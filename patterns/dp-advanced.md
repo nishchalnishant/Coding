@@ -2027,3 +2027,98 @@ print(rob2([2,3,2]))  # 3
 
 ***
 
+
+## 17. Digit DP
+Counting numbers with certain constraints on digits between `[L, R]`.
+
+### Core Idea:
+State is `dp(idx, tightly_bound, ...other_constraints)`.
+`tightly_bound` is a boolean indicating if the digit we pick is restricted by the upper bound `R` at `idx`.
+
+```python
+# Example: Count numbers <= R whose digits sum to S
+def solve(R, S):
+    digit_str = str(R)
+    n = len(digit_str)
+    memo = {}
+
+    def dp(idx, tight, curr_sum):
+        if curr_sum > S:
+            return 0
+        if idx == n:
+            return 1 if curr_sum == S else 0
+        if (idx, tight, curr_sum) in memo:
+            return memo[(idx, tight, curr_sum)]
+            
+        limit = int(digit_str[idx]) if tight else 9
+        res = 0
+        for d in range(limit + 1):
+            res += dp(idx + 1, tight and (d == limit), curr_sum + d)
+            
+        memo[(idx, tight, curr_sum)] = res
+        return res
+
+    return dp(0, True, 0)
+```
+
+## 18. DP with Bitmask
+Useful when the state can be represented as a subset of elements (usually `N <= 20`).
+
+### Core Idea:
+Use an integer to represent a set of items. `bitmask & (1 << i)` checks if item `i` is in the set.
+
+```python
+# Example: Traveling Salesman Problem (TSP) using Bitmask DP
+def tsp(graph):
+    n = len(graph)
+    VISITED_ALL = (1 << n) - 1
+    memo = {}
+    
+    def dp(mask, pos):
+        if mask == VISITED_ALL:
+            return graph[pos][0] # Return to start
+            
+        if (mask, pos) in memo:
+            return memo[(mask, pos)]
+            
+        ans = float('inf')
+        for city in range(n):
+            if (mask & (1 << city)) == 0: # If not visited
+                ans = min(ans, graph[pos][city] + dp(mask | (1 << city), city))
+                
+        memo[(mask, pos)] = ans
+        return ans
+        
+    return dp(1, 0) # Start at city 0
+```
+
+## 19. DP on Trees
+Often requires a post-order traversal (children evaluated before parent).
+
+### Core Idea:
+`dp[node]` depends on `dp[leftChild]` and `dp[rightChild]`.
+
+```python
+# Example: Maximum Path Sum in a Binary Tree
+class Solution:
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        self.max_sum = float('-inf')
+
+        def max_gain(node):
+            if not node:
+                return 0
+            
+            # Max sum on the left and right sub-trees of node
+            left_gain = max(max_gain(node.left), 0)
+            right_gain = max(max_gain(node.right), 0)
+            
+            # Current max path with node as the highest point
+            price_newpath = node.val + left_gain + right_gain
+            self.max_sum = max(self.max_sum, price_newpath)
+            
+            # For recursion, return the max gain if we continue the path
+            return node.val + max(left_gain, right_gain)
+
+        max_gain(root)
+        return self.max_sum
+```
