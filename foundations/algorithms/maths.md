@@ -22,6 +22,27 @@ Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ 
 - **Distance Formula**: $\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$
 
 ## Common SDE-3 Math Problems
-- *Easy*: Count Primes, Power of Tree, Roman to Integer, Excel Sheet Column Title.
+- *Easy*: Count Primes, Power of Two, Roman to Integer, Excel Sheet Column Title.
 - *Medium*: Pow(x,n), Factorial Trailing Zeroes, Rotate Image, Max Points on a Line.
 - *Hard*: Basic Calculator, Max Points on a Line, Rectangle Area.
+
+---
+
+## Pattern Recognition
+
+- **Primes** → Sieve (all primes ≤ N) or trial division up to √N for single number.
+- **GCD/LCM** → Euclidean algorithm; LCM = (a×b)/gcd(a,b). **Modular** → (a±b) mod M, (a×b) mod M; use mod at each step to avoid overflow.
+- **Combinatorics** → nCr = n!/(r!(n-r)!); permutations n!; pigeonhole for "at least one" arguments.
+- **Geometry** → Distance, slope (avoid float when possible; use cross product for collinearity). Max points on a line: group by slope (handle vertical).
+
+## Interview Strategy
+
+- **Identify**: "Count primes" → Sieve. "GCD" / "divisible" → Euclidean. "Ways to choose" → combinations. "Same line" → slope or cross product.
+- **Approach**: State formula or algorithm; handle overflow (mod, or use long). Edge cases: zero, negative, large N.
+- **Common mistakes**: Integer overflow in (a×b) before mod; division by zero in slope; forgetting 0 and 1 for primes.
+
+## Quick Revision
+
+- **Sieve**: Mark multiples of primes; O(N log log N). **Primality**: Check 2..√N. **GCD**: gcd(a,b)=gcd(b,a%b); O(log min(a,b)).
+- **LCM**: (a×b)/gcd(a,b). **Mod**: (a+b) mod M = ((a mod M)+(b mod M)) mod M; same for product.
+- **Trailing zeroes in n!**: Count of 5 in 1..n (each 5 contributes at least one 0).

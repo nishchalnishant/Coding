@@ -21,3 +21,22 @@ An algorithmic paradigm that breaks a problem into smaller, independent subprobl
 - *Easy*: Merge Two Sorted Lists (building block), Majority Element (can be done with D&C).
 - *Medium*: Sort List, Kth Largest Element in an Array (QuickSelect), Search a 2D Matrix II.
 - *Hard*: Merge k Sorted Lists, Median of Two Sorted Arrays, Count of Smaller Numbers After Self, Reverse Pairs.
+
+---
+
+## Pattern Recognition
+
+- **Split in half** → Merge sort, binary search, "divide and combine" (e.g. max subarray crossing mid).
+- **Master Theorem**: T(n) = aT(n/b) + f(n). Case 1: f(n) = O(n^(log_b a - ε)) → T(n) = Θ(n^(log_b a)). Case 2: f(n) = Θ(n^(log_b a)) → T(n) = Θ(n^(log_b a) log n). Case 3: f(n) = Ω(n^(log_b a + ε)) and regularity → T(n) = Θ(f(n)).
+- **D&C vs DP**: Subproblems independent (no overlap) → D&C. Overlapping → DP with memo/table.
+
+## Interview Strategy
+
+- **Identify**: "Independent subproblems", "split and combine" → D&C. If same subproblem repeated → mention DP.
+- **Approach**: Define base case, split (e.g. left/right half), conquer (recurse), combine (merge or aggregate). State recurrence and solve with Master Theorem if applicable.
+- **Common mistakes**: Wrong base case; combine step O(N) forgotten in recurrence; applying Master Theorem when a or b is not constant.
+
+## Quick Revision
+
+- **Merge sort**: T(n) = 2T(n/2) + Θ(n) → Θ(n log n). **Quick sort**: T(n) = T(k) + T(n-k-1) + Θ(n); average k ≈ n/2 → Θ(n log n).
+- **Binary search**: T(n) = T(n/2) + Θ(1) → Θ(log n). **Majority**: Split; majority of array = majority of left or right half (then verify in O(n)).

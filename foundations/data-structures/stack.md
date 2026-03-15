@@ -1,25 +1,105 @@
-# Stack
+# Stack — SDE-3 Level
 
-A linear data structure operating on the **LIFO (Last In, First Out)** principle.
+LIFO (Last In, First Out) structure. SDE-3 focus: monotonic stack for "next greater/smaller", expression parsing, and when to prefer stack over other structures.
 
-## Key Concepts
-- **Core Operations**: Push, Pop, Peek/Top, isEmpty (all $O(1)$ time).
-- **Implementation**: Array-based (fixed size or dynamic) or Linked List-based.
-- **Applications**:
-  - Reversing sequences (strings, lists).
-  - Expression evaluation (Prefix/Postfix, Infix conversion).
-  - Function call stacks (Recursion simulation).
-  - Depth-First Search (DFS) iterative approach.
+---
 
-## Important Variations & Techniques
-- **Monotonic Stack**: Keep elements in strictly increasing/decreasing order.
-  - *Use Case*: Finding Next Greater/Smaller element in $O(N)$ time.
-  - *Problems*: Daily Temperatures, Largest Rectangle in Histogram.
-- **Min/Max Stack**: Maintain auxiliary stack to retrieve current min/max in $O(1)$ time.
-- **Balanced Parentheses**: Push open brackets, pop and verify when encountering matching close brackets.
-- **Undo/Redo**: Track historical states for quick reversion.
+## 1. Concept Overview
 
-## Common SDE-3 Stack Problems
-- *Easy*: Valid Parentheses, Implement Queue using Stacks, Min Stack.
-- *Medium*: Evaluate Reverse Polish Notation, Next Greater Element II, Daily Temperatures, Decode String.
-- *Hard*: Largest Rectangle in Histogram, Trapping Rain Water, Maximum Frequency Stack, Basic Calculator.
+**Problem space**: Next Greater/Smaller Element (NGE/NGSE), largest rectangle in histogram, trapping rain water, expression evaluation, valid parentheses, DFS (iterative).
+
+**When to use**: Need "last relevant" or "nearest previous/next" element; nesting/recursion simulation; undo/redo.
+
+---
+
+## 2. Core Algorithms
+
+### Monotonic Stack (Next Greater Element)
+- Keep stack in decreasing order (top = smallest in stack). For each `i`: pop while `A[stack[-1]] < A[i]` → NGE of `stack[-1]` is `i`; push `i`.
+- **Complexity**: O(N) time, O(N) space.
+
+### Largest Rectangle in Histogram
+- For each bar, find left and right boundaries (first smaller on left/right) via two monotonic stacks (or one pass storing indices). Area = height[i] * (right - left - 1).
+- **Complexity**: O(N).
+
+### Valid Parentheses
+- Push opening; on closing, pop and check match. Final stack must be empty.
+
+---
+
+## 3. Advanced Variations
+
+- **Min/Max Stack**: Auxiliary stack storing current min (or max) per level; push/pop both in sync. O(1) getMin/getMax.
+- **Trapping Rain Water**: Monotonic stack (decreasing by height): when a higher bar appears, pop and add water level above popped bar. Alternative: two pointers (left_max, right_max).
+- **Basic Calculator**: Two stacks (operands, operators); handle precedence and parentheses.
+
+### Edge Cases
+- Empty input; single element; all same height (histogram); negative numbers; overflow in expression.
+
+---
+
+## 4. Common Interview Problems
+
+**Easy**: Valid Parentheses, Implement Queue using Stacks, Min Stack.  
+**Medium**: Evaluate RPN, Next Greater Element II, Daily Temperatures, Decode String.  
+**Hard**: Largest Rectangle in Histogram, Trapping Rain Water, Maximum Frequency Stack, Basic Calculator.
+
+---
+
+## 5. Pattern Recognition
+
+- **Monotonic stack (decreasing)**: NGE, next greater to right; (increasing): next smaller.
+- **Monotonic stack + area**: Histogram rectangle — extend while top >= current, then compute width from stored indices.
+- **Matching/nesting**: Parentheses, tags — push open, pop on close and validate.
+- **Expression**: Infix → postfix (shunting-yard) or direct two-stack calculator.
+
+---
+
+## 6. Code Implementations
+
+```python
+def next_greater_element(nums):
+    n = len(nums)
+    result = [-1] * n
+    stack = []
+    for i in range(n):
+        while stack and nums[stack[-1]] < nums[i]:
+            result[stack.pop()] = nums[i]
+        stack.append(i)
+    return result
+
+def largest_rectangle_area(heights):
+    stack = []
+    best = 0
+    for i, h in enumerate(heights + [0]):
+        while stack and heights[stack[-1]] > h:
+            j = stack.pop()
+            width = i if not stack else i - stack[-1] - 1
+            best = max(best, heights[j] * width)
+        stack.append(i)
+    return best
+```
+
+---
+
+## 7. SDE-3 Level Thinking
+
+- **Trade-offs**: Monotonic stack gives O(N) for "next greater" vs O(N²) brute force. Two pointers for rain water can be O(1) space; stack is more general for "bounded by next greater" thinking.
+- **Scalability**: Stack depth = at most N; consider recursion limit (use iterative stack for deep DFS).
+- **Memory**: One stack for NGE O(N); two stacks for min-stack O(N).
+
+---
+
+## 8. Interview Strategy
+
+- **Identify**: "Next greater/smaller" → monotonic stack. "Largest rectangle" → histogram + NSE both sides. "Matching pairs" → stack.
+- **Approach**: Explain why stack maintains "candidates" and why popped elements have found their answer.
+- **Common mistakes**: Wrong monotonic order; off-by-one in width calculation; forgetting sentinel (e.g., 0 at end for histogram).
+
+---
+
+## 9. Quick Revision
+
+- **Tricks**: Decreasing stack → NGE; increasing → NSE. Histogram: pop and compute width using current index and new top.
+- **Edge cases**: Empty, single bar, all equal, duplicate values (use indices, not values).
+- **Pattern tip**: "Next greater" / "previous smaller" → monotonic stack; "valid brackets" → push/pop match.

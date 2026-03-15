@@ -112,3 +112,22 @@ class FenwickTree:
             i -= i & (-i)
         return s
 ```
+
+---
+
+## Pattern Recognition
+
+- **Trie**: Prefix match, autocomplete, word search in grid (store words, backtrack). Binary Trie: max XOR (prefer opposite bit).
+- **Segment Tree**: Range sum/min/max with point or range updates; O(log N) query/update. Lazy propagation for range add/update.
+- **Fenwick**: Range sum + point update; simpler than segment tree; O(N) space.
+
+## Interview Strategy
+
+- **Identify**: "Prefix" / "autocomplete" / "word dictionary" → Trie. "Range query" with updates → Segment tree or Fenwick.
+- **Common mistakes**: Trie — forgetting is_end; Segment tree — wrong segment bounds; Fenwick — 1-indexed.
+
+## Quick Revision
+
+- **Trie**: insert/search/startsWith O(L). Binary trie for max XOR. Word Search II: Trie + backtrack.
+- **Segment tree**: 4*N nodes; build O(N); query/update O(log N). Lazy for range update.
+- **Fenwick**: update(i, delta), query(i) prefix sum; i += i&-i / i -= i&-i.

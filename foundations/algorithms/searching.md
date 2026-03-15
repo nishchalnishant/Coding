@@ -1,21 +1,108 @@
-# Searching
+# Searching & Binary Search — SDE-3 Level
 
-Techniques to retrieve an item or check for a condition in a collection.
+Techniques to find an element or the best value satisfying a condition. SDE-3 focus: binary search on index, binary search on answer (predicate), rotated arrays, and when to use which variant.
 
-## Core Algorithms
-- **Linear Search**: $O(N)$ time. Used when data is unsorted.
-- **Binary Search**: $O(\log N)$ time. Requires sorted (or monotonic) data.
-  - *Standard Binary Search*: `mid = left + (right - left) // 2`
-  - *Lower Bound*: Find first index $i$ such that $arr[i] \ge target$.
-  - *Upper Bound*: Find first index $i$ such that $arr[i] > target$.
+---
 
-## Binary Search on Answer
-A very common pattern for "Minimizing the maximum" or "Maximizing the minimum". 
-1. Determine the range of possible answers `[low, high]`.
-2. Write an `is_valid(mid)` boolean function that checks if a value `mid` satisfies the required condition in $O(N)$ time.
-3. Binary search the range using `is_valid()`.
+## 1. Concept Overview
 
-## Common SDE-3 Searching Problems
-- *Easy*: Binary Search, First Bad Version, Guess Number Higher or Lower.
-- *Medium*: Search in Rotated Sorted Array, Find First and Last Position of Element, Koko Eating Bananas (Binary Search on Answer).
-- *Hard*: Median of Two Sorted Arrays, Split Array Largest Sum, Aggressive Cows.
+**Problem space**: Sorted array lookup, lower/upper bound, rotated sorted array, search on answer (minimize max, maximize min), peak element, search in 2D matrix.
+
+**When to use**: Sorted or monotonic → binary search on index. "Minimum possible maximum" / "maximum possible minimum" → binary search on answer with predicate.
+
+---
+
+## 2. Core Algorithms
+
+### Standard Binary Search (Index)
+- `lo`, `hi`; `mid = lo + (hi - lo) // 2`; compare with target; shrink to `[lo, mid-1]` or `[mid+1, hi]`. Loop `while lo <= hi`. Return mid or -1.
+- **Lower bound**: First index i such that A[i] >= target. If A[mid] < target → lo = mid+1; else hi = mid (keep mid). Return lo.
+- **Upper bound**: First index i such that A[i] > target. Return first index after last occurrence.
+
+### Binary Search on Answer
+- Identify range [low, high] of possible answers.
+- Define predicate `valid(mid)` that is true for mid and (depending on problem) all larger or all smaller.
+- Binary search so that we find min value where valid is true (or max where valid is false). Typical: minimize maximum → valid(mid) = "can we achieve max ≤ mid"; search for smallest mid where valid(mid).
+
+### Rotated Sorted Array
+- One half of [lo, hi] is always sorted. Compare target with A[mid] and with A[lo]/A[hi] to decide which half to search. Duplicates can force O(N) (e.g., A[lo]==A[mid]==A[hi]).
+
+---
+
+## 3. Advanced Variations
+
+- **Peak element**: Binary search on index; compare A[mid] with A[mid+1]; if rising, peak in right half else left.
+- **Search in 2D (row-sorted, first of row ≤ last of next)**: Flatten to 1D index: row = idx//n, col = idx%n; standard BS.
+- **Median of two sorted arrays**: Binary search on partition in smaller array; balance left sizes and compare max_left ≤ min_right.
+- **Aggressive cows / Split array largest sum**: Classic "minimize maximum" → binary search on answer; predicate: can we place with given limit.
+
+### Edge Cases
+- Empty array; single element; two elements; target smaller than min or larger than max; duplicates (lower/upper bound); rotated with duplicates (cannot do log N in worst case).
+
+---
+
+## 4. Common Interview Problems
+
+**Easy**: Binary Search, First Bad Version, Guess Number.  
+**Medium**: Search in Rotated Sorted Array, Find First and Last Position, Koko Eating Bananas (BS on answer).  
+**Hard**: Median of Two Sorted Arrays, Split Array Largest Sum, Aggressive Cows.
+
+---
+
+## 5. Pattern Recognition (Binary Search Patterns)
+
+- **Search on index**: Sorted array; lower/upper bound; first/last occurrence.
+- **Search on answer**: "Minimize the maximum" / "maximize the minimum" → range [min_possible, max_possible], predicate, find boundary.
+- **Rotated array**: One half always sorted; compare target with mid and ends to go left/right.
+- **Peak / bitonic**: Compare mid with neighbors; move toward larger neighbor.
+- **2D matrix**: Treat as 1D (row-major) if "sorted when flattened"; or binary search row then column.
+
+---
+
+## 6. Code Implementations
+
+```python
+def lower_bound(arr, target):
+    lo, hi = 0, len(arr)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if arr[mid] < target:
+            lo = mid + 1
+        else:
+            hi = mid
+    return lo
+
+def binary_search_on_answer(candidates, predicate):
+    lo, hi = min(candidates), max(candidates)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if predicate(mid):
+            hi = mid
+        else:
+            lo = mid + 1
+    return lo
+```
+
+---
+
+## 7. SDE-3 Level Thinking
+
+- **Trade-offs**: Linear scan O(N) vs binary search O(log N) when data is sorted. BS on answer converts "optimization" to "feasibility" (predicate) — often simpler to reason.
+- **Scalability**: Logarithmic passes; predicate should be O(N) or O(1) per call so total is O(N log range) or O(log N).
+
+---
+
+## 8. Interview Strategy
+
+- **Identify**: "Sorted" / "monotonic" → BS on index. "Minimize max" / "maximize min" → BS on answer.
+- **Approach**: State range, define predicate clearly, then implement loop (avoid off-by-one: use lo < hi vs lo <= hi and what to return).
+- **Common mistakes**: Integer overflow in mid (use lo + (hi-lo)//2); forgetting to handle empty; rotated array with duplicates.
+
+---
+
+## 9. Quick Revision
+
+- **Formulas**: mid = lo + (hi-lo)//2. Lower bound: first >= target; upper bound: first > target.
+- **Tricks**: Predicate for "can we achieve X?"; smallest valid → hi = mid; largest valid → lo = mid (with appropriate loop).
+- **Edge cases**: Empty; single element; target not in range; duplicates.
+- **Pattern tip**: "Minimum maximum" → binary search on answer + greedy predicate.

@@ -1,6 +1,14 @@
-# 30 day
+# 30-Day Interview Preparation Plan
 
-To prepare effectively for SDE2 coding interviews at Google, you need a structured 30-day plan that focuses on data structures, algorithms, and problem-solving skills. Below is a comprehensive plan designed to help you build the necessary skills.
+A **day-by-day plan** for coding interview prep, focused on data structures, algorithms, and problem-solving. Originally aimed at SDE-2; for **SDE-3 depth**, combine this plan with the expanded topic files in [Foundations](../foundations/README.md) and the [SDE-3 DSA Roadmap](../SDE3_DSA_ROADMAP.md).
+
+## How to use
+
+- **Follow the days** in order (Week 1 → Week 4). Each week has a [README](week-1/README.md) and daily notes.
+- **Go deeper:** For each day’s topic, open the matching file in [foundations/data-structures](../foundations/data-structures/README.md) or [foundations/algorithms](../foundations/algorithms/README.md) for SDE-3 level content (pattern recognition, interview strategy, quick revision).
+- **Mocks and roadmap:** Use [SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md) for mock strategy and recommended problem order.
+
+---
 
 ### 30-Day Coding Interview Preparation Plan
 
@@ -87,6 +95,13 @@ To prepare effectively for SDE2 coding interviews at Google, you need a structur
    * HackerRank for timed challenges.
    * GeeksforGeeks for explanations of algorithms and data structures.
 
-By following this structured plan over the next month, you will enhance your coding skills significantly and be well-prepared for SDE2 interviews at Google.
+By following this structured plan over the next month, you will build a strong base for coding interviews. Pair it with the **Foundations** topic files and **SDE3_DSA_ROADMAP** for SDE-3 level preparation.
 
-Sources
+## Week index
+
+| Week | Focus | README |
+|------|--------|--------|
+| Week 1 | Foundations of Data Structures (arrays, lists, stack, queue, hashing, trees) | [week-1/README.md](week-1/README.md) |
+| Week 2 | Advanced DS & Algorithms (BST, heaps, graphs, DP intro) | [week-2/README.md](week-2/README.md) |
+| Week 3 | Problem-Solving Techniques (backtracking, greedy, recursion, bit, graphs, mocks) | [week-3/README.md](week-3/README.md) |
+| Week 4 | Final prep (problem-solving approach, timed practice, patterns, mocks, revision) | [week-4/README.md](week-4/README.md) |

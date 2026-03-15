@@ -1,54 +1,27 @@
-# Data structures
+# Data Structures
 
-**Arrays**&#x20;
+Core data structures with **SDE-3 level** content: concept overview, algorithms, patterns, code, interview strategy, and quick revision.
 
-**Linked list -**-
+## Topic files
 
-* Dynamic datastructure&#x20;
-* number of nodes is not fixed and can grow and shrink on demand&#x20;
-* Very common data structure that is used to create other data structures like trees, graphs, hashing etc.
+| Topic | File | Highlights |
+|-------|------|------------|
+| **Array** | [array.md](array.md) | Two pointers, sliding window, prefix sum, Kadane; edge cases, SDE-3 trade-offs. |
+| **Linked List** | [linked-list.md](linked-list.md) | Dummy node, fast/slow, in-place reversal, cycle detection; LRU (design). |
+| **Stack** | [stack.md](stack.md) | Monotonic stack, next greater element, largest rectangle in histogram. |
+| **Queue** | [queue.md](queue.md) | BFS, monotonic deque, sliding window maximum, circular queue. |
+| **Tree** | [tree.md](tree.md) | Traversals, LCA, tree DP, BST, max path sum, serialize/deserialize. |
+| **Heap** | [heap.md](heap.md) | Top-K, K-way merge, two heaps (median), implementations. |
+| **Hashing** | [hashing.md](hashing.md) | Collision handling, subarray sum = K, consistent hashing, bloom filter. |
+| **Graphs** | [graphs.md](graphs.md) | BFS/DFS, islands, flood fill, rotten oranges, course schedule, alien dictionary; terminology, algorithms, question lists. |
 
-**Stacks** --
+## How to use
 
-* LIFO
-* Space for function parameters and local variables is created internally using a stack.
-* Compiler's syntax check for matching braces is implemented by using stack.
-* Support fo r recu rs ion.
-* It can act as an auxil inry duta structure for other abstract data types.
+- **Learn a topic:** Open the topic file; read Concept Overview → Core Algorithms → Pattern Recognition → Interview Strategy → Quick Revision.
+- **Before interviews:** Use each file’s **Quick Revision** and **Interview Strategy** sections.
+- **Patterns:** See also [patterns/two-pointers-sliding-window.md](../../patterns/two-pointers-sliding-window.md) and [patterns/leetcode-patterns.md](../../patterns/leetcode-patterns.md).
 
-**Queues** --
+## Cross-links
 
-* FIFO
-*   In operating systems, for controlling access to shared system resources such as printers, files,
-
-    communication lines, disks ;:ind tapes.
-*   Computer systems mL1st often provide a _lwlcli11g areu_ for messages between two processes, two
-
-    program::;, or even lwo systems. This holding area is us ua lly ca lled u _/111f fer_ and is often
-
-    implemented as u queue.
-* It can act as an uuxiliury duta structure for other abstract data types.
-
-**Trees** --
-
-* Organize data in a tree format so as to make the data insertion or deletion or search faster.
-* Applications --
-  *   The library database in u library, a student database in a school or college, an employee database in
-
-      a company. a pnlicnl dnwbase in a hospi1 ul, or busica lly any database wou ld be irnple rncntccl using
-
-      trees.
-  * The file system in your compu ter, i.e. folde rs a nd a ll fil es, would be s tored ns n tree.
-  * And a tree ca n act as a n a uxiliar y da ta s tructure fo r other abstract data types.
-
-Priority queues --
-
-* abstract data type designed for systems that maintain a collection of prioritized elelemtns where elements are removed from the collection in order of their priority.
-
-Disjoint set ADT --
-
-* collection of sets that are disjoint, that is no item is foind in more than one set.
-* Collection of disjoint set is called a partition as the intems are partitioned among the sets.
-
-Dictionary --
-
+- **Graph algorithms** (Dijkstra, topo, MST): [../algorithms/graph.md](../algorithms/graph.md)  
+- **Union Find** (connectivity, Kruskal): [../algorithms/union-find.md](../algorithms/union-find.md)

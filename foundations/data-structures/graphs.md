@@ -360,4 +360,26 @@ Here are some useful tips and tricks for solving graph problems in software engi
 * Mention edge cases such as disconnected components, self-loops, or parallel edges.
 * Discuss time complexity (e.g., Dijkstra’s O((V + E) log V) or DFS O(V + E)) and space complexity.
 
-By mastering these techniques and practicing a variety of graph problems, you'll be well-prepared for graph-related questions in interviews. Would you like to explore any specific graph problems or algorithms in detail?
+By mastering these techniques and practicing a variety of graph problems, you'll be well-prepared for graph-related questions in interviews.
+
+---
+
+## Pattern Recognition (SDE-3)
+
+- **Shortest path unweighted** → BFS (level = distance). Multi-source: enqueue all sources (e.g. Rotting Oranges).
+- **Components / cycle / path** → DFS. Topological order → DFS post-order reverse or Kahn's (in-degree BFS).
+- **Dependencies / "A before B"** → Build directed graph, then topological sort (Course Schedule, Alien Dictionary).
+- **Shortest path weighted** → Non-negative: Dijkstra (min-heap). Negative: Bellman-Ford. All-pairs: Floyd-Warshall.
+- **MST / connectivity** → Kruskal (sort edges + Union-Find) or Prim (heap). Union-Find for "are u and v connected?".
+
+## Interview Strategy
+
+- **Identify**: "Shortest path" → BFS (unweighted) or Dijkstra/Bellman-Ford (weighted). "Order" / "before" → topo sort. "Connected" → DFS or Union-Find.
+- **Approach**: Choose representation (usually adjacency list). State time/space (e.g. BFS O(V+E)). Handle disconnected, self-loops, multiple edges.
+- **Common mistakes**: Forgetting visited set; using Dijkstra with negative weights; assuming graph is connected; wrong direction of edges in dependency graph.
+
+## Quick Revision
+
+- **BFS**: Queue + visited; level = shortest distance in unweighted. **DFS**: Stack/recursion; for topo, push in post-order then reverse.
+- **Dijkstra**: Min-heap (dist, node); relax neighbors; first extraction = final distance. **Kruskal**: Sort edges, add if Union-Find union succeeds.
+- **Topo**: Kahn = in-degree 0 queue; or DFS post-order reverse. **Edge cases**: Disconnected, cycle (no topo), single node.

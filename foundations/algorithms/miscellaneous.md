@@ -1,6 +1,6 @@
-# Mislanious
+# Miscellaneous Algorithms
 
-Here are some tips and tricks for mastering miscellaneous algorithms in software engineering interviews:
+Tips and cross-cutting techniques for problems that combine multiple categories (math, graph, DP, greedy, etc.). Use with the dedicated topic files in this folder for full depth.
 
 #### 1. **Familiarize with Different Categories**
 
@@ -81,19 +81,23 @@ Here are some tips and tricks for mastering miscellaneous algorithms in software
 * Be prepared to discuss various algorithm techniques and how they apply to the problems presented.
 * If you encounter difficulties, talk through your thought process and consider alternative approaches.
 
-By mastering these principles and practicing various miscellaneous algorithm problems, you'll be well-prepared for relevant questions in your software engineering interviews. If you want to explore specific miscellaneous problems or concepts, feel free to ask!
+By mastering these principles and practicing various miscellaneous algorithm problems, you'll be well-prepared for relevant questions in your software engineering interviews.
 
+---
 
+## Four Priorities When Writing a Function (in order)
 
+1. **Correctness** — For every valid input the function returns the expected result; no ambiguous behavior.
+2. **Time** — Minimize time complexity (choose the right algorithm and data structure).
+3. **Space** — Minimize extra memory (in-place when possible; avoid unnecessary copies).
+4. **Clarity** — Code should be easy to understand; prefer self-explanatory names and structure.
 
+**Recursion vs iteration:** If both are equally easy to code and have similar complexity, prefer the iterative solution; it avoids stack depth limits and often has better constant factors.
 
-The four things that we should focus on while writing a function (in this order) are:
+---
 
-1. It should serve the purpose. For every possible parameter the function must always return expected results. It should not be ambiguous for any input.
-2. The time taken by function to execute should be minimized.
-3. The extra memory this function consumes should be minimized.
-4. Function should be easy to understand. Ideally the code should be self-explanatory to an exte
+## Quick Revision (Miscellaneous)
 
-If both recursive and non-recursive (iterative) solutions are equally easy and take almost\
-equal time to code, then always write the iterative solution. It takes less time and less\
-memory to execute.
+- **When a problem mixes topics**: Identify the main pattern first (e.g. "it's really a graph" or "it's interval scheduling"), then apply the right DS/algorithm. See [patterns/README.md](../../patterns/README.md).
+- **Edge cases**: Empty input, single element, duplicates, overflow, negative numbers, zero. Always state them.
+- **Interview flow**: Clarify → brute force → optimize → code → test with examples and edge cases → state time/space.

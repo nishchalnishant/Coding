@@ -24,3 +24,30 @@ A data structure consisting of vertices (nodes) and edges (connections). Graphs 
 - *Easy*: Flood Fill, Find Center of Star Graph, Find the Town Judge.
 - *Medium*: Number of Islands, Rotting Oranges (Multi-source BFS), Course Schedule (Topo Sort), Clone Graph, Minimum Height Trees.
 - *Hard*: Word Ladder, Cheapest Flights Within K Stops (Dijkstra/Bellman-Ford), Alien Dictionary (Topo Sort), Swim in Rising Water.
+
+---
+
+## 5. Pattern Recognition
+
+- **BFS shortest path**: Unweighted; level = distance. Multi-source: enqueue all.
+- **DFS**: Components, cycle detection, topo (post-order), backtrack on grid.
+- **Topological sort**: Dependencies, "order of tasks", Alien Dictionary.
+- **Shortest path**: Non-negative → Dijkstra; negative → Bellman-Ford; unweighted → BFS.
+- **MST**: Kruskal (sort + DSU); Prim (heap).
+
+## 6. SDE-3 Level Thinking
+
+- **Trade-offs**: List vs matrix (space vs edge lookup). BFS for unweighted shortest path. Dijkstra vs Bellman-Ford for negative edges.
+- **Scalability**: Adjacency list for sparse; consider distributed algorithms for very large graphs.
+
+## 7. Interview Strategy
+
+- **Identify**: "Shortest path" → BFS or Dijkstra. "Order" / "before" → topo. "Connected" → DFS or DSU. "MST" → Kruskal/Prim.
+- **Common mistakes**: Forgetting visited; Dijkstra with negative weights; topo only on DAG (check cycle first).
+
+## 8. Quick Revision
+
+- **Formulas**: Dijkstra: extract min, relax. Kruskal: sort edges, add if union. Topo: in-degree 0 queue or DFS post-order.
+- **Tricks**: Multi-source BFS = enqueue all sources. 0-1 BFS = deque (0 front, 1 back).
+- **Edge cases**: Disconnected, negative cycle, single node.
+- **Pattern tip**: "Shortest" unweighted → BFS; weighted → Dijkstra/Bellman-Ford; "order" → topo.

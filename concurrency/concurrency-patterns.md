@@ -88,9 +88,26 @@ class ReadWriteLock:
         self.write_lock.release()
 ```
 
-## Concepts Checklist for SDE 3:
-- **Deadlock**: Conditions (Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait) and prevention.
-- **Starvation and Livelock**: Causes and mitigation strategies.
-- **Mutex vs Semaphore**: A Mutex provides mutual exclusion (locking mechanism), while a Semaphore is a signaling mechanism (permits).
-- **Condition Variables**: Used to block a thread until a particular condition evaluates to true.
-- **Concurrent Data Structures**: Knowledge of structures like `ConcurrentHashMap` in Java or Python's `queue.Queue` which is thread-safe.
+## Concepts Checklist for SDE 3
+- **Deadlock**: Conditions (Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait) and prevention (e.g. lock ordering, try-lock, timeout).
+- **Starvation and Livelock**: Causes and mitigation (fairness, backoff).
+- **Mutex vs Semaphore**: Mutex = one owner, mutual exclusion; Semaphore = N permits, signaling. Use semaphores for "allow N at a time" or strict ordering (FooBar).
+- **Condition Variables**: Block until a condition is true; always use with a lock and check condition in a loop (`while` not `if`) to avoid spurious wakeups.
+- **Concurrent Data Structures**: `ConcurrentHashMap`, `queue.Queue` (thread-safe); avoid sharing mutable state without synchronization.
+
+---
+
+## Interview Strategy
+
+- **Identify**: "Two threads alternate" → semaphores or events. "Producer/consumer with bounded buffer" → condition variable (or blocking queue). "Multiple readers, one writer" → reader-writer lock.
+- **Approach**: State the invariant (e.g. "buffer not full when producing"); use `while` for wait conditions; signal after state change. Mention deadlock prevention if multiple locks.
+- **Common mistakes**: Using `if` instead of `while` for wait; forgetting to notify after state change; holding a lock across I/O or long work (hold as briefly as possible).
+
+---
+
+## Quick Revision
+
+- **Producer-Consumer**: One lock + condition; wait while full/empty; notify after put/take.
+- **FooBar**: Two semaphores (e.g. foo=1, bar=0); foo acquires foo_sem, prints, releases bar_sem; bar acquires bar_sem, prints, releases foo_sem.
+- **Reader-Writer**: readers count; first reader acquires write_lock, last reader releases it; writer acquires write_lock.
+- **Deadlock**: Prevent by ordering locks, or use try-lock with backoff. Dining Philosophers: order chopsticks by id, or use one "arbitrator" (e.g. semaphore with one permit).

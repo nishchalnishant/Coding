@@ -127,3 +127,21 @@ class DSU:
 - **A* Search**: Heuristic search for shortest paths (good for maze/grid problems in interviews where Euclidean distance matters).
 - **Bellman-Ford / Floyd-Warshall**: For graphs with negative edge weights.
 - **Hierholzer's Algorithm**: For finding Eulerian Paths or Circuits (visiting all edges exactly once, e.g., "Reconstruct Itinerary" on LeetCode).
+
+---
+
+## Pattern Recognition
+
+- **SCC**: Tarjan (one DFS, low/disc, stack). Kosaraju: two DFS (reverse graph). Use for "strongly connected", condensation graph.
+- **Bridges/Articulation points**: DFS with low/disc; bridge if low[v] > disc[u]; articulation if root with ≥2 children or non-root and low[child] >= disc[u].
+- **Union-Find**: Connectivity, Kruskal; path compression + union by rank. DSU with rollback for offline queries.
+
+## Interview Strategy
+
+- **Identify**: "Critical edges" / "robustness" → bridges. "SCC" / "can all reach each other" → Tarjan. "Merge sets" → DSU.
+- **Common mistakes**: Tarjan — mixing up low vs disc; bridge condition low[v] > disc[u] (strict). DSU — forgetting path compression.
+
+## Quick Revision
+
+- **Tarjan SCC**: low, disc, stack; when low[u]==disc[u] pop to get SCC. Bridge: low[v] > disc[u].
+- **DSU**: find with path compression; union by rank. Kruskal: sort edges, add if union succeeds.

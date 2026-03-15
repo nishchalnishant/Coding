@@ -1,20 +1,68 @@
-# Greedy Algorithms
+# Greedy Algorithms — SDE-3 Level
 
-A problem-solving approach that makes the **locally optimal choice** at each step with the hope that this sequence of local optimizations leads to a **globally optimal solution**.
+Make the **locally optimal choice** at each step; prove (or argue) it leads to a **global optimum**. SDE-3 expects proof intuition, exchange arguments, and when greedy fails.
 
-## Key Concepts
-- **Greedy Choice Property**: A global optimum can be reached by selecting the local optimum at every step.
-- **Optimal Substructure**: An optimal solution to the problem contains optimal solutions to its subproblems.
-- **Irrevocable**: Once a choice is made, the algorithm never goes back to reconsider it (unlike Backtracking / DP).
+---
 
-## Common Patterns
-- **Sorting First**: Most greedy problems require sorting the input array first (e.g., sort intervals by start/end time, sort items by weight/value ratio) so you can make local optimal choices sequentially.
-- **Priority Queue / Max Heap**: Use a heap to always pull the highest-value or lowest-cost item dynamically as the state changes.
+## 1. Concept Overview
 
-## Classic SDE-3 Greedy Problems
-- *Easy*: Assign Cookies, Array Partition I, Largest Perimeter Triangle, Minimum Operations to Make the Array Increasing.
-- *Medium*: Jump Game, Jump Game II, Gas Station, Task Scheduler, Non-overlapping Intervals, Minimum Number of Arrows to Burst Balloons.
-- *Hard*: Minimum Number of Refueling Stops, Reaching Points, Candy.
+**Problem space**: Interval scheduling, jump game, gas station, task scheduler, Huffman, MST (Prim/Kruskal), activity selection, "minimum arrows to burst balloons", candy (two passes).
 
-## Greedy vs. Dynamic Programming
-If you need to explore *all possible paths* or choices have overlapping future implications that are complex, use **Dynamic Programming**. If you can *prove* that picking the "best looking" immediate option will never hurt the final result, use **Greedy**. Note that DP can solve Greedy problems, but Greedy algorithms are usually much faster ($O(N \log N)$ or $O(N)$ vs DP's $O(N^2)$).
+**When to use**: Optimal substructure + greedy choice property. If "take best local option" can be shown never to hurt the global solution, use greedy. Otherwise consider DP.
+
+---
+
+## 2. Core Ideas
+
+- **Greedy choice property**: A global optimum can be achieved by taking the local optimum at each step.
+- **Optimal substructure**: Optimal solution contains optimal solutions to subproblems.
+- **Proof techniques**: Exchange argument (swap greedy choice into any optimal solution); greedy stays ahead (greedy is never behind optimal at each step); structural (e.g., "earliest deadline first" maximizes count).
+
+---
+
+## 3. Common Patterns
+
+- **Sort first**: Intervals by end (or start); items by ratio; then scan and take greedily.
+- **Priority queue**: Always take min/max (e.g., merge K lists, Huffman, Task Scheduler — most frequent first).
+- **Two passes**: Candy (left-to-right then right-to-left for constraints).
+- **Jump / reachability**: Jump Game — track farthest reachable; Jump Game II — min jumps = BFS levels or greedy "jump to farthest we can each time".
+
+---
+
+## 4. Classic SDE-3 Greedy Problems
+
+**Easy**: Assign Cookies, Array Partition I, Largest Perimeter Triangle.  
+**Medium**: Jump Game, Jump Game II, Gas Station, Task Scheduler, Non-overlapping Intervals, Min Arrows to Burst Balloons.  
+**Hard**: Min Refueling Stops, Reaching Points, Candy.
+
+---
+
+## 5. Pattern Recognition
+
+- **Intervals**: Sort by end (or start); take non-overlapping greedily. "Min arrows" = sort by end, shoot at end, skip covered.
+- **Scheduling**: Earliest deadline; or by frequency (Task Scheduler: slot by max freq).
+- **Reachability**: Farthest index we can reach; min jumps = number of "steps" to reach end.
+- **When greedy fails**: Need to try multiple choices (DP) or constraints are global (e.g., partition equal subset — DP).
+
+---
+
+## 6. SDE-3 Level Thinking
+
+- **Trade-offs**: Greedy O(N log N) or O(N) vs DP O(N²); greedy when proof is clear; DP when in doubt for optimization.
+- **Scalability**: Sorting and single pass; heap when "current best" changes dynamically.
+
+---
+
+## 7. Interview Strategy
+
+- **Identify**: "Schedule most", "minimum cost to cover", "earliest/largest first" → try greedy. State "I'll try greedy and argue it's optimal."
+- **Approach**: Define the greedy rule; give exchange or "stays ahead" intuition; then code.
+- **Common mistakes**: Not sorting correctly (by end vs start); wrong heap type; forgetting to handle ties.
+
+---
+
+## 8. Quick Revision
+
+- **Tricks**: Intervals → sort by end; take if start >= last_end. Jump II → while not at end: jump to farthest in current range, steps++. Task Scheduler → (max_count-1)*(n+1) + num_max (with cap at len(tasks)).
+- **Edge cases**: Empty; single interval; all same; zero/n negative.
+- **Pattern tip**: "Maximum number of non-overlapping" / "minimum to cover" → sort + greedy.

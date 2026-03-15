@@ -23,3 +23,25 @@ Arranging data in a specific order to optimize subsequent operations (like searc
 - *Easy*: Merge Sorted Array, Squares of a Sorted Array, Valid Anagram (by sorting).
 - *Medium*: Sort Colors (Dutch National Flag), Merge Intervals, Sort List, Top K Frequent Elements (Bucket sort).
 - *Hard*: Count Inversions, Maximum Gap (Pigeonhole principle), Optimal Account Balancing.
+
+---
+
+## Pattern Recognition
+
+- **Need sorted order** → Merge sort (stable, O(N log N) guaranteed), Quick sort (in-place, average O(N log N)), or library sort.
+- **Linked list sort** → Merge sort (O(1) space with pointer rewiring; no random access for quick sort).
+- **Top K / Kth largest** → QuickSelect (average O(N)) or heap of size K (O(N log K)).
+- **Small integer range** → Counting sort O(N + K). **Fixed-width keys** → Radix sort.
+- **Intervals** → Sort by start or end; then merge or sweep.
+
+## Interview Strategy
+
+- **Identify**: "Sort" requirement → choose by stability, space, and data structure (array vs list). "Kth largest" → QuickSelect or heap.
+- **Approach**: State why you chose the algorithm (e.g. "Merge sort for linked list because we need O(1) extra space and stable sort"). For custom order, define comparator.
+- **Common mistakes**: Wrong comparator (off-by-one or wrong field); forgetting to handle duplicates; QuickSelect partition logic.
+
+## Quick Revision
+
+- **Merge sort**: Split mid, sort halves, merge with two pointers. T(N) = 2T(N/2) + O(N) = O(N log N). Stable.
+- **Quick sort**: Partition around pivot (e.g. last); recurse left and right. Average O(N log N); worst O(N²). QuickSelect: recurse only the partition that contains rank K.
+- **Stable**: Merge, insertion, counting, radix. **Unstable**: Quick, heap. **In-place**: Quick (stack O(log N)), heap, insertion.
