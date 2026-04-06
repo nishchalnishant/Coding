@@ -95,3 +95,11 @@ def subsets_bitmask(nums):
 - **Tricks**: XOR all for single number; mask loop for subsets; bitmask DP for TSP/partition.
 - **Edge cases**: Negative; zero; k out of range.
 - **Pattern tip**: "State as set" + small N → bitmask DP.
+
+---
+
+## See also
+
+- [Dynamic Programming](dynamic-programming/README.md) — bitmask DP  
+- [Backtracking](backtracking.md) — N-Queens with bit masks  
+- [Maths](maths.md) — modular arithmetic with bits

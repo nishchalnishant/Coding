@@ -66,3 +66,32 @@ Make the **locally optimal choice** at each step; prove (or argue) it leads to a
 - **Tricks**: Intervals → sort by end; take if start >= last_end. Jump II → while not at end: jump to farthest in current range, steps++. Task Scheduler → (max_count-1)*(n+1) + num_max (with cap at len(tasks)).
 - **Edge cases**: Empty; single interval; all same; zero/n negative.
 - **Pattern tip**: "Maximum number of non-overlapping" / "minimum to cover" → sort + greedy.
+
+---
+
+## 9. Code sketch (non-overlapping intervals)
+
+```python
+def eraseOverlapIntervals(intervals):
+    if not intervals:
+        return 0
+    intervals.sort(key=lambda x: x[1])  # sort by end time
+    end = intervals[0][1]
+    removals = 0
+    for s, e in intervals[1:]:
+        if s < end:       # overlap with previous chosen interval
+            removals += 1
+        else:
+            end = e
+    return removals
+```
+
+**Jump Game II** (minimum jumps): greedy “furthest in current jump range” — extend `end` of current level, when `i == reach` increment jumps and set `reach = furthest`.
+
+---
+
+## See also
+
+- [Dynamic Programming](dynamic-programming/README.md) — when greedy fails (e.g. partition problems)  
+- [Sorting](sorting.md) — comparators for interval sort  
+- [patterns/leetcode-patterns.md](../../patterns/leetcode-patterns.md)

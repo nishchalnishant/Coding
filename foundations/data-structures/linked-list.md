@@ -132,3 +132,11 @@ def detect_cycle_entry(head):
 - **Tricks**: Dummy node; prev/curr/next for reversal; heap for merge K.
 - **Edge cases**: Empty, single node, cycle at head, k > length.
 - **Pattern tip**: "From end" → two pointers (advance first by n) or stack; "random" → HashMap copy.
+
+---
+
+## See also
+
+- [Heap](heap.md) — merge K sorted lists  
+- [Hashing](hashing.md) — copy with random pointer  
+- [Stack](stack.md) — recursion uses call stack

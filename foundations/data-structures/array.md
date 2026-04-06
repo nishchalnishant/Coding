@@ -188,3 +188,11 @@ def longest_substring_k_distinct(s, k):
 - **Tricks**: Two pointers for sorted pairs; sliding window for "at most K" (shrink from left); difference array for range add.
 - **Edge cases**: Empty, single element, all negative, duplicates, overflow.
 - **Pattern tip**: "Subarray" + "sum" → prefix sum or sliding window; "subarray" + "max sum" → Kadane.
+
+---
+
+## See also
+
+- [Hashing](hashing.md) — two sum, subarray sum = K  
+- [Searching](../algorithms/searching.md) — binary search on answer  
+- [two-pointers-sliding-window.md](../../patterns/two-pointers-sliding-window.md)

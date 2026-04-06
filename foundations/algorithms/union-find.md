@@ -93,3 +93,38 @@ class DSU:
 - **Tricks**: Count components = number of roots (parent[i]==i). Kruskal: sort edges, add if union succeeds.
 - **Edge cases**: Single node; duplicate edges; disconnected.
 - **Pattern tip**: "Same group" / "merge" / "MST" → think DSU.
+
+---
+
+## 9. Java sketch (interviews)
+
+```java
+class DSU {
+    int[] parent, rank;
+    DSU(int n) {
+        parent = new int[n];
+        rank = new int[n];
+        for (int i = 0; i < n; i++) parent[i] = i;
+    }
+    int find(int x) {
+        if (parent[x] != x) parent[x] = find(parent[x]);
+        return parent[x];
+    }
+    boolean union(int x, int y) {
+        int rx = find(x), ry = find(y);
+        if (rx == ry) return false;
+        if (rank[rx] < rank[ry]) { parent[rx] = ry; }
+        else if (rank[rx] > rank[ry]) { parent[ry] = rx; }
+        else { parent[ry] = rx; rank[rx]++; }
+        return true;
+    }
+}
+```
+
+---
+
+## See also
+
+- [Graph](graph.md) — Kruskal, connectivity  
+- [Sorting](sorting.md) — edge sorting for Kruskal  
+- [advanced-graphs.md](../../advanced-dsa/advanced-graphs.md) — bridges (different technique)

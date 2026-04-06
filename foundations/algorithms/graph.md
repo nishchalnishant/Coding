@@ -1,53 +1,127 @@
-# Graphs
+# Graphs — SDE-3 Level
 
-A data structure consisting of vertices (nodes) and edges (connections). Graphs can be directed/undirected, weighted/unweighted, and cyclic/acyclic.
-
-## Graph Representations
-1. **Adjacency List**: Most common. Space $O(V + E)$. Best for sparse graphs.
-2. **Adjacency Matrix**: 2D array. Space $O(V^2)$. Best for very dense graphs or when quick edge lookups $O(1)$ are needed.
-3. **Edge List**: List of `(u, v, weight)`. Space $O(E)$. Useful for algorithms like Kruskal's or Bellman-Ford.
-
-## Core Traversals
-- **BFS (Breadth-First Search)**: Uses a Queue. Explores level-by-level. Ideal for finding the *shortest path* in unweighted graphs. Time $O(V+E)$.
-- **DFS (Depth-First Search)**: Uses recursion (Call Stack) or an explicit Stack. Explores as deep as possible. Ideal for cycle detection, connected components, and topological sorting. Time $O(V+E)$.
-
-## Advanced Graph Algorithms
-- **Dijkstra's**: Shortest path in graphs with *non-negative* weights. Uses a Min-Heap. Time $O(E \log V)$.
-- **Bellman-Ford**: Shortest path in graphs with *negative* weight edges. Detects negative cycles. Time $O(V \times E)$.
-- **Floyd-Warshall**: All-pairs shortest path. Time $O(V^3)$.
-- **Kruskal's**: Minimum Spanning Tree (MST). Greedily sorts edges by weight and uses Union-Find to avoid cycles. Time $O(E \log E)$.
-- **Prim's**: Minimum Spanning Tree (MST). Grows tree from a node using a Min-Heap. Time $O(E \log V)$.
-- **Topological Sort**: Linear ordering of a Directed Acyclic Graph (DAG) such that for every directed edge $u \to v$, $u$ comes before $v$. Kahn's Algorithm (In-degree BFS) or DFS.
-- **Disjoint Set Union (Union-Find)**: Tracks connected components. Uses path compression and union by rank. Time $\approx O(1)$ per operation.
-
-## Common SDE-3 Graph Problems
-- *Easy*: Flood Fill, Find Center of Star Graph, Find the Town Judge.
-- *Medium*: Number of Islands, Rotting Oranges (Multi-source BFS), Course Schedule (Topo Sort), Clone Graph, Minimum Height Trees.
-- *Hard*: Word Ladder, Cheapest Flights Within K Stops (Dijkstra/Bellman-Ford), Alien Dictionary (Topo Sort), Swim in Rising Water.
+Vertices and edges; directed/undirected, weighted/unweighted. Senior interviews expect correct representation choice, BFS vs DFS, shortest paths (BFS / Dijkstra / Bellman-Ford), topological order, MST, and Union-Find for connectivity.
 
 ---
 
-## 5. Pattern Recognition
+## 1. Concept Overview
 
-- **BFS shortest path**: Unweighted; level = distance. Multi-source: enqueue all.
-- **DFS**: Components, cycle detection, topo (post-order), backtrack on grid.
-- **Topological sort**: Dependencies, "order of tasks", Alien Dictionary.
-- **Shortest path**: Non-negative → Dijkstra; negative → Bellman-Ford; unweighted → BFS.
-- **MST**: Kruskal (sort + DSU); Prim (heap).
+**Problem space:** Shortest paths, connectivity, ordering (dependencies), MST, grid as implicit graph, clone graph, word ladder.
 
-## 6. SDE-3 Level Thinking
+**When to use what:**
 
-- **Trade-offs**: List vs matrix (space vs edge lookup). BFS for unweighted shortest path. Dijkstra vs Bellman-Ford for negative edges.
-- **Scalability**: Adjacency list for sparse; consider distributed algorithms for very large graphs.
+| Question | Algorithm |
+|----------|-----------|
+| Shortest path, unweighted | BFS |
+| Shortest path, non-negative weights | Dijkstra (min-heap) |
+| Negative weights / detect negative cycle | Bellman-Ford |
+| All-pairs shortest paths (small V) | Floyd–Warshall |
+| Dependencies / valid order | Topological sort (DAG only) |
+| Connect all nodes, min edge weight | Kruskal or Prim (MST) |
+| Dynamic connectivity / Kruskal | Union-Find |
 
-## 7. Interview Strategy
+---
 
-- **Identify**: "Shortest path" → BFS or Dijkstra. "Order" / "before" → topo. "Connected" → DFS or DSU. "MST" → Kruskal/Prim.
-- **Common mistakes**: Forgetting visited; Dijkstra with negative weights; topo only on DAG (check cycle first).
+## 2. Graph Representations
 
-## 8. Quick Revision
+1. **Adjacency list** — `O(V + E)` space; default for sparse graphs.
+2. **Adjacency matrix** — `O(V²)`; dense graphs or `O(1)` edge lookup.
+3. **Edge list** — `O(E)`; Kruskal, Bellman-Ford.
 
-- **Formulas**: Dijkstra: extract min, relax. Kruskal: sort edges, add if union. Topo: in-degree 0 queue or DFS post-order.
-- **Tricks**: Multi-source BFS = enqueue all sources. 0-1 BFS = deque (0 front, 1 back).
-- **Edge cases**: Disconnected, negative cycle, single node.
-- **Pattern tip**: "Shortest" unweighted → BFS; weighted → Dijkstra/Bellman-Ford; "order" → topo.
+---
+
+## 3. Core Traversals
+
+### BFS (queue)
+```
+queue = [start]; visited = {start}
+while queue:
+  u = queue.pop(0)
+  for v in adj[u]:
+    if v not in visited:
+      visited.add(v); queue.append(v)
+```
+- **Unweighted shortest path:** first time you reach `t` gives minimum edges.
+- **Multi-source:** enqueue all sources at distance 0 (e.g. Rotting Oranges).
+
+**Time:** `O(V + E)`; **Space:** `O(V)`.
+
+### DFS (recursion or stack)
+```
+def dfs(u, visited):
+  visited.add(u)
+  for v in adj[u]:
+    if v not in visited: dfs(v, visited)
+```
+- **Use for:** connected components, cycle (with parent/color), topological sort (post-order stack, then reverse).
+
+**Time:** `O(V + E)`; **Space:** `O(V)` recursion stack.
+
+### Topological sort (DAG)
+- **Kahn:** in-degree 0 in queue; pop, decrement neighbors; if cycle, not all nodes processed.
+- **DFS:** post-order on finish, reverse list.
+
+---
+
+## 4. Advanced Graph Algorithms
+
+| Algorithm | When | Time |
+|-----------|------|------|
+| **Dijkstra** | Non-negative weights | `O((V+E) log V)` with heap |
+| **Bellman–Ford** | Negative edges; detect negative cycle | `O(V·E)` |
+| **Floyd–Warshall** | All pairs, small `V` | `O(V³)` |
+| **Kruskal** | MST | Sort edges `O(E log E)` + DSU |
+| **Prim** | MST | `O(E log V)` with heap |
+| **Union–Find** | Connectivity, Kruskal | ~`O(1)` amortized per op |
+
+**Dijkstra sketch:** `dist[s]=0`; heap `(0,s)`; pop min; if `d > dist[u]` skip; relax `v`: if `d+w < dist[v]`, update and push.
+
+---
+
+## 5. Common SDE-3 Graph Problems
+
+**Easy:** Flood Fill, Find Center of Star Graph, Town Judge.  
+**Medium:** Number of Islands, Rotting Oranges, Course Schedule, Clone Graph, Minimum Height Trees.  
+**Hard:** Word Ladder, Cheapest Flights Within K Stops, Alien Dictionary, Swim in Rising Water.
+
+---
+
+## 6. Pattern Recognition
+
+- **BFS shortest path:** Unweighted; level = distance. Multi-source: enqueue all.
+- **DFS:** Components, cycle detection, topo (post-order), grid backtrack.
+- **Topological sort:** Dependencies, “order of tasks”, Alien Dictionary.
+- **Shortest path:** Non-negative → Dijkstra; negative → Bellman–Ford; unweighted → BFS.
+- **MST:** Kruskal (sort + DSU); Prim (heap).
+
+---
+
+## 7. SDE-3 Level Thinking
+
+- **Trade-offs:** List vs matrix (space vs edge lookup). BFS for unweighted shortest path. Dijkstra vs Bellman–Ford for negative edges.
+- **Scalability:** Adjacency list for sparse graphs; for huge graphs consider bidirectional BFS (meet in middle) when applicable.
+
+---
+
+## 8. Interview Strategy
+
+- **Identify:** “Shortest path” → BFS or Dijkstra. “Order” / “before” → topo. “Connected” → DFS or DSU. “MST” → Kruskal/Prim.
+- **Common mistakes:** Forgetting visited; Dijkstra with negative weights; topo only on DAG (detect cycle first).
+
+---
+
+## 9. Quick Revision
+
+- **Formulas:** Dijkstra: extract min, relax. Kruskal: sort edges, add if union. Topo: in-degree 0 queue or DFS post-order reverse.
+- **Tricks:** Multi-source BFS = enqueue all sources. 0–1 BFS = deque (0 front, 1 back).
+- **Edge cases:** Disconnected, negative cycle, single node.
+- **Pattern tip:** “Shortest” unweighted → BFS; weighted → Dijkstra/Bellman–Ford; “order” → topo.
+
+---
+
+## See also
+
+- [Union Find](union-find.md) — DSU for Kruskal and connectivity  
+- [data-structures/graphs.md](../data-structures/graphs.md) — extended walkthroughs (BFS problems, Striver-style)  
+- [advanced-graphs.md](../../advanced-dsa/advanced-graphs.md) — Tarjan SCC, bridges  
+- [patterns/leetcode-patterns.md](../../patterns/leetcode-patterns.md)

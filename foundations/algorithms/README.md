@@ -2,6 +2,8 @@
 
 Core algorithms for coding interviews. Most topics are expanded to **SDE-3 level**: concept overview, core algorithms, pattern recognition, interview strategy, and quick revision.
 
+**Google interview:** See [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) for a **7-day / 48-hour revision plan** and topic-by-topic links into these notes. One-page recall: [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md).
+
 ## Topic files
 
 | Topic | File | Highlights |
@@ -24,8 +26,8 @@ Core algorithms for coding interviews. Most topics are expanded to **SDE-3 level
 
 | File | Description |
 |------|-------------|
-| [dynamic-programming/dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md) | DP from Aditya Verma style: 0/1 knapsack, recursive tree. |
-| [recursion/aditya-verma.md](recursion/aditya-verma.md) | Recursion: IP/OP, decision tree, hypothesis/induction. |
+| [dynamic-programming/dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md) | **Supplement:** Choice diagram, 0/1 knapsack recurrence, unbounded vs 0/1. **Use with** [dynamic-programming/README.md](dynamic-programming/README.md). |
+| [recursion/aditya-verma.md](recursion/aditya-verma.md) | **Supplement:** IP/OP method, recursive tree, link to DP. **Use with** [recursion/README.md](recursion/README.md). |
 
 ## How to use
 

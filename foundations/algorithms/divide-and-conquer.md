@@ -40,3 +40,11 @@ An algorithmic paradigm that breaks a problem into smaller, independent subprobl
 
 - **Merge sort**: T(n) = 2T(n/2) + Θ(n) → Θ(n log n). **Quick sort**: T(n) = T(k) + T(n-k-1) + Θ(n); average k ≈ n/2 → Θ(n log n).
 - **Binary search**: T(n) = T(n/2) + Θ(1) → Θ(log n). **Majority**: Split; majority of array = majority of left or right half (then verify in O(n)).
+
+---
+
+## See also
+
+- [Sorting](sorting.md) — merge and quick sort  
+- [Searching](searching.md) — binary search  
+- [Dynamic Programming](dynamic-programming/README.md) — overlapping vs independent subproblems

@@ -117,3 +117,11 @@ def kmp_search(text, pattern):
 - **Tricks**: LPS = longest border; KMP never decrement text index. Anagram key = tuple(count) or sorted(s). Min window: expand until valid, shrink while valid.
 - **Edge cases**: Empty pattern; no match; multiple matches; case.
 - **Pattern tip**: "Substring" + "match" → KMP; "substring" + "anagram" → sliding window + count.
+
+---
+
+## See also
+
+- [Array](../data-structures/array.md) — sliding window on arrays vs strings  
+- [Hashing](../data-structures/hashing.md) — frequency maps  
+- [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance

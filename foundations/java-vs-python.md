@@ -53,3 +53,10 @@ if __name__ == "__main__":
 | **Strings** | Immutable; use list for in-place simulation | Immutable; use `StringBuilder` for many appends |
 
 Choose one language and stick to it for practice; know its standard library for DSA (collections, heap, sort, etc.). See [algorithms](algorithms/README.md) and [data-structures](data-structures/README.md) for topic-wise content.
+
+---
+
+## See also
+
+- [languages/java/README.md](../languages/java/README.md) — Java book notes  
+- [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md) — interview revision path

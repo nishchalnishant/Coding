@@ -41,4 +41,12 @@ A problem-solving technique where a function calls itself to solve smaller insta
 - **Base case**: Must be reached; typically empty list, null node, or n=0/1. **Recursive step**: Call with smaller n or child/next.
 - **Memoization**: Cache by (state) before returning; check cache at start. **Backtracking**: path.append(x); recurse; path.pop().
 - **Space**: O(depth) for call stack. Tree DFS: O(h). List: O(n). Consider iterative + explicit stack if depth large.
-- **See also**: [recursion/aditya-verma.md](aditya-verma.md) for IP/OP and decision-tree style.
+
+---
+
+## See also
+
+- [aditya-verma.md](aditya-verma.md) — IP/OP and decision-tree style  
+- [Backtracking](../backtracking.md) — template with undo  
+- [Dynamic Programming](../dynamic-programming/README.md) — memoization from recursion  
+- [Tree](../../data-structures/tree.md) — recursive structure

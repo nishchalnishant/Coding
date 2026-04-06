@@ -100,3 +100,11 @@ def group_anagrams(strs):
 - **Tricks**: Prefix sum + map for subarray sum; sorted string or count tuple for anagram key; complement = target - x.
 - **Edge cases**: K=0; prefix 0; empty; duplicates.
 - **Pattern tip**: "Find pair" / "subarray sum" → map; "group" → key design.
+
+---
+
+## See also
+
+- [Array](array.md) — prefix sum + map  
+- [String](../algorithms/string.md) — anagrams, rolling hash  
+- [Graph](../algorithms/graph.md) — adjacency list is a hash map of lists

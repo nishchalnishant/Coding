@@ -113,3 +113,11 @@ class MedianFinder:
 - **Tricks**: K largest → min-heap K; K smallest → max-heap K (negate in Python). Median → lo (max) + hi (min), keep lo size ≥ hi.
 - **Edge cases**: K=0, K>n; empty stream; duplicate values.
 - **Pattern tip**: "K" + "largest/smallest" or "merge K" → heap.
+
+---
+
+## See also
+
+- [Sorting](../algorithms/sorting.md) — QuickSelect vs heap for top-K  
+- [Queue](queue.md) — priority queue vs FIFO  
+- [Graph](../algorithms/graph.md) — Dijkstra uses min-heap

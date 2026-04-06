@@ -34,3 +34,10 @@ For more complex recurrences (e.g. merge sort \(T(n) = 2T(n/2) + O(n)\)), use th
 
 - **Merge sort**: See [algorithms/sorting.md](algorithms/sorting.md) and [algorithms/divide-and-conquer.md](algorithms/divide-and-conquer.md).
 - **Full DSA coverage**: Use [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md) for SDE-3 level content.
+
+---
+
+## See also
+
+- [algorithms/sorting.md](algorithms/sorting.md) — merge sort and complexity  
+- [algorithms/divide-and-conquer.md](algorithms/divide-and-conquer.md) — merge sort recurrence

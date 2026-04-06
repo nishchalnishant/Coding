@@ -101,3 +101,11 @@ By mastering these principles and practicing various miscellaneous algorithm pro
 - **When a problem mixes topics**: Identify the main pattern first (e.g. "it's really a graph" or "it's interval scheduling"), then apply the right DS/algorithm. See [patterns/README.md](../../patterns/README.md).
 - **Edge cases**: Empty input, single element, duplicates, overflow, negative numbers, zero. Always state them.
 - **Interview flow**: Clarify → brute force → optimize → code → test with examples and edge cases → state time/space.
+
+---
+
+## See also
+
+- [README](README.md) — full algorithm topic index  
+- [patterns/leetcode-patterns.md](../../patterns/leetcode-patterns.md) — pattern catalog  
+- [GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) — revision checklist

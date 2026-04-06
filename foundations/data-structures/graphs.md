@@ -383,3 +383,11 @@ By mastering these techniques and practicing a variety of graph problems, you'll
 - **BFS**: Queue + visited; level = shortest distance in unweighted. **DFS**: Stack/recursion; for topo, push in post-order then reverse.
 - **Dijkstra**: Min-heap (dist, node); relax neighbors; first extraction = final distance. **Kruskal**: Sort edges, add if Union-Find union succeeds.
 - **Topo**: Kahn = in-degree 0 queue; or DFS post-order reverse. **Edge cases**: Disconnected, cycle (no topo), single node.
+
+---
+
+## See also
+
+- [Graph algorithms](../algorithms/graph.md) — compact SDE-3 reference with pseudocode  
+- [Union Find](../algorithms/union-find.md) — DSU for Kruskal and connectivity  
+- [advanced-graphs.md](../../advanced-dsa/advanced-graphs.md) — Tarjan, bridges

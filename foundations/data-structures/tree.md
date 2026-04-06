@@ -107,3 +107,11 @@ def lowest_common_ancestor_bst(root, p, q):
 - **Tricks**: Postorder for tree DP; inorder for BST; null markers for serialize.
 - **Edge cases**: Empty, single node, negatives, overflow.
 - **Pattern tip**: "Through root" or "any path" → tree DP with global max.
+
+---
+
+## See also
+
+- [Graph](../algorithms/graph.md) — trees are special graphs  
+- [Dynamic Programming](../algorithms/dynamic-programming/README.md) — tree DP, House Robber III  
+- [Backtracking](../algorithms/backtracking.md) — path sum with backtrack

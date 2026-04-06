@@ -1,84 +1,75 @@
-# DP Aditya verma
+# Dynamic Programming — Aditya Verma Style (Supplement)
 
-What it is
+Notes on the **choice diagram** and **0/1 knapsack** way of building DP. For the main SDE-3 DP guide see [README.md](README.md) and [patterns/dp-advanced.md](../../../patterns/dp-advanced.md).
 
-* Enhanced recursion
-* Identify if question uses recursion
-* Recursion happens when we have choices at each step
-* So DP is Recursion + storage
+---
 
-DP happens when&#x20;
+## What is DP here?
 
-* If it calls two/multiple function and&#x20;
-* has recursion with optimal scenarios (Like maximum or minimum, greatest largest as such)
+- **DP = recursion + storage** — Same subproblems computed many times → cache results.
+- **When:** Choices at each step (take / not take, split, match) **and** optimal substructure (max/min/count).
+- **Steps:** Write correct **recursive** solution → add **memo** (top-down) or **table** (bottom-up) → **space optimize** when only previous row/column needed.
 
-How to approach
+---
 
-* Find the recursive function, which is to be used
-* Then do memoization \[storing result] or top down \[stack]
+## Parent patterns (overview)
 
-Different types of DP Problem variation (parent question)
+| Pattern | Idea |
+|---------|------|
+| 0/1 Knapsack | Each item at most once — two branches per item. |
+| Unbounded Knapsack | Unlimited copies of each item. |
+| Fibonacci / linear | `dp[i]` from previous indices. |
+| LCS / LIS | Two sequences or patience sorting. |
+| Kadane | Max subarray ending at `i`. |
+| MCM / Interval | Split `[i,j]` at `k`. |
+| DP on trees | Post-order; combine children. |
+| DP on graphs | Often topo order + relax. |
 
-* O-1 knapsack (6 sub problem)
-* Unbounded knapsack(5)
-* Fibonacci (7)
-* LSC (15)
-* LIS (10)
-* Kadane algorithm (6)
-* Matrix chain multiplication (7)
-* DP on trees (7)
-* DP on Graphs(14)
-* &#x20;Others (5)
+---
 
-***
+## 0/1 Knapsack — classic formulation
 
-## 0-1 knapsack problems
+**Problem:** `n` items with `weight[i]` and `value[i]`, capacity `W`. Maximize sum of values without exceeding `W`.
 
-We have a sack which can store a limit of weight where we have items which has cost and weight associated with that, where we have to pick up the items so that profit is maximum.
+**Choices per item:** Include item `i` (if weight fits) or skip.
 
-* Three types&#x20;
-  * Fractional knapsack (greedy)
-    * we can have a fraction of an item in our bag, so that we can have a full bag always
-    * This is of greedy approach where we can select the maximum one at a instance and get things one&#x20;
-  * 0-1 knapsack (DP)
-    * an object goes in or not, so we have to choose optimally all the time
-  * unbounded knapsack
-    * we can have multiple instance of the same object
-* Initial steps
-  * After reading the question we have to look for two things&#x20;
-    * Choice at each step (choice to select or reject)
-    * optimal (maximum, minimum etc)
-  * After that we do
-    * Find recursive solution --> memoization --> Top down
-* Code
-  * we have to find the recursive code first then do the memoization
-  * recursive code&#x20;
-    * then start with the base condition
-      * to find base condition, think of smallest valid input&#x20;
-      * in this case the size of weight, cost and weight is 0
-      * then find the answer for that smallest input&#x20;
-      * so here,
-        * if (n==0) and (wt=0):
-          * return 0
-    * first start with choice digram&#x20;
-      * here the choice digram would be for each object if the weight is more than the weight that can be part of the sack then we don't take that object, else&#x20;
-      * we would have two options either to take the object or not based on certain condition such as max(val\[n-1]+knapsack(wt,val,w-wt\[n-1],n-1), knapsack(wt+val, w,n-1)
-  * bottoms up approach
-    * once we have recursive solution it is easy to create a bottoms up approach
-    * for bottoms up we have to change 2 things, we need to store values which are not changing while calling the recursive function
-    * and fill it with placeholder values
-    * and before calling the recursive function we just need to check in the array if it is present of not, if yes we skip the recursive call if no we fill it with the value.
-    * Note — if we look closely for different values of the n and w we get the values of the subproblems  therefore for each values of n and w
-  * Topdown approach&#x20;
-    * we plan to skip the recursive call all together , we just store the values and skip the recursive call
-    * this is best efficient approach but in some question it might not work.
-    * to derive the top down approach&#x20;
-      * step 1: here also we create a matrix with values which are not change in the recursive calls
-      * step 2: initialise the values in the array with random values but initialise the 0th row and 0th column with the case of the base condition
-      * now instead of the recursive calls we just have to make it iterative so that we don't have the stack to worry about.
-      * so we have to use previous result and run a loop to find out the result of that particular position using the past results
-* identification of knapsack problem introduction
-  * &#x20;subset sum problem&#x20;
-    * is there a subset in an array where the summ is equal to a value
-  * initial solution
-    * we have a choice for each number so recursion can be used
+**Recursive (conceptual):**
+
+```text
+knapsack(i, w) = max(
+    knapsack(i-1, w),                                    # skip i
+    value[i-1] + knapsack(i-1, w - weight[i-1])         # take i, if w >= weight[i-1]
+)
+```
+
+Base: `i == 0` or `w == 0` → `0` (adjust indices to your 0/1-based convention).
+
+**Memo dimensions:** `(i, w)` — at most `(n+1)*(W+1)` states.
+
+**Bottom-up:** `dp[i][w]` = max value using first `i` items with capacity `w`. Space-optimize to **1D** `dp[w]` iterating **backwards** over `w` when copying from `i-1` row.
+
+**Identification:** “Subset with given sum”, “partition equal subset”, “target sum” — often reduce to knapsack or subset-sum variant.
+
+---
+
+## Unbounded knapsack
+
+Same items can be picked multiple times — inner loop can iterate **forward** over capacity when using 1D DP (unlike 0/1 backward loop).
+
+---
+
+## Original notes (fractional vs 0/1 vs unbounded)
+
+- **Fractional knapsack** — Greedy by value/weight ratio (not DP).
+- **0/1 knapsack** — Each item once; DP.
+- **Unbounded** — Unlimited copies; DP with different inner loop order.
+
+After reading the problem, check: **choice** (pick/skip) + **optimal** (max/min) → write recurrence → memo/table.
+
+---
+
+## See also
+
+- [README.md](README.md) — SDE-3 DP overview and interview flow  
+- [patterns/dp-advanced.md](../../../patterns/dp-advanced.md) — 16 patterns  
+- [greedy.md](../greedy.md) — when greedy replaces DP (fractional knapsack)

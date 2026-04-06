@@ -83,3 +83,30 @@ def backtrack(path, start, ...):
 - **Tricks**: Use start index to avoid duplicate combinations; for permutations swap and recurse or use "remaining" set. N-Queens: cols, diag1 (r+c), diag2 (r-c) sets.
 - **Edge cases**: Duplicates; empty; one element.
 - **Pattern tip**: "Generate all" / "find one valid" with constraints → backtrack; overlap → memo → DP.
+
+---
+
+## 9. Code sketch (permutations)
+
+```python
+def permute(nums):
+    res = []
+    def backtrack(path, remaining):
+        if not remaining:
+            res.append(path[:])
+            return
+        for i, x in enumerate(remaining):
+            backtrack(path + [x], remaining[:i] + remaining[i+1:])
+    backtrack([], nums)
+    return res
+```
+
+*(Production-style: swap in-place or use a `used` boolean array to avoid O(n) slice cost.)*
+
+---
+
+## See also
+
+- [Dynamic Programming](dynamic-programming/README.md) — overlapping subproblems → memo  
+- [Recursion](recursion/README.md) — base case and stack depth  
+- [Trie + backtrack](../../advanced-dsa/trie-segment-trees.md) — Word Search II

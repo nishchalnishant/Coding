@@ -103,3 +103,11 @@ def largest_rectangle_area(heights):
 - **Tricks**: Decreasing stack → NGE; increasing → NSE. Histogram: pop and compute width using current index and new top.
 - **Edge cases**: Empty, single bar, all equal, duplicate values (use indices, not values).
 - **Pattern tip**: "Next greater" / "previous smaller" → monotonic stack; "valid brackets" → push/pop match.
+
+---
+
+## See also
+
+- [Queue](queue.md) — monotonic deque for sliding window max  
+- [Graph](../algorithms/graph.md) — DFS uses implicit stack  
+- [Greedy](../algorithms/greedy.md) — some stack problems have greedy structure

@@ -91,3 +91,11 @@ def sliding_window_maximum(nums, k):
 
 - **Tricks**: Monotonic deque: store indices; remove from back if smaller than current; remove from front if out of window.
 - **Edge cases**: k=0, k>n; empty graph; disconnected (BFS from each unvisited).
+
+---
+
+## See also
+
+- [Stack](stack.md) — stack vs queue for traversal  
+- [Graph](../algorithms/graph.md) — BFS shortest path  
+- [array.md](array.md) — sliding window (related to deque for max in window)

@@ -11,6 +11,8 @@
 * [Folder-by-Folder Audit](FOLDER_BY_FOLDER_AUDIT.md)
 * [SDE-3 DSA Roadmap](SDE3_DSA_ROADMAP.md)
 * [Notes (Foundations)](foundations/README.md)
+  * [Google Interview Revision](foundations/GOOGLE_INTERVIEW_REVISION.md)
+  * [Google Quick Sheet](foundations/GOOGLE_QUICK_SHEET.md)
   * [Data structures](foundations/data-structures/README.md)
     * [Array](foundations/data-structures/array.md)
     * [Linked list](foundations/data-structures/linked-list.md)

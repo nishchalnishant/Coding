@@ -106,3 +106,11 @@ def binary_search_on_answer(candidates, predicate):
 - **Tricks**: Predicate for "can we achieve X?"; smallest valid → hi = mid; largest valid → lo = mid (with appropriate loop).
 - **Edge cases**: Empty; single element; target not in range; duplicates.
 - **Pattern tip**: "Minimum maximum" → binary search on answer + greedy predicate.
+
+---
+
+## See also
+
+- [Array](../data-structures/array.md) — rotated array search patterns  
+- [Sorting](sorting.md) — ordering prerequisite for binary search on index  
+- [Graph](graph.md) — not directly related; BS on answer is cross-topic

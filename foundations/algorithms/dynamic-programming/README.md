@@ -78,3 +78,11 @@ See [dp-advanced.md](../../patterns/dp-advanced.md) for 16 patterns and examples
 - **Recurrence**: State = f(smaller states). Base = known values.
 - **Space**: 1D often → 2 variables (current, prev); 2D → 1D row if row i only needs row i-1.
 - **Pattern tip**: "Max/min/count with choices" → state + recurrence; "interval" → split k; "subset" small n → bitmask.
+
+---
+
+## See also
+
+- [dp-aditya-verma.md](dp-aditya-verma.md) — choice diagram / knapsack style  
+- [patterns/dp-advanced.md](../../../patterns/dp-advanced.md) — 16 patterns  
+- [Backtracking](../backtracking.md) — when to memoize into DP

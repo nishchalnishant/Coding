@@ -45,3 +45,11 @@ Arranging data in a specific order to optimize subsequent operations (like searc
 - **Merge sort**: Split mid, sort halves, merge with two pointers. T(N) = 2T(N/2) + O(N) = O(N log N). Stable.
 - **Quick sort**: Partition around pivot (e.g. last); recurse left and right. Average O(N log N); worst O(N²). QuickSelect: recurse only the partition that contains rank K.
 - **Stable**: Merge, insertion, counting, radix. **Unstable**: Quick, heap. **In-place**: Quick (stack O(log N)), heap, insertion.
+
+---
+
+## See also
+
+- [Greedy](greedy.md) — sort first, then greedy scan  
+- [Divide and Conquer](divide-and-conquer.md) — merge sort, quicksort  
+- [Heap](../data-structures/heap.md) — heap sort

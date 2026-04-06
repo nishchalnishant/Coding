@@ -1,34 +1,41 @@
-# Aditya verma
+# Recursion — Aditya Verma Style (Supplement)
 
-Intro
+Structured way to think about **recursion as decisions + smaller input**. Use alongside [recursion/README.md](README.md) and [backtracking.md](../backtracking.md).
 
-* make I/P smaller ? but why?
-  * we take some decisions which leads to smaller inputs
-  * so in recursion we take decisions which makes the input smaller
-* recursion — decision space
-* recursive tree — soul of recursion
-  * create a recursive tree then we will be done with the question
-  * ex — create all subsets of a string
-  * recursion == choices + decision&#x20;
-* 2 steps to solve any recursive problem
+---
 
+## Core idea
 
+1. **Make the input smaller** — Each recursive call should move toward a **base case** by a valid decision (include/exclude, move to next index, split left/right).
+2. **Recursion = choices + decisions** — At each step you have options; the **recursive tree** (decision tree) shows all paths.
+3. **Draw the tree first** — For subsets, permutations, knapsack-style choices, sketching the tree often reveals the recurrence.
 
-Approach to recursion problem
+---
 
-* Recursive tree — IP/OP method (decision tree)
-  * create a decision tree where we take desicision at each step
-* Base condition — Induction/hypothesis
-  * Base condition
-  * Hypothesis
-  * induction —&#x20;
-* Choice Digram (DP)
-* one more
+## IP / OP method (input–output)
 
+- **Input:** What you have left to process (e.g. remaining string, index `i`, remaining budget).
+- **Output:** What you are building (current path, current sum, current string).
+- Each branch: choose an action → new IP (smaller) → recurse → optionally **undo** (backtracking).
 
+---
 
-* Recursive tree
-  * at each input we have option to do a action and for each action we have input and output
-  * Based on each action the input gets smaller and smaller
-  * for each node in the tree we have number of &#x20;
+## Base case and induction
 
+- **Base case:** Smallest valid input where the answer is trivial (empty string, `i == n`, weight 0).
+- **Hypothesis:** Assume recursive calls return the correct answer for smaller inputs.
+- **Induction:** Combine children results to build the answer for the current node.
+
+---
+
+## From recursion to DP
+
+When the same **(state)** is reached on different paths → **overlapping subproblems** → add **memoization** (top-down) or **tabulation** (bottom-up). See [dynamic-programming/README.md](../dynamic-programming/README.md).
+
+---
+
+## See also
+
+- [recursion/README.md](README.md) — formal template and complexity  
+- [dp-aditya-verma.md](../dynamic-programming/dp-aditya-verma.md) — knapsack and choice diagram  
+- [patterns/dp-advanced.md](../../../patterns/dp-advanced.md)

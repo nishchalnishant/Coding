@@ -46,3 +46,11 @@ Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ 
 - **Sieve**: Mark multiples of primes; O(N log log N). **Primality**: Check 2..√N. **GCD**: gcd(a,b)=gcd(b,a%b); O(log min(a,b)).
 - **LCM**: (a×b)/gcd(a,b). **Mod**: (a+b) mod M = ((a mod M)+(b mod M)) mod M; same for product.
 - **Trailing zeroes in n!**: Count of 5 in 1..n (each 5 contributes at least one 0).
+
+---
+
+## See also
+
+- [Bit manipulation](bit-manipulation.md) — powers of two, parity  
+- [Greedy](greedy.md) — some math scheduling problems  
+- [Miscellaneous](miscellaneous.md) — number-theory style mix problems
