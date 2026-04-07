@@ -1,4 +1,4 @@
-# Stack — SDE-3 Level
+# Stack — SDE-2+ Level
 
 LIFO (Last In, First Out) structure. SDE-3 focus: monotonic stack for "next greater/smaller", expression parsing, and when to prefer stack over other structures.
 
@@ -57,6 +57,8 @@ LIFO (Last In, First Out) structure. SDE-3 focus: monotonic stack for "next grea
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/stack_queue.py`.
+
 ```python
 def next_greater_element(nums):
     n = len(nums)
@@ -82,7 +84,7 @@ def largest_rectangle_area(heights):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Monotonic stack gives O(N) for "next greater" vs O(N²) brute force. Two pointers for rain water can be O(1) space; stack is more general for "bounded by next greater" thinking.
 - **Scalability**: Stack depth = at most N; consider recursion limit (use iterative stack for deep DFS).
@@ -108,13 +110,18 @@ def largest_rectangle_area(heights):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Daily Temperatures** | Decreasing index stack; warmer day pops and assigns | Store **indices**, not temps; end of array |
-| **Largest Rectangle Histogram** | Pop when lower bar; width = `i - new_top - 1` | Sentinel `0` height at end; empty stack width |
-| **Valid Parentheses** | Push opens; pop match on close | `[{` type mismatch; only `()` in easy variant |
-| **Decode String** | Stack of `(string, k)` at `[`; repeat on `]` | Multi-digit `k`; nested `a2[b3[c]]` |
-| **Trapping Rain Water** (stack) | Pop when current higher; compute water between | Same as array two-pointer but stack mental model |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Daily Temperatures** | **Monotonic decreasing stack of indices**; for each `i`, while stack top has lower temp, pop `j` and set `answer[j]=i-j`. | **Indices** on stack; **no warmer** → 0. **O(n)** each index pushed/popped once. |
+| **Next Greater Element I** | Monotonic **decreasing** value stack; when see greater, assign NGE for popped. **Circular:** iterate `2n` or modulo. | **Per-query** vs preprocess; **-1** if none. |
+| **Largest Rectangle in Histogram** | Stack of **increasing** indices; on lower bar, pop `h`; width = `i - stack.top - 1` (after pop). Append **0** sentinel at end. | **Empty stack** after pop → width `i`; **equal** heights—index stack handles. |
+| **Maximal Rectangle** (matrix) | For each row, build **heights** histogram; run **largest rectangle** per row. | **O(n*m)**; compress matrix to 1D histogram sweep. |
+| **Valid Parentheses** | Push on `(` `[` `{`; on close, pop must match type. | **Early** invalid if stack empty; **only one type** in easy version. |
+| **Min Stack** | **Aux stack** of mins, or store `(val, min_so_far)` per node. | **Pop** must restore min; **duplicate** min values in aux stack. |
+| **Decode String** | Stack of `(prefix_string, repeat_k)` at `[`; on `]` pop and repeat. **Recursion** also works. | **Multi-digit** `k`; **nested** brackets. |
+| **Exclusive Time of Functions** | Stack of `(id, start)`; on **end**, add `timestamp - start + 1` to id; pause inner on nested start. | **Timestamp** inclusive; **nested** functions subtract overlap correctly. |
+| **Simplify Path** | Split `/`; stack for `..` (pop if non-empty), ignore `.` and empty. | **Root** `..` doesn’t pop; **trailing** slash. |
+| **Trapping Rain Water** (stack) | Stack of **decreasing** heights; pop and compute water between popped and current with boundary. | Equivalent insight to **two pointers**; good for “why stack” explanation. |
 
 ---
 

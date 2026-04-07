@@ -1,4 +1,4 @@
-# Greedy Algorithms — SDE-3 Level
+# Greedy Algorithms — SDE-2+ Level
 
 Make the **locally optimal choice** at each step; prove (or argue) it leads to a **global optimum**. SDE-3 expects proof intuition, exchange arguments, and when greedy fails.
 
@@ -46,7 +46,7 @@ Make the **locally optimal choice** at each step; prove (or argue) it leads to a
 
 ---
 
-## 6. SDE-3 Level Thinking
+## 6. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Greedy O(N log N) or O(N) vs DP O(N²); greedy when proof is clear; DP when in doubt for optimization.
 - **Scalability**: Sorting and single pass; heap when "current best" changes dynamically.
@@ -71,6 +71,8 @@ Make the **locally optimal choice** at each step; prove (or argue) it leads to a
 
 ## 9. Code sketch (non-overlapping intervals)
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/greedy.py`.
+
 ```python
 def eraseOverlapIntervals(intervals):
     if not intervals:
@@ -92,14 +94,19 @@ def eraseOverlapIntervals(intervals):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Jump Game II** | Greedy: furthest in current jump range; increment jumps at range end | Jump Game I is only reachability — different |
-| **Non-overlapping Intervals** | Sort by **end**; count removal when overlap | Sort by start fails — counterexample |
-| **Gas Station** | If total gas ≥ total cost, start exists; reset when tank < 0 | Proof of uniqueness |
-| **Task Scheduler** | Idle slots `(max-1)*(n+1)+num_max` | Cap at `len(tasks)` |
-| **Assign Cookies** | Sort both; greedily match smallest cookie that fits | Two pointers after sort |
-| **Candy** | Left pass then right pass ratings | Two passes for both constraints |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Jump Game I** | Track `furthest`; if `i > furthest` unreachable; else `furthest = max(furthest, i+nums[i])`. | **O(n)** single pass; **Jump II** is different (count jumps). |
+| **Jump Game II** | **Greedy BFS levels:** `end` of current jump range, `furthest` max reach; when `i==end`, increment jumps, `end=furthest`. | **Not** DP for standard statement—greedy optimal; **prove** why extending furthest in current range works. |
+| **Non-overlapping Intervals** | Sort by **end**; keep last picked end; if `start < lastEnd` skip/remove. | **Sort by start** fails (counterexample); **erase** minimum intervals = same as max non-overlapping count. |
+| **Meeting Rooms / min arrows** | Intervals: sort by end; **one arrow** per merged cluster end (min arrows to burst balloons). | **Touching** points—`>` vs `≥` for overlap. |
+| **Gas Station** | If `sum(gas) < sum(cost)` no start; else start from 0 with running tank; reset start when tank < 0. | **Uniqueness** of valid start when total surplus ≥ 0; **circular** array linearized by reset. |
+| **Task Scheduler** | Idle formula: `(max_freq-1)*(n+1) + num_tasks_with_max_freq`, **capped** at `len(tasks)`. | **Cap** means cooling fits inside available slots; **heap** simulation alternative. |
+| **Assign Cookies** | Sort `g`, `s`; two pointers—smallest cookie that satisfies smallest child. | **Greedy** matching preserves maximum satisfied children proof. |
+| **Candy** | **Left→right:** if `rating[i] > rating[i-1]` then `candy[i]=candy[i-1]+1`; **right→left** symmetric fix. | **Two passes** needed—one pass fails; **O(n)** time O(n) space. |
+| **Fractional Knapsack** | Sort by **value/weight**; take greedily until capacity. | **0/1 knapsack** is **not** greedy—need DP. |
+| **Minimum Refueling Stops** | **Max-heap** of reachable gas stations’ fuel; at each position refuel largest when needed. | **Greedy** by **largest** available fuel when you must stop. |
+| **Partition Labels** | Record **last index** of each char; sweep—extend `end` of current partition; cut when `i==end`. | **Greedy** partition so each letter appears in only one part. |
 
 ---
 

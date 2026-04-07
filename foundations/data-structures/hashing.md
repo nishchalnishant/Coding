@@ -1,4 +1,4 @@
-# Hashing — SDE-3 Level
+# Hashing — SDE-2+ Level
 
 Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE-3: collision strategies, load factor, consistent hashing (distributed), and when to use set vs map.
 
@@ -58,6 +58,8 @@ Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/arrays.py` (prefix sums), `../../google-sde2/snippets/python/two_pointers_window.py` (window maps).
+
 ```python
 def subarray_sum_equals_k(nums, k):
     count = 0
@@ -80,7 +82,7 @@ def group_anagrams(strs):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Chaining vs open addressing — chaining simpler, open addressing better cache and one allocation. Load factor vs space vs collision rate.
 - **Scalability**: Distributed systems → consistent hashing. Huge key space with small set → bloom filter. LRU at scale → sharded maps + TTL.
@@ -105,13 +107,18 @@ def group_anagrams(strs):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Group Anagrams** | Key = sorted string or tuple of 26 counts | Unicode → not 26 buckets; tuple hashable |
-| **Longest Consecutive** | Put all in set; start seq only if `x-1` ∉ set | Looks O(n²) but each number visited once total |
-| **LRU Cache** | HashMap + doubly linked list; move to front on get | O(1) needs pointer updates; capacity 1 edge case |
-| **Subarray Sum = K** | `count[prefix]` and `count[prefix-K]` | `count[0]=1`; negatives allowed |
-| **Design HashMap** (basic) | Chaining or open addressing | Load factor rehash; equals/hash contract |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Group Anagrams** | Key: **sorted string** O(k log k) per word, or **count tuple** (26 or Unicode-sized array → tuple). Bucket by key. | **Unicode:** 26 letters assumption fails—use map or sort. **Space:** storing sorted string vs count vector. |
+| **Longest Consecutive Sequence** | `set(nums)`; for each `x`, if `x-1` not in set, walk `x, x+1, ...` and count length. | **Amortized O(n):** each number in at most one chain. **Sort** is O(n log n)—worse but simpler. |
+| **LRU Cache** | `HashMap` key→`Node`; **DLL** for recency (head=MRU, tail=LRU); `get`/`put` splice node; evict tail if size > cap. | **O(1)** only with DLL pointers correct; **capacity 1**; **update** existing key moves node. |
+| **Subarray Sum Equals K** | `count[prefix]` frequency; `ans += count[prefix - K]`; `count[0]=1`. | Works with **negatives**; **sliding window** wrong for arbitrary integers. |
+| **Contiguous Array** (equal 0/1) | Map **prefix balance** (count1−count0) to **first index**; max length with same balance. | Transform `0→-1` then same as “subarray sum 0”. |
+| **Copy List with Random Pointer** | Map original→clone; two passes. Or **interleave** clones for O(1) extra. | **Random** pointer graph structure. |
+| **Design HashMap** | **Chaining:** array of buckets, linked list on collision. **Open addressing:** linear/quadratic probe. | **Rehash** when load factor high; **`equals`/`hashCode`** contract in Java; **delete** tombstones in probing. |
+| **Insert Delete GetRandom O(1)** | `map val→index` + **dynamic array**; swap-with-last on delete to keep indices compact. | **Duplicate** values need multiset or map to **set of indices** variant. |
+| **Minimum Window Substring** | Sliding window + **need** counts for `t`; shrink when valid to minimize. | **Unicode** counts; **multiple** same chars in `t`. |
+| **Logger Rate Limiter** | Map `msg → last_timestamp`; allow if `now ≥ last+10`. | **Prune** old entries if memory bound (follow-up). |
 
 ---
 

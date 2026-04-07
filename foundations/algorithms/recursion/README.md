@@ -16,7 +16,7 @@ A problem-solving technique where a function calls itself to solve smaller insta
 - **Memoization**: Cache results of expensive recursive calls to avoid redundant work (Top-Down Dynamic Programming).
 - **Backtracking**: A form of recursion that builds a solution incrementally and abandons a path ("backtracks") as soon as it determines the path cannot lead to a valid solution.
 
-## Common SDE-3 Recursion Problems
+## Common SDE-2 Recursion Problems
 - *Easy*: Fibonacci Number, Factorial, Reverse Linked List, Same Tree.
 - *Medium*: Subsets, Permutations, Combinations, Validate Binary Search Tree.
 - *Hard*: Serialize and Deserialize Binary Tree, Word Search II, Regular Expression Matching.
@@ -46,13 +46,16 @@ A problem-solving technique where a function calls itself to solve smaller insta
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Reverse Linked List** | Recursive: reverse rest then fix head | Stack O(n); tail call |
-| **Same Tree** | Match structure and value | Null handling |
-| **Fibonacci** | Recursion + memo vs iterative | Exponential naive |
-| **Pow(x,n)** | Recursion half power | n negative; overflow |
-| **Generate Parentheses** | Add `(` if open left; add `)` if valid | Backtracking variant |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Reverse Linked List** | `reverse(head)` = `reverse(head.next)` then `head.next.next = head; head.next = null`. | **O(n)** stack space; **cycle** breaks; **tail** becomes new head. |
+| **Same Tree** | Match `p.val == q.val` and recurse `left`, `right`; both null → true; one null → false. | **Structure** and **value**; **iterative** queue alternative. |
+| **Maximum Depth of Binary Tree** | `1 + max(depth(left), depth(right))`; empty → 0. | **Stack depth** on skewed tree O(n). |
+| **Fibonacci** | Naive `fib(n)=fib(n-1)+fib(n-2)` is **O(2^n)**; **memo** or **iterative** O(n). | **Mod** 10^9+7; **matrix** exp log n for huge n. |
+| **Pow(x, n)** | `n%2==0` → `pow(x*x, n//2)` else `x * pow(x, n-1)`; handle negative `n`. | **INT_MIN** negation; **double** vs int. |
+| **Generate Parentheses** | Recurse `open` used, `close` used; add `(` if `open<n`; add `)` if `close<open`. | **Valid** prefix: `close ≤ open` always; **count** only vs **list all**. |
+| **Merge Two Sorted Lists** | Recursive: smaller head = `merge(head.next, other)`; **iterative** often preferred. | **O(n)** stack vs O(1) iterative. |
+| **Flatten Multilevel Doubly Linked List** | DFS: next then child; **rewire** child’s tail to next. | **Null** child; **in-place** pointer surgery. |
 
 ---
 

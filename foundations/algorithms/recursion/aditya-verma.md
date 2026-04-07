@@ -36,13 +36,16 @@ When the same **(state)** is reached on different paths → **overlapping subpro
 
 ## Interview Questions — Logic & Trickiness (recursive style)
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **All Subsets** | Include/exclude each index; recurse | Bitmask vs recursion depth |
-| **Permutations** | Swap or used[] | Duplicate elements — skip same branch |
-| **Tower of Hanoi** | Move n-1, move base, move n-1 | Classic induction |
-| **N-Queens** | Row recursion + validity | Diagonal encoding |
-| **Generate Parentheses** | Open/close count | Prune when `close > open` |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **All Subsets** | At index `i`: branch **include** `nums[i]` and **exclude**; recurse to `i+1`. | **Bitmask** `0..2^n-1` equivalent; **subsets II** needs sort + skip duplicates on exclude branch. |
+| **Permutations** | Swap-based or `used[]` boolean; **depth** = n. | **Duplicate** array: sort + `if (i>0 && nums[i]==nums[i-1] && !used[i-1])` skip. |
+| **Tower of Hanoi** | `move(n, src, aux, dst)` = move `n-1` src→aux, move disk n src→dst, move `n-1` aux→dst. | **Induction** proof; **2^n-1** moves optimal. |
+| **Josephus / elimination games** | Recursive `f(n,k) = (f(n-1,k)+k) % n` with base; iterative from 0. | **0-based** vs **1-based** index; **k** step size. |
+| **N-Queens** | Place one queen per row; recurse column choice; check `col` and diagonals. | **Bitmasks** `cols | diag1 | diag2` for speed; **count** vs **print** one solution. |
+| **Generate Parentheses** | Only add `)` when `close < open`; stop when `open==close==n`. | **IP/OP style:** `open` count = output so far, `close` count; **invalid** if `close` exceeds `open`. |
+| **Binary Tree Paths** | DFS: path string + `->`; on leaf append to result. | **Leaf** = node with no children; **value** to string. |
+| **Expression evaluation** | Operators + recursion on **subexpr**; or two-stack **Shunting-yard** (iterative). | **Recursion** matches nested parentheses naturally. |
 
 ---
 

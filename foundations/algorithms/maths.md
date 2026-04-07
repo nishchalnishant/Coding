@@ -3,6 +3,9 @@
 Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ loops down to $O(\sqrt{N})$ or $O(1)$. 
 
 ## Core Theory & Algorithms
+
+SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/maths.py`.
+
 - **Prime Numbers**:
   - *Sieve of Eratosthenes*: Find all primes up to $N$ in $O(N \log \log N)$ time.
   - *Primality Test*: Loop from $2$ to $\sqrt{N}$. If $N$ is divisible by any, it's not prime. Time: $O(\sqrt{N})$.
@@ -51,14 +54,18 @@ Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ 
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Pow(x,n)** | Fast exponentiation binary expansion of n | Negative n; n = MIN_INT edge case |
-| **Sqrt(x)** | BS on `[0,x]` or Newton | Integer sqrt floor; overflow in `mid*mid` |
-| **GCD / LCM** | Euclidean `gcd(a,b)=gcd(b,a%b)` | LCM = `a*b/gcd` overflow → divide first |
-| **Count Primes** | Sieve of Eratosthenes | `i*i <= n`; boolean array size n+1 |
-| **Max Points on Line** | Slope map from point i; gcd normalize dy,dx | Duplicate points; vertical line (dx=0) |
-| **Random Pick with Weight** | Prefix sum + BS on random value | Inclusive ranges; `rand` in `[0, total)` |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Pow(x, n)** | Binary exponentiation: square `x` while halving `n`; multiply result when `n` odd. | **`n < 0`** take reciprocal; **`n = INT_MIN`**—use `long` or halve positive carefully. |
+| **Sqrt(x) / Integer Sqrt** | Binary search `ans` in `[0,x]` with `mid <= x // mid`; or **Newton** `x_{k+1} = (x_k + n/x_k)/2`. | **`mid*mid`** overflow—compare with division; **floor** vs **ceil** sqrt. |
+| **GCD / LCM** | **Euclidean** gcd; **LCM** = `a / gcd(a,b) * b` to reduce overflow. | **`gcd(0,a)=a`**; **coprime** check `gcd==1`. |
+| **Count Primes** | **Sieve:** mark multiples from each prime `p` starting `p*p`. | **`sqrt(n)`** bound for primes to sieve; **space** O(n)—**segmented** sieve for huge n. |
+| **Factorial Trailing Zeroes** | Count **factors of 5** in n! (each 5,25,125…). | **More 2s than 5s**—only count 5s; **legendre** style sum. |
+| **Max Points on a Line** | For each anchor, map **reduced slope** `(dy/g, dx/g)` with `g=gcd(|dy|,|dx|)`; handle **vertical** and **duplicates**. | **Same point** add to duplicate counter; **use gcd** to normalize `-2/3` vs `2/-3`. |
+| **Random Pick with Weight** | **Prefix sums** `P[i]`; draw `r` in `[0, P[last])`; **binary search** first `P[i] > r`. | **Inclusive/exclusive** random range; **zero** weights excluded. |
+| **Integer Break** | For `n≥4`, break into **3s** (maximize product); handle small n by table. | **Greedy** proof via calculus / AM-GM intuition; **DP** for variant constraints. |
+| **Arranging Coins** | Find max `k` with `k(k+1)/2 ≤ n` → **binary search** or quadratic formula. | **Integer** overflow in `k*(k+1)`. |
+| **Bulb Switcher** | Only bulbs with **square** indices stay on after n toggles—`floor(sqrt(n))`. | **Divisor pairs**—squares have odd # of divisors. |
 
 ---
 

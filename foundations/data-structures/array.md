@@ -1,4 +1,4 @@
-# Arrays — SDE-3 Level
+# Arrays — SDE-2+ Level
 
 A fixed-size sequential collection of elements of the same type stored in contiguous memory. Mastery at SDE-3 means knowing when to use which technique, trade-offs, and production considerations.
 
@@ -119,6 +119,8 @@ return best
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/arrays.py`, `../../google-sde2/snippets/python/two_pointers_window.py`.
+
 ### Kadane (Max Subarray Sum)
 ```python
 def max_subarray_sum(nums):
@@ -164,7 +166,7 @@ def longest_substring_k_distinct(s, k):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Two pointers vs hash map for two-sum — hash map handles unsorted and gives O(N); two pointers need sort O(N log N) but O(1) space. For "all pairs" vs "one pair", design accordingly.
 - **Scalability**: For very large arrays, consider streaming (Kadane, reservoir sampling); for range queries at scale, prefix sum is O(1) per query but no point updates (use segment tree if updates needed).
@@ -193,14 +195,22 @@ def longest_substring_k_distinct(s, k):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Two Sum** | Hash complement `target - x`, or sort + two pointers | Duplicates; return indices vs values; unsorted needs map |
-| **3Sum** | Sort; fix `i`, two-pointer on rest; skip duplicate `nums[i]` | Must skip at `i`, `left`, and `right` or duplicate triplets |
-| **Subarray Sum = K** | Prefix sum + `count[prefix]`; `count[0]=1` | Negative nums OK; prefix 0 = subarray from start |
-| **Longest substring ≤K distinct** | Sliding window; shrink `i` while `distinct > K` | Jump `i` with last-index map vs char-by-char |
-| **Trapping Rain Water** | Two pointers: `min(l_max,r_max)-height[i]`; move shorter side | Why shorter side caps water; stack variant for 2D thinking |
-| **Product Except Self** | Left products × right products; no division | Two zeros → all zero; one zero → only that index non-zero |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Two Sum** | Map `value → index` (or list of indices); for each `x`, check `target - x`. **Sorted array:** two pointers `left/right` moving inward by comparing sum to target. | **Indices:** sorting loses original index—pair `(val, idx)` if needed. **Duplicates:** two `3`s can be valid pair for `6` if different positions. **Follow-up:** all pairs, sorted array, k-sum. |
+| **3Sum** | Sort `O(n log n)`; fix `i`, then two-pointer on `[i+1..n-1]` for target `0 - nums[i]`. On match, record triplet, then **skip equal** `nums[left]` and `nums[right]` before moving pointers. | **Deduplication** at `i`, `left`, `right` separately—classic bug. **Time** O(n²). **4Sum:** fix two indices + two pointers. |
+| **3Sum Closest** | Same as 3Sum but track closest `abs(sum - target)`; no dedupe needed usually. | Update best when `sum` closer; still O(n²). |
+| **Subarray Sum = K** | `count[prefix]` frequency; each step `ans += count[prefix - K]`; `count[0] = 1` for subarrays starting at 0. | **Negatives:** prefix + map still works; **sliding window fails** for exact K with negatives. **Overflow** if sum huge. |
+| **Subarray Product < K** | Sliding window with **positive** nums; multiply/divide. If zeros, split segments. | **Negatives / zeros** break monotonicity—different problem variant. |
+| **Longest substring ≤ K distinct** | Expand `j`, add char to freq map; while `distinct > K`, remove `s[i]` and `i++`. Answer = max window length. | **Optimization:** store **last index** of char to jump `i` (not always needed). **Empty string**, `K=0`. |
+| **Minimum Size Subarray Sum ≥ S** | Variable window: grow `right` until `sum ≥ S`, then shrink `left` while valid; track min length. | **All positive** required for two pointers; **negative** → prefix + map or different approach. |
+| **Trapping Rain Water** | Two pointers `l,r` with `l_max,r_max`; water at `i` = `min(l_max,r_max) - h[i]`; move the side with **smaller** max. **Stack:** pop bars when current higher. | **Why move shorter max:** taller side doesn’t limit water at shorter. **Follow-up:** 2D elevation map (hard). |
+| **Product of Array Except Self** | `output[i] = product(left[0..i-1]) * product(right[i+1..n-1])`; two passes O(n), O(1) extra if output counts as extra. | **Zeros:** count zeros—two zeros → all output 0; one zero → only that index non-zero, rest 0. **No division** constraint. |
+| **Container With Most Water** | Two pointers ends; area = `min(h[l],h[r])*(r-l)`; move the **shorter** pointer inward. | **Proof:** shorter line can’t form better pair with any inner on same side. |
+| **Next Permutation** | Find first `i` from right with `nums[i] < nums[i+1]`; swap with next larger in suffix; reverse suffix. | **Lexicographic** order; **last permutation** → reverse all. |
+| **Spiral Matrix** | Four boundaries `top,bottom,left,right`; walk right→down→left→up; shrink bounds. | **Odd dimension** center cell; **direction** order. |
+| **Rotate Image** | Transpose then reverse rows (or reverse rows then transpose) for 90° clockwise. | **In-place** O(1) extra; **90° CCW** different order. |
+| **Median of Two Sorted Arrays** | Binary search partition on **shorter** array so left half has half the elements and `max(left) ≤ min(right)`. | **Even/odd** length; **empty** array; **duplicate** medians; index arithmetic errors. |
 
 ---
 

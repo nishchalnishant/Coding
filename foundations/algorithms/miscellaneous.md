@@ -106,15 +106,17 @@ By mastering these principles and practicing various miscellaneous algorithm pro
 
 ## Interview Questions — Logic & Trickiness
 
-Cross-topic problems — **name the underlying pattern** before coding.
+Cross-topic problems — **name the underlying pattern** before coding. For each pattern: state **input shape**, **sort key** or **graph model**, then **algorithm** and **complexity**.
 
-| Pattern | Example questions | Trickiness |
-|---------|-------------------|------------|
-| **Intervals** | Merge, min arrows, meeting rooms | Sort key (start vs end); touching intervals |
-| **Graph disguised** | Word ladder, snakes and ladders | Implicit edges; BFS level |
-| **Simulation** | Rotate array, spiral matrix | Indices and boundaries; direction vector |
-| **Greedy proof** | Jump game, gas station | Why local choice is safe |
-| **Math + code** | Random pick with weight, factorial trailing zeros | Overflow; precision |
+| Pattern | Example questions | Trickiness & details |
+|---------|-------------------|----------------------|
+| **Intervals** | Merge intervals, min arrows to burst balloons, meeting rooms I/II, non-overlapping intervals | **Sort by start** vs **end** changes the greedy; **touching** `[1,2]` vs `[2,3]`—clarify if merge. **Sweep line** + heap for max overlap. |
+| **Graph disguised** | Word ladder, snakes and ladders, evaluate division, course schedule | Build **implicit** adjacency; **BFS** for unweighted shortest; **state** may include `(node, extra)` (e.g. stops). |
+| **Simulation / matrix** | Rotate image, spiral matrix, game of life (next state), battleships | **Index** boundaries; **direction** array `(dx,dy)`; **in-place** rotation layer-by-layer. |
+| **Greedy proof** | Jump game, gas station, task scheduler, assign cookies | **Exchange argument** or **interval** structure; **counterexample** when greedy fails (e.g. DP needed). |
+| **Math + implementation** | Random pick with weight, factorial trailing zeros, integer sqrt, super pow | **Mod** arithmetic; **overflow** (`long`, divide before multiply); **precision** (float vs integer). |
+| **Design / streaming** | LRU, LFU, rate limiter, moving average | **Amortized** O(1) vs **worst** case; **thread-safety** follow-up for prod. |
+| **Bit + array** | Single number, missing number, sum of two integers without +/- | **XOR** cancellation; **sum** vs **xor** assumptions; **overflow** in languages. |
 
 ---
 

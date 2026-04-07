@@ -8,6 +8,8 @@ Core **data structures** and **algorithms** for coding interviews. Topics are wr
 
 If you have a **Google** (or similar big-tech) coding interview, use these in order:
 
+If you want a single end-to-end plan for **Google SDE-2 (L4)** (coding + system design + behavioral), start with: [../google-sde2/README.md](../google-sde2/README.md).
+
 | Resource | Use it for |
 |----------|------------|
 | **[GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md)** | Full revision guide: what Google looks for, topic priority, topic-by-topic links, communication templates, **7-day** and **48-hour** plans, practice lists. |
@@ -66,7 +68,7 @@ Every major topic file aims to include:
 5. **Code** — Python (and sometimes Java where noted).  
 6. **Interview strategy** — How to approach under time pressure.  
 7. **Quick revision** — Formulas and one-line triggers.  
-8. **Interview Questions — Logic & Trickiness** — Canonical problems for that file’s topic with **core logic** and **gotchas** (per-file tables).  
+8. **Interview Questions — Logic & Trickiness** — Canonical problems with **core logic** and **trickiness & details** (edge cases, follow-ups, common mistakes; per-file tables, expanded in each topic file).  
 9. **See also** — Cross-links to related topics and patterns.
 
 Supplemental notes: [algorithms/recursion/aditya-verma.md](algorithms/recursion/aditya-verma.md), [algorithms/dynamic-programming/dp-aditya-verma.md](algorithms/dynamic-programming/dp-aditya-verma.md).

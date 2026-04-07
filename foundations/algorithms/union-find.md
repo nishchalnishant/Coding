@@ -1,4 +1,4 @@
-# Union Find (Disjoint Set Union) — SDE-3 Level
+# Union Find (Disjoint Set Union) — SDE-2+ Level
 
 Maintain disjoint sets with near O(1) amortized union and find using path compression and union by rank. Essential for connectivity, MST (Kruskal), and dynamic connectivity.
 
@@ -21,6 +21,9 @@ Maintain disjoint sets with near O(1) amortized union and find using path compre
 - Find roots of x and y. If same, return. Else attach smaller rank under larger; if equal, increment one rank. Amortized O(α(n)).
 
 ### Full DSU
+
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/union_find.py`.
+
 ```python
 class DSU:
     def __init__(self, n):
@@ -73,7 +76,7 @@ class DSU:
 
 ---
 
-## 6. SDE-3 Level Thinking
+## 6. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: DSU vs DFS for connectivity — DSU supports incremental edges and many queries; DFS is simpler for one-shot "count components". Complexity: α(n) ≈ 4 for practical n.
 - **Memory**: O(N) for parent and rank. With rollback, store history (stack of (node, old_parent)).
@@ -125,14 +128,16 @@ class DSU {
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Redundant Connection** | Union edges; first where `find(u)==find(v)` | Undirected |
-| **Number of Islands II** | DSU add land positions; count components | 2D index mapping; dynamic add |
-| **Accounts Merge** | Union emails under same name; group by root | Email → parent mapping |
-| **Kruskal MST** | Sort edges; union if different component | Disconnected graph — no full MST |
-| **Satisfiability / equations** | Union “equal”; check “not equal” same set | Path compression for speed |
-| **Largest Component by Common Factor** | Union indices sharing a factor | Factor sieve up to max value |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Redundant Connection** | Process edges; **union(u,v)**; if already same set → **that edge** closes cycle (undirected tree + one edge). | **Return last** edge in problem order; **directed** variant is harder (see graph.md). |
+| **Number of Islands II** | DSU over **water**; as land added, **union** with 4 neighbors; track **component count** delta. | **2D → 1D** index `r*cols+c`; **dynamic** connectivity vs static flood fill. |
+| **Accounts Merge** | Union all emails in same account; **map email → root**; collect emails per root; sort. | **Same email** across accounts merges; **disjoint** names handled by union. |
+| **Kruskal MST** | Sort edges by weight; add if **find(u)≠find(v)**; **union**; stop when `n-1` edges. | **Disconnected** graph—MST not spanning all; **parallel** edges. |
+| **Satisfiability of Equations** | **Union** `a==b`; for `a!=b` check `find(a)==find(b)` → false. | **Path compression** + **union by rank** for α(n) amortized. |
+| **Largest Component by Common Factor** | For each prime `p`, union all indices whose value divisible by `p` (or use gcd edges). | **Sieve** factorization; **value 1** has no prime factors—handle alone. |
+| **Smallest String With Swaps** | Union **indices** in same pair; each connected component **sort** chars lexicographically. | **Greedy** per component after DSU groups. |
+| **Graph Valid Tree** | **n nodes, n-1 edges** and **fully connected** ⇔ tree; DSU verify no cycle and one component. | **Cycle** detection vs **disconnected**. |
 
 ---
 

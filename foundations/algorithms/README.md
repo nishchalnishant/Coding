@@ -1,8 +1,9 @@
 # Algorithms
 
-Core algorithms for coding interviews. Most topics are expanded to **SDE-3 level**: concept overview, core algorithms, pattern recognition, interview strategy, and quick revision.
+Core algorithms for coding interviews (sufficient for Google SDE-2, with optional depth for SDE-3): concept overview, core algorithms, pattern recognition, interview strategy, and quick revision.
 
 **Google interview:** See [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) for a **7-day / 48-hour revision plan** and topic-by-topic links into these notes. One-page recall: [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md).
+For a single SDE-2 plan that includes mocks + system design + behavioral, use: [../../google-sde2/README.md](../../google-sde2/README.md).
 
 Each algorithm topic file includes **Interview Questions — Logic & Trickiness** (problems, core logic, gotchas). Supplements: [dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md), [recursion/aditya-verma.md](recursion/aditya-verma.md).
 

@@ -1,10 +1,12 @@
-# Dynamic Programming — SDE-3 Level
+# Dynamic Programming — SDE-2+ Level
 
 Optimization via overlapping subproblems and optimal substructure; store solutions (memo or table). SDE-3 expects recurrence derivation, space optimization, and pattern recognition (see [dp-advanced.md](../../patterns/dp-advanced.md)).
 
 ---
 
 ## 1. Concept Overview
+
+SDE-2 reference implementations (Python): `../../../google-sde2/snippets/python/dp.py`.
 
 **When to use**: Choices at each step; maximize/minimize/count; overlapping subproblems. If greedy doesn't apply and state space is manageable, try DP.
 
@@ -59,7 +61,7 @@ See [dp-advanced.md](../../patterns/dp-advanced.md) for 16 patterns and examples
 
 ---
 
-## 6. SDE-3 Level Thinking
+## 6. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Top-down easier to write; bottom-up faster and easier to optimize space. Recursion depth vs table size.
 - **Scalability**: State space must be feasible (e.g., bitmask 2^n for n≤20). For huge state, consider approximate or greedy.
@@ -83,15 +85,20 @@ See [dp-advanced.md](../../patterns/dp-advanced.md) for 16 patterns and examples
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **House Robber** | Linear; skip or take | Robber II — circular: two linear runs |
-| **Coin Change** | Unbounded min coins | Return -1 if impossible |
-| **Target Sum** | 0/1 knapsack count ways | Offset for negative sums |
-| **LIS** | DP O(n²) or binary search O(n log n) | Non-decreasing vs strictly increasing |
-| **Longest Palindromic Substring** | Expand center or DP `i..j` | Even/odd centers |
-| **Unique Paths** | Grid DP | Obstacles; modulo |
-| **Burst Balloons** | Interval DP | Multiply `nums[i]*nums[k]*nums[j]` with sentinels |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **House Robber** | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])`; space to **two vars** `take/skip`. | **House Robber II:** rob `[0..n-2]` or `[1..n-1]`—can’t take both ends. **III** tree DP. |
+| **Coin Change (min coins)** | `dp[amt] = 1 + min(dp[amt-c])` for coins `c`; unbounded forward loop. | **Impossible** → -1; **order** of loops matters for **combinations** vs permutations in counting variants. |
+| **Coin Change 2 (ways)** | Unbounded **combinations:** outer loop **coins**, inner **amount** to avoid duplicate order. | **Permutation** count uses outer amount, inner coins—different problem. |
+| **Target Sum** | Count subsets with `sum(P) - sum(N) = target` → subset sum with offset; or **2D DP** on index and sum. | **Sum bounds** shrink state space; **memo** `(i, curr_sum)`. |
+| **Longest Increasing Subsequence** | **O(n²):** `dp[i]` = best ending at `i`. **O(n log n):** patience sorting with **binary search** on tails. | **Strictly** vs **non-decreasing** changes `lower_bound` vs `upper_bound`. |
+| **Longest Common Subsequence** | `dp[i][j]` from char match or max skip; classic 2D table. | **Space** one row if only length needed; **print** LCS needs backtrack. |
+| **Longest Palindromic Substring** | Expand centers **O(n²)** or **Manacher** O(n). | **DP** `isPal[i][j]` for LPS **subsequence** differs from substring. |
+| **Unique Paths** | `dp[i][j] = dp[i-1][j] + dp[i][j-1]`; obstacles → `0` if blocked. | **Mod** result; **start** blocked edge case. |
+| **Edit Distance** | Insert/delete/replace recurrence on prefixes. | **One-row** optimization; **delete-only** variant simpler. |
+| **Burst Balloons** | Interval DP: add **imaginary** 1 balloons at ends; split at last balloon `k` in `(i,j)`. | **O(n³)**; **index** shift for closed interval `[i,j]`. |
+| **Word Break** | `dp[i]` = can segment `s[0:i)`; try all dict words ending at `i`. | **Trie** speeds prefix checks; **Word Break II** all sentences → backtrack + memo. |
+| **Decode Ways** | `dp[i]` from `dp[i-1]` (one digit) and `dp[i-2]` (two digits if 10–26). | **Leading zero** invalid; **`*`** wildcard variant harder. |
 
 ---
 

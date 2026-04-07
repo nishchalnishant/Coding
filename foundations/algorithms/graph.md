@@ -1,4 +1,4 @@
-# Graphs — SDE-3 Level
+# Graphs — SDE-2+ Level
 
 Vertices and edges; directed/undirected, weighted/unweighted. Senior interviews expect correct representation choice, BFS vs DFS, shortest paths (BFS / Dijkstra / Bellman-Ford), topological order, MST, and Union-Find for connectivity.
 
@@ -31,6 +31,8 @@ Vertices and edges; directed/undirected, weighted/unweighted. Senior interviews 
 ---
 
 ## 3. Core Traversals
+
+SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/graphs.py` (BFS/topo/islands) and `../../google-sde2/snippets/python/union_find.py` (DSU).
 
 ### BFS (queue)
 ```
@@ -96,7 +98,7 @@ def dfs(u, visited):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs:** List vs matrix (space vs edge lookup). BFS for unweighted shortest path. Dijkstra vs Bellman–Ford for negative edges.
 - **Scalability:** Adjacency list for sparse graphs; for huge graphs consider bidirectional BFS (meet in middle) when applicable.
@@ -121,15 +123,19 @@ def dfs(u, visited):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Course Schedule** | Topo; detect cycle | Prerequisite edge direction |
-| **Network Delay Time** | Dijkstra from K | Unreachable → infinity |
-| **Cheapest Flights K Stops** | Bellman k rounds or state `(node,stops)` | Off-by-one on stops |
-| **Number of Islands** | Flood fill | Visited vs mutate grid |
-| **Pacific Atlantic Water Flow** | Multi-source from oceans | Reverse: flow from ocean inward |
-| **Redundant Connection** | DSU; first cycle edge | Undirected |
-| **Critical Connections** | Tarjan bridges | `low[v] > disc[u]` |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Course Schedule** | Build graph: edge `b→a` if **b** before **a**; topo (Kahn/DFS) detects cycle; order = valid semester plan. | **Reverse** graph mistakes; **multiple** components—run from all nodes with indegree calc. |
+| **Network Delay Time** | **Dijkstra** from `K`: `dist[u]+w < dist[v]` relax; min-heap by distance. | **Unreachable** nodes stay ∞; **self-loop** / **multi-edge** clarify. |
+| **Path With Minimum Effort** | **Dijkstra** on grid with edge cost = abs height diff; effort = **max** diff on path (minimax). | **State** is min max-diff—not sum of diffs. |
+| **Cheapest Flights Within K Stops** | **Bellman-Ford** k iterations from `src`; or **BFS** level = stops with **state** `(city, stops_used)`. | **Off-by-one:** k stops vs k edges; **negative** prices need BF care. |
+| **Number of Islands** | DFS/BFS on `1`s; mark visited/`0`. | **8-dir** vs 4; **in-place** marking. |
+| **Pacific Atlantic Water Flow** | Multi-source **reverse** flood from both oceans; **intersection**. | Why reverse: avoid repeated climbs from each cell. |
+| **Redundant Connection II** | **Directed** graph: case (1) one node indegree 2, (2) no indegree 2 but cycle—remove wrong edge. | Harder than undirected; **root** of tree + cycle. |
+| **Redundant Connection** | **DSU**: for each edge `u-v`, if `find(u)==find(v)` → redundant; else `union`. | **Undirected**; return **last** edge in problem statement order. |
+| **Critical Connections** | **Tarjan**: bridge iff `low[v] > disc[u]` for tree edge `u→v`. | **Back edge** updates `low`; **multiple** edges between same nodes (parallel). |
+| **Minimum Cost to Connect All Points** | **MST**: Kruskal on complete graph of Manhattan distances **or** Prim with heap. | **O(n²)** edges—use implicit edges / Prim. |
+| **Swim in Rising Water** | **Dijkstra** / **Union-Find** by sorting cells by height; merge until path exists. | Minimize **max** height along path—same minimax flavor. |
 
 ---
 

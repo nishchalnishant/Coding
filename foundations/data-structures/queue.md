@@ -1,4 +1,4 @@
-# Queue — SDE-3 Level
+# Queue — SDE-2+ Level
 
 FIFO (First In, First Out). SDE-3 focus: BFS, deque for sliding-window max (monotonic queue), circular buffer, and priority queue (heap) usage.
 
@@ -55,6 +55,8 @@ FIFO (First In, First Out). SDE-3 focus: BFS, deque for sliding-window max (mono
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/two_pointers_window.py` (deque window max), `../../google-sde2/snippets/python/graphs.py` (BFS).
+
 ```python
 def sliding_window_maximum(nums, k):
     from collections import deque
@@ -73,7 +75,7 @@ def sliding_window_maximum(nums, k):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Array queue wastes space (front moves); circular reuses. Deque for sliding window max avoids O(K) scan per window (O(N) total).
 - **Concurrency**: Blocking queue for producer-consumer; lock-free queues in high-throughput systems.
@@ -96,12 +98,16 @@ def sliding_window_maximum(nums, k):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Rotten Oranges** | Multi-source BFS; level = minutes | Count fresh vs rotten; impossible if fresh left |
-| **Sliding Window Maximum** | Deque of indices, decreasing values; pop out-of-window front | **Indices** on deque; pop back while smaller |
-| **Design Circular Queue** | Array + front/rear; full/empty sentinel or size | Off-by-one; `(rear+1)%cap == front` vs size counter |
-| **Shortest Path** (grid) | BFS from start; 4-dir neighbors | Obstacles; visited mark; 0-1 BFS if weights 0/1 |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Rotten Oranges** | **Multi-source BFS** from all rotten cells; each level = 1 minute; track fresh count; if `fresh>0` after BFS return -1. | **In-place** marking rotten vs visited; **4-direction** only. **Edge:** already all rotten or no fresh. |
+| **Word Ladder** | BFS on graph of words differing by one letter; queue of `(word, depth)`; use **set** for O(1) neighbor check. | **Bidirectional BFS** faster; **remove** word from dict when visited to prune. |
+| **Sliding Window Maximum** | **Deque of indices**, decreasing **values**; pop from **back** while `nums[i] >= nums[back]`; pop **front** if out of window. | **Amortized O(n)**; each index added/removed once. **Naive heap** O(n log k). |
+| **Shortest Path in Binary Matrix** | BFS on 8-neighbor grid; track distance layer. | **Block** `(0,0)` or `(n-1,n-1)`; **visited** before enqueue. |
+| **01 Matrix** | **Multi-source BFS** from all 0 cells to compute distance to nearest 0. | Reverse BFS from targets, not from each 1. |
+| **Design Circular Queue** | Fixed array; `front`, `rear`, `size` **or** wasted slot to distinguish full/empty. | **Off-by-one:** `(rear+1)%cap == front` full; **thread-safety** follow-up for prod. |
+| **Moving Average from Data Stream** | Fixed-size **queue** + running **sum**; evict front when over window. | **Division** float vs int; **empty** window. |
+| **Cheapest Flights Within K Stops** | **BFS level = stops** or **Bellman-Ford** relax k times; min cost to dest. | **Negative** edges change method; **visited** pruning can break optimality—careful. |
 
 ---
 

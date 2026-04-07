@@ -1,4 +1,4 @@
-# Searching & Binary Search — SDE-3 Level
+# Searching & Binary Search — SDE-2+ Level
 
 Techniques to find an element or the best value satisfying a condition. SDE-3 focus: binary search on index, binary search on answer (predicate), rotated arrays, and when to use which variant.
 
@@ -61,6 +61,8 @@ Techniques to find an element or the best value satisfying a condition. SDE-3 fo
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/binary_search.py`.
+
 ```python
 def lower_bound(arr, target):
     lo, hi = 0, len(arr)
@@ -85,7 +87,7 @@ def binary_search_on_answer(candidates, predicate):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Linear scan O(N) vs binary search O(log N) when data is sorted. BS on answer converts "optimization" to "feasibility" (predicate) — often simpler to reason.
 - **Scalability**: Logarithmic passes; predicate should be O(N) or O(1) per call so total is O(N log range) or O(log N).
@@ -111,14 +113,18 @@ def binary_search_on_answer(candidates, predicate):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Binary Search (sorted)** | `lo, hi`, `mid`, shrink half | `lo<=hi` vs `lo<hi`; return `lo` or `hi` |
-| **First/Last Position** | Lower bound / upper bound templates | Duplicates: first `>=` vs last `<=` |
-| **Rotated Sorted Array** | Find sorted half; check if target in range | Duplicates at ends → worst O(n) |
-| **Koko / BS on answer** | `valid(mid)` greedy check; minimize `mid` | Ceil division `(p+k-1)//k` |
-| **Median Two Sorted** | BS partition on smaller array; balance left/right | `i+j = m+n+1/2`; edge empty array |
-| **Peak Element** | `mid` vs `mid+1` climb toward peak | Boundaries 0 and n-1 |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Classic Binary Search** | `while lo <= hi`: `mid = lo + (hi-lo)//2`; compare `nums[mid]` to target; shrink left or right half. | **`lo<=hi` vs `lo<hi`** templates differ; **`mid` bias** (floor vs ceil) to avoid infinite loop in variants. |
+| **First / Last Position** | **Lower bound:** first index with `nums[i] >= target` (`lo` ends at first ≥). **Upper bound:** first `> target` minus one. | **Empty** result `-1`; **all smaller** or **all larger** edge cases. |
+| **Search in Rotated Sorted Array** | Find **sorted** half by comparing `nums[lo]`, `nums[mid]`; check if target in sorted range; else other half. | **Duplicates** at `lo==mid==hi` → shrink `hi--` or **O(n)** worst. **Pivot** unknown—two binary searches alternative. |
+| **Find Minimum in Rotated Sorted Array** | Compare `mid` to `right`: if `nums[mid] > nums[right]`, min in right half; else left. | **No duplicates** simplifies; **with duplicates** similar shrink trick. |
+| **Koko Eating Bananas / BS on Answer** | Monotonic `valid(k)` = can finish in `H` hours with speed `k`; search **min** `k` in `[1, max pile]`. | **`ceil(piles[i]/k)`** sum; **long** overflow on sum. |
+| **Split Array Largest Sum** | `valid(mid)` = need ≤ `m` subarrays with max sum `mid`; **greedy** fill subarray until exceed. | **Binary search** on answer range `[max(A), sum(A)]`. |
+| **Median of Two Sorted Arrays** | Binary search **partition** on shorter array so left half has `(m+n+1)//2` elements and `max(left) ≤ min(right)`. | **`i=0` or `j=0`** sentinels −∞/∞; **even** vs **odd** total length. |
+| **Find Peak Element** | Compare `nums[mid]` vs `nums[mid+1]`; move toward **larger** side; `lo<hi` until `lo==hi`. | **Multiple** peaks—return any; **boundaries** neighbors −∞ conceptually. |
+| **Sqrt(x) / Integer Sqrt** | BS `ans` in `[0,x]` where `mid*mid <= x`. | **Overflow** use `mid <= x // mid`; **newton** alternative. |
+| **Random Pick with Weight** | **Prefix sums** + binary search on random value in `[0, total)`. | **Inclusive** random range; **0** weights excluded. |
 
 ---
 

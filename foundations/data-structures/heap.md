@@ -1,4 +1,4 @@
-# Heap / Priority Queue — SDE-3 Level
+# Heap / Priority Queue — SDE-2+ Level
 
 Complete binary tree with heap property: parent ≥ children (max-heap) or parent ≤ children (min-heap). Used for priority queue, top-K, K-way merge, median maintenance.
 
@@ -61,6 +61,8 @@ Complete binary tree with heap property: parent ≥ children (max-heap) or paren
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/arrays.py`, `../../google-sde2/snippets/python/two_pointers_window.py`, `../../google-sde2/snippets/python/stack_queue.py`.
+
 ```python
 import heapq
 
@@ -92,7 +94,7 @@ class MedianFinder:
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Heap vs sort — heap O(N log K) for top-K without fully sorting. Two heaps for median: O(log N) add, O(1) median; alternative is sorted structure (e.g., balanced BST).
 - **Memory**: Top-K heap uses O(K). Median two heaps O(N). For distributed top-K, merge local top-K from each shard.
@@ -118,13 +120,18 @@ class MedianFinder:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Merge K Sorted Lists** | Min-heap of `(val, list_id, node)` | Empty lists; same value tie-break |
-| **Top K Frequent** | Count → min-heap of size K **or** bucket by freq | Bucket O(n) vs heap O(n log k) |
-| **Find Median Data Stream** | Max-heap lower half + min-heap upper; rebalance | Even length: average two tops; after each insert rebalance |
-| **K Closest to Origin** | Max-heap size K of distance (or squared) | Avoid sqrt until compare; integer overflow |
-| **Task Scheduler** | Idle slot formula or greedy with heap | `(max-1)*(n+1)+num_max` capped at `len` |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Merge K Sorted Lists** | Min-heap stores `(value, list_id, node)`; repeatedly pop min, append to result, push `node.next` if any. Alternative: **divide & conquer** pairwise merge. | **Empty** input lists; **Python heap** tie-break needs tuple with unique `list_id`. **Complexity:** O(N log k) vs O(N log N) sort-all. |
+| **Kth Largest Element** | **Quickselect** average O(n); or **min-heap of size k** streaming largest. Max-heap of n−k+1 for “kth largest” less common. | **Duplicates:** partition on `<=` vs `<` matters. **Worst-case** quickselect O(n²) unless randomized/median-of-medians. |
+| **Top K Frequent Elements** | Count with map; **min-heap** of size k on `(freq, key)` **or** bucket sort by frequency O(n). | Bucket: freq 1..n buckets of lists; scan from high freq. **Tie** on frequency. |
+| **Find Median from Data Stream** | **Two heaps:** `small` max-heap (lower half), `large` min-heap (upper half); invariant `len(small) == len(large)` or +1. Rebalance after insert. | **Even** count: median average of both tops. **Duplicate** values fine. **Follow-up:** sliding window median (harder). |
+| **K Closest Points to Origin** | **Max-heap** of size k on squared distance (avoid sqrt); or **quickselect** on distances. | **Squared distance** avoids float; **overflow** on `x*x+y*y`. **All same distance**—any k. |
+| **IPO / Max Capital** | Sort projects by capital; min-heap of profits for affordable set; pick max profit, add capital, repeat k times. | **Greedy + heap**; projects become affordable as capital grows. |
+| **Reorganize String** | Count chars; max-heap by freq; repeatedly place most frequent not equal to last placed. | **Impossible** if `max_freq > (n+1)/2`. **Tie** handling when popping. |
+| **Task Scheduler** | **Math:** `(max_count-1)*(n+1) + num_with_max_freq`, capped at `tasks.length`. **Sim:** heap of task counts + idle slots. | **Cap** explains “cooling fits inside task count”. **Multiple** max frequencies add slots. |
+| **Smallest Range Covering Elements from K Lists** | Min-heap over current head of each list; track global min/max; advance list that had min. | Like **merge k sorted** tracking range; **O(N log k)**. |
+| **Furthest Building** (bricks/ladders) | Greedy: use **min-heap** of climbs for largest jumps to cover with ladders; rest bricks. | Clarify **ladders** replace one climb entirely. |
 
 ---
 

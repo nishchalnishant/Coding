@@ -1,4 +1,4 @@
-# Linked List — SDE-3 Level
+# Linked List — SDE-2+ Level
 
 A linear data structure where elements (nodes) are stored in non-contiguous memory, connected via pointers. SDE-3 expects clean in-place operations, correct cycle handling, and trade-offs vs arrays.
 
@@ -79,6 +79,8 @@ Time O(N), Space O(1).
 
 ## 6. Code Implementations
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/linked_list.py`.
+
 ```python
 def reverse_list(head):
     prev = None
@@ -110,7 +112,7 @@ def detect_cycle_entry(head):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Linked list vs array — list: O(1) insert/delete at known node, no random access; array: O(1) access, cache-friendly. Use list when insertions/deletions in middle are dominant (e.g., LRU).
 - **Memory**: In-place reversal avoids extra list; dummy node uses one extra node (negligible). Copy structures (random pointer) need O(N) map.
@@ -137,13 +139,19 @@ def detect_cycle_entry(head):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Reverse List** | `prev, curr, next` iterative | Recursive O(n) stack; null head |
-| **Merge Two Sorted** | Dummy head; compare and append smaller | In-place vs new list; exhaust one list |
-| **Cycle II (entry)** | Floyd meet; reset one ptr to head; same speed to entry | Why math works; confusing “restart fast only” |
-| **Merge K Lists** | Min-heap of heads; pop min, push next | O(N log k); tie-break list id |
-| **Copy with Random** | Map old→new; two passes wire `next`/`random` | O(1) space interleaving is bonus |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Reverse Linked List** | Iterative: `prev=null, curr=head`; loop `next=curr.next; curr.next=prev; prev=curr; curr=next`. Recursive: reverse rest then fix `head.next.next`. | **Empty/single** node; **cycle** breaks naive reverse. **Stack** depth O(n) for recursion. |
+| **Merge Two Sorted Lists** | Dummy node `d`; compare `l1.val` vs `l2.val`, advance smaller; attach remainder when one empty. | **In-place** vs new list; **reuse nodes** only if allowed. **Follow-up:** merge k lists (heap or divide-conquer). |
+| **Remove Nth From End** | Fast pointer advances `n` ahead; then both move until fast hits null; remove `slow.next`. | **Dummy** before head handles removing **first** node. **One pass** requirement. |
+| **Linked List Cycle** | Floyd: `slow` 1 step, `fast` 2 steps; meet ⇒ cycle. No meet ⇒ no cycle. | **Null** fast.next check each step. |
+| **Linked List Cycle II (entry)** | After meet, move **one** pointer from **head** and one from meet, both **1 step**; meet at entry. | **Proof:** distance equality—often asked. Wrong: restarting **both** from head with different speeds. |
+| **Intersection of Two Lists** | Align lengths: walk longer list by `|lenA-lenB|`; then walk both until same node. **Alt:** A+B traversal (switch at end). | **No intersection** → both reach null. **Values** can duplicate; compare **node identity**. |
+| **Merge K Sorted Lists** | Min-heap `(val, id, node)`; pop smallest, push `node.next`. **Divide & conquer** pairwise merge O(N log k). | **Empty** lists in heap; **tie-break** on list id for stability. **Time:** O(N log k) heap. |
+| **Copy List with Random Pointer** | **HashMap** old→new; first pass create nodes, second wire `next` and `random`. **O(1) space:** interleave clone between each node, split. | **Random** can point null or to any node; **two-pass** map is clearer in interview. |
+| **Palindrome Linked List** | Find mid (slow/fast); reverse second half; compare two halves. | **Odd** length: mid is extra—skip or handle. **O(1) space** vs stack O(n). |
+| **Reorder List** | Mid + reverse second half; interleave first and second halves. | **In-place** pointer surgery; don’t lose tail. |
+| **LRU Cache** (list + map) | Doubly linked list order (MRU front), `map key→node`; get moves to front; evict tail if over capacity. | **O(1)** needs DLL + map; **capacity 1** edge case. |
 
 ---
 

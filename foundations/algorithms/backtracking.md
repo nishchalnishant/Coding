@@ -1,4 +1,4 @@
-# Backtracking — SDE-3 Level
+# Backtracking — SDE-2+ Level
 
 Build solutions incrementally; **backtrack** when constraints fail. DFS over the decision tree. SDE-3 expects pruning, complexity analysis, and when to add memoization (overlap with DP).
 
@@ -62,7 +62,7 @@ def backtrack(path, start, ...):
 
 ---
 
-## 6. SDE-3 Level Thinking
+## 6. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: Backtracking explores all valid paths; DP when subproblems overlap (then state + memo). Pruning reduces tree size significantly.
 - **Memory**: Recursion depth = length of path; visited set O(path length) or reuse array. Word Search II: Trie reduces branches (only follow existing prefixes).
@@ -88,6 +88,8 @@ def backtrack(path, start, ...):
 
 ## 9. Code sketch (permutations)
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/backtracking.py`.
+
 ```python
 def permute(nums):
     res = []
@@ -107,15 +109,19 @@ def permute(nums):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Permutations** | DFS + used set or swap | Duplicates: sort + skip same at level |
-| **Combinations** | `start` index; n choose k | Prune when not enough elements left |
-| **Combination Sum** | Reuse same index | II: `i+1`, skip duplicate values |
-| **N-Queens** | Row by row; `col`, `diag1`, `diag2` | Bitmask optimization bonus |
-| **Word Search** | DFS grid + visited | Trie for Word Search II |
-| **Sudoku Solver** | Try digits; validate 3×3 | Backtrack on fail |
-| **Palindrome Partitioning** | Cut positions; is palindrome check | DP precompute palindrome table |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Permutations** | DFS: choose next unused element; **swap** method: fix position `i` with each `j≥i`. | **Duplicates:** **sort** first; skip `nums[j]==nums[j-1]` when `j>start` not to repeat same level choice. |
+| **Permutations II** | Same as permutations with **duplicate skip**; or use **Counter** multiset. | **Time:** O(n! × n); **space** recursion depth. |
+| **Combinations** | `dfs(start, path)` pick `i` from `start..n-1` until `len(path)==k`. | **Prune:** if `remaining elements < k - len(path)` return. |
+| **Combination Sum** | Reuse index `i` (unbounded same element); target decreases by `nums[i]`. | **Combination Sum II:** **next index `i+1`**, no reuse; **duplicate** values skip same as subset II. |
+| **Subsets** | Include/exclude each index; or iterative cascade. | **Subsets II** with duplicate skip. |
+| **N-Queens** | Place row `r` in column `c` if `col` and two diagonals `r+c`, `r-c` free. | **Diag** keys: `r+c` and `r-c`; **bitmask** for speed. |
+| **Word Search** | DFS from each cell; mark visited **or** mutate board to `#`; **4-direction** backtrack. | **Word Search II:** **Trie** of words to prune; **O(sum of words)** vs repeated scans. |
+| **Sudoku Solver** | Find empty; try 1–9; check row/col/box; recurse; **undo** on failure. | **Heuristic:** pick cell with **fewest** candidates (MRV). |
+| **Palindrome Partitioning** | DFS: partition prefix if palindrome; recurse on suffix. | **DP** precompute `isPal[i][j]` to avoid O(n) palindrome check each step. |
+| **Restore IP Addresses** | DFS insert dots after 1–3 digits; validate octet 0–255 and no leading `0` unless single `0`. | **Prune** invalid length early; **4 parts** exactly. |
+| **Letter Combinations Phone** | Cartesian product via DFS or iterative queue. | **Empty** digits edge case. |
 
 ---
 

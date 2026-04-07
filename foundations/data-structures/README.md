@@ -1,8 +1,9 @@
 # Data Structures
 
-Core data structures with **SDE-3 level** content: concept overview, algorithms, patterns, code, interview strategy, and quick revision.
+Core data structures for coding interviews. These notes are written to be sufficient for **Google SDE-2 (L4)**, with optional deeper sections that also help for SDE-3: concept overview, algorithms, patterns, code, interview strategy, and quick revision.
 
 **Google interview:** Use [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) (topic priority + practice lists) and [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md) (one-page patterns) alongside the files below.
+For an end-to-end SDE-2 plan (coding + system design + behavioral), start with: [../../google-sde2/README.md](../../google-sde2/README.md).
 
 Each topic file below includes **Interview Questions — Logic & Trickiness** (canonical problems, solution logic, and trickiness for that structure).
 

@@ -2,7 +2,7 @@
 
 This guide lists **canonical interview questions** by topic, **why** they appear, the **core solution logic**, and **what makes them tricky** (gotchas, wrong turns, follow-ups). Use with the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md).
 
-**Per-file detail:** Each markdown file in `foundations/` (data structures, algorithms, supplements) now contains its own **Interview Questions — Logic & Trickiness** section with tables tailored to that file—use this document as a **cross-topic index**, and open the specific topic file for the full note set (concept, code, strategy, revision).
+**Per-file detail:** Each markdown file in `foundations/` (data structures, algorithms, supplements) has an **Interview Questions — Logic & Trickiness** section with a table: **Question** | **Core logic** | **Trickiness & details** (follow-ups, edge cases, wrong answers, complexity notes). This document stays a **cross-topic index** with shorter rows; open the specific topic file for the **full** expanded table and the rest of the notes (concept, code, strategy, revision).
 
 ---
 
@@ -50,7 +50,7 @@ This guide lists **canonical interview questions** by topic, **why** they appear
 | Question | What it tests | Core logic | Trickiness |
 |----------|----------------|------------|------------|
 | **Valid Parentheses** | Stack matching | Push opens; on close, pop and match | **Order** matters; **only one type** of bracket in simpler variants. |
-| **Daily Temperatures** | Monotonic stack** | Decreasing stack of indices; **warmer** pop and assign | **Indices** on stack, not values; **end** of array — sentinel or second pass. |
+| **Daily Temperatures** | Monotonic stack | Decreasing stack of indices; **warmer** pop and assign | **Indices** on stack, not values; **end** of array — sentinel or second pass. |
 | **Largest Rectangle in Histogram** | Monotonic stack | Bars as heights; pop when lower; width = `i - new_top - 1` | **Sentinel 0** at end to flush stack; **width** formula when stack empty. |
 | **Sliding Window Maximum** | Monotonic deque | Deque of indices, decreasing values; pop back while `nums[back] < nums[i]` | **Front** out of window — remove while `<= i-k`; **indices** not values for width. |
 | **Decode String** | Nested structure | Stack of (current_string, repeat_count) or recursive | **Nested** `a2[b3[c]]` — stack per `[`; **digit** can be multi-digit `100[`. |

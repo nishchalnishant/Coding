@@ -1,4 +1,4 @@
-# Strings — SDE-3 Level
+# Strings — SDE-2+ Level
 
 Arrays of characters; problems center on pattern matching, palindromes, sliding window, and DP (LCS, edit distance). SDE-3 expects KMP/LPS, rolling hash, and clean handling of immutability.
 
@@ -60,6 +60,8 @@ Arrays of characters; problems center on pattern matching, palindromes, sliding 
 
 ## 6. Code (KMP LPS + Search)
 
+More SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/two_pointers_window.py` (windows) and `../../google-sde2/snippets/python/dp.py` (edit distance/LCS style).
+
 ```python
 def build_lps(pattern):
     n = len(pattern)
@@ -98,7 +100,7 @@ def kmp_search(text, pattern):
 
 ---
 
-## 7. SDE-3 Level Thinking
+## 7. Trade-offs & Scaling (optional)
 
 - **Trade-offs**: KMP avoids backtracking in text (O(N)); Rabin-Karp simpler, probabilistic. For production: consider Unicode, large alphabet, and library (e.g., Boyer-Moore for long patterns).
 - **Memory**: LPS O(M); rolling hash O(1) extra; sliding window O(distinct chars).
@@ -122,14 +124,19 @@ def kmp_search(text, pattern):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness |
-|----------|------------|------------|
-| **Longest Palindromic Substring** | Expand around center; or DP `i..j` | Even/odd centers; Manacher bonus |
-| **Minimum Window Substring** | Sliding window + `need`/`have` counts | `formed == required`; Unicode rare |
-| **Group Anagrams** | Sorted key or 26-count tuple | Key must be hashable |
-| **Valid Parenthesis String** | Greedy two-pass or DP for `*` | `*` as `(`, `)`, or empty |
-| **KMP / strStr** | LPS table; match without text backtrack | LPS construction bugs |
-| **Edit Distance** | 2D DP | Space-optimized one row |
+| Question | Core logic | Trickiness & details |
+|----------|------------|----------------------|
+| **Longest Palindromic Substring** | **Expand** around each center (odd length) and between chars (even); track max. **DP:** `dp[i][j]` true if `s[i]==s[j]` and inner palindrome. | **O(n²)** centers vs **O(n³)** naive; **Manacher** O(n) bonus. |
+| **Longest Palindromic Subsequence** | **DP:** `LPS[i][j]` from ends; match adds 2, else max skip left/right. | **vs substring**—subsequence can skip chars; **reverse LCS** trick `LPS(s) = LCS(s, reverse(s))`. |
+| **Minimum Window Substring** | Expand `right` until all chars of `t` satisfied (`formed == required`); shrink `left` while valid, track min. | **`need`** map vs `have`; **Unicode** counts not just 26 letters; **empty** `t`. |
+| **Substring with Concatenation of All Words** | **Fixed word length:** slide window in steps of wordLen; compare **multiset** of words in window to target multiset. | **Same word** multiple times; **O(len * n * numWords)** with careful hashing. |
+| **Group Anagrams** | Key = **sorted string** or **tuple of 26 counts**. | **Unicode** breaks 26-array assumption. |
+| **Valid Parenthesis String** | **Greedy range** `[low, high]` of possible open count after processing `*` as 0/1/2; or two-pass min/max greedy. | `*` is wildcard; **DP** O(n²) if greedy proof unclear. |
+| **KMP — strStr** | Build **LPS** (longest proper prefix which is suffix) for pattern; scan text **never moving text pointer backward**. | **LPS** off-by-one bugs; **empty** pattern. |
+| **Repeated String Match** | Need at most **`ceil(lenB/lenA)+2`** copies of A to contain B (prove bound). | **Rabin-Karp** or KMP inside expanded repeats. |
+| **Edit Distance** | `dp[i][j]` = min insert/delete/replace from first `i` to first `j` chars. | **Space** one row O(min(m,n)); **only delete** costs variant. |
+| **Distinct Subsequences** | DP counts ways to form `t` as subsequence of `s`. | **Mod** large prime; **empty** `t` → 1. |
+| **Word Break** | **BFS/DP** on positions: `dp[i]` = can segment starting at `i` using dict set. | **Memo** DFS; **word break II** needs backtrack all sentences. |
 
 ---
 
