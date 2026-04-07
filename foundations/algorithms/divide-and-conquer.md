@@ -8,6 +8,9 @@ An algorithmic paradigm that breaks a problem into smaller, independent subprobl
 3. **Combine**: Merge the results of the subproblems to form the final solution.
 
 ## Key Algorithms
+
+SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/sorting.py` (quickselect) and `../../google-sde2/snippets/python/maths.py` (fast pow).
+
 - **Merge Sort**: Divide array in half, sort each half, merge sorted halves. $O(N \log N)$ time, $O(N)$ space.
 - **Quick Sort**: Pick a pivot, partition array into $\le$ pivot and $>$ pivot, then sort both parts. Average $O(N \log N)$ time, $O(\log N)$ space.
 - **Binary Search**: Divide search space in half based on comparison. $O(\log N)$ time.

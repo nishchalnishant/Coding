@@ -48,3 +48,4 @@ If you only follow one thing: do `ROADMAP.md` + `PROBLEM_SET.md` + 6–10 mocks.
 - `LANGUAGE_TEMPLATES.md` — Python/Java templates (BFS/DFS/topo/DSU/etc.)
 - `COVERAGE_MAP.md` — ensure you’re not missing core topics
 - `SNIPPETS.md` — Python snippet library (solutions/templates)
+- `QUESTION_BANK.md` — canonical questions + tricks + code pointers

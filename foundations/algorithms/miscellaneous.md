@@ -106,6 +106,8 @@ By mastering these principles and practicing various miscellaneous algorithm pro
 
 ## Interview Questions — Logic & Trickiness
 
+Code references (Python): `../../google-sde2/snippets/python/arrays.py`, `../../google-sde2/snippets/python/two_pointers_window.py`, `../../google-sde2/snippets/python/graphs.py`, `../../google-sde2/snippets/python/dp.py`, `../../google-sde2/snippets/python/maths.py`.
+
 Cross-topic problems — **name the underlying pattern** before coding. For each pattern: state **input shape**, **sort key** or **graph model**, then **algorithm** and **complexity**.
 
 | Pattern | Example questions | Trickiness & details |
