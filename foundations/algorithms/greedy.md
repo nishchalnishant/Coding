@@ -90,8 +90,21 @@ def eraseOverlapIntervals(intervals):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Jump Game II** | Greedy: furthest in current jump range; increment jumps at range end | Jump Game I is only reachability — different |
+| **Non-overlapping Intervals** | Sort by **end**; count removal when overlap | Sort by start fails — counterexample |
+| **Gas Station** | If total gas ≥ total cost, start exists; reset when tank < 0 | Proof of uniqueness |
+| **Task Scheduler** | Idle slots `(max-1)*(n+1)+num_max` | Cap at `len(tasks)` |
+| **Assign Cookies** | Sort both; greedily match smallest cookie that fits | Two pointers after sort |
+| **Candy** | Left pass then right pass ratings | Two passes for both constraints |
+
+---
+
 ## See also
 
-- [Dynamic Programming](dynamic-programming/README.md) — when greedy fails (e.g. partition problems)  
-- [Sorting](sorting.md) — comparators for interval sort  
+- [Dynamic Programming](dynamic-programming/README.md) — when greedy fails  
+- [Sorting](sorting.md) — sort key for intervals  
 - [patterns/leetcode-patterns.md](../../patterns/leetcode-patterns.md)

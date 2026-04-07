@@ -12,6 +12,7 @@ If you have a **Google** (or similar big-tech) coding interview, use these in or
 |----------|------------|
 | **[GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md)** | Full revision guide: what Google looks for, topic priority, topic-by-topic links, communication templates, **7-day** and **48-hour** plans, practice lists. |
 | **[GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md)** | **One-page** pattern → action → complexity for last-minute review. |
+| **[TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)** | **Canonical questions** per topic with **logic** (how to solve) and **trickiness** (gotchas, wrong turns). Pairs with [sde-3-guide Top 20](../sde-3-guide/sde-3-guide.md). |
 
 Then drill the underlying notes:
 
@@ -65,6 +66,9 @@ Every major topic file aims to include:
 5. **Code** — Python (and sometimes Java where noted).  
 6. **Interview strategy** — How to approach under time pressure.  
 7. **Quick revision** — Formulas and one-line triggers.  
-8. **See also** — Cross-links to related topics and patterns.
+8. **Interview Questions — Logic & Trickiness** — Canonical problems for that file’s topic with **core logic** and **gotchas** (per-file tables).  
+9. **See also** — Cross-links to related topics and patterns.
 
 Supplemental notes: [algorithms/recursion/aditya-verma.md](algorithms/recursion/aditya-verma.md), [algorithms/dynamic-programming/dp-aditya-verma.md](algorithms/dynamic-programming/dp-aditya-verma.md).
+
+**Question quality:** For interview-style problems with **logic + trickiness** per topic, see [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).

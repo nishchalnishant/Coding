@@ -116,6 +116,18 @@ class MedianFinder:
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Merge K Sorted Lists** | Min-heap of `(val, list_id, node)` | Empty lists; same value tie-break |
+| **Top K Frequent** | Count → min-heap of size K **or** bucket by freq | Bucket O(n) vs heap O(n log k) |
+| **Find Median Data Stream** | Max-heap lower half + min-heap upper; rebalance | Even length: average two tops; after each insert rebalance |
+| **K Closest to Origin** | Max-heap size K of distance (or squared) | Avoid sqrt until compare; integer overflow |
+| **Task Scheduler** | Idle slot formula or greedy with heap | `(max-1)*(n+1)+num_max` capped at `len` |
+
+---
+
 ## See also
 
 - [Sorting](../algorithms/sorting.md) — QuickSelect vs heap for top-K  

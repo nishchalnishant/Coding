@@ -81,6 +81,20 @@ See [dp-advanced.md](../../patterns/dp-advanced.md) for 16 patterns and examples
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **House Robber** | Linear; skip or take | Robber II — circular: two linear runs |
+| **Coin Change** | Unbounded min coins | Return -1 if impossible |
+| **Target Sum** | 0/1 knapsack count ways | Offset for negative sums |
+| **LIS** | DP O(n²) or binary search O(n log n) | Non-decreasing vs strictly increasing |
+| **Longest Palindromic Substring** | Expand center or DP `i..j` | Even/odd centers |
+| **Unique Paths** | Grid DP | Obstacles; modulo |
+| **Burst Balloons** | Interval DP | Multiply `nums[i]*nums[k]*nums[j]` with sentinels |
+
+---
+
 ## See also
 
 - [dp-aditya-verma.md](dp-aditya-verma.md) — choice diagram / knapsack style  

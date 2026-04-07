@@ -34,6 +34,18 @@ When the same **(state)** is reached on different paths → **overlapping subpro
 
 ---
 
+## Interview Questions — Logic & Trickiness (recursive style)
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **All Subsets** | Include/exclude each index; recurse | Bitmask vs recursion depth |
+| **Permutations** | Swap or used[] | Duplicate elements — skip same branch |
+| **Tower of Hanoi** | Move n-1, move base, move n-1 | Classic induction |
+| **N-Queens** | Row recursion + validity | Diagonal encoding |
+| **Generate Parentheses** | Open/close count | Prune when `close > open` |
+
+---
+
 ## See also
 
 - [recursion/README.md](README.md) — formal template and complexity  

@@ -119,6 +119,20 @@ def dfs(u, visited):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Course Schedule** | Topo; detect cycle | Prerequisite edge direction |
+| **Network Delay Time** | Dijkstra from K | Unreachable → infinity |
+| **Cheapest Flights K Stops** | Bellman k rounds or state `(node,stops)` | Off-by-one on stops |
+| **Number of Islands** | Flood fill | Visited vs mutate grid |
+| **Pacific Atlantic Water Flow** | Multi-source from oceans | Reverse: flow from ocean inward |
+| **Redundant Connection** | DSU; first cycle edge | Undirected |
+| **Critical Connections** | Tarjan bridges | `low[v] > disc[u]` |
+
+---
+
 ## See also
 
 - [Union Find](union-find.md) — DSU for Kruskal and connectivity  

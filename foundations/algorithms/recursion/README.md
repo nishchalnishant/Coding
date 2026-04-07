@@ -44,9 +44,21 @@ A problem-solving technique where a function calls itself to solve smaller insta
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Reverse Linked List** | Recursive: reverse rest then fix head | Stack O(n); tail call |
+| **Same Tree** | Match structure and value | Null handling |
+| **Fibonacci** | Recursion + memo vs iterative | Exponential naive |
+| **Pow(x,n)** | Recursion half power | n negative; overflow |
+| **Generate Parentheses** | Add `(` if open left; add `)` if valid | Backtracking variant |
+
+---
+
 ## See also
 
 - [aditya-verma.md](aditya-verma.md) — IP/OP and decision-tree style  
-- [Backtracking](../backtracking.md) — template with undo  
+- [Backtracking](../backtracking.md) — template with undo; recursion with choices  
 - [Dynamic Programming](../dynamic-programming/README.md) — memoization from recursion  
 - [Tree](../../data-structures/tree.md) — recursive structure

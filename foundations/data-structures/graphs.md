@@ -386,6 +386,19 @@ By mastering these techniques and practicing a variety of graph problems, you'll
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Number of Islands** | DFS/BFS flood `1`; mark visited | Mutate grid vs visited set; 4 vs 8 neighbors |
+| **Course Schedule** | Topo sort; cycle = can't finish all | Edge `a,b` means **b before a** — build graph correctly |
+| **Alien Dictionary** | Adjacent word pairs → edges; topo all letters | Invalid cycle; prefix order `"ab"`/`"abc"`; isolated letters |
+| **Word Ladder** | BFS one-char change; wordList as set | Bidirectional BFS follow-up; `endWord` must be in list |
+| **Rotten Oranges** | Multi-source BFS | Time = levels; track fresh count |
+| **Clone Graph** | HashMap old→copy; BFS/DFS clone neighbors | Cycle in graph; don’t re-clone same node |
+
+---
+
 ## See also
 
 - [Graph algorithms](../algorithms/graph.md) — compact SDE-3 reference with pseudocode  

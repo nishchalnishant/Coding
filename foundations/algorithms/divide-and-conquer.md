@@ -43,6 +43,18 @@ An algorithmic paradigm that breaks a problem into smaller, independent subprobl
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Merge Sort** | Split, sort halves, merge two sorted | O(n) extra space; stable; linked list merge |
+| **Quick Sort** | Partition; recurse one side | Pivot choice; duplicate-heavy arrays → 3-way partition |
+| **Majority Element** | Boyer-Moore vote or D&C verify | Element must appear > n/2; second pass to verify |
+| **Count Inversions** | Merge sort + count cross inversions | Long long for count; merge step key |
+| **Median Two Sorted** | Often framed as D&C / BS | See [searching](searching.md) |
+
+---
+
 ## See also
 
 - [Sorting](sorting.md) — merge and quick sort  

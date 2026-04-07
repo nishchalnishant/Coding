@@ -109,6 +109,19 @@ def binary_search_on_answer(candidates, predicate):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Binary Search (sorted)** | `lo, hi`, `mid`, shrink half | `lo<=hi` vs `lo<hi`; return `lo` or `hi` |
+| **First/Last Position** | Lower bound / upper bound templates | Duplicates: first `>=` vs last `<=` |
+| **Rotated Sorted Array** | Find sorted half; check if target in range | Duplicates at ends → worst O(n) |
+| **Koko / BS on answer** | `valid(mid)` greedy check; minimize `mid` | Ceil division `(p+k-1)//k` |
+| **Median Two Sorted** | BS partition on smaller array; balance left/right | `i+j = m+n+1/2`; edge empty array |
+| **Peak Element** | `mid` vs `mid+1` climb toward peak | Boundaries 0 and n-1 |
+
+---
+
 ## See also
 
 - [Array](../data-structures/array.md) — rotated array search patterns  

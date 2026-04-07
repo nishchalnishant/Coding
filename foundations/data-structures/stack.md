@@ -106,6 +106,18 @@ def largest_rectangle_area(heights):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Daily Temperatures** | Decreasing index stack; warmer day pops and assigns | Store **indices**, not temps; end of array |
+| **Largest Rectangle Histogram** | Pop when lower bar; width = `i - new_top - 1` | Sentinel `0` height at end; empty stack width |
+| **Valid Parentheses** | Push opens; pop match on close | `[{` type mismatch; only `()` in easy variant |
+| **Decode String** | Stack of `(string, k)` at `[`; repeat on `]` | Multi-digit `k`; nested `a2[b3[c]]` |
+| **Trapping Rain Water** (stack) | Pop when current higher; compute water between | Same as array two-pointer but stack mental model |
+
+---
+
 ## See also
 
 - [Queue](queue.md) — monotonic deque for sliding window max  

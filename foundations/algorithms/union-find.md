@@ -123,8 +123,21 @@ class DSU {
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Redundant Connection** | Union edges; first where `find(u)==find(v)` | Undirected |
+| **Number of Islands II** | DSU add land positions; count components | 2D index mapping; dynamic add |
+| **Accounts Merge** | Union emails under same name; group by root | Email → parent mapping |
+| **Kruskal MST** | Sort edges; union if different component | Disconnected graph — no full MST |
+| **Satisfiability / equations** | Union “equal”; check “not equal” same set | Path compression for speed |
+| **Largest Component by Common Factor** | Union indices sharing a factor | Factor sieve up to max value |
+
+---
+
 ## See also
 
-- [Graph](graph.md) — Kruskal, connectivity  
-- [Sorting](sorting.md) — edge sorting for Kruskal  
-- [advanced-graphs.md](../../advanced-dsa/advanced-graphs.md) — bridges (different technique)
+- [Graph](graph.md) — Kruskal, connectivity; when DSU vs BFS  
+- [Sorting](sorting.md) — edge order for Kruskal  
+- [advanced-graphs.md](../../advanced-dsa/advanced-graphs.md) — bridges (Tarjan, not DSU)

@@ -56,6 +56,17 @@ Choose one language and stick to it for practice; know its standard library for 
 
 ---
 
+## Interview questions — Logic & trickiness (language choice)
+
+| Situation | What interviewers check | Trickiness |
+|-----------|-------------------------|------------|
+| **“Solve in X”** | Syntax, stdlib (heap, deque, sort) | Python: `heapq` min-only; Java: `PriorityQueue` |
+| **Integer overflow** | Use `long` / check before multiply | Java stricter; Python arbitrary int — still mention for “C++ style” rounds |
+| **Strings** | Immutable str in both; `StringBuilder` in Java for concat | Python list join vs repeated `+=` |
+| **Recursion depth** | Python ~1000 default | `sys.setrecursionlimit` vs iterative rewrite |
+
+---
+
 ## See also
 
 - [languages/java/README.md](../languages/java/README.md) — Java book notes  

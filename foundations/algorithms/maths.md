@@ -49,6 +49,19 @@ Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ 
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Pow(x,n)** | Fast exponentiation binary expansion of n | Negative n; n = MIN_INT edge case |
+| **Sqrt(x)** | BS on `[0,x]` or Newton | Integer sqrt floor; overflow in `mid*mid` |
+| **GCD / LCM** | Euclidean `gcd(a,b)=gcd(b,a%b)` | LCM = `a*b/gcd` overflow → divide first |
+| **Count Primes** | Sieve of Eratosthenes | `i*i <= n`; boolean array size n+1 |
+| **Max Points on Line** | Slope map from point i; gcd normalize dy,dx | Duplicate points; vertical line (dx=0) |
+| **Random Pick with Weight** | Prefix sum + BS on random value | Inclusive ranges; `rand` in `[0, total)` |
+
+---
+
 ## See also
 
 - [Bit manipulation](bit-manipulation.md) — powers of two, parity  

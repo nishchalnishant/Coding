@@ -37,6 +37,16 @@ For more complex recurrences (e.g. merge sort \(T(n) = 2T(n/2) + O(n)\)), use th
 
 ---
 
+## Interview Questions — Logic & Trickiness (complexity)
+
+| Question style | Core logic | Trickiness |
+|----------------|------------|------------|
+| **What is T(n) for f(n)=2f(n/2)+n?** | Master theorem case 2 → O(n log n) | State a,b,f(n) |
+| **Compare O(n log n) sorts** | Merge stable O(n) space; quick in-place | Worst case quick O(n²) |
+| **Why not O(n) sort always?** | Comparison lower bound Ω(n log n); counting needs bounded keys | Problem constraints |
+
+---
+
 ## See also
 
 - [algorithms/sorting.md](algorithms/sorting.md) — merge sort and complexity  

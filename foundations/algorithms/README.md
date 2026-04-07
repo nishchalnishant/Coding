@@ -4,6 +4,8 @@ Core algorithms for coding interviews. Most topics are expanded to **SDE-3 level
 
 **Google interview:** See [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) for a **7-day / 48-hour revision plan** and topic-by-topic links into these notes. One-page recall: [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md).
 
+Each algorithm topic file includes **Interview Questions — Logic & Trickiness** (problems, core logic, gotchas). Supplements: [dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md), [recursion/aditya-verma.md](recursion/aditya-verma.md).
+
 ## Topic files
 
 | Topic | File | Highlights |

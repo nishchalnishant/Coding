@@ -135,6 +135,18 @@ def detect_cycle_entry(head):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Reverse List** | `prev, curr, next` iterative | Recursive O(n) stack; null head |
+| **Merge Two Sorted** | Dummy head; compare and append smaller | In-place vs new list; exhaust one list |
+| **Cycle II (entry)** | Floyd meet; reset one ptr to head; same speed to entry | Why math works; confusing “restart fast only” |
+| **Merge K Lists** | Min-heap of heads; pop min, push next | O(N log k); tie-break list id |
+| **Copy with Random** | Map old→new; two passes wire `next`/`random` | O(1) space interleaving is bonus |
+
+---
+
 ## See also
 
 - [Heap](heap.md) — merge K sorted lists  

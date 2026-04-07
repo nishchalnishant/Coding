@@ -103,6 +103,18 @@ def group_anagrams(strs):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Group Anagrams** | Key = sorted string or tuple of 26 counts | Unicode → not 26 buckets; tuple hashable |
+| **Longest Consecutive** | Put all in set; start seq only if `x-1` ∉ set | Looks O(n²) but each number visited once total |
+| **LRU Cache** | HashMap + doubly linked list; move to front on get | O(1) needs pointer updates; capacity 1 edge case |
+| **Subarray Sum = K** | `count[prefix]` and `count[prefix-K]` | `count[0]=1`; negatives allowed |
+| **Design HashMap** (basic) | Chaining or open addressing | Load factor rehash; equals/hash contract |
+
+---
+
 ## See also
 
 - [Array](array.md) — prefix sum + map  

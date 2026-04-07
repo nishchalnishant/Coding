@@ -191,6 +191,19 @@ def longest_substring_k_distinct(s, k):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Two Sum** | Hash complement `target - x`, or sort + two pointers | Duplicates; return indices vs values; unsorted needs map |
+| **3Sum** | Sort; fix `i`, two-pointer on rest; skip duplicate `nums[i]` | Must skip at `i`, `left`, and `right` or duplicate triplets |
+| **Subarray Sum = K** | Prefix sum + `count[prefix]`; `count[0]=1` | Negative nums OK; prefix 0 = subarray from start |
+| **Longest substring ≤K distinct** | Sliding window; shrink `i` while `distinct > K` | Jump `i` with last-index map vs char-by-char |
+| **Trapping Rain Water** | Two pointers: `min(l_max,r_max)-height[i]`; move shorter side | Why shorter side caps water; stack variant for 2D thinking |
+| **Product Except Self** | Left products × right products; no division | Two zeros → all zero; one zero → only that index non-zero |
+
+---
+
 ## See also
 
 - [Hashing](hashing.md) — two sum, subarray sum = K  

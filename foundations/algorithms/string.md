@@ -120,6 +120,19 @@ def kmp_search(text, pattern):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Longest Palindromic Substring** | Expand around center; or DP `i..j` | Even/odd centers; Manacher bonus |
+| **Minimum Window Substring** | Sliding window + `need`/`have` counts | `formed == required`; Unicode rare |
+| **Group Anagrams** | Sorted key or 26-count tuple | Key must be hashable |
+| **Valid Parenthesis String** | Greedy two-pass or DP for `*` | `*` as `(`, `)`, or empty |
+| **KMP / strStr** | LPS table; match without text backtrack | LPS construction bugs |
+| **Edit Distance** | 2D DP | Space-optimized one row |
+
+---
+
 ## See also
 
 - [Array](../data-structures/array.md) — sliding window on arrays vs strings  

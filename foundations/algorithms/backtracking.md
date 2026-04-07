@@ -105,6 +105,20 @@ def permute(nums):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Permutations** | DFS + used set or swap | Duplicates: sort + skip same at level |
+| **Combinations** | `start` index; n choose k | Prune when not enough elements left |
+| **Combination Sum** | Reuse same index | II: `i+1`, skip duplicate values |
+| **N-Queens** | Row by row; `col`, `diag1`, `diag2` | Bitmask optimization bonus |
+| **Word Search** | DFS grid + visited | Trie for Word Search II |
+| **Sudoku Solver** | Try digits; validate 3×3 | Backtrack on fail |
+| **Palindrome Partitioning** | Cut positions; is palindrome check | DP precompute palindrome table |
+
+---
+
 ## See also
 
 - [Dynamic Programming](dynamic-programming/README.md) — overlapping subproblems → memo  

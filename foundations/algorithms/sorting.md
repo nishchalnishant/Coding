@@ -48,6 +48,18 @@ Arranging data in a specific order to optimize subsequent operations (like searc
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Merge Intervals** | Sort by start; merge overlapping | Also sort by **end** for scheduling-style greedies |
+| **Sort Colors (DNF)** | Three pointers `low,mid,high` | Invariants; `mid` only under `high` |
+| **Kth Largest** | QuickSelect or min-heap size K | k from largest vs smallest end |
+| **Merge Sorted Array** | Fill from **end** (backward) | Avoid overwriting unread elements |
+| **Largest Number** | Sort with comparator `a+b > b+a` | All zeros → `"0"` not `"00..."` |
+
+---
+
 ## See also
 
 - [Greedy](greedy.md) — sort first, then greedy scan  

@@ -94,6 +94,17 @@ def sliding_window_maximum(nums, k):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Rotten Oranges** | Multi-source BFS; level = minutes | Count fresh vs rotten; impossible if fresh left |
+| **Sliding Window Maximum** | Deque of indices, decreasing values; pop out-of-window front | **Indices** on deque; pop back while smaller |
+| **Design Circular Queue** | Array + front/rear; full/empty sentinel or size | Off-by-one; `(rear+1)%cap == front` vs size counter |
+| **Shortest Path** (grid) | BFS from start; 4-dir neighbors | Obstacles; visited mark; 0-1 BFS if weights 0/1 |
+
+---
+
 ## See also
 
 - [Stack](stack.md) — stack vs queue for traversal  

@@ -110,6 +110,18 @@ def lowest_common_ancestor_bst(root, p, q):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **LCA BST** | `p,q < root` → left; both `> root` → right; else root | LCA can be `p` or `q`; duplicate values policy |
+| **LCA Binary Tree** | Return non-null from left/right; both → root | Assumes `p,q` exist; not BST |
+| **Max Path Sum** | Postorder: `max(0, child)` + val; global max | Path may skip root; negative node values |
+| **Serialize / Deserialize** | Preorder + null markers + queue rebuild | Multi-digit values delimiter; empty tree |
+| **Kth Smallest BST** | Inorder traversal count or BST size field | Iterative stack vs recursion; duplicate handling |
+
+---
+
 ## See also
 
 - [Graph](../algorithms/graph.md) — trees are special graphs  

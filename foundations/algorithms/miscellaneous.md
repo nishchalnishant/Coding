@@ -104,6 +104,20 @@ By mastering these principles and practicing various miscellaneous algorithm pro
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+Cross-topic problems — **name the underlying pattern** before coding.
+
+| Pattern | Example questions | Trickiness |
+|---------|-------------------|------------|
+| **Intervals** | Merge, min arrows, meeting rooms | Sort key (start vs end); touching intervals |
+| **Graph disguised** | Word ladder, snakes and ladders | Implicit edges; BFS level |
+| **Simulation** | Rotate array, spiral matrix | Indices and boundaries; direction vector |
+| **Greedy proof** | Jump game, gas station | Why local choice is safe |
+| **Math + code** | Random pick with weight, factorial trailing zeros | Overflow; precision |
+
+---
+
 ## See also
 
 - [README](README.md) — full algorithm topic index  

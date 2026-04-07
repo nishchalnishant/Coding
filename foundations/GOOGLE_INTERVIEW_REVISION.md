@@ -2,6 +2,8 @@
 
 Use this document for **focused revision** before your Google interview. It complements the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Read **Part A** the day before; use **Part B** by topic; follow **Part C** for communication; use **Part D** for timing.
 
+**Per-topic drill:** Every file under `foundations/` now includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+
 ---
 
 ## Part A — One-Page Quick Recall (Cheatsheet)

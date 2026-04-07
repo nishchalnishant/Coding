@@ -98,6 +98,19 @@ def subsets_bitmask(nums):
 
 ---
 
+## Interview Questions — Logic & Trickiness
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Single Number** | XOR all elements | Generalize to III (bit count mod 3) |
+| **Number of 1 Bits** | `n & (n-1)` loop or `bin(n).count` | Signed vs unsigned in some langs |
+| **Power of Two** | `n>0 and (n & (n-1))==0` | n=0 false |
+| **Reverse Bits** | Bit loop or byte table | 32 vs 64 bit |
+| **Maximum XOR Two Numbers** | Binary trie; greedy opposite bit | Bit width; leading zeros |
+| **Subset / bitmask DP** | `mask` over assignments | Only when n ≤ ~20 |
+
+---
+
 ## See also
 
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP  

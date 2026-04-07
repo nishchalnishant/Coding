@@ -4,6 +4,8 @@ Core data structures with **SDE-3 level** content: concept overview, algorithms,
 
 **Google interview:** Use [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) (topic priority + practice lists) and [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md) (one-page patterns) alongside the files below.
 
+Each topic file below includes **Interview Questions — Logic & Trickiness** (canonical problems, solution logic, and trickiness for that structure).
+
 ## Topic files
 
 | Topic | File | Highlights |

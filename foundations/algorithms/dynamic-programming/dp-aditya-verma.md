@@ -68,6 +68,18 @@ After reading the problem, check: **choice** (pick/skip) + **optimal** (max/min)
 
 ---
 
+## Interview Questions — Logic & Trickiness (knapsack family)
+
+| Question | Core logic | Trickiness |
+|----------|------------|------------|
+| **Subset Sum** | 0/1 pick to reach target | DP[i][sum] |
+| **Partition Equal Subset Sum** | Target = sum/2; odd sum → false | Bitset optimization follow-up |
+| **Target Sum** | Count ways with +/- signs | Offset array or two-DP |
+| **Coin Change (unbounded)** | Min coins; inner loop forward on weight | vs 0/1 backward inner loop |
+| **Rod Cutting** | Unbounded max value | Same as unbounded knapsack |
+
+---
+
 ## See also
 
 - [README.md](README.md) — SDE-3 DP overview and interview flow  

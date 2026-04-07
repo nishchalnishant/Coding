@@ -13,6 +13,7 @@
 * [Notes (Foundations)](foundations/README.md)
   * [Google Interview Revision](foundations/GOOGLE_INTERVIEW_REVISION.md)
   * [Google Quick Sheet](foundations/GOOGLE_QUICK_SHEET.md)
+  * [Topic Questions — Logic & Trickiness](foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
   * [Data structures](foundations/data-structures/README.md)
     * [Array](foundations/data-structures/array.md)
     * [Linked list](foundations/data-structures/linked-list.md)

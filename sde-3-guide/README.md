@@ -13,6 +13,7 @@ High-level guide for **SDE-3 / Senior Software Engineer** coding and system-desi
 
 ## Related resources
 
+- **[TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)** — Canonical questions by topic with **solution logic** and **trickiness** (gotchas).
 - **[SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md)** — Problem order, weekly plan, mock strategy.
 - **[Foundations](../foundations/README.md)** — Core data structures and algorithms (SDE-3 expanded).
 - **[FOLDER_BY_FOLDER_AUDIT.md](../FOLDER_BY_FOLDER_AUDIT.md)** — Audit of every folder, including this one.
