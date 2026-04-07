@@ -13,6 +13,7 @@
   * [Coverage Map](google-sde2/COVERAGE_MAP.md)
   * [Snippets](google-sde2/SNIPPETS.md)
   * [Question Bank](google-sde2/QUESTION_BANK.md)
+  * [Problem Details](google-sde2/PROBLEM_DETAILS.md)
 * [Google SDE-2 Audit](GOOGLE_SDE2_AUDIT.md)
 * [Books](books/README.md)
   * [Data structures and algorithms using python](books/data-structures-and-algorithms-using-python.md)
