@@ -75,7 +75,7 @@ These are the **families** Aditya Verma-style notes organize around: each has a 
 - **How to solve:** **LCS:** `dp[i][j]` longest common subsequence of prefixes. **LIS:** for each `i`, scan `j<i` with `nums[j]<nums[i]` and take `1+dp[j]`, or maintain `tails[]` where `tails[k]` = smallest ending value of an increasing subsequence of length `k+1`.
 - **Question variations:**
   - **LCS, LCS print, shortest common supersequence** (length = `m+n-LCS`).
-  - **Edit distance** — similar grid; insert/delete/replace costs.
+  - [Edit distance](../../../google-sde2/PROBLEM_DETAILS.md#edit-distance) — similar grid; insert/delete/replace costs.
   - **Longest palindromic subsequence** = LCS(s, reverse(s)).
   - **LIS:** count LIS, longest chain of pairs, Russian dolls envelopes (sort + LIS).
   - **Follow-up:** **DLIS** (decreasing), **non-decreasing** vs **strict** (binary search `lower_bound` vs `upper_bound`).
@@ -95,11 +95,11 @@ These are the **families** Aditya Verma-style notes organize around: each has a 
 
 ### MCM / Interval DP
 
-- **Idea:** Optimal solution on `[i,j]` is often **split** at `k` (`i ≤ k < j`): solve `[i,k]` and `[k+1,j]` independently, pay a **merge/cost** at `k`. Matrix chain multiplication is the textbook example; **burst balloons** and **palindrome partitioning II** use the same **interval** state.
+- **Idea:** Optimal solution on `[i,j]` is often **split** at `k` (`i ≤ k < j`): solve `[i,k]` and `[k+1,j]` independently, pay a **merge/cost** at `k`. Matrix chain multiplication is the textbook example; **[burst balloons](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons)** and **palindrome partitioning II** use the same **interval** state.
 - **How to solve:** `dp[i][j] = min/max over k of dp[i][k] + dp[k+1][j] + cost(i,j,k)`. Fill by **increasing length** `len = 2..n`. **O(n³)** for many problems unless structure reduces `k` range.
 - **Question variations:**
   - **Matrix chain multiplication** — cost = product of dimensions at split.
-  - **Burst balloons** — add imaginary 1 at ends; value at `k` when last to burst in `(i,j)`.
+  - [Burst balloons](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons) — add imaginary 1 at ends; value at `k` when last to burst in `(i,j)`.
   - **Palindrome partitioning II** — min cuts; **optimal BST** (search cost) — similar split flavor.
   - **Scramble string** — recursive structure with pruning.
   - **Follow-up:** **optimal triangulation** of polygon (same interval DP shape).
@@ -123,9 +123,9 @@ These are the **families** Aditya Verma-style notes organize around: each has a 
 - **How to solve:** **Topo order + DP:** `dp[v] = aggregate of dp[u] + edge(u,v)` over incoming edges. **Shortest/longest path in DAG** is linear in `V+E` with topo sort. **Bitmask DP on graph:** Hamiltonian path, TSP-like, `n ≤ ~20`.
 - **Question variations:**
   - **Longest path in DAG** (project scheduling, critical path).
-  - **Cheapest flights within K stops** — state `(city, edges_used)` or Bellman-Ford `K` rounds.
+  - [Cheapest flights within K stops](../../../google-sde2/PROBLEM_DETAILS.md#cheapest-flights-within-k-stops) — state `(city, edges_used)` or Bellman-Ford `K` rounds.
   - **Travelling salesman** (bitmask), **collect all keys** (state = position + key mask).
-  - **Follow-up:** **0-1 BFS** / **Dijkstra** when weights non-negative — not always labeled “DP” but same “relax in order” idea.
+  - **Follow-up:** **0-1 BFS** / **[Dijkstra](../../../google-sde2/PROBLEM_DETAILS.md#dijkstra)** when weights non-negative — not always labeled “DP” but same “relax in order” idea.
 
 ---
 

@@ -118,9 +118,9 @@ print(permute([1, 2, 3]))
 
 #### 8. **Practice Problems**
 
-1. **Combination Sum**: Find all combinations of numbers that add up to a target value.
-2. **Subsets**: Generate all possible subsets from a given set.
-3. **Word Search**: Given a 2D board and a word, determine if the word exists in the grid.
+1. **[Combination Sum](../../google-sde2/PROBLEM_DETAILS.md#combination-sum)**: Find all combinations of numbers that add up to a target value.
+2. **[Subsets](../../google-sde2/PROBLEM_DETAILS.md#subsets)**: Generate all possible subsets from a given set.
+3. **[Word Search](../../google-sde2/PROBLEM_DETAILS.md#word-search)**: Given a 2D board and a word, determine if the word exists in the grid.
 
 #### 9. **Conclusion**
 

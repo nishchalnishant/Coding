@@ -74,7 +74,7 @@ During this review, focus on the following topics covered in Week 2:
   * **Optimal Substructure**: The optimal solution can be constructed from optimal solutions of subproblems.
 * **Common Problems**:
   * **Fibonacci Sequence**: Calculated via memoization or tabulation.
-  * **Coin Change**: Finding the minimum number of coins for a specific amount.
+  * **[Coin Change](../../google-sde2/PROBLEM_DETAILS.md#coin-change)**: Finding the minimum number of coins for a specific amount.
   * **Longest Increasing Subsequence (LIS)**: Finding the longest subsequence of a sequence that is sorted in increasing order.
 * **Time Complexity**:
   * Fibonacci: O(n) for both approaches.

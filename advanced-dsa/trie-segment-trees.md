@@ -44,7 +44,7 @@ class Trie:
 
 ### Common SDE 3 Trie Problems:
 1.  **Word Search II**: Use a Trie to store words, then perform backtracking on the grid to search for them efficiently.
-2.  **Maximum XOR of Two Numbers**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
+2.  **[Maximum XOR of Two Numbers](../google-sde2/PROBLEM_DETAILS.md#maximum-xor-of-two-numbers)**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
 
 ---
 

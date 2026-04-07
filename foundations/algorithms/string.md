@@ -128,15 +128,15 @@ def kmp_search(text, pattern):
 |----------|------------|----------------------|
 | **Longest Palindromic Substring** | **Expand** around each center (odd length) and between chars (even); track max. **DP:** `dp[i][j]` true if `s[i]==s[j]` and inner palindrome. | **O(n²)** centers vs **O(n³)** naive; **Manacher** O(n) bonus. |
 | **Longest Palindromic Subsequence** | **DP:** `LPS[i][j]` from ends; match adds 2, else max skip left/right. | **vs substring**—subsequence can skip chars; **reverse LCS** trick `LPS(s) = LCS(s, reverse(s))`. |
-| **Minimum Window Substring** | Expand `right` until all chars of `t` satisfied (`formed == required`); shrink `left` while valid, track min. | **`need`** map vs `have`; **Unicode** counts not just 26 letters; **empty** `t`. |
+| **[Minimum Window Substring](../../google-sde2/PROBLEM_DETAILS.md#minimum-window-substring)** | Expand `right` until all chars of `t` satisfied (`formed == required`); shrink `left` while valid, track min. | **`need`** map vs `have`; **Unicode** counts not just 26 letters; **empty** `t`. |
 | **Substring with Concatenation of All Words** | **Fixed word length:** slide window in steps of wordLen; compare **multiset** of words in window to target multiset. | **Same word** multiple times; **O(len * n * numWords)** with careful hashing. |
-| **Group Anagrams** | Key = **sorted string** or **tuple of 26 counts**. | **Unicode** breaks 26-array assumption. |
+| **[Group Anagrams](../../google-sde2/PROBLEM_DETAILS.md#group-anagrams)** | Key = **sorted string** or **tuple of 26 counts**. | **Unicode** breaks 26-array assumption. |
 | **Valid Parenthesis String** | **Greedy range** `[low, high]` of possible open count after processing `*` as 0/1/2; or two-pass min/max greedy. | `*` is wildcard; **DP** O(n²) if greedy proof unclear. |
 | **KMP — strStr** | Build **LPS** (longest proper prefix which is suffix) for pattern; scan text **never moving text pointer backward**. | **LPS** off-by-one bugs; **empty** pattern. |
 | **Repeated String Match** | Need at most **`ceil(lenB/lenA)+2`** copies of A to contain B (prove bound). | **Rabin-Karp** or KMP inside expanded repeats. |
-| **Edit Distance** | `dp[i][j]` = min insert/delete/replace from first `i` to first `j` chars. | **Space** one row O(min(m,n)); **only delete** costs variant. |
+| **[Edit Distance](../../google-sde2/PROBLEM_DETAILS.md#edit-distance)** | `dp[i][j]` = min insert/delete/replace from first `i` to first `j` chars. | **Space** one row O(min(m,n)); **only delete** costs variant. |
 | **Distinct Subsequences** | DP counts ways to form `t` as subsequence of `s`. | **Mod** large prime; **empty** `t` → 1. |
-| **Word Break** | **BFS/DP** on positions: `dp[i]` = can segment starting at `i` using dict set. | **Memo** DFS; **word break II** needs backtrack all sentences. |
+| **[Word Break](../../google-sde2/PROBLEM_DETAILS.md#word-break)** | **BFS/DP** on positions: `dp[i]` = can segment starting at `i` using dict set. | **Memo** DFS; **word break II** needs backtrack all sentences. |
 
 ---
 

@@ -52,11 +52,11 @@ SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/sor
 |----------|------------|----------------------|
 | **Merge Sort** | Divide at `mid`, recursively sort, **merge** two sorted runs with two pointers O(n). | **O(n)** extra array; **stable**; **linked list** can merge in O(1) space for list nodes. **Bottom-up** iterative merges. |
 | **Quick Sort** | **Partition** around pivot (Lomuto/Hoare); recurse on left/right. **QuickSelect** recurses only side containing k. | **Pivot** random/median-of-three avoids O(n²) on sorted input; **3-way partition** (Dutch flag) for many duplicates. |
-| **Majority Element** | **Boyer–Moore:** candidate + count; cancel pairs; second pass **verify** count > n/2. | Works only if **strict majority** > ⌊n/2⌋; **D&C:** majority of whole is majority of a half or doesn’t exist—then verify. |
+| **[Majority Element](../../google-sde2/PROBLEM_DETAILS.md#majority-element)** | **Boyer–Moore:** candidate + count; cancel pairs; second pass **verify** count > n/2. | Works only if **strict majority** > ⌊n/2⌋; **D&C:** majority of whole is majority of a half or doesn’t exist—then verify. |
 | **Count Inversions** | **Merge sort** augmentation: when taking from **right** before left, add `len(left_remaining)` to inversion count. | Use **64-bit** count; **merge** step is where cross inversions counted. |
 | **Maximum Subarray (divide & conquer)** | Max in left, right, or **crossing** through mid—combine O(n) per level. | **Kadane** O(n) usually preferred; D&C shows recurrence thinking. |
 | **Closest Pair of Points** | Sort by x; divide; min distance in strips by y-sorted **strip** scan O(n) per level. | **Strip** only points within δ of midline; **6-point** packing argument. |
-| **Median of Two Sorted Arrays** | See binary search partition in [searching](searching.md)—often classified as D&C + BS. | **O(log(min(m,n)))** goal. |
+| **[Median of Two Sorted Arrays](../../google-sde2/PROBLEM_DETAILS.md#median-of-two-sorted-arrays)** | See binary search partition in [searching](searching.md)—often classified as D&C + BS. | **O(log(min(m,n)))** goal. |
 | **Pow(x, n)** | Divide: `x^n = (x^(n/2))²` for even n; odd `x * x^(n-1)`. | **Negative** n; **MIN_INT** overflow when negate. |
 
 ---

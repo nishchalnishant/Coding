@@ -55,15 +55,15 @@ SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/sor
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Merge Intervals** | Sort by **start**; sweep: if overlap with last (`curr.start <= last.end`), merge `end = max(...)`; else append. | **Contained** intervals; **sort by end** for “max non-overlapping” / meeting room variants. |
+| **[Merge Intervals](../../google-sde2/PROBLEM_DETAILS.md#merge-intervals)** | Sort by **start**; sweep: if overlap with last (`curr.start <= last.end`), merge `end = max(...)`; else append. | **Contained** intervals; **sort by end** for “max non-overlapping” / meeting room variants. |
 | **Meeting Rooms II** | Sort starts; **min-heap** of **end** times of ongoing meetings; pop ended, push new end. | Answers **min rooms** = max overlap; **wrong:** one pass without heap. |
 | **Sort Colors (DNF)** | Three pointers: `0..low-1` are 0s, `low..mid-1` are 1s, `mid..high` unknown, `high+1..` are 2s. | Only **`mid++`** when swap with `low`; **swap with high** without mid++. |
-| **Kth Largest Element** | **QuickSelect** partition until pivot at `n-k`; or **min-heap** of size k. | **k** from largest vs smallest; **QuickSelect** worst O(n²)—randomized pivot helps. |
+| **[Kth Largest Element](../../google-sde2/PROBLEM_DETAILS.md#kth-largest-element)** | **QuickSelect** partition until pivot at `n-k`; or **min-heap** of size k. | **k** from largest vs smallest; **QuickSelect** worst O(n²)—randomized pivot helps. |
 | **Merge Sorted Array** | Merge into `nums1` **from the end** using pointers `i=m-1, j=n-1, k=m+n-1`. | **Overwrite** risk if merge front; **trailing** zeros in nums1. |
 | **Largest Number** | Sort digit strings with **`cmp(a,b) = (a+b) vs (b+a)`**. | **All zeros** → single `"0"`; comparator must define **strict weak ordering**. |
 | **Reorder Log Files** | Letter-logs: sort by **content**, then **identifier**; digit-logs keep **relative order** after letter-logs. | **Custom** key extraction; **stable** partition between letter vs digit logs. |
 | **H-Index** | After **sort desc**, find max `i` with `citations[i] >= i+1`; or **counting bucket** O(n). | **h** papers with **≥ h** citations each; index vs count off-by-one. |
-| **Insert Interval** | Insert new interval into sorted list: **merge once** with neighbors. | **Binary search** insert position; **merge** left and right expansions. |
+| **[Insert Interval](../../google-sde2/PROBLEM_DETAILS.md#insert-interval)** | Insert new interval into sorted list: **merge once** with neighbors. | **Binary search** insert position; **merge** left and right expansions. |
 
 ---
 

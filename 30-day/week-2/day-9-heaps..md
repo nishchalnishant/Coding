@@ -156,9 +156,9 @@ Heaps are useful in various applications, including:
 
 1. **LeetCode**:
    * Kth Largest Element in an Array
-   * Merge K Sorted Lists
-   * Top K Frequent Elements
-   * Find Median from Data Stream
+   * [Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)
+   * [Top K Frequent Elements](../../google-sde2/PROBLEM_DETAILS.md#top-k-frequent-elements)
+   * [Find Median from Data Stream](../../google-sde2/PROBLEM_DETAILS.md#find-median-from-data-stream)
 2. **HackerRank**:
    * Max Heap
    * Min Heap

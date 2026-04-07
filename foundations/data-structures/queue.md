@@ -101,13 +101,13 @@ def sliding_window_maximum(nums, k):
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
 | **Rotten Oranges** | **Multi-source BFS** from all rotten cells; each level = 1 minute; track fresh count; if `fresh>0` after BFS return -1. | **In-place** marking rotten vs visited; **4-direction** only. **Edge:** already all rotten or no fresh. |
-| **Word Ladder** | BFS on graph of words differing by one letter; queue of `(word, depth)`; use **set** for O(1) neighbor check. | **Bidirectional BFS** faster; **remove** word from dict when visited to prune. |
-| **Sliding Window Maximum** | **Deque of indices**, decreasing **values**; pop from **back** while `nums[i] >= nums[back]`; pop **front** if out of window. | **Amortized O(n)**; each index added/removed once. **Naive heap** O(n log k). |
+| **[Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder)** | BFS on graph of words differing by one letter; queue of `(word, depth)`; use **set** for O(1) neighbor check. | **Bidirectional BFS** faster; **remove** word from dict when visited to prune. |
+| **[Sliding Window Maximum](../../google-sde2/PROBLEM_DETAILS.md#sliding-window-maximum)** | **Deque of indices**, decreasing **values**; pop from **back** while `nums[i] >= nums[back]`; pop **front** if out of window. | **Amortized O(n)**; each index added/removed once. **Naive heap** O(n log k). |
 | **Shortest Path in Binary Matrix** | BFS on 8-neighbor grid; track distance layer. | **Block** `(0,0)` or `(n-1,n-1)`; **visited** before enqueue. |
 | **01 Matrix** | **Multi-source BFS** from all 0 cells to compute distance to nearest 0. | Reverse BFS from targets, not from each 1. |
 | **Design Circular Queue** | Fixed array; `front`, `rear`, `size` **or** wasted slot to distinguish full/empty. | **Off-by-one:** `(rear+1)%cap == front` full; **thread-safety** follow-up for prod. |
 | **Moving Average from Data Stream** | Fixed-size **queue** + running **sum**; evict front when over window. | **Division** float vs int; **empty** window. |
-| **Cheapest Flights Within K Stops** | **BFS level = stops** or **Bellman-Ford** relax k times; min cost to dest. | **Negative** edges change method; **visited** pruning can break optimality—careful. |
+| **[Cheapest Flights Within K Stops](../../google-sde2/PROBLEM_DETAILS.md#cheapest-flights-within-k-stops)** | **BFS level = stops** or **Bellman-Ford** relax k times; min cost to dest. | **Negative** edges change method; **visited** pruning can break optimality—careful. |
 
 ---
 

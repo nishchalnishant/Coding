@@ -33,7 +33,7 @@ A condensed guide to standard problem-solving patterns.
 - **LCS (Longest Common Subsequence)**: 2D DP comparing strings.
 - **LIS (Longest Increasing Subsequence)**: $O(N \log N)$ using binary search + tails array.
 - **Palindromic Subsequence**: DP focusing on expanding from center or shrinking from ends.
-- **Edit Distance**: Minimum insertions/deletions/replacements to convert strings.
+- **[Edit Distance](../google-sde2/PROBLEM_DETAILS.md#edit-distance)**: Minimum insertions/deletions/replacements to convert strings.
 - **Subset Sum**: Determine if a subset sums to target $K$.
 - **Matrix Chain Multiplication**: Interval DP. Grouping optimally.
 - **Catalan Numbers**: Combinatorial DP (e.g., Unique BSTs, Valid Parentheses).

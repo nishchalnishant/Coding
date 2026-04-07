@@ -104,15 +104,15 @@ def subsets_bitmask(nums):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Single Number** | XOR all: pairs cancel (`a^a=0`); leftover is unique. | **Two** unique numbers—split by **lowest set bit** of XOR mask. |
+| **[Single Number](../../google-sde2/PROBLEM_DETAILS.md#single-number)** | XOR all: pairs cancel (`a^a=0`); leftover is unique. | **Two** unique numbers—split by **lowest set bit** of XOR mask. |
 | **Single Number II** | Count bits mod 3 per position, or **digital circuit** simulation. | **O(32)** passes; **sum mod 3** per bit works for 32-bit ints. |
 | **Number of 1 Bits** | `while n: n &= n-1` clears lowest set bit; count iterations. | **Python** arbitrary precision; **Java** `>>> ` unsigned right shift for negatives. |
-| **Counting Bits** | **DP:** `bits[i] = bits[i>>1] + (i&1)` for 0..n. | **O(n)** vs per-number popcount. |
+| **[Counting Bits](../../google-sde2/PROBLEM_DETAILS.md#counting-bits)** | **DP:** `bits[i] = bits[i>>1] + (i&1)` for 0..n. | **O(n)** vs per-number popcount. |
 | **Power of Two** | `n > 0` and `(n & (n-1)) == 0` (single bit set). | **`n=0`** false; **power of four** extra check `(n & 0x55555555)`. |
 | **Reverse Bits** | For i in 0..31: `result = (result<<1) \| (n&1); n>>=1`. | **Pad** to 32 bits; **byte lookup** table optimization. |
 | **Maximum XOR of Two Numbers in Array** | **Binary trie** of bits MSB→LSB; for each number greedily pick opposite bit if child exists. | **Leading** zeros—fix bit width (31..0); **empty** array. |
 | **Bitwise AND of Numbers Range** | Common **left prefix**: shift until `m==n`; answer `m << shifts`. | **Brute** range too big; **pattern** is highest differing bit zeros out lower. |
-| **Total Hamming Distance** | Per bit position: count ones `c`; contribution `c*(n-c)`. | **O(32n)** vs pairwise O(n²). |
+| **[Total Hamming Distance](../../google-sde2/PROBLEM_DETAILS.md#total-hamming-distance)** | Per bit position: count ones `c`; contribution `c*(n-c)`. | **O(32n)** vs pairwise O(n²). |
 | **Subset / Bitmask DP** | `dp[mask]` over subsets for small `n≤20`; iterate submasks `s = mask; s=(s-1)&mask`. | **TSP**, **assignment** problems; **enumeration** 2^n exponential. |
 
 ---

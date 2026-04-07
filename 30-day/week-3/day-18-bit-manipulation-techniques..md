@@ -81,7 +81,7 @@ print(find_non_repeating([1, 2, 3, 2, 1]))  # Output: 3
 
 #### 4. **Common Problems Involving Bit Manipulation**
 
-1. **Single Number**: Find the element that appears only once in an array where every other element appears twice.
+1. **[Single Number](../../google-sde2/PROBLEM_DETAILS.md#single-number)**: Find the element that appears only once in an array where every other element appears twice.
 2. **Power of Two**: Check if a number is a power of two using the condition `n > 0 and (n & (n - 1)) == 0`.
 3. **Reverse Bits**: Reverse the bits of a given 32-bit unsigned integer.
 4. **Maximum XOR of Two Numbers in an Array**: Find two numbers in an array such that their XOR is maximum.
@@ -90,7 +90,7 @@ print(find_non_repeating([1, 2, 3, 2, 1]))  # Output: 3
 
 1. **Find Missing Number**: Given an array containing n distinct numbers taken from 0 to n, find the missing number.
 2. **Subset XOR**: Given an array, find the maximum XOR subset.
-3. **Total Hamming Distance**: Calculate the total Hamming distance between all pairs of integers in an array.
+3. **[Total Hamming Distance](../../google-sde2/PROBLEM_DETAILS.md#total-hamming-distance)**: Calculate the total Hamming distance between all pairs of integers in an array.
 
 #### 6. **Tips for Mastering Bit Manipulation**
 

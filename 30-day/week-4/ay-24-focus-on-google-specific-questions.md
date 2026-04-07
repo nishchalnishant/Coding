@@ -46,27 +46,27 @@ Here are some frequently asked questions that candidates report encountering in 
 
 **3.1 Array and String Problems**
 
-* **Two Sum**: Given an array of integers, find two numbers such that they add up to a target.
-* **Longest Substring Without Repeating Characters**: Find the length of the longest substring without repeating characters.
+* **[Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)**: Given an array of integers, find two numbers such that they add up to a target.
+* **[Longest Substring Without Repeating Characters](../../google-sde2/PROBLEM_DETAILS.md#longest-substring-without-repeating-characters)**: Find the length of the longest substring without repeating characters.
 * **Rotate Array**: Rotate an array to the right by `k` steps.
 
 **3.2 Linked List Problems**
 
-* **Reverse Linked List**: Reverse a singly linked list.
-* **Merge Two Sorted Lists**: Merge two sorted linked lists into one sorted list.
+* **[Reverse Linked List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)**: Reverse a singly linked list.
+* **[Merge Two Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-two-sorted-lists)**: Merge two sorted linked lists into one sorted list.
 * **Detect Cycle in a Linked List**: Determine if a linked list has a cycle.
 
 **3.3 Tree and Graph Problems**
 
-* **Binary Tree Level Order Traversal**: Return the level order traversal of a binary tree's nodes.
+* **[Binary Tree Level Order Traversal](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-level-order-traversal)**: Return the level order traversal of a binary tree's nodes.
 * **Lowest Common Ancestor of a Binary Tree**: Find the lowest common ancestor of two nodes in a binary tree.
-* **Number of Islands**: Given a 2D grid of '1's (land) and '0's (water), count the number of islands.
+* **[Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands)**: Given a 2D grid of '1's (land) and '0's (water), count the number of islands.
 
 **3.4 Dynamic Programming Problems**
 
 * **Climbing Stairs**: Count how many distinct ways to climb to the top.
-* **Coin Change**: Determine the minimum number of coins to make a given amount.
-* **Longest Increasing Subsequence**: Find the length of the longest increasing subsequence in an array.
+* **[Coin Change](../../google-sde2/PROBLEM_DETAILS.md#coin-change)**: Determine the minimum number of coins to make a given amount.
+* **[Longest Increasing Subsequence](../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence)**: Find the length of the longest increasing subsequence in an array.
 
 #### 4. **Approaching Google-Specific Questions**
 

@@ -98,8 +98,8 @@ Given an array of integers, return indices of the two numbers such that they add
 
 Try applying this systematic approach to various problems. Some examples include:
 
-* Valid Parentheses
-* Merge Intervals
+* [Valid Parentheses](../../google-sde2/PROBLEM_DETAILS.md#valid-parentheses)
+* [Merge Intervals](../../google-sde2/PROBLEM_DETAILS.md#merge-intervals)
 * Letter Combinations of a Phone Number
 
 #### 5. **Conclusion**

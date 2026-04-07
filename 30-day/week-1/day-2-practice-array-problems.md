@@ -156,9 +156,9 @@ def containsDuplicate(nums):
 #### Recommended Practice Problems:
 
 1. **LeetCode**:
-   * Two Sum
+   * [Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)
    * Best Time to Buy and Sell Stock
-   * Maximum Subarray
+   * [Maximum Subarray](../../google-sde2/PROBLEM_DETAILS.md#maximum-subarray)
    * Move Zeros
    * Contains Duplicate
 2. **HackerRank**: Arrays – DS, Array Manipulation.

@@ -75,7 +75,7 @@ print(fibonacci_tab(10))  # Output: 55
 1. **Fibonacci Sequence**: Calculate the nth Fibonacci number.
 2. **Climbing Stairs**: Given `n` stairs, calculate how many ways one can reach the top if you can climb 1 or 2 stairs at a time.
 3. **Coin Change Problem**: Given an amount and denominations of coins, find the minimum number of coins needed to make that amount.
-4. **Longest Common Subsequence**: Find the longest subsequence common to two sequences.
+4. **[Longest Common Subsequence](../../google-sde2/PROBLEM_DETAILS.md#longest-common-subsequence)**: Find the longest subsequence common to two sequences.
 5. **0/1 Knapsack Problem**: Given weights and values of items, determine the maximum value that can be carried in a knapsack of fixed capacity.
 
 ***
@@ -134,9 +134,9 @@ print(coin_change(coins, amount))  # Output: 3 (11 = 5 + 5 + 1)
 
 1. **LeetCode**:
    * Climbing Stairs
-   * Coin Change
+   * [Coin Change](../../google-sde2/PROBLEM_DETAILS.md#coin-change)
    * Unique Paths
-   * Longest Increasing Subsequence
+   * [Longest Increasing Subsequence](../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence)
 2. **HackerRank**:
    * Coin Change Problem
    * Maximum Sum Problem

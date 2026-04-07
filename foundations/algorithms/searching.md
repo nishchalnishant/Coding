@@ -33,7 +33,7 @@ Techniques to find an element or the best value satisfying a condition. SDE-3 fo
 
 - **Peak element**: Binary search on index; compare A[mid] with A[mid+1]; if rising, peak in right half else left.
 - **Search in 2D (row-sorted, first of row ≤ last of next)**: Flatten to 1D index: row = idx//n, col = idx%n; standard BS.
-- **Median of two sorted arrays**: Binary search on partition in smaller array; balance left sizes and compare max_left ≤ min_right.
+- **[Median of two sorted arrays](../../google-sde2/PROBLEM_DETAILS.md#median-of-two-sorted-arrays)**: Binary search on partition in smaller array; balance left sizes and compare max_left ≤ min_right.
 - **Aggressive cows / Split array largest sum**: Classic "minimize maximum" → binary search on answer; predicate: can we place with given limit.
 
 ### Edge Cases
@@ -117,11 +117,11 @@ def binary_search_on_answer(candidates, predicate):
 |----------|------------|----------------------|
 | **Classic Binary Search** | `while lo <= hi`: `mid = lo + (hi-lo)//2`; compare `nums[mid]` to target; shrink left or right half. | **`lo<=hi` vs `lo<hi`** templates differ; **`mid` bias** (floor vs ceil) to avoid infinite loop in variants. |
 | **First / Last Position** | **Lower bound:** first index with `nums[i] >= target` (`lo` ends at first ≥). **Upper bound:** first `> target` minus one. | **Empty** result `-1`; **all smaller** or **all larger** edge cases. |
-| **Search in Rotated Sorted Array** | Find **sorted** half by comparing `nums[lo]`, `nums[mid]`; check if target in sorted range; else other half. | **Duplicates** at `lo==mid==hi` → shrink `hi--` or **O(n)** worst. **Pivot** unknown—two binary searches alternative. |
-| **Find Minimum in Rotated Sorted Array** | Compare `mid` to `right`: if `nums[mid] > nums[right]`, min in right half; else left. | **No duplicates** simplifies; **with duplicates** similar shrink trick. |
+| **[Search in Rotated Sorted Array](../../google-sde2/PROBLEM_DETAILS.md#search-in-rotated-sorted-array)** | Find **sorted** half by comparing `nums[lo]`, `nums[mid]`; check if target in sorted range; else other half. | **Duplicates** at `lo==mid==hi` → shrink `hi--` or **O(n)** worst. **Pivot** unknown—two binary searches alternative. |
+| **[Find Minimum in Rotated Sorted Array](../../google-sde2/PROBLEM_DETAILS.md#find-minimum-in-rotated-sorted-array)** | Compare `mid` to `right`: if `nums[mid] > nums[right]`, min in right half; else left. | **No duplicates** simplifies; **with duplicates** similar shrink trick. |
 | **Koko Eating Bananas / BS on Answer** | Monotonic `valid(k)` = can finish in `H` hours with speed `k`; search **min** `k` in `[1, max pile]`. | **`ceil(piles[i]/k)`** sum; **long** overflow on sum. |
-| **Split Array Largest Sum** | `valid(mid)` = need ≤ `m` subarrays with max sum `mid`; **greedy** fill subarray until exceed. | **Binary search** on answer range `[max(A), sum(A)]`. |
-| **Median of Two Sorted Arrays** | Binary search **partition** on shorter array so left half has `(m+n+1)//2` elements and `max(left) ≤ min(right)`. | **`i=0` or `j=0`** sentinels −∞/∞; **even** vs **odd** total length. |
+| **[Split Array Largest Sum](../../google-sde2/PROBLEM_DETAILS.md#split-array-largest-sum)** | `valid(mid)` = need ≤ `m` subarrays with max sum `mid`; **greedy** fill subarray until exceed. | **Binary search** on answer range `[max(A), sum(A)]`. |
+| **[Median of Two Sorted Arrays](../../google-sde2/PROBLEM_DETAILS.md#median-of-two-sorted-arrays)** | Binary search **partition** on shorter array so left half has `(m+n+1)//2` elements and `max(left) ≤ min(right)`. | **`i=0` or `j=0`** sentinels −∞/∞; **even** vs **odd** total length. |
 | **Find Peak Element** | Compare `nums[mid]` vs `nums[mid+1]`; move toward **larger** side; `lo<hi` until `lo==hi`. | **Multiple** peaks—return any; **boundaries** neighbors −∞ conceptually. |
 | **Sqrt(x) / Integer Sqrt** | BS `ans` in `[0,x]` where `mid*mid <= x`. | **Overflow** use `mid <= x // mid`; **newton** alternative. |
 | **Random Pick with Weight** | **Prefix sums** + binary search on random value in `[0, total)`. | **Inclusive** random range; **0** weights excluded. |

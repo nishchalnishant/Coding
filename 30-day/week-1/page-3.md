@@ -229,7 +229,7 @@ Balancing a tree ensures that the height remains close to the minimum possible, 
    * Insert into a Binary Search Tree
    * Delete Node in a BST
    * Invert Binary Tree
-   * Binary Tree Level Order Traversal
+   * [Binary Tree Level Order Traversal](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-level-order-traversal)
 2. **HackerRank**:
    * Binary Search Tree: Insertion
    * Binary Search Tree: Lowest Common Ancestor

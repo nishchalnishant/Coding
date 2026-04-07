@@ -17,7 +17,7 @@ SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/mat
   - $(A \times B) \mod M = ((A \mod M) \times (B \mod M)) \mod M$
 
 ## Combinatorics & Probability
-- **Permutations**: $N!$ ways to arrange $N$ distinct items.
+- **[Permutations](../../google-sde2/PROBLEM_DETAILS.md#permutations)**: $N!$ ways to arrange $N$ distinct items.
 - **Combinations**: $nCr = \frac{n!}{r!(n-r)!}$ ways to choose $r$ items from $n$.
 - **Pigeonhole Principle**: If $N$ items are put into $M$ containers ($N > M$), at least one container must hold $> 1$ item.
 
@@ -34,7 +34,7 @@ SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/mat
 ## Pattern Recognition
 
 - **Primes** → Sieve (all primes ≤ N) or trial division up to √N for single number.
-- **GCD/LCM** → Euclidean algorithm; LCM = (a×b)/gcd(a,b). **Modular** → (a±b) mod M, (a×b) mod M; use mod at each step to avoid overflow.
+- **[GCD/LCM](../../google-sde2/PROBLEM_DETAILS.md#gcd-lcm)** → Euclidean algorithm; LCM = (a×b)/gcd(a,b). **Modular** → (a±b) mod M, (a×b) mod M; use mod at each step to avoid overflow.
 - **Combinatorics** → nCr = n!/(r!(n-r)!); permutations n!; pigeonhole for "at least one" arguments.
 - **Geometry** → Distance, slope (avoid float when possible; use cross product for collinearity). Max points on a line: group by slope (handle vertical).
 
@@ -58,8 +58,8 @@ SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/mat
 |----------|------------|----------------------|
 | **Pow(x, n)** | Binary exponentiation: square `x` while halving `n`; multiply result when `n` odd. | **`n < 0`** take reciprocal; **`n = INT_MIN`**—use `long` or halve positive carefully. |
 | **Sqrt(x) / Integer Sqrt** | Binary search `ans` in `[0,x]` with `mid <= x // mid`; or **Newton** `x_{k+1} = (x_k + n/x_k)/2`. | **`mid*mid`** overflow—compare with division; **floor** vs **ceil** sqrt. |
-| **GCD / LCM** | **Euclidean** gcd; **LCM** = `a / gcd(a,b) * b` to reduce overflow. | **`gcd(0,a)=a`**; **coprime** check `gcd==1`. |
-| **Count Primes** | **Sieve:** mark multiples from each prime `p` starting `p*p`. | **`sqrt(n)`** bound for primes to sieve; **space** O(n)—**segmented** sieve for huge n. |
+| **[GCD / LCM](../../google-sde2/PROBLEM_DETAILS.md#gcd-lcm)** | **Euclidean** gcd; **LCM** = `a / gcd(a,b) * b` to reduce overflow. | **`gcd(0,a)=a`**; **coprime** check `gcd==1`. |
+| **[Count Primes](../../google-sde2/PROBLEM_DETAILS.md#count-primes)** | **Sieve:** mark multiples from each prime `p` starting `p*p`. | **`sqrt(n)`** bound for primes to sieve; **space** O(n)—**segmented** sieve for huge n. |
 | **Factorial Trailing Zeroes** | Count **factors of 5** in n! (each 5,25,125…). | **More 2s than 5s**—only count 5s; **legendre** style sum. |
 | **Max Points on a Line** | For each anchor, map **reduced slope** `(dy/g, dx/g)` with `g=gcd(|dy|,|dx|)`; handle **vertical** and **duplicates**. | **Same point** add to duplicate counter; **use gcd** to normalize `-2/3` vs `2/-3`. |
 | **Random Pick with Weight** | **Prefix sums** `P[i]`; draw `r` in `[0, P[last])`; **binary search** first `P[i] > r`. | **Inclusive/exclusive** random range; **zero** weights excluded. |

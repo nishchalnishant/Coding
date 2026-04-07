@@ -55,7 +55,7 @@ def backtrack(path, start, ...):
 
 ## 5. Pattern Recognition
 
-- **Permutations**: Choices = unused elements; path length = n.
+- **[Permutations](../../google-sde2/PROBLEM_DETAILS.md#permutations)**: Choices = unused elements; path length = n.
 - **Combinations/Subsets**: Choices = include or not; or "next start index" to avoid duplicate sets.
 - **Constraint satisfaction**: N-Queens (place row by row, check column/diagonals); Sudoku (try 1-9, check row/col/box).
 - **String/path**: Word Search — 4 directions, visited set; undo visited on backtrack.
@@ -111,13 +111,13 @@ def permute(nums):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Permutations** | DFS: choose next unused element; **swap** method: fix position `i` with each `j≥i`. | **Duplicates:** **sort** first; skip `nums[j]==nums[j-1]` when `j>start` not to repeat same level choice. |
+| **[Permutations](../../google-sde2/PROBLEM_DETAILS.md#permutations)** | DFS: choose next unused element; **swap** method: fix position `i` with each `j≥i`. | **Duplicates:** **sort** first; skip `nums[j]==nums[j-1]` when `j>start` not to repeat same level choice. |
 | **Permutations II** | Same as permutations with **duplicate skip**; or use **Counter** multiset. | **Time:** O(n! × n); **space** recursion depth. |
 | **Combinations** | `dfs(start, path)` pick `i` from `start..n-1` until `len(path)==k`. | **Prune:** if `remaining elements < k - len(path)` return. |
-| **Combination Sum** | Reuse index `i` (unbounded same element); target decreases by `nums[i]`. | **Combination Sum II:** **next index `i+1`**, no reuse; **duplicate** values skip same as subset II. |
-| **Subsets** | Include/exclude each index; or iterative cascade. | **Subsets II** with duplicate skip. |
+| **[Combination Sum](../../google-sde2/PROBLEM_DETAILS.md#combination-sum)** | Reuse index `i` (unbounded same element); target decreases by `nums[i]`. | **Combination Sum II:** **next index `i+1`**, no reuse; **duplicate** values skip same as subset II. |
+| **[Subsets](../../google-sde2/PROBLEM_DETAILS.md#subsets)** | Include/exclude each index; or iterative cascade. | **[Subsets II](../../google-sde2/PROBLEM_DETAILS.md#subsets-ii)** with duplicate skip. |
 | **N-Queens** | Place row `r` in column `c` if `col` and two diagonals `r+c`, `r-c` free. | **Diag** keys: `r+c` and `r-c`; **bitmask** for speed. |
-| **Word Search** | DFS from each cell; mark visited **or** mutate board to `#`; **4-direction** backtrack. | **Word Search II:** **Trie** of words to prune; **O(sum of words)** vs repeated scans. |
+| **[Word Search](../../google-sde2/PROBLEM_DETAILS.md#word-search)** | DFS from each cell; mark visited **or** mutate board to `#`; **4-direction** backtrack. | **Word Search II:** **Trie** of words to prune; **O(sum of words)** vs repeated scans. |
 | **Sudoku Solver** | Find empty; try 1–9; check row/col/box; recurse; **undo** on failure. | **Heuristic:** pick cell with **fewest** candidates (MRV). |
 | **Palindrome Partitioning** | DFS: partition prefix if palindrome; recurse on suffix. | **DP** precompute `isPal[i][j]` to avoid O(n) palindrome check each step. |
 | **Restore IP Addresses** | DFS insert dots after 1–3 digits; validate octet 0–255 and no leading `0` unless single `0`. | **Prune** invalid length early; **4 parts** exactly. |

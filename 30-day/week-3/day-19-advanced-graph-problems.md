@@ -148,9 +148,9 @@ print(kosaraju_scc(graph))  # Output: [['D'], ['A', 'B', 'C']]
 
 #### 5. **Practice Problems**
 
-1. **Course Schedule**: Given a list of prerequisites, determine if you can finish all courses.
-2. **Clone Graph**: Clone an undirected graph given a reference to a node.
-3. **Number of Islands**: Given a grid of `1`s (land) and `0`s (water), count the number of islands.
+1. **[Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule)**: Given a list of prerequisites, determine if you can finish all courses.
+2. **[Clone Graph](../../google-sde2/PROBLEM_DETAILS.md#clone-graph)**: Clone an undirected graph given a reference to a node.
+3. **[Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands)**: Given a grid of `1`s (land) and `0`s (water), count the number of islands.
 
 #### 6. **Tips for Mastering Advanced Graph Problems**
 

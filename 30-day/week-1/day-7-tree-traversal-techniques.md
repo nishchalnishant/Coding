@@ -208,7 +208,7 @@ def level_order_traversal(root):
    * Binary Tree Inorder Traversal
    * Binary Tree Preorder Traversal
    * Binary Tree Postorder Traversal
-   * Binary Tree Level Order Traversal
+   * [Binary Tree Level Order Traversal](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-level-order-traversal)
    * Construct Binary Tree from Preorder and Inorder Traversal
 2. **HackerRank**:
    * Tree: Level Order Traversal

@@ -38,8 +38,8 @@ When the same **(state)** is reached on different paths → **overlapping subpro
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **All Subsets** | At index `i`: branch **include** `nums[i]` and **exclude**; recurse to `i+1`. | **Bitmask** `0..2^n-1` equivalent; **subsets II** needs sort + skip duplicates on exclude branch. |
-| **Permutations** | Swap-based or `used[]` boolean; **depth** = n. | **Duplicate** array: sort + `if (i>0 && nums[i]==nums[i-1] && !used[i-1])` skip. |
+| **All Subsets** | At index `i`: branch **include** `nums[i]` and **exclude**; recurse to `i+1`. | **Bitmask** `0..2^n-1` equivalent; **[subsets II](../../../google-sde2/PROBLEM_DETAILS.md#subsets-ii)** needs sort + skip duplicates on exclude branch. |
+| **[Permutations](../../../google-sde2/PROBLEM_DETAILS.md#permutations)** | Swap-based or `used[]` boolean; **depth** = n. | **Duplicate** array: sort + `if (i>0 && nums[i]==nums[i-1] && !used[i-1])` skip. |
 | **Tower of Hanoi** | `move(n, src, aux, dst)` = move `n-1` src→aux, move disk n src→dst, move `n-1` aux→dst. | **Induction** proof; **2^n-1** moves optimal. |
 | **Josephus / elimination games** | Recursive `f(n,k) = (f(n-1,k)+k) % n` with base; iterative from 0. | **0-based** vs **1-based** index; **k** step size. |
 | **N-Queens** | Place one queen per row; recurse column choice; check `col` and diagonals. | **Bitmasks** `cols | diag1 | diag2` for speed; **count** vs **print** one solution. |

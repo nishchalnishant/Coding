@@ -130,7 +130,7 @@ class DSU {
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Redundant Connection** | Process edges; **union(u,v)**; if already same set → **that edge** closes cycle (undirected tree + one edge). | **Return last** edge in problem order; **directed** variant is harder (see graph.md). |
+| **[Redundant Connection](../../google-sde2/PROBLEM_DETAILS.md#redundant-connection)** | Process edges; **union(u,v)**; if already same set → **that edge** closes cycle (undirected tree + one edge). | **Return last** edge in problem order; **directed** variant is harder (see graph.md). |
 | **Number of Islands II** | DSU over **water**; as land added, **union** with 4 neighbors; track **component count** delta. | **2D → 1D** index `r*cols+c`; **dynamic** connectivity vs static flood fill. |
 | **Accounts Merge** | Union all emails in same account; **map email → root**; collect emails per root; sort. | **Same email** across accounts merges; **disjoint** names handled by union. |
 | **Kruskal MST** | Sort edges by weight; add if **find(u)≠find(v)**; **union**; stop when `n-1` edges. | **Disconnected** graph—MST not spanning all; **parallel** edges. |

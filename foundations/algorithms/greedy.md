@@ -88,7 +88,7 @@ def eraseOverlapIntervals(intervals):
     return removals
 ```
 
-**Jump Game II** (minimum jumps): greedy “furthest in current jump range” — extend `end` of current level, when `i == reach` increment jumps and set `reach = furthest`.
+**[Jump Game II](../../google-sde2/PROBLEM_DETAILS.md#jump-game-ii)** (minimum jumps): greedy “furthest in current jump range” — extend `end` of current level, when `i == reach` increment jumps and set `reach = furthest`.
 
 ---
 
@@ -97,11 +97,11 @@ def eraseOverlapIntervals(intervals):
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
 | **Jump Game I** | Track `furthest`; if `i > furthest` unreachable; else `furthest = max(furthest, i+nums[i])`. | **O(n)** single pass; **Jump II** is different (count jumps). |
-| **Jump Game II** | **Greedy BFS levels:** `end` of current jump range, `furthest` max reach; when `i==end`, increment jumps, `end=furthest`. | **Not** DP for standard statement—greedy optimal; **prove** why extending furthest in current range works. |
-| **Non-overlapping Intervals** | Sort by **end**; keep last picked end; if `start < lastEnd` skip/remove. | **Sort by start** fails (counterexample); **erase** minimum intervals = same as max non-overlapping count. |
+| **[Jump Game II](../../google-sde2/PROBLEM_DETAILS.md#jump-game-ii)** | **Greedy BFS levels:** `end` of current jump range, `furthest` max reach; when `i==end`, increment jumps, `end=furthest`. | **Not** DP for standard statement—greedy optimal; **prove** why extending furthest in current range works. |
+| **[Non-overlapping Intervals](../../google-sde2/PROBLEM_DETAILS.md#non-overlapping-intervals)** | Sort by **end**; keep last picked end; if `start < lastEnd` skip/remove. | **Sort by start** fails (counterexample); **erase** minimum intervals = same as max non-overlapping count. |
 | **Meeting Rooms / min arrows** | Intervals: sort by end; **one arrow** per merged cluster end (min arrows to burst balloons). | **Touching** points—`>` vs `≥` for overlap. |
-| **Gas Station** | If `sum(gas) < sum(cost)` no start; else start from 0 with running tank; reset start when tank < 0. | **Uniqueness** of valid start when total surplus ≥ 0; **circular** array linearized by reset. |
-| **Task Scheduler** | Idle formula: `(max_freq-1)*(n+1) + num_tasks_with_max_freq`, **capped** at `len(tasks)`. | **Cap** means cooling fits inside available slots; **heap** simulation alternative. |
+| **[Gas Station](../../google-sde2/PROBLEM_DETAILS.md#gas-station)** | If `sum(gas) < sum(cost)` no start; else start from 0 with running tank; reset start when tank < 0. | **Uniqueness** of valid start when total surplus ≥ 0; **circular** array linearized by reset. |
+| **[Task Scheduler](../../google-sde2/PROBLEM_DETAILS.md#task-scheduler)** | Idle formula: `(max_freq-1)*(n+1) + num_tasks_with_max_freq`, **capped** at `len(tasks)`. | **Cap** means cooling fits inside available slots; **heap** simulation alternative. |
 | **Assign Cookies** | Sort `g`, `s`; two pointers—smallest cookie that satisfies smallest child. | **Greedy** matching preserves maximum satisfied children proof. |
 | **Candy** | **Left→right:** if `rating[i] > rating[i-1]` then `candy[i]=candy[i-1]+1`; **right→left** symmetric fix. | **Two passes** needed—one pass fails; **O(n)** time O(n) space. |
 | **Fractional Knapsack** | Sort by **value/weight**; take greedily until capacity. | **0/1 knapsack** is **not** greedy—need DP. |

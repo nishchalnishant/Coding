@@ -48,13 +48,13 @@ A problem-solving technique where a function calls itself to solve smaller insta
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Reverse Linked List** | `reverse(head)` = `reverse(head.next)` then `head.next.next = head; head.next = null`. | **O(n)** stack space; **cycle** breaks; **tail** becomes new head. |
+| **[Reverse Linked List](../../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | `reverse(head)` = `reverse(head.next)` then `head.next.next = head; head.next = null`. | **O(n)** stack space; **cycle** breaks; **tail** becomes new head. |
 | **Same Tree** | Match `p.val == q.val` and recurse `left`, `right`; both null → true; one null → false. | **Structure** and **value**; **iterative** queue alternative. |
-| **Maximum Depth of Binary Tree** | `1 + max(depth(left), depth(right))`; empty → 0. | **Stack depth** on skewed tree O(n). |
+| **[Maximum Depth of Binary Tree](../../../google-sde2/PROBLEM_DETAILS.md#maximum-depth-of-binary-tree)** | `1 + max(depth(left), depth(right))`; empty → 0. | **Stack depth** on skewed tree O(n). |
 | **Fibonacci** | Naive `fib(n)=fib(n-1)+fib(n-2)` is **O(2^n)**; **memo** or **iterative** O(n). | **Mod** 10^9+7; **matrix** exp log n for huge n. |
 | **Pow(x, n)** | `n%2==0` → `pow(x*x, n//2)` else `x * pow(x, n-1)`; handle negative `n`. | **INT_MIN** negation; **double** vs int. |
 | **Generate Parentheses** | Recurse `open` used, `close` used; add `(` if `open<n`; add `)` if `close<open`. | **Valid** prefix: `close ≤ open` always; **count** only vs **list all**. |
-| **Merge Two Sorted Lists** | Recursive: smaller head = `merge(head.next, other)`; **iterative** often preferred. | **O(n)** stack vs O(1) iterative. |
+| **[Merge Two Sorted Lists](../../../google-sde2/PROBLEM_DETAILS.md#merge-two-sorted-lists)** | Recursive: smaller head = `merge(head.next, other)`; **iterative** often preferred. | **O(n)** stack vs O(1) iterative. |
 | **Flatten Multilevel Doubly Linked List** | DFS: next then child; **rewire** child’s tail to next. | **Null** child; **in-place** pointer surgery. |
 
 ---

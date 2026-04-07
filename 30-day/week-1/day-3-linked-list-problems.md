@@ -196,9 +196,9 @@ def getIntersectionNode(headA, headB):
 #### Recommended Practice Problems
 
 1. **LeetCode**:
-   * Reverse Linked List
+   * [Reverse Linked List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)
    * Linked List Cycle
-   * Merge Two Sorted Lists
+   * [Merge Two Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-two-sorted-lists)
    * Remove N-th Node From End of List
    * Intersection of Two Linked Lists
 2. **HackerRank**:

@@ -78,7 +78,7 @@ return best
 - **Dutch National Flag**: Three-way partition (e.g., 0s, 1s, 2s) with two boundaries; O(N), O(1).
 - **Reservoir sampling**: One-pass random sample of size k from stream; equal probability per element.
 - **Difference array**: For range updates (add `c` to `[l, r]`): `diff[l]+=c`, `diff[r+1]-=c`; prefix sum of `diff` gives final array.
-- **Trapping Rain Water**: Two pointers (left max, right max) or monotonic stack; discuss trade-offs (stack generalizes to "next greater" thinking).
+- **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)**: Two pointers (left max, right max) or monotonic stack; discuss trade-offs (stack generalizes to "next greater" thinking).
 
 ### Edge Cases
 - Empty array; single element; all same; all negative (Kadane); integer overflow in sum/product; duplicates in two-sum (return first vs all).
@@ -88,21 +88,21 @@ return best
 ## 4. Common Interview Problems
 
 ### Easy
-- **Two Sum** — HashMap for complement or two pointers if sorted. Edge: duplicates, one solution vs all.
+- [Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum) — HashMap for complement or two pointers if sorted. Edge: duplicates, one solution vs all.
 - **Best Time to Buy/Sell Stock** — Track min so far; max profit = current - min. O(N), O(1).
 - **Move Zeroes** — Two pointers: write index and read index; swap or overwrite. O(N), O(1).
 - **Missing Number** — XOR of index and value, or Gauss sum. Edge: 0..n vs 1..n.
 
 ### Medium
-- **3Sum** — Fix one index; two pointers on the rest for two-sum. Skip duplicates. O(N²).
-- **Product of Array Except Self** — Prefix product from left, then from right; or single pass with left product and right product variable.
-- **Subarray Sum Equals K** — Prefix sum + HashMap (count of prefix sums = sum - K). Edge: negative numbers; prefix 0.
-- **Merge Intervals** — Sort by start; merge if `curr.start <= prev.end`. O(N log N).
+- [3Sum](../../google-sde2/PROBLEM_DETAILS.md#3sum) — Fix one index; two pointers on the rest for two-sum. Skip duplicates. O(N²).
+- [Product of Array Except Self](../../google-sde2/PROBLEM_DETAILS.md#product-of-array-except-self) — Prefix product from left, then from right; or single pass with left product and right product variable.
+- [Subarray Sum Equals K](../../google-sde2/PROBLEM_DETAILS.md#subarray-sum-equals-k) — Prefix sum + HashMap (count of prefix sums = sum - K). Edge: negative numbers; prefix 0.
+- [Merge Intervals](../../google-sde2/PROBLEM_DETAILS.md#merge-intervals) — Sort by start; merge if `curr.start <= prev.end`. O(N log N).
 
 ### Hard
-- **Trapping Rain Water** — Two pointers: water at `i` = min(left_max, right_max) - height[i]. O(N), O(1).
+- [Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water) — Two pointers: water at `i` = min(left_max, right_max) - height[i]. O(N), O(1).
 - **Maximum Product Subarray** — Track max and min ending at i (negative flip). O(N), O(1).
-- **Median of Two Sorted Arrays** — Binary search on smaller array's partition; balance left/right sizes and compare medians. O(log(min(n,m))).
+- [Median of Two Sorted Arrays](../../google-sde2/PROBLEM_DETAILS.md#median-of-two-sorted-arrays) — Binary search on smaller array's partition; balance left/right sizes and compare medians. O(log(min(n,m))).
 - **Minimum Number of Operations to Make Array Continuous** — Sort + sliding window on unique; window size = n; minimize replacements. O(N log N).
 
 ---
@@ -197,20 +197,20 @@ def longest_substring_k_distinct(s, k):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Two Sum** | Map `value → index` (or list of indices); for each `x`, check `target - x`. **Sorted array:** two pointers `left/right` moving inward by comparing sum to target. | **Indices:** sorting loses original index—pair `(val, idx)` if needed. **Duplicates:** two `3`s can be valid pair for `6` if different positions. **Follow-up:** all pairs, sorted array, k-sum. |
-| **3Sum** | Sort `O(n log n)`; fix `i`, then two-pointer on `[i+1..n-1]` for target `0 - nums[i]`. On match, record triplet, then **skip equal** `nums[left]` and `nums[right]` before moving pointers. | **Deduplication** at `i`, `left`, `right` separately—classic bug. **Time** O(n²). **4Sum:** fix two indices + two pointers. |
+| **[Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)** | Map `value → index` (or list of indices); for each `x`, check `target - x`. **Sorted array:** two pointers `left/right` moving inward by comparing sum to target. | **Indices:** sorting loses original index—pair `(val, idx)` if needed. **Duplicates:** two `3`s can be valid pair for `6` if different positions. **Follow-up:** all pairs, sorted array, k-sum. |
+| **[3Sum](../../google-sde2/PROBLEM_DETAILS.md#3sum)** | Sort `O(n log n)`; fix `i`, then two-pointer on `[i+1..n-1]` for target `0 - nums[i]`. On match, record triplet, then **skip equal** `nums[left]` and `nums[right]` before moving pointers. | **Deduplication** at `i`, `left`, `right` separately—classic bug. **Time** O(n²). **4Sum:** fix two indices + two pointers. |
 | **3Sum Closest** | Same as 3Sum but track closest `abs(sum - target)`; no dedupe needed usually. | Update best when `sum` closer; still O(n²). |
 | **Subarray Sum = K** | `count[prefix]` frequency; each step `ans += count[prefix - K]`; `count[0] = 1` for subarrays starting at 0. | **Negatives:** prefix + map still works; **sliding window fails** for exact K with negatives. **Overflow** if sum huge. |
 | **Subarray Product < K** | Sliding window with **positive** nums; multiply/divide. If zeros, split segments. | **Negatives / zeros** break monotonicity—different problem variant. |
 | **Longest substring ≤ K distinct** | Expand `j`, add char to freq map; while `distinct > K`, remove `s[i]` and `i++`. Answer = max window length. | **Optimization:** store **last index** of char to jump `i` (not always needed). **Empty string**, `K=0`. |
 | **Minimum Size Subarray Sum ≥ S** | Variable window: grow `right` until `sum ≥ S`, then shrink `left` while valid; track min length. | **All positive** required for two pointers; **negative** → prefix + map or different approach. |
-| **Trapping Rain Water** | Two pointers `l,r` with `l_max,r_max`; water at `i` = `min(l_max,r_max) - h[i]`; move the side with **smaller** max. **Stack:** pop bars when current higher. | **Why move shorter max:** taller side doesn’t limit water at shorter. **Follow-up:** 2D elevation map (hard). |
-| **Product of Array Except Self** | `output[i] = product(left[0..i-1]) * product(right[i+1..n-1])`; two passes O(n), O(1) extra if output counts as extra. | **Zeros:** count zeros—two zeros → all output 0; one zero → only that index non-zero, rest 0. **No division** constraint. |
-| **Container With Most Water** | Two pointers ends; area = `min(h[l],h[r])*(r-l)`; move the **shorter** pointer inward. | **Proof:** shorter line can’t form better pair with any inner on same side. |
-| **Next Permutation** | Find first `i` from right with `nums[i] < nums[i+1]`; swap with next larger in suffix; reverse suffix. | **Lexicographic** order; **last permutation** → reverse all. |
+| **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)** | Two pointers `l,r` with `l_max,r_max`; water at `i` = `min(l_max,r_max) - h[i]`; move the side with **smaller** max. **Stack:** pop bars when current higher. | **Why move shorter max:** taller side doesn’t limit water at shorter. **Follow-up:** 2D elevation map (hard). |
+| **[Product of Array Except Self](../../google-sde2/PROBLEM_DETAILS.md#product-of-array-except-self)** | `output[i] = product(left[0..i-1]) * product(right[i+1..n-1])`; two passes O(n), O(1) extra if output counts as extra. | **Zeros:** count zeros—two zeros → all output 0; one zero → only that index non-zero, rest 0. **No division** constraint. |
+| **[Container With Most Water](../../google-sde2/PROBLEM_DETAILS.md#container-with-most-water)** | Two pointers ends; area = `min(h[l],h[r])*(r-l)`; move the **shorter** pointer inward. | **Proof:** shorter line can’t form better pair with any inner on same side. |
+| **[Next Permutation](../../google-sde2/PROBLEM_DETAILS.md#next-permutation)** | Find first `i` from right with `nums[i] < nums[i+1]`; swap with next larger in suffix; reverse suffix. | **Lexicographic** order; **last permutation** → reverse all. |
 | **Spiral Matrix** | Four boundaries `top,bottom,left,right`; walk right→down→left→up; shrink bounds. | **Odd dimension** center cell; **direction** order. |
 | **Rotate Image** | Transpose then reverse rows (or reverse rows then transpose) for 90° clockwise. | **In-place** O(1) extra; **90° CCW** different order. |
-| **Median of Two Sorted Arrays** | Binary search partition on **shorter** array so left half has half the elements and `max(left) ≤ min(right)`. | **Even/odd** length; **empty** array; **duplicate** medians; index arithmetic errors. |
+| **[Median of Two Sorted Arrays](../../google-sde2/PROBLEM_DETAILS.md#median-of-two-sorted-arrays)** | Binary search partition on **shorter** array so left half has half the elements and `max(left) ≤ min(right)`. | **Even/odd** length; **empty** array; **duplicate** medians; index arithmetic errors. |
 
 ---
 

@@ -242,7 +242,7 @@ def nextGreaterElements(nums: List[int]) -> List[int]:
 #### Recommended Practice Problems
 
 1. **LeetCode**:
-   * Valid Parentheses
+   * [Valid Parentheses](../../google-sde2/PROBLEM_DETAILS.md#valid-parentheses)
    * Min Stack
    * Implement Queue using Stacks
    * Next Greater Element I

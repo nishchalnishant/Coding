@@ -212,11 +212,11 @@ def topKFrequent(nums, k):
 #### Recommended Practice Problems
 
 1. **LeetCode**:
-   * Two Sum
-   * Group Anagrams
-   * Subarray Sum Equals K
-   * Longest Substring Without Repeating Characters
-   * Top K Frequent Elements
+   * [Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)
+   * [Group Anagrams](../../google-sde2/PROBLEM_DETAILS.md#group-anagrams)
+   * [Subarray Sum Equals K](../../google-sde2/PROBLEM_DETAILS.md#subarray-sum-equals-k)
+   * [Longest Substring Without Repeating Characters](../../google-sde2/PROBLEM_DETAILS.md#longest-substring-without-repeating-characters)
+   * [Top K Frequent Elements](../../google-sde2/PROBLEM_DETAILS.md#top-k-frequent-elements)
 2. **HackerRank**:
    * Frequency Queries
    * Hash Tables: Ice Cream Parlor

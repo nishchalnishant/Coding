@@ -30,7 +30,7 @@ LIFO (Last In, First Out) structure. SDE-3 focus: monotonic stack for "next grea
 ## 3. Advanced Variations
 
 - **Min/Max Stack**: Auxiliary stack storing current min (or max) per level; push/pop both in sync. O(1) getMin/getMax.
-- **Trapping Rain Water**: Monotonic stack (decreasing by height): when a higher bar appears, pop and add water level above popped bar. Alternative: two pointers (left_max, right_max).
+- **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)**: Monotonic stack (decreasing by height): when a higher bar appears, pop and add water level above popped bar. Alternative: two pointers (left_max, right_max).
 - **Basic Calculator**: Two stacks (operands, operators); handle precedence and parentheses.
 
 ### Edge Cases
@@ -112,16 +112,16 @@ def largest_rectangle_area(heights):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Daily Temperatures** | **Monotonic decreasing stack of indices**; for each `i`, while stack top has lower temp, pop `j` and set `answer[j]=i-j`. | **Indices** on stack; **no warmer** → 0. **O(n)** each index pushed/popped once. |
+| **[Daily Temperatures](../../google-sde2/PROBLEM_DETAILS.md#daily-temperatures)** | **Monotonic decreasing stack of indices**; for each `i`, while stack top has lower temp, pop `j` and set `answer[j]=i-j`. | **Indices** on stack; **no warmer** → 0. **O(n)** each index pushed/popped once. |
 | **Next Greater Element I** | Monotonic **decreasing** value stack; when see greater, assign NGE for popped. **Circular:** iterate `2n` or modulo. | **Per-query** vs preprocess; **-1** if none. |
-| **Largest Rectangle in Histogram** | Stack of **increasing** indices; on lower bar, pop `h`; width = `i - stack.top - 1` (after pop). Append **0** sentinel at end. | **Empty stack** after pop → width `i`; **equal** heights—index stack handles. |
+| **[Largest Rectangle in Histogram](../../google-sde2/PROBLEM_DETAILS.md#largest-rectangle-in-histogram)** | Stack of **increasing** indices; on lower bar, pop `h`; width = `i - stack.top - 1` (after pop). Append **0** sentinel at end. | **Empty stack** after pop → width `i`; **equal** heights—index stack handles. |
 | **Maximal Rectangle** (matrix) | For each row, build **heights** histogram; run **largest rectangle** per row. | **O(n*m)**; compress matrix to 1D histogram sweep. |
-| **Valid Parentheses** | Push on `(` `[` `{`; on close, pop must match type. | **Early** invalid if stack empty; **only one type** in easy version. |
+| **[Valid Parentheses](../../google-sde2/PROBLEM_DETAILS.md#valid-parentheses)** | Push on `(` `[` `{`; on close, pop must match type. | **Early** invalid if stack empty; **only one type** in easy version. |
 | **Min Stack** | **Aux stack** of mins, or store `(val, min_so_far)` per node. | **Pop** must restore min; **duplicate** min values in aux stack. |
-| **Decode String** | Stack of `(prefix_string, repeat_k)` at `[`; on `]` pop and repeat. **Recursion** also works. | **Multi-digit** `k`; **nested** brackets. |
+| **[Decode String](../../google-sde2/PROBLEM_DETAILS.md#decode-string)** | Stack of `(prefix_string, repeat_k)` at `[`; on `]` pop and repeat. **Recursion** also works. | **Multi-digit** `k`; **nested** brackets. |
 | **Exclusive Time of Functions** | Stack of `(id, start)`; on **end**, add `timestamp - start + 1` to id; pause inner on nested start. | **Timestamp** inclusive; **nested** functions subtract overlap correctly. |
 | **Simplify Path** | Split `/`; stack for `..` (pop if non-empty), ignore `.` and empty. | **Root** `..` doesn’t pop; **trailing** slash. |
-| **Trapping Rain Water** (stack) | Stack of **decreasing** heights; pop and compute water between popped and current with boundary. | Equivalent insight to **two pointers**; good for “why stack” explanation. |
+| **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)** (stack) | Stack of **decreasing** heights; pop and compute water between popped and current with boundary. | Equivalent insight to **two pointers**; good for “why stack” explanation. |
 
 ---
 

@@ -109,15 +109,15 @@ def group_anagrams(strs):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Group Anagrams** | Key: **sorted string** O(k log k) per word, or **count tuple** (26 or Unicode-sized array → tuple). Bucket by key. | **Unicode:** 26 letters assumption fails—use map or sort. **Space:** storing sorted string vs count vector. |
-| **Longest Consecutive Sequence** | `set(nums)`; for each `x`, if `x-1` not in set, walk `x, x+1, ...` and count length. | **Amortized O(n):** each number in at most one chain. **Sort** is O(n log n)—worse but simpler. |
-| **LRU Cache** | `HashMap` key→`Node`; **DLL** for recency (head=MRU, tail=LRU); `get`/`put` splice node; evict tail if size > cap. | **O(1)** only with DLL pointers correct; **capacity 1**; **update** existing key moves node. |
-| **Subarray Sum Equals K** | `count[prefix]` frequency; `ans += count[prefix - K]`; `count[0]=1`. | Works with **negatives**; **sliding window** wrong for arbitrary integers. |
+| **[Group Anagrams](../../google-sde2/PROBLEM_DETAILS.md#group-anagrams)** | Key: **sorted string** O(k log k) per word, or **count tuple** (26 or Unicode-sized array → tuple). Bucket by key. | **Unicode:** 26 letters assumption fails—use map or sort. **Space:** storing sorted string vs count vector. |
+| **[Longest Consecutive Sequence](../../google-sde2/PROBLEM_DETAILS.md#longest-consecutive-sequence)** | `set(nums)`; for each `x`, if `x-1` not in set, walk `x, x+1, ...` and count length. | **Amortized O(n):** each number in at most one chain. **Sort** is O(n log n)—worse but simpler. |
+| **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)** | `HashMap` key→`Node`; **DLL** for recency (head=MRU, tail=LRU); `get`/`put` splice node; evict tail if size > cap. | **O(1)** only with DLL pointers correct; **capacity 1**; **update** existing key moves node. |
+| **[Subarray Sum Equals K](../../google-sde2/PROBLEM_DETAILS.md#subarray-sum-equals-k)** | `count[prefix]` frequency; `ans += count[prefix - K]`; `count[0]=1`. | Works with **negatives**; **sliding window** wrong for arbitrary integers. |
 | **Contiguous Array** (equal 0/1) | Map **prefix balance** (count1−count0) to **first index**; max length with same balance. | Transform `0→-1` then same as “subarray sum 0”. |
-| **Copy List with Random Pointer** | Map original→clone; two passes. Or **interleave** clones for O(1) extra. | **Random** pointer graph structure. |
+| **[Copy List with Random Pointer](../../google-sde2/PROBLEM_DETAILS.md#copy-list-with-random-pointer)** | Map original→clone; two passes. Or **interleave** clones for O(1) extra. | **Random** pointer graph structure. |
 | **Design HashMap** | **Chaining:** array of buckets, linked list on collision. **Open addressing:** linear/quadratic probe. | **Rehash** when load factor high; **`equals`/`hashCode`** contract in Java; **delete** tombstones in probing. |
 | **Insert Delete GetRandom O(1)** | `map val→index` + **dynamic array**; swap-with-last on delete to keep indices compact. | **Duplicate** values need multiset or map to **set of indices** variant. |
-| **Minimum Window Substring** | Sliding window + **need** counts for `t`; shrink when valid to minimize. | **Unicode** counts; **multiple** same chars in `t`. |
+| **[Minimum Window Substring](../../google-sde2/PROBLEM_DETAILS.md#minimum-window-substring)** | Sliding window + **need** counts for `t`; shrink when valid to minimize. | **Unicode** counts; **multiple** same chars in `t`. |
 | **Logger Rate Limiter** | Map `msg → last_timestamp`; allow if `now ≥ last+10`. | **Prune** old entries if memory bound (follow-up). |
 
 ---

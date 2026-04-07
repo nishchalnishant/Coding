@@ -69,7 +69,7 @@ def dfs(u, visited):
 
 | Algorithm | When | Time |
 |-----------|------|------|
-| **Dijkstra** | Non-negative weights | `O((V+E) log V)` with heap |
+| **[Dijkstra](../../google-sde2/PROBLEM_DETAILS.md#dijkstra)** | Non-negative weights | `O((V+E) log V)` with heap |
 | **Bellman–Ford** | Negative edges; detect negative cycle | `O(V·E)` |
 | **Floyd–Warshall** | All pairs, small `V` | `O(V³)` |
 | **Kruskal** | MST | Sort edges `O(E log E)` + DSU |
@@ -125,17 +125,17 @@ def dfs(u, visited):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Course Schedule** | Build graph: edge `b→a` if **b** before **a**; topo (Kahn/DFS) detects cycle; order = valid semester plan. | **Reverse** graph mistakes; **multiple** components—run from all nodes with indegree calc. |
-| **Network Delay Time** | **Dijkstra** from `K`: `dist[u]+w < dist[v]` relax; min-heap by distance. | **Unreachable** nodes stay ∞; **self-loop** / **multi-edge** clarify. |
-| **Path With Minimum Effort** | **Dijkstra** on grid with edge cost = abs height diff; effort = **max** diff on path (minimax). | **State** is min max-diff—not sum of diffs. |
-| **Cheapest Flights Within K Stops** | **Bellman-Ford** k iterations from `src`; or **BFS** level = stops with **state** `(city, stops_used)`. | **Off-by-one:** k stops vs k edges; **negative** prices need BF care. |
-| **Number of Islands** | DFS/BFS on `1`s; mark visited/`0`. | **8-dir** vs 4; **in-place** marking. |
+| **[Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule)** | Build graph: edge `b→a` if **b** before **a**; topo (Kahn/DFS) detects cycle; order = valid semester plan. | **Reverse** graph mistakes; **multiple** components—run from all nodes with indegree calc. |
+| **[Network Delay Time](../../google-sde2/PROBLEM_DETAILS.md#network-delay-time)** | **[Dijkstra](../../google-sde2/PROBLEM_DETAILS.md#dijkstra)** from `K`: `dist[u]+w < dist[v]` relax; min-heap by distance. | **Unreachable** nodes stay ∞; **self-loop** / **multi-edge** clarify. |
+| **Path With Minimum Effort** | **[Dijkstra](../../google-sde2/PROBLEM_DETAILS.md#dijkstra)** on grid with edge cost = abs height diff; effort = **max** diff on path (minimax). | **State** is min max-diff—not sum of diffs. |
+| **[Cheapest Flights Within K Stops](../../google-sde2/PROBLEM_DETAILS.md#cheapest-flights-within-k-stops)** | **Bellman-Ford** k iterations from `src`; or **BFS** level = stops with **state** `(city, stops_used)`. | **Off-by-one:** k stops vs k edges; **negative** prices need BF care. |
+| **[Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands)** | DFS/BFS on `1`s; mark visited/`0`. | **8-dir** vs 4; **in-place** marking. |
 | **Pacific Atlantic Water Flow** | Multi-source **reverse** flood from both oceans; **intersection**. | Why reverse: avoid repeated climbs from each cell. |
 | **Redundant Connection II** | **Directed** graph: case (1) one node indegree 2, (2) no indegree 2 but cycle—remove wrong edge. | Harder than undirected; **root** of tree + cycle. |
-| **Redundant Connection** | **DSU**: for each edge `u-v`, if `find(u)==find(v)` → redundant; else `union`. | **Undirected**; return **last** edge in problem statement order. |
+| **[Redundant Connection](../../google-sde2/PROBLEM_DETAILS.md#redundant-connection)** | **DSU**: for each edge `u-v`, if `find(u)==find(v)` → redundant; else `union`. | **Undirected**; return **last** edge in problem statement order. |
 | **Critical Connections** | **Tarjan**: bridge iff `low[v] > disc[u]` for tree edge `u→v`. | **Back edge** updates `low`; **multiple** edges between same nodes (parallel). |
 | **Minimum Cost to Connect All Points** | **MST**: Kruskal on complete graph of Manhattan distances **or** Prim with heap. | **O(n²)** edges—use implicit edges / Prim. |
-| **Swim in Rising Water** | **Dijkstra** / **Union-Find** by sorting cells by height; merge until path exists. | Minimize **max** height along path—same minimax flavor. |
+| **Swim in Rising Water** | **[Dijkstra](../../google-sde2/PROBLEM_DETAILS.md#dijkstra)** / **Union-Find** by sorting cells by height; merge until path exists. | Minimize **max** height along path—same minimax flavor. |
 
 ---
 

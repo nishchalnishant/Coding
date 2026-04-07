@@ -51,9 +51,9 @@ Time O(N), Space O(1).
 ## 3. Advanced Variations
 
 - **Reverse in K-Group**: Reverse each k-block; connect tails; handle remainder.
-- **Merge K Sorted Lists**: Min-heap of size K (first node of each list); pop min, append, push next. O(N log K).
-- **Copy List with Random Pointer**: Old node → new node map; two passes (create nodes, then set next/random).
-- **LRU Cache**: HashMap + doubly linked list (head = recent, tail = evict). Get: move to head; Put: add at head, evict tail if over capacity.
+- **[Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)**: Min-heap of size K (first node of each list); pop min, append, push next. O(N log K).
+- **[Copy List with Random Pointer](../../google-sde2/PROBLEM_DETAILS.md#copy-list-with-random-pointer)**: Old node → new node map; two passes (create nodes, then set next/random).
+- **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)**: HashMap + doubly linked list (head = recent, tail = evict). Get: move to head; Put: add at head, evict tail if over capacity.
 
 ### Edge Cases
 - Empty list; single node; two nodes; cycle at head; no cycle; even/odd length for middle.
@@ -141,17 +141,17 @@ def detect_cycle_entry(head):
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Reverse Linked List** | Iterative: `prev=null, curr=head`; loop `next=curr.next; curr.next=prev; prev=curr; curr=next`. Recursive: reverse rest then fix `head.next.next`. | **Empty/single** node; **cycle** breaks naive reverse. **Stack** depth O(n) for recursion. |
-| **Merge Two Sorted Lists** | Dummy node `d`; compare `l1.val` vs `l2.val`, advance smaller; attach remainder when one empty. | **In-place** vs new list; **reuse nodes** only if allowed. **Follow-up:** merge k lists (heap or divide-conquer). |
-| **Remove Nth From End** | Fast pointer advances `n` ahead; then both move until fast hits null; remove `slow.next`. | **Dummy** before head handles removing **first** node. **One pass** requirement. |
+| **[Reverse Linked List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | Iterative: `prev=null, curr=head`; loop `next=curr.next; curr.next=prev; prev=curr; curr=next`. Recursive: reverse rest then fix `head.next.next`. | **Empty/single** node; **cycle** breaks naive reverse. **Stack** depth O(n) for recursion. |
+| **[Merge Two Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-two-sorted-lists)** | Dummy node `d`; compare `l1.val` vs `l2.val`, advance smaller; attach remainder when one empty. | **In-place** vs new list; **reuse nodes** only if allowed. **Follow-up:** merge k lists (heap or divide-conquer). |
+| **[Remove Nth From End](../../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end)** | Fast pointer advances `n` ahead; then both move until fast hits null; remove `slow.next`. | **Dummy** before head handles removing **first** node. **One pass** requirement. |
 | **Linked List Cycle** | Floyd: `slow` 1 step, `fast` 2 steps; meet ⇒ cycle. No meet ⇒ no cycle. | **Null** fast.next check each step. |
 | **Linked List Cycle II (entry)** | After meet, move **one** pointer from **head** and one from meet, both **1 step**; meet at entry. | **Proof:** distance equality—often asked. Wrong: restarting **both** from head with different speeds. |
 | **Intersection of Two Lists** | Align lengths: walk longer list by `|lenA-lenB|`; then walk both until same node. **Alt:** A+B traversal (switch at end). | **No intersection** → both reach null. **Values** can duplicate; compare **node identity**. |
-| **Merge K Sorted Lists** | Min-heap `(val, id, node)`; pop smallest, push `node.next`. **Divide & conquer** pairwise merge O(N log k). | **Empty** lists in heap; **tie-break** on list id for stability. **Time:** O(N log k) heap. |
-| **Copy List with Random Pointer** | **HashMap** old→new; first pass create nodes, second wire `next` and `random`. **O(1) space:** interleave clone between each node, split. | **Random** can point null or to any node; **two-pass** map is clearer in interview. |
+| **[Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | Min-heap `(val, id, node)`; pop smallest, push `node.next`. **Divide & conquer** pairwise merge O(N log k). | **Empty** lists in heap; **tie-break** on list id for stability. **Time:** O(N log k) heap. |
+| **[Copy List with Random Pointer](../../google-sde2/PROBLEM_DETAILS.md#copy-list-with-random-pointer)** | **HashMap** old→new; first pass create nodes, second wire `next` and `random`. **O(1) space:** interleave clone between each node, split. | **Random** can point null or to any node; **two-pass** map is clearer in interview. |
 | **Palindrome Linked List** | Find mid (slow/fast); reverse second half; compare two halves. | **Odd** length: mid is extra—skip or handle. **O(1) space** vs stack O(n). |
 | **Reorder List** | Mid + reverse second half; interleave first and second halves. | **In-place** pointer surgery; don’t lose tail. |
-| **LRU Cache** (list + map) | Doubly linked list order (MRU front), `map key→node`; get moves to front; evict tail if over capacity. | **O(1)** needs DLL + map; **capacity 1** edge case. |
+| **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)** (list + map) | Doubly linked list order (MRU front), `map key→node`; get moves to front; evict tail if over capacity. | **O(1)** needs DLL + map; **capacity 1** edge case. |
 
 ---
 

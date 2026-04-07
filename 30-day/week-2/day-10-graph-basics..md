@@ -152,9 +152,9 @@ Graph traversal techniques are fundamental for various applications:
 #### 6. **Recommended Practice Problems**
 
 1. **LeetCode**:
-   * Number of Islands (using DFS/BFS)
-   * Course Schedule (Topological Sort)
-   * Clone Graph
+   * [Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands) (using DFS/BFS)
+   * [Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule) (Topological Sort)
+   * [Clone Graph](../../google-sde2/PROBLEM_DETAILS.md#clone-graph)
    * Minimum Depth of Binary Tree (BFS)
 2. **HackerRank**:
    * Breadth First Search: Shortest Reach

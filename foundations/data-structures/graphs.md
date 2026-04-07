@@ -145,16 +145,16 @@ Key interview points:
 ## 6) Common SDE-2 problems
 
 ### Easy/Medium (high frequency)
-- Number of Islands (grid DFS/BFS)
+- [Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands) (grid DFS/BFS)
 - Flood Fill
-- Rotting Oranges (multi-source BFS)
+- [Rotting Oranges](../../google-sde2/PROBLEM_DETAILS.md#rotting-oranges) (multi-source BFS)
 - Course Schedule / Course Schedule II (topo + cycle)
-- Clone Graph (graph traversal + map)
+- [Clone Graph](../../google-sde2/PROBLEM_DETAILS.md#clone-graph) (graph traversal + map)
 - Surrounded Regions (border flood fill)
 
 ### Hard/Stretch (still common at Google)
-- Word Ladder (BFS; bidirectional BFS follow-up)
-- Alien Dictionary (topo; prefix invalid case)
+- [Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder) (BFS; bidirectional BFS follow-up)
+- [Alien Dictionary](../../google-sde2/PROBLEM_DETAILS.md#alien-dictionary) (topo; prefix invalid case)
 - Evaluate Division (graph with weights; DFS/BFS)
 
 ---
@@ -181,14 +181,14 @@ Key interview points:
 
 | Question | Core logic | Trickiness & details |
 |----------|------------|----------------------|
-| **Number of Islands** | DFS/BFS flood-fill from each unvisited `1`; count components. | **4 vs 8** neighbors; recursion depth on large grid—use stack/queue. |
+| **[Number of Islands](../../google-sde2/PROBLEM_DETAILS.md#number-of-islands)** | DFS/BFS flood-fill from each unvisited `1`; count components. | **4 vs 8** neighbors; recursion depth on large grid—use stack/queue. |
 | **Flood Fill** | BFS/DFS recolor connected component starting at `(sr,sc)` with original color. | Don’t loop if `newColor == oldColor`. |
-| **Rotting Oranges** | Multi-source BFS from all rotten; minutes = BFS levels; track fresh count. | If fresh remain unreachable → `-1`. |
-| **Course Schedule** | Build directed edges “prereq → course”; topo; cycle means impossible. | Edge direction is the #1 bug: `a,b` means **b before a**. |
-| **Clone Graph** | DFS/BFS with map `old → clone`; connect neighbors using the map. | Cycles require you to create clone before traversing neighbors. |
+| **[Rotting Oranges](../../google-sde2/PROBLEM_DETAILS.md#rotting-oranges)** | Multi-source BFS from all rotten; minutes = BFS levels; track fresh count. | If fresh remain unreachable → `-1`. |
+| **[Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule)** | Build directed edges “prereq → course”; topo; cycle means impossible. | Edge direction is the #1 bug: `a,b` means **b before a**. |
+| **[Clone Graph](../../google-sde2/PROBLEM_DETAILS.md#clone-graph)** | DFS/BFS with map `old → clone`; connect neighbors using the map. | Cycles require you to create clone before traversing neighbors. |
 | **Surrounded Regions** | Flood from border `O` to mark safe; flip remaining `O` to `X`. | Don’t BFS from every interior `O`—too slow. |
-| **Word Ladder** | BFS; neighbors are one-letter edits in set; first reach end is shortest. | Bidirectional BFS follow-up; remove visited words early. |
-| **Alien Dictionary** | Build edges from first mismatch in adjacent words; topo all letters. | Prefix invalid: `"abc"` before `"ab"` is impossible. |
+| **[Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder)** | BFS; neighbors are one-letter edits in set; first reach end is shortest. | Bidirectional BFS follow-up; remove visited words early. |
+| **[Alien Dictionary](../../google-sde2/PROBLEM_DETAILS.md#alien-dictionary)** | Build edges from first mismatch in adjacent words; topo all letters. | Prefix invalid: `"abc"` before `"ab"` is impossible. |
 
 ---
 

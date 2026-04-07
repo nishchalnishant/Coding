@@ -33,13 +33,13 @@ Select a range of questions to cover different topics and difficulty levels. Her
 
 * **Easy**:
   * Valid Anagram
-  * Merge Two Sorted Lists
+  * [Merge Two Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-two-sorted-lists)
 * **Medium**:
-  * Course Schedule (Topological Sort)
+  * [Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule) (Topological Sort)
   * Longest Palindromic Substring
 * **Hard**:
-  * Word Ladder
-  * Trapping Rain Water
+  * [Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder)
+  * [Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)
 
 #### 3. **Conducting the Mock Interview**
 

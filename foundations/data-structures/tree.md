@@ -32,9 +32,9 @@ Hierarchical structure: root, parent-child, leaves. SDE-3 expects traversals, BS
 ## 3. Advanced Variations
 
 - **Morris Inorder**: O(1) space by threading; use rightmost of left subtree to point to current (then restore).
-- **Serialize/Deserialize**: Preorder with null markers; single string; deserialize by consuming tokens.
+- **[Serialize/Deserialize](../../google-sde2/PROBLEM_DETAILS.md#serialize-deserialize)**: Preorder with null markers; single string; deserialize by consuming tokens.
 - **BST**: Inorder successor (right exists → leftmost of right; else first ancestor that is left child); range sum (inorder with range filter).
-- **Kth smallest in BST**: Inorder with counter; or store subtree sizes and binary search on rank.
+- **[Kth smallest in BST](../../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst)**: Inorder with counter; or store subtree sizes and binary search on rank.
 
 ### Edge Cases
 - Empty tree; single node; skew (linked list); duplicate values (BST definition: left <= vs left <); integer overflow in path sum.
@@ -118,11 +118,11 @@ def lowest_common_ancestor_bst(root, p, q):
 |----------|------------|----------------------|
 | **LCA in BST** | If both `p,q < root` go left; if both `> root` go right; else `root` is split point (ancestor). | **LCA** can be `p` or `q` itself. **Duplicate** values—define `<` vs `≤` consistently. **O(h)** time. |
 | **LCA in Binary Tree** | Recursion: if `root` is `p` or `q` return it; else search subtrees; if **both** sides return non-null, `root` is LCA; if one side, return that. | Assumes **both exist**; if not, need extra validation pass. **Not BST**—must traverse both subtrees. |
-| **Binary Tree Maximum Path Sum** | Postorder: `gain = max(0, max(left,right))`; update global with `node.val + left_gain + right_gain`; **return** `node.val + max(left_gain, right_gain)` for parent. | Path is **any** node-to-node; **negative** nodes—take `max(0, child)`. |
+| **[Binary Tree Maximum Path Sum](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum)** | Postorder: `gain = max(0, max(left,right))`; update global with `node.val + left_gain + right_gain`; **return** `node.val + max(left_gain, right_gain)` for parent. | Path is **any** node-to-node; **negative** nodes—take `max(0, child)`. |
 | **Diameter of Binary Tree** | Same postorder: `diameter = max(left_h + right_h)` at each node; global max. | **Edges** vs **nodes** count—clarify answer format. |
 | **Serialize / Deserialize Tree** | **Preorder** with `null` markers; deserialize with **queue** and recursion/index pointer. **Level-order** also common. | **Multi-digit** values need delimiter (`1,null,2` vs `12,null`); **BST** can use preorder only without nulls sometimes. |
-| **Kth Smallest in BST** | **Inorder** traversal (left, root, right) until k steps; or augment node with **subtree size**. | **Iterative** Morris or stack; **duplicate** values policy. |
-| **Validate BST** | DFS with `(min, max)` bounds per node; or inorder **strictly increasing** check. | **Wrong:** only compare parent and children—need **full** bounds. **Equal** values—BST definition varies. |
+| **[Kth Smallest in BST](../../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst)** | **Inorder** traversal (left, root, right) until k steps; or augment node with **subtree size**. | **Iterative** Morris or stack; **duplicate** values policy. |
+| **[Validate BST](../../google-sde2/PROBLEM_DETAILS.md#validate-bst)** | DFS with `(min, max)` bounds per node; or inorder **strictly increasing** check. | **Wrong:** only compare parent and children—need **full** bounds. **Equal** values—BST definition varies. |
 | **Construct from Preorder and Inorder** | Preorder gives **root**; find in inorder → left/right sizes; recurse. | **Hash map** inorder value→index O(n); **duplicate** values break uniqueness. |
 | **Flatten to Linked List** | Morris traversal **or** reverse postorder (right, left, root) wiring `prev`. | **In-place** O(1) extra; order must be preorder linked list. |
 | **House Robber III** | Tree DP: `rob(node) = max( val + rob(grandchildren), rob(left)+rob(right) )` with memo; or return `(rob, skip)` pair postorder. | **Overlapping** subtrees—memo or pair return. |
