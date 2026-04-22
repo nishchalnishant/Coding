@@ -2,6 +2,8 @@
 
 This is **not** an L5/L6 deep-dive. For L4, you’re usually evaluated on clear thinking, fundamentals, and tradeoffs.
 
+**When to use this file:** you have a **general** system design round (e.g. URL shortener, feed, chat). If your schedule has an **AI / ML** interview instead, that round may focus on **model lifecycle, data, training, serving, and monitoring** — use the **AI / ML** section in [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) and treat this file as **supplementary** for scalable serving and storage. Some candidates get **both**; confirm with your recruiter.
+
 ---
 
 ## What interviewers expect at L4

@@ -2,6 +2,7 @@
 
 * [Home](README.md)
 * [Google SDE-2 Track](google-sde2/README.md)
+  * [Two-Week Revision (DSA + EET / on-site + AI-ML)](google-sde2/TWO_WEEK_REVISION.md)
   * [Roadmap (4–6 Weeks)](google-sde2/ROADMAP.md)
   * [Problem Set (Curated)](google-sde2/PROBLEM_SET.md)
   * [Coding Rounds (Rubric)](google-sde2/CODING_ROUNDS.md)

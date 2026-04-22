@@ -59,4 +59,4 @@ Print or keep on a second screen during **last-minute** review (not during the i
 
 ## Full notes
 
-For explanations and practice lists, use [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md) and the topic files under [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Each topic file has an **Interview Questions — Logic & Trickiness** section; consolidated tables: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+For explanations and practice lists, use [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md) and the topic files under [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Each topic file has an **Interview Questions — Logic & Trickiness** section; consolidated tables: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md). **Google SDE-2** full track (problem set, mocks, optional AI-ML): [../google-sde2/README.md](../google-sde2/README.md).

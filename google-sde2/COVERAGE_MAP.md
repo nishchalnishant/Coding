@@ -2,6 +2,8 @@
 
 Use this map to ensure you’re not missing any high-frequency area. Each row points to where to learn + where to practice.
 
+**Planning and timelines:** [README.md](README.md) (interview loop shapes) → [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) (14 days, **2 DSA + AI-ML** option) or [ROADMAP.md](ROADMAP.md) (4–6 weeks).
+
 ---
 
 ## Highest frequency (must be strong)
@@ -33,10 +35,11 @@ Use this map to ensure you’re not missing any high-frequency area. Each row po
 
 | Area | Learn here |
 |---|---|
-| Coding round execution | `CODING_ROUNDS.md` |
-| Templates | `TEMPLATES.md` |
-| Language snippets | `LANGUAGE_TEMPLATES.md` |
-| System design (L4) | `SYSTEM_DESIGN_L4.md` |
-| Behavioral | `BEHAVIORAL_GOOGLINESS.md` |
-| Tracking mistakes | `PRACTICE_TRACKER.md` |
+| Coding round execution (incl. virtual vs on-site) | [CODING_ROUNDS.md](CODING_ROUNDS.md) |
+| Templates (coding, SD, mock scorecard, **AI/ML discussion**) | [TEMPLATES.md](TEMPLATES.md) |
+| Language snippets | [LANGUAGE_TEMPLATES.md](LANGUAGE_TEMPLATES.md) |
+| System design (general, L4) | [SYSTEM_DESIGN_L4.md](SYSTEM_DESIGN_L4.md) |
+| AI / ML round (checklist) | [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) |
+| Behavioral | [BEHAVIORAL_GOOGLINESS.md](BEHAVIORAL_GOOGLINESS.md) |
+| Tracking mistakes | [PRACTICE_TRACKER.md](PRACTICE_TRACKER.md) |
 

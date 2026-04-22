@@ -228,6 +228,8 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
+- [../google-sde2/README.md](../google-sde2/README.md) — **Google SDE-2 (L4)** track: loop variants, file index  
+- [../google-sde2/TWO_WEEK_REVISION.md](../google-sde2/TWO_WEEK_REVISION.md) — **14-day** plan, **2× DSA** (virtual + on-site) + **AI-ML** when applicable  
 - [SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md) — longer problem order and weekly plan  
 - [sde-3-guide/sde-3-guide.md](../sde-3-guide/sde-3-guide.md) — Top 20 curated problems  
 - [patterns/leetcode-patterns.md](../patterns/leetcode-patterns.md) — condensed patterns  

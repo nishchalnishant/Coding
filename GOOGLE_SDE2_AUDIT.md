@@ -70,3 +70,13 @@ Also updated root navigation:
 - Add “mock transcripts”: 2–3 worked examples showing “Google-style communication” for a Medium + a Hard.
 - Add language-specific “interview snippets” (Python/Java) for heaps/graphs/DFS templates.
 
+---
+
+## Update (2026) — track aligned to real loops
+
+- **README + roadmap** now describe **variable** interview shapes (e.g. **2× DSA** with **virtual + on-site**, optional **AI / ML** instead of or in addition to **general** system design). Recruiter’s schedule is always canonical.
+- **[google-sde2/TWO_WEEK_REVISION.md](google-sde2/TWO_WEEK_REVISION.md)** — 14-day plan with DSA + **AI-ML** checklist; repo still has no separate ML topic tree (checklist + external refs only).
+- **[google-sde2/CODING_ROUNDS.md](google-sde2/CODING_ROUNDS.md)** — **virtual vs in-person** DSA logistics.
+- **[google-sde2/TEMPLATES.md](google-sde2/TEMPLATES.md)** — **AI / ML discussion** template.
+- **Snippets:** [google-sde2/LANGUAGE_TEMPLATES.md](google-sde2/LANGUAGE_TEMPLATES.md) and [google-sde2/snippets/python/README.md](google-sde2/snippets/python/README.md) support the “snippet library” idea above; expand Java if needed.
+

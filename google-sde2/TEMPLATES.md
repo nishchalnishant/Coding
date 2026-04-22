@@ -52,6 +52,22 @@ Use these templates to practice in the same structure every time.
 
 ---
 
+## AI / ML discussion template (30–45 min — adjust to your loop)
+
+Use when the round is **not** classic DSA. Confirm format with the recruiter (theory, resume deep-dive, or **ML system** design).
+
+- **Role & scope:** what *you* owned vs team (1 min)
+- **Problem:** business or user impact in one sentence
+- **Data:** sources, size, **label** quality, train vs serve features (**leakage** risks)
+- **Model / approach:** baselines → what you chose; **metrics** and how you pick them; failure modes
+- **Production:** training cadence, serving path **latency**, monitoring (**drift**, quality drops), rollbacks, A/B if relevant
+- **Tradeoff you’d defend:** e.g. precision vs recall, cost vs quality
+- **What you’d do next:** one improvement with **how you’d measure** success
+
+Deeper checklist: [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) (AI / ML section).
+
+---
+
 ## Mock interview scorecard (self-review)
 
 - Did I ask constraints early?

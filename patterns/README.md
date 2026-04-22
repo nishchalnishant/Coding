@@ -1,6 +1,6 @@
 # Patterns
 
-Problem-solving patterns for coding interviews (Google SDE-2 friendly). Use with the Google track at [../google-sde2/README.md](../google-sde2/README.md) or the deeper SDE-3 roadmap at [../SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md).
+Problem-solving patterns for coding interviews (Google SDE-2 friendly). Use with the Google track at [../google-sde2/README.md](../google-sde2/README.md) — for a **2-week** sprint use [../google-sde2/TWO_WEEK_REVISION.md](../google-sde2/TWO_WEEK_REVISION.md) — or the deeper SDE-3 roadmap at [../SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md).
 
 - **[LeetCode Patterns](leetcode-patterns.md)** — Condensed guide to standard patterns (array, search, linked list, tree, graph, DP, backtracking).
 - **[Two Pointers & Sliding Window](two-pointers-sliding-window.md)** — When to use opposite-end vs same-direction two pointers; variable vs fixed sliding window; pattern recognition.

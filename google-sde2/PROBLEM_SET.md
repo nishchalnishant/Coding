@@ -2,6 +2,8 @@
 
 This is a **pattern-first** list of canonical problems that cover what Google commonly asks at **SDE-2 (L4)**.
 
+**Fit this into a plan:** [README.md](README.md) → [ROADMAP.md](ROADMAP.md) (4–6 weeks) or [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) (14 days, including **2 DSA + optional AI-ML**). Pair every block of practice with [CODING_ROUNDS.md](CODING_ROUNDS.md) for communication and [PRACTICE_TRACKER.md](PRACTICE_TRACKER.md) for redos.
+
 Notes:
 - Prefer **depth over volume**: redo missed problems until you can derive them quickly.
 - Don’t memorize solutions; memorize **patterns + invariants**.

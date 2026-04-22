@@ -52,9 +52,21 @@ Use this as a “runbook” for every timed practice and mock.
 
 ---
 
+## Virtual (video) vs in-person DSA (same bar, different logistics)
+
+| Setting | What to practice |
+|--------|-------------------|
+| **Virtual** (e.g. Google Meet, screen share, shared doc) | **Audio first**: think out loud even when not typing. **Test once**: camera, mic, **screen share**, and the **IDE / language** you will use. One monitor is fine; know how to **split** problem statement and editor. **Time zone** and **link** in calendar. Minimize **keyboard noise**; have water nearby. If you have **two** DSA rounds in different formats, do at least one full mock in **video** before the virtual round — see [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md). |
+| **In person** | Confirm whether you will **type on a laptop** or use a **whiteboard** (varies by site). Practice that medium: if whiteboard, **bigger** print, leave space for corrections; if laptop, same hygiene as home. Arrive with **buffer** for check-in. |
+
+Both settings: the rubric in **What “strong” looks like** is unchanged. Weak communication hurts more on video when the interviewer cannot read your full scratch work.
+
+---
+
 ## Where to revise inside this repo
 
-- Full revision guide: `../foundations/GOOGLE_INTERVIEW_REVISION.md`
-- One-page sheet: `../foundations/GOOGLE_QUICK_SHEET.md`
-- Canonical question index: `../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`
+- Full revision guide: [../foundations/GOOGLE_INTERVIEW_REVISION.md](../foundations/GOOGLE_INTERVIEW_REVISION.md)
+- One-page sheet: [../foundations/GOOGLE_QUICK_SHEET.md](../foundations/GOOGLE_QUICK_SHEET.md)
+- Canonical question index: [../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
+- Two-week + AI-ML + EET / on-site plan: [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md)
 

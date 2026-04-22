@@ -42,6 +42,8 @@ Your goal: have **6–8 reusable stories** you can adapt.
 - A time you received tough feedback
 - Why Google? Why this role?
 
+If you have a dedicated **ML / AI** or research-adjacent round, expect **overlap**: collaboration on ambiguous goals, **responsible** use of data, tradeoffs (latency vs model quality, cost vs coverage), and **honesty** about what you built vs what libraries did. Add **1–2** stories where you **measured** impact (metrics before/after, not only “we shipped a model”). Technical depth for that round is covered in [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) (AI / ML section); keep behavioral answers in **STAR** form here.
+
 ---
 
 ## Answer quality checklist

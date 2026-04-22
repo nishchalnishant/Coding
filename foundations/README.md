@@ -8,10 +8,11 @@ Core **data structures** and **algorithms** for coding interviews. Topics are wr
 
 If you have a **Google** (or similar big-tech) coding interview, use these in order:
 
-If you want a single end-to-end plan for **Google SDE-2 (L4)** (coding + system design + behavioral), start with: [../google-sde2/README.md](../google-sde2/README.md).
+If you want a single end-to-end plan for **Google SDE-2 (L4)** (coding + system design + behavioral, or **2× DSA + AI/ML** per your loop), start with: [../google-sde2/README.md](../google-sde2/README.md).
 
 | Resource | Use it for |
 |----------|------------|
+| **[../google-sde2/TWO_WEEK_REVISION.md](../google-sde2/TWO_WEEK_REVISION.md)** | **~2 weeks** before onsite: day-by-day DSA + **virtual vs in-person** mocks + **AI / ML** prep when scheduled. |
 | **[GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md)** | Full revision guide: what Google looks for, topic priority, topic-by-topic links, communication templates, **7-day** and **48-hour** plans, practice lists. |
 | **[GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md)** | **One-page** pattern → action → complexity for last-minute review. |
 | **[TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)** | **Canonical questions** per topic with **logic** (how to solve) and **trickiness** (gotchas, wrong turns). Pairs with [sde-3-guide Top 20](../sde-3-guide/sde-3-guide.md). |

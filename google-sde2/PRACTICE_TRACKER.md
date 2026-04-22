@@ -7,8 +7,8 @@ Use this to keep practice honest and targeted. The fastest improvement comes fro
 ## Weekly checklist (copy each week)
 
 - [ ] 3–5 timed sessions (45–60 min)
-- [ ] 1–2 full mocks (2 problems)
-- [ ] 1 system design run-through (30–45 min)
+- [ ] 1–2 full mocks (2 problems); if you have both **virtual** and **in-person** DSA rounds, include **at least one** mock in each style (see [CODING_ROUNDS.md](CODING_ROUNDS.md))
+- [ ] 1 system design run-through (30–45 min) **or**, if that round is not on your loop, 1 **AI / ML** discussion / outline (see [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md))
 - [ ] 1 behavioral practice (record yourself once)
 - [ ] Review and redo every “fail” from the week
 

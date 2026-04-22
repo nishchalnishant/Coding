@@ -2,7 +2,7 @@
 
 Canonical questions by topic, with the **trick** (what usually goes wrong) and where to find the reference code.
 
-Use this to build mock sets: pick 1–2 from 2–3 topics per session.
+Use this to build mock sets: pick 1–2 from 2–3 topics per session. Cross-index with [PROBLEM_SET.md](PROBLEM_SET.md) and the **14-day** schedule in [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) if you are on a short timeline.
 
 ---
 

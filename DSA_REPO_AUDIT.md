@@ -29,6 +29,7 @@ No folder was skipped.
 | Concurrency | `concurrency/` | Concurrency patterns (readers-writers, producer-consumer) |
 | 30-Day Plan | `30-day/` | Week-by-week prep (beginner/SDE-1 oriented) |
 | SDE-3 Guide | `sde-3-guide/` | High-level SDE-3 focus areas and curated problems |
+| Google SDE-2 | `google-sde2/` | L4-oriented: problem set, coding round runbook, optional system design + **AI-ML** checklist ([TWO_WEEK_REVISION.md](google-sde2/TWO_WEEK_REVISION.md)) |
 
 ---
 
