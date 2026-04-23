@@ -15,7 +15,6 @@ reference/
   quick-sheets/    # Revision blitz cheat sheets
 books/             # Algorithm design deep dives, CP3, DP
 archive/           # Legacy content, ignore unless asked
-google-sde2/       # Older flat layout — now superseded by tracks/google-sde2/
 ```
 
 ## Common tasks and where to go

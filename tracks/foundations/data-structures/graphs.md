@@ -155,31 +155,8 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 
 ---
 
-### Dijkstra — Shortest Path with Non-Negative Weights
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Minimum cost path**" — OR — "shortest path with **edge weights**" — AND — "all weights are **non-negative**". Dijkstra uses a min-heap to always expand the node with the current shortest known distance. One critical guard: skip stale (distance, node) pairs that are no longer optimal.
-
-```python
-import heapq
-
-def dijkstra(n: int, adj: dict, start: int) -> dict[int, float]:
-    dist = {start: 0}
-    heap = [(0, start)]  # (distance, node)
-    while heap:
-        d, u = heapq.heappop(heap)
-        if d > dist.get(u, float('inf')):
-            continue  # stale entry — skip
-        for v, weight in adj[u]:
-            new_dist = d + weight
-            if new_dist < dist.get(v, float('inf')):
-                dist[v] = new_dist
-                heapq.heappush(heap, (new_dist, v))
-    return dist
-```
-
-> [!CAUTION]
-> Dijkstra **fails with negative weights** — the greedy invariant breaks. Use Bellman-Ford (O(VE)) for graphs with negative edges. For negative cycles specifically, Bellman-Ford detects them (relaxation still changes after V-1 passes).
+> [!TIP]
+> For weighted shortest path algorithms (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal's), see [Graph Algorithms](../algorithms/graph.md). This file covers graph **representation and traversal**; that file covers graph **algorithms on weighted edges**.
 
 ---
 

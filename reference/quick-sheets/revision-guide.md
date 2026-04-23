@@ -2,7 +2,7 @@
 
 Use this document for **focused revision** before your Google interview. It complements the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Read **Part A** the day before; use **Part B** by topic; follow **Part C** for communication; use **Part D** for timing.
 
-**Per-topic drill:** Every file under `foundations/` now includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+**Per-topic drill:** Every file under `foundations/` now includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [canonical-questions.md](../problem-bank/canonical-questions.md).
 
 ---
 
@@ -271,9 +271,9 @@ Use this in the final 30 minutes before your interview. Do NOT solve new problem
 
 | Need | File |
 |------|------|
-| **One-page patterns** | [GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md) |
-| **Arrays / two pointers** | [data-structures/array.md](data-structures/array.md) |
-| **Graphs (compact)** | [algorithms/graph.md](algorithms/graph.md) |
-| **Graphs (long examples)** | [data-structures/graphs.md](data-structures/graphs.md) |
-| **DP** | [algorithms/dynamic-programming/README.md](algorithms/dynamic-programming/README.md) |
-| **Full topic index** | [data-structures/README.md](data-structures/README.md), [algorithms/README.md](algorithms/README.md) |
+| **One-page patterns** | [quick-recall.md](quick-recall.md) |
+| **Arrays / two pointers** | [data-structures/array.md](../../tracks/foundations/data-structures/array.md) |
+| **Graphs (traversal + topo)** | [data-structures/graphs.md](../../tracks/foundations/data-structures/graphs.md) |
+| **Graphs (Dijkstra, Bellman-Ford, MST)** | [algorithms/graph.md](../../tracks/foundations/algorithms/graph.md) |
+| **DP** | [algorithms/dynamic-programming/README.md](../../tracks/foundations/algorithms/dynamic-programming/README.md) |
+| **Full topic index** | [data-structures/](../../tracks/foundations/data-structures/), [algorithms/](../../tracks/foundations/algorithms/) |
