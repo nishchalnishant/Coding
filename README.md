@@ -19,6 +19,7 @@ A lean, high-yield system for mastering DSA and System Design for Big Tech inter
 Targeted programs based on your goal or timeline.
 - **[Google SDE-2](tracks/google-sde2/)**: Roadmap, 14-day revision, curated problem set, and behavioral prep.
 - **[SDE-3 DSA](tracks/sde3-dsa/)**: Advanced DSA, LLD, and system design building blocks.
+- **[Master Improvement Prompt](tracks/sde3-dsa/master-prompt.md)**: A high-yield AI prompt to elevate any documentation in this repo to SDE-3 standards.
 - **[Foundations](tracks/foundations/)**: Atomic notes on every major data structure and algorithm.
 
 ### 🧠 [Reference Hub](reference/)

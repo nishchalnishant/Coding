@@ -1,76 +1,297 @@
-# Mathematics
+# Mathematics — SDE-3 Gold Standard
 
-Maths concepts frequently appear in algorithm problems to optimize naive $O(N)$ loops down to $O(\sqrt{N})$ or $O(1)$. 
-
-## Core Theory & Algorithms
-
-SDE-2 reference implementations (Python): `../../google-sde2/snippets/python/maths.py`.
-
-- **Prime Numbers**:
-  - *Sieve of Eratosthenes*: Find all primes up to $N$ in $O(N \log \log N)$ time.
-  - *Primality Test*: Loop from $2$ to $\sqrt{N}$. If $N$ is divisible by any, it's not prime. Time: $O(\sqrt{N})$.
-- **GCD & LCM**:
-  - *Euclidean Algorithm*: `def gcd(a, b): return a if b == 0 else gcd(b, a % b)` in $O(\log(\min(a,b)))$ time.
-  - *LCM*: `(a * b) // gcd(a, b)`
-- **Modular Arithmetic**:
-  - $(A + B) \mod M = ((A \mod M) + (B \mod M)) \mod M$
-  - $(A \times B) \mod M = ((A \mod M) \times (B \mod M)) \mod M$
-
-## Combinatorics & Probability
-- **[Problem Details](../../google-sde2/PROBLEM_DETAILS.md#permutations)**: $N!$ ways to arrange $N$ distinct items.
-- **Combinations**: $nCr = \frac{n!}{r!(n-r)!}$ ways to choose $r$ items from $n$.
-- **Pigeonhole Principle**: If $N$ items are put into $M$ containers ($N > M$), at least one container must hold $> 1$ item.
-
-## Geometry
-- **Distance Formula**: $\sqrt{(x_2-x_1)^2 + (y_2-y_1)^2}$
-
-## Common SDE-3 Math Problems
-- *Easy*: Count Primes, Power of Two, Roman to Integer, Excel Sheet Column Title.
-- *Medium*: Pow(x,n), Factorial Trailing Zeroes, Rotate Image, Max Points on a Line.
-- *Hard*: Basic Calculator, Max Points on a Line, Rectangle Area.
+Mathematical patterns that collapse O(N) loops to O(√N) or O(log N). SDE-3 expects: sieve correctness, fast exponentiation, modular arithmetic fluency, and knowing when geometry reduces to integer algebra.
 
 ---
 
-## Pattern Recognition
+## 1. Algorithm Selection
 
-- **Primes** → Sieve (all primes ≤ N) or trial division up to √N for single number.
-- **[Problem Details](../../google-sde2/PROBLEM_DETAILS.md#gcd-lcm)** → Euclidean algorithm; LCM = (a×b)/gcd(a,b). **Modular** → (a±b) mod M, (a×b) mod M; use mod at each step to avoid overflow.
-- **Combinatorics** → nCr = n!/(r!(n-r)!); permutations n!; pigeonhole for "at least one" arguments.
-- **Geometry** → Distance, slope (avoid float when possible; use cross product for collinearity). Max points on a line: group by slope (handle vertical).
+> [!IMPORTANT]
+> **The Click Moment**: "Count **primes** up to N" → Sieve. "**Divisible** / GCD / LCM" → Euclidean. "Large power **mod M**" → binary exponentiation. "Overflow in a×b before mod" → divide first: `a // gcd(a,b) * b`. "**Same line** / collinear" → cross product (no floats). "**Modular inverse**" → Fermat's little theorem when M is prime; Extended Euclidean otherwise.
 
-## Interview Strategy
+| Goal | Algorithm | Complexity |
+| :--- | :--- | :--- |
+| All primes ≤ N | Sieve of Eratosthenes | O(N log log N) |
+| Is N prime? | Trial division | O(√N) |
+| GCD of a, b | Euclidean algorithm | O(log min(a,b)) |
+| a^n mod M | Binary exponentiation | O(log n) |
+| nCr mod prime p | Precomputed factorials + Fermat inverse | O(N + log N) |
+| Collinear points | Cross product / GCD-normalized slope | O(1), no float error |
 
-- **Identify**: "Count primes" → Sieve. "GCD" / "divisible" → Euclidean. "Ways to choose" → combinations. "Same line" → slope or cross product.
-- **Approach**: State formula or algorithm; handle overflow (mod, or use long). Edge cases: zero, negative, large N.
-- **Common mistakes**: Integer overflow in (a×b) before mod; division by zero in slope; forgetting 0 and 1 for primes.
+---
 
-## Quick Revision
+## 2. Core Algorithms & Click Moments
 
-- **Sieve**: Mark multiples of primes; O(N log log N). **Primality**: Check 2..√N. **GCD**: gcd(a,b)=gcd(b,a%b); O(log min(a,b)).
-- **LCM**: (a×b)/gcd(a,b). **Mod**: (a+b) mod M = ((a mod M)+(b mod M)) mod M; same for product.
-- **Trailing zeroes in n!**: Count of 5 in 1..n (each 5 contributes at least one 0).
+### Sieve of Eratosthenes — All Primes ≤ N
+
+> [!IMPORTANT]
+> **The Click Moment**: "Count primes" — OR — "is each number prime?" — OR — "smallest prime factor of every number" (linear sieve). Sieve is the canonical O(N log log N) all-primes algorithm; trial division per number would be O(N √N).
+
+```python
+def sieve(n: int) -> list[bool]:
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    p = 2
+    while p * p <= n:
+        if is_prime[p]:
+            for multiple in range(p * p, n + 1, p):
+                is_prime[multiple] = False
+        p += 1
+    return is_prime
+
+def count_primes(n: int) -> int:
+    return sum(sieve(n - 1)) if n > 1 else 0  # count primes strictly less than n
+
+def smallest_prime_factor(n: int) -> list[int]:
+    spf = list(range(n + 1))
+    p = 2
+    while p * p <= n:
+        if spf[p] == p:  # p is still prime
+            for multiple in range(p * p, n + 1, p):
+                if spf[multiple] == multiple:
+                    spf[multiple] = p
+        p += 1
+    return spf
+
+def factorize(x: int, spf: list[int]) -> list[int]:
+    factors = []
+    while x > 1:
+        factors.append(spf[x])
+        x //= spf[x]
+    return factors
+```
+
+> [!TIP]
+> **Smallest Prime Factor (SPF) sieve**: `spf[i]` = smallest prime dividing i. Factorize any number k in O(log k) after O(N log log N) precomputation — `while k > 1: factors.append(spf[k]); k //= spf[k]`. This is the engine for "count divisors" and "group numbers by prime factor" problems (e.g., Largest Component Size by Common Factor).
+
+---
+
+### GCD, LCM, and Extended Euclidean
+
+> [!IMPORTANT]
+> **The Click Moment**: "Greatest common divisor" — OR — "reduce a fraction" — OR — "coprime check" — OR — "**modular inverse**" (use Extended Euclidean when M is not prime, or Fermat's little theorem when M is prime). `gcd(0, a) = a` — handle zeros explicitly.
+
+```python
+import math
+
+def gcd(a: int, b: int) -> int:
+    return a if b == 0 else gcd(b, a % b)  # or math.gcd(a, b)
+
+def lcm(a: int, b: int) -> int:
+    return a // math.gcd(a, b) * b  # divide BEFORE multiply to prevent overflow
+
+def extended_gcd(a: int, b: int) -> tuple[int, int, int]:
+    if b == 0:
+        return a, 1, 0
+    g, x, y = extended_gcd(b, a % b)
+    return g, y, x - (a // b) * y  # g, x, y such that a*x + b*y = g
+
+def modular_inverse(a: int, m: int) -> int:
+    g, x, _ = extended_gcd(a % m, m)
+    if g != 1:
+        raise ValueError(f"{a} has no inverse mod {m} (not coprime)")
+    return x % m
+```
+
+> [!CAUTION]
+> **LCM overflow**: `a * b // gcd(a, b)` computes `a*b` first — overflows in Java/C++ for large inputs. Always write `a // gcd(a, b) * b` (divide before multiply). Python integers are arbitrary precision but the habit matters when reasoning about other languages in interviews.
+
+---
+
+### Binary Exponentiation (Fast Power)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Compute **x^n mod M**" — OR — "**Fibonacci in O(log N)** via matrix exponentiation" — OR — "**modular inverse** when M is prime" (`x^(M-2) mod M` by Fermat's little theorem). Halving the exponent at each step → O(log n).
+
+```python
+def fast_pow(base: int, exp: int, mod: int = 0) -> int:
+    if exp < 0:
+        base, exp = modular_inverse(base, mod), -exp
+    result = 1
+    base = base % mod if mod else base
+    while exp:
+        if exp & 1:
+            result = result * base % mod if mod else result * base
+        base = base * base % mod if mod else base * base
+        exp >>= 1
+    return result
+
+def matrix_mult(A: list[list[int]], B: list[list[int]], mod: int) -> list[list[int]]:
+    n = len(A)
+    C = [[0] * n for _ in range(n)]
+    for i in range(n):
+        for k in range(n):
+            if A[i][k] == 0:
+                continue
+            for j in range(n):
+                C[i][j] = (C[i][j] + A[i][k] * B[k][j]) % mod
+    return C
+
+def fibonacci_log_n(n: int, mod: int = 10**9 + 7) -> int:
+    if n <= 1:
+        return n
+
+    def mat_pow(M: list[list[int]], p: int) -> list[list[int]]:
+        result = [[1, 0], [0, 1]]  # identity
+        while p:
+            if p & 1:
+                result = matrix_mult(result, M, mod)
+            M = matrix_mult(M, M, mod)
+            p >>= 1
+        return result
+
+    M = [[1, 1], [1, 0]]
+    return mat_pow(M, n)[0][1]
+```
+
+> [!CAUTION]
+> **INT_MIN overflow in Java/C++**: Negating `exp` when `exp = INT_MIN` (-2^31) overflows to INT_MIN again because INT_MAX = 2^31 - 1. Cast to `long` before negating. Python integers are arbitrary precision — not an issue here, but mention it in interviews.
+
+---
+
+### Modular Arithmetic — Large Combinations
+
+> [!IMPORTANT]
+> **The Click Moment**: "Answer **mod 10^9+7**" — OR — "**large nCr** mod prime". Apply mod at every addition and multiplication step. Precompute factorials and inverse factorials once in O(N); then each nCr query is O(1).
+
+```python
+MOD = 10**9 + 7
+
+def precompute_factorials(n: int, mod: int = MOD) -> tuple[list[int], list[int]]:
+    fact = [1] * (n + 1)
+    for i in range(1, n + 1):
+        fact[i] = fact[i-1] * i % mod
+    inv_fact = [1] * (n + 1)
+    inv_fact[n] = fast_pow(fact[n], mod - 2, mod)  # Fermat: fact[n]^(mod-2) mod mod
+    for i in range(n - 1, -1, -1):
+        inv_fact[i] = inv_fact[i+1] * (i+1) % mod
+    return fact, inv_fact
+
+def nCr_mod(n: int, r: int, fact: list[int], inv_fact: list[int], mod: int = MOD) -> int:
+    if r < 0 or r > n:
+        return 0
+    return fact[n] * inv_fact[r] % mod * inv_fact[n-r] % mod
+```
+
+---
+
+### Number Theory Tricks
+
+```python
+def count_trailing_zeros_factorial(n: int) -> int:
+    count = 0
+    power_of_5 = 5
+    while power_of_5 <= n:
+        count += n // power_of_5
+        power_of_5 *= 5
+    return count
+
+def is_prime(n: int) -> bool:
+    if n < 2:
+        return False
+    if n < 4:
+        return True
+    if n % 2 == 0 or n % 3 == 0:
+        return False
+    i = 5
+    while i * i <= n:
+        if n % i == 0 or n % (i + 2) == 0:
+            return False
+        i += 6
+    return True
+
+def max_points_on_line(points: list[list[int]]) -> int:
+    if len(points) <= 2:
+        return len(points)
+    max_pts = 1
+    for i in range(len(points)):
+        slopes: dict = {}
+        duplicate = 1
+        for j in range(i + 1, len(points)):
+            dx = points[j][0] - points[i][0]
+            dy = points[j][1] - points[i][1]
+            if dx == 0 and dy == 0:
+                duplicate += 1
+                continue
+            g = math.gcd(abs(dy), abs(dx))
+            slope = (dy // g, dx // g)
+            if dx < 0:  # normalize sign: always keep dx non-negative
+                slope = (-slope[0], -slope[1])
+            slopes[slope] = slopes.get(slope, 0) + 1
+        local_max = max(slopes.values()) if slopes else 0
+        max_pts = max(max_pts, local_max + duplicate)
+    return max_pts
+```
+
+> [!CAUTION]
+> **Max Points on a Line gotchas**: (1) Represent slope as `(dy/g, dx/g)` with GCD normalization — `(-2/3)` and `(2/-3)` must map to the same key. (2) Normalize the sign (keep dx ≥ 0). (3) Count **duplicate points** separately — they lie on every line through the anchor. Missing duplicates is the #1 bug.
+
+---
+
+## 3. SDE-3 Deep Dives
+
+### Scalability: Segmented Sieve for Huge N
+
+> [!TIP]
+> Standard sieve uses O(N) memory — infeasible for N = 10^12. **Segmented sieve**: first sieve primes up to √N (fits in RAM), then process the range [lo, hi] in √N-sized blocks. Each block is O(√N) memory. Total time is still O(N log log N). Used in competitive programming for N up to 10^10 and in distributed prime generation systems.
+
+### Scalability: Chinese Remainder Theorem (CRT)
+
+> [!TIP]
+> CRT lets you reconstruct a large number from remainders modulo small coprime moduli. Application: compute a huge product modulo multiple small primes in parallel on different machines, then combine with CRT. Used in FFT-based polynomial multiplication (number-theoretic transform) and multi-party computation protocols.
+
+### Concurrency: Thread-Safe Prime Cache
+
+> [!TIP]
+> A sieve computed once at startup is read-only and needs no locking — safe for concurrent reads. For an incremental primality service: maintain a sorted set of known primes protected by a `ReadWriteLock` (Java) or `threading.RLock` (Python). On query for n: acquire read lock, trial-divide against known primes ≤ √n; if n is new prime, upgrade to write lock and insert. The read path scales linearly with threads.
+
+### Trade-offs: Float vs Integer Arithmetic
+
+| Problem | Float approach | Integer approach | Prefer |
+| :--- | :--- | :--- | :--- |
+| Slope of two points | `dy/dx` | `(dy//g, dx//g)` tuple | **Integer** — no rounding error |
+| Distance comparison | `math.hypot(dx,dy)` | `dx*dx + dy*dy` (compare squared) | Integer for comparison, float for output |
+| nCr | `math.comb(n,r)` | Precomputed factorials + modular inverse | **Modular integer** when answer is large |
+| Primality | Miller-Rabin (probabilistic) | Trial division | Trial div for N ≤ 10^7; Miller-Rabin for N ≤ 10^18 |
+
+---
+
+## 4. Common Interview Problems
+
+### Easy / Medium
+- **Count Primes** — Sieve of Eratosthenes; count `True` values in `is_prime[:n]`.
+- **Pow(x, n)** — Binary exponentiation; handle `n < 0` by inverting x.
+- **GCD / LCM of Array** — Reduce with `math.gcd`; LCM: `a // gcd(a,b) * b`.
+- **Factorial Trailing Zeros** — Count factors of 5 via Legendre's formula.
+- **Integer Square Root** — Binary search on `[0, x]` with `mid <= x // mid`.
+
+### Hard
+- **Max Points on a Line** — Per anchor: GCD-normalized slope frequency map.
+- **Super Pow** — `a^(b mod phi(mod)) mod mod` via Euler's theorem; handle non-coprime case.
+- **Count of Range Sum** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
+- **Nth Digit** — Determine which digit group (1-digit, 2-digit…); offset within the number.
 
 ---
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness & details |
-|----------|------------|----------------------|
-| **Pow(x, n)** | Binary exponentiation: square `x` while halving `n`; multiply result when `n` odd. | **`n < 0`** take reciprocal; **`n = INT_MIN`**—use `long` or halve positive carefully. |
-| **Sqrt(x) / Integer Sqrt** | Binary search `ans` in `[0,x]` with `mid <= x // mid`; or **Newton** `x_{k+1} = (x_k + n/x_k)/2`. | **`mid*mid`** overflow—compare with division; **floor** vs **ceil** sqrt. |
-| **[Problem Details](../../google-sde2/PROBLEM_DETAILS.md#gcd-lcm)** | **Euclidean** gcd; **LCM** = `a / gcd(a,b) * b` to reduce overflow. | **`gcd(0,a)=a`**; **coprime** check `gcd==1`. |
-| **[Problem Details](../../google-sde2/PROBLEM_DETAILS.md#count-primes)** | **Sieve:** mark multiples from each prime `p` starting `p*p`. | **`sqrt(n)`** bound for primes to sieve; **space** O(n)—**segmented** sieve for huge n. |
-| **Factorial Trailing Zeroes** | Count **factors of 5** in n! (each 5,25,125…). | **More 2s than 5s**—only count 5s; **legendre** style sum. |
-| **Max Points on a Line** | For each anchor, map **reduced slope** `(dy/g, dx/g)` with `g=gcd(|dy|,|dx|)`; handle **vertical** and **duplicates**. | **Same point** add to duplicate counter; **use gcd** to normalize `-2/3` vs `2/-3`. |
-| **Random Pick with Weight** | **Prefix sums** `P[i]`; draw `r` in `[0, P[last])`; **binary search** first `P[i] > r`. | **Inclusive/exclusive** random range; **zero** weights excluded. |
-| **Integer Break** | For `n≥4`, break into **3s** (maximize product); handle small n by table. | **Greedy** proof via calculus / AM-GM intuition; **DP** for variant constraints. |
-| **Arranging Coins** | Find max `k` with `k(k+1)/2 ≤ n` → **binary search** or quadratic formula. | **Integer** overflow in `k*(k+1)`. |
-| **Bulb Switcher** | Only bulbs with **square** indices stay on after n toggles—`floor(sqrt(n))`. | **Divisor pairs**—squares have odd # of divisors. |
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- |
+| **Pow(x, n)** | "Fast exponentiation; n can be negative" | Square x, halve n; if n odd multiply result by x once | `n = INT_MIN` overflow in Java/C++ — use `long`. Negative n: `base = 1/base, exp = -exp`. |
+| **Sqrt(x)** | "Integer square root without `math.sqrt`" | Binary search `[0, x]` with `mid <= x // mid` | `mid*mid` overflow — compare as `mid <= x // mid` (integer division). Floor vs ceiling. |
+| **Count Primes** | "Count primes strictly less than n" | Sieve: mark composites from each prime p starting p² | `is_prime[0] = is_prime[1] = False`. Inner loop starts at `p*p`, not `2*p`. |
+| **Factorial Trailing Zeros** | "Count (2,5) factor pairs = count 5s in n!" | Sum `n//5 + n//25 + n//125 + …` until power > n | More 2s than 5s — count only 5-factors. Integer division, no floats. |
+| **Max Points on a Line** | "Group by slope; find max frequency" | Per anchor: GCD-normalize `(dy, dx)` slope; count per slope | Same point = duplicate, not a slope. Normalize sign: `dx < 0 → flip both`. |
+| **Random Pick with Weight** | "Weighted random choice" | Prefix sums + binary search on random value in `[0, total)` | `random.randint(0, total-1)` is inclusive; `random.random() * total` is `[0, total)`. Zero weights excluded. |
+| **Integer Break** | "Split n to maximize product" | Break into 3s for n≥4; avoid breaking into 1s | AM-GM: e≈2.718 → 3 is optimal integer. Handle n=2 (→1×1=1? No, must split: return 1), n=3 (→ 1×2=2). |
+| **Bulb Switcher** | "How many bulbs on after n rounds?" | Bulb i toggled by each of its divisors; odd count ↔ perfect square | Divisors pair up except for perfect squares. Answer = `int(n**0.5)`. |
+| **GCD of Array** | "Reduce via Euclidean iteratively" | `functools.reduce(math.gcd, nums)` | `gcd(0, a) = a` — handle zeros. LCM can overflow for large arrays; use Python big int. |
 
 ---
 
 ## See also
 
-- [Bit manipulation](bit-manipulation.md) — powers of two, parity  
-- [Greedy](greedy.md) — some math scheduling problems  
-- [Miscellaneous](miscellaneous.md) — number-theory style mix problems
+- [Bit Manipulation](bit-manipulation.md) — powers of two, parity, GCD via binary method
+- [Divide and Conquer](divide-and-conquer.md) — fast exponentiation derivation; Master Theorem
+- [Dynamic Programming](dynamic-programming/README.md) — DP for combinatorics (ways to sum, partition)
+- [Patterns Master](../../../reference/patterns/patterns-master.md) — math pattern recognition triggers
