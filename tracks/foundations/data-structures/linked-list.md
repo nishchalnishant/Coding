@@ -1,117 +1,283 @@
-# Linked List — SDE-2+ Level
+# Linked List — SDE-3 Gold Standard
 
-A linear data structure where nodes are stored in non-contiguous memory, connected via pointers. SDE-3 expects clean in-place operations, cycle handling, and trade-offs vs arrays.
+A linear data structure where nodes are stored in non-contiguous memory, connected via next pointers. SDE-3 expects: clean in-place pointer manipulation, cycle detection with proof, DLL-based design problems, and trade-offs vs arrays.
 
 ---
 
 ## 1. Concept Overview
 
-### Problem Space
-- **Reversal**: Full, in k-groups, reorder (L0→Ln→L1→Ln-1…).
-- **Finding**: Middle, cycle, cycle entry, intersection.
-- **Merge**: Two sorted, K sorted, reorder.
-- **Copy**: Copy with random pointer.
+### When to Use Which Technique
 
-### When to Use
-| Technique | Purpose |
-| :--- | :--- |
-| **Dummy Node** | Operation might change head (delete head, merge). |
-| **Fast & Slow** | Find middle, detect cycle, find cycle entry. |
-| **In-place Reversal** | Minimize space to O(1); `prev/curr/next`. |
+| Technique | Purpose | Pattern |
+| :--- | :--- | :--- |
+| **Dummy node** | Head may be deleted/replaced (merge, delete head) | `dummy.next = head; return dummy.next` |
+| **Fast & Slow pointers** | Find middle, detect cycle, find cycle entry | `slow += 1, fast += 2` |
+| **In-place reversal** | O(1) space reversal; palindrome check; reorder | `prev, curr, nxt` three-pointer dance |
+| **Two-pass or two-pointer offset** | Remove Nth from end without knowing length | Advance fast by N first |
 
 ---
 
 ## 2. Core Algorithms & Click Moments
 
 ### In-Place Reversal
+
 > [!IMPORTANT]
-> **The Click Moment**: "Reverse the order", "Palindrome check (second half)", "Reorder list".
+> **The Click Moment**: "**Reverse** the list" — OR — "**palindrome** check (reverse second half)" — OR — "**reorder** list (weave first and second half)" — OR — "reverse in **K-groups**". All require the same three-pointer dance. Master this before anything else in linked lists.
 
 ```python
-prev, curr = None, head
-while curr:
-    nxt = curr.next
-    curr.next = prev
-    prev, curr = curr, nxt
-return prev
+def reverse_list(head):
+    prev, curr = None, head
+    while curr:
+        nxt = curr.next      # save next before overwriting
+        curr.next = prev     # reverse the pointer
+        prev, curr = curr, nxt
+    return prev  # prev is the new head
+
+def reverse_between(head, left: int, right: int):
+    dummy = ListNode(0)
+    dummy.next = head
+    pre = dummy
+    for _ in range(left - 1):
+        pre = pre.next
+    curr = pre.next
+    for _ in range(right - left):
+        nxt = curr.next
+        curr.next = nxt.next
+        nxt.next = pre.next
+        pre.next = nxt
+    return dummy.next
 ```
 
-### Find Middle (Fast & Slow)
-> [!IMPORTANT]
-> **The Click Moment**: "Find middle node", "Split list", "Even/Odd length check".
-
-```python
-slow = fast = head
-while fast and fast.next:
-    slow = slow.next
-    fast = fast.next.next
-return slow
-```
-
-### Floyd's Cycle Detection
-> [!IMPORTANT]
-> **The Click Moment**: "Detect cycle", "Find loop start", "Intersection of two lists".
-
-- **Detect**: If `slow == fast`, there is a cycle.
-- **Entry**: Reset `slow` to `head`, keep `fast` at meeting point. Move both 1 step. Meet at entry.
+> [!CAUTION]
+> **The #1 linked list bug**: Forgetting to save `curr.next` before overwriting `curr.next = prev`. Once you do `curr.next = prev`, you've lost the reference to the rest of the list. Always `nxt = curr.next` as the **first line** inside the loop.
 
 ---
 
-## 3. Advanced Variations
+### Find Middle — Fast & Slow Pointers
 
-- **Reverse in K-Group**: Reverse each k-block; connect tails.
-- **Copy List with Random Pointer**: Use a map for `old_node → new_node`.
-- **LRU Cache**: Doubly linked list + Hash Map.
+> [!IMPORTANT]
+> **The Click Moment**: "Find the **middle** node" — OR — "split the list into two halves" — OR — "check if linked list is a **palindrome**" (find middle, reverse second half, compare). The fast pointer moves twice per step; when it reaches the end, slow is at the middle.
+
+```python
+def find_middle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow  # for even-length list: returns second-middle node
+
+def is_palindrome(head) -> bool:
+    if not head or not head.next:
+        return True
+    mid = find_middle(head)
+    second_half = reverse_list(mid)
+    p1, p2 = head, second_half
+    result = True
+    while p2:  # compare original and reversed second half
+        if p1.val != p2.val:
+            result = False
+            break
+        p1, p2 = p1.next, p2.next
+    reverse_list(second_half)  # restore original structure
+    return result
+```
+
+> [!TIP]
+> **Which middle for odd vs even lengths?** With `while fast and fast.next`, slow lands on the **left-middle** for even-length lists. If the problem requires the right-middle (e.g., for merge sort on linked lists), use `while fast.next and fast.next.next`. Clarify with the interviewer which is needed.
+
+---
+
+### Floyd's Cycle Detection
+
+> [!IMPORTANT]
+> **The Click Moment**: "**Detect a cycle**" — OR — "find the **cycle entry point**" — OR — "**intersection** of two linked lists" (same idea: two pointers meet at intersection). Floyd's algorithm proves that slow and fast must meet inside the cycle, and the meeting point is exactly L steps from the cycle entry (where L = distance from head to entry).
+
+```python
+def has_cycle(head) -> bool:
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            return True
+    return False
+
+def detect_cycle_entry(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow is fast:
+            break
+    else:
+        return None  # no cycle
+    # Reset slow to head; move both one step at a time
+    slow = head
+    while slow is not fast:
+        slow = slow.next
+        fast = fast.next
+    return slow  # cycle entry node
+```
+
+> [!CAUTION]
+> **Identity check, not equality**: Use `slow is fast` (identity), **not** `slow == fast` (value equality). Two different nodes with the same value would falsely trigger `==`. This is a common Python bug that passes some test cases but fails on identical-value nodes.
+
+---
+
+### Reverse K-Group
+
+> [!IMPORTANT]
+> **The Click Moment**: "Reverse the list in **groups of K**" — OR — "K-group reversal". The key insight: check that K nodes exist before reversing; then reverse exactly K nodes, connect the tail of the reversed group to the result of the recursive (or iterative) call for the rest.
+
+```python
+def reverse_k_group(head, k: int):
+    # Check if k nodes remain
+    count, node = 0, head
+    while node and count < k:
+        node = node.next
+        count += 1
+    if count < k:
+        return head  # fewer than k nodes remain — don't reverse
+
+    prev, curr = None, head
+    for _ in range(k):
+        nxt = curr.next
+        curr.next = prev
+        prev, curr = curr, nxt
+
+    head.next = reverse_k_group(curr, k)  # head is now the tail of reversed group
+    return prev  # prev is the new head of this group
+```
+
+---
+
+### LRU Cache — Doubly Linked List + Hash Map
+
+> [!IMPORTANT]
+> **The Click Moment**: "**LRU Cache**" — OR — "O(1) get and put with eviction of **least recently used**". The DLL maintains recency order (most recent at head, LRU at tail). The hash map provides O(1) access to any node for repositioning.
+
+```python
+class DLLNode:
+    def __init__(self, key=0, val=0):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+
+class LRUCache:
+    def __init__(self, capacity: int):
+        self.cap = capacity
+        self.cache: dict[int, DLLNode] = {}
+        self.head = DLLNode()  # dummy head (MRU side)
+        self.tail = DLLNode()  # dummy tail (LRU side)
+        self.head.next = self.tail
+        self.tail.prev = self.head
+
+    def _remove(self, node: DLLNode) -> None:
+        node.prev.next = node.next
+        node.next.prev = node.prev
+
+    def _insert_front(self, node: DLLNode) -> None:
+        node.next = self.head.next
+        node.prev = self.head
+        self.head.next.prev = node
+        self.head.next = node
+
+    def get(self, key: int) -> int:
+        if key not in self.cache:
+            return -1
+        node = self.cache[key]
+        self._remove(node)
+        self._insert_front(node)
+        return node.val
+
+    def put(self, key: int, value: int) -> None:
+        if key in self.cache:
+            self._remove(self.cache[key])
+        node = DLLNode(key, value)
+        self.cache[key] = node
+        self._insert_front(node)
+        if len(self.cache) > self.cap:
+            lru = self.tail.prev
+            self._remove(lru)
+            del self.cache[lru.key]
+```
+
+---
+
+## 3. SDE-3 Deep Dives
+
+### Scalability: Skip Lists
+
+> [!TIP]
+> A **skip list** is a probabilistic linked-list-based data structure supporting O(log N) search, insert, and delete — matching balanced BSTs without complex rotations. It uses multiple levels of "express lanes" (linked lists of increasing step size), each node randomly promoted to higher levels.
+>
+> Used in: Redis sorted sets (`ZSET`), LevelDB/RocksDB memtables, Java's `ConcurrentSkipListMap`. At Google scale, skip lists handle sorted-set operations in Bigtable's in-memory index.
+
+### Concurrency: Lock-Free Linked Lists
+
+> [!TIP]
+> **Michael-Scott Lock-Free Queue** uses CAS on the `tail.next` pointer for enqueue. The key trick: if `tail.next != null`, another thread is mid-enqueue — help it by advancing `tail` before your own insert. This makes all threads cooperative, preventing starvation.
+>
+> For lock-free singly linked list **delete**: use **logical deletion** — mark the `next` pointer with a "deleted" bit (tagged pointer). Physical removal happens lazily during traversal. Avoids the ABA problem without versioned pointers.
+
+> [!CAUTION]
+> Python's CPython GIL makes individual `append`/`popleft` on `collections.deque` thread-safe, but multi-step operations (check-then-act) are not atomic. Use `threading.Lock` for LRU Cache or other multi-step DLL operations in concurrent Python code.
+
+### Trade-offs: Linked List vs Array
+
+| Operation | Singly LL | Doubly LL | Dynamic Array |
+| :--- | :--- | :--- | :--- |
+| Random access | O(N) | O(N) | O(1) |
+| Insert at head | O(1) | O(1) | O(N) amortized |
+| Insert at tail | O(N) or O(1) with tail ptr | O(1) | O(1) amortized |
+| Delete (given node ptr) | O(N) for prev | O(1) | O(N) shift |
+| Cache performance | Poor (pointer chasing) | Poor | Excellent (contiguous) |
+| Memory overhead | 1 pointer/node | 2 pointers/node | None (contiguous) |
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy
-- [Reverse Linked List](../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list) — Iterative vs recursive.
-- **Linked List Cycle** — Fast & slow pointers.
+- [Reverse Linked List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list) — Three-pointer iterative; recursive is shorter but O(N) stack.
+- **Linked List Cycle** — Fast & slow; `O is O` identity check.
+- **Merge Two Sorted Lists** — Dummy head; two-pointer merge.
 
 ### Medium
-- [Remove Nth From End](../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end) — Fast pointer advances `n` steps first.
-- [Copy List with Random Pointer](../google-sde2/PROBLEM_DETAILS.md#copy-list-with-random-pointer) — Map or interleave.
+- [Remove Nth From End](../../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end) — Fast advances N steps first; both advance together until fast.next is null.
+- [Copy List with Random Pointer](../../google-sde2/PROBLEM_DETAILS.md#copy-list-with-random-pointer) — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
+- **Palindrome Linked List** — Find middle, reverse second half, compare, restore.
+- **Add Two Numbers** — Digit-by-digit sum with carry; handle length mismatch.
+- **Reorder List** — Find middle, reverse second half, weave (merge alternating).
+- **Swap Nodes in Pairs** — Reverse every two nodes; dummy node simplifies head case.
 
 ### Hard
-- [Merge K Sorted Lists](../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists) — Min-heap of size K.
-- [LRU Cache](../google-sde2/PROBLEM_DETAILS.md#lru-cache) — DLL + Map.
-
----
-
-## 5. Pattern Recognition
-
-- **"Change Head"** → Dummy node.
-- **"Middle/Cycle"** → Fast & slow.
-- **"O(1) Space Reversal"** → Pointer manipulation.
-- **"Random Pointer"** → Hash map for nodes.
-
----
-
-## 6. Interview Strategy
-
-- **Dummy Node**: Always use a dummy node to simplify head deletions or insertions.
-- **Null Checks**: Fast pointer check `while fast and fast.next`.
-- **In-place**: If space is constrained, avoid using a stack or recursion.
+- [Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists) — Min-heap of K nodes; or divide-and-conquer pairwise merge.
+- [LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache) — DLL + hash map; dummy head/tail to avoid edge cases.
+- **Reverse K-Group** — Recursion or iterative; check K nodes exist before reversing.
+- **Sort List** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
 
 ---
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core logic | Trickiness / Gotchas |
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- |
-| **[Reverse List](../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | "Flip pointers" | `curr.next = prev` | Don't lose the `next` node. |
-| **[Remove Nth Node](../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end)** | "Offset pointers" | Fast advances `n` ahead | Removing the **head** node. |
-| **[Merge K Lists](../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | "Smallest among K" | Min-heap of size K | Handling empty lists. |
-| **[LRU Cache](../google-sde2/PROBLEM_DETAILS.md#lru-cache)** | "Recent access" | DLL + Map | Capacity 1 edge case. |
+| **[Reverse List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
+| **[Remove Nth From End](../../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end)** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
+| **[Merge K Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
+| **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
+| **Detect Cycle Entry** | "Where does the cycle begin?" | Two-pointer meet inside cycle; reset slow to head; advance both by 1 | The math: meeting point is exactly `L` steps from entry — derive it once, remember it. |
+| **Palindrome LL** | "Is the list a palindrome?" | Find middle, reverse second half, compare | Restore the second half after comparison — mutation side effect trap. |
+| **Reverse K-Group** | "Reverse every K nodes" | Count K nodes; reverse; connect tail to result of recursive call | Fewer than K nodes at end — don't reverse; just return `head`. |
+| **Copy List with Random Pointer** | "Deep copy with random pointers" | Map `old → clone`; two passes | Without the map: interleave clones between originals — O(1) extra space trick. |
+| **Sort List** | "Sort linked list efficiently" | Merge sort: find middle, split, sort each, merge | Unlike arrays, finding middle is O(N); overall still O(N log N) with O(log N) stack. |
+| **Add Two Numbers** | "LL represents number, add two" | Digit-by-digit sum with carry tracking | Handle different lengths; handle final carry (create extra node if carry=1 at end). |
 
 ---
 
 ## See also
 
-- [Heap](heap.md) — merge K sorted lists  
-- [Hashing](hashing.md) — copy with random pointer  
-- [Patterns Master](../../../reference/patterns/patterns-master.md)
-- [Stack](stack.md) — recursion uses call stack
+- [Heap](heap.md) — Merge K sorted lists via min-heap
+- [Hashing](hashing.md) — Copy list with random pointer; LRU cache hash map component
+- [Stack](stack.md) — Recursion uses call stack; iterative reversal eliminates it
+- [Patterns Master](../../../reference/patterns/patterns-master.md) — fast & slow pointer pattern triggers

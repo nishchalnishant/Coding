@@ -1,106 +1,283 @@
-# Tree — SDE-2+ Level
+# Tree — SDE-3 Gold Standard
 
-Hierarchical structure: root, parent-child, leaves. SDE-3 expects traversals, BST invariants, LCA, and tree DP (return multiple values).
+Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
 
 ---
 
 ## 1. Concept Overview
 
-### Problem Space
-- **Traversals**: Pre/in/post (recursive vs iterative), Level-order (BFS).
-- **Paths**: Path sum, diameter, max path sum (any to any).
-- **BST**: Validate, kth smallest, range sum, successor.
-- **Structural**: Serialize/Deserialize, flatten to list, invert.
+### When to Use Which Traversal
 
-### When to Use
-| Goal | Technique |
-| :--- | :--- |
-| **Sorted Order** | Inorder traversal of BST. |
-| **Subtree Values** | Postorder traversal (Bottom-up). |
-| **Level-by-Level** | BFS with a queue. |
-| **O(1) Space** | Morris Traversal. |
+| Goal | Technique | Why |
+| :--- | :--- | :--- |
+| **Process children before parent** | Postorder / Bottom-Up | Parent state depends on children (Tree DP, diameter, height) |
+| **Sorted order of BST** | Inorder | Left < Root < Right gives sorted sequence |
+| **Level-by-level processing** | BFS with queue | Level order, zigzag, connect level pointers |
+| **O(1) space traversal** | Morris (threaded) | Temporarily threads tree; restores structure |
+| **Validate/range-check** | Preorder with bounds | Pass `(min, max)` range down to each node |
 
 ---
 
 ## 2. Core Algorithms & Click Moments
 
 ### Lowest Common Ancestor (LCA)
-> [!IMPORTANT]
-> **The Click Moment**: "Find common parent", "Distance between nodes", "Lowest shared ancestor".
 
-- **Binary Tree**: Recursive: if `root` is `p` or `q`, return `root`. Recurse left/right. If both non-null, `root` is LCA.
-- **BST**: If both `p, q < root`, go left; if both `> root`, go right; else `root` is LCA.
-
-### Tree DP (Max Path Sum)
 > [!IMPORTANT]
-> **The Click Moment**: "Path from any node to any node", "Global max sum", "Postorder gain calculation".
+> **The Click Moment**: "Find the **common parent**" — OR — "**distance between two nodes** in a tree" — OR — "**lowest shared ancestor**". In a binary tree, recurse: if you find either target, return it up. If both sides return non-null, the current node is the LCA.
 
 ```python
-def dfs(node):
-    if not node: return 0
-    left = max(0, dfs(node.left))
-    right = max(0, dfs(node.right))
-    global_max = max(global_max, node.val + left + right)
-    return node.val + max(left, right)
+def lowest_common_ancestor(root, p, q):
+    if not root or root is p or root is q:
+        return root
+    left = lowest_common_ancestor(root.left, p, q)
+    right = lowest_common_ancestor(root.right, p, q)
+    if left and right:
+        return root  # p and q are on opposite sides — this node is LCA
+    return left or right
+
+def lca_bst(root, p, q):
+    # BST: use the ordering property — no need to search both subtrees
+    while root:
+        if p.val < root.val and q.val < root.val:
+            root = root.left
+        elif p.val > root.val and q.val > root.val:
+            root = root.right
+        else:
+            return root  # they diverge here — root is LCA
+```
+
+> [!CAUTION]
+> The binary tree LCA assumes `p` and `q` both exist in the tree. If they might not exist, you need a modified version that tracks a `found_count` and only returns the LCA when both are confirmed found.
+
+---
+
+### Tree DP — Bottom-Up with Multiple Return Values
+
+> [!IMPORTANT]
+> **The Click Moment**: "Maximum/minimum **path sum** from any node to any node" — OR — "**diameter** of a tree" — OR — "**camera** coverage" — OR — any problem where the optimal solution through a node depends on both subtrees. The pattern: return a **tuple** of values from each DFS call instead of relying on a global variable per call.
+
+```python
+def max_path_sum(root) -> int:
+    best = [float('-inf')]
+
+    def dfs(node) -> int:
+        if not node:
+            return 0
+        left_gain = max(0, dfs(node.left))   # take 0 if subtree is negative
+        right_gain = max(0, dfs(node.right))
+        # Update global best: path through this node
+        best[0] = max(best[0], node.val + left_gain + right_gain)
+        # Return the best single-branch gain for parent
+        return node.val + max(left_gain, right_gain)
+
+    dfs(root)
+    return best[0]
+
+def diameter_of_tree(root) -> int:
+    diameter = [0]
+
+    def height(node) -> int:
+        if not node:
+            return 0
+        left = height(node.left)
+        right = height(node.right)
+        diameter[0] = max(diameter[0], left + right)
+        return 1 + max(left, right)
+
+    height(root)
+    return diameter[0]
+```
+
+> [!TIP]
+> **The paired-return pattern** (return `(include_node, exclude_node)`): when a parent's optimal decision depends on whether the child is included or not, return both options and let the parent pick. Used in House Robber III, Binary Tree Cameras, and weighted independent set on trees.
+
+```python
+def rob_house_tree(root) -> int:
+    def dfs(node):
+        if not node:
+            return 0, 0  # (rob_this_node, skip_this_node)
+        left_rob, left_skip = dfs(node.left)
+        right_rob, right_skip = dfs(node.right)
+        rob = node.val + left_skip + right_skip
+        skip = max(left_rob, left_skip) + max(right_rob, right_skip)
+        return rob, skip
+    return max(dfs(root))
 ```
 
 ---
 
-## 3. Advanced Variations
+### BST Operations — Validate, Kth Smallest, Range Sum
 
-- **Morris Inorder**: O(1) space traversal by threading.
-- **Serialize/Deserialize**: Use preorder with `null` markers for consistent representation.
-- **Recover BST**: Find two swapped nodes using inorder traversal (they will be out of order).
+> [!IMPORTANT]
+> **The Click Moment**: "**Validate BST**" — OR — "Kth **smallest/largest** in BST" — OR — "**Range sum** of BST values". The BST invariant (all left < node < all right, not just immediate children) is the source of most bugs.
+
+```python
+def is_valid_bst(root, lo=float('-inf'), hi=float('inf')) -> bool:
+    if not root:
+        return True
+    if not (lo < root.val < hi):
+        return False
+    return (is_valid_bst(root.left, lo, root.val) and
+            is_valid_bst(root.right, root.val, hi))
+
+def kth_smallest_bst(root, k: int) -> int:
+    # Iterative inorder to avoid O(N) recursion for large trees
+    stack, node = [], root
+    count = 0
+    while stack or node:
+        while node:
+            stack.append(node)
+            node = node.left
+        node = stack.pop()
+        count += 1
+        if count == k:
+            return node.val
+        node = node.right
+```
+
+> [!CAUTION]
+> **BST validation trap**: Checking only that `node.val > node.left.val and node.val < node.right.val` is **wrong**. A right child that is smaller than the root's parent but larger than the root passes the local check but violates the global BST property. Always pass `(min_bound, max_bound)` through the recursion.
+
+---
+
+### Morris Inorder Traversal — O(1) Space
+
+> [!IMPORTANT]
+> **The Click Moment**: "Traverse a BST **without extra space** (no stack, no recursion)" — OR — any tree traversal problem where the interviewer adds the constraint "O(1) auxiliary space". Morris threading temporarily mutates the tree and restores it — zero stack space.
+
+```python
+def morris_inorder(root) -> list[int]:
+    result = []
+    current = root
+    while current:
+        if not current.left:
+            result.append(current.val)
+            current = current.right
+        else:
+            # Find inorder predecessor
+            predecessor = current.left
+            while predecessor.right and predecessor.right is not current:
+                predecessor = predecessor.right
+
+            if not predecessor.right:
+                # Thread: link predecessor back to current
+                predecessor.right = current
+                current = current.left
+            else:
+                # Unthread: restore tree structure; visit current
+                predecessor.right = None
+                result.append(current.val)
+                current = current.right
+    return result
+```
+
+---
+
+### Serialize and Deserialize
+
+> [!IMPORTANT]
+> **The Click Moment**: "Convert a tree to a **string** and back" — OR — "store/transmit a tree". Preorder with explicit `null` markers uniquely represents any binary tree (unlike inorder, which requires additional information for reconstruction).
+
+```python
+def serialize(root) -> str:
+    if not root:
+        return 'N'
+    return f"{root.val},{serialize(root.left)},{serialize(root.right)}"
+
+def deserialize(data: str):
+    vals = iter(data.split(','))
+    def build():
+        val = next(vals)
+        if val == 'N':
+            return None
+        node = TreeNode(int(val))
+        node.left = build()
+        node.right = build()
+        return node
+    return build()
+```
+
+---
+
+## 3. SDE-3 Deep Dives
+
+### Scalability: Balanced BSTs and Self-Balancing Trees
+
+> [!TIP]
+> A plain BST degrades to O(N) in the worst case (sorted insertions = linked list). Production systems use:
+> - **AVL tree**: Strict height balance (|left - right| ≤ 1); O(log N) guaranteed; more rotations on insert.
+> - **Red-Black tree**: Relaxed balance; O(log N) amortized; fewer rotations; used in Java's `TreeMap`, Linux kernel's task scheduler.
+> - **B-tree / B+ tree**: Branching factor >> 2; optimized for disk I/O; used in all relational databases.
+>
+> At Google scale: sharded B-trees underlie Bigtable's SSTable format.
+
+### Scalability: Parallel Tree Traversal
+
+> [!TIP]
+> Tree DFS is naturally parallelizable: left and right subtrees are independent. For very large trees (file systems, ASTs), use a thread pool where each task processes a subtree and submits children as new tasks. In Python, use `concurrent.futures.ThreadPoolExecutor` with a work queue seeded from the root.
+
+### Concurrency: Lock-Free BST
+
+> [!TIP]
+> Lock-free concurrent BSTs use **CAS on child pointers**. The key insight: reads of child pointers are safe without locks (pointer reads are atomic on 64-bit systems); writes use CAS to atomically update a child pointer only if it hasn't changed. Used in Java's `ConcurrentSkipListMap` (skip list ≈ probabilistic balanced BST) for lock-free ordered map.
+
+### Trade-offs
+
+| Operation | Sorted Array | Hash Map | BST | Balanced BST |
+| :--- | :--- | :--- | :--- | :--- |
+| Search | O(log N) BS | O(1) | O(log N) avg | O(log N) |
+| Insert | O(N) shift | O(1) amort | O(log N) avg | O(log N) |
+| Delete | O(N) shift | O(1) amort | O(log N) avg | O(log N) |
+| Range query | O(log N + K) | O(N) | O(log N + K) | O(log N + K) |
+| In-order iteration | O(N) | O(N) unsorted | O(N) | O(N) |
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy
-- [Invert Binary Tree](../google-sde2/PROBLEM_DETAILS.md#invert-binary-tree) — Recursive swap.
-- **Diameter of Binary Tree** — Postorder height + global max.
+- [Invert Binary Tree](../../google-sde2/PROBLEM_DETAILS.md#invert-binary-tree) — Swap children at each node; recursive or BFS.
+- **Symmetric Tree** — Mirror check: `left.val == right.val` and recurse cross-ways.
+- **Maximum Depth** — `1 + max(depth(left), depth(right))`.
 
 ### Medium
-- [Validate BST](../google-sde2/PROBLEM_DETAILS.md#validate-bst) — Use `(min, max)` range or inorder check.
-- [LCA of Binary Tree](../google-sde2/PROBLEM_DETAILS.md#lca) — The classic "both sides non-null" logic.
+- [Validate BST](../../google-sde2/PROBLEM_DETAILS.md#validate-bst) — Pass `(min, max)` bounds down.
+- [LCA of Binary Tree](../../google-sde2/PROBLEM_DETAILS.md#lca) — "Both sides non-null" = LCA found.
+- [Kth Smallest in BST](../../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst) — Iterative inorder; stop at K.
+- **Binary Tree Level Order** — BFS; separate levels by queue-size snapshot.
+- **Diameter of Binary Tree** — Postorder height; update global `left + right`.
+- **House Robber III** — Tree DP; return `(rob, skip)` pair.
+- **Flatten Binary Tree to Linked List** — Morris-like threading; preorder rewiring.
 
 ### Hard
-- [Serialize and Deserialize](../google-sde2/PROBLEM_DETAILS.md#serialize-and-deserialize-binary-tree) — Preorder with delimiters.
-- [Binary Tree Max Path Sum](../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum) — Bottom-up gain return.
-
----
-
-## 5. Pattern Recognition
-
-- **"Sorted BST"** → Inorder.
-- **"Level by Level"** → BFS.
-- **"Any to Any Path"** → Tree DP with global max.
-- **"Range/Boundaries"** → Pruning or (min, max) recursion.
-
----
-
-## 6. Interview Strategy
-
-- **Null Handling**: Always handle `if not root: return ...`.
-- **Bottom-Up**: Most tree problems are solved by getting info from children (postorder).
-- **BST Invariant**: Remember that left < root < right.
+- [Serialize and Deserialize](../../google-sde2/PROBLEM_DETAILS.md#serialize-and-deserialize-binary-tree) — Preorder with `N` markers.
+- [Binary Tree Max Path Sum](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum) — Tree DP; `max(0, child)` to drop negatives.
+- **Binary Tree Cameras** — Tree DP; 3 states per node: covered/has-camera/uncovered.
+- **Recover BST** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
+- **Vertical Order Traversal** — BFS with `(col, row, val)`; sort by col then row then val.
 
 ---
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core logic | Trickiness / Gotchas |
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- |
-| **[Validate BST](../google-sde2/PROBLEM_DETAILS.md#validate-bst)** | "Strict range" | `min < val < max` | Only checking children is **not** enough. |
-| **[Max Path Sum](../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum)** | "Bottom-up gain" | `max(0, child_gain)` | Path can stop at node (negatives). |
-| **[LCA](../google-sde2/PROBLEM_DETAILS.md#lca)** | "Split point" | `left and right` | Nodes might not exist (validate). |
-| **[Kth Smallest](../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst)** | "Sorted rank" | Inorder traversal | Iterative stop at `k`. |
+| **[Validate BST](../../google-sde2/PROBLEM_DETAILS.md#validate-bst)** | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
+| **[Max Path Sum](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum)** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
+| **[LCA](../../google-sde2/PROBLEM_DETAILS.md#lca)** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
+| **[Kth Smallest](../../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst)** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
+| **Diameter** | "Longest path between any two nodes" | `height(left) + height(right)` at each node | Diameter doesn't have to pass through root; track global max. |
+| **House Robber III** | "No adjacent nodes (parent-child), max sum" | Return `(rob_this, skip_this)` per node | Two values per node, not one — the novelty of tree DP. |
+| **Serialize/Deserialize** | "Lossless tree → string → tree" | Preorder + `N` markers; use iterator for deserialize | Why preorder works: root first unambiguously determines left vs right subtrees. |
+| **Morris Inorder** | "Inorder traversal without O(N) stack" | Thread predecessor.right → current; unthread on second visit | Temporarily mutates tree; restores on second pass — explain this explicitly. |
+| **Recover BST** | "Two nodes swapped — find and fix" | Inorder gives one or two inversions | One inversion: adjacent swap (`first = prev, second = curr`); two inversions: `first` from first, `second` from second. |
+| **Binary Tree Cameras** | "Minimum cameras to monitor all nodes" | Tree DP: 3 states — needs coverage, has camera, is covered | Greedy: install camera at parent of unmonitored leaf; process bottom-up. |
 
 ---
 
 ## See also
 
-- [Graph](../algorithms/graph.md) — trees are special graphs  
-- [Dynamic Programming](../algorithms/dynamic-programming/README.md) — tree DP  
-- [Patterns Master](../../reference/patterns/patterns-master.md)
-- [Backtracking](../algorithms/backtracking.md) — path sum with backtrack
+- [Graph](../algorithms/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
+- [Dynamic Programming](../algorithms/dynamic-programming/README.md) — Tree DP (postorder state propagation)
+- [Backtracking](../algorithms/backtracking.md) — path sum with backtracking
+- [Patterns Master](../../../reference/patterns/patterns-master.md) — tree traversal pattern triggers

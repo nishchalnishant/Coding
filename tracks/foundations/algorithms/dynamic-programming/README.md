@@ -1,109 +1,290 @@
-# Dynamic Programming — SDE-2+ Level
+# Dynamic Programming — SDE-3 Gold Standard
 
-Optimization via overlapping subproblems and optimal substructure; store solutions (memo or table). SDE-3 expects recurrence derivation, space optimization, and pattern recognition (see [Patterns Master](../../../../reference/patterns/patterns-master.md)).
-
----
-
-## 1. Concept Overview
-
-SDE-2 reference implementations (Python): `../../../google-sde2/snippets/python/dp.py`.
-
-**When to use**: Choices at each step; maximize/minimize/count; overlapping subproblems. If greedy doesn't apply and state space is manageable, try DP.
-
-**Two approaches**: Top-down (recurse + memo; only needed states) vs bottom-up (table; often space-optimizable). State definition and recurrence are key.
+Solve optimization problems by breaking them into **overlapping subproblems** with **optimal substructure**; store solutions to avoid recomputation. SDE-3 expects: recurrence derivation from scratch, space optimization, and knowing when DP is wrong.
 
 ---
 
-## 2. Core Patterns (Summary)
+## 1. The Four-Step Framework
 
-- **1D**: Fibonacci, Climbing Stairs, House Robber, Decode Ways — dp[i] from dp[i-1], dp[i-2].
-- **0/1 Knapsack**: Pick or skip; dp[i][w] = max( dp[i-1][w], val[i] + dp[i-1][w-wt[i]] ). Space → 1D backward loop.
-- **Unbounded Knapsack**: Same item repeatable; dp[w] from dp[w-wt[i]].
-- **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#lis)**: dp[i] = 1 + max dp[j] for j < i and arr[j] < arr[i]; or O(N log N) with binary search + tails.
-- **LCS**: 2D; match → 1+dp[i-1][j-1]; else max(dp[i-1][j], dp[i][j-1]).
-- **Kadane**: dp[i] = max(arr[i], arr[i]+dp[i-1]); O(1) space.
-- **Interval DP**: dp[i][j] from split k in [i,j]; Burst Balloons, MCM.
-- **Tree DP**: Post-order; parent state from children (e.g., max path sum, House Robber III).
-- **Bitmask DP**: state = mask (subset); TSP, partition; N ≤ ~20.
-- **Digit DP**: state = (position, tight, ...); count numbers in [L,R] with property.
+> [!IMPORTANT]
+> **Before writing a single line of code, answer all four questions out loud. Interviewers at Google evaluate whether you can derive a recurrence — not just recall one.**
 
----
+1. **Define the state**: What does `dp[i]` (or `dp[i][j]`) represent? Be explicit. E.g., "dp[i] = maximum profit using items 0..i".
+2. **Write the recurrence**: How does `dp[i]` depend on previous states? The recurrence *is* the algorithm.
+3. **Identify base cases**: The smallest subproblems that need no recursion (e.g., `dp[0] = 0`).
+4. **Choose traversal order**: Must you fill left-to-right, bottom-up, or can states be computed independently?
 
-## 3. Interview Flow
-
-1. **Define state**: What does dp[i] or dp[i][j] represent?
-2. **Recurrence**: How does state depend on smaller states? Base cases?
-3. **Order**: Bottom-up order so dependencies are computed first.
-4. **Space**: If dp[i] only needs dp[i-1] (and maybe dp[i-2]), use 1D and overwrite or use few variables.
+```
+State → Recurrence → Base Cases → Order → Space Optimize
+```
 
 ---
 
-## 4. Common SDE-3 DP Problems
+## 2. Core Patterns & Click Moments
 
-**Easy**: Climbing Stairs, House Robber, Maximum Subarray.  
-**Medium**: Coin Change, LIS, LCS, Unique Paths, Longest Palindromic Substring.  
-**Hard**: Edit Distance, Burst Balloons, TSP (bitmask), Tree DP (Max Path Sum), Digit DP.
+### Linear DP (1D)
 
-See [Patterns Master](../../../../reference/patterns/patterns-master.md) for 16 patterns and examples.
+> [!IMPORTANT]
+> **The Click Moment**: "Ways to reach N" — OR — "max gain using items in sequence" — OR — "dependency on the **previous 1 or 2 states** only". If you can express `dp[i]` using only `dp[i-1]` and `dp[i-2]`, you can always space-optimize to O(1) using two variables.
 
----
+- **Examples**: Fibonacci, Climbing Stairs, House Robber.
 
-## 5. Pattern Recognition (DP Patterns)
+```python
+def house_robber(nums: list[int]) -> int:
+    if not nums:
+        return 0
+    if len(nums) == 1:
+        return nums[0]
+    prev2, prev1 = 0, 0
+    for val in nums:
+        prev2, prev1 = prev1, max(prev1, prev2 + val)
+    return prev1
+```
 
-- **Linear 1D**: Fibonacci, House Robber — previous states only.
-- **0/1 Knapsack**: Pick/skip; weight dimension.
-- **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#lis)**: End at i; binary search for O(N log N).
-- **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#lcs-edit-distance)**: Two sequences; 2D.
-- **Interval**: Break at k; MCM, Burst Balloons.
-- **Tree**: Post-order; return multiple values (e.g., with/without node).
-- **Bitmask**: Subset as integer; TSP, partition.
-- **Digit**: Position, tight, sum/count.
-
----
-
-## 6. Trade-offs & Scaling (optional)
-
-- **Trade-offs**: Top-down easier to write; bottom-up faster and easier to optimize space. Recursion depth vs table size.
-- **Scalability**: State space must be feasible (e.g., bitmask 2^n for n≤20). For huge state, consider approximate or greedy.
+> [!TIP]
+> Space optimization rule: if `dp[i]` depends only on `dp[i-1]` and `dp[i-2]`, replace the entire array with two variables. If it depends on `dp[i-1][j]` for all j (2D), replace the full 2D table with a single 1D rolling array.
 
 ---
 
-## 7. Interview Strategy
+### Knapsack — 0/1 and Unbounded
 
-- **Identify**: "Choices", "optimal", "count ways" → DP. Define state and recurrence first.
-- **Common mistakes**: Wrong state (missing dimension); wrong order in bottom-up; forgetting base case; integer overflow in count problems.
+> [!IMPORTANT]
+> **The Click Moment**: "Limited **capacity** or **budget**" — AND — "choose which items to take". **0/1**: each item used at most once. **Unbounded**: each item can be used infinitely. The only difference in code is iteration order: for 0/1, iterate `capacity` **backwards**; for unbounded, iterate **forwards**.
+
+```python
+def knapsack_01(weights: list[int], values: list[int], capacity: int) -> int:
+    dp = [0] * (capacity + 1)
+    for w, v in zip(weights, values):
+        for c in range(capacity, w - 1, -1):  # backwards: prevents reuse
+            dp[c] = max(dp[c], dp[c - w] + v)
+    return dp[capacity]
+
+def coin_change_min(coins: list[int], amount: int) -> int:
+    dp = [float('inf')] * (amount + 1)
+    dp[0] = 0
+    for coin in coins:
+        for c in range(coin, amount + 1):  # forwards: allows reuse
+            dp[c] = min(dp[c], dp[c - coin] + 1)
+    return dp[amount] if dp[amount] != float('inf') else -1
+```
+
+> [!CAUTION]
+> The **iteration direction** is the single most common knapsack bug. Iterating forwards over capacity in a 0/1 problem allows using the same item multiple times (turns it into unbounded). Nail this distinction; interviewers probe it directly.
 
 ---
 
-## 8. Quick Revision
+### Longest Common Subsequence (LCS) — 2D String DP
 
-- **Recurrence**: State = f(smaller states). Base = known values.
-- **Space**: 1D often → 2 variables (current, prev); 2D → 1D row if row i only needs row i-1.
-- **Pattern tip**: "Max/min/count with choices" → state + recurrence; "interval" → split k; "subset" small n → bitmask.
+> [!IMPORTANT]
+> **The Click Moment**: "Compare **two strings or sequences**" — OR — "minimum edits to transform one string to another" — OR — "longest shared subsequence / pattern". Any problem involving pairwise comparison of two sequences maps to a 2D DP grid.
+
+```python
+def lcs_length(s1: str, s2: str) -> int:
+    m, n = len(s1), len(s2)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s1[i - 1] == s2[j - 1]:
+                dp[i][j] = dp[i - 1][j - 1] + 1
+            else:
+                dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+    return dp[m][n]
+
+def edit_distance(word1: str, word2: str) -> int:
+    m, n = len(word1), len(word2)
+    dp = list(range(n + 1))  # space-optimized: single row
+    for i in range(1, m + 1):
+        prev = dp[0]
+        dp[0] = i
+        for j in range(1, n + 1):
+            temp = dp[j]
+            if word1[i - 1] == word2[j - 1]:
+                dp[j] = prev
+            else:
+                dp[j] = 1 + min(prev, dp[j], dp[j - 1])
+            prev = temp
+    return dp[n]
+```
+
+> [!TIP]
+> **Space-optimize 2D LCS/Edit Distance**: You only ever read `dp[i-1][j]`, `dp[i][j-1]`, and `dp[i-1][j-1]`. Use a single 1D array and a `prev` variable for the diagonal. Reduces O(M×N) space to O(N).
+
+---
+
+### Interval DP
+
+> [!IMPORTANT]
+> **The Click Moment**: "Optimal way to **merge or split a range [i, j]**" — OR — "the **last operation** happens at some index k between i and j". You don't know which k is optimal, so you try all k and take the best. Iteration order: by **length** of the interval, from short to long.
+
+```python
+def burst_balloons(nums: list[int]) -> int:
+    # Add sentinel balloons of value 1 at both ends
+    balloons = [1] + nums + [1]
+    n = len(balloons)
+    dp = [[0] * n for _ in range(n)]
+
+    for length in range(2, n):  # interval length
+        for left in range(n - length):
+            right = left + length
+            for k in range(left + 1, right):  # k is the LAST balloon to burst
+                coins = balloons[left] * balloons[k] * balloons[right]
+                dp[left][right] = max(dp[left][right],
+                                      dp[left][k] + coins + dp[k][right])
+    return dp[0][n - 1]
+```
+
+> [!CAUTION]
+> **Burst Balloons key insight**: `k` is the **last** balloon to burst in `[left, right]`, not the first. This makes the subproblems independent because `balloons[left]` and `balloons[right]` are still present when `k` is burst. Thinking of k as the first balloon to burst leads to overlapping subproblem boundaries.
+
+---
+
+### Bitmask DP — Subset State Tracking
+
+> [!IMPORTANT]
+> **The Click Moment**: "N ≤ 20" — AND — "need to track **which elements have been used**". State `dp[mask]` encodes the set of used elements as a bitmask. See [Bit Manipulation](../bit-manipulation.md) for the subset enumeration loop.
+
+---
+
+### Digit DP — Count Numbers in a Range
+
+> [!IMPORTANT]
+> **The Click Moment**: "Count integers in `[L, R]` with a specific **digit-level property**" (sum of digits = K, no consecutive same digits, etc.). The key insight: count `f(R) - f(L-1)` where `f(X)` = count of valid numbers in `[0, X]`.
+
+- **State**: `dp[position][tight][carry_or_sum]`
+  - `tight`: are we still bounded by the limit digit at this position?
+  - Build top-down with memoization.
+
+---
+
+### Tree DP — Postorder State Propagation
+
+> [!IMPORTANT]
+> **The Click Moment**: "Optimal selection on a **tree**" — OR — "each node's value depends on its children's choices" — OR — "cannot select two adjacent nodes in a tree". Process children first (postorder); aggregate into parent.
+
+```python
+def rob_house_tree(root) -> int:
+    def dfs(node):
+        if not node:
+            return 0, 0  # (with_node, without_node)
+        left_with, left_without = dfs(node.left)
+        right_with, right_without = dfs(node.right)
+        with_node = node.val + left_without + right_without
+        without_node = max(left_with, left_without) + max(right_with, right_without)
+        return with_node, without_node
+
+    return max(dfs(root))
+```
+
+---
+
+## 3. SDE-3 Deep Dives
+
+### Scalability: Large State Spaces & Selective Memoization
+
+> [!TIP]
+> For very large state spaces (e.g., Digit DP with large N), use a **dictionary-based memo** (`@functools.lru_cache` or explicit dict) instead of a full 2D array. This stores only **reachable states** and avoids allocating O(N²) memory when most cells are never visited.
+
+```python
+from functools import lru_cache
+
+def count_valid_numbers(limit: str) -> int:
+    n = len(limit)
+
+    @lru_cache(maxsize=None)
+    def dp(pos: int, tight: bool, started: bool) -> int:
+        if pos == n:
+            return 1 if started else 0
+        max_digit = int(limit[pos]) if tight else 9
+        total = 0
+        for digit in range(0, max_digit + 1):
+            is_tight = tight and (digit == max_digit)
+            is_started = started or (digit != 0)
+            total += dp(pos + 1, is_tight, is_started)
+        return total
+
+    return dp(0, True, False)
+```
+
+> [!CAUTION]
+> `@lru_cache` uses **unhashable** arguments restriction — lists and dicts cannot be cache keys. Convert mutable state to tuples before passing. For very deep recursion (N > 10,000), increase `sys.setrecursionlimit` or rewrite iteratively.
+
+### Scalability: Space Optimization Patterns
+
+| Original DP | Optimized To | How |
+| :--- | :--- | :--- |
+| `dp[i]` uses `dp[i-1]` only | 1 variable | Rolling scalar |
+| `dp[i]` uses `dp[i-1]` and `dp[i-2]` | 2 variables | `prev2, prev1` |
+| `dp[i][j]` uses `dp[i-1][j*]` | 1D array | Process row i, overwrite with i+1 |
+| `dp[i][j]` uses diagonal `dp[i-1][j-1]` | 1D array + `prev` scalar | Track previous diagonal value |
+
+### Concurrency: Parallelizing DP
+
+> [!TIP]
+> Most DP problems have data dependencies that prevent naive parallelization. However:
+> - **Embarrassingly parallel states**: In interval DP, all intervals of the same length are independent — each length layer can be computed in parallel.
+> - **Wavefront parallelism**: In 2D grid DP, all cells on the same anti-diagonal (`i + j = constant`) are independent.
+> - In practice: Python's GIL blocks CPU parallelism in threads; use `multiprocessing` or `numpy` vectorization for bulk DP transitions.
+
+### When DP is the Wrong Tool
+
+> [!CAUTION]
+> DP requires **optimal substructure** (the global optimum contains local optima) and **overlapping subproblems** (the same subproblems are solved repeatedly). If either is absent, DP is wrong:
+> - **Greedy** works when local optimal choices always lead to the global optimum (e.g., Activity Selection, Huffman).
+> - **Divide and conquer** works when subproblems don't overlap (e.g., standard Merge Sort).
+> - **Backtracking** is needed when you can't define a useful state or when constraints invalidate memoization.
+
+### Trade-offs: Top-Down vs. Bottom-Up
+
+| Dimension | Top-Down (Memoization) | Bottom-Up (Tabulation) |
+| :--- | :--- | :--- |
+| Code style | Natural recursion; easier to derive | Requires explicit iteration order |
+| Space | Stack depth + memo table | Memo table only; no stack risk |
+| Cache efficiency | Cache misses on sparse access | Sequential memory access = cache-friendly |
+| Partial computation | Only computes reachable states | Fills entire table regardless |
+| When to prefer | Complex state transitions; large sparse space | Tight space constraints; no recursion limit risk |
+
+---
+
+## 4. Common Interview Problems
+
+### Medium
+- [House Robber](../../../google-sde2/PROBLEM_DETAILS.md#house-robber) — Linear DP; space-optimize to O(1).
+- [Longest Increasing Subsequence](../../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence) — O(N²) DP or O(N log N) patience sort (binary search).
+- [Coin Change](../../../google-sde2/PROBLEM_DETAILS.md#coin-change) — Unbounded knapsack; forward iteration.
+- [Word Break](../../../google-sde2/PROBLEM_DETAILS.md#word-break) — Linear DP with set lookup; `dp[i]` = can s[:i] be segmented.
+- **Partition Equal Subset Sum** — 0/1 knapsack; `dp[target]` = is subset-sum `target` achievable?
+- **Longest Palindromic Subsequence** — LCS of string with its reverse.
+
+### Hard
+- [Edit Distance](../../../google-sde2/PROBLEM_DETAILS.md#edit-distance) — 2D LCS variant; space-optimize to O(N).
+- [Burst Balloons](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons) — Interval DP; k = last balloon burst.
+- **Palindrome Partitioning II** — Interval DP + precomputed palindrome check.
+- **Regular Expression Matching** — 2D DP handling `*` as zero or more of preceding.
+- **Strange Printer** — Interval DP; turns needed to print s[i..j].
+- **Largest Rectangle in Histogram** — Stack-based O(N); recognize as the hidden "DP on sorted structure".
 
 ---
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Core logic | Trickiness & details |
-|----------|------------|----------------------|
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#house-robber)** | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])`; space to **two vars** `take/skip`. | **House Robber II:** rob `[0..n-2]` or `[1..n-1]`—can’t take both ends. **III** tree DP. |
-| **Coin Change (min coins)** | `dp[amt] = 1 + min(dp[amt-c])` for coins `c`; unbounded forward loop. | **Impossible** → -1; **order** of loops matters for **combinations** vs permutations in counting variants. |
-| **Coin Change 2 (ways)** | Unbounded **combinations:** outer loop **coins**, inner **amount** to avoid duplicate order. | **Permutation** count uses outer amount, inner coins—different problem. |
-| **Target Sum** | Count subsets with `sum(P) - sum(N) = target` → subset sum with offset; or **2D DP** on index and sum. | **Sum bounds** shrink state space; **memo** `(i, curr_sum)`. |
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence)** | **O(n²):** `dp[i]` = best ending at `i`. **O(n log n):** patience sorting with **binary search** on tails. | **Strictly** vs **non-decreasing** changes `lower_bound` vs `upper_bound`. |
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#longest-common-subsequence)** | `dp[i][j]` from char match or max skip; classic 2D table. | **Space** one row if only length needed; **print** LCS needs backtrack. |
-| **Longest Palindromic Substring** | Expand centers **O(n²)** or **Manacher** O(n). | **DP** `isPal[i][j]` for LPS **subsequence** differs from substring. |
-| **Unique Paths** | `dp[i][j] = dp[i-1][j] + dp[i][j-1]`; obstacles → `0` if blocked. | **Mod** result; **start** blocked edge case. |
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#edit-distance)** | Insert/delete/replace recurrence on prefixes. | **One-row** optimization; **delete-only** variant simpler. |
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons)** | Interval DP: add **imaginary** 1 balloons at ends; split at last balloon `k` in `(i,j)`. | **O(n³)**; **index** shift for closed interval `[i,j]`. |
-| **[Problem Details](../../../google-sde2/PROBLEM_DETAILS.md#word-break)** | `dp[i]` = can segment `s[0:i)`; try all dict words ending at `i`. | **Trie** speeds prefix checks; **Word Break II** all sentences → backtrack + memo. |
-| **Decode Ways** | `dp[i]` from `dp[i-1]` (one digit) and `dp[i-2]` (two digits if 10–26). | **Leading zero** invalid; **`*`** wildcard variant harder. |
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- |
+| **[House Robber](../../../google-sde2/PROBLEM_DETAILS.md#house-robber)** | "No adjacent selection" | `dp[i] = max(dp[i-1], val + dp[i-2])` | Space-optimize to 2 vars; handle `len=1` separately. |
+| **[LIS](../../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence)** | "Strictly increasing order" | O(N²) DP or O(N log N) patience sort | **O(N log N)** is often expected at SDE-3; patience sort uses `bisect_left`. |
+| **[Word Break](../../../google-sde2/PROBLEM_DETAILS.md#word-break)** | "Partition string into dictionary words" | `dp[i]` = can segment `s[:i]` | Use a **set** for O(1) lookup; nested loop is O(N²) without it. |
+| **[Edit Distance](../../../google-sde2/PROBLEM_DETAILS.md#edit-distance)** | "Transform string via ops" | 2D DP on prefix pairs | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D. |
+| **Coin Change** | "Min coins for amount" | Unbounded knapsack; forward iteration | Init dp with `inf`, not 0; return -1 if `dp[amount]` stays `inf`. |
+| **Partition Equal Subset** | "Split into two equal halves" | 0/1 knapsack to `sum//2` | Only possible if total sum is even; check first. |
+| **[Burst Balloons](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons)** | "Last operation in range" | Interval DP; k = last to burst | k is the **last** balloon, not first — this is what makes subproblems non-overlapping. |
+| **LPS (Longest Palindromic Subseq)** | "Palindromic structure in one string" | LCS of `s` and `reversed(s)` | Classic LCS reduction; easy to miss this framing. |
+| **Egg Drop** | "Min trials in worst case" | Interval DP or binary search + DP | State `dp[eggs][floors]`; can be inverted: "how many floors with k eggs and t trials?" |
+| **Regular Expression** | "Pattern match with `*` and `.`" | 2D DP; `*` = zero or more of prev char | `*` can mean zero occurrences of the preceding char — handle separately. |
 
 ---
 
 ## See also
 
-- [dp-aditya-verma.md](dp-aditya-verma.md) — choice diagram / knapsack style  
-- [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 patterns  
-- [Backtracking](../backtracking.md) — when to memoize into DP
+- [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 DP pattern recognition triggers
+- [Bit Manipulation](../bit-manipulation.md) — bitmask DP for subset problems
+- [Backtracking](../backtracking.md) — when to use backtracking vs. memoizing into DP
+- [Binary Search](../binary-search.md) — O(N log N) LIS via patience sort
