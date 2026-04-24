@@ -1,9 +1,18 @@
-# Advanced Graph Algorithms
+# Advanced Graph Algorithms — SDE-3 Level
+
+SDE-3 interviews focus on complex topologies, strongly connected components, and network robustness.
+
 
 For SDE 3 roles, problems often require knowledge of complex graph topologies, strongly connected components, or sophisticated shortest path algorithms.
 
-## 1. Tarjan's Algorithm for Strongly Connected Components (SCC)
+## 1. Strongly Connected Components (Tarjan's)
+
+### The Click Moment
+> [!IMPORTANT]
+> **The Click Moment**: "Find groups where everyone can reach everyone else in a **directed** graph" — OR — "condensation graph" — OR — "deadlock detection in complex dependency graphs".
+
 Used to find all strongly connected components in a directed graph.
+
 
 ```python
 class Graph:
@@ -48,11 +57,17 @@ class Graph:
                 self.SCCUtil(i, low, disc, stackMember, st)
 ```
 
-## 2. Bridges and Articulation Points (Critical Edges/Nodes)
+## 2. Critical Connections (Bridges & Articulation Points)
+
+### The Click Moment
+> [!IMPORTANT]
+> **The Click Moment**: "Find edges whose removal disconnects the graph" (Bridges) — OR — "find nodes whose removal disconnects the graph" (Articulation Points) — OR — "network vulnerability analysis".
+
 Very common in system design/LLD coding problems acting like "network robustess".
 
 An Articulation Point is a vertex whose removal increases the number of connected components.
 A Bridge is an edge whose removal increases the number of connected components.
+
 
 ```python
 class BridgeGraph:
@@ -93,8 +108,14 @@ class BridgeGraph:
         return bridges
 ```
 
-## 3. Disjoint Set Union (Union-Find) with Path Compression and Union by Rank
+## 3. Disjoint Set Union (Union-Find)
+
+### The Click Moment
+> [!IMPORTANT]
+> **The Click Moment**: "Dynamic connectivity" — OR — "Kruskal's MST" — OR — "grouping elements with transitivity".
+
 Essential for Kruskal's MST and solving connected components efficiently.
+
 
 ```python
 class DSU:
@@ -124,24 +145,34 @@ class DSU:
 ```
 
 ## 4. Other Advanced Graph Concepts
+
 - **A* Search**: Heuristic search for shortest paths (good for maze/grid problems in interviews where Euclidean distance matters).
-- **Bellman-Ford / Floyd-Warshall**: For graphs with negative edge weights.
-- **Hierholzer's Algorithm**: For finding Eulerian Paths or Circuits (visiting all edges exactly once, e.g., "Reconstruct Itinerary" on LeetCode).
+- **Bellman-Ford**:
+  > [!IMPORTANT]
+  > **The Click Moment**: "Shortest path with **negative edge weights**" — OR — "detect **negative cycles**".
+- **Floyd-Warshall**:
+  > [!IMPORTANT]
+  > **The Click Moment**: "**All-pairs** shortest paths" — OR — "transitive closure of a graph".
+- **Hierholzer's Algorithm**:
+  > [!IMPORTANT]
+  > **The Click Moment**: "Visit every **edge** exactly once" — OR — "reconstruct itinerary".
 
 ---
 
-## Pattern Recognition
+## 5. Interview Questions — Logic & Trickiness
 
-- **SCC**: Tarjan (one DFS, low/disc, stack). Kosaraju: two DFS (reverse graph). Use for "strongly connected", condensation graph.
-- **Bridges/Articulation points**: DFS with low/disc; bridge if low[v] > disc[u]; articulation if root with ≥2 children or non-root and low[child] >= disc[u].
-- **Union-Find**: Connectivity, Kruskal; path compression + union by rank. DSU with rollback for offline queries.
+| Question | Click Moment | Core logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- |
+| **Critical Connections** | "Vulnerability" | Tarjan's (Bridge) | Undirected graph; avoid parent in DFS. |
+| **Reconstruct Itinerary** | "Every edge once" | Hierholzer's | Lexicographical order (sort neighbors first). |
+| **[Alien Dictionary](../../google-sde2/PROBLEM_DETAILS.md#alien-dictionary)** | "Implicit ordering" | Topological Sort | Detect cycles; handle "prefix" edge cases. |
+| **Cheapest Flights (K stops)** | "Shortest path + K" | BFS or Bellman-Ford | Dijkstra fails due to the "K stops" constraint. |
 
-## Interview Strategy
+---
 
-- **Identify**: "Critical edges" / "robustness" → bridges. "SCC" / "can all reach each other" → Tarjan. "Merge sets" → DSU.
-- **Common mistakes**: Tarjan — mixing up low vs disc; bridge condition low[v] > disc[u] (strict). DSU — forgetting path compression.
+## See also
 
-## Quick Revision
+- [Graph Foundations](../foundations/algorithms/graph.md) — BFS, DFS, and Dijkstra  
+- [SDE-3 Roadmap](roadmap.md) — advanced study plan  
+- [Patterns Master](../../reference/patterns/patterns-master.md)
 
-- **Tarjan SCC**: low, disc, stack; when low[u]==disc[u] pop to get SCC. Bridge: low[v] > disc[u].
-- **DSU**: find with path compression; union by rank. Kruskal: sort edges, add if union succeeds.

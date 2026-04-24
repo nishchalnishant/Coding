@@ -6,6 +6,9 @@ Algorithms commonly used in system design and LLD: rate limiting, consistent has
 
 ## 1. Rate Limiting
 
+> [!IMPORTANT]
+> **The Click Moment**: "Protect service from **abuse**" — OR — "handle **bursty traffic** gracefully" — OR — "**throttling** per user/API key".
+
 **Token bucket**: Bucket holds at most N tokens; refill at R tokens/sec. Request consumes 1 token; if no token, reject. Implementation: store `tokens` and `last_refill_time`; on request, refill by `(now - last_refill_time) * R`, cap at N; if tokens >= 1, deduct and allow.
 
 **Leaky bucket**: Requests enter queue; processed at fixed rate (leak). Enforce rate by queue size or drop when full.
@@ -17,6 +20,9 @@ Algorithms commonly used in system design and LLD: rate limiting, consistent has
 ---
 
 ## 2. Consistent Hashing
+
+> [!IMPORTANT]
+> **The Click Moment**: "**Scale** out cache/database nodes" — OR — "minimize **rehashing** when nodes join/leave" — OR — "**repartitioning** at scale".
 
 **Problem**: Distribute keys across N servers; when adding/removing a server, minimize key movement.
 
@@ -30,6 +36,9 @@ Algorithms commonly used in system design and LLD: rate limiting, consistent has
 
 ## 3. Leader Election
 
+> [!IMPORTANT]
+> **The Click Moment**: "**Single point of coordination**" — OR — "**High Availability (HA)**" — OR — "who is the **master** in this cluster?".
+
 **In-memory (single process)**: One leader; on failure, next in order or highest ID wins. Use consensus (Raft, Paxos) in distributed setting.
 
 **Ring**: Process passes token; whoever has token is leader. Failure detection and bypass.
@@ -42,15 +51,28 @@ Algorithms commonly used in system design and LLD: rate limiting, consistent has
 
 ## 4. Quorum
 
+> [!IMPORTANT]
+> **The Click Moment**: "**Eventual vs Strong Consistency**" — OR — "handle **node failures** in distributed storage" — OR — "**Replication Factor** configuration".
+
 **Read/write quorum**: N replicas; write succeeds if W replicas ack; read succeeds if R replicas ack; W + R > N and W > N/2 for consistency (overlap with latest write).
 
 **Use**: Distributed databases, durable writes. Trade-off: higher W/R = stronger consistency, lower availability.
 
 ---
 
-## Quick Revision
+## 5. Interview Questions — Logic & Trickiness
 
-- **Rate limit**: Token bucket (refill rate, capacity); sliding window counter O(1).
-- **Consistent hashing**: Ring; virtual nodes; minimal reassignment.
-- **Leader**: Raft/Paxos for distributed; bully/ring for concepts.
-- **Quorum**: W + R > N; W > N/2 for strong consistency.
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- |
+| **Rate Limiter** | "Throttling" | Token Bucket / Sliding Window | Handling concurrency (locks) and distributed state (Redis). |
+| **Consistent Hashing** | "Minimal re-mapping" | Hash Ring + Virtual Nodes | **Virtual Nodes** are critical for load balance; mention "hot spots". |
+| **Leader Election** | "Coordination" | Raft / Bully | Split-brain scenario; term/epoch numbers to resolve conflicts. |
+| **Quorum** | "Consistency" | W + R > N | Trade-off between write latency (higher W) and read latency (higher R). |
+
+---
+
+## See also
+
+- [Distributed Systems Foundations](../../reference/distributed/README.md) — Paxos, Raft, and CAP theorem
+- [LLD Patterns](../../reference/lld/README.md) — Singleton and Proxy patterns in system design
+- [Patterns Master](../../reference/patterns/patterns-master.md)
