@@ -4,6 +4,42 @@ Build solutions incrementally; **backtrack** when constraints fail. DFS over the
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Systematic trial-and-error over a decision tree: explore depth-first, and when a partial solution violates a constraint, undo the last choice and try the next alternative. Core invariant: state is fully restored after each recursive call — the **choose → explore → unchoose** cycle.
+
+**Why it exists.** Many problems require generating all valid configurations (permutations, placements, partitions) where constraints eliminate most candidates early. Backtracking formalizes "try everything, but prune dead ends immediately" — far faster in practice than enumerating all leaves naively.
+
+**The mental model.** A maze solver who marks dead ends and backtracks to the last fork. At each fork, pick a direction; if you hit a wall, erase your mark and return to the fork to try the next direction.
+
+**Complexity at a glance.**
+
+| Operation | Time | Space |
+| :--- | :--- | :--- |
+| Worst-case enumeration | O(branching_factor^depth) | O(depth) — recursion stack |
+| With effective pruning | Much less in practice | O(depth) |
+| Copy path on collect | +O(path length) per result | — |
+
+**When to reach for it.**
+- Generate all subsets, permutations, or combinations.
+- Constraint satisfaction: N-Queens, Sudoku, crossword fill.
+- Word search in a grid (DFS with visited marking).
+- Partition a sequence into valid groups (palindrome partition, combination sum).
+- "Find one valid configuration" problems.
+
+**When NOT to use it.**
+- You need a single optimal answer — use greedy or DP (backtracking revisits too much).
+- N > 20 with subset-tracking — use bitmask DP instead.
+- Subproblems repeat — add memoization to convert to top-down DP.
+
+**Common mistakes.**
+- Not undoing state after the recursive call — mutations leak across branches (the #1 bug).
+- Forgetting to copy the current path before appending to results (`path[:]` not `path`).
+- Starting index confusion: combinations use a `start` index to avoid going backwards; permutations do not.
+- Wrong base case — returning too early (missing valid paths) or too late (infinite recursion).
+
+---
+
 ## 1. Concept Overview
 
 **Problem space**: Permutations, combinations, subsets, N-Queens, Sudoku, Word Search, Palindrome Partitioning, Remove Invalid Parentheses, Letter Combinations.
@@ -304,19 +340,41 @@ def dfs_iterative(start, choices):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Subsets** | "All possible subsets" | Include/exclude; `start` index | Deep copy path: `results.append(path[:])`, not `path`. |
-| **Permutations** | "All orderings of N elements" | Swap-in-place or unused set | Permutations II: sort first; skip `nums[i]==nums[i-1] and not used[i-1]`. |
-| **Combination Sum** | "Target sum, reuse allowed" | Advance same `i` (unbounded) | Sum II: advance `i+1`; skip duplicate values at same level. |
-| **N-Queens** | "Place N non-attacking queens" | `cols`, `diag r+c`, `diag r-c` sets | Diagonals use `r+c` and `r-c` as keys — derive from first principles. |
-| **Word Search** | "Path spelling word in grid" | Mark `#` in-place; restore after | Word Search II: Trie prunes branches with no matching prefix. |
-| **Sudoku Solver** | "Fill grid satisfying constraints" | Try 1-9; check row/col/box | MRV heuristic: pick cell with fewest valid candidates first. |
-| **Palindrome Partitioning** | "All palindrome splits" | Precompute `is_pal[i][j]` | Without precompute: O(N³); with: O(N²) — always precompute. |
-| **Generate Parentheses** | "All valid bracket sequences of N pairs" | Track open/close count | Prune: `open < n` to add `(`; `close < open` to add `)`. |
-| **Remove Invalid Parentheses** | "Remove min to make valid" | BFS by removal count | Generate all possible removals of length `k`; check validity. |
-| **Letter Combinations** | "Phone keypad, all combos" | Cartesian product via DFS | Empty `digits` input → return `[]`, not `[""]`. |
-| **Expression Add Operators** | "Insert +,-,* to reach target" | Backtrack with `last_operand` | `*` needs to undo `last_operand` from running sum before re-multiplying. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Subsets** | Include/Exclude | "All possible subsets" | Include/exclude; `start` index | Deep copy path: `results.append(path[:])`, not `path`. |
+| **Permutations** | Swap / Used-array | "All orderings of N elements" | Swap-in-place or unused set | Permutations II: sort first; skip `nums[i]==nums[i-1] and not used[i-1]`. |
+| **Combination Sum** | Include/Exclude + Target | "Target sum, reuse allowed" | Advance same `i` (unbounded) | Sum II: advance `i+1`; skip duplicate values at same level. |
+| **N-Queens** | Constraint Satisfaction | "Place N non-attacking queens" | `cols`, `diag r+c`, `diag r-c` sets | Diagonals use `r+c` and `r-c` as keys — derive from first principles. |
+| **Word Search** | Grid DFS + Backtrack | "Path spelling word in grid" | Mark `#` in-place; restore after | Word Search II: Trie prunes branches with no matching prefix. |
+| **Sudoku Solver** | Constraint Satisfaction | "Fill grid satisfying constraints" | Try 1-9; check row/col/box | MRV heuristic: pick cell with fewest valid candidates first. |
+| **Palindrome Partitioning** | Include/Exclude + Validity Guard | "All palindrome splits" | Precompute `is_pal[i][j]` | Without precompute: O(N³); with: O(N²) — always precompute. |
+| **Generate Parentheses** | IP/OP Validity Guard | "All valid bracket sequences of N pairs" | Track open/close count | Prune: `open < n` to add `(`; `close < open` to add `)`. |
+| **Remove Invalid Parentheses** | BFS by Level | "Remove min to make valid" | BFS by removal count | Generate all possible removals of length `k`; check validity. |
+| **Letter Combinations** | Cartesian Product DFS | "Phone keypad, all combos" | Cartesian product via DFS | Empty `digits` input → return `[]`, not `[""]`. |
+| **Expression Add Operators** | Backtrack + Running State | "Insert +,-,* to reach target" | Backtrack with `last_operand` | `*` needs to undo `last_operand` from running sum before re-multiplying. |
+| **Binary Watch** [E] | Include/Exclude + Pruning | "Generate all times readable on binary watch" | Backtrack placing lit LEDs; check hours < 12, minutes < 60 | Enumerate bit counts, not time values — easier to prune invalid combos. |
+| **Find All Anagrams in a String** [E] | Sliding Window (not backtracking) | "All start indices of anagrams of p in s" | Sliding window with frequency map — not backtracking | Click moment: fixed window size = backtracking becomes sliding window here. |
+| **Restore IP Addresses** [M] | Backtrack + Validity Guard | "Generate all valid IP addresses from digit string" | Backtrack with 4 parts; each part 0-255, no leading zeros | Leading zero check: `part[0] == '0' and len(part) > 1` is invalid. Exactly 4 parts required. |
+| **Combinations** [M] | Include/Exclude + Start Index | "All K-element subsets of [1,N]" | Backtrack with `start` index; stop when path length == K | Prune: if `n - start + 1 < k - len(path)`, not enough elements left — prune early. |
+| **Target Sum** [M] | Include/Exclude → 0/1 Knapsack | "Assign + or - to reach target" | Backtrack each element; or reframe as subset sum (partition into two groups) | `(sum + target) % 2 != 0` or `sum + target < 0` → impossible; converts to count-subsets problem. |
+| **Partition to K Equal Subsets** [M] | Backtrack + Bucket Pruning | "Can array be split into K equal-sum subsets?" | Backtrack assigning elements to buckets; prune if bucket overflows | Sort descending first — places large elements first and prunes faster. Skip identical-value buckets at same depth. |
+| **Word Break II** [M] | DFS + Memoization | "All sentences from word dictionary covering s" | DFS with memoization; memo maps `start_index → [sentences]` | Memoize the list of valid sentences from each index — avoids exponential re-expansion. |
+| **Unique Paths III** [H] | Grid Backtrack + Bitmask | "Count paths visiting all non-obstacle squares exactly once" | Backtrack on grid; mark visited; only count path reaching end when all squares visited | Track remaining empty squares counter to know when path is complete — no need to re-scan. |
+| **Zuma Game** [H] | Interval DP / Memoized Backtrack | "Min insertions to clear all groups" | Interval DP or memoized backtracking on remaining groups | Group consecutive same-color balls; state = current group string. Handle groups merging after removal. |
+| **Stickers to Spell Word** [H] | Bitmask DP / BFS | "Min stickers to spell target (unlimited reuse)" | Bitmask BFS/DP on covered chars; each state = bitmask of covered target chars | Always fill leftmost uncovered char first to reduce duplicate states. |
+
+---
+
+## Quick Revision Triggers
+
+- "Generate all valid combinations / permutations / subsets" → backtracking with choose / recurse / unchoose.
+- "Constraint says order matters, use each element once" → permutation backtracking with `visited[]` array.
+- "Constraint says order doesn't matter, no reuse" → combination backtracking with `start` index advancing.
+- "Find paths in a grid with obstacles" → DFS backtracking marking cell visited, unmark on return.
+- "Decision tree branches explode but many share the same failure condition" → prune before recursing.
+- "Duplicate elements in input; distinct results required" → sort first, skip `nums[i] == nums[i-1]` at the same depth level.
+- "State is mutable (list, grid) and must be restored after recursing" → explicit undo; immutable state (string, int) needs no undo.
 
 ---
 

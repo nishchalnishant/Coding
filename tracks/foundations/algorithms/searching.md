@@ -4,6 +4,44 @@ Find an element or the optimal value satisfying a predicate. SDE-3 focus: **bina
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Binary search is a divide-and-conquer strategy on a sorted (or monotonic) search space — eliminate half the candidates each iteration. Core invariant: the search space `[lo, hi]` always contains the answer, and every iteration strictly shrinks it. Terminates in O(log N) iterations.
+
+**Why it exists.** Linear scan is O(N); binary search is O(log N). For N = 10^9 (feasibility check on a numeric range), binary search completes in ~30 iterations. The power insight: binary search applies to any monotonic predicate, not just sorted arrays — "binary search on the answer".
+
+**The mental model.** Open a dictionary to the middle page. If your word comes before the middle word, close the right half and repeat on the left. The key is that the "answer" is always in the surviving half — never discard a range without being certain the answer isn't there.
+
+**Complexity at a glance.**
+
+| Variant | Time | Space |
+| :--- | :--- | :--- |
+| Exact match in sorted array | O(log N) | O(1) |
+| Lower / upper bound | O(log N) | O(1) |
+| Binary search on answer (predicate) | O(log(range) × predicate_cost) | O(1) |
+| Rotated array search | O(log N) | O(1) |
+| Median of two sorted arrays | O(log(min(m, n))) | O(1) |
+
+**When to reach for it.**
+- Sorted array lookup or first/last occurrence.
+- Rotated sorted arrays — one half is always sorted.
+- "Minimize the maximum" or "maximize the minimum" — convert to feasibility check.
+- Feasibility check on a numeric range: "is speed k sufficient to finish in H hours?"
+- Any monotone predicate over integers or floats.
+
+**When NOT to use it.**
+- Array is unsorted and sorting is too expensive — use a hash map or linear scan.
+- Frequent insertions/deletions into a sorted structure — use a balanced BST or sorted list.
+- The predicate is not monotone — binary search gives wrong results silently.
+
+**Common mistakes.**
+- Infinite loop from wrong mid rounding: always use `lo + (hi - lo) // 2`, and use `hi = mid` (not `hi = mid - 1`) with the `lo < hi` template.
+- Mixing templates: `lo <= hi` with `hi = mid` loops forever; `lo < hi` with early return on exact match exits too soon.
+- Off-by-one in `lo`/`hi` initialization — boundary problems fail on single-element arrays.
+- Not verifying predicate monotonicity before applying — a non-monotone predicate breaks the algorithm.
+
+---
+
 ## 1. Binary Search Template Reference
 
 > [!IMPORTANT]
@@ -281,9 +319,9 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Classic Binary Search** | "Find element in sorted array" | `lo <= hi`; shrink left or right | `mid = lo + (hi-lo)//2` avoids overflow in C++/Java; Python int is arbitrary size. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Classic Binary Search** | Binary Search (Exact Match) | "Find element in sorted array" | `lo <= hi`; shrink left or right | `mid = lo + (hi-lo)//2` avoids overflow in C++/Java; Python int is arbitrary size. |
 | **First / Last Position** | "Range of target in sorted array" | Lower bound + upper bound | Lower bound returns first ≥; subtract 1 for last occurrence. Handle "not found" case. |
 | **[Search Rotated Array](../../google-sde2/PROBLEM_DETAILS.md#search-in-rotated-sorted-array)** | "Binary search in rotated sorted" | Identify sorted half via `nums[lo] <= nums[mid]` | Duplicates → `nums[lo]==nums[mid]==nums[hi]` forces O(N) — clarify with interviewer. |
 | **[Find Min Rotated](../../google-sde2/PROBLEM_DETAILS.md#find-minimum-in-rotated-sorted-array)** | "Minimum in rotated sorted array" | `nums[mid] > nums[hi]` → min in right half | No duplicates simplifies; with duplicates: `hi -= 1` when equal. |
@@ -293,6 +331,29 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 | **Find Peak Element** | "Any peak (greater than neighbors)" | Move toward larger neighbor | Multiple peaks: any valid answer; boundaries are treated as `-inf`. |
 | **Random Pick by Weight** | "Weighted random selection" | Prefix sums + `bisect_left` on random float | Inclusive vs exclusive random range; prefix sum must be exclusive (start from 0). |
 | **Aggressive Cows** | "Maximize minimum distance between k cows" | BS on answer; predicate = can place k with min distance ≥ mid | Classic "maximize minimum" — predicate is greedy: greedily place cows starting from leftmost. |
+| **Guess Number Higher or Lower** [E] | "Binary search on number range" | `lo=1, hi=n`; call `guess(mid)`; adjust bounds on result | Template: `lo <= hi`; return `mid` on exact match. Canonical BS exercise. |
+| **Sqrt(x)** [E] | "Integer square root without built-ins" | BS on `[0, x]`; find largest `mid` where `mid*mid <= x` | Use `lo < hi` template; `hi = mid` when `mid*mid > x`. Avoid overflow: `mid <= x // mid` instead of `mid*mid`. |
+| **Count of Negative Numbers in Sorted Matrix** [E] | "Count negatives in row-wise and col-wise sorted matrix" | Start from top-right; move left on negative (count col+1), move down on non-negative | O(R+C) staircase traversal — faster than binary search per row when matrix is small. |
+| **First Bad Version** [E] | "Find first True in monotone bool sequence" | `lo < hi` boundary template; `hi = mid` when `isBadVersion(mid)` | Don't call `isBadVersion(mid+1)` inside the loop — minimize API calls. |
+| **Search in Rotated Sorted Array II** [M] | "Rotated array with duplicates; find target" | Duplicates degrade worst case to O(N): when `lo == mid == hi`, shrink bounds by 1 | Adds `lo += 1; hi -= 1` on ambiguous duplicate — key difference from no-duplicate version. |
+| **Find Minimum in Rotated Sorted Array II** [M] | "With duplicates; find minimum" | When `nums[mid] == nums[hi]`, `hi -= 1`; otherwise standard rotation logic | Deduplication step prevents false confidence about which half is sorted. |
+| **Time Based Key-Value Store** [M] | "Get largest timestamp ≤ query" | Map `key → sorted (timestamp, value)` list; `bisect_right` on timestamps | `bisect_right(times, t) - 1` gives the insertion point's predecessor — the largest ≤ t. |
+| **Find Kth Missing Positive Number** [M] | "Binary search on missing count" | `missing count at index i = arr[i] - (i+1)`; BS for first index where missing ≥ k | After loop, `lo + k` is the answer — elements before `lo` are all present. |
+| **Minimize Max Distance to Gas Station** [H] | "Add K stations to minimize max gap" | BS on answer (max gap); feasibility = `ceil((gap / D) - 1)` additional stations per interval | Float BS: `eps = 1e-6`; count `int(gaps[i] / D)` stations needed per segment. |
+| **Count of Smaller Numbers After Self** [H] | "For each element, count elements to its right that are smaller" | Binary search into sorted suffix (built left-to-right via bisect); or BIT/merge sort | Merge sort approach gives O(N log N); bisect + insert gives O(N²) — know which to use. |
+| **Koko Eating Bananas** [M] | "Min eating speed to finish all piles in H hours" | BS on speed `[1, max(piles)]`; feasibility = `sum(ceil(p/k)) <= H` | `ceil(p/k)` in integer arithmetic: `(p + k - 1) // k`. |
+
+---
+
+## Quick Revision Triggers
+
+- "Find exact value in sorted array" → `lo≤hi` template; `mid = (lo+hi)//2`; shrink both sides on match.
+- "Find leftmost / rightmost position satisfying a condition" → `lo<hi` boundary template; never return inside loop.
+- "Answer is a value in a range and feasibility is monotone" → binary search on the answer space, not the array.
+- "Sorted array rotated at unknown pivot" → binary search; determine which half is sorted before choosing direction.
+- "Array is sorted but has duplicates; find boundary" → `lo<hi` template; use `mid+1` carefully to avoid infinite loop.
+- "Peak element: find any element greater than its neighbors" → binary search; move toward the higher neighbor.
+- "Two templates exist; never mix them" → `lo≤hi` returns inside loop (exact search); `lo<hi` returns `lo` after loop (boundary search).
 
 ---
 

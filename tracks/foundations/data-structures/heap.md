@@ -4,6 +4,46 @@ Complete binary tree with the heap property: parent ≤ children (min-heap) or p
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A complete binary tree stored as an array where every parent satisfies the heap property with its children. Min-heap: parent ≤ both children (root = global minimum). Max-heap: parent ≥ both children (root = global maximum). Core invariant: heap property maintained after every insert/delete via sift-up/sift-down.
+
+**Why it exists:** Solves the problem of repeatedly extracting the current best (min or max) element from a dynamic set. Real-world analogy: a hospital triage queue — the most critical patient is always treated next, regardless of arrival order.
+
+**Memory layout:** Stored as a flat array (0-indexed): parent of `i` is at `(i-1)//2`; children are at `2i+1` and `2i+2`. This avoids pointer overhead and gives good cache locality for the top levels.
+
+**Key invariants:**
+- Every parent satisfies the heap property with both children — not just one.
+- The tree is always complete (filled level-by-level, left to right) — this enables array storage.
+- After insert: append to end, sift up. After extract-root: move last element to root, sift down.
+- Build-heap from an unsorted array is O(N) — not O(N log N). Start from last non-leaf and sift down.
+
+**Complexity at a glance:**
+
+| Operation | Time | Notes |
+| :--- | :--- | :--- |
+| Peek min/max | O(1) | Root of heap |
+| Insert | O(log N) | Sift up |
+| Extract min/max | O(log N) | Sift down |
+| Build heap | O(N) | Heapify from last non-leaf |
+| Arbitrary delete | O(log N) | Swap with last, sift down |
+| Search | O(N) | No ordering across siblings |
+
+**When to reach for it:**
+- Top-K largest/smallest from a stream (heap of size K).
+- Dynamic median maintenance (two heaps: max-heap lower half + min-heap upper half).
+- Dijkstra's shortest path — always expand the lowest-cost unvisited node.
+- K-way merge of sorted lists/arrays.
+- Priority scheduling — always process the highest-priority available task.
+
+**Common mistakes:**
+- Python's `heapq` is min-heap only — negate values to simulate max-heap; negate again on pop.
+- Not including a unique tie-breaker in tuples — comparing non-comparable objects (e.g., `ListNode`) raises `TypeError`.
+- Calling `heapq.heapify()` on a non-list or forgetting to call it after bulk construction with `append`.
+- Using lazy deletion incorrectly — must check if the popped element is still valid before processing.
+
+---
+
 ## 1. Concept Overview
 
 ### Array Representation (0-indexed)
@@ -210,9 +250,9 @@ For P99 latency from a live request stream:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | "Smallest among K heads" | Min-heap `(val, list_id, node)` | Tie-break: include `list_id` as second element to avoid comparing nodes. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Merge K Sorted Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | K-Way Merge (Min-Heap) | "Smallest among K heads" | Min-heap `(val, list_id, node)` | Tie-break: include `list_id` as second element to avoid comparing nodes. |
 | **[Kth Largest Element](../../google-sde2/PROBLEM_DETAILS.md#kth-largest-element)** | "Rank without full sort" | QuickSelect O(N) avg or min-heap-K | QuickSelect mutates array; heap is cleaner for streams. Confirm if K can equal N. |
 | **[Top K Frequent](../../google-sde2/PROBLEM_DETAILS.md#top-k-frequent-elements)** | "K by frequency" | Count + min-heap-K, or bucket sort | Bucket sort is O(N) — prefer when K not given or K = N. |
 | **[Find Median from Stream](../../google-sde2/PROBLEM_DETAILS.md#find-median-from-data-stream)** | "Median as data arrives" | Two heaps: max-lo + min-hi | Even count → average of tops; ensure `lo` stays ≥ `hi` in size. |
@@ -222,8 +262,29 @@ For P99 latency from a live request stream:
 | **[Task Scheduler](../../google-sde2/PROBLEM_DETAILS.md#task-scheduler)** | "Min time with cooldown n" | `(max_f-1)*(n+1) + count_max_f`, cap at len | The cap: `max(formula, len(tasks))` — when variety fills the idle slots. |
 | **Sliding Window Median** | "Median in moving window of size k" | Two heaps + lazy deletion dict | Lazy delete: only remove from top when it surfaces, not immediately. |
 | **Smallest Range (K Lists)** | "Smallest range containing one from each list" | K-way merge + track global max | Advance the list with the current minimum; stop when any list exhausted. |
+| **Last Stone Weight** [E] | "Repeatedly smash two heaviest stones" | Max-heap; pop two, push difference if nonzero | Python has min-heap only — negate values to simulate max-heap. |
+| **Kth Largest in Stream** [E] | "Maintain Kth largest as elements arrive" | Min-heap of size K; root = Kth largest | Pop when size > K to keep only top K; root of min-heap is Kth largest. |
+| **Find Median from Stream** [M] | "Maintain median for dynamic insertions" | Max-heap (lower half) + min-heap (upper half); rebalance so sizes differ by ≤ 1 | Always push to max-heap first, then move max of max-heap to min-heap — ensures balance invariant. |
+| **Furthest Building You Can Reach** [M] | "Use bricks/ladders optimally to climb" | Min-heap of ladder-used jumps; swap smallest ladder for bricks when bricks run out | Greedily save ladders for largest jumps; min-heap tracks the smallest ladder jump currently used. |
+| **Single-Threaded CPU** [M] | "Process tasks: pick smallest duration at available time" | Sort by enqueue time; min-heap of `(duration, index)`; advance time if idle | If CPU idle, jump time to next task's enqueue time — don't simulate every second. |
+| **Maximum Performance of a Team** [M] | "Choose K engineers, maximize sum_speed × min_efficiency" | Sort by efficiency desc; sliding window with min-heap of size K on speed | When adding engineer i (efficiency = new min), pop smallest speed from heap to maintain size K. |
+| **K Closest Points to Origin** [M] | "Efficiently find K closest" | Max-heap of size K; pop if heap size > K | Alternatively: QuickSelect O(N) average — no sorting needed. Max-heap gives O(N log K). |
+| **Meeting Rooms II** [M] | "Minimum conference rooms needed" | Sort by start; min-heap of end times; pop if `end <= new_start` | Heap size = rooms in use at any point = answer at peak. |
+| **Ugly Number II** [M] | "Nth ugly number (factors only 2, 3, 5)" | Min-heap; push `n*2`, `n*3`, `n*5` on each pop; deduplicate | Use a visited set or three-pointer DP approach to avoid duplicates in heap. |
+| **Find K Pairs with Smallest Sums** [M] | "K smallest pairs (one from each sorted array)" | Min-heap seeded with `(nums1[i]+nums2[0], i, 0)`; expand column per row | Only seed first column; on pop `(i, j)`, push `(i, j+1)` — avoids O(N²) initial population. |
+| **Trapping Rain Water II** [H] | "3D trapped water in matrix" | Min-heap BFS from borders; propagate water level inward | Level at each cell = `max(border_height, parent_level)`; process border cells first. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "top K largest/smallest" → think Min-Heap of size K; pop when size exceeds K; root = K-th largest.
+- If the problem says "median of a stream" → think Two Heaps; max-heap for lower half (negated in Python), min-heap for upper half; rebalance on every insert.
+- If the problem says "merge K sorted lists/arrays" → think K-Way Merge Heap; push `(value, list_idx, element_idx)` tuples with tie-breaking index.
+- If the problem says "shortest path in weighted graph" → think Dijkstra with min-heap; `(cost, node)` tuple; skip already-settled nodes.
+- If the problem says "scheduling with deadlines or priorities" → think Max-Heap of available tasks; unlock tasks as capacity grows.
+- If you need a max-heap in Python → negate values before pushing and negate again after popping; use `(-priority, counter, item)` for stability.
+- If the problem says "build heap from array" → use `heapq.heapify()` which is O(N) — not O(N log N).
 
 ## See also
 

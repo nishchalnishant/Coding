@@ -4,6 +4,44 @@ Use binary representation and bitwise operators for compact state and O(1) const
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Operations directly on the binary representations of integers — 2–10× faster than arithmetic on modern CPUs. Core invariant: each bit is an independent boolean flag; bitwise ops process all 32/64 flags simultaneously in a single instruction.
+
+**Why it exists.** Integer hardware supports AND/OR/XOR/SHIFT natively at the register level. Problems with small N (≤ 20) or intrinsic binary structure (power-of-two checks, flag sets, XOR cancellation) collapse from O(N) or O(2^N) loops to O(1) or O(N × 32) with the right bit operator.
+
+**The mental model.** A row of 32 light switches. AND = "keep only the switches that are on in both rows"; OR = "turn on any switch that is on in either row"; XOR = "flip switches where the two rows differ"; shift left = double the binary number (multiply by 2).
+
+**Complexity at a glance.**
+
+| Operation | Time | Space |
+| :--- | :--- | :--- |
+| Any single bitwise op (AND, OR, XOR, shift) | O(1) | O(1) |
+| Count set bits (Brian Kernighan) | O(k), k = #set bits | O(1) |
+| Bitmask DP (N ≤ 20) | O(2^N × N) | O(2^N × N) |
+| XOR Trie (max XOR pair) | O(N × 32) | O(N × 32) |
+| Subset enumeration over all masks | O(3^N) total | O(1) extra |
+
+**When to reach for it.**
+- Power-of-two checks: `n > 0 and (n & (n-1)) == 0`.
+- Finding a unique element among pairs: XOR cancellation.
+- Subset enumeration when N ≤ 20 — bitmask DP replaces backtracking.
+- Toggling feature flags / visited states as a single integer.
+- Maximum XOR of two numbers in an array — XOR trie.
+
+**When NOT to use it.**
+- Readability matters and the problem has no intrinsic bit structure — use plain arithmetic.
+- N > 20 for bitmask DP — state space is 2^N > 10^6; use regular DP or backtracking with pruning.
+- 32-bit overflow simulation in Python — Python integers are arbitrary precision; always mask with `& 0xFFFFFFFF` explicitly.
+
+**Common mistakes.**
+- Python `~x` equals `-(x+1)`, not a 32-bit flip — use `x ^ 0xFFFFFFFF` for 32-bit complement.
+- Forgetting `n > 0` in power-of-two check — `0 & (0-1) == 0` is true but 0 is not a power of 2.
+- Signed vs unsigned right-shift behavior in Java/C++ (`>>>` vs `>>`); Python always arithmetic.
+- Not masking with `& 0xFFFFFFFF` when simulating 32-bit wrap-around in Python.
+
+---
+
 ## 1. Concept Overview
 
 ### Core Operators
@@ -259,9 +297,9 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Single Number](../../google-sde2/PROBLEM_DETAILS.md#single-number)** | "Pairs cancel" | `reduce(xor, nums)` | Only works when all others appear **exactly twice**. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Single Number](../../google-sde2/PROBLEM_DETAILS.md#single-number)** | XOR Cancellation | "Pairs cancel" | `reduce(xor, nums)` | Only works when all others appear **exactly twice**. |
 | **[Single Number II](../../google-sde2/PROBLEM_DETAILS.md#single-number-ii)** | "Appear 3× except one" | Count each bit mod 3 across all nums | XOR alone doesn't work; need separate mod-3 bit counter. |
 | **Power of Two** | "Single bit set" | `n > 0 and n & (n-1) == 0` | `n = 0` satisfies `n & (n-1) == 0` but is not a power of 2. |
 | **Reverse Bits** | "Bit symmetry" | Shift and OR, 32 iterations | Must pad to exactly 32 bits; Python needs `& 0xFFFFFFFF`. |
@@ -270,6 +308,29 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 | **Find Missing Number** | "One missing from 0..N" | `xor(0..N) ^ xor(nums)` | Only works when **exactly one** number is missing. |
 | **Sum Without `+`** | "Add using bits" | XOR for sum, AND<<1 for carry, loop until carry=0 | Python needs `& 0xFFFFFFFF` mask; infinite loop risk without it. |
 | **Smallest Sufficient Team** | "Cover all skills, min people" | Bitmask DP on skill union | Model each person's skills as a bitmask; 2^N states. |
+| **Number of 1 Bits** [E] | "Count set bits (popcount)" | Brian Kernighan: `n &= (n-1)` clears lowest set bit; repeat until 0 | Alternative: `bin(n).count('1')` in Python; Brian Kernighan is language-agnostic. |
+| **Reverse Bits** [E] | "Reverse all 32 bits" | Shift result left and OR in LSB of n; shift n right; repeat 32 times | Caching 8-bit chunks speeds repeated calls — mention as follow-up. |
+| **Missing Number** [E] | "Find missing in [0,N]" | `XOR(0..N) ^ XOR(nums)` cancels all present values | Sum approach also O(N) O(1) but risks overflow for large N in non-Python languages. |
+| **Number Complement** [E] | "Flip all bits of number's binary representation" | Create mask of all 1s with same bit length; XOR with mask | `mask = (1 << num.bit_length()) - 1`; XOR flips all bits within that width. |
+| **Bitwise AND of Numbers Range** [M] | "AND of all numbers in [left, right]" | Right-shift both until equal; that common prefix is the answer | The differing suffix bits all become 0 due to a number in the range having 0 in that position. |
+| **Decode XORed Array** [M] | "Recover original array from XOR differences" | `a[0]` is given; `a[i] = encoded[i-1] ^ a[i-1]` | Straightforward once you know `a XOR b = c → b = a XOR c`. |
+| **Divide Two Integers** [M] | "Divide without `*`, `/`, `%`" | Bit-shift divisor left until it exceeds dividend; subtract and accumulate | Handle overflow: `INT_MIN / -1 = INT_MAX + 1` → clamp. Work in negatives to avoid unsigned issue. |
+| **UTF-8 Validation** [M] | "Check if byte sequence is valid UTF-8" | Check leading bits per byte; count continuation bytes | Continuation bytes must start with `10`; count how many follow-bytes expected from first byte. |
+| **Maximum XOR of Two Numbers** [M] | "Largest XOR of any pair" | Build XOR Trie or use prefix greedy with set | Trie approach: insert all numbers; for each number greedily pick opposite bit. O(32N). |
+| **Find Two Non-Repeating Numbers** [H] | "Two numbers appear once, rest twice" | XOR all → `x ^ y`; find any set bit; partition array and XOR each partition | The set bit distinguishes x and y — any set bit works; use lowest for simplicity: `diff & (-diff)`. |
+| **Count Different Palindromic Subsequences** [H] | "Count distinct palindromic subsequences" | Interval DP with bitmask for seen characters at each level | Hard to derive; know the O(N²) DP recurrence exists; mention the palindrome center expansion variant. |
+
+---
+
+## Quick Revision Triggers
+
+- "Check / set / clear the k-th bit" → `n >> k & 1`, `n | (1<<k)`, `n & ~(1<<k)`.
+- "Count set bits" → `bin(n).count('1')` or `n & (n-1)` loop or `popcount`.
+- "Find the single non-repeating element; all others appear twice" → XOR all elements.
+- "Enumerate all subsets of N items (N ≤ 20)" → bitmask `0` to `(1<<N)-1`; each bit = include/exclude.
+- "Maximize XOR of two numbers in an array" → XOR Trie; greedy bit-by-bit from MSB.
+- "In Python, `~x` gives `-(x+1)`, not the unsigned complement" → mask with `& 0xFFFFFFFF` for 32-bit semantics.
+- "DP state is a subset of N elements (N ≤ 20)" → bitmask DP, O(2^N × N) time.
 
 ---
 

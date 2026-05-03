@@ -4,6 +4,45 @@ Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects:
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A connected acyclic graph with a designated root. Every node has exactly one parent (except the root). Binary tree: each node has at most 2 children. BST invariant: all values in left subtree < node.val < all values in right subtree (not just immediate children).
+
+**Why it exists:** Solves the problem of representing and querying hierarchical data efficiently. Real-world analogy: a company org chart — the CEO is root, departments are subtrees, individual employees are leaves.
+
+**Memory layout:** Nodes allocated individually on the heap, linked via left/right child pointers. No cache locality between nodes. Height h determines all operation costs — balanced: h = O(log N); skewed (worst case): h = O(N).
+
+**Key invariants:**
+- Every node has at most one parent; root has none.
+- BST: left subtree values < node < right subtree values — this must hold globally, not just locally.
+- Height of tree: max depth of any leaf. Determines worst-case recursion depth.
+- Traversal order is fixed: inorder (L → node → R) gives sorted output for BST; preorder (node → L → R) for serialization; postorder (L → R → node) for Tree DP.
+
+**Complexity at a glance:**
+
+| Operation | Balanced BST | Skewed BST | Notes |
+| :--- | :--- | :--- | :--- |
+| Search | O(log N) | O(N) | Follow BST property |
+| Insert | O(log N) | O(N) | Find position, link node |
+| Delete | O(log N) | O(N) | Handle 3 cases (0/1/2 children) |
+| Traversal | O(N) | O(N) | All nodes visited once |
+| LCA | O(log N) BST | O(N) | O(N) for general binary tree |
+
+**When to reach for it:**
+- Hierarchical data representation (file systems, org charts, XML/JSON parsing).
+- Sorted range queries, predecessor/successor lookups (BST).
+- Path problems — max path sum, LCA, distance between nodes.
+- Level-order / BFS problems where level structure matters.
+- Serialization/deserialization of structured data.
+
+**Common mistakes:**
+- Confusing height and depth: height of a node = max edges to a leaf below it; depth = edges from root to that node.
+- Forgetting null checks before accessing `node.left` or `node.right` in recursion.
+- BST validation checking only immediate children (not global bounds) — always pass `(lo, hi)` range down.
+- Returning single value from tree DP when two values are needed (e.g., rob/skip, gain/path).
+
+---
+
 ## 1. Concept Overview
 
 ### When to Use Which Traversal
@@ -260,9 +299,9 @@ def deserialize(data: str):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Validate BST](../../google-sde2/PROBLEM_DETAILS.md#validate-bst)** | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Validate BST](../../google-sde2/PROBLEM_DETAILS.md#validate-bst)** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
 | **[Max Path Sum](../../google-sde2/PROBLEM_DETAILS.md#binary-tree-maximum-path-sum)** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
 | **[LCA](../../google-sde2/PROBLEM_DETAILS.md#lca)** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
 | **[Kth Smallest](../../google-sde2/PROBLEM_DETAILS.md#kth-smallest-in-bst)** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
@@ -272,8 +311,29 @@ def deserialize(data: str):
 | **Morris Inorder** | "Inorder traversal without O(N) stack" | Thread predecessor.right → current; unthread on second visit | Temporarily mutates tree; restores on second pass — explain this explicitly. |
 | **Recover BST** | "Two nodes swapped — find and fix" | Inorder gives one or two inversions | One inversion: adjacent swap (`first = prev, second = curr`); two inversions: `first` from first, `second` from second. |
 | **Binary Tree Cameras** | "Minimum cameras to monitor all nodes" | Tree DP: 3 states — needs coverage, has camera, is covered | Greedy: install camera at parent of unmonitored leaf; process bottom-up. |
+| **Invert Binary Tree** [E] | "Mirror the tree" | Swap left/right at every node (preorder) | Recursive one-liner; iterative uses a queue — BFS or DFS both work identically. |
+| **Symmetric Tree** [E] | "Is tree a mirror of itself?" | Compare left-subtree and right-subtree simultaneously (two-pointer recursion) | Check `left.val == right.val` AND recurse `(left.left, right.right)` AND `(left.right, right.left)`. |
+| **Path Sum** [E] | "Root-to-leaf path summing to target" | DFS; subtract node value from target; return True at leaf when target == 0 | Leaf check: `not node.left and not node.right` — not just `target == 0` (could be mid-path). |
+| **Count Good Nodes** [M] | "Nodes ≥ all ancestors on its root path" | DFS with `max_so_far`; increment count at each node ≥ max | Pass updated max downward; root is always good. |
+| **Binary Tree Level Order Traversal** [M] | "BFS layer by layer" | Deque; snapshot `len(queue)` at start of each level; process exactly that many | Snapshot length before inner loop — queue grows during processing. |
+| **Construct Binary Tree from Preorder and Inorder** [M] | "Rebuild tree from two traversals" | Root = preorder[0]; split inorder at root index; recurse left/right | Hash `inorder` values → index for O(1) split. Preorder index advances globally via nonlocal/outer variable. |
+| **Populating Next Right Pointers** [M] | "Connect level nodes with next pointer" | BFS or O(1) space: use already-connected `next` pointers of the level above | O(1) space trick: process level N using the `next` chain of level N-1 — no queue needed. |
+| **Flatten Binary Tree to Linked List** [M] | "In-place preorder flattening" | Morris-like: connect right subtree after leftmost rightmost; move left to right | O(1) space: for each node, thread its right subtree to end of left subtree's rightmost chain. |
+| **All Nodes Distance K in Binary Tree** [M] | "All nodes exactly K edges from target" | Build parent map (BFS); then BFS from target with visited set | Convert tree to undirected graph via parent map — enables upward traversal. |
+| **Vertical Order Traversal** [H] | "Nodes grouped by column, sorted by row then value" | BFS/DFS with `(col, row, val)`; sort globally or per-column | Multiple nodes at same `(col, row)` must be sorted by value — a common missed case. |
+| **Binary Tree Maximum Path Sum** [H] | "Max sum path (any node to any node)" | Post-order; at each node compute max one-arm gain; update global with both arms | Return single-arm to parent (max of left/right arm + node); update global with `node + left + right`. Drop negative arms (use 0 instead). |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "validate BST" → think Range Propagation; pass `(lo, hi)` bounds through recursion, not just local child comparison.
+- If the problem says "lowest common ancestor" → think Postorder DFS; if both sides return non-null, current node is LCA.
+- If the problem says "diameter" or "maximum path sum" → think Tree DP with global variable; return single-arm gain to parent, update global with both arms at each node.
+- If the problem says "K-th smallest in BST" → think Iterative Inorder; stop after K pops to avoid O(N) stack for large skewed trees.
+- If the problem says "serialize/deserialize tree" → think Preorder with explicit `None` markers; inorder alone is insufficient for reconstruction.
+- If the problem says "O(1) space traversal" → think Morris Threading; temporarily link predecessor back to current, restore on second visit.
+- If the problem says "level-order" or "connect level pointers" → think BFS with `len(queue)` snapshot per level.
 
 ## See also
 

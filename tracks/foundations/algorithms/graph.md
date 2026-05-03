@@ -4,6 +4,45 @@ Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: cor
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Graph algorithms operate on vertices and edges to answer reachability, shortest-path, ordering, and connectivity questions. Core invariant: the correct algorithm depends entirely on the graph's edge-weight structure — wrong algorithm = wrong answer regardless of implementation quality.
+
+**Why it exists.** Many real-world problems are graphs in disguise: course prerequisites (DAG + topological sort), network routing (shortest path), social connectivity (union-find / BFS components), infrastructure cost (MST). Graph algorithms formalize "how do nodes relate?" into efficient traversal and optimization procedures.
+
+**The mental model.** Think of the graph as a city map. BFS finds the fewest-turn driving route (unweighted). Dijkstra finds the fastest route (weighted, non-negative). DFS checks if two cities are connected at all. Topological sort gives the prerequisite order for course enrollment. Algorithm selection is the core SDE-3 graph skill.
+
+**Complexity at a glance.**
+
+| Algorithm | Time | Space | Use When |
+| :--- | :--- | :--- | :--- |
+| BFS / DFS | O(V + E) | O(V) | Unweighted shortest path / connectivity |
+| Dijkstra | O((V + E) log V) | O(V) | Non-negative weighted shortest path |
+| Bellman-Ford | O(V × E) | O(V) | Negative weights; negative cycle detection |
+| Floyd-Warshall | O(V³) | O(V²) | All-pairs shortest path, V ≤ ~500 |
+| Kruskal / Prim | O(E log E) | O(V) | Minimum spanning tree |
+| Kahn's (topo sort) | O(V + E) | O(V) | Ordering with dependencies; cycle detection |
+
+**When to reach for it.**
+- Shortest path (unweighted → BFS; weighted non-negative → Dijkstra; negative weights → Bellman-Ford).
+- Dependency ordering or cycle detection in directed graphs → topological sort (Kahn's or DFS postorder).
+- Connected components with dynamic edge additions → DSU.
+- Minimum spanning tree → Kruskal (sparse) or Prim (dense).
+- Bridges / articulation points → Tarjan's DFS.
+
+**When NOT to use it.**
+- Floyd-Warshall on graphs with V > 1000 — O(V³) is too slow.
+- Standard Dijkstra on graphs with negative weights — produces silently wrong results.
+- DFS for shortest path in unweighted graphs — BFS guarantees shortest; DFS does not.
+
+**Common mistakes.**
+- Not handling disconnected graphs — always run BFS/DFS from every unvisited node.
+- Forgetting to mark visited before pushing to the BFS queue — causes TLE from revisiting nodes exponentially.
+- Wrong edge direction in directed graphs (prereq → course vs. course → prereq).
+- Using Dijkstra without the lazy deletion guard `if d > dist[u]: continue` — stale heap entries corrupt results.
+
+---
+
 ## 1. Algorithm Selection
 
 | Goal | Algorithm | Complexity |
@@ -291,9 +330,9 @@ def kruskal_mst(n: int, edges: list[tuple[int,int,int]]) -> int:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule)** | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Course Schedule](../../google-sde2/PROBLEM_DETAILS.md#course-schedule)** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
 | **[Network Delay Time](../../google-sde2/PROBLEM_DETAILS.md#network-delay-time)** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
 | **[Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder)** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
 | **[Alien Dictionary](../../google-sde2/PROBLEM_DETAILS.md#alien-dictionary)** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
@@ -302,6 +341,30 @@ def kruskal_mst(n: int, edges: list[tuple[int,int,int]]) -> int:
 | **Evaluate Division** | "Graph: nodes=variables, edges=ratios" | Build weighted graph; BFS/DFS to find path product | Handle disconnected components (query impossible → -1). Bidirectional edges: A/B and B/A. |
 | **Reconstruct Itinerary** | "Eulerian path with lexicographic order" | Hierholzer's; DFS with sorted neighbors; post-order reversal | Must visit all edges exactly once — Eulerian, not Hamiltonian. Sort neighbors for lex order. |
 | **Critical Connections** | "Bridges in undirected graph" | Tarjan's: discovery time + low value; bridge if `low[v] > disc[u]` | Low[v] = min(disc[v], min low of DFS descendants). Requires tracking parent to avoid trivial back-edge. |
+| **Find if Path Exists in Graph [E]** | "Simple reachability check" | BFS/DFS from source; return True if destination visited | DSU also works: union all edges, check `find(src)==find(dst)`. BFS preferred for shortest path guarantee. |
+| **Find Center of Star Graph [E]** | "Identify hub node connected to all others" | Center appears in every edge; check first two edges | `edges[0]` and `edges[1]` share exactly one node — that's the center. O(1). |
+| **Clone Graph [M]** | "Deep copy a graph with arbitrary structure" | BFS/DFS; map `old→new` node; copy neighbors recursively | Must memoize (old→new) before recursing into neighbors to handle cycles. |
+| **Pacific Atlantic Water Flow [M]** | "Cells that can reach both oceans" | Reverse BFS from each ocean's border; find intersection | Multi-source BFS from all Pacific border cells, then all Atlantic border cells; return overlap. |
+| **All Paths From Source to Target [M]** | "Enumerate all paths in a DAG" | DFS backtracking; append to result when destination reached | DAG guarantees no cycles — no visited set needed. Backtrack by popping from path after each recursive call. |
+| **Is Graph Bipartite [M]** | "Can nodes be 2-colored with no edge within same color?" | BFS/DFS coloring; conflict = not bipartite | Handle disconnected graphs — BFS from every unvisited node. Bipartite ↔ no odd-length cycles. |
+| **Course Schedule II [M]** | "Return valid course ordering or [] if cycle exists" | Kahn's topological sort; return order only if `len(order)==n` | DFS topo: post-order reversal. Kahn's is cleaner for detecting cycles. Edge direction: prereq → course. |
+| **Find Eventual Safe States [M]** | "Nodes that cannot reach a cycle" | Reverse graph + topological sort; or DFS with 3-color state (unvisited/in-progress/safe) | In DFS: node is safe iff all its neighbors are safe. Memoize safe status to avoid recomputation. |
+| **Minimum Height Trees [M]** | "Find roots that minimize tree height" | Iteratively trim leaf nodes (degree 1) until 1 or 2 nodes remain | Same idea as topological sort from leaves inward. At most 2 centroids for any tree. |
+| **Dijkstra's Shortest Path [M]** | "Single-source shortest paths in weighted graph with non-negative weights" | Min-heap `(dist, node)`; relax neighbors; skip stale heap entries | Won't work with negative edges (use Bellman-Ford). Stale entry check: `if dist > current best, skip`. |
+| **Bus Routes [H]** | "Minimum bus transfers to reach destination" | BFS on bus routes (not stops); each route is a node; stop-to-routes mapping | Build `stop → list of routes` map; BFS expands entire routes, not individual stops. |
+| **Shortest Path Visiting All Nodes [H]** | "Shortest path that visits all nodes in undirected graph" | BFS with state `(node, visited_bitmask)`; start from all nodes simultaneously | Multi-source BFS with bitmask state. Goal state = `visited == (1<<n)-1`. State space O(N × 2^N). |
+
+---
+
+## Quick Revision Triggers
+
+- "Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).
+- "Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).
+- "Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).
+- "All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).
+- "Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.
+- "Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).
+- "Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.
 
 ---
 

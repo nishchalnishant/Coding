@@ -43,12 +43,13 @@ Repo-wide: [../sde3-dsa/roadmap.md](../sde3-dsa/roadmap.md) (problem order), [..
 
 ---
 
-## Other notes (foundations root)
+## Other notes
 
-| File | Description |
-|------|-------------|
-| [java-vs-python.md](java-vs-python.md) | Brief comparison (Hello World, `main` vs `if __name__`) for interview language choice. |
-| [best-data-structures-course.md](best-data-structures-course.md) | Course notes: algorithms, time complexity, merge sort. |
+| Resource | Description |
+|----------|-------------|
+| [../../reference/quick-sheets/revision-guide.md](../../reference/quick-sheets/revision-guide.md) | Full revision guide: topic priority, 7-day and 48-hour plans, communication templates. |
+| [../../reference/quick-sheets/quick-recall.md](../../reference/quick-sheets/quick-recall.md) | One-page pattern → action → complexity for last-minute review. |
+| [../../reference/problem-bank/canonical-questions.md](../../reference/problem-bank/canonical-questions.md) | Canonical questions per topic with logic and trickiness. |
 
 ---
 

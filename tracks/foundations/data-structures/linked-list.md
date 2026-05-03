@@ -4,6 +4,46 @@ A linear data structure where nodes are stored in non-contiguous memory, connect
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A sequence of nodes where each node holds a value and a pointer to the next node. No random access — you must traverse from the head. Core invariant: `head` points to the first node; the last node's `next` is `None`.
+
+**Why it exists:** Solves the problem of frequent insertions and deletions at arbitrary positions without shifting memory. Real-world analogy: a treasure hunt — each clue (node) tells you where the next clue is; you cannot skip ahead without following the chain.
+
+**Memory layout:** Nodes are scattered in heap memory, linked only via pointers. No cache locality — each pointer dereference is a potential cache miss. Doubly linked lists add a `prev` pointer for O(1) delete given a node reference.
+
+**Key invariants:**
+- `head` must always point to the first node (or `None` for empty list).
+- Last node's `next` is `None` (for singly linked list).
+- In a doubly linked list: `node.prev.next is node` and `node.next.prev is node` must hold everywhere.
+- Cycle: if a `next` pointer points to an earlier node, traversal loops forever — detect with Floyd's algorithm.
+
+**Complexity at a glance:**
+
+| Operation | Singly LL | Doubly LL | Notes |
+| :--- | :--- | :--- | :--- |
+| Access by index | O(N) | O(N) | Must traverse from head |
+| Insert at head | O(1) | O(1) | Update head pointer |
+| Insert at tail | O(N) / O(1)* | O(1)* | *O(1) only with tail pointer |
+| Insert at known pointer | O(1) | O(1) | Pointer manipulation only |
+| Delete at known pointer | O(N) singly | O(1) doubly | Singly needs prev node |
+| Search | O(N) | O(N) | Linear scan |
+
+**When to reach for it:**
+- Frequent insertions/deletions at arbitrary positions (given a pointer to the node).
+- Implementing stacks, queues, LRU cache (DLL + hash map).
+- Merging sorted sequences (merge sort on lists, K-way merge).
+- No random access needed — only sequential traversal.
+- Memory allocation pattern where contiguous blocks are unavailable.
+
+**Common mistakes:**
+- Losing the `head` reference by not using a dummy node when the head may be deleted.
+- Forgetting to update the `tail` pointer on insert at the tail end.
+- Null-pointer dereference on empty list — always guard `if not head` before accessing `head.next`.
+- Off-by-one in reversal — saving `curr.next` after overwriting it instead of before.
+
+---
+
 ## 1. Concept Overview
 
 ### When to Use Which Technique
@@ -260,9 +300,9 @@ class LRUCache:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Reverse List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Reverse List](../../google-sde2/PROBLEM_DETAILS.md#reverse-linked-list)** | Iterative Pointer Reversal | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
 | **[Remove Nth From End](../../google-sde2/PROBLEM_DETAILS.md#remove-nth-from-end)** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
 | **[Merge K Lists](../../google-sde2/PROBLEM_DETAILS.md#merge-k-sorted-lists)** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
 | **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
@@ -272,8 +312,28 @@ class LRUCache:
 | **Copy List with Random Pointer** | "Deep copy with random pointers" | Map `old → clone`; two passes | Without the map: interleave clones between originals — O(1) extra space trick. |
 | **Sort List** | "Sort linked list efficiently" | Merge sort: find middle, split, sort each, merge | Unlike arrays, finding middle is O(N); overall still O(N log N) with O(log N) stack. |
 | **Add Two Numbers** | "LL represents number, add two" | Digit-by-digit sum with carry tracking | Handle different lengths; handle final carry (create extra node if carry=1 at end). |
+| **Middle of Linked List** [E] | "Find middle node" | Fast/slow pointers; fast moves 2, slow moves 1 | For even-length lists, `slow` lands on the second middle — clarify which middle is wanted. |
+| **Linked List Cycle** [E] | "Detect if cycle exists" | Fast/slow pointers — they meet iff cycle exists | No need to find entry point for detection only; O(1) space. |
+| **Merge Two Sorted Lists** [E] | "Merge without extra space" | Dummy head; compare `l1.val` vs `l2.val`; attach smaller | Always use a dummy node — avoids special-casing the empty-head edge case. |
+| **Intersection of Two Linked Lists** [M] | "Find node where two lists merge" | Two pointers; redirect each to other list's head on exhaustion; meet at intersection | They traverse `A+B` and `B+A` total — equal regardless of individual lengths. `null == null` handles no-intersection case. |
+| **Reorder List** [M] | "L0→Ln→L1→Ln-1→..." | Find middle; reverse second half; merge alternating | Three steps must be clean: find mid (slow/fast), reverse (iterative), merge. Mess up pointer order and you get infinite loops. |
+| **Swap Nodes in Pairs** [M] | "Swap every two adjacent nodes" | Dummy head; swap `curr.next` and `curr.next.next`; advance by 2 | Save `next_pair = curr.next.next.next` before relinking or you lose the rest of the list. |
+| **Rotate Linked List** [M] | "Rotate right by K places" | Find length; make circular; break at `length - k % length` | `k % length` handles k > length; break from the tail, not the head. |
+| **Remove Duplicates from Sorted List II** [M] | "Remove all nodes with any duplicate value" | Dummy head; detect duplicate run; skip entire run | Unlike version I (keep one), skip ALL nodes with that value — continue until `curr.next.val != val`. |
+| **Flatten Multilevel Doubly Linked List** [M] | "Flatten nested child pointers" | On `child`: insert child list between curr and curr.next; update prev/next | Update `prev` pointer on re-attach — doubly linked lists require both directions. |
+| **Merge K Sorted Lists** [H] | "Merge K lists efficiently" | Min-heap of `(val, list_index, node)`; pop and push next | Tie-breaking: include list index to avoid comparing ListNode objects directly. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem needs O(1) insert/delete at a known position without shifting → think Linked List because pointer relinking is O(1).
+- If the problem says "detect cycle" or "find cycle entry" → think Floyd's fast & slow pointers; use `is` not `==` for identity.
+- If the problem says "find middle" or "check palindrome" → think Fast & Slow pointers; slow lands at left-middle for even-length lists.
+- If the problem says "LRU Cache" or "O(1) eviction" → think Doubly Linked List + Hash Map; dummy head/tail eliminate edge cases.
+- If the problem says "merge K sorted lists" → think Min-Heap of K nodes with tie-breaking by list index.
+- If the problem says "reverse in K-groups" → think count K nodes first, reverse exactly K, recurse on remainder.
+- If the problem says "remove Nth from end without knowing length" → think Two-pointer with N-step head start.
 
 ## See also
 

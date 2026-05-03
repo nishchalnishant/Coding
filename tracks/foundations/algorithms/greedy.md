@@ -4,6 +4,42 @@ Make the **locally optimal choice** at each step; prove it leads to a **global o
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Make the locally optimal choice at each step, trusting that this leads to a globally optimal solution. Core invariant: the **greedy choice property** must hold — taking the best available option now never prevents a better global outcome.
+
+**Why it exists.** For problems with the greedy choice property, a single sorted pass or priority queue replaces exponential search. Greedy is correct when "best now" never conflicts with "best overall" — this must be provable, not assumed.
+
+**The mental model.** A miser who always takes the best deal available right now. This works perfectly when the deals are independent (interval scheduling) and catastrophically when future deals depend on current choices (0/1 knapsack).
+
+**Complexity at a glance.**
+
+| Pattern | Time | Space |
+| :--- | :--- | :--- |
+| Sort-based greedy (interval scheduling, task scheduling) | O(N log N) | O(1) or O(N) |
+| Single-pass greedy (jump game, gas station) | O(N) | O(1) |
+| Priority-queue greedy (Prim's MST, Huffman) | O(N log N) | O(N) |
+
+**When to reach for it.**
+- Interval scheduling: maximize non-overlapping intervals (sort by end time).
+- Jump reachability: track the farthest index reachable.
+- Gas station circuit: reset start after any deficit prefix.
+- Task scheduling with cooldown: arrange by frequency.
+- Partition / labeling: extend a partition greedily to the last occurrence of any character in it.
+
+**When NOT to use it.**
+- Taking the best local choice can block a globally better combination — use DP (classic failure: coin change with non-standard denominations like [1, 3, 4]).
+- 0/1 knapsack — greedy on value-density fails; fractional knapsack works.
+- If you cannot articulate an exchange argument or "greedy stays ahead" proof — try DP first.
+
+**Common mistakes.**
+- Sorting by the wrong key — intervals need end-time sort for maximum non-overlapping, start-time for merging.
+- Assuming greedy works without a proof — always construct a potential counterexample first.
+- Applying greedy to 0/1 knapsack (fractional knapsack is greedy; 0/1 is not).
+- Missing the `max(formula, len(tasks))` cap in task scheduler — when task variety fills all idle slots.
+
+---
+
 ## 1. Concept Overview
 
 **When to use**: Optimal substructure + **greedy choice property** (the globally optimal solution can always be extended by taking the locally best choice). If "take best local option" can be shown never to hurt the global solution, use greedy. Otherwise, reach for DP.
@@ -233,9 +269,9 @@ def partition_labels(s: str) -> list[int]:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Jump Game I** | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Jump Game I** | Greedy Reach Tracking | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
 | **[Jump Game II](../../google-sde2/PROBLEM_DETAILS.md#jump-game-ii)** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
 | **[Non-overlapping Intervals](../../google-sde2/PROBLEM_DETAILS.md#non-overlapping-intervals)** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
 | **Min Arrows to Burst Balloons** | "Minimum shots to pop all balloons" | Sort by end; new arrow only if `start > arrow_pos` | `>` not `>=` — touching boundary is one shot. |
@@ -246,6 +282,29 @@ def partition_labels(s: str) -> list[int]:
 | **Fractional Knapsack** | "Max value with fractional items" | Sort by value/weight; take greedily | 0/1 Knapsack is **not** greedy — needs DP. Verify items are divisible. |
 | **Minimum Refueling Stops** | "Fewest stops to reach destination" | Max-heap of reachable stations; refuel when tank < 0 | Greedily take the largest available fuel when you must stop — not the nearest. |
 | **Partition Labels** | "Partition so each letter in one part" | `last[ch]` map; extend `end`; cut at `i == end` | Each letter's last occurrence defines the minimum partition end. |
+| **Lemonade Change** [E] | "Can you give correct change for each customer?" | Greedy: prefer using $10 over $5 when making $15 change | Use $10 before $5 to preserve smaller bills for future $5 change needs. |
+| **Score After Flipping Matrix** [M] | "Maximize sum of rows as binary numbers" | First: toggle row if first bit is 0 (MSB dominates); then: toggle column if zeros > ones | MSB of each row must be 1 first; then maximize each column independently. |
+| **Two City Scheduling** [M] | "Send N people to each of 2 cities at min cost" | Sort by `cost_A - cost_B`; first N go to A, rest to B | Sorting by cost difference selects people with greatest relative saving for each city. |
+| **Boats to Save People** [M] | "Min boats where each holds ≤ 2 people, total ≤ limit" | Sort; two pointers (lightest + heaviest); if sum ≤ limit pair them | Greedy: always try to pair the heaviest with the lightest; if impossible, heaviest goes alone. |
+| **Minimum Number of Arrows** [M] | "Min arrows to burst all balloons" | Sort by end; arrow at `end`; advance to next balloon not reached | Identical to "non-overlapping intervals" — one arrow can burst multiple overlapping balloons. |
+| **Queue Reconstruction by Height** [M] | "Reconstruct queue from (h, k) pairs" | Sort by height desc (ties: k asc); insert each person at index k | Taller people are placed first; inserting at `k` is valid since all remaining are shorter or equal. |
+| **Car Pooling** [M] | "Can car with capacity C handle all trips?" | Difference array on stops; scan prefix sums | Or: sort events by position; track running passenger count. |
+| **Wiggle Subsequence** [M] | "Longest alternating up-down subsequence" | Greedy: count peaks and valleys; every direction change is a peak/valley | No need to track indices — just count alternating slopes. DP O(N²) exists but greedy is O(N). |
+| **Maximum Units on a Truck** [E] | "Greedy: load boxes with most units first" | Sort by units per box desc; load until capacity | Straightforward greedy; just don't forget to clamp last batch to remaining capacity. |
+| **Minimum Cost to Connect Sticks** [M] | "Merge sticks: cost = sum of two merged; minimize total" | Min-heap; always merge two smallest; push result back | Equivalent to Huffman encoding — merging smallest first minimizes total cost. |
+| **IPO (Maximize Capital)** [H] | "Pick K projects to maximize capital; project unlocks at capital threshold" | Sort by capital; max-heap of profits of unlocked projects | Unlock projects incrementally as capital grows; always pick highest-profit unlocked project. |
+
+---
+
+## Quick Revision Triggers
+
+- "Always pick the locally best option (largest profit, earliest deadline, minimum cost)" → greedy; verify exchange argument before coding.
+- "Interval scheduling: maximize non-overlapping intervals" → sort by end time; greedily pick earliest-ending.
+- "Interval merging / covering" → sort by start time; merge overlapping or count gaps.
+- "Coin change with standard denominations" → greedy works; arbitrary denominations → DP.
+- "Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints" → greedy scan left to right, extend reach.
+- "Sort by ratio or combined key (profit/weight, deadline−duration)" → greedy on sorted order.
+- "Greedy fails on a small counterexample" → switch to DP immediately.
 
 ---
 

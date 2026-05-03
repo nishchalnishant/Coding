@@ -4,6 +4,44 @@ Solve optimization problems by breaking them into **overlapping subproblems** wi
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Dynamic Programming solves problems with overlapping subproblems by storing subproblem results — trading space for time to avoid recomputation. Core invariant: two properties must hold — **optimal substructure** (the optimal solution contains optimal sub-solutions) and **overlapping subproblems** (the same subproblems arise from multiple distinct recursive calls).
+
+**Why it exists.** Naive recursion on problems with overlapping subproblems is exponential (Fibonacci: O(2^N)); DP reduces this to polynomial by solving each unique subproblem exactly once. DP is "careful brute force" — enumerate all possibilities, but cache intermediate results.
+
+**The mental model.** DP is careful brute force: enumerate all possibilities but cache intermediate results so each subproblem is solved only once. Two approaches: top-down (memoization: recursion + cache) and bottom-up (tabulation: fill a table iteratively from base cases). Top-down is easier to derive; bottom-up is cache-friendlier and avoids recursion limits.
+
+**Complexity at a glance.**
+
+| DP Type | Typical States | Typical Transition | Space Optimization |
+| :--- | :--- | :--- | :--- |
+| Linear 1D | O(N) | O(1) per state | O(1) with two variables |
+| 2D grid / string | O(N × M) | O(1) per state | O(min(N, M)) rolling array |
+| Knapsack | O(N × W) | O(1) per state | O(W) single row |
+| Interval DP | O(N²) | O(N) per state (try all k) | Rarely reducible |
+| Bitmask DP (N ≤ 20) | O(2^N × N) | O(N) per state | Rarely reducible |
+
+**When to reach for it.**
+- "Count ways", "minimum / maximum cost", "is it possible" — classic DP signals.
+- Sequences with choices at each step: knapsack, LCS, edit distance, coin change.
+- Game theory: optimal play by both players.
+- Any problem where brute-force recursion revisits the same `(args)` multiple times.
+
+**When NOT to use it.**
+- Greedy works — if the greedy choice property holds, DP is slower and unnecessary.
+- State space is too large — bitmask DP requires N ≤ 20; 2D DP on N = 10^4 × M = 10^4 is infeasible.
+- Subproblems don't overlap — use divide and conquer instead.
+
+**Common mistakes.**
+- Wrong state definition — missing a dimension (e.g., forgetting the "number of items used" dimension in bounded knapsack).
+- Incorrect base case — one wrong base case cascades to all subsequent states.
+- Confusing 0-indexed vs 1-indexed DP table — causes off-by-one on string indexing.
+- Not recognizing that O(N²) DP can be optimized to O(N log N) (e.g., LIS via patience sort with bisect).
+- Forgetting to take modulo in count problems — results overflow silently.
+
+---
+
 ## 1. The Four-Step Framework
 
 > [!IMPORTANT]
@@ -279,6 +317,32 @@ def count_valid_numbers(limit: str) -> int:
 | **LPS (Longest Palindromic Subseq)** | "Palindromic structure in one string" | LCS of `s` and `reversed(s)` | Classic LCS reduction; easy to miss this framing. |
 | **Egg Drop** | "Min trials in worst case" | Interval DP or binary search + DP | State `dp[eggs][floors]`; can be inverted: "how many floors with k eggs and t trials?" |
 | **Regular Expression** | "Pattern match with `*` and `.`" | 2D DP; `*` = zero or more of prev char | `*` can mean zero occurrences of the preceding char — handle separately. |
+| **Climbing Stairs** [E] | "Ways to climb N stairs (1 or 2 steps at a time)" | `dp[i] = dp[i-1] + dp[i-2]`; base cases `dp[1]=1, dp[2]=2` | This is Fibonacci — space-optimize to two variables. Generalize to K step sizes as follow-up. |
+| **Min Cost Climbing Stairs** [E] | "Min cost to reach top; each step costs `cost[i]`" | `dp[i] = min(dp[i-1], dp[i-2]) + cost[i]`; answer = `min(dp[n-1], dp[n-2])` | Can start from index 0 or 1 — both are valid starting positions. |
+| **Unique Paths** [E] | "Count paths in m×n grid moving only right/down" | `dp[i][j] = dp[i-1][j] + dp[i][j-1]`; base row/col all 1s | Space-optimize to 1D by reusing row array. Math formula: `C(m+n-2, m-1)`. |
+| **Maximum Product Subarray** [M] | "Max product of contiguous subarray" | Track both `max_prod` and `min_prod` (negatives flip on multiplication) | Negative × negative = positive max — must track minimum as well. Reset on 0. |
+| **Decode Ways** [M] | "Number of ways to decode digit string (A=1..Z=26)" | `dp[i]` from `dp[i-1]` (single char) + `dp[i-2]` (two chars if 10-26) | `'0'` alone is invalid; `'06'` is invalid (leading zero); handle these edge cases. |
+| **Triangle** [M] | "Min path sum from top to bottom of triangle" | Bottom-up; `dp[j] = min(dp[j], dp[j+1]) + triangle[i][j]` | Work bottom-up to avoid managing indices for variable-width rows. |
+| **Counting Subsets Equal to Sum** [M] | "Number of subsets summing to target" | 0/1 knapsack counting variant; `dp[w] += dp[w - num]`; backward iteration | Init `dp[0] = 1`; backward loop so each item counted at most once (unlike unbounded). |
+| **Longest Common Substring** [M] | "Contiguous common substring (not subsequence)" | `dp[i][j] = dp[i-1][j-1] + 1` if chars match, else 0 | Reset to 0 on mismatch (contiguous); max over all `dp[i][j]` is answer. LCS keeps value on mismatch — know the difference. |
+| **Minimum Path Sum** [M] | "Grid path with min cost, right/down only" | `dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])` | Initialize top row and left column as prefix sums. O(1) space: modify grid in place. |
+| **Maximal Square** [M] | "Largest square of 1s in binary matrix" | `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1` | Answer = `max(dp[i][j])²`; the min of three neighbors is the key insight. |
+| **Interleaving String** [M] | "Can s3 be formed by interleaving s1 and s2?" | `dp[i][j]` = can form `s3[:i+j]` using `s1[:i]` and `s2[:j]` | Two sources for each `s3[i+j-1]` position; transitions from both dimensions. |
+| **Super Egg Drop** [H] | "Min moves in worst case with K eggs and N floors" | Invert problem: `dp[moves][eggs]` = max floors checkable | Direct `dp[eggs][floors]` is O(KN²); inverted is O(KN log N) with binary search. |
+| **Palindrome Partitioning II** [H] | "Min cuts to make all parts palindromes" | `cut[i]` = min cuts for `s[:i+1]`; precompute palindrome table | Combine palindrome expansion + cut DP in one pass for O(N²). |
+| **Strange Printer** [H] | "Min print operations to print string" | Interval DP; if `s[i] == s[j]`, `dp[i][j] = dp[i][j-1]` (extend last turn) | Diagonal order; merge intervals when endpoints match — reduces prints by 1. |
+
+---
+
+## Quick Revision Triggers
+
+- "Overlapping subproblems + optimal substructure" → DP; memoize or tabulate.
+- "Recursive solution has exponential branches with repeated arguments" → add `@lru_cache`; done.
+- "Count ways / min cost / max profit over a sequence" → 1D DP on index; define `dp[i]` as answer for prefix ending at `i`.
+- "Two sequences (strings, arrays): align / match / edit" → 2D DP on `(i, j)`; LCS / edit distance template.
+- "Subset sum / knapsack: include or exclude each item" → 1D DP iterating items then capacity (backwards for 0/1 knapsack).
+- "Optimal split of a contiguous segment (matrix chain, burst balloons)" → interval DP `dp[l][r]`; try all split points k.
+- "State space encodes a subset of N items (N ≤ 20)" → bitmask DP `dp[mask]`; enumerate submasks in O(3^N).
 
 ---
 

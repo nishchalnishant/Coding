@@ -2,7 +2,7 @@
 
 Core data structures for coding interviews. These notes are written to be sufficient for **Google SDE-2 (L4)**, with optional deeper sections that also help for SDE-3: concept overview, algorithms, patterns, code, interview strategy, and quick revision.
 
-**Google interview:** Use [../GOOGLE_INTERVIEW_REVISION.md](../GOOGLE_INTERVIEW_REVISION.md) (topic priority + practice lists) and [../GOOGLE_QUICK_SHEET.md](../GOOGLE_QUICK_SHEET.md) (one-page patterns) alongside the files below.
+**Google interview:** Use [../../../reference/quick-sheets/revision-guide.md](../../../reference/quick-sheets/revision-guide.md) (topic priority + practice lists) and [../../../reference/quick-sheets/quick-recall.md](../../../reference/quick-sheets/quick-recall.md) (one-page patterns) alongside the files below.
 For an end-to-end SDE-2 plan (coding + system design + behavioral), start with: [../../google-sde2/README.md](../../google-sde2/README.md).
 
 Each topic file below includes **Interview Questions — Logic & Trickiness** (canonical problems, solution logic, and trickiness for that structure).
@@ -19,6 +19,7 @@ Each topic file below includes **Interview Questions — Logic & Trickiness** (c
 | **Heap** | [heap.md](heap.md) | Top-K, K-way merge, two heaps (median), implementations. |
 | **Hashing** | [hashing.md](hashing.md) | Collision handling, subarray sum = K, consistent hashing, bloom filter. |
 | **Graphs** | [graphs.md](graphs.md) | BFS/DFS, islands, flood fill, rotten oranges, course schedule, alien dictionary; terminology, algorithms, question lists. |
+| **Trie** | [trie.md](trie.md) | Prefix tree, autocomplete, Word Search II (Trie + backtracking), XOR Trie for max XOR, Aho-Corasick. |
 
 ## How to use
 

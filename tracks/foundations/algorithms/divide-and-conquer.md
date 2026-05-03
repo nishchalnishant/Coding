@@ -4,6 +4,44 @@ Break a problem into **independent subproblems**, solve recursively, and **combi
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Break a problem into smaller, independent subproblems of the same type, solve each recursively, then combine the results. Core invariant: subproblems are **independent** — solving the left half never depends on or changes the right half.
+
+**Why it exists.** Many problems have a recursive self-similar structure that naturally halves the search space each level, giving O(log N) depth. The combine step often reveals global information invisible in either half alone (cross-midpoint maximum subarray, cross-half inversions).
+
+**The mental model.** Military divide-and-conquer: split the enemy force, defeat each half independently, then unify. The reunion (combine) step may require coordination but each battle is self-contained.
+
+**Complexity at a glance.**
+
+| Algorithm | Recurrence | Result |
+| :--- | :--- | :--- |
+| Merge Sort | T(n) = 2T(n/2) + O(n) | O(N log N) — Master Theorem Case 2 |
+| Binary Search | T(n) = T(n/2) + O(1) | O(log N) — Master Theorem Case 2 |
+| QuickSelect (avg) | T(n) = T(n/2) + O(n) | O(N) average |
+| Closest Pair of Points | T(n) = 2T(n/2) + O(n log n) | O(N log² N) |
+| Fast Exponentiation | T(n) = T(n/2) + O(1) | O(log N) |
+
+**When to reach for it.**
+- Sorting (merge sort, quicksort) or Kth order statistic (quickselect).
+- Counting inversions or pairs satisfying a cross-half condition.
+- Binary search and its generalizations (rotated arrays, search on answer).
+- Matrix exponentiation (Fibonacci in O(log N)).
+- Closest pair of points, polynomial multiplication (FFT).
+
+**When NOT to use it.**
+- Subproblems overlap — use DP (memoization avoids recomputation).
+- The combine step costs O(N²) — the recurrence degrades to O(N² log N).
+- Subproblems are unequal and unbalanced — analyze with the recursion tree, not the Master Theorem.
+
+**Common mistakes.**
+- Forgetting the combine step's cost in the recurrence (must include merge cost to get O(N log N), not O(N)).
+- Incorrect base case — must handle n = 0 and n = 1 separately.
+- Off-by-one in midpoint: always use `mid = lo + (hi - lo) // 2` (avoids overflow in C/Java, correct in Python).
+- Mutating shared state across the two recursive calls — each call must operate on its own slice.
+
+---
+
 ## 1. The Three Steps
 
 > [!IMPORTANT]
@@ -247,9 +285,9 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Merge Sort** | "Stable sort, guaranteed O(N log N)" | Divide at mid; merge sorted halves | Combine step is O(N) — include in recurrence T(n)=2T(n/2)+O(n). |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Merge Sort** | Divide → Merge | "Stable sort, guaranteed O(N log N)" | Divide at mid; merge sorted halves | Combine step is O(N) — include in recurrence T(n)=2T(n/2)+O(n). |
 | **Count Inversions** | "Pairs where i<j but nums[i]>nums[j]" | Merge sort; count right-picks during merge (`len(left)-i`) | Requires a copy of left array; in-place merge loses position info. |
 | **QuickSelect** | "Kth largest in O(N) average" | Partition; recurse only into side with target | Mutates array; randomize pivot to avoid O(N²). Median-of-medians gives O(N) worst. |
 | **Pow(x,n)** | "Fast exponentiation" | `x^n = (x^(n/2))²`; odd: multiply by x once | Negative n: `x = 1/x, n = -n`; INT_MIN overflow in Java/C++. |
@@ -258,6 +296,24 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 | **Merge K Sorted Lists** | "Merge K into one sorted list" | D&C pairwise merge: merge pairs in O(N log K) | K-way heap is also O(N log K) — D&C has better cache locality. |
 | **Reverse Pairs** | "Pairs where nums[i] > 2×nums[j], i<j" | Modified merge sort; count cross-half pairs | Different from standard inversions — inequality is strict and scaled. Use two pointers in combine. |
 | **Closest Pair of Points** | "Min distance in 2D plane, O(N log N)" | D&C with strip of width 2δ; sort strip by y; check 7 candidates | 6-point packing argument ensures at most 7 comparisons per strip point. |
+| **Majority Element [E]** | "Element appearing > n/2 times guaranteed to exist" | Boyer-Moore: candidate + count; or D&C — majority of whole must be majority of some half | D&C: if both halves agree → that's majority. If they differ → count each in full array. One scan for Boyer-Moore; two scans for D&C. |
+| **Sort List [M]** | "Sort a linked list in O(N log N) time and O(log N) space" | Merge sort: slow/fast pointers to find mid; split; merge | Splitting at mid requires setting `slow.next = None`. Bottom-up merge sort avoids O(log N) recursion stack entirely. |
+| **Beautiful Array [M]** | "Construct array where no A[k]*2 == A[i]+A[j] for i<k<j" | D&C: split into odd and even halves recursively; beautiful property is preserved | `1` is trivially beautiful. Odd positions preserve the property after transformation `2x-1`; even after `2x`. |
+| **Different Ways to Add Parentheses [M]** | "All possible results from parenthesizing expression" | D&C on each operator: split left/right, combine all pairs of results | Memoize on `(lo, hi)` substring to avoid recomputing subexpressions. Return `[num]` for pure numeric substrings. |
+| **Count of Range Sum [H]** | "Count subarrays with sum in [lower, upper]" | Prefix sums + modified merge sort; count pairs `(i,j)` where `lower <= prefix[j]-prefix[i] <= upper` | During merge: for each left element, slide two pointers on right to count valid window. Do NOT forget to merge after counting. |
+| **Reverse Pairs [H]** | "Count pairs where nums[i] > 2*nums[j] for i < j" | Modified merge sort; count cross-half pairs before merging | Counting step and merge step are separate — count with two pointers first, then do the actual merge. Inequality `>2*` differs from standard inversions. |
+
+---
+
+## Quick Revision Triggers
+
+- "Split the input in half, solve each half independently, merge results" → divide and conquer.
+- "Count inversions / cross-half pairs while sorting" → merge sort variant with counting during merge.
+- "Find median of two sorted arrays in O(log N)" → binary search on partition point (D&C on index).
+- "Recurrence fits `T(n) = aT(n/b) + f(n)`" → apply Master Theorem to read off complexity immediately.
+- "Closest pair of points in 2D" → D&C; strip merge in O(N); overall O(N log N).
+- "Fast exponentiation: `a^n` in O(log n)" → `pow(a, n//2, mod)` squared, times `a` if n is odd.
+- "Subproblems overlap (same arguments repeated)" → D&C becomes DP; add memoization.
 
 ---
 

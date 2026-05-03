@@ -4,6 +4,45 @@ Fixed-size sequential collection in contiguous memory. Mastery at SDE-3 means ch
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A contiguous block of memory where elements are stored sequentially and accessed in O(1) by index. Core invariant: `address(i) = base_address + i × element_size`.
+
+**Why it exists:** Solves the problem of storing and accessing ordered data efficiently. Real-world analogy: numbered parking spots in a row — you jump directly to spot #42 without checking every spot before it.
+
+**Memory layout:** All elements live in adjacent memory cells. This enables CPU cache prefetching — iterating an array is cache-friendly; pointer-chasing structures (linked lists) are not.
+
+**Key invariants:**
+- Fixed allocation size (in low-level sense); dynamic arrays (Python list) amortize reallocation at 2× growth.
+- Index is always O(1): direct address arithmetic, no traversal.
+- Insert/delete at arbitrary index requires shifting all subsequent elements — O(N).
+
+**Complexity at a glance:**
+
+| Operation | Time | Notes |
+| :--- | :--- | :--- |
+| Access by index | O(1) | Direct address arithmetic |
+| Search (unsorted) | O(N) | Linear scan |
+| Search (sorted) | O(log N) | Binary search |
+| Insert at end | O(1) amortized | Dynamic array reallocation |
+| Insert at arbitrary index | O(N) | Shifting required |
+| Delete at arbitrary index | O(N) | Shifting required |
+
+**When to reach for it:**
+- Random access by index is needed (O(1) read/write by position).
+- Cache locality matters — sequential processing of large data.
+- Sliding window or two-pointer patterns (requires index arithmetic).
+- Prefix sum precomputation for range queries.
+- Input is already sorted and binary search applies.
+
+**Common mistakes:**
+- Off-by-one errors in slice bounds (`nums[l:r]` excludes `r`; `nums[l:r+1]` includes it).
+- Forgetting to handle the empty array edge case before accessing `nums[0]`.
+- Mutating the array while iterating over it (use a copy or two-pointer approach).
+- Using sliding window when negatives exist and sum isn't monotone — switch to prefix sum + map.
+
+---
+
 ## 1. Technique Selection Guide
 
 | Constraint | Technique | Complexity |
@@ -292,9 +331,9 @@ def reservoir_sample(stream, k: int) -> list:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)** | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Two Sum](../../google-sde2/PROBLEM_DETAILS.md#two-sum)** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
 | **[3Sum](../../google-sde2/PROBLEM_DETAILS.md#3sum)** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
 | **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
 | **[Subarray Sum = K](../../google-sde2/PROBLEM_DETAILS.md#subarray-sum-equals-k)** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
@@ -304,8 +343,28 @@ def reservoir_sample(stream, k: int) -> list:
 | **Jump Game II** | "Minimum jumps to reach end" | Greedy BFS levels; extend `current_end` | Track `farthest` in current level; when `i == current_end`, increment jumps. |
 | **Sliding Window Maximum** | "Max in each window of size K" | Monotonic deque (decreasing); front = max of window | Remove from front if out of window `deque[0] <= i - k`; remove from back if smaller than current. |
 | **Median of Two Arrays** | "Median without merging" | Binary search partition on shorter array | Partition so `len(left_half) == len(right_half)±1`; compare `max_left <= min_right`. |
+| **Best Time to Buy and Sell Stock** [E] | "One transaction, maximize profit" | Single pass: track `min_price` so far; `max_profit = max(max_profit, price - min_price)` | Only one buy before one sell — not two-pointer; `min_price` resets naturally. |
+| **Remove Duplicates from Sorted Array** [E] | "In-place, return new length" | Two pointers: `slow` marks write position; `slow` advances only on new value | Write `nums[slow] = nums[fast]`; return `slow + 1`; array is modified in-place. |
+| **Find All Disappearing Numbers** [E] | "Numbers in [1,N] absent from array" | Negate `nums[abs(val)-1]`; collect indices still positive | O(1) space trick: use the array itself as a visited marker via sign flipping. |
+| **Maximum Subarray** [M] | "Contiguous subarray with max sum" | Kadane: `cur = max(nums[i], cur + nums[i])`; update global max | Don't reset `cur` to 0 — that misses all-negative arrays; reset to `nums[i]`. |
+| **Rotate Array** [M] | "Rotate right by K steps in-place" | Reverse all; reverse `[0:k]`; reverse `[k:]` | Normalize `k = k % n` first; forgetting this causes wrong answers for k > n. |
+| **Find the Duplicate Number** [M] | "One duplicate in [1,N], O(1) space" | Floyd's cycle detection: treat array as linked list with `next = nums[i]` | Requires O(1) space — XOR or sum tricks fail when duplicates appear more than twice. |
+| **Spiral Matrix** [M] | "Traverse matrix in spiral order" | Shrink boundaries: `top`, `bottom`, `left`, `right`; advance after each direction | After each row/col traversal, check `top <= bottom` and `left <= right` before next direction. |
+| **Set Matrix Zeroes** [M] | "Zero out row and col for each zero cell" | First pass: record zeroed rows/cols; second pass: apply | O(1) space: use first row and col as markers; handle them last with a separate `first_row_zero` flag. |
+| **Longest Consecutive Sequence** [H] | "Longest run, O(N) time" | Hash set; only start counting from `n` if `n-1` not in set | Starting only from sequence beginnings avoids O(N²) — each element processed once. |
+| **Minimum Window Substring** [H] | "Smallest window containing all of T" | Sliding window; `have` tracks satisfied char counts | `have` tracks characters meeting their target count — not just counts; `have == need` means window is valid. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem needs O(1) access by position → think Array because index = base + i×size.
+- If the problem says "contiguous subarray satisfying a condition" → think Sliding Window (monotone) or Prefix Sum + Map (with negatives).
+- If the problem says "range sum queries on static data" → think Prefix Sum; O(1) per query after O(N) build.
+- If the problem says "many range-add updates, read final values" → think Difference Array; O(1) update, O(N) reconstruct.
+- If the problem says "maximum subarray sum" → think Kadane's; initialize to `nums[0]`, not 0.
+- If the problem says "sorted array + find pair/triplet with target sum" → think Two Pointers; advance the side that moves you toward the target.
+- If the problem says "partition into 3 groups in one pass" → think Dutch National Flag; three-pointer dance.
 
 ## See also
 

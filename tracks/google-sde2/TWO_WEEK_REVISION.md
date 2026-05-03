@@ -23,7 +23,8 @@ Use this **14-day** schedule when your interview is **~2 weeks away**. It compre
 | **DSA (both rounds)** | ~30–40 **high-quality** problems (Medium-heavy; Easy for speed; a few Hard if strong). Same bar for virtual and on-site — only the **medium** changes (doc vs keyboard). |
 | **DSA mocks** | **4–6** sessions of **45–60 min** (1–2 problems). Make **≥2** of them **video** (share screen, no extra paper) to mimic **EET**; make **≥1** “on-site style” (single screen, or paper) to mimic **in person**. |
 | **AI / ML** | **6–10** hours of focused revision + **2–3** deep-dive sessions (see checklist); **1** full mock / discussion. |
-| **System design (general software)** | **Optional** unless your recruiter confirmed a separate SD round. If not in the loop, skip or cap at **0–2** light reads of [SYSTEM_DESIGN_L4.md](SYSTEM_DESIGN_L4.md) for vocabulary only. |
+| **System design (general software)** | **Optional** unless your recruiter confirmed a separate SD round. If not in the loop, skip or cap at **0–2** light reads of [SYSTEM_DESIGN_L4.md](SYSTEM_DESIGN_L4.md) — which now includes 3 worked walkthroughs (URL shortener, rate limiter, news feed). |
+| **AI / ML** | [AIML_PREP.md](AIML_PREP.md) — core ML, metrics, data issues, ML system design, STAR story templates. |
 | **Behavioral / Googliness** | Still often embedded in every round — **6–8** STAR stories, said out loud; [BEHAVIORAL_GOOGLINESS.md](BEHAVIORAL_GOOGLINESS.md). |
 | **Polish** | One **mistake log** ([PRACTICE_TRACKER.md](PRACTICE_TRACKER.md)); redo failures cold in week 2. |
 
@@ -73,9 +74,11 @@ Use this **14-day** schedule when your interview is **~2 weeks away**. It compre
 
 ---
 
-## AI / ML interview — what to touch (no dedicated file in this repo)
+## AI / ML interview — what to touch
 
-There is **no** AI-ML–specific markdown in this repository; use the checklist below and your own notes. **Ask the recruiter** whether the round is: theory-only, **ML system design** (serving, training, data), or **stats/coding** (e.g. simple modeling). Cover all three lightly if unknown.
+Full prep guide: **[AIML_PREP.md](AIML_PREP.md)** — covers core ML, evaluation metrics, data issues, ML system design, and STAR story templates.
+
+Summary checklist (quick orientation): **Ask the recruiter** whether the round is: theory-only, **ML system design** (serving, training, data), or **stats/coding** (e.g. simple modeling). Cover all three lightly if unknown.
 
 | Theme | Revision points |
 |--------|-----------------|

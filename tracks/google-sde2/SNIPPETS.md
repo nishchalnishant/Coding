@@ -2,9 +2,12 @@
 
 This folder contains **copy/paste** implementations for the most common SDE-2 patterns.
 
+**Usage rule: reference during practice, not during interviews.** Your goal is to internalize the pattern so you no longer need this file.
+
 Use them like this:
 - Learn the **pattern + invariant** from `foundations/` and `patterns/`
-- Then practice coding using these snippets as your “muscle memory” reference
+- Code it from memory; check this file only after your attempt to spot delta
+- If you needed to look something up more than twice, add it to your mistake log in `PRACTICE_TRACKER.md`
 
 Primary language: **Python** (more can be added if you want Java equivalents for all).
 

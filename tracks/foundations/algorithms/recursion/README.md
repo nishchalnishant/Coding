@@ -4,6 +4,43 @@ A function that calls itself on a reduced subproblem. SDE-3 focus: recognizing w
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Recursion is a function that calls itself on a strictly smaller instance of the same problem. Core invariant: (1) a base case handles the smallest solvable instance directly, (2) each recursive call makes progress toward the base case, (3) the result combines the base value with recursive sub-results.
+
+**Why it exists.** Many problems have self-similar structure — trees, nested subproblems, combinatorial generation. Recursion directly expresses this structure. Every recursive solution has an equivalent iterative one (using an explicit stack), but the recursive form is often far more readable and derivable.
+
+**The mental model.** Trust the recursive call: assume `f(subproblem)` correctly solves the subproblem, then write only the logic that combines it with the current node/choice. Your job is not to trace the recursion — it's to define the base case, ensure progress, and combine correctly.
+
+**Complexity at a glance.**
+
+| Recurrence | Expanded Form | Result |
+| :--- | :--- | :--- |
+| T(n) = T(n-1) + O(1) | Linear chain | O(N) |
+| T(n) = 2T(n-1) + O(1) | Binary branching without pruning | O(2^N) |
+| T(n) = T(n/2) + O(1) | Halving each level | O(log N) |
+| T(n) = 2T(n/2) + O(N) | Merge sort | O(N log N) |
+| T(n) = T(n-1) + T(n-2) + O(1) | Fibonacci (naive) | O(2^N); O(N) with memo |
+
+**When to reach for it.**
+- Tree or graph traversal — the recursive structure matches the data structure.
+- Divide-and-conquer — independent halves.
+- Generating all combinations / permutations — backtracking with choose/unchoose.
+- Problems with self-similar structure: nested lists, fractal patterns, expression parsing.
+
+**When NOT to use it.**
+- Depth > 10^4 in Python — default recursion limit is 1000 (`sys.setrecursionlimit`); convert to iterative + explicit stack.
+- Overlapping subproblems without memoization — exponential blowup; add `@lru_cache` or rewrite as DP.
+- Tail recursion for performance — Python does not optimize tail calls; unroll to a loop.
+
+**Common mistakes.**
+- Missing base case — infinite recursion and stack overflow.
+- Not making progress toward the base case — each call must reduce the problem size.
+- Python's default recursion limit is 1000 — mention `sys.setrecursionlimit` and the iterative alternative in interviews.
+- Mutable default arguments persist across calls — never use `def f(path=[])`, use `def f(path=None)` and initialize inside.
+
+---
+
 ## 1. Recursion Types & Click Moments
 
 > [!IMPORTANT]
@@ -211,6 +248,18 @@ def generate_parentheses(n: int) -> list[str]:
 | **Word Break** | "Memoized recursion on suffix" | `any(s[:i] in word_set and word_break(s[i:], frozenset))` | Pass `frozenset` (hashable) not `set` (unhashable) to `@lru_cache`. Avoid recomputing suffix slices. |
 | **Decode Ways** | "1-digit or 2-digit decode choice per step" | `dp(i) = dp(i+1)` if valid 1-digit `+ dp(i+2)` if valid 2-digit | `'0'` cannot stand alone; `'06'` is not `'6'`. Empty suffix returns 1 (one valid decoding). |
 | **Regular Expression Matching** | "Pattern match with `'*'` and `'.'`" | `'*'` = zero or more of preceding char; `match(i,j)` branches on `p[j+1] == '*'` | Handle `'.*'` as greedy match-all. Two base cases: `i` exhausted (check remaining pattern), `j` exhausted (True only if `i` also exhausted). |
+
+---
+
+## Quick Revision Triggers
+
+- "Process a tree or linked list node in terms of its children / rest" → structural recursion; base case is null/empty.
+- "Generate all combinations / permutations / valid strings" → backtracking recursion; undo state after each recursive call.
+- "Recursive call tree has repeated arguments" → memoize with `@lru_cache`; this is top-down DP.
+- "Divide into two independent halves and merge results" → divide and conquer; apply Master Theorem for complexity.
+- "Recursion depth > ~1000 in Python" → convert to iterative with explicit stack; mention `sys.setrecursionlimit` as stopgap.
+- "Last operation is the recursive call (tail recursion)" → Python does not optimize tail calls; unroll to a loop for O(1) stack.
+- "Default argument `def f(path=[])` persists across calls" → use `def f(path=None)` and initialize inside the function.
 
 ---
 

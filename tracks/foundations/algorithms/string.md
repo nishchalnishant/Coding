@@ -4,6 +4,45 @@ Arrays of characters with immutability constraints. SDE-3 expects: KMP for O(N+M
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Strings are immutable sequences of characters with rich algorithmic structure — pattern matching, palindrome detection, anagram grouping, and compression. Core invariant: most string algorithms reduce to "find a structure in the character sequence" — a window, a prefix, a suffix, or a pattern.
+
+**Why it exists.** Naive pattern matching is O(N × M); KMP achieves O(N + M) by precomputing the failure function (LPS) so the text pointer never backtracks. Rolling hash computes string hashes in O(1) per shift. These optimizations matter at scale: searching for patterns in gigabyte log streams requires sub-linear methods.
+
+**The mental model.** Strings are arrays with character semantics. The key insight per problem type: pattern matching → KMP / Rabin-Karp; palindrome → expand from center (2N-1 centers); anagram detection → frequency tuple as hash key; sliding window → expand right until valid, shrink left to minimize; subsequence vs substring — non-contiguous vs contiguous (these are different problems).
+
+**Complexity at a glance.**
+
+| Algorithm | Preprocessing | Search | Space |
+| :--- | :--- | :--- | :--- |
+| Naive | O(1) | O(N × M) | O(1) |
+| KMP | O(M) LPS | O(N) | O(M) |
+| Rabin-Karp | O(M) hash | O(N) avg | O(1) |
+| Z-algorithm | O(N + M) | O(N + M) | O(N + M) |
+| Manacher | O(N) | — | O(N) |
+| Sliding window | O(1) | O(N) | O(alphabet) |
+
+**When to reach for it.**
+- Pattern matching (single pattern, no preprocessing budget) → KMP.
+- Multiple pattern matching simultaneously → Aho-Corasick.
+- Palindrome detection (contiguous) → expand from center O(N²) or Manacher O(N).
+- Anagram grouping → sorted key or 26-count frequency tuple as hash key.
+- Minimum window containing all characters of T → sliding window with `have`/`required` counters.
+- Prefix/suffix structure (trie for word routing, Z-array for pattern search).
+
+**When NOT to use it.**
+- The "string" is really a number sequence — treat as array, not string (different algorithms apply).
+- Concatenating strings in a loop — O(N²) in Python/Java; use `''.join(parts)` or `StringBuilder`.
+
+**Common mistakes.**
+- Python string immutability: concatenation in a loop is O(N²) — always use list accumulation + `''.join()`.
+- KMP LPS off-by-one: `lps[length - 1]` on mismatch, not `lps[length]`; `lps[0]` is always 0.
+- Not handling Unicode vs ASCII — 26-char frequency array breaks for Unicode; use `Counter` or dict.
+- Confusing substring (contiguous, sliding window) with subsequence (non-contiguous, DP on two strings).
+
+---
+
 ## 1. Concept Overview
 
 **Problem space**: Pattern matching (KMP, Rabin-Karp), longest palindromic substring (expand or Manacher), anagram detection (hash/count), sliding window (min window substring), DP (LCS, edit distance), parsing (valid number, decode string).
@@ -269,9 +308,9 @@ def z_search(text: str, pattern: str) -> list[int]:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Longest Palindromic Substring** | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Longest Palindromic Substring** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
 | **Longest Palindromic Subsequence** | "Longest non-contiguous palindrome" | DP or `LCS(s, reversed(s))` | Subsequence ≠ substring; LCS reduction is the cleanest approach. |
 | **[Min Window Substring](../../google-sde2/PROBLEM_DETAILS.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right; shrink left while `have==required` | `have` tracks saturation (== need[ch]), not total count. Unicode: use full Counter, not 26-char array. |
 | **Substring with Concatenation** | "Window containing all words exactly once" | Fixed word-length window; multiset word comparison | Multiple occurrences of same word require multiset, not set. O(N×W×K) with rolling word-hash. |
@@ -281,6 +320,31 @@ def z_search(text: str, pattern: str) -> list[int]:
 | **Repeated String Match** | "Minimum copies of A to contain B" | Build `A * ceil(len(B)/len(A)) + 1`; KMP/find | At most `ceil(len(B)/len(A)) + 1` copies suffice — prove bound. |
 | **[Edit Distance](../../google-sde2/PROBLEM_DETAILS.md#edit-distance)** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
 | **Distinct Subsequences** | "Ways to form T as subsequence of S" | `dp[i][j]` = count ways for `s[:i]` containing `t[:j]` | Mod by large prime for large inputs; base case `dp[i][0]=1` (empty T always 1 way). |
+| **Valid Palindrome** [E] | "Ignore non-alphanumeric; check palindrome" | Two pointers; `isalnum()` skip; compare `lower()` | `''.join(c.lower() for c in s if c.isalnum())` then `== reversed` is also clean. |
+| **Reverse Words in a String** [E] | "Reverse word order, single spaces, no leading/trailing" | `' '.join(reversed(s.split()))` in Python | In-place without split: reverse entire string, then reverse each word. |
+| **Longest Common Prefix** [E] | "Prefix shared by all strings" | Sort lexicographically; compare only first and last | Only need to compare extremes after sort — all others are bounded by these two. |
+| **String to Integer (atoi)** [M] | "Parse integer with sign, overflow, invalid chars" | Skip whitespace; read sign; accumulate digits; stop on non-digit; clamp to [INT_MIN, INT_MAX] | Test: leading spaces, sign-only, overflow, empty string, non-digit prefix. |
+| **Count and Say** [M] | "RLE encoding applied iteratively" | Expand each sequence by counting consecutive runs | Use `itertools.groupby` or two-pointer; off-by-one when counting final group. |
+| **Longest Repeating Character Replacement** [M] | "Max window where replacing ≤ K chars makes it uniform" | Sliding window; track `max_freq` in window; `window_size - max_freq > K` → shrink | `max_freq` never decreases — we only care about windows larger than current best. |
+| **Minimum Remove to Make Valid Parentheses** [M] | "Remove min chars to balance parentheses" | Stack of unmatched `(` indices; set of unmatched `)` indices; remove both | Convert string to list; remove indices from set; join remainder. |
+| **Longest Substring Without Repeating Characters** [M] | "Max length window with all unique chars" | Sliding window with set or last-seen map; shrink `left` on duplicate | Map approach: `left = max(left, last_seen[c] + 1)` — jump past duplicate directly. |
+| **Find All Anagrams in a String** [M] | "All start indices where substring is anagram of p" | Fixed-size sliding window; frequency array comparison | Compare full frequency arrays each step is O(26) = O(1) — not O(N). |
+| **Palindromic Substrings** [M] | "Count all palindromic substrings" | Expand around every center (N single + N-1 double centers) | Total O(N²) centers; Manacher's O(N) for follow-up — know it exists. |
+| **Word Search** [M] | "Find word in 2D board via adjacent cells" | DFS with in-place visited marking (replace with `#`); restore after | Mark before recursing — not after; otherwise you might revisit within one DFS path. |
+| **Wildcard Matching** [H] | "Pattern match with `?` (any char) and `*` (any sequence)" | 2D DP; `*` can match zero (`dp[i][j-1]`) or one-more (`dp[i-1][j]`) | Unlike regex, `*` here matches any sequence directly (not "zero or more of preceding"). |
+| **Regular Expression Matching** [H] | "Match with `.` and `*`; `*` means zero-or-more of preceding" | `dp[i][j]`: match char/dot; `*` = zero occurrences `dp[i][j-2]` or consume one `dp[i-1][j]` | `*` zero occurrences is the tricky case: skip pattern char + `*` with `dp[i][j-2]`. |
+
+---
+
+## Quick Revision Triggers
+
+- "Find pattern P in text T efficiently" → KMP, O(N+M); build LPS array first.
+- "Check if two strings are anagrams / find all anagram windows" → sliding window with frequency map, O(N).
+- "Longest palindromic substring" → Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.
+- "Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.
+- "Minimum window containing all characters of T" → sliding window with two pointers and character count.
+- "Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).
+- "Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.
 
 ---
 

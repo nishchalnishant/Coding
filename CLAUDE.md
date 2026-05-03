@@ -28,6 +28,10 @@ archive/           # Legacy content, ignore unless asked
 | Add a canonical problem | `reference/problem-bank/canonical-questions.md` |
 | Update quick-reference sheets | `reference/quick-sheets/` |
 | Behavioral / googliness | `tracks/google-sde2/BEHAVIORAL_GOOGLINESS.md` |
+| AI / ML round prep | `tracks/google-sde2/AIML_PREP.md` |
+| System design worked examples | `tracks/google-sde2/SYSTEM_DESIGN_L4.md` |
+| Common mistake patterns by topic | `tracks/google-sde2/PRACTICE_TRACKER.md` (Mistake library section) |
+| Brute→optimal progressions | `tracks/google-sde2/CODING_ROUNDS.md` |
 
 ## Working norms
 - All files are Markdown. Edit in place — don't create new files unless asked.

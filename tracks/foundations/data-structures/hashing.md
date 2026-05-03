@@ -4,6 +4,44 @@ Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A data structure that maps keys to array indices via a hash function, enabling O(1) average-case insert, lookup, and delete. Core invariant: `bucket_index = hash(key) % capacity`; collisions (two keys mapping to same bucket) are resolved by chaining or open addressing.
+
+**Why it exists:** Solves the problem of O(1) arbitrary-key lookup — something arrays (index-only) and BSTs (O(log N)) cannot match. Real-world analogy: a library index card system — look up a book by title (key), get the shelf location (value) instantly without scanning every shelf.
+
+**Memory layout:** An array of buckets. Each bucket is a linked list (chaining) or a probe sequence (open addressing). Load factor α = n/m (n = stored items, m = capacity). Python dict rehashes when α > ~0.66, doubling capacity.
+
+**Key invariants:**
+- `hash(key) % capacity` must be deterministic and uniform across key space.
+- Load factor α must stay below a threshold (typically 0.7) to keep O(1) average.
+- Collision resolution must guarantee every key is findable — no silent overwrites.
+- In Python, only immutable (hashable) types can be keys: `int`, `str`, `tuple` (of hashables), `frozenset`. Lists and dicts cannot be keys.
+
+**Complexity at a glance:**
+
+| Operation | Average | Worst Case | Notes |
+| :--- | :--- | :--- | :--- |
+| Insert | O(1) | O(N) | Worst case: all keys collide |
+| Lookup | O(1) | O(N) | Worst case: all keys collide |
+| Delete | O(1) | O(N) | Worst case: all keys collide |
+| Rehash | O(N) | O(N) | Amortized over all inserts |
+
+**When to reach for it:**
+- Frequency counting — `Counter` or `defaultdict(int)`.
+- Complement/pair lookups — two-sum: check if `target - x` already seen.
+- Grouping by property — anagram grouping, event bucketing.
+- O(1) membership test — set lookups vs linear scan.
+- Sliding window character counts — track window state with a frequency map.
+
+**Common mistakes:**
+- Using mutable objects (lists, dicts) as keys — raises `TypeError`; convert to `tuple` first.
+- Not initializing `seen = {0: 1}` or `first_seen = {0: -1}` in prefix-sum hash map patterns.
+- Comparing floats as dict keys — floating point imprecision makes equality unreliable.
+- Forgetting that Python `dict` preserves insertion order (3.7+) — can be an asset or a surprise.
+
+---
+
 ## 1. Concept Overview
 
 **Problem space**: Frequency count, existence check (set), two-sum (complement map), grouping by key (anagrams), subarray sum = K (prefix sum → count map), LRU cache (map + DLL), deduplication.
@@ -256,9 +294,9 @@ class RandomizedSet:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Group Anagrams](../../google-sde2/PROBLEM_DETAILS.md#group-anagrams)** | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Group Anagrams](../../google-sde2/PROBLEM_DETAILS.md#group-anagrams)** | Hash by Canonical Key | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
 | **[Longest Consecutive](../../google-sde2/PROBLEM_DETAILS.md#longest-consecutive-sequence)** | "Longest streak, unsorted" | Set; only start chain if `x-1` not in set | Without the "start only" guard: O(N²); with it: amortized O(N). |
 | **[LRU Cache](../../google-sde2/PROBLEM_DETAILS.md#lru-cache)** | "O(1) get/put with eviction" | Map `key→DLL node`; move on access; evict tail | Dummy head/tail eliminate all null-check edge cases in `_remove`. |
 | **[Subarray Sum = K](../../google-sde2/PROBLEM_DETAILS.md#subarray-sum-equals-k)** | "Count subarrays with exact sum" | `seen={0:1}`; `count += seen[prefix-K]` | Works with negatives; sliding window doesn't. `seen[0]=1` is critical. |
@@ -268,8 +306,29 @@ class RandomizedSet:
 | **Design HashMap** | "Hash map from scratch" | Array of buckets; chaining with linear scan | Prime capacity; handle `equals` by value; tombstone for open addressing delete. |
 | **4Sum Count** | "Count quadruples summing to 0" | Hash sums of `A+B`; count complements in `C+D` | O(N²) space and time — better than O(N⁴) brute force. |
 | **Max Points on a Line** | "Max collinear points" | Slope map per anchor; `gcd` normalize slope fraction | Vertical line (`dx=0`); same point (`dy=dx=0`); negative slopes in fraction. |
+| **Two Sum** [E] | "Find two indices summing to target" | Complement map: store `val → index`; look up `target - val` | Return indices, not values — clarify. Handle same index: check before inserting. |
+| **Valid Anagram** [E] | "Do two strings use same characters?" | Frequency count: increment for s, decrement for t; all zeros = anagram | `Counter(s) == Counter(t)` is clean; for follow-up (Unicode), same approach applies. |
+| **Word Pattern** [E] | "Bijection between pattern chars and words" | Two maps: `char→word` and `word→char`; check both directions | Bijection requires both maps — `a→dog` and `b→dog` is invalid even if one map is fine. |
+| **Longest Subarray with At Most K Distinct** [M] | "Sliding window, count distinct ≤ K" | Sliding window; map counts elements in window; shrink left when distinct > K | Decrement count and delete key only when count reaches 0 — not just on any shrink. |
+| **Top K Frequent Words** [M] | "K most frequent strings, ties alphabetical" | Count frequencies; sort by `(-freq, word)`; take first K | Heap alternative: `heapq.nsmallest(k, ...)` with `(-freq, word)` avoids full sort. |
+| **Ransom Note** [E] | "Can you build ransom string from magazine?" | Count magazine letters; check ransom has no unsatisfied letter | `Counter(ransomNote) - Counter(magazine)` — if any key remains, return False. |
+| **Find Duplicate File in System** [M] | "Group files by content" | Map `content → [path/file]`; collect groups with ≥ 2 | Parse path+content from each entry; content is key, list of full paths is value. |
+| **Longest Palindrome** [M] | "Longest palindrome buildable from letters" | Count frequencies; all even-count chars contribute fully; one odd-count char can be center | Add 1 if any odd-frequency char exists (it becomes the center). |
+| **Isomorphic Strings** [E] | "Bijection between characters of s and t" | Map `s[i]→t[i]` and `t[i]→s[i]`; conflict = not isomorphic | Same structure as Word Pattern bijection — need both maps for correctness. |
+| **Subarray Sum Equals K** [M] | "Count subarrays with exact sum K" | Prefix sum + map; `count += prefix_map[running_sum - K]`; init `prefix_map[0] = 1` | Sliding window fails with negatives — prefix map handles all cases. |
+| **Longest Increasing Subsequence (via hash)** [M] | "LIS via patience sort + bisect" | Maintain `tails` list; `bisect_left` for replacement index | `tails` is not the LIS itself — only its length. Reconstruct via parent tracking if sequence needed. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "find pair summing to target" → think Complement Map; store `x → index` and look up `target - x`.
+- If the problem says "count subarrays with sum = K" (with negatives) → think Prefix Sum + Hash Map; initialize `seen = {0: 1}` before the loop.
+- If the problem says "group strings by pattern" or "anagrams" → think Frequency-Key Map; key = `tuple(sorted(s))` or 26-count tuple.
+- If the problem says "O(1) insert, delete, getRandom" → think Hash Map + Array; swap-with-last on delete to preserve O(1) random access.
+- If the problem says "longest consecutive sequence" → think Hash Set; only start a chain from `x` if `x-1` is not in the set.
+- If the problem says "sliding window with at most K distinct" → think Frequency Map as window state; delete key only when its count drops to 0.
+- If the problem involves custom hash map design → think Prime-sized bucket array + chaining; rehash when load factor exceeds 0.7.
 
 ## See also
 

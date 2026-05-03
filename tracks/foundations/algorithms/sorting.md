@@ -4,6 +4,45 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Arrange elements in a defined order — the foundation for a vast class of algorithmic optimizations. Core invariant: once data is sorted, binary search, two-pointer, and greedy interval algorithms become applicable — many O(N²) problems drop to O(N) or O(N log N).
+
+**Why it exists.** "Sorting is the unlock." Sorted data enables binary search (O(log N) lookup), greedy interval algorithms (sort by end time → O(N) scan), two-pointer techniques (sorted array → O(N) two-sum), and merge-based counting (inversions, closest pair). Algorithm selection depends on: stability requirement, memory constraint, data size vs RAM, and whether data has special structure.
+
+**The mental model.** Sorting doesn't just order data — it reveals structure. A sorted array is a prerequisite for a dozen other algorithms. Every time you sort, ask: "what does this unlock?" Comparison sorts are bounded by Ω(N log N); non-comparison sorts (counting, radix) break this with O(N) when K is small.
+
+**Complexity at a glance.**
+
+| Algorithm | Avg Time | Worst Time | Space | Stable? |
+| :--- | :--- | :--- | :--- | :--- |
+| Merge Sort | O(N log N) | O(N log N) | O(N) | Yes |
+| Quick Sort (randomized) | O(N log N) | O(N²) | O(log N) | No |
+| Heap Sort | O(N log N) | O(N log N) | O(1) | No |
+| TimSort (Python default) | O(N log N) | O(N log N) | O(N) | Yes |
+| Counting Sort | O(N + K) | O(N + K) | O(K) | Yes |
+| Radix Sort | O(N × d) | O(N × d) | O(N + B) | Yes |
+
+**When to reach for it.**
+- Pre-process before binary search, two-pointer, or greedy interval pass.
+- Count inversions — merge sort augmented.
+- Kth order statistic without full sort — QuickSelect O(N) avg.
+- External sort when data exceeds RAM — external merge sort with K-way heap merge.
+- Top-K from a stream — min-heap of size K, O(N log K).
+
+**When NOT to use it.**
+- K is large for counting sort — memory blowup (O(K) space).
+- Using naive pivot QuickSort on nearly-sorted input — degrades to O(N²); always randomize.
+- Using unstable sort when equal-element relative order matters (e.g., stable sort by secondary key).
+
+**Common mistakes.**
+- Unstable sort when equal-element order matters — Python's `sorted()` / `.sort()` are TimSort (stable); Java's `Arrays.sort` on objects is also stable, but on primitives uses dual-pivot QuickSort (unstable).
+- Naive last-element pivot in QuickSort on sorted input — O(N²) worst case; always randomize.
+- Applying counting sort when K >> N — the O(K) space dominates and kills performance.
+- Interval problems: sorting by start vs end — merging intervals uses start; maximum non-overlapping uses end.
+
+---
+
 ## 1. Algorithm Overview
 
 | Algorithm | Avg Time | Worst Time | Space | Stable? | Best For |
@@ -257,9 +296,9 @@ For distributed sort (MapReduce model):
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Merge Intervals](../../google-sde2/PROBLEM_DETAILS.md#merge-intervals)** | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Merge Intervals](../../google-sde2/PROBLEM_DETAILS.md#merge-intervals)** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
 | **Meeting Rooms II** | "Max concurrent meetings" | Sort starts + ends; two-pointer sweep | Use a **min-heap** of end times for generality. |
 | **Largest Number** | "Lex concat order" | Custom comparator `a+b vs b+a` | Handle all-zeros: `[0,0]` → `"0"`, not `"00"`. |
 | **H-Index** | "Count vs. value crossover" | Sort desc or bucket sort | Find `i` where `citations[i] >= i+1`; off-by-one is common. |
@@ -267,6 +306,28 @@ For distributed sort (MapReduce model):
 | **Count Inversions** | "Out-of-order pairs" | Modified merge sort | Count `len(left) - i` inversions on each right-side pick. |
 | **Russian Doll Envelopes** | "Nested 2D increasing" | Sort w asc, h **desc**; LIS on h | Height sort is **descending** to prevent same-width stacking. |
 | **Maximum Gap** | "Largest gap in sorted form" | Bucket sort; gap spans empty bucket | Gap ≥ `(max - min) / (n-1)`; allocate `n-1` buckets. |
+| **Sort Colors (Dutch National Flag)** [M] | "Sort array of 0s, 1s, 2s in one pass" | Three pointers: `lo`, `mid`, `hi`; swap 0s left, 2s right | `mid` advances on 0 (after swap) and 1 (no swap), but NOT on 2 — element from `hi` is unknown. |
+| **Sort Characters by Frequency** [M] | "Descending frequency sort of string chars" | Count frequencies; sort by `-freq`; rebuild string | Bucket sort alternative: group by frequency index for O(N) vs O(N log N). |
+| **Wiggle Sort II** [M] | "nums[0] < nums[1] > nums[2] < ..." | QuickSelect for median; 3-way partition; interleave via index mapping | Index mapping `(1 + 2*i) % (n | 1)` places larger half at odd indices without extra space. |
+| **Find K-th Smallest Pair Distance** [H] | "Kth smallest absolute difference of any pair" | Binary search on answer; count pairs with distance ≤ mid via two pointers on sorted array | Binary search over difference value [0, max-min]; counting pairs is O(N) with two pointers. |
+| **Minimum Number of Moves to Seat Everyone** [E] | "Match seats to students to minimize total moves" | Sort both arrays; pair sorted seats with sorted students; sum abs differences | Greedy: sorted pairing always minimizes total displacement (exchange argument). |
+| **Largest Perimeter Triangle** [M] | "Largest triangle perimeter from array sides" | Sort desc; check first triplet where `a[i] < a[i-1] + a[i-2]` | Valid triangle: sum of two shorter sides > longest side. Only need to check adjacent triples after sorting. |
+| **Minimum Time Difference** [M] | "Min difference between any two times in list" | Convert to minutes; sort; check adjacent and wrap-around (last - first vs 1440) | Circular: last gap = `1440 - (last - first)`. Sort enables O(N log N) instead of O(N²) pairs. |
+| **Maximum Ice Cream Bars** [M] | "Buy max bars within budget; cheapest first" | Sort by cost; buy greedily from cheapest | Greedy works: maximizing count = minimize cost per item = take cheapest first. |
+| **3Sum Closest** [M] | "Triplet sum closest to target" | Sort; fix `i`; two pointers; update closest on each candidate | Update closest only; move both pointers on exact match for efficiency. |
+| **4Sum** [M] | "All unique quadruples summing to target" | Sort; fix two outer loops; two pointers for inner | Deduplicate at all four levels: outer loop `i`, second loop `j`, and both pointer positions. |
+
+---
+
+## Quick Revision Triggers
+
+- "Problem becomes easy after sorting" → sort first; two pointers / greedy / binary search then apply.
+- "Need stable sort preserving original order of equal elements" → merge sort or Python's TimSort (`sorted()`).
+- "Sort and count inversions simultaneously" → merge sort; count cross-half pairs during merge step.
+- "Interval problems: merge overlapping" → sort by start; greedy merge.
+- "Interval problems: non-overlapping / scheduling" → sort by end; greedy pick earliest ending.
+- "Values bounded by small range (0–K)" → counting sort O(N+K); or radix sort O(N·d) for integers.
+- "Custom comparator in Python" → `functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).
 
 ---
 

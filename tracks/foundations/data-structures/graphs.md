@@ -4,6 +4,45 @@ Vertices (nodes) + Edges (connections). SDE-3 focus: correct representation choi
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** A set of vertices (nodes) V and edges (connections) E between pairs of vertices. Variants: directed vs undirected; weighted vs unweighted; cyclic vs acyclic (DAG). Core property: connectivity — what can reach what.
+
+**Why it exists:** Solves the problem of modeling arbitrary relationships between entities. Real-world analogy: a road network — cities are nodes, roads are edges, one-way streets are directed edges, and traffic jams are edge weights.
+
+**Memory layout:** Two main representations — (1) Adjacency list: `dict[node → list[neighbor]]`, O(V+E) space, O(degree) edge lookup — default for sparse graphs. (2) Adjacency matrix: `matrix[u][v] = weight`, O(V²) space, O(1) edge lookup — only for dense graphs (N ≤ 1000).
+
+**Key invariants:**
+- Undirected graph: each edge stored twice (u→v and v→u) in adjacency list.
+- Directed graph: edge u→v exists only in `adj[u]`; `adj[v]` does not include u.
+- DAG (Directed Acyclic Graph): topological ordering exists iff no cycles — Kahn's algorithm verifies this.
+- Visited set must be maintained to avoid infinite loops in graphs with cycles.
+
+**Complexity at a glance:**
+
+| Operation | Adj List | Adj Matrix | Notes |
+| :--- | :--- | :--- | :--- |
+| Space | O(V+E) | O(V²) | List is sparse-efficient |
+| Add edge | O(1) | O(1) | Both O(1) |
+| Check edge u→v | O(degree(u)) | O(1) | Matrix wins for edge checks |
+| BFS/DFS | O(V+E) | O(V²) | List wins for traversal |
+| All neighbors of u | O(degree(u)) | O(V) | List wins for iteration |
+
+**When to reach for it:**
+- Relationships between entities — social networks, dependency graphs, road maps.
+- Shortest path problems — BFS (unweighted), Dijkstra (weighted positive), Bellman-Ford (negative weights).
+- Network flow, dependency ordering (topological sort), cluster detection (connected components).
+- Grid problems — treat each cell as a node, 4/8 neighbors as edges (implicit graph).
+- Cycle detection in directed graphs (build order, deadlock detection).
+
+**Common mistakes:**
+- Forgetting to handle disconnected graphs — always iterate over all nodes to start BFS/DFS from each unvisited one.
+- Recursive DFS stack overflow on large graphs (>10K nodes) — use iterative DFS with explicit stack.
+- Treating undirected graph as directed — adding edge only one direction causes connectivity bugs.
+- Marking visited after dequeue (BFS) instead of before enqueue — causes duplicate processing and TLE.
+
+---
+
 ## 1. Representation Choice
 
 > [!IMPORTANT]
@@ -224,8 +263,30 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 | **[Word Ladder](../../google-sde2/PROBLEM_DETAILS.md#word-ladder)** | "Shortest transformation sequence" | BFS; each word's neighbors = one-letter edits in dict | Remove words from set as visited — prevents revisit. Bidirectional BFS for follow-up. |
 | **[Alien Dictionary](../../google-sde2/PROBLEM_DETAILS.md#alien-dictionary)** | "Infer char ordering from sorted words" | Extract edges from first mismatch in adjacent words; topo | Invalid input: `"abc"` before `"ab"` — detect and return `""`. |
 | **Pacific Atlantic Flow** | "Which cells reach both oceans?" | Reverse BFS from each ocean's border; intersect reachable sets | Reverse means: "can water flow here from the border?" — go uphill. |
+| **Find if Path Exists** [E] | "Is there a path from source to destination?" | BFS/DFS or Union-Find; mark visited | Union-Find: check `find(source) == find(destination)` after all union ops. |
+| **Find Center of Star Graph** [E] | "Node connected to all others in star" | Center appears in both of the first two edges | Any common node in `edges[0]` and `edges[1]` is the center — O(1). |
+| **Employee Importance** [E] | "Total importance of employee and all subordinates" | BFS/DFS from root employee; accumulate importance | Build id→employee map first; then BFS on subordinate ids. |
+| **All Paths From Source to Target** [M] | "All paths in DAG from 0 to n-1" | DFS with backtracking; no visited set needed (DAG guarantees no cycles) | No cycle → no need for visited set; append path on reaching target. |
+| **Is Graph Bipartite?** [M] | "2-color graph with no monochromatic edge" | BFS/DFS; alternate colors; conflict = not bipartite | Disconnected graph: run BFS/DFS from every unvisited node. |
+| **Minimum Number of Vertices to Reach All Nodes** [M] | "In DAG, find nodes with no incoming edges" | Count in-degrees; nodes with in-degree 0 are the answer | Any node reachable from another has in-degree ≥ 1 — not a required start. |
+| **Network Delay Time** [M] | "All nodes reachable in shortest time" | Dijkstra from source; answer = max of all shortest distances | Return -1 if any node unreachable (`dist == inf`). |
+| **Find Eventual Safe States** [M] | "Nodes that don't lead to a cycle" | Reverse edges; topo sort via Kahn's; nodes in topo = safe | Alternatively: DFS with 3-color (white/gray/black); gray = cycle. |
+| **Redundant Connection** [M] | "Edge creating cycle in undirected graph" | Union-Find; first edge where `find(u) == find(v)` is redundant | If multiple redundant edges exist, return the last one (rightmost in input). |
+| **Minimum Spanning Tree (Kruskal's)** [M] | "Min total edge weight connecting all nodes" | Sort edges by weight; add if no cycle (Union-Find) | Edge count of MST = N-1; stop early when you've added N-1 edges. |
+| **Longest Path in DAG** [H] | "Maximum length path in directed acyclic graph" | Topo sort + DP; `dp[node] = max(dp[neighbor] + 1)` | Only works on DAGs — cycles make this undefined. Use memo + DFS for top-down. |
+| **Swim in Rising Water** [H] | "Min time to reach bottom-right as water rises" | Binary search on answer + BFS feasibility; or Dijkstra treating elevation as cost | Dijkstra approach: `dist[r][c]` = min max-elevation path to `(r,c)`. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.
+- If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.
+- If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.
+- If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.
+- If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.
+- If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
+- If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.
 
 ## See also
 

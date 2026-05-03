@@ -4,6 +4,44 @@ LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next 
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** An abstract data type where all insertions (push) and deletions (pop) happen at the same end — the top. Core invariant: LIFO — the most recently pushed item is always the next to be popped.
+
+**Why it exists:** Solves the problem of tracking "last relevant" state and undoing or replaying operations. Real-world analogy: a stack of plates — you always take from the top; the bottom plate was the first placed and last removed.
+
+**Memory layout:** Implemented as a dynamic array (Python `list`) or linked list. Dynamic array gives O(1) amortized push/pop with good cache locality. Linked list gives O(1) push/pop with overhead of pointer allocation per node.
+
+**Key invariants:**
+- All insert and delete operations touch only the top — never middle or bottom.
+- Pop on an empty stack is undefined (check `not stack` before popping).
+- The top of the stack reflects the most recent state; the bottom reflects the earliest unresolved state.
+
+**Complexity at a glance:**
+
+| Operation | Time | Notes |
+| :--- | :--- | :--- |
+| Push | O(1) amortized | Array append |
+| Pop | O(1) | Remove top |
+| Peek (top) | O(1) | `stack[-1]` in Python |
+| Search | O(N) | Must scan entire stack |
+| Space | O(N) | N elements stored |
+
+**When to reach for it:**
+- Undo/redo operations — each action is a frame; undo pops the top frame.
+- Balanced parentheses / nested structure validation.
+- Iterative DFS — explicit stack replaces the call stack.
+- Monotonic relationships: next greater element, largest rectangle, daily temperatures.
+- Expression evaluation with operator precedence (Basic Calculator variants).
+
+**Common mistakes:**
+- Not checking `not stack` before calling `pop()` or accessing `stack[-1]` — causes `IndexError`.
+- Confusing push/pop order when simulating a process — trace through a small example first.
+- Storing values instead of indices on the stack — you lose position info needed for distance or result-array filling.
+- Not resetting the stack between test cases in batch-input problems.
+
+---
+
 ## 1. Concept Overview
 
 **Problem space**: Next Greater/Smaller Element (NGE/NSE), largest rectangle in histogram, trapping rain water, expression evaluation, valid parentheses, DFS simulation, decode string, exclusive function time.
@@ -229,9 +267,9 @@ For very large streams that don't fit in memory: partition the stream into chunk
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Daily Temperatures](../../google-sde2/PROBLEM_DETAILS.md#daily-temperatures)** | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Daily Temperatures](../../google-sde2/PROBLEM_DETAILS.md#daily-temperatures)** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
 | **Next Greater Element II** | "Next greater in circular array" | Iterate `0..2N-1` with `% N`; same monotonic stack | Never push index `i % N` when `i >= N` — only query, don't double-add. |
 | **[Largest Rectangle](../../google-sde2/PROBLEM_DETAILS.md#largest-rectangle-in-histogram)** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
 | **Maximal Rectangle** | "Max rectangle of 1s in matrix" | Build histogram row by row; run LRH each row | Heights reset to 0 on encountering `'0'`; LRH applied to each row. |
@@ -241,8 +279,28 @@ For very large streams that don't fit in memory: partition the stream into chunk
 | **Exclusive Time of Functions** | "Non-overlapping function runtimes" | Stack of `(id, start)`; on end: `time += end - start + 1` | Nested calls: pause outer by subtracting inner's duration from outer's start time. |
 | **[Trapping Rain Water](../../google-sde2/PROBLEM_DETAILS.md#trapping-rain-water)** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
 | **Maximum Frequency Stack** | "Pop most frequent; ties: most recent" | Map `freq→[elements]`; map `val→freq`; track `max_freq` | On pop, decrement `max_freq` if top bucket becomes empty. |
+| **Balanced Parentheses** [E] | "Check if brackets are balanced" | Push open brackets; on close check top matches; stack empty at end | Map `')': '('` for clean matching; early return if stack empty on close. |
+| **Baseball Game** [E] | "Simulate score with ops `+`, `D`, `C`, int" | Stack; `+` sums top two; `D` doubles top; `C` pops top | Process in order; `+` looks at top two without popping them before pushing sum. |
+| **Remove All Adjacent Duplicates** [E] | "Repeatedly remove adjacent equal pairs" | Stack; push if top ≠ curr; pop if top == curr | Result is remaining stack joined — equivalent to cancellation like bracket matching. |
+| **Asteroid Collision** [M] | "Positive (right) and negative (left) collide; larger survives" | Stack; negative asteroid collides with positive top | Same size → both explode. Negative vs negative → no collision (both going left). |
+| **Online Stock Span** [M] | "Days where price ≤ today's for consecutive run" | Monotonic decreasing stack of `(price, span)`; merge spans | On pop, accumulate `span += popped_span` — key: spans propagate multiplicatively. |
+| **Remove K Digits** [M] | "Remove K digits to form smallest number" | Monotonic increasing stack; pop when top > curr and k > 0 | Strip leading zeros from result. If k > 0 after loop, trim last k from stack (they're already sorted). |
+| **Sum of Subarray Minimums** [M] | "Sum of min of every contiguous subarray" | Monotonic stack; compute left and right boundaries for each element as minimum | `answer += stack_val * left_count * right_count`; left boundary uses strict `<`, right uses `<=` to avoid double-counting equal values. |
+| **Largest Rectangle in Histogram** [H] | "Max area rectangle in bar chart" | Monotonic increasing stack; for each bar compute max width it can span | Width = `right_boundary - left_boundary - 1`; append sentinel `0` to flush remaining stack at end. |
+| **Basic Calculator II** [M] | "Evaluate expression with `+`, `-`, `*`, `/`" | Stack; flush on `+`/`-`; compute `*`/`/` with last operand | Unary minus: treat as `0 - ...`. Integer division truncates toward zero in Python use `int(a/b)` not `a//b` for negatives. |
+| **Validate Stack Sequences** [M] | "Can `pushed` sequence produce `popped`?" | Simulate: push elements; pop greedily when top matches `popped[j]` | If stack is empty at end, sequences are valid. Greedy pop is always safe — no benefit to delaying. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "next greater/smaller element" → think Monotonic Stack; brute force O(N²) → stack O(N) because each element pushed/popped once.
+- If the problem says "valid brackets" or "nested structure matching" → think Stack; push on open, pop-and-verify on close.
+- If the problem says "undo/redo" or "backtrack to previous state" → think Stack because LIFO naturally reverses recent actions.
+- If the problem says "largest rectangle in histogram" → think Monotonic Increasing Stack; pop when a shorter bar arrives, compute width using remaining stack top.
+- If the problem says "evaluate expression with parentheses" → think Stack saving `(result, sign)` context on `(` and restoring on `)`.
+- If the problem says "iterative DFS" → think explicit Stack replacing the call stack; push neighbors in reverse order to preserve traversal direction.
+- If the problem needs O(1) getMin with push/pop → think Parallel Min-Stack synced with main stack.
 
 ## See also
 

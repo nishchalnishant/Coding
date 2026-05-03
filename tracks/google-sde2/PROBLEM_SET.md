@@ -21,93 +21,94 @@ Notes:
 
 ## Arrays, prefix sums, hashing
 
-- [Two Sum](PROBLEM_DETAILS.md#two-sum)
-- [Subarray Sum Equals K](PROBLEM_DETAILS.md#subarray-sum-equals-k)
-- [Product of Array Except Self](PROBLEM_DETAILS.md#product-of-array-except-self)
-- [Maximum Subarray (Kadane)](PROBLEM_DETAILS.md#maximum-subarray-kadane)
-- [Merge Intervals](PROBLEM_DETAILS.md#merge-intervals)
-- [Insert Interval](PROBLEM_DETAILS.md#insert-interval) (Stretch)
-- [Next Permutation](PROBLEM_DETAILS.md#next-permutation) (Stretch)
-- [Majority Element](PROBLEM_DETAILS.md#majority-element)
+- [E] [Two Sum](PROBLEM_DETAILS.md#two-sum)
+- [M] [Subarray Sum Equals K](PROBLEM_DETAILS.md#subarray-sum-equals-k)
+- [M] [Product of Array Except Self](PROBLEM_DETAILS.md#product-of-array-except-self)
+- [M] [Maximum Subarray (Kadane)](PROBLEM_DETAILS.md#maximum-subarray-kadane)
+- [M] [Merge Intervals](PROBLEM_DETAILS.md#merge-intervals)
+- [M] [Majority Element](PROBLEM_DETAILS.md#majority-element) — Boyer-Moore voting
+- [H] [Insert Interval](PROBLEM_DETAILS.md#insert-interval) (Stretch)
+- [H] [Next Permutation](PROBLEM_DETAILS.md#next-permutation) (Stretch)
 
 ## Two pointers
 
-- [3Sum](PROBLEM_DETAILS.md#3sum)
-- [Container With Most Water](PROBLEM_DETAILS.md#container-with-most-water)
-- [Trapping Rain Water](PROBLEM_DETAILS.md#trapping-rain-water) (Hard / Stretch)
-- [Remove Duplicates from Sorted Array](PROBLEM_DETAILS.md#remove-duplicates-from-sorted-array)
-- [Sort Colors (Dutch Flag)](PROBLEM_DETAILS.md#sort-colors-dutch-flag)
+- [M] [3Sum](PROBLEM_DETAILS.md#3sum)
+- [M] [Container With Most Water](PROBLEM_DETAILS.md#container-with-most-water)
+- [E] [Remove Duplicates from Sorted Array](PROBLEM_DETAILS.md#remove-duplicates-from-sorted-array)
+- [M] [Sort Colors (Dutch Flag)](PROBLEM_DETAILS.md#sort-colors-dutch-flag)
+- [H] [Trapping Rain Water](PROBLEM_DETAILS.md#trapping-rain-water) (Hard / Stretch)
 
 ## Sliding window
 
-- [Longest Substring Without Repeating Characters](PROBLEM_DETAILS.md#longest-substring-without-repeating-characters)
-- [Longest Repeating Character Replacement](PROBLEM_DETAILS.md#longest-repeating-character-replacement)
-- [Minimum Window Substring](PROBLEM_DETAILS.md#minimum-window-substring) (Hard / Stretch)
-- [Find All Anagrams in a String](PROBLEM_DETAILS.md#find-all-anagrams-in-a-string)
-- [Sliding Window Maximum](PROBLEM_DETAILS.md#sliding-window-maximum) (Hard / Stretch)
+- [M] [Longest Substring Without Repeating Characters](PROBLEM_DETAILS.md#longest-substring-without-repeating-characters)
+- [M] [Longest Repeating Character Replacement](PROBLEM_DETAILS.md#longest-repeating-character-replacement)
+- [M] [Find All Anagrams in a String](PROBLEM_DETAILS.md#find-all-anagrams-in-a-string)
+- [H] [Minimum Window Substring](PROBLEM_DETAILS.md#minimum-window-substring) (Hard / Stretch)
+- [H] [Sliding Window Maximum](PROBLEM_DETAILS.md#sliding-window-maximum) (Hard / Stretch)
 
 ## Binary search (index + “search on answer”)
 
-- [Find First and Last Position of Element](PROBLEM_DETAILS.md#find-first-and-last-position-of-element)
-- [Search in Rotated Sorted Array](PROBLEM_DETAILS.md#search-in-rotated-sorted-array)
-- [Find Minimum in Rotated Sorted Array](PROBLEM_DETAILS.md#find-minimum-in-rotated-sorted-array)
-- [Koko Eating Bananas](PROBLEM_DETAILS.md#koko-eating-bananas) (BS on answer)
-- [Median of Two Sorted Arrays](PROBLEM_DETAILS.md#median-of-two-sorted-arrays) (Hard / Stretch)
+- [M] [Find First and Last Position of Element](PROBLEM_DETAILS.md#find-first-and-last-position-of-element)
+- [M] [Search in Rotated Sorted Array](PROBLEM_DETAILS.md#search-in-rotated-sorted-array)
+- [M] [Find Minimum in Rotated Sorted Array](PROBLEM_DETAILS.md#find-minimum-in-rotated-sorted-array)
+- [M] [Koko Eating Bananas](PROBLEM_DETAILS.md#koko-eating-bananas) (BS on answer)
+- [H] [Median of Two Sorted Arrays](PROBLEM_DETAILS.md#median-of-two-sorted-arrays) (Hard / Stretch)
 
 ## Stack / queue (monotonic patterns)
 
-- [Valid Parentheses](PROBLEM_DETAILS.md#valid-parentheses)
-- [Daily Temperatures](PROBLEM_DETAILS.md#daily-temperatures)
-- [Largest Rectangle in Histogram](PROBLEM_DETAILS.md#largest-rectangle-in-histogram) (Hard / Stretch)
-- [Evaluate Reverse Polish Notation](PROBLEM_DETAILS.md#evaluate-reverse-polish-notation)
+- [E] [Valid Parentheses](PROBLEM_DETAILS.md#valid-parentheses)
+- [M] [Daily Temperatures](PROBLEM_DETAILS.md#daily-temperatures)
+- [M] [Evaluate Reverse Polish Notation](PROBLEM_DETAILS.md#evaluate-reverse-polish-notation)
+- [H] [Largest Rectangle in Histogram](PROBLEM_DETAILS.md#largest-rectangle-in-histogram) (Hard / Stretch)
 
 ## Linked list
 
-- [Reverse Linked List](PROBLEM_DETAILS.md#reverse-linked-list)
-- [Linked List Cycle II](PROBLEM_DETAILS.md#linked-list-cycle-ii)
-- [Merge Two Sorted Lists](PROBLEM_DETAILS.md#merge-two-sorted-lists)
-- [LRU Cache](PROBLEM_DETAILS.md#lru-cache) (Hard / Stretch; also design-heavy)
+- [E] [Reverse Linked List](PROBLEM_DETAILS.md#reverse-linked-list)
+- [E] [Merge Two Sorted Lists](PROBLEM_DETAILS.md#merge-two-sorted-lists)
+- [M] [Linked List Cycle II](PROBLEM_DETAILS.md#linked-list-cycle-ii)
+- [M] [Remove Nth Node From End](PROBLEM_DETAILS.md#remove-nth-from-end)
+- [H] [LRU Cache](PROBLEM_DETAILS.md#lru-cache) (Hard / Stretch; doubly linked list + hash map)
 
 ## Trees / BST
 
-- [Maximum Depth of Binary Tree](PROBLEM_DETAILS.md#maximum-depth-of-binary-tree)
-- [Validate BST](PROBLEM_DETAILS.md#validate-bst)
-- [Lowest Common Ancestor (BST + general)](PROBLEM_DETAILS.md#lowest-common-ancestor-bst-general)
-- [Binary Tree Level Order Traversal](PROBLEM_DETAILS.md#binary-tree-level-order-traversal)
-- [Kth Smallest in BST](PROBLEM_DETAILS.md#kth-smallest-in-bst)
-- [Binary Tree Maximum Path Sum](PROBLEM_DETAILS.md#binary-tree-maximum-path-sum) (Hard / Stretch)
-- [Serialize and Deserialize Binary Tree](PROBLEM_DETAILS.md#serialize-and-deserialize-binary-tree) (Hard / Stretch)
+- [E] [Maximum Depth of Binary Tree](PROBLEM_DETAILS.md#maximum-depth-of-binary-tree)
+- [M] [Binary Tree Level Order Traversal](PROBLEM_DETAILS.md#binary-tree-level-order-traversal)
+- [M] [Validate BST](PROBLEM_DETAILS.md#validate-bst)
+- [M] [Lowest Common Ancestor (BST + general)](PROBLEM_DETAILS.md#lowest-common-ancestor-bst-general)
+- [M] [Kth Smallest in BST](PROBLEM_DETAILS.md#kth-smallest-in-bst)
+- [H] [Binary Tree Maximum Path Sum](PROBLEM_DETAILS.md#binary-tree-maximum-path-sum) (Hard / Stretch)
+- [H] [Serialize and Deserialize Binary Tree](PROBLEM_DETAILS.md#serialize-and-deserialize-binary-tree) (Hard / Stretch)
 
 ## Graphs (BFS/DFS/topo)
 
-- [Number of Islands](PROBLEM_DETAILS.md#number-of-islands)
-- [Clone Graph](PROBLEM_DETAILS.md#clone-graph)
-- [Course Schedule](PROBLEM_DETAILS.md#course-schedule) (topo + cycle)
-- [Rotting Oranges](PROBLEM_DETAILS.md#rotting-oranges) (multi-source BFS)
-- [Word Ladder](PROBLEM_DETAILS.md#word-ladder) (Hard / Stretch)
-- [Network Delay Time](PROBLEM_DETAILS.md#network-delay-time) (Dijkstra; Stretch)
+- [M] [Number of Islands](PROBLEM_DETAILS.md#number-of-islands)
+- [M] [Clone Graph](PROBLEM_DETAILS.md#clone-graph)
+- [M] [Course Schedule](PROBLEM_DETAILS.md#course-schedule) (topo + cycle)
+- [M] [Rotting Oranges](PROBLEM_DETAILS.md#rotting-oranges) (multi-source BFS)
+- [H] [Word Ladder](PROBLEM_DETAILS.md#word-ladder) (Hard / Stretch)
+- [M] [Network Delay Time](PROBLEM_DETAILS.md#network-delay-time) (Dijkstra; Stretch)
 
 ## Dynamic programming (core)
 
-- [House Robber](PROBLEM_DETAILS.md#house-robber)
-- [Coin Change](PROBLEM_DETAILS.md#coin-change)
-- [Longest Increasing Subsequence](PROBLEM_DETAILS.md#longest-increasing-subsequence)
-- [Longest Common Subsequence](PROBLEM_DETAILS.md#longest-common-subsequence)
-- [Edit Distance](PROBLEM_DETAILS.md#edit-distance) (Hard / Stretch)
-- [Word Break](PROBLEM_DETAILS.md#word-break)
+- [M] [House Robber](PROBLEM_DETAILS.md#house-robber)
+- [M] [Coin Change](PROBLEM_DETAILS.md#coin-change)
+- [M] [Word Break](PROBLEM_DETAILS.md#word-break)
+- [M] [Longest Increasing Subsequence](PROBLEM_DETAILS.md#longest-increasing-subsequence)
+- [M] [Longest Common Subsequence](PROBLEM_DETAILS.md#longest-common-subsequence)
+- [H] [Edit Distance](PROBLEM_DETAILS.md#edit-distance) (Hard / Stretch)
 
 ## Backtracking
 
-- [Permutations](PROBLEM_DETAILS.md#permutations)
-- [Subsets](PROBLEM_DETAILS.md#subsets)
-- [Combination Sum](PROBLEM_DETAILS.md#combination-sum)
-- [Word Search](PROBLEM_DETAILS.md#word-search) (Stretch)
+- [M] [Subsets](PROBLEM_DETAILS.md#subsets)
+- [M] [Permutations](PROBLEM_DETAILS.md#permutations)
+- [M] [Combination Sum](PROBLEM_DETAILS.md#combination-sum)
+- [M] [Word Search](PROBLEM_DETAILS.md#word-search) (Stretch)
 
 ## Heaps
 
-- [Top K Frequent Elements](PROBLEM_DETAILS.md#top-k-frequent-elements)
-- [Merge K Sorted Lists](PROBLEM_DETAILS.md#merge-k-sorted-lists)
-- [Find Median from Data Stream](PROBLEM_DETAILS.md#find-median-from-data-stream) (Hard / Stretch)
+- [M] [Top K Frequent Elements](PROBLEM_DETAILS.md#top-k-frequent-elements)
+- [H] [Merge K Sorted Lists](PROBLEM_DETAILS.md#merge-k-sorted-lists)
+- [H] [Find Median from Data Stream](PROBLEM_DETAILS.md#find-median-from-data-stream) (Hard / Stretch — two heaps)
 
 ---
 

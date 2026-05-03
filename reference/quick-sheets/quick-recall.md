@@ -1,6 +1,6 @@
 # Google Interview — One-Page Quick Sheet
 
-Print or keep on a second screen during **last-minute** review (not during the interview). For full context see [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md).
+**This is a reminder sheet, not a learning tool.** Use it in the final 2 days only — after you've already practiced each pattern. For full context see [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md).
 
 ---
 
@@ -20,8 +20,9 @@ Print or keep on a second screen during **last-minute** review (not during the i
 | Union-Find | Connectivity, Kruskal | find + union | ~O(1) amortized |
 | Heap | Top K, merge K lists | Size-K min-heap or push all heads | O(n log k) |
 | Binary search on answer | Minimize max, feasibility | `valid(mid)` + search range | O(n log range) |
-| Monotonic stack | Next greater, histogram | Pop while smaller | O(n) |
-| Tree DP | Max path through node | Postorder, return up value | O(n) |
+| Monotonic stack | Next greater, histogram | Store indices; pop while current > top | O(n) |
+| Heap (size K) | Top K, K-th largest/smallest | Size-K min-heap; pop when size > K | O(n log k) |
+| Tree DP | Max path through node | Postorder; helper returns single-branch gain | O(n) |
 | 2D DP | LCS, edit distance | `dp[i][j]` from three neighbors | O(nm) |
 
 ---

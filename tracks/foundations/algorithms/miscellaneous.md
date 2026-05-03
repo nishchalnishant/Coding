@@ -4,6 +4,44 @@ Advanced data structures and cross-cutting patterns that don't fit neatly into o
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Advanced data structures (Fenwick tree, Segment tree, Sparse table) and sweep-line / design patterns that don't fit a single algorithmic paradigm. Core invariant: each structure exploits a specific structural property of its problem class — binary index tricks for prefix sums, interval trees for range aggregation, event sorting for sweep line.
+
+**Why it exists.** Many competitive and SDE-3 interview problems require operations that prefix arrays can't support (point updates) or that Fenwick trees can't express (range min/max). These structures fill those gaps at O(log N) per operation rather than O(N) brute force.
+
+**The mental model.** Power tools for specific problem shapes. Fenwick tree = "dynamic prefix sum with a 10-line implementation"; Segment tree = "any associative range operation + lazy propagation"; Sweep line = "sort events by x, process with an active set"; LRU/LFU = "system design in code using standard data structure combos".
+
+**Complexity at a glance.**
+
+| Structure | Build | Point Update | Range Query | Notes |
+| :--- | :--- | :--- | :--- | :--- |
+| Prefix array (static) | O(N) | O(N) rebuild | O(1) | Read-only; no updates |
+| Fenwick tree (BIT) | O(N log N) | O(log N) | O(log N) prefix sum | Supports sum and count; not min/max |
+| Segment tree | O(N) | O(log N) | O(log N) | Any associative op; lazy prop for range update |
+| Sparse table | O(N log N) | — (static) | O(1) | Idempotent ops only (min, max, GCD); no updates |
+| Sweep line | O(N log N) | — | — | Sort + active set; O(N log N) total |
+
+**When to reach for it.**
+- Range sum/min/max with point updates → Fenwick (sum only) or Segment tree (general).
+- Sliding window with complex queries → monotonic deque.
+- Building data structures in code (LRU = HashMap + doubly linked list; LFU = three maps + min_freq).
+- Event-based geometry (skyline problem, rectangle area union) → sweep line.
+- Count inversions dynamically → Fenwick tree on coordinate-compressed values.
+
+**When NOT to use it.**
+- N is small (≤ 1000) — brute force is cleaner and faster to code.
+- Array is read-only — a prefix sum array handles range sum in O(1) with O(N) precompute; no Fenwick needed.
+- Range update + range query is needed — Segment tree with lazy propagation; Fenwick alone cannot do this cleanly.
+
+**Common mistakes.**
+- Fenwick tree is 1-indexed — `update(0, ...)` is wrong; all indices must be ≥ 1.
+- Segment tree: lazy propagation must be pushed down before querying children — missed push-down produces stale values.
+- LRU: "move to head on get" is required, not just on put — forgetting this breaks the recency invariant.
+- LFU: `min_freq` must be reset to 1 on every new key insertion — not resetting causes wrong eviction.
+
+---
+
 ## 1. Advanced Data Structures
 
 ### Fenwick Tree (Binary Indexed Tree) — Dynamic Prefix Sums
@@ -202,9 +240,9 @@ def rmq(table: list[list[int]], l: int, r: int) -> int:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Merge Intervals** | "Combine overlapping [l, r] ranges" | Sort by start; extend `end` greedily while `interval[0] <= end` | Touching intervals `[1,2]` and `[2,3]` — confirm merging rule. Sort by start, not end. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Merge Intervals** | Sort + Greedy Merge | "Combine overlapping [l, r] ranges" | Sort by start; extend `end` greedily while `interval[0] <= end` | Touching intervals `[1,2]` and `[2,3]` — confirm merging rule. Sort by start, not end. |
 | **Meeting Rooms II** | "Minimum rooms for N meetings" | Min-heap of end times; if `heap[0] <= start`, reuse room (pop + push new end) | Heap size at any moment = answer (max concurrent meetings). Sort by start first. |
 | **Range Sum Query Mutable** | "Prefix sum with point updates" | Fenwick tree; `update(i, delta)` and `prefix_sum(i)` each O(log N) | 1-indexed; `i += i & (-i)` for update; `i -= i & (-i)` for query — opposite directions. |
 | **Count Smaller After Self** | "For each i, count j>i where nums[j]<nums[i]" | Fenwick on coordinate-compressed values (right-to-left); or merge sort counting right-picks | Merge sort: pass `(value, original_index)` pairs to track positions through sorting. |
@@ -212,6 +250,15 @@ def rmq(table: list[list[int]], l: int, r: int) -> int:
 | **Design LFU Cache** | "Evict least-frequently used; ties → LRU" | `key→val`, `key→freq`, `freq→OrderedDict`; track global `min_freq` | Reset `min_freq = 1` on every `put` of a new key. Increment `min_freq` in `get` only when `freq_map[min_freq]` becomes empty. |
 | **Non-Overlapping Intervals** | "Min removals to make disjoint" | Sort by **end**; greedily keep interval with earliest end; count removals | Sort by end (not start): earliest end leaves max room for future intervals. |
 | **Data Stream Intervals** | "Maintain disjoint intervals dynamically" | Binary search for left/right overlap; merge on insert | Handle both neighbors: merge left if `new.start <= left.end + 1`; merge right if `new.end >= right.start - 1`. |
+| **Design HashSet [E]** | "Implement a hash set without built-in hash" | Array of buckets (chaining); `hash(key) = key % size`; linked list per bucket | Choose bucket count as a prime (e.g., 1009) to reduce collisions. Handle remove in chained list carefully. |
+| **Design Hit Counter [E]** | "Count hits in the past 5 minutes" | Circular array of 300 slots (seconds); slot = `(timestamp, count)`; reset stale slot on write | `timestamp % 300` gives slot index. Reading: sum all slots where `timestamp - slot_time < 300`. |
+| **LRU Cache [M]** | "O(1) get/put with eviction of least recently used" | `OrderedDict` or HashMap + doubly linked list; move to head on access; evict tail on overflow | Python `OrderedDict.move_to_end(key)` + `popitem(last=False)` gives O(1). Hand-roll DLL for interviews expecting lower-level answer. |
+| **Design Twitter [M]** | "In-memory Twitter: post tweet, follow, getNewsFeed" | Per-user tweet list (most recent first); `getNewsFeed` = K-way merge of followees' lists via min-heap | K-way merge with heap: push `(timestamp, user, tweet_idx)`; pop 10 times. Follow/unfollow update a set. |
+| **Range Sum Query — Immutable [E]** | "Precompute prefix sums for O(1) range queries" | `prefix[i] = prefix[i-1] + nums[i-1]`; `query(l,r) = prefix[r+1] - prefix[l]` | 1-indexed prefix array avoids boundary check. `prefix[0] = 0` sentinel. |
+| **Snapshot Array [M]** | "Array with snapshot: get value at past snapshot" | Per-index list of `(snap_id, val)`; binary search on snap_id for reads | Store only changed values (copy-on-write). Binary search via `bisect_right(snaps, snap_id) - 1`. |
+| **Find Median from Data Stream [H]** | "Maintain running median as numbers are inserted" | Two heaps: max-heap for lower half, min-heap for upper half; balance sizes | Max-heap in Python: negate values. Rebalance after every insert: sizes differ by at most 1. Median = top of larger heap or average of both tops. |
+| **The Skyline Problem [H]** | "Building silhouette as list of key (x, height) points" | Sweep line on start/end events; max-heap of `(-height, end)`; emit when max height changes | Lazy-delete from heap (check if top building has ended). Critical: emit only when height **changes**, not on every event. |
+| **Minimum Interval to Include Each Query [H]** | "For each query point, find smallest interval containing it" | Sort queries and intervals by start; min-heap `(size, end)` of active intervals; sweep and pop expired | Offline processing: sort queries + intervals together by left endpoint. Lazy-remove intervals where `end < query`. |
 
 ---
 
@@ -221,6 +268,18 @@ def rmq(table: list[list[int]], l: int, r: int) -> int:
 2. **Time** — Choose the right algorithm and data structure; state complexity before coding.
 3. **Space** — Minimize extra memory; in-place when possible.
 4. **Clarity** — Self-explanatory names; no clever tricks that obscure intent.
+
+---
+
+## Quick Revision Triggers
+
+- "Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.
+- "Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).
+- "Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.
+- "Events at coordinates: intervals, rectangles, skyline" → sweep line; sort events by x, process with sorted structure.
+- "O(1) average get/put with eviction of least recently used" → LRU: `OrderedDict` or doubly-linked list + hash map.
+- "O(1) average get/put with eviction of least frequently used" → LFU: two hash maps + min_freq pointer; reset min_freq=1 on put.
+- "Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).
 
 ---
 

@@ -62,7 +62,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 - Full notes: [data-structures/array.md](data-structures/array.md)  
 - Patterns: [../patterns/two-pointers-sliding-window.md](../patterns/two-pointers-sliding-window.md)
 
-**Google-style practice (names only — use your platform):** Two Sum, 3Sum, Subarray Sum Equals K, Longest Substring Without Repeating Characters, Minimum Window Substring, Trapping Rain Water, Merge Intervals, Product of Array Except Self.
+**Practice:** [PROBLEM_SET.md — Arrays, hashing, two pointers, sliding window sections](../../tracks/google-sde2/PROBLEM_SET.md): Two Sum, 3Sum, Subarray Sum Equals K, Longest Substring Without Repeating Characters, Minimum Window Substring, Trapping Rain Water, Merge Intervals, Product of Array Except Self.
 
 **Verbal template:** “I’ll use a hash map for O(N) or two pointers after sort for O(N) with O(1) space trade-off…”
 
@@ -74,7 +74,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [algorithms/string.md](algorithms/string.md), [data-structures/hashing.md](data-structures/hashing.md)
 
-**Practice:** Group Anagrams, Valid Anagram, Longest Palindromic Substring, Minimum Window Substring, Find All Anagrams in a String.
+**Practice:** [PROBLEM_SET.md — Arrays/hashing section](../../tracks/google-sde2/PROBLEM_SET.md): Group Anagrams, Valid Anagram, Longest Palindromic Substring, Find All Anagrams in a String.
 
 ---
 
@@ -84,7 +84,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [data-structures/linked-list.md](data-structures/linked-list.md)
 
-**Practice:** Reverse Linked List, Linked List Cycle II, Merge Two Sorted Lists, Remove Nth From End.
+**Practice:** [PROBLEM_SET.md — Linked list section](../../tracks/google-sde2/PROBLEM_SET.md): Reverse Linked List, Linked List Cycle II, Merge Two Sorted Lists, Remove Nth From End.
 
 ---
 
@@ -94,7 +94,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [data-structures/stack.md](data-structures/stack.md), [data-structures/queue.md](data-structures/queue.md)
 
-**Practice:** Daily Temperatures, Largest Rectangle in Histogram, Sliding Window Maximum, Valid Parentheses.
+**Practice:** [PROBLEM_SET.md — Stack/queue section](../../tracks/google-sde2/PROBLEM_SET.md): Valid Parentheses, Daily Temperatures, Sliding Window Maximum, Largest Rectangle in Histogram.
 
 ---
 
@@ -104,7 +104,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [data-structures/tree.md](data-structures/tree.md)
 
-**Practice:** Lowest Common Ancestor, Validate BST, Binary Tree Maximum Path Sum, Serialize and Deserialize Binary Tree, Kth Smallest in BST.
+**Practice:** [PROBLEM_SET.md — Trees/BST section](../../tracks/google-sde2/PROBLEM_SET.md): Maximum Depth, Level Order Traversal, LCA (general + BST), Validate BST, Max Path Sum, Serialize/Deserialize.
 
 ---
 
@@ -114,7 +114,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [data-structures/heap.md](data-structures/heap.md)
 
-**Practice:** Merge K Sorted Lists, Top K Frequent Elements, Find Median from Data Stream.
+**Practice:** [PROBLEM_SET.md — Heaps section](../../tracks/google-sde2/PROBLEM_SET.md): Top K Frequent Elements, Merge K Sorted Lists, Find Median from Data Stream.
 
 ---
 
@@ -124,7 +124,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [algorithms/searching.md](algorithms/searching.md)
 
-**Practice:** Search in Rotated Sorted Array, Find First and Last Position, Koko Eating Bananas (or similar BS-on-answer).
+**Practice:** [PROBLEM_SET.md — Binary search section](../../tracks/google-sde2/PROBLEM_SET.md): Find First and Last Position, Search in Rotated Sorted Array, Find Minimum in Rotated Sorted Array, Koko Eating Bananas.
 
 ---
 
@@ -136,7 +136,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 - Union-Find: [algorithms/union-find.md](algorithms/union-find.md)  
 - Advanced (if L5+): [../advanced-dsa/advanced-graphs.md](../advanced-dsa/advanced-graphs.md)
 
-**Practice:** Number of Islands, Course Schedule, Rotten Oranges, Clone Graph, Word Ladder (BFS), Cheapest Flights Within K Stops (or Bellman/Dijkstra variant).
+**Practice:** [PROBLEM_SET.md — Graphs section](../../tracks/google-sde2/PROBLEM_SET.md): Number of Islands, Course Schedule, Rotting Oranges, Clone Graph, Network Delay Time (Dijkstra), Word Ladder (stretch).
 
 ---
 
@@ -147,7 +147,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 - Full notes: [algorithms/dynamic-programming/README.md](algorithms/dynamic-programming/README.md)  
 - 16 patterns: [../patterns/dp-advanced.md](../patterns/dp-advanced.md)
 
-**Practice:** Coin Change, House Robber, Longest Increasing Subsequence, Longest Common Subsequence, Unique Paths, Edit Distance, Word Break.
+**Practice:** [PROBLEM_SET.md — DP section](../../tracks/google-sde2/PROBLEM_SET.md): House Robber, Coin Change, LIS (O(n log n) variant), LCS, Word Break, Edit Distance (stretch).
 
 ---
 
@@ -157,7 +157,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 - Full notes: [algorithms/greedy.md](algorithms/greedy.md), [algorithms/backtracking.md](algorithms/backtracking.md)
 
-**Practice:** Jump Game, Merge Intervals / Non-overlapping Intervals, Permutations, Combination Sum, Word Search.
+**Practice:** [PROBLEM_SET.md — Backtracking + Greedy sections](../../tracks/google-sde2/PROBLEM_SET.md): Subsets, Permutations, Combination Sum, Non-overlapping Intervals, Jump Game II.
 
 ---
 
@@ -185,7 +185,10 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 4. **While coding:** Narrate non-obvious indices and invariants (“`left` is always the start of the valid window”).
 5. **End:** “Time is O(…), space is O(…). Edge cases: empty input, single element, …”
 
-If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted graph I’ll use BFS because…”
+If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted graph I’ll use BFS because each level guarantees minimum distance.”
+
+**Example dialogue — Two Sum:**
+> “So we need to find two indices that sum to target. Let me confirm: can indices be the same? Is there always exactly one answer? [Wait.] Brute force is O(n²) — check all pairs. We can do better: scan once, storing each value in a hash map keyed by the complement target-x. When we see a value whose complement is already in the map, we return both indices. This is O(n) time, O(n) space. Edge case: same element can’t be used twice, so I’ll check the index stored in the map isn’t the current index.”
 
 ---
 

@@ -4,6 +4,44 @@ FIFO ordered processing. SDE-3 focus: BFS shortest path, monotonic deque for sli
 
 ---
 
+## Theory & Mental Models
+
+**What it is:** An abstract data type where elements are added at the rear (enqueue) and removed from the front (dequeue). Core invariant: FIFO — the oldest item is always processed first.
+
+**Why it exists:** Solves the problem of fair ordered processing and level-by-level exploration. Real-world analogy: a checkout line — the first person in line is served first; late arrivals wait at the back.
+
+**Memory layout:** Best implemented as a doubly-ended deque (`collections.deque`) backed by a doubly-linked list of fixed-size blocks — O(1) append and popleft. Python `list.pop(0)` is O(N) due to shifting; never use it for a queue.
+
+**Key invariants:**
+- Enqueue at rear, dequeue from front — both O(1) with `deque`.
+- BFS requires a queue to guarantee level-order (shortest-path) exploration.
+- Monotonic deque: elements are maintained in sorted order; each element enters and exits at most once → O(N) total.
+
+**Complexity at a glance:**
+
+| Operation | `deque` | `list.pop(0)` | Notes |
+| :--- | :--- | :--- | :--- |
+| Enqueue (append) | O(1) | O(1) | Both O(1) to add |
+| Dequeue (popleft) | O(1) | O(N) | `list.pop(0)` shifts all elements |
+| Peek front | O(1) | O(1) | `deque[0]` or `list[0]` |
+| Search | O(N) | O(N) | Linear scan |
+| Space | O(N) | O(N) | N elements stored |
+
+**When to reach for it:**
+- BFS / level-order traversal — queue guarantees shortest path in unweighted graphs.
+- Sliding window maximum/minimum in O(N) — monotonic deque.
+- Multi-source BFS — all sources enqueued at distance 0 simultaneously.
+- Task scheduling and producer-consumer patterns with bounded capacity.
+- Implementing a circular buffer with fixed memory footprint.
+
+**Common mistakes:**
+- Using `list.pop(0)` instead of `deque.popleft()` — silently O(N), causes TLE on large inputs.
+- Not checking empty before dequeue — causes `IndexError` or wrong behavior.
+- Confusing BFS queue (FIFO, shortest path) with DFS stack (LIFO, depth-first).
+- Marking visited after dequeue instead of before enqueue — leads to duplicate entries and TLE.
+
+---
+
 ## 1. Representation Choice
 
 > [!IMPORTANT]
@@ -240,8 +278,28 @@ class CircularQueue:
 | **Design Circular Queue** | "Bounded FIFO with O(1) all ops" | Array + `front`/`size`/`cap`; `rear = (front+size)%cap` | Use `size` counter over wasted-slot trick — cleaner. Thread-safety follow-up: add a mutex around enqueue/dequeue. |
 | **Moving Average from Data Stream** | "Average of last k values in O(1)" | Deque + running sum; evict front when `len > k` | Float division. Python `deque(maxlen=k)` auto-evicts but you still need the running sum — don't recompute. |
 | **[Cheapest Flights K Stops](../../google-sde2/PROBLEM_DETAILS.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | BFS level = stops; or Bellman-Ford K+1 rounds | Standard Dijkstra doesn't bound stops. Need state `(cost, node, stops)` and prune when `stops > K`. |
+| **Number of Recent Calls** [E] | "Count requests in last 3000ms window" | Deque; add timestamp; pop front while `front < t - 3000` | Deque size = answer; no need to count separately. |
+| **Implement Queue Using Stacks** [E] | "FIFO from two LIFOs" | Two stacks; lazy transfer: pour `s1 → s2` only when `s2` is empty | Amortized O(1) per operation — each element moves from s1 to s2 at most once. |
+| **Implement Stack Using Queues** [E] | "LIFO from one FIFO" | Enqueue then rotate: after each push, cycle all older elements behind the new one | `push` is O(N); `pop` and `top` are O(1) — opposite of stack-from-queues. |
+| **Jump Game III** [M] | "Reach any index with value 0 via jumps ±arr[i]" | BFS from start; add `i + arr[i]` and `i - arr[i]` if in bounds and unvisited | DFS also works but BFS gives shortest path to zero if needed as follow-up. |
+| **Bus Routes** [M] | "Min buses to travel from source to target" | BFS on buses (not stops): expand all stops of current bus; add unvisited buses | Build stop→bus map; BFS over buses, not stops — avoids revisiting the same bus. |
+| **Open the Lock** [M] | "Min turns to reach target combination from 0000" | BFS; each state = 4-digit string; neighbors = ±1 on each wheel | Bidirectional BFS reduces search space dramatically for this problem. |
+| **Walls and Gates** [M] | "Distance from each empty room to nearest gate" | Multi-source BFS from all gates simultaneously | Push all gates first; BFS naturally computes minimum distances without per-gate passes. |
+| **Minimum Knight Moves** [M] | "Min knight moves in infinite chessboard" | BFS from (0,0) to (x,y); 8 knight move directions | Symmetry: work in first quadrant `(abs(x), abs(y))` — 4x fewer states to explore. |
+| **Shortest Path in Grid with Obstacles Elimination** [H] | "Min steps allowing K obstacle removals" | BFS with state `(row, col, remaining_k)` | State space is `R × C × (K+1)` — mark visited per `(r, c, k)` not just `(r, c)`. |
+| **Find Shortest Path in Directed Weighted Graph** [H] | "Shortest path with state (node, extra constraint)" | Dijkstra with state `(cost, node, extra)`; revisit allowed if state differs | Classic Dijkstra revisit guard only on node — add the extra dimension when constraints exist. |
 
 ---
+
+## Quick Revision Triggers
+
+- If the problem says "shortest path in unweighted graph" or "minimum steps" → think BFS with `deque` because first reach = shortest path.
+- If the problem says "level-order traversal" or "process layer by layer" → think BFS; snapshot `len(queue)` at the start of each level.
+- If the problem says "all sources spread simultaneously" (rotten oranges, 01 matrix) → think Multi-Source BFS; enqueue all sources at distance 0 before starting.
+- If the problem says "maximum in every sliding window of size K" → think Monotonic Deque; store indices in decreasing value order.
+- If the problem says "fixed-capacity ring buffer" or "producer-consumer" → think Circular Queue with `front`/`size`/`cap` and modular arithmetic.
+- If the problem says "implement queue using stacks" → think Two-Stack Queue; lazy transfer from push-stack to pop-stack only when pop-stack is empty.
+- If you see `list.pop(0)` in your solution → replace with `deque.popleft()` because `list.pop(0)` is O(N).
 
 ## See also
 

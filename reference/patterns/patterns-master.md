@@ -194,8 +194,30 @@ while curr:
 
 #### Union-Find (DSU)
 **When:** Connectivity, cycle detection, Kruskal's MST
-**Template:** Path compression + union by rank
 **Complexity:** ~O(1) amortized
+**Template (Python — path compression + union by rank):**
+```python
+parent = list(range(n))
+rank = [0] * n
+
+def find(x):
+    while parent[x] != x:
+        parent[x] = parent[parent[x]]  # path halving
+        x = parent[x]
+    return x
+
+def union(a, b):
+    ra, rb = find(a), find(b)
+    if ra == rb:
+        return False  # already connected; returning False signals a cycle
+    if rank[ra] < rank[rb]:
+        ra, rb = rb, ra
+    parent[rb] = ra
+    if rank[ra] == rank[rb]:
+        rank[ra] += 1
+    return True
+```
+Note: all pseudocode in this file is illustrative; runnable versions are in `tracks/google-sde2/LANGUAGE_TEMPLATES.md`.
 
 ---
 

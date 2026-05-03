@@ -4,6 +4,43 @@ Mathematical patterns that collapse O(N) loops to O(√N) or O(log N). SDE-3 exp
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Number theory, combinatorics, and modular arithmetic underlie a class of problems where the mathematical structure *is* the algorithm. Core invariant: find the formula or mathematical shortcut rather than simulating step by step.
+
+**Why it exists.** Brute-force simulation of prime checking, large powers, or combinatorics is too slow. Mathematical identities collapse these: trial division checks primality in O(√N) instead of O(N); binary exponentiation computes a^n in O(log n) instead of O(n); precomputed factorials answer nCr in O(1) instead of O(r).
+
+**The mental model.** Math problems have closed-form or formula-based solutions. The skill is recognizing which formula applies, not re-deriving it: "count primes ≤ N" → sieve; "GCD of two numbers" → Euclidean; "large power mod M" → fast exponentiation; "number of ways to choose k from n" → precomputed nCr.
+
+**Complexity at a glance.**
+
+| Algorithm | Time | Space |
+| :--- | :--- | :--- |
+| Primality test (trial division) | O(√N) | O(1) |
+| Sieve of Eratosthenes | O(N log log N) | O(N) |
+| Euclidean GCD | O(log min(a, b)) | O(1) |
+| Fast exponentiation | O(log n) | O(1) |
+| nCr with factorial precomputation | O(N) build, O(1) query | O(N) |
+
+**When to reach for it.**
+- Prime factorization or counting primes up to N — sieve.
+- Combinatorics (number of ways to choose, arrange, partition) — precomputed nCr or Pascal's triangle.
+- Large numbers mod M — apply mod at every multiplication step; use Fermat's little theorem for division.
+- Geometry that involves collinearity or slope comparison — use GCD-normalized integer tuples, not floats.
+- Digit-based problems or number-structure problems (trailing zeros, ugly numbers, digital root).
+
+**When NOT to use it.**
+- No mathematical formula exists — simulate directly.
+- K is large in counting sort / sieve — memory blowup.
+
+**Common mistakes.**
+- Integer overflow: `a * b mod m` — compute `(a mod m) * (b mod m) mod m`; in Python big int is automatic but state it for other languages.
+- Floating-point slope comparison — use GCD-normalized integer tuples `(dy//g, dx//g)` to avoid rounding errors.
+- Forgetting modular inverse for division under modulo — `a / b mod m = a * b^(m-2) mod m` when m is prime (Fermat).
+- `n // 2` vs `n / 2` type mismatch — integer division in Python 3 requires `//`.
+
+---
+
 ## 1. Algorithm Selection
 
 > [!IMPORTANT]
@@ -275,9 +312,9 @@ def max_points_on_line(points: list[list[int]]) -> int:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Pow(x, n)** | "Fast exponentiation; n can be negative" | Square x, halve n; if n odd multiply result by x once | `n = INT_MIN` overflow in Java/C++ — use `long`. Negative n: `base = 1/base, exp = -exp`. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Pow(x, n)** | Exponentiation by Squaring | "Fast exponentiation; n can be negative" | Square x, halve n; if n odd multiply result by x once | `n = INT_MIN` overflow in Java/C++ — use `long`. Negative n: `base = 1/base, exp = -exp`. |
 | **Sqrt(x)** | "Integer square root without `math.sqrt`" | Binary search `[0, x]` with `mid <= x // mid` | `mid*mid` overflow — compare as `mid <= x // mid` (integer division). Floor vs ceiling. |
 | **Count Primes** | "Count primes strictly less than n" | Sieve: mark composites from each prime p starting p² | `is_prime[0] = is_prime[1] = False`. Inner loop starts at `p*p`, not `2*p`. |
 | **Factorial Trailing Zeros** | "Count (2,5) factor pairs = count 5s in n!" | Sum `n//5 + n//25 + n//125 + …` until power > n | More 2s than 5s — count only 5-factors. Integer division, no floats. |
@@ -286,6 +323,27 @@ def max_points_on_line(points: list[list[int]]) -> int:
 | **Integer Break** | "Split n to maximize product" | Break into 3s for n≥4; avoid breaking into 1s | AM-GM: e≈2.718 → 3 is optimal integer. Handle n=2 (→1×1=1? No, must split: return 1), n=3 (→ 1×2=2). |
 | **Bulb Switcher** | "How many bulbs on after n rounds?" | Bulb i toggled by each of its divisors; odd count ↔ perfect square | Divisors pair up except for perfect squares. Answer = `int(n**0.5)`. |
 | **GCD of Array** | "Reduce via Euclidean iteratively" | `functools.reduce(math.gcd, nums)` | `gcd(0, a) = a` — handle zeros. LCM can overflow for large arrays; use Python big int. |
+| **Add Digits [E]** | "Repeat digit sum until single digit" | Digital root: `1 + (n-1) % 9`; special case n=0 | O(1) formula, not a loop. `n=0` → 0; otherwise digital root formula. |
+| **Excel Sheet Column Number [E]** | "Convert Excel column title (A, Z, AA…) to number" | Treat as base-26: `result = result * 26 + ord(ch) - ord('A') + 1` | 1-indexed not 0-indexed ('A'=1, not 0). No zero in this base-26 encoding. |
+| **Happy Number [E]** | "Does repeated digit-square-sum reach 1?" | Floyd's cycle detection or known cycle set `{4,16,37,58,89,145,42,20}` | If not happy, always cycles through `{4,...,20}`. Stop when `n==1` (happy) or `n in cycle`. |
+| **Ugly Number II [M]** | "Nth number whose only prime factors are 2, 3, 5" | Three pointers for multiples of 2, 3, 5; advance min pointer each step | Tie case: all three pointers at same value → advance all three to avoid duplicates. |
+| **Perfect Squares [M]** | "Minimum number of perfect squares summing to n" | DP: `dp[i] = min(dp[i - j*j] + 1)` for all j; or Lagrange's 4-square theorem | Lagrange theorem: answer ≤ 4. Check 1, then 2 (two-sum of squares), else answer is 3 or 4. |
+| **Fraction to Recurring Decimal [M]** | "Detect repeating decimal in long division" | Map remainder → position; repeat starts when remainder seen again | Handle sign separately: XOR numerator and denominator signs. `denominator = 0` not tested but guard anyway. |
+| **Nth Digit [M]** | "Find nth digit in infinite sequence 123456789101112…" | Determine which digit group (d-digit numbers); offset within the number | d-digit numbers: count = 9×10^(d-1); total digits = count×d. Use integer division to pinpoint exact digit. |
+| **Count Different Palindromic Subsequences [H]** | "Count distinct palindromic subsequences in string" | DP: `dp[i][j]` = count in `s[i..j]`; case on `s[i]==s[j]` and inner occurrences | When `s[i]==s[j]`: add `dp[i+1][j-1]*2 + 2` if no inner match, `+1` if one inner match, `+0` if two inner matches (avoids double-count). Answer mod 10^9+7. |
+| **Super Pow [H]** | "Compute a^b mod 1337 where b is huge integer array" | `a^(b mod phi(m)) mod m` via Euler's theorem; process b digit by digit | Euler's theorem requires gcd(a,m)=1. 1337=7×191 (not prime) — use CRT or direct modular exponentiation cycling. |
+
+---
+
+## Quick Revision Triggers
+
+- "Is N prime?" → trial division up to √N; sieve if checking many numbers.
+- "All primes up to N" → Sieve of Eratosthenes, O(N log log N).
+- "GCD / LCM of two numbers" → `math.gcd(a, b)`; `lcm = a * b // gcd`.
+- "Compute `a^b mod m` efficiently" → `pow(a, b, m)` in Python (built-in fast exponentiation).
+- "Division under modular arithmetic (mod is prime)" → Fermat: `a^(-1) mod p = pow(a, p-2, p)`.
+- "Count combinations `nCr mod p`" → precompute factorials and inverse factorials; `nCr = fact[n] * inv_fact[r] * inv_fact[n-r] % p`.
+- "Avoid float for slope / ratio comparisons" → normalize to `(dy/gcd, dx/gcd)` tuple; use integer arithmetic.
 
 ---
 

@@ -4,6 +4,44 @@ Near-O(1) amortized connectivity. SDE-3 focus: correct optimizations (path compr
 
 ---
 
+## Theory & Mental Models
+
+**What it is.** Disjoint Set Union (DSU) is a data structure tracking which elements belong to the same connected component, supporting two operations: `find` (which component does x belong to?) and `union` (merge the components of x and y). Core invariant: each component is represented as a tree; the root is the component ID.
+
+**Why it exists.** BFS/DFS answers connectivity in O(V + E) per query — expensive when connectivity is queried repeatedly after dynamic edge additions. DSU answers each union/find in amortized O(α(N)) ≈ O(1) by maintaining a compact forest structure with two optimizations.
+
+**The mental model.** Each component is a tree; `find` walks to the root (component representative). Path compression flattens the tree so future `find` calls jump directly to the root. Union by rank attaches the shorter tree under the taller one to keep trees flat.
+
+**Complexity at a glance.**
+
+| Operation | Without optimizations | With path compression + union by rank |
+| :--- | :--- | :--- |
+| find(x) | O(N) worst | O(α(N)) ≈ O(1) |
+| union(x, y) | O(N) worst | O(α(N)) ≈ O(1) |
+| N operations total | O(N²) | O(N α(N)) ≈ O(N) |
+
+α is the inverse Ackermann function — effectively ≤ 4 for all practical N.
+
+**When to reach for it.**
+- Detecting cycles in undirected graphs (if `find(u) == find(v)` before union → cycle).
+- Connected components with dynamic edge additions.
+- Kruskal's MST — greedily add cheapest edge that doesn't create a cycle.
+- Checking if two nodes are in the same group after a series of merges.
+- Grouping elements by shared properties (accounts merge, satisfiability of equations).
+
+**When NOT to use it.**
+- Edges are removed — standard DSU doesn't support deletions (use DSU with rollback for offline queries, or link-cut trees for fully dynamic).
+- Directed graphs — DSU is for undirected connectivity; use DFS/topological sort for SCCs.
+- You need the actual path between nodes — DSU only answers "same component?", not "what is the path?".
+
+**Common mistakes.**
+- Calling `find` without path compression — correct but degrades to O(N) without it; always use both optimizations together.
+- Union by value rather than by rank — degrades tree balance to O(N) height.
+- Not initializing `parent[i] = i` for all nodes — uninitialized parent causes infinite loops in `find`.
+- Forgetting to check `find(u) != find(v)` before union in Kruskal — adding a cycle edge inflates MST cost.
+
+---
+
 ## 1. Representation Choice
 
 > [!IMPORTANT]
@@ -217,9 +255,9 @@ class RollbackDSU:
 
 ## Interview Questions — Logic & Trickiness
 
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **[Redundant Connection](../../google-sde2/PROBLEM_DETAILS.md#redundant-connection)** | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
+| Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **[Redundant Connection](../../google-sde2/PROBLEM_DETAILS.md#redundant-connection)** | DSU Cycle Detection | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
 | **Number of Islands II** | "Dynamic land additions; track component count" | DSU over 2D grid → 1D index `r*cols+c`; union 4-neighbors each add | Check bounds before union. Duplicate queries (same cell added twice) must not double-decrement count. |
 | **Accounts Merge** | "Same email = same person across accounts" | Union all emails within each account; group by DSU root; sort | Email is the DSU element (not account name). Map `email → integer index` first. |
 | **Kruskal MST** | "Min cost to connect all nodes" | Sort edges by weight; add edge if `union(u,v)` succeeds; stop at n-1 edges | Disconnected graph → return -1. Parallel edges → take cheapest; DSU handles duplicates naturally. |
@@ -227,6 +265,25 @@ class RollbackDSU:
 | **Largest Component by Common Factor** | "Numbers sharing a prime factor → same group" | Sieve + DSU: for each prime factor, union all indices divisible by it | `value=1` has no prime factors — isolated node. Sieve factorization O(N log log N). |
 | **Smallest String With Swaps** | "Swap any indices in a given pair repeatedly" | DSU on index pairs; sort chars within each connected component lexicographically | Transitivity: if (0,1) and (1,2) are pairs, indices 0,1,2 are all in the same component. |
 | **Graph Valid Tree** | "Is this graph a tree?" | DSU: n nodes, n-1 edges, no cycle ↔ tree | Check **both**: no cycle (n-1 successful unions) **and** connected (`components == 1`). |
+| **Find if Path Exists [E]** | "Is there any path between source and destination?" | DSU: union all edges; check `find(src) == find(dst)` | BFS/DFS also works; DSU is one-liner if already built. |
+| **Number of Provinces [E]** | "Count connected components in adjacency matrix" | DSU or DFS; union all `isConnected[i][j]==1` pairs | Adjacency matrix input — iterate upper triangle only to avoid double-unioning. |
+| **Largest Component Size by Common Factor [M]** | "Numbers sharing a prime factor belong to same group" | Sieve factorization; DSU union index with each prime factor node | `value=1` has no prime factors — isolated. Map prime factors to a synthetic node range above n. |
+| **Regions Cut by Slashes [M]** | "Count regions in grid divided by '/' and '\\' slashes" | Divide each cell into 4 triangles; union based on slash type and adjacency | Expand each cell into 4 sub-cells (top, right, bottom, left); '/' splits top-right from bottom-left. |
+| **Number of Operations to Make Network Connected [M]** | "Minimum cable moves to connect all computers" | Count components C and extra edges E; answer = C-1 if E >= C-1 | Need at least n-1 edges total. Extra edges = edges beyond n-1 MST edges. Return -1 if extras < components-1. |
+| **Minimize Malware Spread [H]** | "Remove one initial malware node to minimize spread" | DSU for component sizes; pick node whose removal saves the largest component | Only nodes that are the **sole** malware source in their component help. Multiple malware nodes in one component = no savings from removing one. |
+| **Swim in Rising Water [H]** | "Minimum time to reach bottom-right as water rises" | Binary search on time + DSU/BFS; or Dijkstra with `max(path)` as cost | Union-Find: at time T, union all cells with elevation ≤ T; check if (0,0) and (n-1,n-1) are connected. |
+
+---
+
+## Quick Revision Triggers
+
+- "Are two elements in the same group after a series of merges?" → DSU `find(x) == find(y)`.
+- "Add edges one by one; query connectivity after each addition" → DSU; O(α(N)) per operation.
+- "Detect cycle in undirected graph without BFS/DFS" → DSU; `union` returns False when already connected.
+- "Minimum spanning tree with sparse edge list" → Kruskal: sort edges, DSU for cycle detection.
+- "Group accounts / emails by shared identifier" → DSU on the shared element (email), not the container (account).
+- "Need to undo a union (offline queries)" → rollback DSU: union by rank only, no path compression.
+- "Variables with ratios (a/b = k)" → weighted DSU storing ratio relative to root; accumulate on path compression.
 
 ---
 
