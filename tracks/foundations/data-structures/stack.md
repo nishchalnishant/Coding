@@ -211,6 +211,34 @@ def calculate(s: str) -> int:
 
 ---
 
+### Asteroid Collision (Positive vs Negative Cancellation)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Elements moving in **opposite directions** annihilate each other based on size." The stack represents surviving elements moving right (positive). When a left-moving element (negative) arrives, it repeatedly collides with the top of the stack until one or both are destroyed.
+
+```python
+def asteroid_collision(asteroids: list[int]) -> list[int]:
+    stack: list[int] = []
+    for ast in asteroids:
+        # Collision only happens when stack top is positive and current is negative
+        while stack and stack[-1] > 0 and ast < 0:
+            if stack[-1] < abs(ast):
+                stack.pop()
+                continue
+            elif stack[-1] == abs(ast):
+                stack.pop()
+            break  # Current asteroid is destroyed
+        else:
+            # Reached if the while loop completes without breaking
+            stack.append(ast)
+    return stack
+```
+
+> [!TIP]
+> Using the `while ... else` construct in Python is perfect here: the `else` block executes only if the loop finishes naturally (the negative asteroid destroyed everything in its path or the stack was empty/had negative top). If the loop breaks (the current asteroid was destroyed), the `else` block is skipped and the asteroid is not appended.
+
+---
+
 ## 3. SDE-3 Deep Dives
 
 ### Scalability: Stream Processing with Monotonic Stack

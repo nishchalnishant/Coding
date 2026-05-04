@@ -163,6 +163,47 @@ def postorder_iterative(root: Optional[TreeNode]) -> list[int]:
 
 ---
 
+---
+
+### Graph DFS — Recursive Traversal
+
+> [!IMPORTANT]
+> **The Click Moment**: "Traverse a graph" — OR — "find connected components / islands" — OR — "detect cycles" — OR — "topological sort". Unlike trees, graphs have cycles, so always track `visited` nodes. Mark a node visited **before** recursing into its neighbors.
+
+```python
+from collections import defaultdict
+
+# Core DFS template
+def dfs(node: int, visited: set, graph: dict) -> None:
+    visited.add(node)                    # mark BEFORE recursing
+    for neighbor in graph[node]:
+        if neighbor not in visited:
+            dfs(neighbor, visited, graph)
+
+# Cycle detection in directed graph (3-color: 0=white, 1=gray, 2=black)
+def has_cycle(n: int, edges: list) -> bool:
+    graph = defaultdict(list)
+    for u, v in edges: graph[u].append(v)
+    color = [0] * n                      # 0=unvisited, 1=in-stack, 2=done
+
+    def dfs(node: int) -> bool:
+        color[node] = 1                  # gray: currently in call stack
+        for nbr in graph[node]:
+            if color[nbr] == 1: return True   # back edge = cycle
+            if color[nbr] == 0 and dfs(nbr): return True
+        color[node] = 2                  # black: done
+        return False
+
+    return any(dfs(i) for i in range(n) if color[i] == 0)
+```
+
+> [!CAUTION]
+> For **directed** graphs, a single `visited` set is insufficient for cycle detection — a node reachable via two paths (one with a cycle, one without) would be incorrectly classified. Use the **3-color (white/gray/black)** scheme: a back edge to a gray node means a cycle exists.
+
+See [graph-recursion.md](graph-recursion.md) for flood fill, topological sort, connected components, and path finding.
+
+---
+
 ### Constrained Generation — Generate Parentheses
 
 ```python
@@ -248,6 +289,17 @@ def generate_parentheses(n: int) -> list[str]:
 | **Word Break** | "Memoized recursion on suffix" | `any(s[:i] in word_set and word_break(s[i:], frozenset))` | Pass `frozenset` (hashable) not `set` (unhashable) to `@lru_cache`. Avoid recomputing suffix slices. |
 | **Decode Ways** | "1-digit or 2-digit decode choice per step" | `dp(i) = dp(i+1)` if valid 1-digit `+ dp(i+2)` if valid 2-digit | `'0'` cannot stand alone; `'06'` is not `'6'`. Empty suffix returns 1 (one valid decoding). |
 | **Regular Expression Matching** | "Pattern match with `'*'` and `'.'`" | `'*'` = zero or more of preceding char; `match(i,j)` branches on `p[j+1] == '*'` | Handle `'.*'` as greedy match-all. Two base cases: `i` exhausted (check remaining pattern), `j` exhausted (True only if `i` also exhausted). |
+| **Number of Islands** | "Count connected components in grid" | DFS from each unvisited `'1'`; sink visited cells to `'#'` | 4-directional only; restore grid if mutation is not allowed |
+| **Course Schedule (Topo Sort)** | "Cycle detection in directed dependency graph" | 3-color DFS: 0=white, 1=gray, 2=black; back edge (gray nbr) = cycle | Single `visited` set is wrong for directed graphs |
+| **N-Queens** | "Constraint satisfaction: one queen per row" | Sets for `cols`, `diag1 = r-c`, `diag2 = r+c`; prune before recursing | Bitmask version ~3x faster; anti-diagonal key is `r+c` |
+| **LCA General Tree** | "First node where p and q diverge" | If both children return non-null → current is LCA | Check `root == p or root == q` BEFORE recursing into children |
+| **Validate BST** | "All ancestors constrain valid range" | Pass `(lo, hi)` range down; fail if `val` out of range | Checking only immediate parent misses grandparent violations |
+| **Subsets** | "Every element: include or exclude" | `solve(i+1, cur+[x])` AND `solve(i+1, cur)`; record at base | Snapshot `cur[:]` — not `cur` (reference) |
+| **Permutations II** | "Dedup at same recursion level" | Sort + `not used[i-1]` guard | `not used[i-1]` (sibling unused) prevents same-level duplicates |
+| **Combination Sum I** | "Unlimited reuse to hit target" | Recurse with same `i` (reuse); sort + `break` | `break` not `continue` — sorted array: all subsequent also too large |
+| **Combination Sum II** | "Each used once; deduplicate" | Recurse `i+1`; `if i > start and nums[i]==nums[i-1]: continue` | `i > start` not `i > 0` — allows same value across different depth levels |
+
+
 
 ---
 
@@ -260,13 +312,31 @@ def generate_parentheses(n: int) -> list[str]:
 - "Recursion depth > ~1000 in Python" → convert to iterative with explicit stack; mention `sys.setrecursionlimit` as stopgap.
 - "Last operation is the recursive call (tail recursion)" → Python does not optimize tail calls; unroll to a loop for O(1) stack.
 - "Default argument `def f(path=[])` persists across calls" → use `def f(path=None)` and initialize inside the function.
+- "All subsets / power set" → include/exclude; `f(i+1, cur+[x])` AND `f(i+1, cur)`; snapshot `cur[:]` at base.
+- "Duplicates in input, unique results" → sort first; skip `nums[i]==nums[i-1]` when `i > start` (not `i > 0`).
+- "Unlimited reuse of elements" → combination sum I: recurse with same `i`.
+- "Graph traversal, find connected regions, detect cycles" → DFS with `visited` set; mark before recursing; 3-color for directed cycles.
+- "Topological ordering of tasks" → DFS postorder: add to stack after all descendants; reverse at end.
+- "Pattern match with `*` and `.`" → memoized 2D recursion `dp(i,j)`; `*` = zero-or-more of preceding char.
+- "Recursion → DP" → state params → table dimensions; fill base cases; larger from smaller; space-optimize last.
 
 ---
 
 ## See also
 
-- [Aditya Verma recursion patterns](aditya-verma.md) — IP/OP and decision-tree style for subset/permutation problems
+**Recursion Sub-files (this folder):**
+- [aditya-verma.md](aditya-verma.md) — IP/OP and decision-tree style for subset/permutation problems
+- [recursion-to-dp.md](recursion-to-dp.md) — Step-by-step: recursive → memo → tabulation for 8 problems
+- [tree-recursion.md](tree-recursion.md) — Advanced tree recursion: BST, LCA, serialize, path problems
+- [graph-recursion.md](graph-recursion.md) — DFS on graphs: flood fill, cycle detection, topo sort
+- [combination-problems.md](combination-problems.md) — Full combination family: Sum I–IV, subsets, combos
+- [string-recursion.md](string-recursion.md) — Regex, wildcard, expression eval, palindrome partition
+- [questions-bank.md](questions-bank.md) — 60 tiered drill questions (Easy/Medium/Hard)
+- [tips-and-gotchas.md](tips-and-gotchas.md) — 15 common bugs, pattern recognition, interview framework
+
+**Related files:**
 - [Backtracking](../backtracking.md) — recursion with undo; choose / recurse / unchoose template
 - [Dynamic Programming](../dynamic-programming/README.md) — memoized recursion → tabulation conversion
 - [Tree](../../data-structures/tree.md) — structural recursion on binary trees
 - [Divide and Conquer](../divide-and-conquer.md) — independent subproblems; parallel fork-join
+

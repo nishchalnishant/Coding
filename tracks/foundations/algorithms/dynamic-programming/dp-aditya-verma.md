@@ -700,7 +700,115 @@ def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
 
 ---
 
-## 0/1 Knapsack — Classic Formulation (Reference)
+## Pattern 10 — Stock Trading State Machine
+
+### Theory
+
+**Core idea:** All 6 stock variants share the same `dp[i][k][holding]` state machine. `holding = 0` (not holding) or `1` (holding). Constraints (k transactions, cooldown, fee) simply modify the transition rules.
+
+**Key rule:** Decrement `k` on **buy** (not sell). This tracks remaining complete transactions.
+
+```python
+# Unlimited transactions — 2 states
+def max_profit_ii(prices: list[int]) -> int:
+    hold, free = -prices[0], 0
+    for p in prices[1:]:
+        hold, free = max(hold, free - p), max(free, hold + p)
+    return free
+
+# K transactions — 2D DP with backward k-loop
+def max_profit_iv(k: int, prices: list[int]) -> int:
+    n = len(prices)
+    if k >= n // 2:   # unlimited case
+        return sum(max(0, prices[i]-prices[i-1]) for i in range(1, n))
+    dp = [[0, float('-inf')] for _ in range(k + 1)]
+    for p in prices:
+        for j in range(k, 0, -1):   # backward prevents reuse of updated values
+            dp[j][0] = max(dp[j][0], dp[j][1] + p)
+            dp[j][1] = max(dp[j][1], dp[j-1][0] - p)
+    return dp[k][0]
+
+# Cooldown — 3 states
+def max_profit_cooldown(prices: list[int]) -> int:
+    hold, sold, rest = float('-inf'), 0, 0
+    for p in prices:
+        prev_sold = sold
+        sold = hold + p
+        hold = max(hold, rest - p)
+        rest = max(rest, prev_sold)   # prev_sold: can't buy same day as sell
+    return max(sold, rest)
+```
+
+### Stock Variants Table
+
+| Variant | k | Extra | States | Key Bug to Avoid |
+| :--- | :--- | :--- | :--- | :--- |
+| **I** | 1 | None | Greedy | Forgetting edge case: empty array |
+| **II** | ∞ | None | `hold, free` | Buying same day as selling = 0 gain (allowed) |
+| **III** | 2 | None | `buy1, sell1, buy2, sell2` | Not chaining `sell1` into `buy2` |
+| **IV** | K | None | `dp[k][0/1]` | Forward k-loop causes reuse (must go backward) |
+| **Cooldown** | ∞ | 1-day wait | `hold, sold, rest` | Using `sold` in same iteration (use `prev_sold`) |
+| **Fee** | ∞ | Fee per tx | `hold, free` | Applying fee at both buy and sell |
+
+See [stock-trading-dp.md](stock-trading-dp.md) for all 6 variants with full code.
+
+---
+
+## Pattern 11 — Palindrome DP
+
+### Theory
+
+**Core idea:** `s[i..j]` is a palindrome iff `s[i] == s[j]` AND `s[i+1..j-1]` is a palindrome. Fill `is_pal[i][j]` by increasing length. Then use it for:
+- Counting palindromic substrings
+- Longest palindromic subsequence (LCS shortcut)
+- Minimum cuts to partition into palindromes
+
+```python
+def build_palindrome_table(s: str) -> list[list[bool]]:
+    n = len(s)
+    is_pal = [[False]*n for _ in range(n)]
+    for i in range(n - 1, -1, -1):
+        for j in range(i, n):
+            is_pal[i][j] = (s[i] == s[j]) and (j - i < 2 or is_pal[i+1][j-1])
+    return is_pal
+
+def longest_palindromic_subsequence(s: str) -> int:
+    """LCS(s, reverse(s)) — clean O(N²) reduction."""
+    t = s[::-1]
+    m, n = len(s), len(t)
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(1, m+1):
+        for j in range(1, n+1):
+            dp[i][j] = dp[i-1][j-1]+1 if s[i-1]==t[j-1] else max(dp[i-1][j], dp[i][j-1])
+    return dp[m][n]
+
+def min_cut_palindrome(s: str) -> int:
+    n = len(s)
+    is_pal = build_palindrome_table(s)
+    cut = list(range(n))          # worst case: n-1 cuts
+    for i in range(1, n):
+        if is_pal[0][i]: cut[i] = 0; continue
+        for j in range(1, i+1):
+            if is_pal[j][i]:
+                cut[i] = min(cut[i], cut[j-1] + 1)
+    return cut[n-1]
+```
+
+### Palindrome DP Variations
+
+| Problem | Formula | Notes |
+| :--- | :--- | :--- |
+| **Longest Palindromic Substring** | Expand around center O(1) space | DP table is O(N²) space; expand is better |
+| **Longest Palindromic Subsequence** | `LCS(s, rev(s))` | Elegant reduction to LCS |
+| **Count Palindromic Substrings** | 2n-1 expand-around-centers | Track both odd and even centers |
+| **Min Insertions for Palindrome** | `len(s) - LPS(s)` | Same count as min deletions |
+| **Min Cuts for Palindrome Partition** | Precompute `is_pal`; linear `cut[]` | If `is_pal[0][i]`: no cut needed for prefix |
+| **Palindrome Partitioning III (K parts)** | 2D DP + `cost(l,r)` function | `cost` = chars to change to make palindrome |
+
+See [string-palindrome-dp.md](string-palindrome-dp.md) for regex and wildcard matching too.
+
+---
+
 
 ```text
 Items: weight[1..n], value[1..n], capacity W
@@ -787,9 +895,22 @@ Space-optimized: dp[0..W], iterate w from W down to weight[i]
 
 ---
 
+---
+
 ## See also
 
+**DP Sub-files (this folder):**
 - [README.md](README.md) — SDE-3 DP overview and interview flow
+- [digit-dp.md](digit-dp.md) — Digit DP with 8+ problems
+- [grid-dp.md](grid-dp.md) — 2D grid DP: paths, Dungeon, Cherry Pickup
+- [stock-trading-dp.md](stock-trading-dp.md) — All 6 stock variants (Pattern 10)
+- [string-palindrome-dp.md](string-palindrome-dp.md) — Palindromes, regex, wildcard (Pattern 11)
+- [advanced-dp-optimizations.md](advanced-dp-optimizations.md) — CHT, deque, D&C, SOS DP
+- [probability-combinatorics-dp.md](probability-combinatorics-dp.md) — Game theory, egg drop, Catalan
+- [questions-bank.md](questions-bank.md) — 70 tiered drill questions
+- [tips-and-gotchas.md](tips-and-gotchas.md) — 12 common bugs, 30+ recognition triggers
+
+**Related files:**
 - [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 patterns with recognition triggers
 - [greedy.md](../greedy.md) — when greedy replaces DP (fractional knapsack, interval scheduling)
 - [divide-and-conquer.md](../divide-and-conquer.md) — independent subproblems vs overlapping (DP)

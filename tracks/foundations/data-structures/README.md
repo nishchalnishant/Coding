@@ -1,25 +1,29 @@
-# Data Structures
+# Data Structures — SDE-3 Gold Standard
 
-Core data structures for coding interviews. These notes are written to be sufficient for **Google SDE-2 (L4)**, with optional deeper sections that also help for SDE-3: concept overview, algorithms, patterns, code, interview strategy, and quick revision.
+Core data structures for senior-level engineering interviews. This repository has been rigorously audited and structured as a **"Truth Source" for SDE-3 / Staff** candidates. It goes beyond SDE-2 problem-solving by injecting canonical implementations, concurrency considerations, memory layout implications, and system design scalability metrics.
 
-**Google interview:** Use [../../../reference/quick-sheets/revision-guide.md](../../../reference/quick-sheets/revision-guide.md) (topic priority + practice lists) and [../../../reference/quick-sheets/quick-recall.md](../../../reference/quick-sheets/quick-recall.md) (one-page patterns) alongside the files below.
-For an end-to-end SDE-2 plan (coding + system design + behavioral), start with: [../../google-sde2/README.md](../../google-sde2/README.md).
+**Twin-Track Architecture:**
+Use [../../../reference/quick-sheets/revision-guide.md](../../../reference/quick-sheets/revision-guide.md) (topic priority) and [../../../reference/quick-sheets/quick-recall.md](../../../reference/quick-sheets/quick-recall.md) (one-page patterns) alongside the files below.
 
-Each topic file below includes **Interview Questions — Logic & Trickiness** (canonical problems, solution logic, and trickiness for that structure).
+Each topic module contains:
+1. **Theory & Mental Models**: Memory layout, caching implications, and invariants.
+2. **Core Algorithms & Click Moments**: SDE-3 canonical code templates.
+3. **SDE-3 Deep Dives**: Thread-safety, lock-free structures, and distributed scalability.
+4. **Interview Questions — Logic & Trickiness**: Distilled wisdom on boundaries and traps.
 
 ## Topic files
 
 | Topic | File | Highlights |
 |-------|------|------------|
-| **Array** | [array.md](array.md) | Two pointers, sliding window, prefix sum, Kadane; edge cases, SDE-3 trade-offs. |
-| **Linked List** | [linked-list.md](linked-list.md) | Dummy node, fast/slow, in-place reversal, cycle detection; LRU (design). |
-| **Stack** | [stack.md](stack.md) | Monotonic stack, next greater element, largest rectangle in histogram. |
-| **Queue** | [queue.md](queue.md) | BFS, monotonic deque, sliding window maximum, circular queue. |
-| **Tree** | [tree.md](tree.md) | Traversals, LCA, tree DP, BST, max path sum, serialize/deserialize. |
-| **Heap** | [heap.md](heap.md) | Top-K, K-way merge, two heaps (median), implementations. |
-| **Hashing** | [hashing.md](hashing.md) | Collision handling, subarray sum = K, consistent hashing, bloom filter. |
-| **Graphs** | [graphs.md](graphs.md) | BFS/DFS, islands, flood fill, rotten oranges, course schedule, alien dictionary; terminology, algorithms, question lists. |
-| **Trie** | [trie.md](trie.md) | Prefix tree, autocomplete, Word Search II (Trie + backtracking), XOR Trie for max XOR, Aho-Corasick. |
+| **Array** | [array.md](array.md) | Boyer-Moore, Floyd's cycle, prefix sum, Kadane, stream scaling. |
+| **Linked List** | [linked-list.md](linked-list.md) | In-place reversal, cycle detection, LRU Cache DLL, Lock-free design. |
+| **Stack** | [stack.md](stack.md) | Monotonic stack, Asteroid collision, expression evaluation. |
+| **Queue** | [queue.md](queue.md) | BFS, monotonic deque, ring buffer bit-masking, LMAX disruptor. |
+| **Tree** | [tree.md](tree.md) | 1-Stack Postorder, LCA, tree DP, max path sum, serialization. |
+| **Heap** | [heap.md](heap.md) | Custom `__lt__` objects, top-K, K-way merge, Two Heaps (median). |
+| **Hashing** | [hashing.md](hashing.md) | Rabin-Karp, subarray sums, consistent hashing, bloom filters. |
+| **Graphs** | [graphs.md](graphs.md) | Bidirectional BFS, multi-source BFS, topological sort, flood fill. |
+| **Trie** | [trie.md](trie.md) | Prefix tree, autocomplete, Word Search II pruning, XOR Trie. |
 
 ## How to use
 

@@ -172,6 +172,33 @@ def bellman_ford(edges: list[tuple[int,int,int]], n: int, start: int) -> tuple[l
 
 ---
 
+### Floyd-Warshall — All-Pairs Shortest Path
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the shortest path between **all pairs** of nodes" — OR — "graph has V ≤ 400". DP-based approach that iteratively allows nodes 0 to k to act as intermediate hops. O(V³) time, O(V²) space.
+
+```python
+def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float]]:
+    dist = [[float('inf')] * n for _ in range(n)]
+    for i in range(n):
+        dist[i][i] = 0
+    for u, v, w in edges:
+        dist[u][v] = min(dist[u][v], w)  # handle parallel edges
+        # dist[v][u] = min(dist[v][u], w) # uncomment if undirected
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] != float('inf') and dist[k][j] != float('inf'):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    return dist
+```
+
+> [!TIP]
+> **Negative cycle detection**: After running the algorithm, if `dist[i][i] < 0` for any `i`, the graph contains a negative cycle.
+
+---
+
 ### Topological Sort — Kahn's Algorithm
 
 > [!IMPORTANT]
@@ -260,6 +287,25 @@ def kruskal_mst(n: int, edges: list[tuple[int,int,int]]) -> int:
             if edges_used == n - 1:
                 break
     return total_cost if edges_used == n - 1 else -1  # -1 if graph is disconnected
+
+# Prim's (requires Min-Heap)
+def prim_mst(n: int, adj: dict) -> int:
+    import heapq
+    heap = [(0, 0)]  # (cost, node); start arbitrarily from node 0
+    visited = set()
+    total_cost = 0
+
+    while heap and len(visited) < n:
+        cost, u = heapq.heappop(heap)
+        if u in visited:
+            continue
+        visited.add(u)
+        total_cost += cost
+        for v, w in adj[u]:
+            if v not in visited:
+                heapq.heappush(heap, (w, v))
+                
+    return total_cost if len(visited) == n else -1
 ```
 
 ---

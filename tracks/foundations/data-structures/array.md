@@ -251,6 +251,59 @@ def sort_colors(nums: list[int]) -> None:
         else:
             nums[mid], nums[hi] = nums[hi], nums[mid]
             hi -= 1  # don't increment mid — swapped element from hi is unexamined
+
+---
+
+### Boyer-Moore Majority Vote — O(1) Space
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the **majority element** (appears > N/2 times)" — AND — "must use **O(1) space**". Hash map is O(N) space. Sorting is O(N log N) time. Boyer-Moore pairs up different elements and cancels them out; the majority element will survive because it outnumbers all other elements combined.
+
+```python
+def majority_element(nums: list[int]) -> int:
+    candidate = None
+    count = 0
+    for num in nums:
+        if count == 0:
+            candidate = num
+            count = 1
+        elif candidate == num:
+            count += 1
+        else:
+            count -= 1
+    # If a majority is not guaranteed, a second pass is required to verify:
+    # return candidate if nums.count(candidate) > len(nums) // 2 else -1
+    return candidate
+```
+
+> [!CAUTION]
+> This algorithm only works if a majority element strictly > N/2 is **guaranteed to exist**. If it might not exist, the algorithm still returns a candidate, but it could be a false positive. You must run a second pass to verify the candidate's frequency.
+
+---
+
+### Floyd's Cycle Detection on Arrays
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the **duplicate number** in an array of size N+1 containing values [1, N]" — AND — "must use **O(1) space and not modify the array**". Array mutation via sign flipping violates "read-only". Treat the array as a linked list where `next_node = nums[current]`. Since values are in `[1, N]`, index 0 is not in the cycle, making it the perfect start node.
+
+```python
+def find_duplicate(nums: list[int]) -> int:
+    # Phase 1: Fast and Slow pointers to find intersection inside cycle
+    slow = fast = nums[0]
+    while True:
+        slow = nums[slow]
+        fast = nums[nums[fast]]
+        if slow == fast:
+            break
+            
+    # Phase 2: Find the cycle entry point (which is the duplicate value)
+    slow = nums[0]
+    while slow != fast:
+        slow = nums[slow]
+        fast = nums[fast]
+        
+    return slow
+```
 ```
 
 ---

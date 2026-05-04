@@ -212,6 +212,40 @@ def morris_inorder(root) -> list[int]:
 
 ---
 
+### Iterative Postorder Traversal (1-Stack)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Traverse tree **L → R → Root iteratively** using only one stack." — OR — "You must process children before the parent, but avoid recursion due to stack overflow." Postorder is the hardest iterative traversal because you reach the root twice (once before going right, once after) and only process it the second time. You need a `last_visited` pointer to know if you're returning from the right child.
+
+```python
+def iterative_postorder(root) -> list[int]:
+    result = []
+    stack = []
+    curr = root
+    last_visited = None
+    
+    while curr or stack:
+        if curr:
+            stack.append(curr)
+            curr = curr.left
+        else:
+            peek_node = stack[-1]
+            # If right child exists and hasn't been visited yet, go right
+            if peek_node.right and last_visited is not peek_node.right:
+                curr = peek_node.right
+            else:
+                # Both left and right are done; process node
+                result.append(peek_node.val)
+                last_visited = stack.pop()
+    
+    return result
+```
+
+> [!TIP]
+> A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, SDE-3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
+
+---
+
 ### Serialize and Deserialize
 
 > [!IMPORTANT]

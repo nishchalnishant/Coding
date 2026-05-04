@@ -1,29 +1,29 @@
-# Algorithms
+# Algorithms — SDE-3 Gold Standard
 
-Core algorithms for coding interviews (sufficient for Google SDE-2, with optional depth for SDE-3): concept overview, core algorithms, pattern recognition, interview strategy, and quick revision.
+Core algorithms for coding interviews, strictly audited to the **SDE-3 Gold Standard**. This module goes beyond standard SDE-2 concepts to include advanced structural recognition, exact production-grade implementations (like Lazy Deletion Dijkstra, LRU from scratch, and Trie), and "Click Moment" intuition.
 
 **Google interview:** See [../../../reference/quick-sheets/revision-guide.md](../../../reference/quick-sheets/revision-guide.md) for a **7-day / 48-hour revision plan** and topic-by-topic links into these notes. One-page recall: [../../../reference/quick-sheets/quick-recall.md](../../../reference/quick-sheets/quick-recall.md).
-For a single SDE-2 plan that includes mocks + system design + behavioral, use: [../../google-sde2/README.md](../../google-sde2/README.md).
+For a single plan that includes mocks + system design + behavioral, use: [../../google-sde2/README.md](../../google-sde2/README.md).
 
-Each algorithm topic file includes **Interview Questions — Logic & Trickiness** (problems, core logic, gotchas). Supplements: [dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md), [recursion/aditya-verma.md](recursion/aditya-verma.md).
+Each algorithm topic file includes **Interview Questions — Logic & Trickiness** (problems, core logic, gotchas). Supplements: [dynamic-programming/dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md), [recursion/aditya-verma.md](recursion/aditya-verma.md).
 
-## Topic files
+## Topic Files (Audited to Gold Standard)
 
-| Topic | File | Highlights |
+| Topic | File | SDE-3 Highlights Added |
 |-------|------|------------|
-| **Searching & Binary Search** | [searching.md](searching.md) | Standard BS, lower/upper bound, BS on answer, rotated array, peak. |
-| **Sorting** | [sorting.md](sorting.md) | Big-O table (merge, quick, heap, counting, radix), QuickSelect, custom comparators. |
-| **Divide and Conquer** | [divide-and-conquer.md](divide-and-conquer.md) | Merge sort, quick sort, Master Theorem; D&C vs DP. |
-| **Mathematics** | [maths.md](maths.md) | Primes, GCD/LCM, modular arithmetic, combinatorics; common problems. |
-| **String** | [string.md](string.md) | KMP, Rabin-Karp, longest palindromic substring, sliding window, LCS/edit distance. |
-| **Bit Manipulation** | [bit-manipulation.md](bit-manipulation.md) | Operators, tricks, bitmask DP, XOR, subset enumeration. |
-| **Greedy** | [greedy.md](greedy.md) | Proof techniques, intervals, scheduling, jump game, candy. |
-| **Backtracking** | [backtracking.md](backtracking.md) | Template, pruning, permutations/combinations, N-Queens, Word Search. |
-| **Graph** | [graph.md](graph.md) | BFS, DFS, Dijkstra, Bellman-Ford, topo sort, Kruskal; pattern recognition, strategy. |
-| **Union Find** | [union-find.md](union-find.md) | DSU with path compression and rank; Kruskal, connectivity. |
-| **Dynamic Programming** | [dynamic-programming/README.md](dynamic-programming/README.md) | State, recurrence, top-down vs bottom-up; link to 16 patterns in patterns/dp-advanced.md. |
-| **Recursion** | [recursion/README.md](recursion/README.md) | Base case, recursive step, types; memoization, backtracking. |
-| **Miscellaneous** | [miscellaneous.md](miscellaneous.md) | Tips: categories, brute force, greedy, DP, maths, graph, debugging, edge cases. |
+| **Searching & Binary Search** | [searching.md](searching.md) | "Maximize the Minimum" explicit template, Rotated Arrays. |
+| **Sorting** | [sorting.md](sorting.md) | Counting Sort, Radix Sort, QuickSelect, Custom Comparators. |
+| **Divide and Conquer** | [divide-and-conquer.md](divide-and-conquer.md) | D&C vs DP boundary proof (`fib` vs `merge_sort`), Master Theorem. |
+| **Mathematics** | [maths.md](maths.md) | Sieve of Eratosthenes, Fast Exponentiation, nCr mod, Integer Geometry. |
+| **String** | [string.md](string.md) | **Trie (Prefix Tree)**, KMP, Rabin-Karp, Z-Algorithm, Manacher awareness. |
+| **Bit Manipulation** | [bit-manipulation.md](bit-manipulation.md) | Single Number III logic, Bitmask + BFS, O(3^N) submask enumeration. |
+| **Greedy** | [greedy.md](greedy.md) | **Priority Queue Greedy (IPO)**, Interval Scheduling proofs. |
+| **Backtracking** | [backtracking.md](backtracking.md) | MRV/Pruning heuristics, Sudoku Solver, Memoization conversions. |
+| **Graph** | [graph.md](graph.md) | **Floyd-Warshall**, **Prim's**, Dijkstra lazy deletion, Bellman-Ford negative cycles. |
+| **Union Find** | [union-find.md](union-find.md) | Rollback DSU, Weighted DSU, Path Compression + Rank optimization. |
+| **Dynamic Programming** | [dynamic-programming/README.md](dynamic-programming/README.md) | State/recurrence mapping; links to 16 canonical patterns. |
+| **Recursion** | [recursion/README.md](recursion/README.md) | 9 specialized modules: Graph, Tree, Combination, String, DP-Bridge. |
+| **Miscellaneous** | [miscellaneous.md](miscellaneous.md) | **Hand-rolled LRU Cache**, Fenwick Tree, Segment Tree, Sparse Table. |
 
 ## Supplementary (same folder)
 

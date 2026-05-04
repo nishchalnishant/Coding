@@ -161,10 +161,34 @@ def split_array_largest_sum(nums: list[int], k: int) -> int:
         else:
             lo = mid + 1
     return lo
+
+def aggressive_cows(stalls: list[int], cows: int) -> int:
+    stalls.sort()
+    
+    def can_place(min_dist: int) -> bool:
+        placed = 1
+        last_pos = stalls[0]
+        for i in range(1, len(stalls)):
+            if stalls[i] - last_pos >= min_dist:
+                placed += 1
+                last_pos = stalls[i]
+        return placed >= cows
+
+    lo, hi = 1, stalls[-1] - stalls[0]
+    while lo < hi:
+        # Crucial: +1 prevents infinite loop when lo and hi are adjacent
+        mid = lo + (hi - lo + 1) // 2  
+        if can_place(mid):
+            lo = mid      # mid is feasible, we want to MAXIMIZE it
+        else:
+            hi = mid - 1  # mid is NOT feasible, must be smaller
+    return lo
 ```
 
-> [!TIP]
-> **Range for binary search on answer**: `lo = minimum possible answer` (often `max(nums)` or `1`), `hi = maximum possible answer` (often `sum(nums)` or `max(nums)`). The predicate must be monotone: if `valid(mid)` is true, then `valid(mid+1)` must also be true (for minimization). Always verify monotonicity before applying.
+> [!CAUTION]
+> **Maximize vs Minimize the Answer**: 
+> - **Minimize** (`split_array_largest_sum`): If `valid(mid)` is true, try smaller. Use `hi = mid`, `lo = mid + 1`, and `mid = lo + (hi-lo)//2`.
+> - **Maximize** (`aggressive_cows`): If `valid(mid)` is true, try larger. Use `lo = mid`, `hi = mid - 1`. **CRITICAL**: you must use `mid = lo + (hi - lo + 1) // 2`. Without the `+1`, if `lo=2, hi=3`, `mid` becomes `2`. If `valid(2)` is true, `lo=2`, creating an infinite loop.
 
 ---
 

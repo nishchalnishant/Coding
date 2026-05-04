@@ -245,6 +245,43 @@ class RandomizedSet:
 >
 > On hash match, verify with direct string comparison to handle collisions. Use double hashing (two different primes) to reduce false-positive rate to ~1/p² for billion-character text.
 
+```python
+def rabin_karp_search(text: str, pattern: str) -> list[int]:
+    n, m = len(text), len(pattern)
+    if m == 0 or n < m:
+        return []
+        
+    BASE, MOD = 256, 10**9 + 7
+    # Precompute BASE^(m-1) % MOD for removing leading character
+    base_m_minus_1 = pow(BASE, m - 1, MOD)
+    
+    pat_hash = 0
+    text_hash = 0
+    
+    # Compute initial hash for pattern and first window of text
+    for i in range(m):
+        pat_hash = (pat_hash * BASE + ord(pattern[i])) % MOD
+        text_hash = (text_hash * BASE + ord(text[i])) % MOD
+        
+    results = []
+    
+    # Slide the window
+    for i in range(n - m + 1):
+        if pat_hash == text_hash:
+            # Hash match -> verify character by character to handle collision
+            if text[i:i+m] == pattern:
+                results.append(i)
+                
+        # Calculate hash for next window (remove leading char, add trailing char)
+        if i < n - m:
+            # (current_hash - leading_char * BASE^(m-1)) * BASE + next_char
+            text_hash = (text_hash - ord(text[i]) * base_m_minus_1) % MOD
+            text_hash = (text_hash * BASE + ord(text[i + m])) % MOD
+            text_hash = (text_hash + MOD) % MOD  # Handle negative modulo in some languages
+            
+    return results
+```
+
 ### Concurrency: Thread-Safe Hash Maps
 
 > [!TIP]

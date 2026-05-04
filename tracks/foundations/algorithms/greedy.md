@@ -205,6 +205,43 @@ def partition_labels(s: str) -> list[int]:
 
 ---
 
+### Priority Queue Greedy — Maximize Capital (IPO)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Maximize profit by choosing K items, where items **unlock** based on current capacity" — OR — "dynamically changing pool of valid choices". Use two data structures: a sorted array (or min-heap) for locked items sorted by cost, and a max-heap for the profits of currently unlocked items.
+
+```python
+import heapq
+
+def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int]) -> int:
+    # Min-heap of projects by capital required
+    projects = list(zip(capital, profits))
+    projects.sort()  # Sort by capital ascending
+    
+    max_heap = []
+    i = 0
+    n = len(projects)
+    
+    for _ in range(k):
+        # Unlock all projects we can afford with current capital 'w'
+        while i < n and projects[i][0] <= w:
+            heapq.heappush(max_heap, -projects[i][1])  # Max-heap for profits
+            i += 1
+            
+        if not max_heap:
+            break  # Can't afford any more projects
+            
+        # Greedily pick the most profitable unlocked project
+        w += -heapq.heappop(max_heap)
+        
+    return w
+```
+
+> [!TIP]
+> This "Two-Heap/Sorted + Heap" pattern is the gold standard for dynamic greedy algorithms. Sorting handles the unlocking condition (cost), and the max-heap handles the greedy selection (profit).
+
+---
+
 ## 3. SDE-3 Deep Dives
 
 ### When Greedy Fails: DP is Needed

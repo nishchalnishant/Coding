@@ -724,7 +724,18 @@ Or convert to iterative (bottom-up DP / explicit stack).
 
 ## See also
 
-- [recursion/README.md](README.md) — formal template and complexity analysis
+**Recursion Sub-files (this folder):**
+- [README.md](README.md) — Formal theory and complexity analysis
+- [recursion-to-dp.md](recursion-to-dp.md) — Recursion → DP bridge (8 problems)
+- [tree-recursion.md](tree-recursion.md) — Advanced tree recursion: BST, LCA, serialize
+- [graph-recursion.md](graph-recursion.md) — DFS: flood fill, cycle detection, topo sort
+- [combination-problems.md](combination-problems.md) — Full Combination Sum I–IV with code (Pattern 9)
+- [string-recursion.md](string-recursion.md) — Regex, wildcard, expression eval (Pattern 10)
+- [questions-bank.md](questions-bank.md) — 60 tiered drill questions
+- [tips-and-gotchas.md](tips-and-gotchas.md) — 15 bugs, recognition triggers, interview framework
+
+**Related files:**
 - [backtracking.md](../backtracking.md) — constraint satisfaction and pruning deep dive
 - [dp-aditya-verma.md](../dynamic-programming/dp-aditya-verma.md) — when recursion + memo becomes DP
 - [Patterns Master](../../../../reference/patterns/patterns-master.md)
+

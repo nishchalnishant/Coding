@@ -244,8 +244,12 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 > **D&C**: Subproblems are **independent** — solving the left half never depends on or influences the right half. No caching needed. O(recursion depth × combine cost).
 >
 > **DP**: Subproblems **overlap** — the same subproblem arises from multiple distinct calls. Memoization or tabulation avoids recomputation.
->
-> Quick test: Draw the recursion tree. If nodes at the same level have different arguments → D&C (independent). If they share arguments → DP (overlapping).
+
+**Concrete Example: Fibonacci vs Merge Sort**
+- `fib(n) = fib(n-1) + fib(n-2)`: The call to `fib(n-1)` completely subsumes the work of `fib(n-2)`. The tree has massive overlap. Without DP memoization, this is O(2^N).
+- `merge_sort(lo, hi)`: The left half `[lo, mid]` shares exactly **zero** elements with the right half `[mid+1, hi]`. There is no overlapping work to memoize. This is pure D&C and strictly O(N log N).
+
+**Quick Test**: Draw the recursion tree. Do nodes across different branches receive the exact same arguments? If yes → DP. If no → D&C.
 
 ### Scalability: Parallel D&C
 

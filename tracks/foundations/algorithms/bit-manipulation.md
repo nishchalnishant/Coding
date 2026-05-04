@@ -56,7 +56,15 @@ Use binary representation and bitwise operators for compact state and O(1) const
 | **Right shift `>>`** | Divide by 2^k (floor) | Arithmetic (sign-preserving) in Python |
 
 > [!CAUTION]
-> **Python integer gotcha — the #1 interview trap**: Python integers have **arbitrary precision** — there is no 32-bit overflow. When a problem says "treat as 32-bit unsigned integer", you must mask with `& 0xFFFFFFFF` after operations to simulate wrap-around. `~x` in Python equals `-(x+1)`, not the bitwise complement you get in C/Java. Always clarify the language's integer model with your interviewer.
+> **Python integer gotcha — the #1 interview trap**: Python integers have **arbitrary precision** — there is no 32-bit overflow. When a problem says "treat as 32-bit unsigned integer", you must mask with `& 0xFFFFFFFF` after operations to simulate wrap-around.
+> ```python
+> # WRONG: ~x gives -(x+1) in Python
+> print(bin(~5))  # output: -0b110
+> 
+> # CORRECT: XOR with all 1s for 32-bit complement
+> print(bin(5 ^ 0xFFFFFFFF))  # output: 0b11111111111111111111111111111010
+> ```
+> Always clarify the language's integer model with your interviewer.
 
 ---
 
@@ -82,6 +90,25 @@ def single_number(nums: list[int]) -> int:
 def missing_number(nums: list[int]) -> int:
     n = len(nums)
     return reduce(xor, range(n + 1)) ^ reduce(xor, nums)
+```
+
+```python
+def single_number_iii(nums: list[int]) -> list[int]:
+    # 1. XOR all elements to get xor_sum = x ^ y
+    xor_sum = reduce(xor, nums)
+    
+    # 2. Find the lowest set bit in xor_sum (this bit differs between x and y)
+    lowest_set_bit = xor_sum & (-xor_sum)
+    
+    # 3. Partition array into two groups based on that bit and XOR each group
+    x = y = 0
+    for num in nums:
+        if num & lowest_set_bit:
+            x ^= num
+        else:
+            y ^= num
+            
+    return [x, y]
 ```
 
 > [!CAUTION]
@@ -132,15 +159,22 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
     return result  # 2^n subsets including empty set
 ```
 
-> [!TIP]
-> **SDE-3 trick — enumerate sub-subsets in O(3^N) total**: To iterate over all subsets of a given bitmask `mask`:
-> ```python
-> sub = mask
-> while sub:
->     process(sub)
->     sub = (sub - 1) & mask
-> ```
-> This is the core loop in subset-sum DP optimizations. The total work across all masks is O(3^N) — a non-obvious but provable bound that separates SDE-3 candidates.
+### O(3^N) Submask Enumeration (Advanced DP)
+
+> [!IMPORTANT]
+> **The Click Moment**: You are doing Bitmask DP, but instead of adding one element at a time, you need to transition by choosing an entire **subset** of the available elements (e.g., assigning a subset of tasks to one worker). 
+
+If you iterate `0` to `mask` checking `(sub & mask) == sub`, that's O(4^N). The SDE-3 trick is to generate *only* the valid submasks directly.
+
+```python
+def process_submasks(mask: int):
+    sub = mask
+    while sub:
+        # process(sub)
+        sub = (sub - 1) & mask  # The magic step: subtract 1, then clear invalid bits
+```
+
+**Complexity Insight**: If you run this loop inside an outer loop over all `2^N` masks, the total number of inner loop executions across all masks is exactly `3^N`. This non-obvious bound separates SDE-3 candidates in DP optimization questions.
 
 ---
 
@@ -188,6 +222,42 @@ def min_cost_tsp(cost: list[list[int]]) -> int:
                 dp[new_mask][v] = min(dp[new_mask][v], dp[mask][u] + cost[u][v])
 
     return min(dp[FULL_MASK][v] + cost[v][0] for v in range(1, n))
+```
+
+---
+
+### Bitmask + BFS (State Space Search)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the shortest path visiting all nodes" — BUT — nodes can be visited multiple times. Standard BFS fails because you can't just use a `visited_nodes` set. 
+
+- **Idea**: The state of the BFS is not just the `current_node`, but the tuple `(current_node, visited_bitmask)`. You only stop exploring if you reach the *exact same node* with the *exact same visited mask*.
+- **Complexity**: O(N × 2^N) states.
+
+```python
+def shortest_path_all_nodes(graph: list[list[int]]) -> int:
+    n = len(graph)
+    target_mask = (1 << n) - 1
+    
+    from collections import deque
+    # Queue stores: (node, mask, steps)
+    # Start BFS from all nodes simultaneously
+    q = deque([(i, 1 << i, 0) for i in range(n)])
+    visited = {(i, 1 << i) for i in range(n)}
+    
+    while q:
+        node, mask, steps = q.popleft()
+        if mask == target_mask:
+            return steps
+            
+        for neighbor in graph[node]:
+            next_mask = mask | (1 << neighbor)
+            state = (neighbor, next_mask)
+            if state not in visited:
+                visited.add(state)
+                q.append((neighbor, next_mask, steps + 1))
+                
+    return 0
 ```
 
 ---
@@ -317,8 +387,8 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 | **Divide Two Integers** [M] | "Divide without `*`, `/`, `%`" | Bit-shift divisor left until it exceeds dividend; subtract and accumulate | Handle overflow: `INT_MIN / -1 = INT_MAX + 1` → clamp. Work in negatives to avoid unsigned issue. |
 | **UTF-8 Validation** [M] | "Check if byte sequence is valid UTF-8" | Check leading bits per byte; count continuation bytes | Continuation bytes must start with `10`; count how many follow-bytes expected from first byte. |
 | **Maximum XOR of Two Numbers** [M] | "Largest XOR of any pair" | Build XOR Trie or use prefix greedy with set | Trie approach: insert all numbers; for each number greedily pick opposite bit. O(32N). |
-| **Find Two Non-Repeating Numbers** [H] | "Two numbers appear once, rest twice" | XOR all → `x ^ y`; find any set bit; partition array and XOR each partition | The set bit distinguishes x and y — any set bit works; use lowest for simplicity: `diff & (-diff)`. |
-| **Count Different Palindromic Subsequences** [H] | "Count distinct palindromic subsequences" | Interval DP with bitmask for seen characters at each level | Hard to derive; know the O(N²) DP recurrence exists; mention the palindrome center expansion variant. |
+| **Find Two Non-Repeating Numbers** [H] | "Two numbers appear once, rest twice" | `diff = xor_sum & (-xor_sum)`; partition array | The set bit distinguishes x and y — any set bit works; use lowest for simplicity: `diff & (-diff)`. |
+| **Shortest Path Visiting All Nodes** [H] | "Shortest path touching all nodes, revisits allowed" | BFS with state `(node, visited_mask)` | Standard BFS fails when revisits are needed. Bitmask captures the "history" to prevent infinite loops while allowing necessary revisits. |
 
 ---
 

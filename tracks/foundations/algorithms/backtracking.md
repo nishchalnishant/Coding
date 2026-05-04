@@ -188,6 +188,50 @@ def solve_n_queens(n: int) -> list[list[str]]:
 > [!TIP]
 > **Bitmask N-Queens (SDE-3 follow-up)**: Encode `cols`, `diag1`, `diag2` as integers. Available columns = `((1 << n) - 1) & ~(cols | diag1 | diag2)`. Extract lowest set bit with `pos = avail & (-avail)`. This runs 3-5× faster than set-based due to cache efficiency — mention this as the optimized version.
 
+#### Sudoku Solver (LC 37)
+
+```python
+def solve_sudoku(board: list[list[str]]) -> None:
+    # 1. Precompute constraints for O(1) lookup
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    empty = []
+    
+    for r in range(9):
+        for c in range(9):
+            if board[r][c] == '.':
+                empty.append((r, c))
+            else:
+                val = board[r][c]
+                rows[r].add(val)
+                cols[c].add(val)
+                boxes[(r // 3) * 3 + c // 3].add(val)
+                
+    def backtrack(index: int) -> bool:
+        if index == len(empty): return True
+        r, c = empty[index]
+        box_idx = (r // 3) * 3 + c // 3
+        
+        for val in map(str, range(1, 10)):
+            if val not in rows[r] and val not in cols[c] and val not in boxes[box_idx]:
+                # Apply choice
+                board[r][c] = val
+                rows[r].add(val); cols[c].add(val); boxes[box_idx].add(val)
+                
+                if backtrack(index + 1): return True
+                
+                # Undo choice
+                board[r][c] = '.'
+                rows[r].remove(val); cols[c].remove(val); boxes[box_idx].remove(val)
+        return False
+        
+    backtrack(0)
+```
+
+> [!TIP]
+> **MRV Optimization**: Instead of passing `empty` as a fixed list, dynamically pick the empty cell with the fewest valid options remaining (Minimum Remaining Values heuristic). This radically prunes the search space.
+
 ---
 
 ### Word Search — Grid DFS with Backtracking
@@ -244,7 +288,28 @@ def partition(s: str) -> list[list[str]]:
 
 ---
 
-## 4. Complexity Reference
+## 4. Advanced Pruning Strategies
+
+> [!IMPORTANT]
+> SDE-3 interviews aren't just about writing the backtracking template — they are about **pruning the search space** aggressively. Without pruning, backtracking is just O(N!) brute force.
+
+### 4.1 Minimum Remaining Values (MRV) Heuristic
+Instead of picking the "next" item sequentially, always pick the item with the **fewest valid options**. If an item has 0 options, the branch dies immediately.
+- **Example**: In Sudoku, don't fill cells row-by-row. Count valid digits for each empty cell, and pick the cell with the fewest candidates.
+
+### 4.2 Look-ahead / Feasibility Checks
+Before recursing, check if the goal is even mathematically reachable.
+- **Example**: In Subset Sum, if `remaining_target` > sum of all remaining elements, return immediately.
+- **Example**: In Grid Pathfinding, if the Manhattan distance to the goal is greater than the remaining allowed steps, prune.
+
+### 4.3 Symmetry Breaking
+If the problem space is symmetric, force an arbitrary order to avoid exploring identical mirror-image branches.
+- **Example**: In Combinations, the `start` index is a symmetry breaker (prevents `[1,2]` and `[2,1]`).
+- **Example**: If assigning tasks to identical workers, enforce that Worker A's first task ID must be < Worker B's first task ID.
+
+---
+
+## 5. Complexity Reference
 
 | Problem | Time | Space | Pruning Available? |
 | :--- | :--- | :--- | :--- |
@@ -279,6 +344,42 @@ def word_break(s: str, word_dict: list[str]) -> bool:
                    for end in range(start + 1, n + 1))
     return can_break(0)
 ```
+
+```
+
+### Backtracking to DP: All Paths (Word Break II)
+
+Sometimes you need *all* paths, but subproblems overlap wildly. Memoize the **list of valid suffixes** to avoid exponential re-expansion.
+
+```python
+def word_break_ii(s: str, word_dict: list[str]) -> list[str]:
+    words = set(word_dict)
+    
+    @lru_cache(maxsize=None)
+    def backtrack(start: int) -> list[str]:
+        if start == len(s): return [""]
+        results = []
+        for end in range(start + 1, len(s) + 1):
+            if s[start:end] in words:
+                suffixes = backtrack(end)
+                for suffix in suffixes:
+                    results.append(s[start:end] + (" " + suffix if suffix else ""))
+        return results
+        
+    return backtrack(0)
+```
+
+### State Management: Mutable vs. Immutable
+
+> [!TIP]
+> How you pass state down the recursion tree dramatically impacts performance and bug likelihood.
+
+| Approach | Code Example | Pros | Cons |
+| :--- | :--- | :--- | :--- |
+| **Mutable (In-place)** | `path.append(x); dfs(); path.pop()` | O(1) space allocation per node; extremely fast | High risk of bugs if `pop()` missed or path not copied at base case. |
+| **Immutable (Copy)** | `dfs(path + [x])` | Safe; no undo needed; easy to convert to DP | O(N) allocation per call; very slow for deep trees. |
+
+**SDE-3 Rule**: Use mutable state for large collections (lists, grids, sets) to avoid O(N) allocation overhead per node. Use immutable state (strings, integers) where Python handles the immutability natively.
 
 ### Scalability: Iterative Backtracking for Deep Trees
 
@@ -382,5 +483,7 @@ def dfs_iterative(start, choices):
 
 - [Dynamic Programming](dynamic-programming/README.md) — memoize overlapping backtracking → DP
 - [Bit Manipulation](bit-manipulation.md) — bitmask as backtracking state for N≤20
-- [Recursion](recursion/README.md) — base cases and stack depth
+- [Recursion (Full Playbook)](recursion/README.md) — core recursion types and iterative conversion
+- [Combination Problems](recursion/combination-problems.md) — full combinatorial family (Sum I-IV)
+- [String Recursion](recursion/string-recursion.md) — Regex, wildcard, decode string
 - [Trie](../data-structures/trie.md) — Word Search II (pruning via Trie prefix)

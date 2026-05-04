@@ -238,6 +238,48 @@ def z_search(text: str, pattern: str) -> list[int]:
 
 ---
 
+### Trie (Prefix Tree) — Fast Prefix Matching
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find all words starting with **prefix**" — OR — "search for a word character-by-character" — OR — "Word Search II (DFS on grid + Trie)". A Trie optimizes prefix lookups to O(L) where L is word length, drastically outperforming hash sets for prefix queries.
+
+```python
+class TrieNode:
+    def __init__(self):
+        self.children = {}
+        self.is_word = False
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+        
+    def insert(self, word: str) -> None:
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                node.children[char] = TrieNode()
+            node = node.children[char]
+        node.is_word = True
+        
+    def search(self, word: str) -> bool:
+        node = self.root
+        for char in word:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return node.is_word
+        
+    def startsWith(self, prefix: str) -> bool:
+        node = self.root
+        for char in prefix:
+            if char not in node.children:
+                return False
+            node = node.children[char]
+        return True
+```
+
+---
+
 ## 3. SDE-3 Deep Dives
 
 ### Scalability: Streaming Pattern Matching

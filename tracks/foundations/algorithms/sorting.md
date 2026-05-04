@@ -189,6 +189,59 @@ def sort_colors(nums: list[int]) -> None:
 
 ---
 
+### Counting Sort & Radix Sort — O(N) Linear Sorts
+
+> [!IMPORTANT]
+> **The Click Moment**: "Sort an array where elements are guaranteed to be in a small range `[0, K]`" — OR — "sort fixed-width integers/strings". When you must break the O(N log N) comparison barrier.
+
+**Counting Sort** (O(N + K)): Count frequencies, prefix-sum the counts to find exact placement indices.
+```python
+def counting_sort(nums: list[int], max_val: int) -> list[int]:
+    counts = [0] * (max_val + 1)
+    for num in nums:
+        counts[num] += 1
+        
+    # Prefix sum to determine ending positions
+    for i in range(1, len(counts)):
+        counts[i] += counts[i - 1]
+        
+    result = [0] * len(nums)
+    # Iterate backwards to maintain stability!
+    for num in reversed(nums):
+        counts[num] -= 1
+        result[counts[num]] = num
+        
+    return result
+```
+
+**Radix Sort** (O(N × d)): Sort by least-significant digit to most-significant digit, using Counting Sort as the stable subroutine.
+```python
+def radix_sort(nums: list[int]) -> list[int]:
+    if not nums: return []
+    max_num = max(nums)
+    exp = 1  # 1, 10, 100, 1000...
+    
+    while max_num // exp > 0:
+        counts = [0] * 10
+        for num in nums:
+            counts[(num // exp) % 10] += 1
+        for i in range(1, 10):
+            counts[i] += counts[i - 1]
+            
+        result = [0] * len(nums)
+        for num in reversed(nums):
+            digit = (num // exp) % 10
+            counts[digit] -= 1
+            result[counts[digit]] = num
+            
+        for i in range(len(nums)):
+            nums[i] = result[i]
+        exp *= 10
+    return nums
+```
+
+---
+
 ### Custom Comparators — Sorting Objects & Intervals
 
 > [!TIP]

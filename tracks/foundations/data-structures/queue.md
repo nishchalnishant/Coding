@@ -216,6 +216,9 @@ class CircularQueue:
 > [!CAUTION]
 > **Full vs empty ambiguity**: The classic "wasted slot" approach (`rear+1 == front` means full) works but wastes one slot and is error-prone. The `size` counter approach above is cleaner: full when `size == cap`, empty when `size == 0`. Always prefer the counter approach in interviews.
 
+> [!TIP]
+> **Performance Optimization (Power of 2 Capacity)**: If the capacity `k` is guaranteed to be a power of 2, you can replace the modulo operator `%` with a bitwise AND `& (k - 1)`. Modulo division is notoriously slow on CPUs. `rear = (front + size) & (k - 1)` is significantly faster and is the standard implementation in high-performance C++/Java systems and the Linux Kernel's kfifo.
+
 ---
 
 ## 3. SDE-3 Deep Dives

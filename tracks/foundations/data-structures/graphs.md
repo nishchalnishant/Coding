@@ -208,6 +208,40 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 > - **Pregel model** (Google): vertices compute and communicate via messages. Each BFS level is one superstep. Workers hold a shard of the graph; messages cross shard boundaries. O(diameter × E/P) where P = number of machines.
 > - **Bidirectional BFS**: Start BFS simultaneously from source and target. Meet in the middle. Reduces explored nodes from O(b^d) to O(b^(d/2)) where b = branching factor, d = diameter. Used in Google Maps shortest path.
 
+```python
+def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
+    if start == target:
+        return 0
+        
+    # Maintain two frontiers and their distances
+    queue_start, queue_target = deque([start]), deque([target])
+    dist_start, dist_target = {start: 0}, {target: 0}
+    
+    def expand_frontier(queue, dist_this, dist_other):
+        # Process one full level of the smaller queue
+        for _ in range(len(queue)):
+            u = queue.popleft()
+            for v in adj[u]:
+                if v in dist_other:
+                    return dist_this[u] + 1 + dist_other[v]
+                if v not in dist_this:
+                    dist_this[v] = dist_this[u] + 1
+                    queue.append(v)
+        return -1
+        
+    while queue_start and queue_target:
+        # Always expand the smaller frontier to minimize branching factor impact
+        if len(queue_start) <= len(queue_target):
+            ans = expand_frontier(queue_start, dist_start, dist_target)
+        else:
+            ans = expand_frontier(queue_target, dist_target, dist_start)
+            
+        if ans != -1:
+            return ans
+            
+    return -1  # unreachable
+```
+
 ### Scalability: 0-1 BFS
 
 > [!TIP]

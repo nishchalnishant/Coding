@@ -186,11 +186,45 @@ def burst_balloons(nums: list[int]) -> int:
 ### Digit DP — Count Numbers in a Range
 
 > [!IMPORTANT]
-> **The Click Moment**: "Count integers in `[L, R]` with a specific **digit-level property**" (sum of digits = K, no consecutive same digits, etc.). The key insight: count `f(R) - f(L-1)` where `f(X)` = count of valid numbers in `[0, X]`.
+> **The Click Moment**: "Count integers in `[L, R]` with a specific **digit-level property**" (sum of digits = K, no consecutive same digits, etc.). The key insight: count `f(R) - f(L-1)` where `f(X)` = count of valid numbers in `[0, X]`. Build numbers digit-by-digit with a `tight` flag.
 
-- **State**: `dp[position][tight][carry_or_sum]`
-  - `tight`: are we still bounded by the limit digit at this position?
-  - Build top-down with memoization.
+**State:** `dp[pos][tight][started][extra]`
+- `pos` — current digit position
+- `tight` — still bounded by the limit digit?
+- `started` — has a non-zero digit been placed? (handles leading zeros)
+- `extra` — problem-specific: digit sum, last digit, remainder mod K, bitmask of used digits…
+
+```python
+from functools import lru_cache
+
+def count_up_to(limit: int, K: int) -> int:
+    digits = str(limit)
+    n = len(digits)
+
+    @lru_cache(maxsize=None)
+    def dp(pos: int, tight: bool, started: bool, curr_sum: int) -> int:
+        if curr_sum > K: return 0          # prune
+        if pos == n: return 1 if started and curr_sum == K else 0
+        max_d = int(digits[pos]) if tight else 9
+        total = 0
+        for d in range(0, max_d + 1):
+            new_started = started or d != 0
+            new_sum = (curr_sum + d) if new_started else 0
+            total += dp(pos+1, tight and d==max_d, new_started, new_sum)
+        return total
+
+    result = dp(0, True, False, 0)
+    dp.cache_clear()   # ← critical: clear before next call
+    return result
+
+def count_digit_sum_in_range(L: int, R: int, K: int) -> int:
+    return count_up_to(R, K) - count_up_to(L - 1, K)
+```
+
+> [!CAUTION]
+> **Always call `dp.cache_clear()` between `f(R)` and `f(L-1)`.** The `digits` string lives in the closure — cached results for `f(R)` are wrong for `f(L-1)`. Also: do NOT update state (`curr_sum`, `mask`, `rem`) when `started=False` — leading zeros must not pollute state.
+
+See [digit-dp.md](digit-dp.md) for 8+ full problem implementations.
 
 ---
 
@@ -212,6 +246,51 @@ def rob_house_tree(root) -> int:
 
     return max(dfs(root))
 ```
+
+---
+
+### Stock Trading — State Machine DP
+
+> [!IMPORTANT]
+> **The Click Moment**: "Buy and sell stock with constraints" — K transactions, cooldown, fee. Unify all 6 variants under one state machine: `dp[i][k][holding]` where `holding = 0` (not holding) or `1` (holding stock).
+
+```python
+# Best Time to Buy and Sell Stock II — unlimited transactions
+def max_profit_unlimited(prices: list[int]) -> int:
+    hold, free = -prices[0], 0
+    for p in prices[1:]:
+        hold, free = max(hold, free - p), max(free, hold + p)
+    return free
+
+# With cooldown (3-state machine)
+def max_profit_cooldown(prices: list[int]) -> int:
+    hold, sold, rest = float('-inf'), 0, 0
+    for p in prices:
+        prev_sold = sold          # save before overwrite
+        sold = hold + p           # sell today
+        hold = max(hold, rest - p)  # buy from rest only
+        rest = max(rest, prev_sold) # rest or post-cooldown
+    return max(sold, rest)
+
+# With fee
+def max_profit_fee(prices: list[int], fee: int) -> int:
+    hold, free = -prices[0], 0
+    for p in prices[1:]:
+        hold = max(hold, free - p)
+        free = max(free, hold + p - fee)  # subtract fee on sell
+    return free
+```
+
+| Variant | k | Extra | Code Strategy |
+| :--- | :--- | :--- | :--- |
+| I | 1 | None | Greedy: track `min_price` |
+| II | ∞ | None | 2 states: `hold, free` |
+| III | 2 | None | 4 states: `buy1, sell1, buy2, sell2` |
+| IV | K | None | `dp[k][0/1]`; backward k-loop |
+| Cooldown | ∞ | 1-day wait | 3 states: `hold, sold, rest`; use `prev_sold` |
+| Fee | ∞ | Fee per tx | 2 states; `- fee` on sell |
+
+See [stock-trading-dp.md](stock-trading-dp.md) for all 6 variants with full code.
 
 ---
 
@@ -285,6 +364,13 @@ def count_valid_numbers(limit: str) -> int:
 
 ## 4. Common Interview Problems
 
+### Easy
+- **Climbing Stairs** — Fibonacci; `dp[i] = dp[i-1] + dp[i-2]`; space-optimize to 2 vars.
+- **Min Cost Climbing Stairs** — Can start at step 0 or 1; `dp[i] = cost[i] + min(dp[i-1], dp[i-2])`.
+- **Maximum Subarray** — Kadane; `end_here = max(x, end_here + x)`.
+- **Best Time to Buy/Sell I** — Greedy; track running minimum; answer = max(price - min_seen).
+- **Delete and Earn** — House Robber on `earn[v] = v × count(v)` array.
+
 ### Medium
 - [House Robber](../../../google-sde2/PROBLEM_DETAILS.md#house-robber) — Linear DP; space-optimize to O(1).
 - [Longest Increasing Subsequence](../../../google-sde2/PROBLEM_DETAILS.md#longest-increasing-subsequence) — O(N²) DP or O(N log N) patience sort (binary search).
@@ -292,14 +378,24 @@ def count_valid_numbers(limit: str) -> int:
 - [Word Break](../../../google-sde2/PROBLEM_DETAILS.md#word-break) — Linear DP with set lookup; `dp[i]` = can s[:i] be segmented.
 - **Partition Equal Subset Sum** — 0/1 knapsack; `dp[target]` = is subset-sum `target` achievable?
 - **Longest Palindromic Subsequence** — LCS of string with its reverse.
+- **Jump Game II** — Greedy O(N) beats DP O(N²); mention both.
+- **Stock with Cooldown** — 3-state machine: `hold, sold, rest`. Use `prev_sold`.
+- **Unique Paths II** — Grid DP; blocked cells → `dp[i][j] = 0`.
+- **Longest Common Substring** — Grid DP; reset on mismatch (unlike LCS).
+- **Interleaving String** — 2D DP; two sources for each char of s3.
+- **Maximal Square** — `dp[i][j] = min(3 neighbors) + 1`; answer = `max_side²`.
 
 ### Hard
 - [Edit Distance](../../../google-sde2/PROBLEM_DETAILS.md#edit-distance) — 2D LCS variant; space-optimize to O(N).
 - [Burst Balloons](../../../google-sde2/PROBLEM_DETAILS.md#burst-balloons) — Interval DP; k = last balloon burst.
-- **Palindrome Partitioning II** — Interval DP + precomputed palindrome check.
-- **Regular Expression Matching** — 2D DP handling `*` as zero or more of preceding.
-- **Strange Printer** — Interval DP; turns needed to print s[i..j].
-- **Largest Rectangle in Histogram** — Stack-based O(N); recognize as the hidden "DP on sorted structure".
+- **Palindrome Partitioning II** — Precompute `is_pal[i][j]`; linear `cut[]` array.
+- **Regular Expression Matching** — 2D DP; `*` = zero OR more of preceding char.
+- **Wildcard Matching** — 2D DP; `*` = any sequence (standalone, not preceding).
+- **Strange Printer** — Interval DP; merge when `s[i] == s[j]`.
+- **Super Egg Drop** — Invert DP: `dp[moves][eggs]` = max floors. O(K log N).
+- **Dungeon Game** — Reverse grid DP; forward DP is impossible here.
+- **Cherry Pickup** — Simulate 2 simultaneous forward trips: `dp[t][r1][r2]`.
+- **Shortest Path Visiting All Nodes** — Bitmask BFS; `(mask, node)` state.
 
 ---
 
@@ -343,11 +439,30 @@ def count_valid_numbers(limit: str) -> int:
 - "Subset sum / knapsack: include or exclude each item" → 1D DP iterating items then capacity (backwards for 0/1 knapsack).
 - "Optimal split of a contiguous segment (matrix chain, burst balloons)" → interval DP `dp[l][r]`; try all split points k.
 - "State space encodes a subset of N items (N ≤ 20)" → bitmask DP `dp[mask]`; enumerate submasks in O(3^N).
+- "Count integers in [L, R] with digit property (digit sum, no repeats, divisible by K)" → digit DP `f(R) - f(L-1)` with `(pos, tight, started, extra)` state.
+- "Buy/sell stock with K transactions / cooldown / fee" → state machine DP; `hold` and `free` states.
+- "Grid, paths right/down, count or minimize" → grid DP `dp[i][j]`; top row and left column as base.
+- "Palindrome structure, min cuts, min insertions" → palindrome DP `is_pal[i][j]`; fill by increasing interval length.
+- "Match pattern with `*` and `.`" → 2D string DP; regex `*` = zero-or-more of PRECEDING char.
+- "Optimal play by two players, both play optimally" → minimax DP; `dp[state]` = score difference.
+- "Expected value, probability, dice rolls, knight path" → forward probability propagation DP.
 
 ---
 
 ## See also
 
+**DP Sub-files (this folder):**
+- [dp-aditya-verma.md](dp-aditya-verma.md) — Full pattern playbook: 9 patterns with complete code
+- [digit-dp.md](digit-dp.md) — Digit DP: count numbers in ranges with digit properties
+- [grid-dp.md](grid-dp.md) — 2D grid DP: unique paths, min path sum, cherry pickup, dungeon
+- [stock-trading-dp.md](stock-trading-dp.md) — All 6 stock variants with unified state machine
+- [string-palindrome-dp.md](string-palindrome-dp.md) — Palindromes, regex, wildcard, interleaving
+- [advanced-dp-optimizations.md](advanced-dp-optimizations.md) — CHT, deque opt, D&C opt, SOS DP
+- [probability-combinatorics-dp.md](probability-combinatorics-dp.md) — Expected value, games, egg drop
+- [questions-bank.md](questions-bank.md) — 70 tiered drill questions (Easy / Medium / Hard)
+- [tips-and-gotchas.md](tips-and-gotchas.md) — 12 common bugs, recognition triggers, interview framework
+
+**Related files:**
 - [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 DP pattern recognition triggers
 - [Bit Manipulation](../bit-manipulation.md) — bitmask DP for subset problems
 - [Backtracking](../backtracking.md) — when to use backtracking vs. memoizing into DP

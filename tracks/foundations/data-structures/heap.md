@@ -121,6 +121,37 @@ def k_way_merge(sorted_lists: list[list[int]]) -> list[int]:
 > [!CAUTION]
 > **Python heap tie-breaking**: If two tuples have equal first elements, Python compares the second. If `list_idx` values are ints, comparison is fine. But if the second element is a non-comparable type (e.g., a `ListNode` object), Python will raise `TypeError`. Always include a unique tie-breaker (like a counter) as the second element.
 
+### Custom Object Comparators
+
+> [!IMPORTANT]
+> **The Click Moment**: "I need to put **complex objects** (e.g., custom nodes) into a priority queue without using a messy tuple tie-breaker." — OR — "I need a **max-heap of objects**." Python's `heapq` relies entirely on the `<` operator (`__lt__`). By defining `__lt__` in a wrapper class, you control exactly how objects are prioritized.
+
+```python
+import heapq
+
+class Task:
+    def __init__(self, name: str, priority: int, duration: int):
+        self.name = name
+        self.priority = priority
+        self.duration = duration
+        
+    def __lt__(self, other: 'Task'):
+        # Max-heap by priority, then Min-heap by duration as tie-breaker
+        if self.priority != other.priority:
+            return self.priority > other.priority  # > makes it a max-heap for this field
+        return self.duration < other.duration      # < makes it a min-heap for this field
+
+def schedule_tasks(tasks: list[Task]) -> list[str]:
+    heapq.heapify(tasks)  # O(N) because __lt__ is defined
+    order = []
+    while tasks:
+        order.append(heapq.heappop(tasks).name)
+    return order
+```
+
+> [!TIP]
+> Writing a wrapper class with `__lt__` is often cleaner in interviews than juggling `(-priority, duration, counter, item)` tuples, especially when the priority logic has multiple tie-breaker levels.
+
 ---
 
 ### Two Heaps — Dynamic Median
