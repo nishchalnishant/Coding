@@ -1,46 +1,45 @@
-# Coding Interview Preparation Hub
+# Coding Interview Preparation Hub — SDE-3 Gold Standard
 
-A lean, high-yield system for mastering DSA and System Design for Big Tech interviews (Google, Meta, etc.).
-
-## 🚀 Quick Start
-
-| If you are... | Go to... |
-| :--- | :--- |
-| **Prepping for Google SDE-2** | **[tracks/google-sde2/](tracks/google-sde2/README.md)** |
-| **Aiming for SDE-3 (Senior)** | **[tracks/sde3-dsa/](tracks/sde3-dsa/README.md)** |
-| **Learning Foundations** | **[tracks/foundations/](tracks/foundations/README.md)** |
-| **Doing Last-Minute Review** | **[reference/quick-sheets/](reference/quick-sheets/revision-guide.md)** |
+A lean, high-yield "Truth Source" for mastering DSA and System Design for senior-level (SDE-2/SDE-3) big tech interviews. No fluff, no day-by-day schedules—just high-density pattern recognition and pedagogical depth.
 
 ---
 
-## 📂 Repository Structure
+## 🚀 Navigation
 
-### 🛠️ [Interview Tracks](tracks/)
-Targeted programs based on your goal or timeline.
-- **[Google SDE-2](tracks/google-sde2/)**: Roadmap, 14-day revision, curated problem set, and behavioral prep.
-- **[SDE-3 DSA](tracks/sde3-dsa/)**: Advanced DSA, LLD, and system design building blocks.
-- **[Master Improvement Prompt](tracks/sde3-dsa/master-prompt.md)**: A high-yield AI prompt to elevate any documentation in this repo to SDE-3 standards.
-- **[Foundations](tracks/foundations/)**: Atomic notes on every major data structure and algorithm.
+| Section | Description |
+| :--- | :--- |
+| **[Core Data Structures](core/ds/ds_tree.md)** | Atomic notes from Arrays to Advanced Segment Trees. |
+| **[Core Algorithms](core/algo/algorithm_tree.md)** | Pattern-based guides for DP, Graphs, Greedy, and more. |
+| **[Interview Strategies](strategies/interview/README.md)** | Rubrics, Behavioral guides, and System Design frameworks. |
+| **[Reference Hub](reference/README.md)** | 60-second pattern recognition triggers and quick recall sheets. |
+
+---
+
+## 🛠️ Repository Architecture
+
+### 📦 [Core Foundations](core/)
+The backbone of the repository. Every module is optimized for RAG (Retrieval-Augmented Generation) and senior-level study.
+- **[Data Structures](core/ds/)**: Includes the **DS Pattern Tree** for rapid structural selection.
+- **[Algorithms](core/algo/)**: Includes the **Algorithm Pattern Tree** and deep-dives into DP and Recursion.
+
+### 🎯 [Interview Strategies](strategies/)
+Tactical guides for the non-coding aspects of the interview.
+- **[LeetCode Patterns & Variants](strategies/interview/leetcode-variants.md)**: Canonical problems and their twists.
+- **[System Design](strategies/interview/system-design.md)**: Architectural patterns and scalability principles.
+- **[Behavioral](strategies/interview/behavioral.md)**: High-impact Google-specific behavioral frameworks.
+- **[Coding Rubric](strategies/interview/coding-rubric.md)**: How SDE-3 candidates are evaluated.
 
 ### 🧠 [Reference Hub](reference/)
-High-density consolidation of patterns and logic.
-- **[Patterns Master](reference/patterns/patterns-master.md)**: 60-second recognition triggers for all major DSA patterns.
-- **[Problem Bank](reference/problem-bank/canonical-questions.md)**: Logic and trickiness for 100+ canonical questions.
-- **[Quick Sheets](reference/quick-sheets/)**: Revision blitz, quick recall, and pattern triggers.
-
-### 📚 [Other Resources](books/)
-- **Books**: Deep dives into algorithm design, CP3, and DP.
-- **Languages**: Interview-specific notes for Python and Java.
-- **[Archive](archive/)**: Legacy 30-day plan and previous repository audits.
+Consolidated pattern recognition triggers to bridge the gap between "reading" and "doing".
+- **[Patterns Master](reference/patterns/patterns-master.md)**: Logic triggers for all major DSA patterns.
+- **[Interview Cheatsheet](reference/sheets/interview-cheatsheet.md)**: High-density revision sheets for last-minute review.
 
 ---
 
-## 🛠️ How to use this repository
+## 📖 How to Use
+This repository is designed for **nonlinear learning**. 
+1. **The Trees**: Start with `ds_tree.md` or `algorithm_tree.md` to see the full landscape.
+2. **Deep Dives**: If a specific pattern (like *Digit DP* or *LPS*) is fuzzy, go to the corresponding atomic file in `core/`.
+3. **The Triggers**: Use the `reference/` sheets for active recall and mock interview warm-ups.
 
-1. **Pick a track**: Most users should start with the **Google SDE-2** or **SDE-3** track.
-2. **Master the patterns**: Use the **Reference Hub** to learn how to spot solutions instantly.
-3. **Drill foundations**: If a specific topic (like DP or Graphs) is weak, use the **Foundations** directory for a deep dive.
-4. **Practice mocks**: Follow the rubric in the track folders to simulate real interview conditions.
-
----
 *For the full table of contents, see [SUMMARY.md](SUMMARY.md).*
