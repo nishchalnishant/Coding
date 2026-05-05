@@ -100,6 +100,18 @@ A hierarchical map of core algorithms, their underlying patterns, and high-yield
 - **Bit Manipulation**
     - *Variants:* Counting Bits, Single Number I & II, Maximum XOR of Two Numbers.
 
+## 9. Concurrency & Parallelism
+- **Producer-Consumer** — Synchronization between data sources and sinks using bounded buffers and semaphores.
+- **Read-Write Locking** — Optimizing for high-read throughput while ensuring exclusive write access.
+- **Barrier/Phaser Synchronization** — Multi-threaded coordination where threads must wait at specific checkpoints.
+
+## 10. System Design Algorithms (Distributed Scale)
+- **Consistent Hashing** — Distributed data partitioning that minimizes reshuffling during node churn.
+- **Bloom Filters & HyperLogLog** — Space-efficient probabilistic structures for membership and cardinality estimation.
+- **Rate Limiting (Token/Leaky Bucket)** — Algorithms for flow control and protecting systems from traffic bursts.
+- **Consensus (Raft/Paxos)** — Reaching agreement across unreliable distributed nodes for leader election and state replication.
+- **Sketching (Count-Min Sketch)** — Frequency estimation in high-volume data streams (e.g., trending hashtags).
+
 ---
 
 ## How to use this tree

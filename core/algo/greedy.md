@@ -40,14 +40,23 @@ Make the **locally optimal choice** at each step; prove it leads to a **global o
 
 ---
 
-## 1. Concept Overview
+## 1. Concept Overview: The SDE-3 Bar
 
 **When to use**: Optimal substructure + **greedy choice property** (the globally optimal solution can always be extended by taking the locally best choice). If "take best local option" can be shown never to hurt the global solution, use greedy. Otherwise, reach for DP.
 
-**Proof techniques**:
-- **Exchange argument**: Take any optimal solution; swap the greedy choice into it; show the solution doesn't get worse.
-- **Greedy stays ahead**: At each step, the greedy solution is at least as good as any other partial solution (e.g., "most tasks completed by time T").
-- **Structural argument**: The problem's structure guarantees greedy works (e.g., earliest-deadline-first maximizes task count).
+### Proof Techniques (The SDE-3 Requirement)
+Interviewers for Staff/Senior roles often ask: "How do you *know* greedy works here?"
+
+1. **Exchange Argument (The Gold Standard)**:
+   - **Method**: Take an arbitrary optimal solution $O$. Suppose $O$ does *not* make the greedy choice at step 1. Show that you can swap the greedy choice into $O$ without making the solution worse.
+   - **Example (Interval Scheduling)**: If $O$ picks an interval $x$ that doesn't end first, swap it for the earliest-ending interval $g$. Since $g$ ends earlier than $x$, it cannot possibly overlap with any future intervals in $O$. Thus, $O$ remains valid and optimal.
+
+2. **Greedy Stays Ahead**:
+   - **Method**: Define a measure of progress. Show that at every step $k$, the greedy solution is at least as "far along" as any other partial solution.
+   - **Example (Jump Game)**: At step $i$, the greedy "farthest reachable" is always $\ge$ any other choice's reach.
+
+3. **Matroids (Formal Logic)**:
+   - If a problem's constraints form a Matroid structure (like Kruskal's for MST), greedy is mathematically guaranteed to find the global optimum.
 
 ---
 

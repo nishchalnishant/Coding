@@ -1,78 +1,84 @@
-# System Design Related Algorithms — SDE-3 Level
+# System Design Algorithms — SDE-3 Gold Standard
 
-Algorithms commonly used in system design and LLD: rate limiting, consistent hashing, leader election, and quorum. SDE-3 may be asked to implement or reason about these in coding rounds.
-
----
-
-## 1. Rate Limiting
-
-> [!IMPORTANT]
-> **The Click Moment**: "Protect service from **abuse**" — OR — "handle **bursty traffic** gracefully" — OR — "**throttling** per user/API key".
-
-**Token bucket**: Bucket holds at most N tokens; refill at R tokens/sec. Request consumes 1 token; if no token, reject. Implementation: store `tokens` and `last_refill_time`; on request, refill by `(now - last_refill_time) * R`, cap at N; if tokens >= 1, deduct and allow.
-
-**Leaky bucket**: Requests enter queue; processed at fixed rate (leak). Enforce rate by queue size or drop when full.
-
-**Sliding window log**: Store timestamps of requests; count in last window; reject if count >= limit. Memory O(requests). **Sliding window counter**: Approximate with prev_count * (window - elapsed) / window + current_count. O(1) memory.
-
-**When to use**: API throttling, per-user limits. Token bucket allows bursts up to N; leaky bucket smooths traffic.
+These are the "Big Tech" algorithms that power distributed systems. While standard DSA (DP, Graphs) tests logic, these test your ability to build scalable, resilient infrastructure.
 
 ---
 
-## 2. Consistent Hashing
+## 1. Membership & Cardinality (The "Is it there?" Problems)
 
-> [!IMPORTANT]
-> **The Click Moment**: "**Scale** out cache/database nodes" — OR — "minimize **rehashing** when nodes join/leave" — OR — "**repartitioning** at scale".
+### Bloom Filters
+- **What**: A space-efficient probabilistic data structure used to test if an element is in a set.
+- **Why**: Standard `Set` is too large to fit in memory for billions of URLs.
+- **Click Moment**: "Check if a username is taken without hitting the DB", "Filtering malicious URLs", "Avoiding expensive disk lookups for non-existent keys (BigTable/Cassandra)".
+- **Trade-off**: **False Positives** are possible; **False Negatives** are impossible. You cannot delete from a standard Bloom Filter (use a Cuckoo Filter instead).
 
-**Problem**: Distribute keys across N servers; when adding/removing a server, minimize key movement.
-
-**Idea**: Hash servers and keys to a ring (e.g., 0..2^32-1). Key goes to first server clockwise. On add/remove, only keys between old and new positions move.
-
-**Implementation**: Sorted list or tree of server positions; binary search for key's position; handle wraparound. Virtual nodes (replicate each server many times on ring) for balance.
-
-**Use**: Distributed caches (Memcached, Redis cluster), load balancing.
-
----
-
-## 3. Leader Election
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Single point of coordination**" — OR — "**High Availability (HA)**" — OR — "who is the **master** in this cluster?".
-
-**In-memory (single process)**: One leader; on failure, next in order or highest ID wins. Use consensus (Raft, Paxos) in distributed setting.
-
-**Ring**: Process passes token; whoever has token is leader. Failure detection and bypass.
-
-**Bully**: Highest ID wins; on failure, higher IDs start election. O(N²) messages in worst case.
-
-**Interview**: Often "design" rather than code; know trade-offs (availability vs consistency, single leader vs multi-leader).
+### HyperLogLog (HLL)
+- **What**: Estimates the number of *unique* elements in a multiset.
+- **Why**: Counting unique visitors (DAU) for 1 billion users would require gigabytes of memory; HLL does it in **1.5 KB** with 2% error.
+- **Logic**: Observe the maximum number of leading zeros in the hash of elements. More leading zeros = statistically more unique elements seen.
 
 ---
 
-## 4. Quorum
+## 2. Load Balancing & Distribution
 
-> [!IMPORTANT]
-> **The Click Moment**: "**Eventual vs Strong Consistency**" — OR — "handle **node failures** in distributed storage" — OR — "**Replication Factor** configuration".
+### Consistent Hashing
+- **What**: Maps both "Nodes" and "Keys" to a circular 360° hash ring.
+- **Why**: Traditional `hash(key) % N` causes a massive reshuffle if one node dies (N changes). Consistent hashing only reshuffles `1/N` keys.
+- **Click Moment**: "Scaling a cache layer", "Distributed KV store (Dynamo/Cassandra)".
+- **Deep Dive**: Use **Virtual Nodes** to ensure uniform distribution and handle heterogeneous hardware.
 
-**Read/write quorum**: N replicas; write succeeds if W replicas ack; read succeeds if R replicas ack; W + R > N and W > N/2 for consistency (overlap with latest write).
-
-**Use**: Distributed databases, durable writes. Trade-off: higher W/R = stronger consistency, lower availability.
-
----
-
-## 5. Interview Questions — Logic & Trickiness
-
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Rate Limiter** | "Throttling" | Token Bucket / Sliding Window | Handling concurrency (locks) and distributed state (Redis). |
-| **Consistent Hashing** | "Minimal re-mapping" | Hash Ring + Virtual Nodes | **Virtual Nodes** are critical for load balance; mention "hot spots". |
-| **Leader Election** | "Coordination" | Raft / Bully | Split-brain scenario; term/epoch numbers to resolve conflicts. |
-| **Quorum** | "Consistency" | W + R > N | Trade-off between write latency (higher W) and read latency (higher R). |
+### Rendezvous Hashing (Highest Random Weight)
+- **What**: For each key, calculate a hash with every node ID. Assign the key to the node that produces the highest weight.
+- **Why**: Better than Consistent Hashing when the set of nodes is small and changes frequently. No ring to maintain.
 
 ---
 
-## See also
+## 3. Rate Limiting & Flow Control
 
-- [Distributed Systems Foundations](../../reference/distributed/README.md) — Paxos, Raft, and CAP theorem
-- [LLD Patterns](../../reference/lld/README.md) — Singleton and Proxy patterns in system design
-- [Patterns Master](../../reference/patterns/patterns-master.md)
+### Token Bucket
+- **What**: A bucket holds tokens, refilled at a constant rate. Each request consumes a token.
+- **Why**: Allows for **bursts** (up to bucket size) while maintaining a long-term average rate.
+- **Use case**: API rate limiting at the gateway level.
+
+### Leaky Bucket
+- **What**: Requests enter a queue; they are processed at a constant output rate.
+- **Why**: Smooths out traffic. No bursts allowed.
+- **Use case**: Traffic shaping in networking.
+
+---
+
+## 4. Distributed Consensus & Coordination
+
+### Paxos / Raft
+- **What**: Algorithms to reach consensus across multiple unreliable nodes.
+- **Why**: Essential for "Leader Election" and "Distributed Locking". If 3/5 nodes agree, the value is committed.
+- **Interview Soundbite**: "Raft is preferred for its readability; Paxos is the original proof. Both ensure safety (no two leaders) and liveness (eventual progress)."
+
+### Vector Clocks / Lamport Timestamps
+- **What**: Tracking logical time in a distributed system.
+- **Why**: Physical clocks drift (skew). Logical clocks track "happened-before" relationships.
+- **Use case**: Conflict resolution in multi-master databases (Dynamo).
+
+---
+
+## 5. Sketching & Frequency
+
+### Count-Min Sketch
+- **What**: A 2D array of counters. Like a Bloom Filter but stores frequencies instead of membership.
+- **Why**: "Top K trending hashtags" or "Identify heavy hitters" in a stream of millions of events.
+- **Logic**: Use multiple hash functions; the estimated frequency is `min(counters[hash_i])`. This overestimates due to collisions but never underestimates.
+
+### Quadtrees / Geohash
+- **What**: Spatial indexing.
+- **Why**: "Find nearest restaurants", "Uber driver matching".
+- **Logic**: Recursively divide 2D space into 4 quadrants. Geohash encodes a 2D point into a 1D string where longer prefixes = closer proximity.
+
+---
+
+## Quick Revision Triggers
+- "Count unique visitors at scale" → HyperLogLog.
+- "Is this key in the database?" → Bloom Filter.
+- "Add/Remove servers without reshuffling data" → Consistent Hashing.
+- "Find top-K in a stream" → Count-Min Sketch.
+- "Proximity search / Uber" → Quadtree / Geohash.
+- "Leader election" → Raft / Paxos.

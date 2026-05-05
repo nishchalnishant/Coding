@@ -2133,3 +2133,239 @@ reverse(route)
 return route
 ```
 **Important points:** Append in postorder then reverse; duplicates are multiple edges; lexicographic requires sorted adjacency.
+
+---
+
+## Supplementary High-Yield Variants (SDE-3 Saturation)
+
+### 1. Advanced Array & Hashing
+
+<a id="subarray-sums-divisible-by-k"></a>
+#### Subarray Sums Divisible by K
+**Problem:** Count subarrays where the sum is divisible by `k`.  
+**Pseudocode:**
+```
+count = 0, prefix_mod = 0
+mod_freq = {0: 1}
+for x in nums:
+    prefix_mod = (prefix_mod + x) % k
+    if prefix_mod < 0: prefix_mod += k  # handle negative sums
+    count += mod_freq.get(prefix_mod, 0)
+    mod_freq[prefix_mod] = mod_freq.get(prefix_mod, 0) + 1
+return count
+```
+
+<a id="contiguous-array-0-1"></a>
+#### Contiguous Array (Equal 0s and 1s)
+**Problem:** Find max length of subarray with equal number of 0s and 1s.  
+**Pseudocode:**
+```
+count = 0, max_len = 0
+first_occurrence = {0: -1}
+for i, x in enumerate(nums):
+    count += 1 if x == 1 else -1
+    if count in first_occurrence:
+        max_len = max(max_len, i - first_occurrence[count])
+    else:
+        first_occurrence[count] = i
+return max_len
+```
+
+<a id="subarray-product-less-than-k"></a>
+#### Subarray Product Less Than K
+**Problem:** Count contiguous subarrays where product is strictly less than `k`.  
+**Pseudocode:**
+```
+if k <= 1: return 0
+prod = 1, left = 0, count = 0
+for right, val in enumerate(nums):
+    prod *= val
+    while prod >= k:
+        prod /= nums[left]
+        left += 1
+    count += right - left + 1
+return count
+```
+
+### 2. Advanced Binary Search
+
+<a id="find-k-closest-elements"></a>
+#### Find K Closest Elements
+**Problem:** Find `k` elements closest to `x` in a sorted array.  
+**Pseudocode:**
+```
+lo = 0, hi = n - k
+while lo < hi:
+    mid = (lo + hi) // 2
+    # Compare distances of candidates at mid and mid + k
+    if x - arr[mid] > arr[mid + k] - x:
+        lo = mid + 1
+    else:
+        hi = mid
+return arr[lo:lo + k]
+```
+
+<a id="capacity-to-ship-packages"></a>
+#### Capacity to Ship Packages within D Days
+**Problem:** Find min weight capacity to ship all packages in `D` days.  
+**Pseudocode:**
+```
+lo = max(weights), hi = sum(weights)
+def can_ship(cap):
+    days, cur = 1, 0
+    for w in weights:
+        if cur + w > cap:
+            days += 1
+            cur = w
+        else: cur += w
+    return days <= D
+while lo < hi:
+    mid = (lo + hi) // 2
+    if can_ship(mid): hi = mid
+    else: lo = mid + 1
+return lo
+```
+
+### 3. Advanced DFS & BFS
+
+<a id="shortest-bridge"></a>
+#### Shortest Bridge
+**Problem:** Find min 0s to flip to connect two islands.  
+**Pseudocode:**
+```
+1. Find first island via DFS, collect all coordinates in a queue.
+2. multi-source BFS from queue to find the first '1' of the second island.
+3. Steps in BFS - 1 is the answer.
+```
+
+<a id="all-nodes-distance-k"></a>
+#### All Nodes Distance K in Binary Tree
+**Problem:** Find all nodes at distance `k` from a `target` node.  
+**Pseudocode:**
+```
+1. Map each node to its parent via DFS.
+2. BFS from target node, moving to left child, right child, and parent.
+3. Stop BFS at level k and collect results.
+```
+
+### 4. Advanced Backtracking
+
+<a id="word-search-ii"></a>
+#### Word Search II
+**Problem:** Find all words from a list in a grid.  
+**Pseudocode:**
+```
+1. Build a Trie of all words.
+2. For each cell in grid, start DFS if grid[r][c] is in Trie.root.
+3. In DFS, move to corresponding Trie node. If node has a word, collect it.
+4. Mark visited by changing char to '#', restore after.
+```
+
+<a id="remove-invalid-parentheses"></a>
+#### Remove Invalid Parentheses
+**Problem:** Remove min parentheses to make string valid.  
+**Pseudocode:**
+```
+1. BFS: level 0 is [s]. 
+2. For each level, check if any string is valid.
+3. If valid found, collect all valid at this level and return.
+4. Else, generate next level by removing 1 parenthesis from each string.
+```
+
+### 5. Advanced Dynamic Programming
+
+<a id="house-robber-ii"></a>
+#### House Robber II (Circular)
+**Problem:** Max profit robbing houses in a circle.  
+**Pseudocode:**
+```
+return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
+# rob_linear is standard House Robber I
+```
+
+<a id="maximal-square"></a>
+#### Maximal Square
+**Problem:** Find area of largest square of 1s in binary matrix.  
+**Pseudocode:**
+```
+dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) if matrix[i][j] == '1'
+else 0. Max value in dp squared is answer.
+```
+
+<a id="longest-string-chain"></a>
+#### Longest String Chain
+**Problem:** Find longest chain where each word is a predecessor of the next.  
+**Pseudocode:**
+```
+Sort words by length.
+dp[word] = max(dp[prev] + 1) for all prev formed by removing 1 char.
+return max(dp.values())
+```
+
+### 6. Advanced Greedy
+
+<a id="minimum-refueling-stops"></a>
+#### Minimum Refueling Stops
+**Problem:** Min stops to reach destination.  
+**Pseudocode:**
+```
+pq = max-heap of fuel available at reachable stations.
+tank = startFuel, stops = 0, i = 0
+while tank < target:
+    while i < len(stations) and stations[i][0] <= tank:
+        heappush(pq, -stations[i][1]); i += 1
+    if not pq: return -1
+    tank += -heappop(pq)
+    stops += 1
+return stops
+```
+
+<a id="furthest-building-ladders-bricks"></a>
+#### Furthest Building (Ladders & Bricks)
+**Problem:** Max index reachable with `l` ladders and `b` bricks.  
+**Pseudocode:**
+```
+pq = min-heap of jumps where we used ladders.
+for i in range(len(heights) - 1):
+    diff = h[i+1] - h[i]
+    if diff > 0:
+        heappush(pq, diff)
+        if len(pq) > ladders:
+            bricks -= heappop(pq)
+        if bricks < 0: return i
+return n - 1
+```
+
+### 7. Advanced Bit Manipulation
+
+<a id="smallest-sufficient-team"></a>
+#### Smallest Sufficient Team
+**Problem:** Smallest group covering all skills.  
+**Pseudocode:**
+```
+dp = {0: []}
+for person_idx, person_skills in enumerate(people):
+    for mask, team in list(dp.items()):
+        new_mask = mask | person_skills
+        if new_mask not in dp or len(dp[new_mask]) > len(team) + 1:
+            dp[new_mask] = team + [person_idx]
+return dp[(1 << num_skills) - 1]
+```
+
+---
+
+## Quick Reference Table — Variant Mapping
+
+| Topic | Base Problem | High-Yield Variant | Twist |
+| :--- | :--- | :--- | :--- |
+| **Arrays** | Two Sum | Subarray Sum = K | Prefix Sum + Hash Map |
+| **Strings** | strStr() | Shortest Palindrome | LPS Table (KMP) |
+| **BFS** | BFS (Tree) | Rotting Oranges | Multi-source BFS |
+| **DFS** | DFS (Tree) | All Nodes Dist K | Parent Pointers |
+| **Binary Search** | Exact Match | Koko Eating Bananas | Search on Answer (Predicate) |
+| **DP** | House Robber | House Robber II | Circle = Two Linear Passes |
+| **Backtracking** | Permutations | Word Search II | Trie Optimization |
+| **Greedy** | Intervals | Task Scheduler | Math Formula or Heap |
+| **Heap** | Top K | Median from Stream | Two Heaps (Min/Max) |
+| **DSU** | Connectivity | Accounts Merge | Grouping strings |
+

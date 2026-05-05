@@ -82,6 +82,17 @@ A hierarchical map of core data structures, their common patterns, and high-yiel
 - **Segment Trees / Fenwick Trees** — Advanced structures for efficient range updates and range queries in O(log N).
     - *Patterns:* Range Sum Query - Mutable, Count of Smaller Numbers After Self.
 
+## 9. Concurrency Primitives
+- **Semaphores & Mutexes** — Atomic locks and signals for multi-threaded resource management.
+- **Bounded Blocking Queues** — Thread-safe buffers for data exchange between producers and consumers.
+- **Atomic Variables** — Lock-free primitives for thread-safe value updates (CAS).
+
+## 10. Distributed & System Design Structures
+- **LRU / LFU Cache** — Hybrid structures (DLL + Map) for efficient item eviction and retrieval.
+- **Consistent Hashing Ring** — Circular partitioning of keys across dynamic node sets.
+- **Bloom Filters & Count-Min Sketch** — Probabilistic structures for high-cardinality data streams.
+- **Quadtrees & Geohash** — Spatial data structures for proximity-based search and 2D partitioning.
+
 ---
 
 ## How to use this tree
