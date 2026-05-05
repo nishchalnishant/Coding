@@ -1,15 +1,14 @@
-# Data Structures — SDE-3 Gold Standard
+# The Data Structures Library: A Guided Tour
 
-Core data structures for senior-level engineering interviews. This repository has been rigorously audited and structured as a **"Truth Source" for SDE-3 / Staff** candidates. It goes beyond SDE-2 problem-solving by injecting canonical implementations, concurrency considerations, memory layout implications, and system design scalability metrics.
+Welcome to the toolkit. As an SDE-3, you don't just "use" a data structure; you choose it based on its memory footprint, concurrency safety, and cache locality. 
 
-**Twin-Track Architecture:**
-Use [../../reference/sheets/revision-guide.md](../../reference/sheets/revision-guide.md) (topic priority) and [../../reference/sheets/quick-recall.md](../../reference/sheets/quick-recall.md) (one-page patterns) alongside the files below.
+In this section, we're not just going to talk about how to push to a stack. We're going to talk about **why** a Monotonic Stack is the gold standard for "Next Greater Element" and how to implement an **LRU Cache** that won't fail under high-concurrency pressure.
 
-Each topic module contains:
-1. **Theory & Mental Models**: Memory layout, caching implications, and invariants.
-2. **Core Algorithms & Click Moments**: SDE-3 canonical code templates.
-3. **SDE-3 Deep Dives**: Thread-safety, lock-free structures, and distributed scalability.
-4. **Interview Questions — Logic & Trickiness**: Distilled wisdom on boundaries and traps.
+### Our Approach:
+1.  **Theory & Mental Models**: We'll talk about the "Click Moment" for each structure.
+2.  **Core Algorithms**: SDE-3 canonical code templates that you can write in your sleep.
+3.  **SDE-3 Deep Dives**: The "Staff-level" stuff—lock-free designs and distributed scalability.
+4.  **The Dialogue**: Tips on how to explain your choices to an interviewer.
 
 ## Topic files
 

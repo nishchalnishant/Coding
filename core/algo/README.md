@@ -1,11 +1,14 @@
-# Algorithms — SDE-3 Gold Standard
+# The Algorithms Lab: Your Battle Plan
 
-Core algorithms for coding interviews, strictly audited to the **SDE-3 Gold Standard**. This module goes beyond standard SDE-2 concepts to include advanced structural recognition, exact production-grade implementations (like Lazy Deletion Dijkstra, LRU from scratch, and Trie), and "Click Moment" intuition.
+Welcome to the lab. If the Data Structures were your tools, these are your **Tactics.** At the SDE-3 level, the interviewer isn't just looking for a working solution; they're looking for an **optimal strategy.** 
 
-**Revision Resources:**
-Use [../../reference/sheets/revision-guide.md](../../reference/sheets/revision-guide.md) for quick lookups and [../../reference/sheets/quick-recall.md](../../reference/sheets/quick-recall.md) for pattern-based active recall.
+In this section, we'll go beyond basic sorting and searching. We're going to dive into the "Why" behind **Greedy proofs**, the beauty of **Bitmask DP**, and the scalability of **System Design Algorithms** like Consistent Hashing.
 
-Each algorithm topic file includes **Interview Questions — Logic & Trickiness** (problems, core logic, gotchas). Supplements: [dynamic-programming/dp-aditya-verma.md](dynamic-programming/dp-aditya-verma.md), [recursion/aditya-verma.md](recursion/aditya-verma.md).
+### Our Approach:
+1.  **The Algorithm Tree**: Start here to see the full landscape of patterns.
+2.  **Pattern Deep Dives**: Each topic file includes "Click Moments" and "Interviewer Twists."
+3.  **SDE-3 Gold Standard**: Every implementation is production-grade and optimized for RAG.
+4.  **The Dialogue**: Conversational bridges to help you explain complex logic during the interview.
 
 ## Topic Files (Audited to Gold Standard)
 
