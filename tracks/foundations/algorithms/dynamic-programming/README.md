@@ -77,6 +77,14 @@ def house_robber(nums: list[int]) -> int:
     for val in nums:
         prev2, prev1 = prev1, max(prev1, prev2 + val)
     return prev1
+
+#### Common Variants & Twists
+1. **Decode Ways**:
+   - **What (The Problem & Goal):** Given a digit string, count the number of ways to decode it (A=1..Z=26).
+   - **How (Intuition & Mental Model):** This is a Fibonacci variant. `dp[i]` depends on `dp[i-1]` (if `s[i]` is valid) and `dp[i-2]` (if `s[i-1:i+1]` is valid). Handle the '0' cases (leading zero or solo zero) carefully.
+2. **Min Cost For Tickets**:
+   - **What (The Problem & Goal):** Given travel days and costs for 1-day, 7-day, and 30-day passes, find the minimum cost to travel all days.
+   - **How (Intuition & Mental Model):** `dp[i] = min(dp[i-1] + cost[1d], dp[i-7] + cost[7d], dp[i-30] + cost[30d])`. If `i` is not a travel day, `dp[i] = dp[i-1]`.
 ```
 
 > [!TIP]
@@ -104,6 +112,14 @@ def coin_change_min(coins: list[int], amount: int) -> int:
         for c in range(coin, amount + 1):  # forwards: allows reuse
             dp[c] = min(dp[c], dp[c - coin] + 1)
     return dp[amount] if dp[amount] != float('inf') else -1
+
+#### Common Variants & Twists
+1. **Target Sum**:
+   - **What (The Problem & Goal):** Given an array and a target, assign `+/-` signs to each number so they sum to the target.
+   - **How (Intuition & Mental Model):** Let `P` be the sum of positive-assigned numbers and `N` be the sum of negative ones. `P - N = target` and `P + N = total_sum`. Thus, `2P = target + total_sum`. We need to find if a subset sums to `(target + total_sum) / 2`. This reduces to 0/1 Knapsack.
+2. **Partition to K Equal Sum Subsets**:
+   - **What (The Problem & Goal):** Partition array into `k` subsets with equal sum.
+   - **How (Intuition & Mental Model):** This is NP-Hard. For small `N`, use Bitmask DP or Backtracking with pruning. `dp[mask]` stores the current sum of the mask mod `target`.
 ```
 
 > [!CAUTION]
@@ -142,6 +158,14 @@ def edit_distance(word1: str, word2: str) -> int:
                 dp[j] = 1 + min(prev, dp[j], dp[j - 1])
             prev = temp
     return dp[n]
+
+#### Common Variants & Twists
+1. **Shortest Common Supersequence**:
+   - **What (The Problem & Goal):** Find the shortest string that has both `s1` and `s2` as subsequences.
+   - **How (Intuition & Mental Model):** The length is `len(s1) + len(s2) - LCS(s1, s2)`. To reconstruct the string, backtrack through the LCS table.
+2. **Minimum ASCII Delete Sum for Two Strings**:
+   - **What (The Problem & Goal):** Minimum ASCII sum of deleted characters to make two strings equal.
+   - **How (Intuition & Mental Model):** Similar to Edit Distance/LCS. If characters match, cost is 0. If they don't, choose to delete from `s1` (cost `ord(s1[i])`) or `s2` (cost `ord(s2[j])`).
 ```
 
 > [!TIP]
@@ -169,6 +193,14 @@ def burst_balloons(nums: list[int]) -> int:
                 dp[left][right] = max(dp[left][right],
                                       dp[left][k] + coins + dp[k][right])
     return dp[0][n - 1]
+
+#### Common Variants & Twists
+1. **Matrix Chain Multiplication**:
+   - **What (The Problem & Goal):** Find the minimum scalar multiplications to multiply a chain of matrices.
+   - **How (Intuition & Mental Model):** Standard interval DP. `dp[i][j] = min(dp[i][k] + dp[k+1][j] + cost_to_multiply(i, k, j))`.
+2. **Minimum Score Triangulation of Polygon**:
+   - **What (The Problem & Goal):** Divide a polygon into triangles to minimize the sum of products of vertices of each triangle.
+   - **How (Intuition & Mental Model):** An edge `(i, j)` belongs to exactly one triangle with some vertex `k`. Split the range `[i, j]` at `k`.
 ```
 
 > [!CAUTION]
@@ -219,6 +251,14 @@ def count_up_to(limit: int, K: int) -> int:
 
 def count_digit_sum_in_range(L: int, R: int, K: int) -> int:
     return count_up_to(R, K) - count_up_to(L - 1, K)
+
+#### Common Variants & Twists
+1. **Numbers At Most N Given Digit Set**:
+   - **What (The Problem & Goal):** Given a set of digits, count how many numbers up to `N` can be formed.
+   - **How (Intuition & Mental Model):** Standard Digit DP where the available digits are restricted to the given set.
+2. **Non-negative Integers without Consecutive Ones**:
+   - **What (The Problem & Goal):** Count integers up to `N` whose binary representation doesn't have `11`.
+   - **How (Intuition & Mental Model):** Use binary representation in Digit DP. State includes `last_digit`.
 ```
 
 > [!CAUTION]
@@ -245,6 +285,14 @@ def rob_house_tree(root) -> int:
         return with_node, without_node
 
     return max(dfs(root))
+
+#### Common Variants & Twists
+1. **Binary Tree Maximum Path Sum**:
+   - **What (The Problem & Goal):** Find the max path sum between any two nodes.
+   - **How (Intuition & Mental Model):** For each node, the max path passing *through* it is `node.val + max(0, left_gain) + max(0, right_gain)`. Update a global max and return `node.val + max(0, left_gain, right_gain)` to the parent.
+2. **House Robber III**:
+   - **What (The Problem & Goal):** Maximum robbery in a tree without robbing two adjacent nodes.
+   - **How (Intuition & Mental Model):** For each node, return two values: `(rob_it, skip_it)`. `rob_it = node.val + left.skip_it + right.skip_it`. `skip_it = max(left) + max(right)`.
 ```
 
 ---
@@ -279,6 +327,11 @@ def max_profit_fee(prices: list[int], fee: int) -> int:
         hold = max(hold, free - p)
         free = max(free, hold + p - fee)  # subtract fee on sell
     return free
+
+#### Common Variants & Twists
+1. **Stock with Transaction Fee (Optimized)**:
+   - **What (The Problem & Goal):** Unlimited transactions but each sale has a fixed fee.
+   - **How (Intuition & Mental Model):** 2 states: `buy` (max profit ending in a buy) and `sell` (max profit ending in a sell). `buy = max(buy, sell - price)`, `sell = max(sell, buy + price - fee)`. This avoids the complex `dp[k]` state when transactions are unlimited.
 ```
 
 | Variant | k | Extra | Code Strategy |

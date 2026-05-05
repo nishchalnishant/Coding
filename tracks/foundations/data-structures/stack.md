@@ -85,6 +85,17 @@ def daily_temperatures(temps: list[int]) -> list[int]:
 > [!CAUTION]
 > Always store **indices** on the stack, not values. You need the index to compute distances (`i - j`) or to fill the result array. Storing values loses position information.
 
+#### Common Variants & Twists
+1. **Next Greater Element II (Circular Array Twist)**:
+   - **What (The Problem & Goal):** Find the next greater element, but the array is circular (the element after the last element is the first element).
+   - **How (Intuition & Mental Model):** To simulate a circular array, iterate from `0` to `2*N - 1` and use the modulo operator `i % N` to wrap around. Use the exact same monotonic stack logic, but be careful not to double-push elements on the second pass (only query the stack).
+2. **Daily Temperatures**:
+   - **What (The Problem & Goal):** Given an array of temperatures, return an array answering "how many days do you have to wait until a warmer temperature?"
+   - **How (Intuition & Mental Model):** This is the classic Next Greater Element problem in disguise. Instead of storing the *value* of the next greater element, you store the *distance* (difference in indices) by computing `current_index - stack.pop()`.
+3. **Online Stock Span**:
+   - **What (The Problem & Goal):** You receive elements one by one (online). For each element, find how many consecutive previous days had a price `<=` today's price.
+   - **How (Intuition & Mental Model):** Keep a monotonic decreasing stack of tuples: `(price, span)`. When a new price arrives, pop all prices `<= current`. As you pop, accumulate their spans. The current element's span becomes `1 + sum_of_popped_spans`.
+
 ---
 
 ### Largest Rectangle in Histogram
@@ -208,6 +219,14 @@ def calculate(s: str) -> int:
         i += 1
     return result
 ```
+
+#### Common Variants & Twists
+1. **Basic Calculator II (Precedence Twist)**:
+   - **What (The Problem & Goal):** The expression has `*` and `/` (higher precedence) alongside `+` and `-`, but no parentheses.
+   - **How (Intuition & Mental Model):** Maintain a stack of numbers that will simply be summed up at the very end. Keep track of the *previous operator* seen. If it was `+` or `-`, push the number (or its negative). If it was `*` or `/`, immediately pop the top of the stack, perform the multiplication/division with the current number, and push the result back.
+2. **Decode String (Nested String Twist)**:
+   - **What (The Problem & Goal):** Decode a string like `3[a2[c]]` into `accaccacc`.
+   - **How (Intuition & Mental Model):** The stack stores "context" just like parentheses in math. When seeing `[`, push a tuple `(string_built_so_far, repeat_count)` onto the stack and reset your current trackers. When seeing `]`, pop the context, multiply your current inner string by `repeat_count`, and append it to `string_built_so_far`.
 
 ---
 

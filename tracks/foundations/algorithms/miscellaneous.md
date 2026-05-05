@@ -80,6 +80,14 @@ def count_inversions_fenwick(nums: list[int]) -> int:
         inversions += tree.prefix_sum(r - 1)  # count smaller elements to the right
         tree.update(r, 1)
     return inversions
+
+#### Common Variants & Twists
+1. **Count of Smaller Numbers After Self**:
+   - **What (The Problem & Goal):** For each element in an array, count how many numbers to its right are smaller than it.
+   - **How (Intuition & Mental Model):** Use coordinate compression to map large numbers to a small range `[1, K]`. Iterate from right to left. For each number, query the Fenwick tree for the prefix sum up to its rank (this gives the count of numbers already seen that are smaller). Then, update the Fenwick tree at its rank by `+1`.
+2. **Reverse Pairs (Fenwick approach)**:
+   - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
+   - **How (Intuition & Mental Model):** Similar to counting smaller numbers. Coordinate compress all `nums[i]` and `2 * nums[i]`. Iterate right to left, query the tree for prefix sum up to `(nums[i] - 1) // 2` rank, then update the tree at `nums[i]` rank.
 ```
 
 > [!TIP]
@@ -128,6 +136,14 @@ class SegmentTree:
         mid = (start + end) // 2
         return (self.query(2*node+1, start, mid, l, r) +
                 self.query(2*node+2, mid+1, end, l, r))
+
+#### Common Variants & Twists
+1. **Falling Squares**:
+   - **What (The Problem & Goal):** Squares are dropped onto a 1D line. Each square lands on top of any existing squares. Find the current maximum height after each drop.
+   - **How (Intuition & Mental Model):** This is a range update (set height) and range query (max height). Use coordinate compression on all square boundaries. A segment tree with lazy propagation handles "find max in range `[l, r]`" and "set range `[l, r]` to `new_max_height + square_side`".
+2. **Range Module**:
+   - **What (The Problem & Goal):** Track ranges of numbers (add range, remove range, query range).
+   - **How (Intuition & Mental Model):** A dynamic segment tree (where nodes are created on demand) or a segment tree on a fixed large range can handle this. Alternatively, use a `SortedDict` to store disjoint intervals and merge/split them on each operation.
 ```
 
 > [!CAUTION]
@@ -157,6 +173,14 @@ def build_sparse_table(nums: list[int]) -> list[list[int]]:
 def rmq(table: list[list[int]], l: int, r: int) -> int:
     k = int(math.log2(r - l + 1))
     return min(table[k][l], table[k][r - (1 << k) + 1])
+
+#### Common Variants & Twists
+1. **Range GCD Query**:
+   - **What (The Problem & Goal):** Static array, many queries for the GCD of a subarray.
+   - **How (Intuition & Mental Model):** GCD is idempotent (`gcd(x, x) = x`) and associative. A sparse table can be built for GCD in O(N log N) and answered in O(1).
+2. **Lowest Common Ancestor (LCA)**:
+   - **What (The Problem & Goal):** Find the LCA of two nodes in a static tree.
+   - **How (Intuition & Mental Model):** Perform an Euler Tour of the tree, recording the depth of each node visited. The LCA of nodes `u` and `v` corresponds to the node with the minimum depth in the Euler tour array between the first occurrences of `u` and `v`. Use a sparse table on the depth array for O(1) RMQ.
 ```
 
 > [!TIP]
@@ -220,6 +244,14 @@ class LRUCache:
             lru = self.tail.prev
             self._remove(lru)
             del self.cache[lru.key]
+
+#### Common Variants & Twists
+1. **LFU Cache (Least Frequently Used)**:
+   - **What (The Problem & Goal):** Similar to LRU, but evict the item with the lowest frequency. On tie, use LRU.
+   - **How (Intuition & Mental Model):** Maintain two maps: `key_to_node` and `freq_to_dll`. Each frequency `f` points to a doubly linked list of nodes with that frequency. Also track `min_freq`. When a key is accessed, move it from `freq_to_dll[f]` to `freq_to_dll[f+1]`.
+2. **LRU with Expiration (TTL)**:
+   - **What (The Problem & Goal):** Items in the cache have a Time-To-Live (TTL).
+   - **How (Intuition & Mental Model):** In the `get` method, check if the item has expired before returning it. For active eviction of expired items, use a priority queue of `(expiration_time, key)` or periodically sweep the head of a chronologically sorted DLL.
 ```
 
 > [!CAUTION]

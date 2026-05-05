@@ -101,6 +101,17 @@ def three_sum(nums: list[int]) -> list[list[int]]:
 > [!CAUTION]
 > **3Sum duplicate skipping has three sites**: skip duplicate `i` at the outer loop, and skip duplicate `left`/`right` after recording a valid triplet. Missing any one of the three causes duplicate results.
 
+#### Common Variants & Twists
+1. **3Sum Closest**: 
+   - **What (The Problem & Goal):** Find three integers in the array that sum closest to a given target, returning the sum rather than the exact match.
+   - **How (Intuition & Mental Model):** Instead of checking for an exact target, maintain a `min_diff` variable to track the closest sum seen so far. After calculating the current sum, advance the `left` or `right` pointers based on whether the current sum is `< target` or `> target` to pull the sum closer.
+2. **4Sum**:
+   - **What (The Problem & Goal):** Find all unique quadruplets that sum to a target.
+   - **How (Intuition & Mental Model):** Wrap the standard Two-Pointer 3Sum logic inside another outer loop. This fixes the first two elements (`i` and `j`), allowing you to use two pointers (`left` and `right`) for the remaining two elements. Sort first and skip duplicates at all 4 levels. Time complexity is O(N³).
+3. **Container With Most Water**:
+   - **What (The Problem & Goal):** Given an array of heights, find two lines that together form a container holding the most water.
+   - **How (Intuition & Mental Model):** Place two pointers at opposite ends. The area is bounded by the shorter line (`min(h[l], h[r]) * width`). To maximize area, always advance the pointer pointing to the shorter line inward, as moving the taller line can never increase the height bound.
+
 ---
 
 ### Sliding Window — Variable or Fixed Size
@@ -146,6 +157,17 @@ def min_window_substring(s: str, t: str) -> str:
     return result
 ```
 
+#### Common Variants & Twists
+1. **Max Consecutive Ones III (Math Constraint)**:
+   - **What (The Problem & Goal):** Given a binary array, flip at most `K` zeros to ones to get the longest contiguous subarray of ones.
+   - **How (Intuition & Mental Model):** Instead of distinct characters, track the count of `0`s in your window. The valid condition is `zeros <= K`. Expand right; if `zeros > K`, shrink left until `zeros` drops back down to `K` or below.
+2. **Longest Repeating Character Replacement (Dynamic Target)**:
+   - **What (The Problem & Goal):** Replace at most `k` characters to find the longest substring of a single repeating character.
+   - **How (Intuition & Mental Model):** The valid condition is `window_len - max_freq_char <= k`. Maintain a frequency map. If the condition is violated, shrink left. You don't even need to accurately decrement `max_freq_char` strictly when shrinking, because a smaller frequency cannot possibly create a larger valid window!
+3. **Subarrays with K Different Integers (Exact K Twist)**:
+   - **What (The Problem & Goal):** Count the number of subarrays with *exactly* `K` different integers.
+   - **How (Intuition & Mental Model):** Counting exact `K` directly with a sliding window is extremely difficult because shrinking the window doesn't necessarily change the number of distinct elements immediately. Instead, write a helper function `atMost(K)` and return `atMost(K) - atMost(K - 1)`.
+
 ---
 
 ### Prefix Sum — Range Queries
@@ -172,6 +194,14 @@ def range_sum_query(nums: list[int]) -> callable:
         return prefix[right+1] - prefix[left]
     return query
 ```
+
+#### Common Variants & Twists
+1. **Subarray Sums Divisible by K**:
+   - **What (The Problem & Goal):** Find the number of contiguous subarrays whose sum is evenly divisible by `K`.
+   - **How (Intuition & Mental Model):** Instead of storing the raw sum, store `running_sum % K` in the map. If you encounter the exact same modulo at two different points, it means the subarray between those two points added a sum that is a perfect multiple of `K` (which cancels out in modulo arithmetic).
+2. **Continuous Subarray Sum**:
+   - **What (The Problem & Goal):** Check if there's a multiple of `K` subarray of size `>= 2`.
+   - **How (Intuition & Mental Model):** Similar modulo logic, but instead of mapping `mod -> frequency`, map `running_sum % k -> first_index_seen`. It is a valid sequence if `current_index - map[mod] >= 2`.
 
 ---
 
@@ -208,6 +238,14 @@ def max_subarray_with_indices(nums: list[int]) -> tuple[int, int, int]:
 
 > [!CAUTION]
 > Initializing `cur = best = 0` is wrong when all elements are negative — it returns 0 instead of the least-negative element. Always initialize to `nums[0]` and start the loop from index 1.
+
+#### Common Variants & Twists
+1. **Maximum Product Subarray**:
+   - **What (The Problem & Goal):** Find a contiguous subarray that has the largest product.
+   - **How (Intuition & Mental Model):** Negative numbers complicate things because two negatives multiply to a large positive. Therefore, Kadane's must track *both* `max_prod` and `min_prod` (the largest negative) at each step. If the current number is negative, swapping `max_prod` and `min_prod` before multiplying solves it.
+2. **Maximum Circular Subarray**:
+   - **What (The Problem & Goal):** Find the maximum subarray sum in a circular array (the end connects to the beginning).
+   - **How (Intuition & Mental Model):** The max subarray is either the standard Kadane's maximum (no wrapping), OR it wraps around the edges. The wrap-around maximum is simply `total_array_sum - kadanes_minimum_subarray`. Return `max(max_kadane, total_sum - min_kadane)`.
 
 ---
 

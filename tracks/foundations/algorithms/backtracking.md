@@ -108,6 +108,14 @@ def combine(n: int, k: int) -> list[list[int]]:
 > [!TIP]
 > **Key pruning for combinations**: In `combine`, the loop upper bound is `n - (k - len(path)) + 2`, not `n + 1`. This prunes branches where there aren't enough remaining elements to reach size K — reduces constant factor significantly.
 
+#### Common Variants & Twists
+1. **Combination Sum**:
+   - **What (The Problem & Goal):** Find all unique combinations in an array that sum to a target value. Numbers can be reused multiple times.
+   - **How (Intuition & Mental Model):** Use the standard combination template, but when recursing, instead of passing `i + 1` to skip the current element, pass `i` to allow it to be picked again. Prune the branch immediately if the current sum exceeds the target.
+2. **Combination Sum II**:
+   - **What (The Problem & Goal):** Find all unique combinations that sum to a target, but each number can only be used *once*, and the input array contains *duplicates*.
+   - **How (Intuition & Mental Model):** Sort the array first. In the loop, skip duplicates at the *same level* of recursion using `if i > start and nums[i] == nums[i-1]: continue`. This ensures we pick the same value across different levels (for different positions in the combination) but not for the same position.
+
 ---
 
 ### Permutations — Use All Elements in Different Orders
@@ -153,6 +161,14 @@ def permute_unique(nums: list[int]) -> list[list[int]]:
 
 > [!CAUTION]
 > **Duplicate permutations trap**: For `[1,1,2]`, naive permutation generates duplicate results. The fix: sort first, then skip `nums[i] == nums[i-1] and not used[i-1]`. The `not used[i-1]` condition ensures we only skip when the identical previous element was skipped at this recursion level.
+
+#### Common Variants & Twists
+1. **Letter Case Permutation**:
+   - **What (The Problem & Goal):** Given a string, return all possible strings by transforming every letter to lowercase or uppercase.
+   - **How (Intuition & Mental Model):** At each character, you have two choices if it's a letter (upper or lower). If it's a digit, you have only one choice. This is a binary decision tree.
+2. **Next Permutation**:
+   - **What (The Problem & Goal):** Find the lexicographically next greater permutation of numbers.
+   - **How (Intuition & Mental Model):** Not strictly backtracking, but related to permutation logic. (1) Find the first decreasing element from the right (`i`). (2) Find the smallest element to the right of `i` that is larger than `nums[i]` (`j`). (3) Swap them. (4) Reverse everything to the right of `i`.
 
 ---
 
@@ -232,6 +248,14 @@ def solve_sudoku(board: list[list[str]]) -> None:
 > [!TIP]
 > **MRV Optimization**: Instead of passing `empty` as a fixed list, dynamically pick the empty cell with the fewest valid options remaining (Minimum Remaining Values heuristic). This radically prunes the search space.
 
+#### Common Variants & Twists
+1. **Sudoku Solver (optimized)**:
+   - **What (The Problem & Goal):** Solve a Sudoku board faster than naive trial-and-error.
+   - **How (Intuition & Mental Model):** Use the **Minimum Remaining Values (MRV)** heuristic. Instead of filling cells in order, always pick the empty cell with the *fewest* possible valid digits. This prunes the search space dramatically.
+2. **Unique Paths III**:
+   - **What (The Problem & Goal):** Find the number of paths from start to end that visit every non-obstacle square exactly once.
+   - **How (Intuition & Mental Model):** Standard grid backtracking, but add a counter for `empty_squares`. Only increment the result if you reach the target square and `empty_squares == 0`.
+
 ---
 
 ### Word Search — Grid DFS with Backtracking
@@ -254,6 +278,14 @@ def exist(board: list[list[str]], word: str) -> bool:
         return found
 
     return any(dfs(r, c, 0) for r in range(rows) for c in range(cols))
+
+#### Common Variants & Twists
+1. **Word Search II (Trie Optimization)**:
+   - **What (The Problem & Goal):** Search for multiple words in the grid simultaneously.
+   - **How (Intuition & Mental Model):** Instead of running DFS for each word, build a Trie of all words. As you move through the grid, move through the Trie nodes as well. If the Trie node has no child for the current character, prune the search.
+2. **Remove Invalid Parentheses**:
+   - **What (The Problem & Goal):** Remove the minimum number of invalid parentheses to make the input string valid. Return all possible results.
+   - **How (Intuition & Mental Model):** First, calculate the minimum number of open and closed parentheses that must be removed. Then use backtracking to try removing them at different positions, checking for validity at each step.
 ```
 
 ---
@@ -284,6 +316,11 @@ def partition(s: str) -> list[list[str]]:
                 path.pop()
     backtrack(0, [])
     return results
+
+#### Common Variants & Twists
+1. **Palindrome Partitioning II (Min Cuts)**:
+   - **What (The Problem & Goal):** Find the minimum number of cuts needed for a palindrome partitioning of a string.
+   - **How (Intuition & Mental Model):** This is the DP version of the problem. While backtracking generates *all* partitions, DP tracks the minimum cuts for each prefix `s[:i]`. If `s[j:i]` is a palindrome, `cuts[i] = min(cuts[i], cuts[j] + 1)`.
 ```
 
 ---

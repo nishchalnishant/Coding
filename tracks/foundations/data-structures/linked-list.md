@@ -91,6 +91,17 @@ def reverse_between(head, left: int, right: int):
 > [!CAUTION]
 > **The #1 linked list bug**: Forgetting to save `curr.next` before overwriting `curr.next = prev`. Once you do `curr.next = prev`, you've lost the reference to the rest of the list. Always `nxt = curr.next` as the **first line** inside the loop.
 
+#### Common Variants & Twists
+1. **Reverse Linked List II (Range Reversal)**:
+   - **What (The Problem & Goal):** Reverse only a specific sub-portion of the linked list from position `left` to `right`.
+   - **How (Intuition & Mental Model):** Requires a dummy node to elegantly handle cases where `left=1` (the head changes). Traverse to find the `pre` node just before `left`. Then, run the standard pointer reversal loop exactly `right - left` times, carefully relinking the reversed sublist back into the main chain.
+2. **Palindrome Linked List**:
+   - **What (The Problem & Goal):** Check if a linked list reads the same forwards and backwards in O(N) time and O(1) space.
+   - **How (Intuition & Mental Model):** Find the middle using Fast & Slow pointers. Reverse the second half of the list. Compare the first half and the reversed second half node-by-node. Finally (optional but good practice), reverse the second half back to its original state.
+3. **Reorder List**:
+   - **What (The Problem & Goal):** Interleave the list nodes: `L0 -> Ln -> L1 -> Ln-1 -> L2 -> Ln-2 ...`
+   - **How (Intuition & Mental Model):** Same 3-step blueprint: Find the middle, reverse the second half, then interleave/weave the two halves by alternating pointers.
+
 ---
 
 ### Find Middle — Fast & Slow Pointers
@@ -124,6 +135,14 @@ def is_palindrome(head) -> bool:
 
 > [!TIP]
 > **Which middle for odd vs even lengths?** With `while fast and fast.next`, slow lands on the **left-middle** for even-length lists. If the problem requires the right-middle (e.g., for merge sort on linked lists), use `while fast.next and fast.next.next`. Clarify with the interviewer which is needed.
+
+#### Common Variants & Twists
+1. **Remove Nth Node From End**:
+   - **What (The Problem & Goal):** Delete the $N^{th}$ node from the end of the list in a single pass without knowing the length.
+   - **How (Intuition & Mental Model):** Give the `fast` pointer a head start of exactly `N` steps. Then advance both `fast` and `slow` one step at a time. When `fast.next` hits null, `slow` will be sitting exactly one node *before* the target deletion node.
+2. **Delete the Middle Node**:
+   - **What (The Problem & Goal):** Find and delete the middle node of the list.
+   - **How (Intuition & Mental Model):** Standard fast and slow pointer setup to find the middle. However, to *delete* it, you need to link the node *before* the middle to the node *after* the middle. Keep a `prev` pointer right behind `slow` to execute `prev.next = slow.next`.
 
 ---
 
@@ -162,6 +181,14 @@ def detect_cycle_entry(head):
 > [!CAUTION]
 > **Identity check, not equality**: Use `slow is fast` (identity), **not** `slow == fast` (value equality). Two different nodes with the same value would falsely trigger `==`. This is a common Python bug that passes some test cases but fails on identical-value nodes.
 
+#### Common Variants & Twists
+1. **Linked List Cycle II**:
+   - **What (The Problem & Goal):** Not just detect a cycle, but return the exact node where the cycle begins.
+   - **How (Intuition & Mental Model):** Handled by the second phase of Floyd's algorithm. Once `slow` and `fast` intersect inside the cycle, reset `slow` to the `head` of the list. Advance both pointers one step at a time. The exact node where they meet again is the cycle entry point.
+2. **Find the Duplicate Number**:
+   - **What (The Problem & Goal):** Find the duplicate integer in an array of values `[1, N]` without modifying the array and using O(1) extra space.
+   - **How (Intuition & Mental Model):** The array values act as `next` pointers (`next_node = nums[current_node]`). Because all values are in `[1, N]`, index 0 is guaranteed not to be part of the cycle. Run Floyd's Cycle Detection starting from index 0; the cycle entry point is the duplicate value.
+
 ---
 
 ### Reverse K-Group
@@ -188,6 +215,11 @@ def reverse_k_group(head, k: int):
     head.next = reverse_k_group(curr, k)  # head is now the tail of reversed group
     return prev  # prev is the new head of this group
 ```
+
+#### Common Variants & Twists
+1. **Swap Nodes in Pairs**:
+   - **What (The Problem & Goal):** Swap every two adjacent nodes in the linked list.
+   - **How (Intuition & Mental Model):** A specific simplification of Reverse K-Group where `K=2`. While recursion works, an iterative approach with a dummy node is straightforward: repeatedly swap `curr.next` and `curr.next.next`, then advance your `curr` pointer by 2.
 
 ---
 

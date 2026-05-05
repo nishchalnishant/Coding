@@ -92,6 +92,14 @@ def kmp_search(text: str, pattern: str) -> list[int]:
             else:
                 i += 1
     return matches
+
+#### Common Variants & Twists
+1. **Shortest Palindrome**:
+   - **What (The Problem & Goal):** Add minimum characters to the front of a string to make it a palindrome.
+   - **How (Intuition & Mental Model):** Create a new string `s + '#' + reverse(s)`. Find the LPS value of the last character. This value is the length of the longest palindromic prefix of the original string. The characters to add are the remaining suffix of the reversed string.
+2. **Repeated Substring Pattern**:
+   - **What (The Problem & Goal):** Check if a string can be constructed by repeating a substring.
+   - **How (Intuition & Mental Model):** If a string `s` of length `n` has a repeated pattern, then `n % (n - lps[n-1]) == 0` and `lps[n-1] > 0`. Alternatively, check if `s` is in `(s + s)[1:-1]`.
 ```
 
 > [!CAUTION]
@@ -132,6 +140,14 @@ def rabin_karp(text: str, pattern: str) -> list[int]:
         if win_hash == pat_hash and text[i:i+m] == pattern:
             matches.append(i)
     return matches
+
+#### Common Variants & Twists
+1. **Longest Duplicate Substring**:
+   - **What (The Problem & Goal):** Find the longest substring that appears at least twice.
+   - **How (Intuition & Mental Model):** Binary search on the length `L`. For each `L`, use Rabin-Karp to find if any hash is duplicated (using a set of hashes).
+2. **Distinct Echo Substrings**:
+   - **What (The Problem & Goal):** Find the number of distinct substrings that can be written as `a + a`.
+   - **How (Intuition & Mental Model):** Iterate through all possible lengths `L` of `a`. For each `L`, slide a window and check if `hash(s[i:i+L]) == hash(s[i+L:i+2L])`.
 ```
 
 > [!CAUTION]
@@ -164,6 +180,14 @@ def longest_palindromic_substring(s: str) -> str:
             start, end = l2, r2
 
     return s[start:end+1]
+
+#### Common Variants & Twists
+1. **Palindrome Partitioning II**:
+   - **What (The Problem & Goal):** Find the minimum cuts needed to partition a string into palindromes.
+   - **How (Intuition & Mental Model):** Use DP where `dp[i]` is the min cuts for `s[:i]`. To optimize, use the "Expand from Center" idea to find all palindromes and update `dp[right+1] = min(dp[right+1], dp[left] + 1)`.
+2. **Count Palindromic Substrings**:
+   - **What (The Problem & Goal):** Count total number of palindromic substrings.
+   - **How (Intuition & Mental Model):** Standard "Expand from Center". For each center, increment count for every valid palindrome found during expansion.
 ```
 
 > [!TIP]
@@ -202,6 +226,14 @@ def min_window_substring(s: str, t: str) -> str:
                 have -= 1
             left += 1
     return best
+
+#### Common Variants & Twists
+1. **Longest Substring with At Most K Distinct Characters**:
+   - **What (The Problem & Goal):** Find the length of the longest substring with `<= k` distinct characters.
+   - **How (Intuition & Mental Model):** Sliding window with a frequency map. Expand `right`. If `len(map) > k`, shrink `left` until `len(map) == k`.
+2. **Permutation in String**:
+   - **What (The Problem & Goal):** Check if `s2` contains a permutation of `s1`.
+   - **How (Intuition & Mental Model):** This is a fixed-size sliding window of length `len(s1)`. Compare the character frequency map of the window with that of `s1`.
 ```
 
 > [!CAUTION]
@@ -234,6 +266,11 @@ def z_search(text: str, pattern: str) -> list[int]:
     z = z_function(combined)
     m = len(pattern)
     return [i - m - 1 for i in range(m + 1, len(combined)) if z[i] == m]
+
+#### Common Variants & Twists
+1. **Longest Happy Prefix**:
+   - **What (The Problem & Goal):** Find the longest proper prefix that is also a suffix.
+   - **How (Intuition & Mental Model):** This is exactly what the last value of the LPS array in KMP tells you. Alternatively, use the Z-algorithm: the answer is the largest `Z[i]` such that `i + Z[i] == len(s)`.
 ```
 
 ---
@@ -276,6 +313,14 @@ class Trie:
                 return False
             node = node.children[char]
         return True
+
+#### Common Variants & Twists
+1. **Map Sum Pairs**:
+   - **What (The Problem & Goal):** Implement a map that supports `insert(key, val)` and `sum(prefix)` (sum of values of all keys starting with `prefix`).
+   - **How (Intuition & Mental Model):** In each Trie node, store the sum of values of all keys passing through that node. On `insert`, update the delta along the path.
+2. **Stream of Characters**:
+   - **What (The Problem & Goal):** Given a stream of characters, check if any suffix of the stream is a word in a given dictionary.
+   - **How (Intuition & Mental Model):** Insert words into the Trie **in reverse**. Keep the last `max_word_length` characters of the stream and search in the Trie starting from the most recent character.
 ```
 
 ---

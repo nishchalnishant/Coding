@@ -88,6 +88,14 @@ def lca_bst(root, p, q):
 > [!CAUTION]
 > The binary tree LCA assumes `p` and `q` both exist in the tree. If they might not exist, you need a modified version that tracks a `found_count` and only returns the LCA when both are confirmed found.
 
+#### Common Variants & Twists
+1. **LCA of BST**:
+   - **What (The Problem & Goal):** Find the LCA in a Binary Search Tree instead of a standard Binary Tree.
+   - **How (Intuition & Mental Model):** Use the BST ordering property. If `p` and `q` are both smaller than the root, go left. If both are greater, go right. The exact moment they diverge (one is smaller, one is larger) or when one of them equals the root, you have found the LCA. No need to search both subtrees.
+2. **LCA of Deepest Leaves**:
+   - **What (The Problem & Goal):** Find the LCA of the deepest leaves in the tree.
+   - **How (Intuition & Mental Model):** This requires comparing heights. Find the depth of the left and right children. If they are equal, it means the deepest leaves span both subtrees, so the root is the LCA. If the left is deeper, the LCA must reside strictly in the left subtree, so recurse left (and vice versa).
+
 ---
 
 ### Tree DP — Bottom-Up with Multiple Return Values
@@ -142,6 +150,17 @@ def rob_house_tree(root) -> int:
         return rob, skip
     return max(dfs(root))
 ```
+
+#### Common Variants & Twists
+1. **Diameter of Binary Tree**:
+   - **What (The Problem & Goal):** Find the length of the longest path between any two nodes in a tree (path may or may not pass through the root).
+   - **How (Intuition & Mental Model):** The "edge-count" twist on path sum. Instead of values, you count edges. Return the height of a subtree to its parent (`1 + max(left, right)`). Update the global diameter variable with the path passing through the current node (`left + right`).
+2. **Binary Tree Maximum Path Sum**:
+   - **What (The Problem & Goal):** Find the maximum path sum between any two nodes. Values can be negative.
+   - **How (Intuition & Mental Model):** The "negative value" twist. A path can stop at any point. You use `max(0, dfs(child))` to drop negative branches entirely. A node's contribution to its parent is `node.val + max(left_gain, right_gain)`, but the global maximum path sum passing *through* the node is `node.val + left_gain + right_gain`.
+3. **Binary Tree Cameras**:
+   - **What (The Problem & Goal):** Place the minimum number of cameras to monitor all nodes (a camera monitors itself, its parent, and its children).
+   - **How (Intuition & Mental Model):** The "state machine" twist. Run a postorder traversal returning states from children to parents: 0 (needs camera), 1 (has camera), 2 (covered). Install cameras greedily at the parents of uncovered leaves.
 
 ---
 
@@ -243,6 +262,11 @@ def iterative_postorder(root) -> list[int]:
 
 > [!TIP]
 > A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, SDE-3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
+
+#### Common Variants & Twists
+1. **Binary Tree Right Side View**:
+   - **What (The Problem & Goal):** Return the values of the nodes you can see if you look at the tree from the right side.
+   - **How (Intuition & Mental Model):** Not strictly postorder, but relies on traversal order twists. You can use Level-Order (BFS) and grab the last element of each level. Alternatively, use a Preorder DFS but intentionally traverse `Right` before `Left`, keeping track of the `depth` and appending to the result list only the first time you visit a new depth.
 
 ---
 

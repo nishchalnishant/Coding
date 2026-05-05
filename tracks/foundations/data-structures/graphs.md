@@ -115,6 +115,17 @@ def multi_source_bfs(grid: list[list[int]], sources: list[tuple[int,int]]) -> li
     return dist
 ```
 
+#### Common Variants & Twists
+1. **Word Ladder**:
+   - **What (The Problem & Goal):** Find the shortest transformation sequence from a `beginWord` to an `endWord`, changing only one letter at a time.
+   - **How (Intuition & Mental Model):** The implicit graph twist. Nodes are words, and edges exist if two words differ by exactly one character. Use BFS from the `beginWord`. To find neighbors, iterate through each character of the current word and replace it with 'a' through 'z', checking if the new word is in the dictionary.
+2. **Minimum Knight Moves**:
+   - **What (The Problem & Goal):** Find the minimum number of knight moves to reach a target cell on an infinite chessboard.
+   - **How (Intuition & Mental Model):** Graph is an infinite chessboard. Use BFS to find the shortest path. To optimize, use bidirectional BFS, or leverage symmetry (working only in the first quadrant `(abs(x), abs(y))` since moves are symmetric).
+3. **Shortest Path in a Grid with Obstacles Elimination**:
+   - **What (The Problem & Goal):** Find the shortest path from top-left to bottom-right, but you can eliminate at most `k` obstacles.
+   - **How (Intuition & Mental Model):** The state space twist. Your BFS `visited` set must track `(row, col, obstacles_eliminated)` because reaching the same cell with a different number of remaining eliminations is a different state. If you hit an obstacle and have eliminations left, increment the elimination count and proceed.
+
 > [!TIP]
 > **Multi-source BFS**: Add all source nodes to the queue at distance 0 before starting. The queue processes them in round-robin, so BFS naturally expands all fronts simultaneously. This is the correct approach for "rotting oranges", "distance to nearest 0", and "walls and gates" — don't run BFS from each source separately (O(S × (V+E)) vs O(V+E)).
 
@@ -155,6 +166,17 @@ def grid_dfs_flood_fill(grid: list[list[int]], r: int, c: int, target: int, fill
         grid_dfs_flood_fill(grid, r+dr, c+dc, target, fill)
 ```
 
+#### Common Variants & Twists
+1. **Max Area of Island**:
+   - **What (The Problem & Goal):** Find the maximum area of an island (a connected component of 1s).
+   - **How (Intuition & Mental Model):** Instead of just counting components, return the size of the component. The DFS function should return `1 + sum(dfs(neighbor))`. Track the maximum size returned across all starting 1s.
+2. **Number of Closed Islands**:
+   - **What (The Problem & Goal):** Count islands (0s) that are completely surrounded by water (1s) — meaning they don't touch the grid boundary.
+   - **How (Intuition & Mental Model):** First, run DFS on all 0s on the perimeter of the grid and mark them as non-closed (or turn them into 1s). Then, run a standard DFS component count on the remaining interior 0s to find the closed islands.
+3. **Regions Cut By Slashes**:
+   - **What (The Problem & Goal):** A grid consists of `/`, `\`, or blank spaces. Count the number of isolated regions they divide the grid into.
+   - **How (Intuition & Mental Model):** The upscaling twist. A single cell can contain multiple disconnected regions. Upscale the `n x n` grid into a `3n x 3n` grid. Represent slashes with 1s and empty space with 0s. Then, run standard DFS/BFS flood fill to count the components of 0s.
+
 > [!CAUTION]
 > For large grids (200×200 = 40,000 cells), recursive DFS will hit Python's recursion limit. Use **iterative DFS** (explicit stack) or increase `sys.setrecursionlimit` — mention this trade-off to the interviewer. Iterative DFS is always preferable in production.
 
@@ -188,6 +210,17 @@ def topological_sort_kahn(n: int, edges: list[tuple[int,int]]) -> list[int]:
 def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
     return len(topological_sort_kahn(n, edges)) < n
 ```
+
+#### Common Variants & Twists
+1. **Alien Dictionary**:
+   - **What (The Problem & Goal):** Given a sorted list of alien words, derive the lexicographical order of their alphabet.
+   - **How (Intuition & Mental Model):** The implicit dependency twist. Compare adjacent words to find the *first* differing character. That difference implies a directed edge (e.g., if "ab" comes before "ac", then 'b' -> 'c'). Build the graph, then run Kahn's algorithm. If a cycle is detected, no valid ordering exists.
+2. **Course Schedule II**:
+   - **What (The Problem & Goal):** Return the actual ordering in which you should take courses to finish all of them.
+   - **How (Intuition & Mental Model):** Instead of just boolean cycle detection, return the ordering. Kahn's algorithm naturally builds this ordering in its `result` array. If `len(result) == numCourses`, return `result`; otherwise, return an empty array (cycle).
+3. **Sequence Reconstruction**:
+   - **What (The Problem & Goal):** Check if a given sequence is the *only* valid topological sort possible from a set of subsequences.
+   - **How (Intuition & Mental Model):** Uniqueness twist. A topological sort is unique if and only if the queue size never exceeds 1 at any point during Kahn's algorithm. If the queue has 2 or more elements, multiple valid choices exist.
 
 > [!CAUTION]
 > **Edge direction is the #1 topo sort bug**: For "course A requires B as prerequisite", the edge is `B → A` (B must come before A), **not** `A → B`. Getting this backwards causes wrong orderings that look plausible. Always confirm: "edge u→v means u must come before v in the final order."

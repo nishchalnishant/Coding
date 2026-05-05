@@ -109,6 +109,14 @@ def single_number_iii(nums: list[int]) -> list[int]:
             y ^= num
             
     return [x, y]
+
+#### Common Variants & Twists
+1. **Single Number II**:
+   - **What (The Problem & Goal):** Every element appears three times except for one which appears exactly once.
+   - **How (Intuition & Mental Model):** XOR cancellation fails here because `x ^ x ^ x = x`. Instead, count the number of set bits at each of the 32 bit positions across all numbers. The remainder of each count when divided by 3 (`count % 3`) will be the bits of the unique number.
+2. **Single Number III**:
+   - **What (The Problem & Goal):** Two elements appear once, and all other elements appear twice.
+   - **How (Intuition & Mental Model):** XORing all numbers gives `xor_sum = x ^ y`. Since `x` and `y` are distinct, `xor_sum` must have at least one set bit. Find the lowest set bit using `diff = xor_sum & (-xor_sum)`. This bit exists in either `x` or `y`, but not both. Partition the array into two groups based on this bit and XOR each group separately to find the two unique numbers.
 ```
 
 > [!CAUTION]
@@ -135,6 +143,14 @@ def count_set_bits(n: int) -> int:
 
 def hamming_distance(x: int, y: int) -> int:
     return count_set_bits(x ^ y)
+
+#### Common Variants & Twists
+1. **Counting Bits (DP)**:
+   - **What (The Problem & Goal):** For every number `i` in the range `[0, n]`, return an array of the number of 1-bits in their binary representation.
+   - **How (Intuition & Mental Model):** This is a DP twist. Notice that `i >> 1` is a number we've already processed. The number of bits in `i` is the number of bits in `i >> 1` plus 1 if `i` is odd (`i & 1`). `dp[i] = dp[i >> 1] + (i & 1)`.
+2. **Hamming Distance**:
+   - **What (The Problem & Goal):** Calculate the number of positions at which the corresponding bits of two integers are different.
+   - **How (Intuition & Mental Model):** XOR the two numbers (`x ^ y`) to get a number where bits are set only at differing positions. Then use Brian Kernighan's algorithm to count the set bits in the result.
 ```
 
 > [!TIP]
@@ -157,6 +173,14 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
         subset = [nums[k] for k in range(n) if mask & (1 << k)]
         result.append(subset)
     return result  # 2^n subsets including empty set
+
+#### Common Variants & Twists
+1. **Generalized Subset Sum**:
+   - **What (The Problem & Goal):** Check if any subset of numbers sums to a specific `target`.
+   - **How (Intuition & Mental Model):** Iterate through all `2^N` masks. For each mask, calculate the sum of elements corresponding to set bits. If the sum matches the target, return `True`. This is effective for `N <= 20`.
+2. **Generate All Possible String Permutations via Bitmask**:
+   - **What (The Problem & Goal):** Given a string, generate all subsequences.
+   - **How (Intuition & Mental Model):** Use a bitmask where each bit represents whether to include the character at that index in the current subsequence.
 ```
 
 ### O(3^N) Submask Enumeration (Advanced DP)
@@ -186,6 +210,14 @@ def process_submasks(mask: int):
 ```python
 def is_power_of_two(n: int) -> bool:
     return n > 0 and (n & (n - 1)) == 0
+
+#### Common Variants & Twists
+1. **Power of Four**:
+   - **What (The Problem & Goal):** Check if a number is a power of 4.
+   - **How (Intuition & Mental Model):** First, check if it's a power of 2 using `n > 0 and (n & (n-1)) == 0`. Then, ensure the only set bit is at an even position. Use the mask `0x55555555` (binary `010101...`) to check if `n & 0x55555555` is non-zero.
+2. **Find the Single Bit Position**:
+   - **What (The Problem & Goal):** Given a power of 2, find the index of the only set bit.
+   - **How (Intuition & Mental Model):** Use `n.bit_length() - 1` or calculate it using `math.log2(n)`.
 ```
 
 > [!CAUTION]
@@ -222,6 +254,14 @@ def min_cost_tsp(cost: list[list[int]]) -> int:
                 dp[new_mask][v] = min(dp[new_mask][v], dp[mask][u] + cost[u][v])
 
     return min(dp[FULL_MASK][v] + cost[v][0] for v in range(1, n))
+
+#### Common Variants & Twists
+1. **Smallest Sufficient Team**:
+   - **What (The Problem & Goal):** Given a list of required skills and people with specific skills, find the smallest group of people that covers all required skills.
+   - **How (Intuition & Mental Model):** Represent the set of required skills as a bitmask of length `M`. `dp[mask]` stores the smallest list of people to achieve the skill set `mask`. For each person, update `dp[mask | person_skills] = min(dp[mask | person_skills], dp[mask] + [person])`.
+2. **Can I Win?**:
+   - **What (The Problem & Goal):** Two players take turns picking numbers from `1` to `maxInt`. The first player to reach a total sum wins. Can the first player force a win?
+   - **How (Intuition & Mental Model):** Use a bitmask to represent the set of available numbers. Use memoized recursion `solve(current_sum, used_mask)` to determine if the current state is a winning or losing state for the player whose turn it is.
 ```
 
 ---
@@ -258,6 +298,14 @@ def shortest_path_all_nodes(graph: list[list[int]]) -> int:
                 q.append((neighbor, next_mask, steps + 1))
                 
     return 0
+
+#### Common Variants & Twists
+1. **Find Shortest Path with Keys and Locks**:
+   - **What (The Problem & Goal):** Find the shortest path to a target in a grid containing keys and locks. You can only open a lock if you have the corresponding key.
+   - **How (Intuition & Mental Model):** Your BFS state is `(r, c, keys_mask)`. When you pick up a key, update the `keys_mask`. When you hit a lock, only proceed if `keys_mask` has the corresponding bit set.
+2. **Bus Routes (via Mask)**:
+   - **What (The Problem & Goal):** Find the minimum number of buses to take to get from source to destination.
+   - **How (Intuition & Mental Model):** While typically BFS on a graph of routes, if the number of routes is small, you can use a mask to track which routes have been taken. This ensures we don't circle through already-visited lines.
 ```
 
 ---
@@ -305,6 +353,11 @@ def find_maximum_xor(nums: list[int]) -> int:
     for num in nums:
         trie.insert(num)
     return max(trie.max_xor_with(num) for num in nums)
+
+#### Common Variants & Twists
+1. **Maximum XOR with an Element From Array**:
+   - **What (The Problem & Goal):** Given an array and queries `(x, m)`, find the max XOR of `x` with any `nums[i] <= m`.
+   - **How (Intuition & Mental Model):** Offline query processing. Sort both the array and the queries by their limit `m`. Gradually insert elements into the XOR Trie as you iterate through the sorted queries.
 ```
 
 ---

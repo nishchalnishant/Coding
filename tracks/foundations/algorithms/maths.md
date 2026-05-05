@@ -96,6 +96,14 @@ def factorize(x: int, spf: list[int]) -> list[int]:
         factors.append(spf[x])
         x //= spf[x]
     return factors
+
+#### Common Variants & Twists
+1. **Four Divisors**:
+   - **What (The Problem & Goal):** Given an array of integers, return the sum of divisors of integers in the array that have exactly four divisors.
+   - **How (Intuition & Mental Model):** A number has exactly 4 divisors if it's either `p * q` (where `p, q` are distinct primes) or `p^3` (where `p` is prime). Use a sieve to precompute primes or smallest prime factors to check this condition efficiently.
+2. **Closest Prime Numbers in Range**:
+   - **What (The Problem & Goal):** Find the two closest primes in the range `[left, right]`.
+   - **How (Intuition & Mental Model):** Use a segmented sieve if the range is far from zero, or a standard sieve if `right` is within a few millions. Collect all primes in the range and find the pair with the minimum difference.
 ```
 
 > [!TIP]
@@ -128,6 +136,14 @@ def modular_inverse(a: int, m: int) -> int:
     if g != 1:
         raise ValueError(f"{a} has no inverse mod {m} (not coprime)")
     return x % m
+
+#### Common Variants & Twists
+1. **Water and Jug Problem**:
+   - **What (The Problem & Goal):** You have two jugs with capacities `x` and `y`. Can you measure exactly `z` liters using these jugs?
+   - **How (Intuition & Mental Model):** This is a direct application of Bézout's Identity. You can measure `z` liters if and only if `z <= x + y` and `z` is a multiple of `gcd(x, y)`.
+2. **Simplified Fractions**:
+   - **What (The Problem & Goal):** Given `n`, return a list of all simplified fractions `a/b` such that `0 < a < b <= n`.
+   - **How (Intuition & Mental Model):** A fraction `a/b` is simplified if `gcd(a, b) == 1`. Iterate through all `b` from `2` to `n` and `a` from `1` to `b-1`, checking the GCD.
 ```
 
 > [!CAUTION]
@@ -179,6 +195,14 @@ def fibonacci_log_n(n: int, mod: int = 10**9 + 7) -> int:
 
     M = [[1, 1], [1, 0]]
     return mat_pow(M, n)[0][1]
+
+#### Common Variants & Twists
+1. **Modular Inverse when M is NOT prime**:
+   - **What (The Problem & Goal):** Find `x` such that `ax ≡ 1 (mod m)` where `m` is not prime but `gcd(a, m) = 1`.
+   - **How (Intuition & Mental Model):** Fermat's Little Theorem fails here. Use the Extended Euclidean Algorithm to solve `ax + my = 1`. The value `x % m` is the modular inverse.
+2. **Count Good Numbers**:
+   - **What (The Problem & Goal):** A number is "good" if digits at even indices are even (0, 2, 4, 6, 8) and digits at odd indices are prime (2, 3, 5, 7). Find the count of good numbers of length `n` mod `10^9 + 7`.
+   - **How (Intuition & Mental Model):** There are `ceil(n/2)` even indices and `floor(n/2)` odd indices. The answer is `5^(ceil(n/2)) * 4^(floor(n/2)) % (10^9 + 7)`. Use fast exponentiation to compute this in O(log n).
 ```
 
 > [!CAUTION]
@@ -208,6 +232,14 @@ def nCr_mod(n: int, r: int, fact: list[int], inv_fact: list[int], mod: int = MOD
     if r < 0 or r > n:
         return 0
     return fact[n] * inv_fact[r] % mod * inv_fact[n-r] % mod
+
+#### Common Variants & Twists
+1. **Lucas Theorem for nCr mod p**:
+   - **What (The Problem & Goal):** Compute `nCr mod p` where `n` is very large but `p` is a small prime.
+   - **How (Intuition & Mental Model):** Break `n` and `r` into their base-p representations. `nCr mod p ≡ Π (n_i C r_i) mod p`. This allows computing `nCr` for `n > 10^9` as long as `p` is small.
+2. **Count Subarrays with Sum Divisible by K**:
+   - **What (The Problem & Goal):** Find the number of non-empty subarrays whose sum is divisible by `k`.
+   - **How (Intuition & Mental Model):** Use prefix sums and modular arithmetic. If `prefix_sum[j] % k == prefix_sum[i] % k`, then the subarray `sum(i+1, j)` is divisible by `k`. Use a frequency map to count occurrences of each remainder.
 ```
 
 ---
@@ -258,6 +290,14 @@ def max_points_on_line(points: list[list[int]]) -> int:
         local_max = max(slopes.values()) if slopes else 0
         max_pts = max(max_pts, local_max + duplicate)
     return max_pts
+
+#### Common Variants & Twists
+1. **Ugly Number III**:
+   - **What (The Problem & Goal):** Find the n-th "ugly" number which is divisible by `a`, `b`, or `c`.
+   - **How (Intuition & Mental Model):** Use binary search on the answer. To count how many numbers `<= x` are divisible by `a, b, or c`, use the Principle of Inclusion-Exclusion: `count = x/a + x/b + x/c - x/lcm(a,b) - x/lcm(b,c) - x/lcm(a,c) + x/lcm(a,b,c)`.
+2. **Minimum Moves to Equal Array Elements II**:
+   - **What (The Problem & Goal):** Given an array, find the minimum moves (increment/decrement) to make all elements equal.
+   - **How (Intuition & Mental Model):** The target value must be the **median** of the array. The sum of absolute differences from the median is the minimum possible sum.
 ```
 
 > [!CAUTION]

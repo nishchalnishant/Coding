@@ -83,6 +83,14 @@ def min_arrows_to_burst_balloons(points: list[list[int]]) -> int:
             arrows += 1
             arrow_pos = end
     return arrows
+
+#### Common Variants & Twists
+1. **Video Stitching**:
+   - **What (The Problem & Goal):** Given a set of clips and a time `T`, find the minimum number of clips to cover the entire range `[0, T]`.
+   - **How (Intuition & Mental Model):** Sort clips by start time. At each step, choose the clip that starts within the current covered range but extends the `farthest`. This is a greedy extension approach similar to Jump Game.
+2. **Minimum Number of Taps to Open to Water a Garden**:
+   - **What (The Problem & Goal):** Each tap waters a range `[i - ranges[i], i + ranges[i]]`. Find the minimum taps to water the garden `[0, n]`.
+   - **How (Intuition & Mental Model):** Convert each tap into an interval `[start, end]`. Then the problem is identical to Video Stitching: find the minimum intervals to cover the range `[0, n]`.
 ```
 
 > [!CAUTION]
@@ -114,6 +122,14 @@ def jump_game_ii_min_jumps(nums: list[int]) -> int:
             jumps += 1
             current_end = farthest
     return jumps
+
+#### Common Variants & Twists
+1. **Jump Game III**:
+   - **What (The Problem & Goal):** You can jump to `i + arr[i]` or `i - arr[i]`. Can you reach any index with value 0?
+   - **How (Intuition & Mental Model):** This is actually a reachability problem on a graph. Use BFS or DFS starting from the given index.
+2. **Jump Game VII**:
+   - **What (The Problem & Goal):** You can jump from `i` to `j` if `i + minJump <= j <= min(i + maxJump, s.length - 1)` and `s[j] == '0'`.
+   - **How (Intuition & Mental Model):** Use a sliding window + DP approach. Keep track of how many indices in the current reachable window `[i - maxJump, i - minJump]` are themselves reachable. If the count > 0 and `s[i] == '0'`, then `i` is reachable.
 ```
 
 > [!TIP]
@@ -138,6 +154,11 @@ def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
             start = i + 1  # reset start to next position
             tank = 0
     return start
+
+#### Common Variants & Twists
+1. **Gas Station II (Multiple valid starts)**:
+   - **What (The Problem & Goal):** If there are multiple valid starting points, find the one with the minimum index.
+   - **How (Intuition & Mental Model):** The standard algorithm already finds the first possible start point after the "last" deficit. Because of the circular nature and the `sum(gas) >= sum(cost)` condition, the greedy logic naturally points to the start of the first sequence that can complete the loop.
 ```
 
 > [!CAUTION]
@@ -161,6 +182,14 @@ def least_interval(tasks: list[str], n: int) -> int:
     count_max = sum(1 for f in freq.values() if f == max_freq)
     min_slots = (max_freq - 1) * (n + 1) + count_max
     return max(min_slots, len(tasks))
+
+#### Common Variants & Twists
+1. **Reorganize String**:
+   - **What (The Problem & Goal):** Rearrange characters in a string so that no two identical characters are adjacent.
+   - **How (Intuition & Mental Model):** Greedily place the most frequent characters first. Use a Max-Heap to always pick the character with the highest remaining frequency. To avoid placing the same character twice, "wait" for one step before pushing the used character back into the heap.
+2. **Distant Barcodes**:
+   - **What (The Problem & Goal):** Rearrange barcodes so that no two adjacent barcodes are the same.
+   - **How (Intuition & Mental Model):** Identical to Reorganize String. Max-Heap + "wait" one step.
 ```
 
 ---
@@ -181,6 +210,14 @@ def candy(ratings: list[int]) -> int:
         if ratings[i] > ratings[i+1]:
             candy[i] = max(candy[i], candy[i+1] + 1)
     return sum(candy)
+
+#### Common Variants & Twists
+1. **Trapping Rain Water**:
+   - **What (The Problem & Goal):** Calculate how much water a terrain can trap after rain.
+   - **How (Intuition & Mental Model):** Similar to the two-pass greedy in Candy. For each bar, the water level is `min(max_left, max_right) - height`. Precompute `max_left` and `max_right` using two passes.
+2. **Greatest Common Divisor of Strings**:
+   - **What (The Problem & Goal):** Find the largest string `x` such that `x` divides both `str1` and `str2`.
+   - **How (Intuition & Mental Model):** Use the Euclidean algorithm logic. If `str1 + str2 == str2 + str1`, then a GCD string exists and its length is `gcd(len(str1), len(str2))`.
 ```
 
 ---
@@ -201,6 +238,14 @@ def partition_labels(s: str) -> list[int]:
             partitions.append(end - start + 1)
             start = i + 1
     return partitions
+
+#### Common Variants & Twists
+1. **Merge Intervals**:
+   - **What (The Problem & Goal):** Merge all overlapping intervals.
+   - **How (Intuition & Mental Model):** Sort by start time. Iterate and maintain a `current_interval`. If the next interval starts before `current_interval.end`, extend `current_interval.end` to `max(current_end, next_end)`. Otherwise, push the current interval and start a new one.
+2. **Minimum Number of Groups to Create Non-overlapping Intervals**:
+   - **What (The Problem & Goal):** Divide intervals into the minimum number of groups such that intervals in each group don't overlap.
+   - **How (Intuition & Mental Model):** This is equivalent to finding the maximum number of overlapping intervals at any point in time (the "width" of the intervals). Use a min-priority queue of end times. For each interval, if it starts after the earliest end time in the heap, reuse that "group". Otherwise, start a new group.
 ```
 
 ---
@@ -235,6 +280,14 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
         w += -heapq.heappop(max_heap)
         
     return w
+
+#### Common Variants & Twists
+1. **Minimum Cost to Connect Sticks**:
+   - **What (The Problem & Goal):** You have sticks of different lengths. You can connect two sticks of lengths `x` and `y` with cost `x + y`. Find the minimum total cost to connect all sticks.
+   - **How (Intuition & Mental Model):** This is Huffman Coding. To minimize cost, you always want to merge the two smallest sticks available. Use a min-heap to always pop the two smallest, merge them, and push the result back until only one stick remains.
+2. **Minimize Deviation in Array**:
+   - **What (The Problem & Goal):** Perform operations (multiply odd by 2, divide even by 2) to minimize the difference between max and min elements in an array.
+   - **How (Intuition & Mental Model):** First, make all numbers as large as possible (multiply odd by 2). Put all numbers into a max-heap. Track the current minimum. Repeatedly pop the max, update the result (`max - min`), divide the max by 2 (if even), and update the minimum. Stop when the max is odd.
 ```
 
 > [!TIP]

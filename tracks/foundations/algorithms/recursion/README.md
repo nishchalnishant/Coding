@@ -86,6 +86,14 @@ def reverse_list(head):
     head.next.next = head  # reverse pointer
     head.next = None       # cut old forward link
     return new_head
+
+#### Common Variants & Twists
+1. **Lowest Common Ancestor (LCA)**:
+   - **What (The Problem & Goal):** Find the lowest node in a tree that has both `p` and `q` as descendants.
+   - **How (Intuition & Mental Model):** Structural recursion. If the current node is `p` or `q`, return it. Recurse left and right. If both calls return non-null, the current node is the LCA. If only one returns non-null, propagate that up.
+2. **Flatten Binary Tree to Linked List**:
+   - **What (The Problem & Goal):** Flatten a binary tree into a "linked list" using the `right` pointer, in pre-order.
+   - **How (Intuition & Mental Model):** Recurse in reverse pre-order (Right, Left, Root). Keep a `last_processed` node. Set `root.right = last_processed` and `root.left = None`, then update `last_processed = root`.
 ```
 
 > [!CAUTION]
@@ -115,6 +123,11 @@ def word_break(s: str, word_set: frozenset) -> bool:
         s[:i] in word_set and word_break(s[i:], word_set)
         for i in range(1, len(s) + 1)
     )
+
+#### Common Variants & Twists
+1. **Unique Paths II**:
+   - **What (The Problem & Goal):** Count paths in a grid with obstacles.
+   - **How (Intuition & Mental Model):** `memo(r, c)` returns paths from `(r, c)` to destination. If `grid[r][c] == 1`, return 0. Base case: `(r, c) == destination`, return 1. This is the top-down equivalent of the grid DP approach.
 ```
 
 > [!TIP]
@@ -159,6 +172,14 @@ def postorder_iterative(root: Optional[TreeNode]) -> list[int]:
             if node.left:
                 stack.append((node.left, False))
     return result
+
+#### Common Variants & Twists
+1. **Binary Tree Level Order Traversal**:
+   - **What (The Problem & Goal):** Traverse tree level by level.
+   - **How (Intuition & Mental Model):** Use a queue (BFS). For each level, record its size and process that many nodes. This is the iterative alternative to depth-based recursion for level-sensitive tasks.
+2. **Clone Graph**:
+   - **What (The Problem & Goal):** Create a deep copy of a connected undirected graph.
+   - **How (Intuition & Mental Model):** Use a map `old_node -> new_node` and an iterative BFS/DFS. For each node, if it's not in the map, clone it and add its neighbors to the traversal queue/stack.
 ```
 
 ---
@@ -195,6 +216,14 @@ def has_cycle(n: int, edges: list) -> bool:
         return False
 
     return any(dfs(i) for i in range(n) if color[i] == 0)
+
+#### Common Variants & Twists
+1. **Flood Fill**:
+   - **What (The Problem & Goal):** Change the color of a pixel and all its same-colored 4-neighbors.
+   - **How (Intuition & Mental Model):** Recursive DFS. If the current pixel matches the original color, change it and recurse on 4-neighbors. This is the "sink" pattern used in counting islands.
+2. **Pacific Atlantic Water Flow**:
+   - **What (The Problem & Goal):** Find cells from which water can flow to both Pacific and Atlantic oceans.
+   - **How (Intuition & Mental Model):** Run DFS from all boundary cells (Pacific boundary and Atlantic boundary separately). Mark reachable cells for each. The intersection of both marked sets is the answer.
 ```
 
 > [!CAUTION]
@@ -221,6 +250,14 @@ def generate_parentheses(n: int) -> list[str]:
 
     backtrack('', 0, 0)
     return result
+
+#### Common Variants & Twists
+1. **Word Search**:
+   - **What (The Problem & Goal):** Check if a word exists in a 2D grid of letters.
+   - **How (Intuition & Mental Model):** DFS with backtracking. For each cell, try to match the first character. If successful, mark the cell as visited (e.g., `#`), then recurse on 4-neighbors for the next character. Unmark the cell before returning.
+2. **N-Queens**:
+   - **What (The Problem & Goal):** Place N queens on an NxN chessboard such that no two queens attack each other.
+   - **How (Intuition & Mental Model):** Row-by-row backtracking. For each column, check if placing a queen is valid (column, diagonal, and anti-diagonal are free). If valid, mark them as used and move to the next row. Undo the marks on return.
 ```
 
 > [!TIP]

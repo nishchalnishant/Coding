@@ -109,6 +109,14 @@ def sliding_window_maximum(nums: list[int], k: int) -> list[int]:
 > [!TIP]
 > **Sliding window minimum**: flip the comparison — maintain an **increasing** deque: `while dq and nums[dq[-1]] > x: dq.pop()`. The front is always the minimum of the current window. Same O(N) complexity.
 
+#### Common Variants & Twists
+1. **Shortest Subarray with Sum at Least K**:
+   - **What (The Problem & Goal):** Find the length of the shortest contiguous subarray whose sum is `>= K`. (The array can contain negative numbers).
+   - **How (Intuition & Mental Model):** This combines Prefix Sums with a Monotonic Deque. Because of negative numbers, a simple sliding window fails. You compute prefix sums, then slide a window using a monotonic increasing deque to track the smallest prefix sums seen so far. This allows you to efficiently check if `current_prefix - smallest_past_prefix >= K`.
+2. **Constrained Subsequence Sum**:
+   - **What (The Problem & Goal):** Maximize the sum of a subsequence where the distance between any two chosen elements is at most `k`.
+   - **How (Intuition & Mental Model):** This is dynamic programming with a sliding window maximum constraint: `dp[i] = nums[i] + max(0, max_dp_in_last_k_steps)`. Use the monotonic deque to track the maximum DP value in the window `[i-k, i-1]` in O(1) time per step.
+
 ---
 
 ### BFS Multi-Source — Simultaneous Spread
@@ -134,6 +142,17 @@ def multi_source_bfs(grid: list[list[int]], sources: list[tuple[int, int]]) -> l
                 queue.append((nr, nc))
     return dist
 ```
+
+#### Common Variants & Twists
+1. **Walls and Gates**:
+   - **What (The Problem & Goal):** Fill each empty room in a 2D grid with its distance to its nearest gate.
+   - **How (Intuition & Mental Model):** Instead of starting a BFS from each empty room (which would be too slow), start the BFS from *all* gates (0s) simultaneously. The distance naturally propagates outwards, filling the empty rooms with their shortest distance.
+2. **As Far from Land as Possible**:
+   - **What (The Problem & Goal):** Find a water cell (0) that is furthest away from any land cell (1).
+   - **How (Intuition & Mental Model):** Start a multi-source BFS from all land cells (1s). As the BFS expands outward level by level, the water cell that is reached *last* is the one furthest from all land. Track and return the maximum distance encountered in the BFS.
+3. **Shortest Path in Binary Matrix**:
+   - **What (The Problem & Goal):** Find the shortest clear path from the top-left to the bottom-right of a grid.
+   - **How (Intuition & Mental Model):** A classic single-source BFS from `(0, 0)`. The twist is that movement is 8-directional instead of 4-directional, so your direction array must include diagonals: `[(1,0), (-1,0), (0,1), (0,-1), (1,1), (-1,-1), (1,-1), (-1,1)]`.
 
 ---
 

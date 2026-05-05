@@ -56,6 +56,7 @@
 * [Reference Hub](reference/README.md)
   * [Pattern Recognition Master](reference/patterns/patterns-master.md)
   * [Canonical Problem Bank](reference/problem-bank/canonical-questions.md)
+  * [LeetCode Variants & Solutions](reference/problem-bank/leetcode-variants.md)
   * [Quick Sheets](reference/quick-sheets/README.md)
     * [Revision Guide](reference/quick-sheets/revision-guide.md)
     * [Quick Recall Trigger Sheet](reference/quick-sheets/quick-recall.md)

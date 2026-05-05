@@ -80,6 +80,14 @@ def bfs(adj: dict, start: int, target: int) -> int:
                 dist[v] = dist[u] + 1
                 queue.append(v)
     return -1  # unreachable
+
+#### Common Variants & Twists
+1. **Shortest Path in Binary Matrix**:
+   - **What (The Problem & Goal):** Find the shortest path from top-left to bottom-right in a grid of 0s and 1s (where 0 is a path).
+   - **How (Intuition & Mental Model):** Treat the grid as an unweighted graph. Use BFS. Each state is `(r, c)`. The level of the BFS at which you first reach the target is the answer.
+2. **Open the Lock**:
+   - **What (The Problem & Goal):** Given a 4-digit lock and a set of "deadends", find the minimum number of turns to reach a target combination.
+   - **How (Intuition & Mental Model):** The search space consists of 10,000 combinations (nodes). Each combination has 8 neighbors (turning each of the 4 dials up or down). Use BFS starting from "0000". If a neighbor is a deadend, don't add it to the queue.
 ```
 
 ---
@@ -114,6 +122,14 @@ def dfs_topo(adj: dict, n: int) -> list[int]:
             dfs(u)
 
     return [] if has_cycle[0] else topo[::-1]
+
+#### Common Variants & Twists
+1. **Critical Connections in a Network (Bridges)**:
+   - **What (The Problem & Goal):** Find all edges in an undirected graph that, if removed, would disconnect the graph.
+   - **How (Intuition & Mental Model):** Use Tarjan's algorithm or a similar DFS-based approach. Track the `discovery_time` and `lowest_reachable_time` for each node. An edge `(u, v)` is a bridge if the lowest time reachable from `v` is strictly greater than the discovery time of `u`.
+2. **Reconstruct Itinerary**:
+   - **What (The Problem & Goal):** Given a list of airline tickets, reconstruct the itinerary in order, starting from "JFK". If multiple valid itineraries exist, return the one with the smallest lexicographical order.
+   - **How (Intuition & Mental Model):** This is a search for an **Eulerian Path** in a directed graph. Use Hierholzer's algorithm: DFS through neighbors in lexicographical order. When a node has no more outgoing edges, push it to the result stack. The final itinerary is the reversed stack.
 ```
 
 > [!CAUTION]
@@ -142,6 +158,14 @@ def dijkstra(adj: dict, n: int, start: int) -> list[float]:
                 dist[v] = dist[u] + weight
                 heapq.heappush(heap, (dist[v], v))
     return dist
+
+#### Common Variants & Twists
+1. **Path With Maximum Probability**:
+   - **What (The Problem & Goal):** Find the path from start to end with the highest product of edge probabilities.
+   - **How (Intuition & Mental Model):** Probabilities are in `[0, 1]`, so their product decreases as the path length increases. This is equivalent to Dijkstra, but you want to **maximize** the product. Use a Max-Heap. Or, transform it into a shortest path problem by taking `-log(probability)` (which makes it additive and non-negative).
+2. **Smallest Number of Neighbors at a Threshold Distance**:
+   - **What (The Problem & Goal):** Find the city that has the smallest number of other cities reachable within a certain distance `threshold`.
+   - **How (Intuition & Mental Model):** Run Dijkstra from every single city (O(V * E log V)) to find all-pairs distances. Count how many cities are within the threshold for each source.
 ```
 
 > [!CAUTION]
@@ -168,6 +192,11 @@ def bellman_ford(edges: list[tuple[int,int,int]], n: int, start: int) -> tuple[l
         for u, v, w in edges
     )
     return dist, has_negative_cycle
+
+#### Common Variants & Twists
+1. **Cheapest Flights Within K Stops**:
+   - **What (The Problem & Goal):** Find the cheapest price from source to destination with at most `k` stops.
+   - **How (Intuition & Mental Model):** This is a bounded shortest path problem. Run Bellman-Ford for exactly `k+1` iterations. Each iteration `i` represents the minimum cost to reach nodes with at most `i-1` stops. Crucially, use a copy of the distance array to ensure you're only using distances from the *previous* iteration (to avoid using more than `k` edges in a single pass).
 ```
 
 ---
@@ -192,6 +221,11 @@ def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float
                 if dist[i][k] != float('inf') and dist[k][j] != float('inf'):
                     dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
     return dist
+
+#### Common Variants & Twists
+1. **Transitive Closure**:
+   - **What (The Problem & Goal):** For every pair of nodes `(u, v)`, determine if `v` is reachable from `u`.
+   - **How (Intuition & Mental Model):** Use a modified Floyd-Warshall where the update is `reachable[i][j] = reachable[i][j] or (reachable[i][k] and reachable[k][j])`. This is often more efficient than running V BFS/DFS calls if the graph is dense.
 ```
 
 > [!TIP]
@@ -221,6 +255,11 @@ def kahn_topo_sort(n: int, edges: list[tuple[int,int]]) -> list[int]:
             if in_degree[v] == 0:
                 queue.append(v)
     return order if len(order) == n else []  # [] = cycle detected
+
+#### Common Variants & Twists
+1. **Alien Dictionary**:
+   - **What (The Problem & Goal):** Deriving character ordering from a sorted list of words in an alien language.
+   - **How (Intuition & Mental Model):** Compare adjacent words to find the first character mismatch (e.g., "word1[i]" vs "word2[i]"). This gives a directed edge `word1[i] -> word2[i]`. Build the graph of characters and run Kahn's algorithm. If the number of sorted characters is less than the number of unique characters, a cycle exists (invalid dictionary).
 ```
 
 ---
@@ -245,6 +284,11 @@ def zero_one_bfs(adj: dict, start: int, target: int) -> int:
                 else:
                     dq.append(v)      # costly move → back
     return dist.get(target, -1)
+
+#### Common Variants & Twists
+1. **Minimum Cost to Make at Least One Valid Path in a Grid**:
+   - **What (The Problem & Goal):** You are given a grid where each cell has an arrow pointing to a neighbor. You can change the arrow's direction with cost 1. Find the min cost to reach bottom-right.
+   - **How (Intuition & Mental Model):** Edges to the neighbor pointed at by the arrow have cost 0. Edges to all other 3 neighbors have cost 1. Use 0-1 BFS with a deque.
 ```
 
 ---
@@ -306,6 +350,11 @@ def prim_mst(n: int, adj: dict) -> int:
                 heapq.heappush(heap, (w, v))
                 
     return total_cost if len(visited) == n else -1
+
+#### Common Variants & Twists
+1. **Min Cost to Connect All Points (Manhattan)**:
+   - **What (The Problem & Goal):** Connect all points in a 2D plane with minimum cost, where cost between points is Manhattan distance.
+   - **How (Intuition & Mental Model):** This is an MST problem on a complete graph (O(V^2) edges). Kruskal's would be O(V^2 log V). Prim's with a simple array (instead of a heap) is O(V^2), which is better for dense graphs.
 ```
 
 ---

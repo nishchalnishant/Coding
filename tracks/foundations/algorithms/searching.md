@@ -72,6 +72,14 @@ def binary_search_boundary(lo: int, hi: int, predicate) -> int:
         else:
             lo = mid + 1  # mid is definitely not the answer
     return lo  # lo == hi at convergence
+
+#### Common Variants & Twists
+1. **Find K-th Smallest Pair Distance**:
+   - **What (The Problem & Goal):** Given an array, find the k-th smallest absolute difference between any two elements.
+   - **How (Intuition & Mental Model):** The range of possible distances is `[0, max(nums) - min(nums)]`. Binary search on the distance `d`. For each `mid`, count how many pairs have distance `<= mid` using two pointers in O(N).
+2. **K-th Smallest Element in a Sorted Matrix**:
+   - **What (The Problem & Goal):** Find the k-th smallest element in an `n x n` matrix where each row and column is sorted in ascending order.
+   - **How (Intuition & Mental Model):** The range of values is `[matrix[0][0], matrix[n-1][n-1]]`. Binary search on the value. For each `mid`, count how many elements are `<= mid` using a staircase traversal (starting from top-right) in O(N).
 ```
 
 > [!CAUTION]
@@ -113,6 +121,14 @@ def search_range(arr: list[int], target: int) -> list[int]:
         return [-1, -1]
     right = upper_bound(arr, target) - 1
     return [left, right]
+
+#### Common Variants & Twists
+1. **Search Insert Position**:
+   - **What (The Problem & Goal):** Find the index where a target would be inserted in a sorted array to maintain order.
+   - **How (Intuition & Mental Model):** This is exactly the `lower_bound` problem. The first position where `arr[mid] >= target`.
+2. **H-Index II**:
+   - **What (The Problem & Goal):** Given a sorted array of citations, find the researcher's h-index.
+   - **How (Intuition & Mental Model):** The h-index is the largest `h` such that `h` papers have at least `h` citations. Since citations are sorted, at index `i`, there are `n - i` papers with at least `citations[i]` citations. We need the first `i` where `citations[i] >= n - i`.
 ```
 
 > [!TIP]
@@ -183,6 +199,14 @@ def aggressive_cows(stalls: list[int], cows: int) -> int:
         else:
             hi = mid - 1  # mid is NOT feasible, must be smaller
     return lo
+
+#### Common Variants & Twists
+1. **Minimum Speed to Arrive on Time**:
+   - **What (The Problem & Goal):** Find the minimum integer speed `s` to reach destination in `hour` hours.
+   - **How (Intuition & Mental Model):** The speed range is `[1, 10^7]`. The total time is `sum(ceil(dist[i]/s)) + dist[-1]/s`. Use binary search on speed.
+2. **Minimize Maximum Distance to Gas Station (Float)**:
+   - **What (The Problem & Goal):** Add `k` gas stations to minimize the maximum distance between adjacent stations.
+   - **How (Intuition & Mental Model):** Binary search on the distance (a float). For a distance `d`, the number of stations needed between two existing stations at distance `D` is `floor(D/d)`. Sum these up and check if `<= k`. Use a fixed number of iterations (e.g., 100) or `while hi - lo > 1e-7`.
 ```
 
 > [!CAUTION]
@@ -225,6 +249,14 @@ def find_min_rotated(nums: list[int]) -> int:
         else:
             hi = mid       # mid might be the minimum
     return nums[lo]
+
+#### Common Variants & Twists
+1. **Search in Rotated Sorted Array II (with duplicates)**:
+   - **What (The Problem & Goal):** Same as searching in rotated array, but duplicates are allowed.
+   - **How (Intuition & Mental Model):** If `nums[lo] == nums[mid] == nums[hi]`, we cannot tell which side is sorted. Increment `lo` and decrement `hi` and continue. This makes the worst-case O(N).
+2. **Find Minimum in Rotated Sorted Array II**:
+   - **What (The Problem & Goal):** Find minimum in rotated array with duplicates.
+   - **How (Intuition & Mental Model):** Similar logic. If `nums[mid] == nums[hi]`, just decrement `hi`.
 ```
 
 > [!CAUTION]
@@ -247,6 +279,11 @@ def find_peak_element(nums: list[int]) -> int:
         else:
             lo = mid + 1  # peak is strictly to the right
     return lo
+
+#### Common Variants & Twists
+1. **Find Peak Element in 2D Matrix**:
+   - **What (The Problem & Goal):** Find a peak element in an `m x n` matrix (greater than its 4 neighbors).
+   - **How (Intuition & Mental Model):** Binary search on columns. For the middle column, find the global maximum element at `(row, mid)`. Compare it with its neighbors at `(row, mid-1)` and `(row, mid+1)`. Move toward the higher neighbor.
 ```
 
 ---
@@ -279,6 +316,11 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
         else:
             lo = i + 1
     raise ValueError("Input arrays are not sorted")
+
+#### Common Variants & Twists
+1. **K-th Smallest Element of Two Sorted Arrays**:
+   - **What (The Problem & Goal):** Find the k-th smallest element in the union of two sorted arrays.
+   - **How (Intuition & Mental Model):** A generalization of the median problem. Partition `A` and `B` such that `i + j = k`. Use binary search to find the correct `i` such that `A[i-1] <= B[j]` and `B[j-1] <= A[i]`.
 ```
 
 ---

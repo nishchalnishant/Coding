@@ -73,6 +73,14 @@ def four_sum_count(A: list[int], B: list[int], C: list[int], D: list[int]) -> in
     return sum(ab_sums.get(-(c + d), 0) for c in C for d in D)
 ```
 
+#### Common Variants & Twists
+1. **3Sum / 4Sum**:
+   - **What (The Problem & Goal):** Find unique triplets (or quadruplets) that sum to zero (or a target).
+   - **How (Intuition & Mental Model):** Use the Two-Sum map logic as the inner loop, reducing the complexity by one degree of `N` compared to brute force. For 4Sum Count (where you just need the number of tuples from 4 different arrays), hash all sums of `A + B`, then for every `c` and `d`, look up `-(c + d)` in the hash map.
+2. **Max Number of K-Sum Pairs**:
+   - **What (The Problem & Goal):** Find the maximum number of pairs that sum to `k`. Each element can only be used in one pair.
+   - **How (Intuition & Mental Model):** A twist where each number can only be used once. Instead of just storing the index, store the *count* of available numbers in the hash map. When a pair is formed `(x, target - x)`, decrement the count of both numbers to "consume" them.
+
 ---
 
 ### Frequency Map — Counting and Grouping
@@ -107,6 +115,17 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
 > [!TIP]
 > **Anagram key choice**: `tuple(sorted(s))` is O(K log K) per word where K is word length. For very long words, use a 26-integer count tuple: `tuple(Counter(s).get(c, 0) for c in 'abcdefghijklmnopqrstuvwxyz')`. For Unicode strings, the 26-array assumption fails — use `Counter` directly as the key (but `Counter` is not hashable; convert to `tuple(sorted(Counter(s).items()))`).
 
+#### Common Variants & Twists
+1. **Find All Anagrams in a String**:
+   - **What (The Problem & Goal):** Find all starting indices of substrings in `s` that are anagrams of `p`.
+   - **How (Intuition & Mental Model):** Sliding window + frequency map. Maintain a frequency map of the target string `p`. Slide a window of size `len(p)` across `s`, maintaining a running frequency map of the window. If the window's map equals `p`'s map, record the start index.
+2. **Sort Characters By Frequency**:
+   - **What (The Problem & Goal):** Sort a string in decreasing order based on the frequency of its characters.
+   - **How (Intuition & Mental Model):** Count characters into a frequency map, then sort the characters based on their count (or use bucket sort where the index is the frequency). Rebuild the result string by appending `char * count`.
+3. **Minimum Window Substring**:
+   - **What (The Problem & Goal):** Find the shortest substring containing all characters of a target string.
+   - **How (Intuition & Mental Model):** You need a frequency map of the target string, and a running frequency map of the current sliding window. The critical condition is maintaining a `have` counter vs `required_unique_chars`. Only increment `have` when the window's count for a char matches the target's exact requirement.
+
 ---
 
 ### Prefix Sum + Map — Subarray Sum Queries
@@ -139,6 +158,17 @@ def longest_subarray_sum_zero(nums: list[int]) -> int:
 
 > [!CAUTION]
 > Always initialize `seen = {0: 1}` (for counting) or `first_seen = {0: -1}` (for length). This accounts for subarrays starting from index 0. Missing this initialization causes wrong answers when the entire prefix is the valid subarray.
+
+#### Common Variants & Twists
+1. **Contiguous Array**:
+   - **What (The Problem & Goal):** Find the maximum length of a contiguous subarray with an equal number of 0s and 1s.
+   - **How (Intuition & Mental Model):** Replace all `0`s with `-1`. The problem then exactly transforms into finding the longest subarray with a sum of `0`. Store the `first_seen` index of each prefix sum in the hash map.
+2. **Make Sum Divisible by P**:
+   - **What (The Problem & Goal):** Remove the shortest subarray so that the sum of the remaining elements is divisible by `P`.
+   - **How (Intuition & Mental Model):** Find the remainder of the total sum: `rem = sum(nums) % P`. The problem reduces to finding the shortest subarray with `sum % P == rem`. As you iterate, calculate `current_prefix % P` and use `(current_prefix - rem) % P` for the map lookup.
+3. **Subarray Sums Divisible by K**:
+   - **What (The Problem & Goal):** Count the number of subarrays whose sum is divisible by `K`.
+   - **How (Intuition & Mental Model):** Store `running_sum % K` in the map instead of the raw sum. A valid subarray exists ending at the current index if you have seen the exact same remainder before (because `(prefix_j - prefix_i) % K == 0` implies `prefix_j % K == prefix_i % K`).
 
 ---
 

@@ -124,6 +124,14 @@ def _dfs(self, node: TrieNode, path: list[str], results: list[str]) -> None:
         path.pop()
 ```
 
+#### Common Variants & Twists
+1. **Design Search Autocomplete System**:
+   - **What (The Problem & Goal):** Design a system that returns the top 3 most frequently searched words starting with a given prefix.
+   - **How (Intuition & Mental Model):** Instead of a full DFS on every keystroke (which is slow), store a list of the "top 3 words" directly in each `TrieNode` during the insertion phase. When a word's frequency increases, update the "top 3" list in all its ancestor nodes.
+2. **Implement Magic Dictionary**:
+   - **What (The Problem & Goal):** Build a dictionary where a search returns `True` if you can change *exactly one* character in the search word to match a word in the dictionary.
+   - **How (Intuition & Mental Model):** Use DFS to explore the Trie. Pass a `mismatches` count down the recursion. At each node, try all possible children. If the child's character doesn't match the current character of the search word, increment `mismatches`. If `mismatches` exceeds 1, prune that branch. Return `True` if you reach the end of the search word with `mismatches == 1`.
+
 ### Count words with prefix
 
 ```python
@@ -181,6 +189,14 @@ def findWords(board: list[list[str]], words: list[str]) -> list[str]:
 > [!IMPORTANT]
 > **Pruning leaf nodes** (`del node.children[ch]` when subtree is empty) is the critical optimization. Without it, already-found dead-end paths are re-explored.
 
+#### Common Variants & Twists
+1. **Boggle Game (Maximum Non-overlapping Words)**:
+   - **What (The Problem & Goal):** Find the maximum number of words from a dictionary that can be formed on a Boggle board without reusing any cell across *different* words.
+   - **How (Intuition & Mental Model):** This is backtracking on top of backtracking. Use the Trie to find a valid word, then "consume" those cells (mark as used) and recursively try to find more words from the remaining cells. You need to backtrack on the entire "word set" choice to find the global maximum.
+2. **Concatenated Words**:
+   - **What (The Problem & Goal):** Given a list of words, find all words that are formed by concatenating *two or more* shorter words from the same list.
+   - **How (Intuition & Mental Model):** Insert all words into a Trie. For each word, use DFS/DP to see if it can be partitioned into multiple prefixes that are each marked as `is_end` in the Trie. If a prefix is a valid word, recursively check if the remainder of the string is also a valid (concatenated) word.
+
 ---
 
 ## XOR Trie — Maximum XOR Pair
@@ -223,6 +239,11 @@ def findMaximumXOR(nums: list[int]) -> int:
 ```
 
 **Complexity:** O(N × 32) time, O(N × 32) space.
+
+#### Common Variants & Twists
+1. **Maximum XOR With an Element From Array**:
+   - **What (The Problem & Goal):** Given an array `nums` and queries `(x, m)`, find the maximum XOR of `x` with any `nums[i]` where `nums[i] <= m`.
+   - **How (Intuition & Mental Model):** An offline query processing twist. Sort both the array and the queries by their limit `m`. Iterate through the sorted queries, and for each query, insert all numbers from the array that are less than or equal to the current `m` into the XOR Trie. Then perform the standard greedy max-XOR search for `x`.
 
 ---
 

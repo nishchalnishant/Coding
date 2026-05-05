@@ -121,6 +121,14 @@ def k_way_merge(sorted_lists: list[list[int]]) -> list[int]:
 > [!CAUTION]
 > **Python heap tie-breaking**: If two tuples have equal first elements, Python compares the second. If `list_idx` values are ints, comparison is fine. But if the second element is a non-comparable type (e.g., a `ListNode` object), Python will raise `TypeError`. Always include a unique tie-breaker (like a counter) as the second element.
 
+#### Common Variants & Twists
+1. **Find K Pairs with Smallest Sums**:
+   - **What (The Problem & Goal):** Given two sorted arrays, find the `K` pairs `(u, v)` (one from each array) with the smallest sums.
+   - **How (Intuition & Mental Model):** Seed the Min-Heap with `(nums1[i] + nums2[0], i, 0)` for all `i`. This avoids an O(N²) initial population. When popping the smallest pair `(i, j)`, immediately push the next pair in that row: `(nums1[i] + nums2[j+1], i, j+1)` if `j+1` is within bounds.
+2. **Kth Smallest Element in a Sorted Matrix**:
+   - **What (The Problem & Goal):** Find the $K^{th}$ smallest element in an $N \times N$ matrix where every row and every column is sorted.
+   - **How (Intuition & Mental Model):** Exactly the same logic as K-Way Merge. Seed the heap with the first element of each row `(matrix[i][0], i, 0)`. Pop `K-1` times, advancing the column index each time `(matrix[i][j+1], i, j+1)`. The $K^{th}$ popped element is the answer.
+
 ### Custom Object Comparators
 
 > [!IMPORTANT]
@@ -185,6 +193,14 @@ class MedianFinder:
 
 > [!TIP]
 > **Sliding Window Median (hard follow-up)**: Use two heaps + **lazy deletion**. Track invalid elements (those that have slid out of the window) in a counter. When they surface at the top of a heap during a pop, discard them instead. This avoids O(N) re-heapification per step.
+
+#### Common Variants & Twists
+1. **Sliding Window Median**:
+   - **What (The Problem & Goal):** Maintain the median as a fixed-size window slides across an array.
+   - **How (Intuition & Mental Model):** Use two heaps, but removing elements from the middle of a heap is O(N). Instead, use **lazy deletion**. Track invalid elements (those that have slid out of the window) in a Hash Map counter. When you pop from a heap, if the popped element is in the "invalid" map, discard it and pop again. This avoids O(N) re-heapification per step.
+2. **IPO (Maximize Capital)**:
+   - **What (The Problem & Goal):** Pick at most `K` projects to maximize capital. You can only start a project if your current capital `>=` its required capital.
+   - **How (Intuition & Mental Model):** A twist on two ordered structures. Sort projects by required capital. Iterate through the sorted projects and push the profit of all *currently affordable* projects into a Max-Heap. Pop the top of the Max-Heap (most profitable), add it to your capital, and repeat `K` times.
 
 ---
 

@@ -83,6 +83,14 @@ def merge_count(left: list[int], right: list[int]) -> tuple[list[int], int]:
     result.extend(left[i:])
     result.extend(right[j:])
     return result, inversions
+
+#### Common Variants & Twists
+1. **Count Smaller Numbers After Self**:
+   - **What (The Problem & Goal):** For each element in an array, count how many numbers to its right are smaller than it.
+   - **How (Intuition & Mental Model):** Use merge sort on an array of `(value, original_index)`. During the merge step, when you pull an element from the `right` half into the result, it means all remaining elements in the `left` half have "jumped over" this smaller right element. For each element in the `left` half, increment its "smaller after" count by the number of elements already taken from the `right` half.
+2. **Reverse Pairs**:
+   - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
+   - **How (Intuition & Mental Model):** Similar to counting inversions, but the condition is different. Before merging the two sorted halves, use two pointers to count the pairs: for each `i` in the left half, move the right pointer `j` as far as `nums[i] > 2 * nums[j]` holds. Add the count to the total, then proceed with the standard merge.
 ```
 
 ---
@@ -120,6 +128,14 @@ def _qs(nums: list[int], lo: int, hi: int, target: int) -> int:
         return _qs(nums, p + 1, hi, target)
     else:
         return _qs(nums, lo, p - 1, target)
+
+#### Common Variants & Twists
+1. **Top K Frequent Elements**:
+   - **What (The Problem & Goal):** Find the `k` most frequent elements in an array.
+   - **How (Intuition & Mental Model):** First, count frequencies using a hash map. Then, run QuickSelect on the unique elements based on their frequencies. Once the `(n-k)`-th smallest frequency position is found, all elements to its right are the top `k` most frequent.
+2. **K Closest Points to Origin**:
+   - **What (The Problem & Goal):** Given a list of points, find the `k` points closest to `(0,0)`.
+   - **How (Intuition & Mental Model):** Calculate the squared Euclidean distance for each point. Use QuickSelect on the distances to find the `k`-th smallest distance. All points partitioned to the left of this pivot are your answer.
 ```
 
 ---
@@ -140,6 +156,14 @@ def fast_pow(x: float, n: int) -> float:
         x *= x
         n //= 2
     return result
+
+#### Common Variants & Twists
+1. **Matrix Exponentiation**:
+   - **What (The Problem & Goal):** Compute the `n`-th term of a linear recurrence (like Fibonacci) in O(log N) time.
+   - **How (Intuition & Mental Model):** Represent the recurrence as a matrix multiplication: `[F(n), F(n-1)] = [1, 1; 1, 0] * [F(n-1), F(n-2)]`. To find the `n`-th term, compute `M^n` using the fast power algorithm, then multiply by the base case vector.
+2. **Super Pow**:
+   - **What (The Problem & Goal):** Compute `a^b % 1337` where `b` is a very large positive integer represented as an array.
+   - **How (Intuition & Mental Model):** Use the property `a^[1,2,3] = (a^[1,2])^10 * a^3`. Recurse through the array from right to left: `solve(a, b_array) = pow(solve(a, b_array[:-1]), 10) * pow(a, b_array[-1])`.
 ```
 
 > [!CAUTION]
@@ -170,6 +194,14 @@ def max_subarray_dc(nums: list[int], lo: int, hi: int) -> int:
         running += nums[i]
         cross_right = max(cross_right, running)
     return max(left_max, right_max, cross_left + cross_right)
+
+#### Common Variants & Twists
+1. **Max Subarray Sum in 2D (Matrix)**:
+   - **What (The Problem & Goal):** Find the rectangular submatrix with the maximum sum.
+   - **How (Intuition & Mental Model):** Reduce this to 1D by fixing the top and bottom row boundaries. Sum the columns between these rows into a 1D array. Run Kadane's (or D&C Max Subarray) on this 1D array. Repeat for all O(N^2) row pairs.
+2. **Maximum Product Subarray**:
+   - **What (The Problem & Goal):** Find the contiguous subarray with the maximum product.
+   - **How (Intuition & Mental Model):** While usually DP (tracking `min` and `max` due to negatives), the D&C approach involves tracking four values from each half: `max_prod`, `min_prod`, and the products starting/ending at the boundaries. The cross-midpoint combine step is significantly more complex than the sum case.
 ```
 
 > [!TIP]
@@ -207,6 +239,14 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
         return d
 
     return rec(pts)
+
+#### Common Variants & Twists
+1. **Closest Pair of Points in 3D**:
+   - **What (The Problem & Goal):** Extend the 2D algorithm to 3D space.
+   - **How (Intuition & Mental Model):** The D&C structure remains the same (divide by x, solve halves, check strip). However, the strip in 3D is a "slab" of width `2δ`, and the "check constant" increases from 7 to roughly 15-20 points based on 3D sphere packing.
+2. **All Nearest Neighbors**:
+   - **What (The Problem & Goal):** For every point in a set, find its nearest neighbor.
+   - **How (Intuition & Mental Model):** While it can be solved with a KD-Tree, a D&C approach can solve this in O(N log N) by passing more information up the merge step.
 ```
 
 ---

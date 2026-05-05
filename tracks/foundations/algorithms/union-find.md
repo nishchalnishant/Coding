@@ -86,6 +86,14 @@ class DSU:
 
     def component_size(self, x: int) -> int:
         return self.size[self.find(x)]
+
+#### Common Variants & Twists
+1. **Longest Consecutive Sequence**:
+   - **What (The Problem & Goal):** Given an unsorted array, find the length of the longest consecutive elements sequence.
+   - **How (Intuition & Mental Model):** For each `x` in the array, if `x+1` exists, `union(x, x+1)`. After processing all elements, the size of the largest component is the answer. (Note: Hash Set is the standard O(N) approach, but DSU is a valid alternative).
+2. **Number of Provinces**:
+   - **What (The Problem & Goal):** Given an adjacency matrix, find the total number of connected components.
+   - **How (Intuition & Mental Model):** Iterate through the upper triangle of the matrix. If `matrix[i][j] == 1`, `union(i, j)`. The number of components remaining in the DSU is the answer.
 ```
 
 ---
@@ -125,6 +133,14 @@ def kruskal_mst(n: int, edges: list[tuple[int, int, int]]) -> int:
             if edges_used == n - 1:
                 break
     return total_cost if edges_used == n - 1 else -1  # -1 = disconnected graph
+
+#### Common Variants & Twists
+1. **Min Cost to Connect All Points**:
+   - **What (The Problem & Goal):** Connect points on a 2D plane with Manhattan distance cost.
+   - **How (Intuition & Mental Model):** This is a complete graph where edges exist between every pair of points. Generate all `N*(N-1)/2` edges, sort them, and use Kruskal's with DSU. 
+2. **Find Critical and Pseudo-Critical Edges in MST**:
+   - **What (The Problem & Goal):** An edge is critical if its removal increases MST weight. It's pseudo-critical if it can be part of *some* MST.
+   - **How (Intuition & Mental Model):** For each edge, first force its inclusion and compute MST; then force its exclusion and compute MST. Compare these weights with the original MST weight.
 ```
 
 ---
@@ -160,6 +176,11 @@ class WeightedDSU:
         rx, wx = self.find(x)
         ry, wy = self.find(y)
         return wx / wy if rx == ry else -1.0
+
+#### Common Variants & Twists
+1. **Path with Maximum Probability**:
+   - **What (The Problem & Goal):** Find the path with the maximum product of edge probabilities.
+   - **How (Intuition & Mental Model):** While Dijkstra is usually better, for static queries on a tree, a weighted DSU can track products of probabilities relative to the root. If `a/root = p1` and `b/root = p2`, then `a/b = p1/p2`.
 ```
 
 ---
@@ -200,6 +221,11 @@ class RollbackDSU:
             ry, old_parent, rx, old_rank = entry
             self.parent[ry] = old_parent
             self.rank[rx] = old_rank
+
+#### Common Variants & Twists
+1. **Number of Islands II**:
+   - **What (The Problem & Goal):** Dynamic land additions in a grid; return component count after each.
+   - **How (Intuition & Mental Model):** Standard DSU on `r * cols + c`. On each `addLand(r, c)`, check 4-neighbors. If a neighbor is land, `union(current, neighbor)`. This handles the dynamic component counting as the grid evolves.
 ```
 
 > [!CAUTION]

@@ -57,6 +57,14 @@ def unique_paths_with_obstacles(grid: list[list[int]]) -> int:
             elif j > 0:
                 dp[j] += dp[j-1]
     return dp[n-1]
+
+#### Common Variants & Twists
+1. **Paths with Exactly K Obstacles**:
+   - **What (The Problem & Goal):** Count paths from `(0,0)` to `(m-1,n-1)` that pass through exactly `k` obstacle cells.
+   - **How (Intuition & Mental Model):** Add a dimension to the DP: `dp[i][j][count]` = paths to `(i, j)` having encountered `count` obstacles. `dp[i][j][count] = dp[i-1][j][count-curr] + dp[i][j-1][count-curr]` where `curr = 1` if `(i,j)` is an obstacle, else 0.
+2. **Number of Paths with Max K Obstacles**:
+   - **What (The Problem & Goal):** Count paths that pass through at most `k` obstacles.
+   - **How (Intuition & Mental Model):** Use the same `dp[i][j][count]` state. The answer is the sum of `dp[m-1][n-1][0...k]`.
 ```
 
 > [!CAUTION]
@@ -129,6 +137,14 @@ def calculate_minimum_hp(dungeon: list[list[int]]) -> int:
             dp[i][j] = max(need, 1)
 
     return dp[0][0]
+
+#### Common Variants & Twists
+1. **Minimum Path Sum with One "Skip"**:
+   - **What (The Problem & Goal):** Min path sum, but you can skip the cost of one cell.
+   - **How (Intuition & Mental Model):** Use 2-layer DP: `dp[i][j][0]` (cost with no skip used) and `dp[i][j][1]` (cost with one skip used). `dp[i][j][1] = min(dp[i-1][j][1] + grid[i][j], dp[i][j-1][1] + grid[i][j], dp[i-1][j][0], dp[i][j-1][0])`.
+2. **Path with Maximum Minimum Value**:
+   - **What (The Problem & Goal):** Find a path where the minimum value of any cell on the path is maximized.
+   - **How (Intuition & Mental Model):** `dp[i][j] = min(grid[i][j], max(dp[i-1][j], dp[i][j-1]))`. This is the "bottleneck" path problem on a grid.
 ```
 
 > [!CAUTION]
@@ -164,6 +180,14 @@ def maximal_square(matrix: list[list[str]]) -> int:
             prev = temp
 
     return max_side * max_side
+
+#### Common Variants & Twists
+1. **Count Square Submatrices with All Ones**:
+   - **What (The Problem & Goal):** Count total number of square submatrices that have all ones.
+   - **How (Intuition & Mental Model):** Every cell `(i,j)` is the bottom-right corner of `dp[i][j]` squares (where `dp[i][j]` is the side length from the Maximal Square algorithm). Sum all `dp[i][j]` values across the entire matrix.
+2. **Largest Plus Sign**:
+   - **What (The Problem & Goal):** Find the largest "plus sign" of 1s.
+   - **How (Intuition & Mental Model):** Precompute 4 DP tables: `left[i][j]`, `right[i][j]`, `up[i][j]`, `down[i][j]` tracking consecutive 1s in each direction. The largest plus sign centered at `(i,j)` has arm length `min(left, right, up, down)`.
 ```
 
 > [!TIP]

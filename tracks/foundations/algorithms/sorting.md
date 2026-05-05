@@ -92,6 +92,14 @@ def _merge(left: list[int], right: list[int]) -> list[int]:
     result.extend(left[i:])
     result.extend(right[j:])
     return result
+
+#### Common Variants & Twists
+1. **Count of Range Sum**:
+   - **What (The Problem & Goal):** Given an array, find the number of subarrays whose sum lies in `[lower, upper]`.
+   - **How (Intuition & Mental Model):** Calculate prefix sums. The problem becomes finding pairs `(i, j)` where `lower <= prefix[j] - prefix[i] <= upper`. Use merge sort on the prefix sums. Before merging the two sorted halves, for each element in the left half, use two pointers in the right half to find the window of elements that satisfy the range sum condition.
+2. **Reverse Pairs**:
+   - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
+   - **How (Intuition & Mental Model):** Also a merge sort twist. Before merging, use two pointers to count how many `nums[i]` in the left half are greater than `2 * nums[j]` in the right half. Count first, then merge.
 ```
 
 > [!TIP]
@@ -129,6 +137,11 @@ def _partition(nums: list[int], lo: int, hi: int) -> int:
             nums[i], nums[j] = nums[j], nums[i]
     nums[i + 1], nums[hi] = nums[hi], nums[i + 1]
     return i + 1
+
+#### Common Variants & Twists
+1. **Pancake Sorting**:
+   - **What (The Problem & Goal):** Sort an array using only the "flip" operation (reverses prefix of length `k`).
+   - **How (Intuition & Mental Model):** This is selection sort with a twist. At each step, find the current largest element, flip it to the front, and then flip it to its correct sorted position at the end. Repeat for smaller and smaller prefixes.
 ```
 
 > [!CAUTION]
@@ -159,6 +172,14 @@ def _quickselect(nums: list[int], lo: int, hi: int, target: int) -> int:
         return _quickselect(nums, pivot_idx + 1, hi, target)
     else:
         return _quickselect(nums, lo, pivot_idx - 1, target)
+
+#### Common Variants & Twists
+1. **K Closest Points to Origin**:
+   - **What (The Problem & Goal):** Given a list of points, find the `k` points closest to the origin.
+   - **How (Intuition & Mental Model):** Calculate squared distances. Use QuickSelect on these distances to find the `k`-th smallest. All points to the left of the resulting pivot are the `k` closest.
+2. **Top K Frequent Elements**:
+   - **What (The Problem & Goal):** Find the `k` most frequent elements.
+   - **How (Intuition & Mental Model):** Count frequencies. Use QuickSelect on the unique elements based on their frequencies to find the top `k` in O(N) average time.
 ```
 
 > [!CAUTION]
@@ -185,6 +206,14 @@ def sort_colors(nums: list[int]) -> None:
             nums[mid], nums[hi] = nums[hi], nums[mid]
             hi -= 1
     # Loop invariant: nums[:lo]=0s, nums[lo:mid]=1s, nums[mid:]=2s
+
+#### Common Variants & Twists
+1. **Sort Transformed Array**:
+   - **What (The Problem & Goal):** Given a sorted array and a quadratic function `f(x) = ax^2 + bx + c`, return the sorted result of `f(x)` for each `x`.
+   - **How (Intuition & Mental Model):** If `a > 0`, the function is a parabola opening upward; extreme values are at the ends of the array. Use two pointers starting at both ends and pick the larger value. If `a < 0`, start two pointers at both ends and pick the smaller value (filling the result array from middle or reverse).
+2. **Move Zeroes**:
+   - **What (The Problem & Goal):** Move all 0s to the end of the array while maintaining the relative order of non-zero elements.
+   - **How (Intuition & Mental Model):** Use two pointers. `lo` tracks where the next non-zero should go. `mid` iterates. Every time `nums[mid] != 0`, swap `nums[lo]` and `nums[mid]` and increment `lo`. This is a 2-way Dutch National Flag variation.
 ```
 
 ---
@@ -238,6 +267,14 @@ def radix_sort(nums: list[int]) -> list[int]:
             nums[i] = result[i]
         exp *= 10
     return nums
+    
+#### Common Variants & Twists
+1. **Maximum Gap**:
+   - **What (The Problem & Goal):** Find the maximum gap between successive elements in their sorted form in O(N) time.
+   - **How (Intuition & Mental Model):** Use Bucket Sort logic. Divide the range `[min, max]` into `n-1` buckets. The maximum gap cannot occur within a bucket (by Pigeonhole Principle); it must occur between buckets. Track `min` and `max` for each bucket.
+2. **Sort Characters By Frequency**:
+   - **What (The Problem & Goal):** Sort a string by decreasing character frequency.
+   - **How (Intuition & Mental Model):** Use bucket sort where the index is the frequency. Put characters with the same frequency in the same bucket. Traverse the buckets from largest frequency to smallest.
 ```
 
 ---
@@ -258,6 +295,14 @@ def largest_number(nums: list[int]) -> str:
         return (1 if a + b < b + a else -1)
     strs = sorted(map(str, nums), key=cmp_to_key(compare))
     return "".join(strs)
+
+#### Common Variants & Twists
+1. **Custom Sort String**:
+   - **What (The Problem & Goal):** Given an order string `order` and a string `s`, sort the characters of `s` to follow the sequence of `order`.
+   - **How (Intuition & Mental Model):** Create a mapping `char -> rank` based on `order`. Sort `s` using this rank as the key. Characters not in `order` can have any rank (e.g., infinity).
+2. **Queue Reconstruction by Height**:
+   - **What (The Problem & Goal):** Reconstruct a queue where each person is represented by `(h, k)` (height, number of people in front who are ≥ height).
+   - **How (Intuition & Mental Model):** Sort people by height descending, and by `k` ascending for ties. Then, iterate and insert each person into the result list at index `k`. This works because all previously inserted people are taller, so their relative order isn't changed by inserting a shorter person at `k`.
 ```
 
 > [!CAUTION]
