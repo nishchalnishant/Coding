@@ -1,6 +1,8 @@
-# Data Structures Tree — SDE-3 Master Index
+# The Data Structure Tree: Your Tactical Toolkit
 
-A hierarchical map of core data structures, their common patterns, and high-yield interview variants. This tree provides a structural overview for rapid revision of foundational data organization techniques.
+Think of this as your "Map of the Hardware." When you're in an interview and the problem feels overwhelming, I want you to come back here. The secret to SDE-3 mastery isn't knowing every data structure; it's knowing **which tool to grab for which constraint.** 
+
+If you need the "next greater" element, you reach for the **Monotonic Stack**. If you're maintaining a dynamic median, you reach for **Two Heaps**. This tree is your rapid-revision guide to making those structural decisions in seconds.
 
 ---
 

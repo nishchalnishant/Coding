@@ -518,9 +518,24 @@ def dfs_iterative(start, choices):
 
 ## See also
 
-- [Dynamic Programming](dynamic-programming/README.md) — memoize overlapping backtracking → DP
-- [Bit Manipulation](bit-manipulation.md) — bitmask as backtracking state for N≤20
-- [Recursion (Full Playbook)](recursion/README.md) — core recursion types and iterative conversion
-- [Combination Problems](recursion/combination-problems.md) — full combinatorial family (Sum I-IV)
-- [String Recursion](recursion/string-recursion.md) — Regex, wildcard, decode string
 - [Trie](../data-structures/trie.md) — Word Search II (pruning via Trie prefix)
+
+---
+
+## 🎙️ The Coach's Dialogue: The Art of the "Undo"
+
+**Student:** "Coach, every time I write backtracking, I feel like I'm losing track of the state. It’s like trying to remember five different versions of the same reality."
+
+**Coach:** "That's exactly what backtracking is—it's a **Multiverse Search**. The secret to keeping your sanity is the **Undo Step**. If you mutate something before you go deep, you MUST revert it as you come back up. If you forget to pop that element from your path, you're essentially leaking one reality into another."
+
+**Student:** "I get the `path.pop()` part, but what about the grid problems like 'Word Search'? Why do people change the character to a `#`?"
+
+**Coach:** "It’s a clever trick to avoid using a separate `visited` set, which saves memory. But here’s the **Gotcha**: if you don't change that `#` back to the original letter before you `return`, you've just permanently 'burned' that cell for every other branch of the search. You've broken the universe for every other path!"
+
+**Student:** "When does an interviewer know I'm ready for SDE-3 based on my backtracking?"
+
+**Coach:** "When you start talking about **Pruning**. A Junior writes a clean DFS. A Senior says: 'Wait, if I need 5 more numbers to reach the target, and there are only 3 left in the array, I can kill this entire branch right now.' That **Pruning** is the difference between a solution that passes in 5ms and one that TLEs at 2.0 seconds. It's about respecting the CPU's time."
+
+**Student:** "One last thing—how do I avoid the 'Duplicate' trap?"
+
+**Coach:** "Sort. Always sort. If you have `[1, 1, 2]`, and you skip the second `1` because it looks just like the first one you already tried at this level, you've saved yourself thousands of redundant calculations. Sorting is the preamble to efficient backtracking."

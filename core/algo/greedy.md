@@ -409,7 +409,24 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ## See also
 
-- [Dynamic Programming](dynamic-programming/README.md) — when greedy choice property fails
-- [Sorting](sorting.md) — sorting is prerequisite for interval and scheduling greedy
-- [Heap](../data-structures/heap.md) — priority queue for dynamic "current best" selection
 - [Patterns Master](../../../reference/patterns/patterns-master.md) — greedy pattern triggers
+
+---
+
+## 🎙️ The Coach's Dialogue: Mastering the "Greedy" Mindset
+
+**Student:** "Coach, I'm always scared to use Greedy. I feel like I'm taking a gamble that might fail on a weird edge case. How do I *know* it's greedy?"
+
+**Coach:** "That fear is healthy. Most 'Greedy' problems are actually DP problems in disguise if you get the sorting or the choice wrong. The secret isn't in the code—it's in the **Sorting Key**. If I ask you to schedule the most meetings, and you sort by *start time*, you'll fail. Why?"
+
+**Student:** "Because a meeting starting at 8 AM might last until 5 PM and block everything else?"
+
+**Coach:** "Exactly! So you sort by *end time* to stay as 'available' as possible. That's the **Aha! Moment**. In an interview, if you're thinking Greedy, ask yourself: 'Does taking the absolute best option right now ever prevent me from taking an even better combination later?' If the answer is 'maybe,' it’s probably DP."
+
+**Student:** "What about the 'Jump Game'? It feels like I should check every path."
+
+**Coach:** "You could, but that's O(2^N) or O(N²) with DP. The Greedy insight is: if you can reach index 10, you can *definitely* reach everything before 10. So you don't care *how* you got to 10, you only care about the farthest point you can see from there. It’s like driving at night with high beams—you only care about the farthest point the light hits."
+
+**Student:** "What's the one 'Gotcha' that trips up SDE-3 candidates?"
+
+**Coach:** "The **Overlap Boundary**. In 'Minimum Arrows to Burst Balloons,' if two balloons touch at `x=5`, one arrow pops both. In 'Non-overlapping Intervals,' if they touch at `x=5`, they *don't* overlap. Interviewers will watch your `>` vs `>=` like a hawk. One character difference is the gap between a Senior and a Junior hire."

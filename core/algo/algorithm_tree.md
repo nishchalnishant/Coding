@@ -1,6 +1,8 @@
-# Algorithm Tree — SDE-3 Master Index
+# The Algorithm Tree: Your Strategic Map
 
-A hierarchical map of core algorithms, their underlying patterns, and high-yield interview variants. This tree serves as a rapid revision guide for senior-level algorithmic mastery.
+If the Data Structure Tree was your "Toolkit," this is your **"Battle Plan."** Most candidates panic because they try to solve every problem from scratch. We don't do that. We recognize the **Pattern**, apply the **Template**, and then handle the **Twist.**
+
+When you're reading a problem, I want you to ask: "Is this a **Dependency** problem? (Topo Sort)" or "Is this an **Optimization** problem with overlapping parts? (DP)". This tree is your index for mapping a vague interview question to a concrete logical trigger.
 
 ---
 

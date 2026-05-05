@@ -128,5 +128,24 @@ The interviewer expects you to start with the brute force, explain why it's slow
 - Full revision guide: [../foundations/GOOGLE_INTERVIEW_REVISION.md](../foundations/GOOGLE_INTERVIEW_REVISION.md)
 - One-page sheet: [../foundations/GOOGLE_QUICK_SHEET.md](../foundations/GOOGLE_QUICK_SHEET.md)
 - Canonical question index: [../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
-- Two-week + AI-ML + EET / on-site plan: [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md)
+- [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md)
 
+---
+
+## 🎙️ The Coach's Dialogue: The "SDE-3 Vibe"
+
+**Student:** "Coach, everyone says I'm good at coding, but I keep getting leveled at SDE-2. What am I missing for that SDE-3 / Senior signal?"
+
+**Coach:** "It’s not your code; it’s your **Leadership**. An SDE-2 solves the problem. An SDE-3 **owns** the problem. When I give you a vague prompt, don't just start coding. Stop. Ask about the 'Why.' If I say 'Merge these logs,' don't just say 'Merge Sort.' Ask if they're coming in as a stream, if they're already partially sorted, or if we need to handle multi-terabyte files."
+
+**Student:** "So I should spend more time talking?"
+
+**Coach:** "No, you should spend more time **Driving**. You're the pilot; I'm the air traffic controller. I want to see you weigh trade-offs. 'I could use a Hash Map here for O(N) time, but the space might blow up if we have 100 million keys. Since memory is tight, I'll use a two-pointer approach even if it's O(N log N).' That is music to a senior interviewer's ears."
+
+**Student:** "What about when I make a mistake?"
+
+**Coach:** "Senior candidates catch their own bugs. If you realize your logic is flawed, don't panic. Say: 'Actually, I just realized this greedy approach fails for [X] case. Let me pivot to DP.' That self-correction is a massive positive signal. It shows you're not just following a script—you're thinking from first principles."
+
+**Student:** "And the communication during the code?"
+
+**Coach:** "Keep it high-level. Don't explain `i++`. Explain the **Invariant**. Instead of 'I'm incrementing the index,' say 'I'm moving the window boundary to maintain the uniqueness constraint.' Talk like a software architect, not a code monkey."
