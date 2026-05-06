@@ -14,6 +14,7 @@
   * [Graphs: Connectivity Master](core/ds/graphs.md)
   * [Hashing: Rabin-Karp & Scaling](core/ds/hashing.md)
   * [Trie: Prefix Power](core/ds/trie.md)
+  * [Segment Trees: Range Mastery](core/ds/segment-tree.md)
 
 * [The Tactics: Core Algorithms](core/algo/README.md)
   * [The Battle Plan: Algorithm Tree](core/algo/algorithm_tree.md)

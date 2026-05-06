@@ -48,52 +48,17 @@ class Trie:
 
 ---
 
+---
+
 ## Segment Trees
 Crucial for answering range sum/min/max queries over an array, with the ability to update the array in $O(\log n)$.
 
-### Node Structure
-```python
-class SegmentTree:
-    def __init__(self, data):
-        self.n = len(data)
-        self.tree = [0] * (4 * self.n)
-        self.build(data, 0, 0, self.n - 1)
+> [!TIP]
+> **Full Deep Dive**: See the dedicated [Segment Trees Guide](segment-tree.md) for canonical implementations, Lazy Propagation, and SDE-3 Interview variants.
 
-    def build(self, data, node, start, end):
-        if start == end:
-            self.tree[node] = data[start]
-            return
-        mid = (start + end) // 2
-        self.build(data, 2 * node + 1, start, mid)
-        self.build(data, 2 * node + 2, mid + 1, end)
-        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]
+---
 
-    def update(self, node, start, end, idx, val):
-        if start == end:
-            self.tree[node] = val
-            return
-        mid = (start + end) // 2
-        if start <= idx <= mid:
-            self.update(2 * node + 1, start, mid, idx, val)
-        else:
-            self.update(2 * node + 2, mid + 1, end, idx, val)
-        self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]
-
-    def query(self, node, start, end, l, r):
-        if r < start or l > end:
-            return 0  # In sum query, return 0; for min, return infinity
-        if l <= start and end <= r:
-            return self.tree[node]
-        mid = (start + end) // 2
-        left_sum = self.query(2 * node + 1, start, mid, l, r)
-        right_sum = self.query(2 * node + 2, mid + 1, end, l, r)
-        return left_sum + right_sum
-```
-
-### Lazy Propagation
-For range update queries, SDE 3 level questions often require Lazy Propagation to avoid deep recursive updates immediately.
-
-### Alternative: Fenwick Tree (Binary Indexed Tree)
+## Fenwick Tree (Binary Indexed Tree)
 More memory efficient `O(N)` and easier to implement than segment trees for simple sum queries.
 ```python
 class FenwickTree:

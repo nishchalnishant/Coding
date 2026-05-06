@@ -60,6 +60,11 @@ State → Recurrence → Base Cases → Order → Space Optimize
 
 ## 2. Core Patterns & Click Moments
 
+> [!TIP]
+> **Implementation Playbook**: For step-by-step code templates for all 11 DP patterns below, see the [Aditya Verma Pattern Playbook](dp-aditya-verma.md).
+
+---
+
 ### Linear DP (1D)
 
 > [!IMPORTANT]

@@ -83,6 +83,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Redundant Connection, Accounts Merge (Group elements).
 - **Segment Trees / Fenwick Trees** — Advanced structures for efficient range updates and range queries in O(log N).
     - *Patterns:* Range Sum Query - Mutable, Count of Smaller Numbers After Self.
+    - *Deep Dive:* [Segment Trees](segment-tree.md).
 
 ## 9. Concurrency Primitives
 - **Semaphores & Mutexes** — Atomic locks and signals for multi-threaded resource management.

@@ -39,6 +39,32 @@ Step 4 — Optimize space (rolling array / two variables)
 
 ---
 
+## 🎙️ The Coach's Dialogue: Bridging the "What" and the "How"
+
+**Student:** "Coach, I see two different lists of patterns. The [README.md](README.md) has 8 patterns, but this playbook has 11. Which one should I follow?"
+
+**Coach:** "Think of the [README.md](README.md) as the **Syllabus** and this playbook as the **Step-by-Step Training Manual**. The README tells you *what* exists in the world of SDE-3 DP; this file shows you *how* to implement the most common variants using the Aditya Verma 'Pattern-First' approach."
+
+### 🔗 Master Pattern Mapping
+
+| Main README Pattern | This Playbook (Aditya Verma) | High-Yield Variants |
+| :--- | :--- | :--- |
+| **Linear DP (1D)** | **Pattern 3 — Fibonacci / Linear** | Climbing Stairs, House Robber, Decode Ways |
+| **Knapsack — 0/1** | **Pattern 1 — 0/1 Knapsack** | Subset Sum, Target Sum, Stone Weight |
+| **Knapsack — Unbounded** | **Pattern 2 — Unbounded Knapsack** | Coin Change, Rod Cutting, Perfect Squares |
+| **LCS (2D String DP)** | **Pattern 4 — LCS Family** | Edit Distance, SCS, LPS, Palindrome Deletions |
+| **Interval DP** | **Pattern 7 — MCM / Interval DP** | Burst Balloons, Matrix Chain, Palindrome Cuts |
+| **Bitmask DP** | **Pattern 9 — Bitmask / DP on Graphs** | TSP, Assignment, Smallest Sufficient Team |
+| **Tree DP** | **Pattern 8 — DP on Trees** | House Robber III, Max Path Sum, Cameras |
+| **Stock Trading** | **Pattern 10 — Stock Trading Machine** | Cooldown, Fee, K-Transactions |
+| *(In Codebank)* | **Pattern 5 — LIS** | Russian Doll Envelopes, Longest Pair Chain |
+| *(In Codebank)* | **Pattern 6 — Kadane** | Max Subarray, Max Product, Circular Subarray |
+| *(In Codebank)* | **Pattern 11 — Palindrome DP** | Palindromic Substrings, Min Insertions |
+
+---
+
+---
+
 ## Pattern 1 — 0/1 Knapsack
 
 ### Theory
