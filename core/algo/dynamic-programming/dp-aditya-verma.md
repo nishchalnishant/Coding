@@ -63,53 +63,81 @@ Step 4 — Optimize space (rolling array / two variables)
 
 ---
 
----
-
 ## Pattern 1 — 0/1 Knapsack
 
 ### Theory
 
-**Core idea:** Each item has a binary choice — include it once or skip it. Taking an item reduces remaining capacity; skipping does not.
+- **Core idea:** Each item has a binary choice — include it once or skip it. Taking an item reduces remaining capacity; skipping does not.
+- **State:** `dp[i][w]` = maximum value achievable using only the first `i` items with capacity exactly `w`.
+- **Recurrence:** `dp[i][w] = max(dp[i-1][w], values[i-1] + dp[i-1][w - weights[i-1]])` (if weight fits).
+- **Base case:** `dp[0][w] = 0` for all `w`.
+- **Space optimization:** Collapse to 1D `dp[w]` by iterating `w` from **high → low**.
 
-**State:** `dp[i][w]` = maximum value achievable using only the first `i` items with capacity exactly `w`.
+### The 4-Step Build
 
-**Recurrence:**
-```
-dp[i][w] = dp[i-1][w]                               # skip item i
-          if weight[i-1] <= w:
-              dp[i][w] = max(dp[i][w],
-                             value[i-1] + dp[i-1][w - weight[i-1]])  # take item i
-```
+- **Step 1 — Recursion (brute force)**
+    - **Code:**
+        ```python
+        def knapsack_rec(weights, values, W, i):
+            if i == 0 or W == 0: return 0
+            if weights[i-1] > W: return knapsack_rec(weights, values, W, i-1)
+            return max(knapsack_rec(weights, values, W, i-1),
+                       values[i-1] + knapsack_rec(weights, values, W - weights[i-1], i-1))
+        ```
+    - **Language & Logic:** "For every item, we have two choices: take it or leave it. If we take it, we gain its value but lose its weight from our remaining capacity."
+    - **Complexity:** O(2^n) — overlapping subproblems make this slow.
 
-**Base case:** `dp[0][w] = 0` for all `w` (no items → zero value).
+- **Step 2 — Memoization (top-down)**
+    - **Code:**
+        ```python
+        def knapsack_memo(weights, values, W, i, memo={}):
+            if (i, W) in memo: return memo[(i, W)]
+            if i == 0 or W == 0: return 0
+            if weights[i-1] > W:
+                res = knapsack_memo(weights, values, W, i-1, memo)
+            else:
+                res = max(knapsack_memo(weights, values, W, i-1, memo),
+                          values[i-1] + knapsack_memo(weights, values, W - weights[i-1], i-1, memo))
+            memo[(i, W)] = res
+            return res
+        ```
+    - **Language & Logic:** "We carry a notebook (`memo`) and write down the answer the first time we see a pair `(i, W)`. Next time, we just look it up."
+    - **Complexity:** O(n\*W) time, O(n\*W) space.
 
-**Space optimization:** Collapse to 1D `dp[w]`. Iterate `w` from **high → low** so that `dp[w - weight[i]]` still refers to the *previous item's* row (not the current item being added).
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def knapsack_01(weights, values, W):
+            n = len(weights)
+            dp = [[0] * (W + 1) for _ in range(n + 1)]
+            for i in range(1, n + 1):
+                for w in range(W + 1):
+                    dp[i][w] = dp[i-1][w]
+                    if weights[i-1] <= w:
+                        dp[i][w] = max(dp[i][w], values[i-1] + dp[i-1][w - weights[i-1]])
+            return dp[n][W]
+        ```
+    - **Language & Logic:** "We fill a physical table row-by-row. Each cell `dp[i][w]` is calculated using only values from the row above it."
+    - **Complexity:** O(n\*W) time, O(n\*W) space.
 
-```python
-def knapsack_01(weights: list[int], values: list[int], W: int) -> int:
-    n = len(weights)
-    # 2D — easier to derive
-    dp = [[0] * (W + 1) for _ in range(n + 1)]
-    for i in range(1, n + 1):
-        for w in range(W + 1):
-            dp[i][w] = dp[i-1][w]                           # skip
-            if weights[i-1] <= w:
-                dp[i][w] = max(dp[i][w],
-                               values[i-1] + dp[i-1][w - weights[i-1]])  # take
-    return dp[n][W]
-
-def knapsack_01_space(weights: list[int], values: list[int], W: int) -> int:
-    dp = [0] * (W + 1)
-    for i in range(len(weights)):
-        for w in range(W, weights[i] - 1, -1):              # BACKWARD — 0/1 invariant
-            dp[w] = max(dp[w], values[i] + dp[w - weights[i]])
-    return dp[W]
-```
+- **Step 4 — Space optimization (1D rolling array)**
+    - **Code:**
+        ```python
+        def knapsack_01_space(weights, values, W):
+            dp = [0] * (W + 1)
+            for i in range(len(weights)):
+                for w in range(W, weights[i] - 1, -1):   # BACKWARD — 0/1 invariant
+                    dp[w] = max(dp[w], values[i] + dp[w - weights[i]])
+            return dp[W]
+        ```
+    - **Language & Logic:** "We update a single row in place. We go **backward** to ensure `dp[w - weight]` still refers to the previous item's row, so we don't use the same item twice."
+    - **Complexity:** O(n\*W) time, O(W) space.
 
 > [!CAUTION]
 > **Backward vs Forward loop:** In 1D, iterating `w` backward (high → low) ensures each item is used at most once. Iterating forward (low → high) allows the same item to be picked multiple times — that is the unbounded knapsack. Getting this backwards is the #1 knapsack bug.
 
 **Reconstruction (which items were picked):**
+
 ```python
 def knapsack_reconstruct(weights, values, W):
     n = len(weights)
@@ -119,10 +147,9 @@ def knapsack_reconstruct(weights, values, W):
             dp[i][w] = dp[i-1][w]
             if weights[i-1] <= w:
                 dp[i][w] = max(dp[i][w], values[i-1] + dp[i-1][w - weights[i-1]])
-    # Traceback
     items, w = [], W
     for i in range(n, 0, -1):
-        if dp[i][w] != dp[i-1][w]:   # item i was taken
+        if dp[i][w] != dp[i-1][w]:
             items.append(i - 1)
             w -= weights[i - 1]
     return dp[n][W], items[::-1]
@@ -136,7 +163,7 @@ def knapsack_reconstruct(weights, values, W):
 | **Partition Equal Subset Sum** | Subset sum to `total // 2` | Odd total → impossible immediately |
 | **Target Sum (±assign)** | Count subsets with sum `(total + target) / 2` | Parity check first; count, not max |
 | **Count Subsets with Given Sum** | Add ways: `dp[w] += dp[w - weight]` | `dp[0] = 1` (empty subset = one way) |
-| **Last Stone Weight II** | Partition to minimize `|S1 - S2|` = `total - 2 * max_S1_leq_half` | Subset sum variant |
+| **Last Stone Weight II** | Partition to minimize `\|S1 - S2\|` = `total - 2 * max_S1_leq_half` | Subset sum variant |
 | **Ones and Zeroes** | 2D knapsack: capacity is `(m zeros, n ones)` | `dp[i][j]` = max strings using ≤ i zeros, ≤ j ones |
 
 ---
@@ -145,26 +172,76 @@ def knapsack_reconstruct(weights, values, W):
 
 ### Theory
 
-**Core idea:** Each item type can be picked **unlimited** times. After taking one copy of item `i`, you can pick item `i` again — so recurse on the same index `i`, not `i-1`.
+- **Core idea:** Each item type can be picked **unlimited** times. After taking one copy of item `i`, you can pick item `i` again.
+- **State:** `dp[i][w]` = max value using items up to `i` with capacity `w`.
+- **Recurrence:** `dp[i][w] = max(dp[i-1][w], values[i-1] + dp[i][w - weights[i-1]])` (stay at `i`).
+- **Base case:** `dp[0][w] = 0`.
+- **Space optimization:** 1D `dp[w]` with **forward** iteration (low → high).
 
-**Recurrence:**
-```
-dp[i][w] = dp[i-1][w]                               # skip item i entirely
-          if weight[i-1] <= w:
-              dp[i][w] = max(dp[i][w],
-                             value[i-1] + dp[i][w - weight[i-1]])   # take, stay at i
-```
+### The 4-Step Build
 
-**Space optimization:** 1D, iterate `w` from **low → high** (forward). Because we stay at row `i` when taking, `dp[w - weight[i]]` should already include the current item — forward iteration provides this.
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def unbounded_rec(weights, values, W, i):
+            if i == 0 or W == 0: return 0
+            if weights[i-1] > W: return unbounded_rec(weights, values, W, i-1)
+            return max(unbounded_rec(weights, values, W, i-1),
+                       values[i-1] + unbounded_rec(weights, values, W - weights[i-1], i))
+        ```
+    - **Language & Logic:** "Same as 0/1, but if we take an item, we **stay at the same index `i`** because we can pick it again. We only move to `i-1` when we decide we're done with item `i`."
+    - **Complexity:** O(2^n).
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def unbounded_memo(weights, values, W):
+            @lru_cache(maxsize=None)
+            def dp(i, w):
+                if i == 0 or w == 0: return 0
+                if weights[i-1] > w: return dp(i-1, w)
+                return max(dp(i-1, w), values[i-1] + dp(i, w - weights[i-1]))
+            return dp(len(weights), W)
+        ```
+    - **Language & Logic:** "We cache the results of `dp(i, w)` to avoid redundant calculations. The state space remains `n*W`."
+    - **Complexity:** O(n\*W) time and space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def knapsack_unbounded_2d(weights, values, W):
+            n = len(weights)
+            dp = [[0] * (W + 1) for _ in range(n + 1)]
+            for i in range(1, n + 1):
+                for w in range(W + 1):
+                    dp[i][w] = dp[i-1][w]
+                    if weights[i-1] <= w:
+                        dp[i][w] = max(dp[i][w], values[i-1] + dp[i][w - weights[i-1]])
+            return dp[n][W]
+        ```
+    - **Language & Logic:** "When filling the table, notice that taking an item refers to `dp[i][w-wt]` — the **current row**. This allows re-picking."
+    - **Complexity:** O(n\*W) time and space.
+
+- **Step 4 — Space optimization (1D, forward)**
+    - **Code:**
+        ```python
+        def knapsack_unbounded(weights, values, W):
+            dp = [0] * (W + 1)
+            for i in range(len(weights)):
+                for w in range(weights[i], W + 1):   # FORWARD — unbounded invariant
+                    dp[w] = max(dp[w], values[i] + dp[w - weights[i]])
+            return dp[W]
+        ```
+    - **Language & Logic:** "Because we need `dp[w - weight]` to already include the current item (same row), we iterate **forward**. This is exactly how unbounded pick works."
+    - **Complexity:** O(n\*W) time, O(W) space.
+
+> [!TIP]
+> **Combinations vs Permutations:** `coins` outer, `amount` inner → counts combinations (unordered). `amount` outer, `coins` inner → counts permutations (ordered). The problem "Coin Change 2" wants combinations.
+
+**Common Unbounded variants:**
 
 ```python
-def knapsack_unbounded(weights: list[int], values: list[int], W: int) -> int:
-    dp = [0] * (W + 1)
-    for i in range(len(weights)):
-        for w in range(weights[i], W + 1):           # FORWARD — unbounded invariant
-            dp[w] = max(dp[w], values[i] + dp[w - weights[i]])
-    return dp[W]
-
 def coin_change_min(coins: list[int], amount: int) -> int:
     dp = [float('inf')] * (amount + 1)
     dp[0] = 0
@@ -182,15 +259,12 @@ def coin_change_ways(coins: list[int], amount: int) -> int:
     return dp[amount]
 ```
 
-> [!TIP]
-> **Combinations vs Permutations:** `coins` outer, `amount` inner → counts combinations (unordered). `amount` outer, `coins` inner → counts permutations (ordered). The problem "Coin Change 2" wants combinations.
-
 ### Variations & Interview Problems
 
 | Problem | Loop Order | Key Insight |
 | :--- | :--- | :--- |
 | **Coin Change I** (min coins) | Coins outer, amount forward | `dp[0]=0`, rest `inf`; take `min` |
-| **Coin Change II** (count ways) | Coins outer, amount forward | `dp[0]=1`; takes `+= ` not `max` |
+| **Coin Change II** (count ways) | Coins outer, amount forward | `dp[0]=1`; takes `+=` not `max` |
 | **Rod Cutting** (max value) | Lengths outer, capacity forward | Identical to unbounded knapsack; length = weight |
 | **Integer Break** (max product) | Split 1…n; `dp[i] = max(j*(i-j), j*dp[i-j])` | Greedy: break into 3s (AM-GM), but DP is safe |
 | **Perfect Squares** (min count) | Squares outer, amount forward | Same as coin change with coins = 1,4,9,16… |
@@ -201,24 +275,68 @@ def coin_change_ways(coins: list[int], amount: int) -> int:
 
 ### Theory
 
-**Core idea:** `dp[i]` depends on a **fixed small window** of previous values (`dp[i-1]`, `dp[i-2]`, …). No item-weight two-dimensional state; the dimension is purely **position**.
+- **Core idea:** `dp[i]` depends on a fixed small window of previous values (`dp[i-1]`, `dp[i-2]`). Dimension is purely position.
+- **State:** `dp[i]` = answer for problem of size `i`.
+- **Recurrence:** `dp[i] = f(dp[i-1], dp[i-2])`.
+- **Base case:** Problem-specific (e.g., `dp[1]=1, dp[2]=2` for stairs).
+- **Space optimization:** Reduces to O(1) using two variables.
 
-**Signature recurrence:**
-```
-dp[i] = f(dp[i-1], dp[i-2], nums[i])
-```
+### The 4-Step Build (Climbing Stairs)
 
-**Space optimization:** Almost always reducible to O(1) or O(k) variables (two-variable rolling).
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def climb_rec(n):
+            if n <= 2: return n
+            return climb_rec(n-1) + climb_rec(n-2)
+        ```
+    - **Language & Logic:** "To reach step `n`, you must have come from either `n-1` or `n-2`. The total ways is the sum of both."
+    - **Complexity:** O(2^n).
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        @lru_cache(maxsize=None)
+        def climb_memo(n):
+            if n <= 2: return n
+            return climb_memo(n-1) + climb_memo(n-2)
+        ```
+    - **Language & Logic:** "We cache the results to turn an exponential tree into a linear chain."
+    - **Complexity:** O(n) time and space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def climb_dp(n):
+            dp = [0] * (n + 1)
+            dp[1], dp[2] = 1, 2
+            for i in range(3, n + 1):
+                dp[i] = dp[i-1] + dp[i-2]
+            return dp[n]
+        ```
+    - **Language & Logic:** "We fill an array from step 1 up to `n`."
+    - **Complexity:** O(n) time and space.
+
+- **Step 4 — Space optimization (two variables)**
+    - **Code:**
+        ```python
+        def climb_stairs(n):
+            if n <= 2: return n
+            a, b = 1, 2
+            for _ in range(3, n + 1):
+                a, b = b, a + b
+            return b
+        ```
+    - **Language & Logic:** "We only ever need the last two values. Sliding variables save O(N) space."
+    - **Complexity:** O(n) time, O(1) space.
+
+> [!TIP]
+> **House Robber II (circle):** Run the linear robber twice — once on `nums[:-1]` and once on `nums[1:]`. Take the max. The circle constraint means you can't rob both first and last house; excluding one end from each run handles it.
+
+**Other linear DP variants:**
 
 ```python
-def climb_stairs(n: int) -> int:
-    if n <= 2:
-        return n
-    a, b = 1, 2
-    for _ in range(3, n + 1):
-        a, b = b, a + b
-    return b
-
 def house_robber(nums: list[int]) -> int:
     prev2, prev1 = 0, 0
     for x in nums:
@@ -247,11 +365,8 @@ def house_robber_ii(nums: list[int]) -> int:
         return prev1
     if len(nums) == 1:
         return nums[0]
-    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))  # exclude first or last
+    return max(rob_linear(nums[:-1]), rob_linear(nums[1:]))
 ```
-
-> [!TIP]
-> **House Robber II (circle):** Run the linear robber twice — once on `nums[:-1]` and once on `nums[1:]`. Take the max. The circle constraint means you can't rob both first and last house; excluding one end from each run handles it.
 
 ### Variations
 
@@ -270,33 +385,79 @@ def house_robber_ii(nums: list[int]) -> int:
 
 ### Theory
 
-**Core idea:** Two sequences `s1[0..m]` and `s2[0..n]`. At each position pair `(i, j)`, either the characters **match** (extend the common subsequence) or you **skip** one side (take the better of advancing `i` or advancing `j`).
+- **Core idea:** Two sequences. Match characters or skip one side.
+- **State:** `dp[i][j]` = LCS of `s1[:i]` and `s2[:j]`.
+- **Recurrence:** `Match ? 1 + dp[i-1][j-1] : max(up, left)`.
+- **Base case:** `dp[0][j] = dp[i][0] = 0`.
+- **Space optimization:** O(min(m, n)) using two rows.
 
-**State:** `dp[i][j]` = LCS length of `s1[:i]` and `s2[:j]`.
+### The 4-Step Build
 
-**Recurrence:**
-```
-if s1[i-1] == s2[j-1]:
-    dp[i][j] = 1 + dp[i-1][j-1]      # characters match — extend
-else:
-    dp[i][j] = max(dp[i-1][j],        # skip s1[i]
-                   dp[i][j-1])         # skip s2[j]
-```
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def lcs_rec(s1, s2, i, j):
+            if i == 0 or j == 0: return 0
+            if s1[i-1] == s2[j-1]: return 1 + lcs_rec(s1, s2, i-1, j-1)
+            return max(lcs_rec(s1, s2, i-1, j), lcs_rec(s1, s2, i, j-1))
+        ```
+    - **Language & Logic:** "For a mismatch, try skipping from either string and take the better result."
+    - **Complexity:** O(2^(m+n)).
 
-**Base case:** `dp[0][j] = dp[i][0] = 0` (empty prefix has no common characters).
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def lcs_memo(s1, s2):
+            @lru_cache(maxsize=None)
+            def dp(i, j):
+                if i == 0 or j == 0: return 0
+                if s1[i-1] == s2[j-1]: return 1 + dp(i-1, j-1)
+                return max(dp(i-1, j), dp(i, j-1))
+            return dp(len(s1), len(s2))
+        ```
+    - **Language & Logic:** "Cache results for `(i, j)` prefix pairs."
+    - **Complexity:** O(m\*n) time and space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def lcs(s1, s2):
+            m, n = len(s1), len(s2)
+            dp = [[0] * (n + 1) for _ in range(m + 1)]
+            for i in range(1, m + 1):
+                for j in range(1, n + 1):
+                    if s1[i-1] == s2[j-1]:
+                        dp[i][j] = 1 + dp[i-1][j-1]
+                    else:
+                        dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+            return dp[m][n]
+        ```
+    - **Language & Logic:** "Fill table row-by-row. Each cell reads from the row above and the left column."
+    - **Complexity:** O(m\*n) time and space.
+
+- **Step 4 — Space optimization (two rows)**
+    - **Code:**
+        ```python
+        def lcs_space(s1, s2):
+            m, n = len(s1), len(s2)
+            prev = [0] * (n + 1)
+            for i in range(1, m + 1):
+                curr = [0] * (n + 1)
+                for j in range(1, n + 1):
+                    if s1[i-1] == s2[j-1]:
+                        curr[j] = 1 + prev[j-1]
+                    else:
+                        curr[j] = max(prev[j], curr[j-1])
+                prev = curr
+            return prev[n]
+        ```
+    - **Language & Logic:** "Only the previous row is needed. Note: can't reduce to O(1) because `dp[i][j]` reads `dp[i-1][j-1]`, `dp[i-1][j]`, and `dp[i][j-1]`."
+    - **Complexity:** O(m\*n) time, O(n) space.
+
+**Common LCS-family implementations:**
 
 ```python
-def lcs(s1: str, s2: str) -> int:
-    m, n = len(s1), len(s2)
-    dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(1, m + 1):
-        for j in range(1, n + 1):
-            if s1[i-1] == s2[j-1]:
-                dp[i][j] = 1 + dp[i-1][j-1]
-            else:
-                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-    return dp[m][n]
-
 def shortest_common_supersequence(s1: str, s2: str) -> str:
     m, n = len(s1), len(s2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
@@ -306,7 +467,6 @@ def shortest_common_supersequence(s1: str, s2: str) -> str:
                 dp[i][j] = 1 + dp[i-1][j-1]
             else:
                 dp[i][j] = max(dp[i-1][j], dp[i][j-1])
-    # Reconstruct SCS
     result, i, j = [], m, n
     while i > 0 and j > 0:
         if s1[i-1] == s2[j-1]:
@@ -322,15 +482,15 @@ def shortest_common_supersequence(s1: str, s2: str) -> str:
 def edit_distance(word1: str, word2: str) -> int:
     m, n = len(word1), len(word2)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
-    for i in range(m + 1): dp[i][0] = i     # delete all of word1
-    for j in range(n + 1): dp[0][j] = j     # insert all of word2
+    for i in range(m + 1): dp[i][0] = i
+    for j in range(n + 1): dp[0][j] = j
     for i in range(1, m + 1):
         for j in range(1, n + 1):
             if word1[i-1] == word2[j-1]:
                 dp[i][j] = dp[i-1][j-1]
             else:
-                dp[i][j] = 1 + min(dp[i-1][j],    # delete from word1
-                                    dp[i][j-1],    # insert into word1
+                dp[i][j] = 1 + min(dp[i-1][j],    # delete
+                                    dp[i][j-1],    # insert
                                     dp[i-1][j-1])  # replace
     return dp[m][n]
 
@@ -358,49 +518,89 @@ def longest_palindromic_subsequence(s: str) -> int:
 
 ### Theory
 
-**Core idea:** One array; find the length of the longest strictly increasing subsequence. Two approaches with different trade-offs.
+- **Core idea:** One array; find the length of the longest strictly increasing subsequence. Two approaches with different trade-offs.
+- **State (O(N²)):** `dp[i]` = length of LIS ending at index `i`.
+- **Recurrence:** `dp[i] = 1 + max(dp[j] for j < i if nums[j] < nums[i])`.
+- **O(N log N) alternative:** Patience sorting with `tails[]` array and binary search.
+- **Space optimization:** O(N log N) approach already uses O(N) space with no further reduction.
 
-**O(N²) DP:**
-```
-dp[i] = length of LIS ending at index i
-dp[i] = 1 + max(dp[j] for j < i if nums[j] < nums[i])
-```
+### The 4-Step Build
 
-**O(N log N) Patience Sorting:**
-Maintain `tails[]` where `tails[k]` = smallest tail value of any increasing subsequence of length `k+1`. Binary search to find where to place each new element.
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def lis_rec(nums, i, prev_idx):
+            if i == len(nums): return 0
+            skip = lis_rec(nums, i+1, prev_idx)
+            take = 0
+            if prev_idx == -1 or nums[i] > nums[prev_idx]:
+                take = 1 + lis_rec(nums, i+1, i)
+            return max(skip, take)
+        # Call: lis_rec(nums, 0, -1)
+        ```
+    - **Language & Logic:** "At each index, either skip it or take it (if it's greater than the last taken). State = current index + index of last chosen element."
+    - **Complexity:** O(2^n).
 
-```python
-def lis_n2(nums: list[int]) -> int:
-    n = len(nums)
-    dp = [1] * n
-    for i in range(1, n):
-        for j in range(i):
-            if nums[j] < nums[i]:
-                dp[i] = max(dp[i], dp[j] + 1)
-    return max(dp)
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def lis_memo(nums):
+            @lru_cache(maxsize=None)
+            def dp(i, prev_idx):
+                if i == len(nums): return 0
+                skip = dp(i+1, prev_idx)
+                take = 0
+                if prev_idx == -1 or nums[i] > nums[prev_idx]:
+                    take = 1 + dp(i+1, i)
+                return max(skip, take)
+            return dp(0, -1)
+        ```
+    - **Language & Logic:** "Cache `(i, prev_idx)` pairs — there are O(n²) unique states."
+    - **Complexity:** O(n²) time and space.
 
-import bisect
+- **Step 3 — Bottom-up O(N²) tabulation**
+    - **Code:**
+        ```python
+        def lis_n2(nums: list[int]) -> int:
+            n = len(nums)
+            dp = [1] * n
+            for i in range(1, n):
+                for j in range(i):
+                    if nums[j] < nums[i]:
+                        dp[i] = max(dp[i], dp[j] + 1)
+            return max(dp)
+        ```
+    - **Language & Logic:** "Fill `dp[i]` by looking back at all `j < i`. Answer = `max(dp)`, not `dp[n-1]`."
+    - **Complexity:** O(n²) time, O(n) space.
 
-def lis_nlogn(nums: list[int]) -> int:
-    tails = []
-    for x in nums:
-        pos = bisect.bisect_left(tails, x)   # strict LIS: bisect_left
-        if pos == len(tails):
-            tails.append(x)
-        else:
-            tails[pos] = x
-    return len(tails)
+- **Step 4 — O(N log N) via patience sorting (structural improvement)**
+    - **Code:**
+        ```python
+        import bisect
 
-def lis_nlogn_non_decreasing(nums: list[int]) -> int:
-    tails = []
-    for x in nums:
-        pos = bisect.bisect_right(tails, x)  # non-strict: bisect_right
-        if pos == len(tails):
-            tails.append(x)
-        else:
-            tails[pos] = x
-    return len(tails)
-```
+        def lis_nlogn(nums: list[int]) -> int:
+            tails = []
+            for x in nums:
+                pos = bisect.bisect_left(tails, x)   # strict LIS
+                if pos == len(tails):
+                    tails.append(x)
+                else:
+                    tails[pos] = x
+            return len(tails)
+
+        def lis_nlogn_non_decreasing(nums: list[int]) -> int:
+            tails = []
+            for x in nums:
+                pos = bisect.bisect_right(tails, x)  # non-strict
+                if pos == len(tails):
+                    tails.append(x)
+                else:
+                    tails[pos] = x
+            return len(tails)
+        ```
+    - **Language & Logic:** "Maintain `tails[k]` = smallest tail of any IS of length `k+1`. Binary search to place each element. `tails` is NOT the actual LIS — only its length is correct."
+    - **Complexity:** O(n log n) time, O(n) space.
 
 > [!CAUTION]
 > `tails` is NOT the actual LIS — it's a bookkeeping structure for length only. To reconstruct the actual subsequence, store `parent[]` pointers in the O(N²) approach.
@@ -425,24 +625,62 @@ def lis_nlogn_non_decreasing(nums: list[int]) -> int:
 
 ### Theory
 
-**Core idea:** The globally optimal subarray can be found by tracking the best subarray that **ends** at each position. At position `i`, either extend the previous best subarray or start fresh from `i`.
+- **Core idea:** The globally optimal subarray can be found by tracking the best subarray that **ends** at each position. At position `i`, either extend the previous best or start fresh.
+- **State:** `dp[i]` = best subarray sum ending at index `i`.
+- **Recurrence:** `dp[i] = max(nums[i], dp[i-1] + nums[i])`.
+- **Base case:** `dp[0] = nums[0]`.
+- **Space optimization:** O(1) — only the previous value is needed.
 
-**Recurrence:**
-```
-ending_here[i] = max(nums[i], ending_here[i-1] + nums[i])
-global_max = max(global_max, ending_here[i])
-```
+### The 4-Step Build
 
-**Space:** O(1) — just two variables.
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def kadane_rec(nums, i):
+            if i == 0: return nums[0]
+            prev = kadane_rec(nums, i-1)
+            return max(nums[i], prev + nums[i])
+        # Answer: max(kadane_rec(nums, i) for i in range(len(nums)))
+        ```
+    - **Language & Logic:** "At any index `i`, start a brand new subarray at `i`, or attach `nums[i]` to the best subarray ending at `i-1`. Pick whichever is larger."
+    - **Complexity:** O(n) — no branching, linear chain.
+
+- **Step 2 — Memoization**
+    - **Note:** Trivially the same as recursion here — no branching, linear chain. Not needed in practice.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def kadane_dp(nums):
+            n = len(nums)
+            dp = [0] * n
+            dp[0] = nums[0]
+            for i in range(1, n):
+                dp[i] = max(nums[i], dp[i-1] + nums[i])
+            return max(dp)
+        ```
+    - **Language & Logic:** "Fill a 1D array. `dp[i]` = 'what is the best I can do if I MUST end at `i`?'"
+    - **Complexity:** O(n) time, O(n) space.
+
+- **Step 4 — Space optimization (two variables)**
+    - **Code:**
+        ```python
+        def max_subarray(nums: list[int]) -> int:
+            ending_here = global_max = nums[0]
+            for x in nums[1:]:
+                ending_here = max(x, ending_here + x)
+                global_max = max(global_max, ending_here)
+            return global_max
+        ```
+    - **Language & Logic:** "Since `dp[i]` only depends on `dp[i-1]`, we don't need the array — just two variables: the running best and the global best."
+    - **Complexity:** O(n) time, O(1) space.
+
+> [!TIP]
+> **Max Product Subarray:** Track both `cur_max` and `cur_min` at each step because a large negative × negative = large positive. All three candidates `(x, cur_max*x, cur_min*x)` must be evaluated on every step.
+
+**Other Kadane variants:**
 
 ```python
-def max_subarray(nums: list[int]) -> int:
-    ending_here = global_max = nums[0]
-    for x in nums[1:]:
-        ending_here = max(x, ending_here + x)
-        global_max = max(global_max, ending_here)
-    return global_max
-
 def max_subarray_with_indices(nums: list[int]) -> tuple[int, int, int]:
     best_sum = cur_sum = nums[0]
     best_start = best_end = cur_start = 0
@@ -466,19 +704,12 @@ def max_product_subarray(nums: list[int]) -> int:
     return global_max
 
 def max_circular_subarray(nums: list[int]) -> int:
-    # Case 1: subarray doesn't wrap → standard Kadane
-    # Case 2: subarray wraps → total - min_subarray
     total = sum(nums)
     max_straight = max_subarray(nums)
-    # Invert signs to find min subarray
-    min_sub = max_subarray([-x for x in nums])  # min_subarray = -max(-nums)
-    max_wrap = total + min_sub                    # total - min_subarray
-    # Edge case: all negative → max_wrap = 0 (empty), which is wrong; use max_straight
+    min_sub = max_subarray([-x for x in nums])
+    max_wrap = total + min_sub
     return max(max_straight, max_wrap) if max_wrap != 0 else max_straight
 ```
-
-> [!TIP]
-> **Max Product Subarray:** Track both `cur_max` and `cur_min` at each step because a large negative × negative = large positive. All three candidates `(x, cur_max*x, cur_min*x)` must be evaluated on every step.
 
 ### Kadane Variations
 
@@ -496,38 +727,79 @@ def max_circular_subarray(nums: list[int]) -> int:
 
 ### Theory
 
-**Core idea:** The problem is defined on a contiguous interval `[i, j]`. The optimal split point `k` divides the interval into `[i, k]` and `[k+1, j]`; you try all valid `k` and combine.
+- **Core idea:** Optimal solution for interval `[i, j]` depends on splitting it into `[i, k]` and `[k+1, j]`.
+- **State:** `dp[i][j]` = optimal cost/value for the interval `[i..j]`.
+- **Recurrence:** `dp[i][j] = min(dp[i][k] + dp[k+1][j] + cost(i, k, j))` for all `i <= k < j`.
+- **Fill order:** By **increasing length** — `len = 2, 3, …, n`.
+- **Base case:** `dp[i][i] = 0` (interval of size 1).
+- **Space optimization:** Not possible; reads from scattered sub-intervals.
 
-**State:** `dp[i][j]` = optimal cost/value for the interval `[i..j]`.
+### The 4-Step Build (MCM)
 
-**Fill order:** By **increasing length** — `len = 2, 3, …, n`. For each length, iterate all starting positions `i`; `j = i + len - 1`.
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def mcm_rec(dims, i, j):
+            if i == j: return 0
+            res = float('inf')
+            for k in range(i, j):
+                cost = (mcm_rec(dims, i, k) + mcm_rec(dims, k+1, j)
+                        + dims[i-1] * dims[k] * dims[j])
+                res = min(res, cost)
+            return res
+        # Call: mcm_rec(dims, 1, n)
+        ```
+    - **Language & Logic:** "Try every split point `k` and take the minimum. Sub-intervals `[i,k]` and `[k+1,j]` overlap heavily across calls."
+    - **Complexity:** O(3^n).
 
-**Recurrence:**
-```
-dp[i][j] = min over k in [i, j-1] of:
-                dp[i][k] + dp[k+1][j] + cost(i, j, k)
-```
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def mcm_memo(dims):
+            n = len(dims) - 1
+            @lru_cache(maxsize=None)
+            def dp(i, j):
+                if i == j: return 0
+                return min(dp(i, k) + dp(k+1, j) + dims[i-1] * dims[k] * dims[j]
+                           for k in range(i, j))
+            return dp(1, n)
+        ```
+    - **Language & Logic:** "Cache results for sub-intervals `[i, j]`."
+    - **Complexity:** O(n³) time, O(n²) space.
+
+- **Step 3 — Bottom-up tabulation (fill by increasing length)**
+    - **Code:**
+        ```python
+        def matrix_chain_multiplication(dims: list[int]) -> int:
+            n = len(dims) - 1
+            dp = [[0] * (n + 1) for _ in range(n + 1)]
+            for length in range(2, n + 1):
+                for i in range(1, n - length + 2):
+                    j = i + length - 1
+                    dp[i][j] = float('inf')
+                    for k in range(i, j):
+                        cost = dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]
+                        dp[i][j] = min(dp[i][j], cost)
+            return dp[1][n]
+        ```
+    - **Language & Logic:** "Fill table by increasing interval length. Smaller intervals must be filled before larger ones that depend on them."
+    - **Complexity:** O(n³) time, O(n²) space.
+
+- **Step 4 — Space optimization: Not Possible**
+    - **Language & Logic:** "Requires access to arbitrary smaller intervals; cannot reduce below O(n²)."
+
+> [!CAUTION]
+> **Burst Balloons gotcha:** `k` is the **last** balloon to burst within `(i, j)`, not the first. When `k` bursts, `nums[i]` and `nums[j]` are still present (boundaries), so the coins = `nums[i] * nums[k] * nums[j]`.
+
+**Other Interval DP implementations:**
 
 ```python
-def matrix_chain_multiplication(dims: list[int]) -> int:
-    # dims[i-1] x dims[i] = dimensions of matrix i (1-indexed)
-    n = len(dims) - 1                       # number of matrices
-    dp = [[0] * (n + 1) for _ in range(n + 1)]
-    for length in range(2, n + 1):          # fill by increasing length
-        for i in range(1, n - length + 2):
-            j = i + length - 1
-            dp[i][j] = float('inf')
-            for k in range(i, j):           # try every split point
-                cost = dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]
-                dp[i][j] = min(dp[i][j], cost)
-    return dp[1][n]
-
 def burst_balloons(nums: list[int]) -> int:
-    # Add imaginary 1 at both ends
     nums = [1] + nums + [1]
     n = len(nums)
     dp = [[0] * n for _ in range(n)]
-    for length in range(2, n):              # intervals of increasing length
+    for length in range(2, n):
         for i in range(0, n - length):
             j = i + length
             for k in range(i + 1, j):      # k = LAST balloon to burst in (i, j)
@@ -537,14 +809,12 @@ def burst_balloons(nums: list[int]) -> int:
 
 def palindrome_partition_min_cuts(s: str) -> int:
     n = len(s)
-    # Precompute palindrome table
     is_pal = [[False] * n for _ in range(n)]
     for i in range(n - 1, -1, -1):
         for j in range(i, n):
             if s[i] == s[j] and (j - i <= 2 or is_pal[i+1][j-1]):
                 is_pal[i][j] = True
-    # Min cuts
-    dp = list(range(n))                     # dp[i] = min cuts for s[:i+1]
+    dp = list(range(n))
     for i in range(1, n):
         if is_pal[0][i]:
             dp[i] = 0
@@ -554,9 +824,6 @@ def palindrome_partition_min_cuts(s: str) -> int:
                 dp[i] = min(dp[i], dp[j-1] + 1)
     return dp[n - 1]
 ```
-
-> [!CAUTION]
-> **Burst Balloons gotcha:** `k` is the **last** balloon to burst within `(i, j)`, not the first. When `k` bursts, `nums[i]` and `nums[j]` are still present (they are boundaries, not yet burst), so the coins = `nums[i] * nums[k] * nums[j]`. Thinking of `k` as first burst gives wrong boundaries.
 
 ### Interval DP Variations
 
@@ -575,45 +842,86 @@ def palindrome_partition_min_cuts(s: str) -> int:
 
 ### Theory
 
-**Core idea:** Subtrees are independent subproblems. Process in **DFS post-order** — children before parent. Return a tuple or pair representing different choices at each node (e.g., `(rob_this_node, skip_this_node)`).
+- **Core idea:** Subtrees are independent subproblems. Process in **DFS post-order** — children before parent.
+- **Pattern:** Define `dfs(node) → (state_A, state_B)` where states represent discrete choices. Parent combines children's states to compute its own.
+- **Space:** O(h) call stack only — no table needed. "Bottom-up" = post-order DFS returning a tuple.
 
-**Pattern:** Define `dfs(node) → (state_A, state_B)` where states represent discrete choices. Parent combines children's states to compute its own.
+### The 4-Step Build (House Robber III)
+
+- **Step 1 — Recursion (exponential, recomputes subtrees)**
+    - **Code:**
+        ```python
+        def rob_rec(node):
+            if not node: return 0
+            rob = node.val
+            if node.left:
+                rob += rob_rec(node.left.left) + rob_rec(node.left.right)
+            if node.right:
+                rob += rob_rec(node.right.left) + rob_rec(node.right.right)
+            skip = rob_rec(node.left) + rob_rec(node.right)
+            return max(rob, skip)
+        ```
+    - **Language & Logic:** "Either rob this node (skip children, allow grandchildren) or skip it (children free to choose). Grandchildren get recomputed for every rob branch."
+    - **Complexity:** O(2^n).
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        def rob_memo(node, memo={}):
+            if not node: return 0
+            if node in memo: return memo[node]
+            rob = node.val
+            if node.left:
+                rob += rob_memo(node.left.left, memo) + rob_memo(node.left.right, memo)
+            if node.right:
+                rob += rob_memo(node.right.left, memo) + rob_memo(node.right.right, memo)
+            skip = rob_memo(node.left, memo) + rob_memo(node.right, memo)
+            memo[node] = max(rob, skip)
+            return memo[node]
+        ```
+    - **Language & Logic:** "Store the best result per node object. Each node processed exactly once."
+    - **Complexity:** O(n) time, O(n) memo + O(h) call stack.
+
+- **Step 3+4 — Bottom-up (post-order DFS returning both states)**
+    - **Note:** Trees don't use a 2D table. Post-order DFS returning a tuple is both Step 3 and Step 4: each node computes from already-computed children, O(n) time, O(h) space.
+    - **Code:**
+        ```python
+        from typing import Optional
+
+        class TreeNode:
+            def __init__(self, val=0, left=None, right=None):
+                self.val = val; self.left = left; self.right = right
+
+        def house_robber_iii(root: Optional[TreeNode]) -> int:
+            def dfs(node):
+                if not node:
+                    return 0, 0         # (rob_node, skip_node)
+                l_rob, l_skip = dfs(node.left)
+                r_rob, r_skip = dfs(node.right)
+                rob  = node.val + l_skip + r_skip
+                skip = max(l_rob, l_skip) + max(r_rob, r_skip)
+                return rob, skip
+            return max(dfs(root))
+        ```
+
+**Other tree DP implementations:**
 
 ```python
-from typing import Optional
-
-class TreeNode:
-    def __init__(self, val=0, left=None, right=None):
-        self.val = val; self.left = left; self.right = right
-
-def house_robber_iii(root: Optional[TreeNode]) -> int:
-    def dfs(node):
-        if not node:
-            return 0, 0         # (rob_node, skip_node)
-        l_rob, l_skip = dfs(node.left)
-        r_rob, r_skip = dfs(node.right)
-        rob   = node.val + l_skip + r_skip       # take this node; skip children
-        skip  = max(l_rob, l_skip) + max(r_rob, r_skip)  # skip this; children free to choose
-        return rob, skip
-    return max(dfs(root))
-
 def max_path_sum(root: Optional[TreeNode]) -> int:
     best = [float('-inf')]
-    def dfs(node) -> int:                        # returns best downward chain from node
-        if not node:
-            return 0
-        left  = max(dfs(node.left), 0)           # ignore negative subtrees
+    def dfs(node) -> int:
+        if not node: return 0
+        left  = max(dfs(node.left), 0)
         right = max(dfs(node.right), 0)
-        best[0] = max(best[0], node.val + left + right)   # path through this node
-        return node.val + max(left, right)        # best single chain upward
+        best[0] = max(best[0], node.val + left + right)
+        return node.val + max(left, right)
     dfs(root)
     return best[0]
 
 def diameter_of_binary_tree(root: Optional[TreeNode]) -> int:
     diameter = [0]
-    def dfs(node) -> int:                        # returns depth of subtree
-        if not node:
-            return 0
+    def dfs(node) -> int:
+        if not node: return 0
         left, right = dfs(node.left), dfs(node.right)
         diameter[0] = max(diameter[0], left + right)
         return 1 + max(left, right)
@@ -624,8 +932,7 @@ def binary_tree_cameras(root: Optional[TreeNode]) -> int:
     cameras = [0]
     COVERED, HAS_CAMERA, NOT_COVERED = 0, 1, 2
     def dfs(node) -> int:
-        if not node:
-            return COVERED
+        if not node: return COVERED
         left, right = dfs(node.left), dfs(node.right)
         if left == NOT_COVERED or right == NOT_COVERED:
             cameras[0] += 1
@@ -655,17 +962,84 @@ def binary_tree_cameras(root: Optional[TreeNode]) -> int:
 
 ### Theory
 
-**Core idea:** When the graph is small (N ≤ 20), encode the set of visited nodes as a bitmask integer. State = `(current_node, visited_mask)`. This allows O(2^N × N) DP over all subsets.
+- **Core idea:** When the graph is small (N ≤ 20), encode the set of visited nodes as a bitmask integer. State = `(current_node, visited_mask)`.
+- **State:** `dp[mask][v]` = cost/distance to reach node `v` having visited exactly the nodes in `mask`.
+- **Classic application:** TSP, Hamiltonian path, collecting all keys.
+- **Space optimization:** Not possible — full `dp[2^n][n]` table is needed.
 
-**State:** `dp[mask][v]` = cost/distance to reach node `v` having visited exactly the nodes in `mask`.
+### The 4-Step Build (TSP)
 
-**Classic application:** Travelling Salesman Problem (TSP), Hamiltonian path, collecting all keys.
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def tsp_rec(dist, visited, curr, n):
+            if visited == (1 << n) - 1:
+                return dist[curr][0]             # return to start
+            best = float('inf')
+            for nxt in range(n):
+                if not (visited >> nxt & 1):
+                    cost = dist[curr][nxt] + tsp_rec(dist, visited | (1 << nxt), nxt, n)
+                    best = min(best, cost)
+            return best
+        # Call: tsp_rec(dist, 1, 0, n)
+        ```
+    - **Language & Logic:** "From the current node, try visiting every unvisited neighbor. 'Visited' is encoded as a bitmask (e.g., `1011` means nodes 0, 1, and 3 are done)."
+    - **Complexity:** O(n!) — exponential; `(visited, curr)` subproblems repeat heavily.
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def tsp_memo(dist):
+            n = len(dist)
+            @lru_cache(maxsize=None)
+            def dp(visited, curr):
+                if visited == (1 << n) - 1:
+                    return dist[curr][0]
+                best = float('inf')
+                for nxt in range(n):
+                    if not (visited >> nxt & 1):
+                        best = min(best, dist[curr][nxt] + dp(visited | (1 << nxt), nxt))
+                return best
+            return dp(1, 0)
+        ```
+    - **Language & Logic:** "There are only 2^N subsets × N current positions = O(2^N × N) unique states. We cache this `(mask, curr)` pair."
+    - **Complexity:** O(2^n × n²) time, O(2^n × n) space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Note:** Fill by increasing `popcount(mask)` so smaller subproblems (fewer nodes visited) come before larger ones.
+    - **Code:**
+        ```python
+        def tsp_bottom_up(dist):
+            n = len(dist)
+            INF = float('inf')
+            FULL = (1 << n) - 1
+            dp = [[INF] * n for _ in range(1 << n)]
+            dp[1][0] = 0                         # start at node 0, only node 0 visited
+            for mask in range(1, 1 << n):
+                for u in range(n):
+                    if dp[mask][u] == INF or not (mask >> u & 1):
+                        continue
+                    for v in range(n):
+                        if mask >> v & 1: continue
+                        new_mask = mask | (1 << v)
+                        dp[new_mask][v] = min(dp[new_mask][v], dp[mask][u] + dist[u][v])
+            return min(dp[FULL][u] + dist[u][0] for u in range(n))
+        ```
+    - **Complexity:** O(2^n × n²) time, O(2^n × n) space.
+
+- **Step 4 — Space optimization: Not Possible**
+    - **Language & Logic:** "`dp[mask][v]` reads from `dp[mask ^ (1<<v)][u]` for all `u`; the full table is needed."
+
+> [!TIP]
+> **Subset enumeration trick:** To iterate over all subsets of a mask `m`, use `sub = m; while sub > 0: process(sub); sub = (sub - 1) & m`. This runs in O(3^N) total over all masks.
+
+**Other bitmask DP implementations:**
 
 ```python
 def shortest_path_all_nodes(graph: list[list[int]]) -> int:
     n = len(graph)
     INF = float('inf')
-    # BFS to precompute pairwise distances
     from collections import deque
     dist = [[INF] * n for _ in range(n)]
     for src in range(n):
@@ -677,20 +1051,15 @@ def shortest_path_all_nodes(graph: list[list[int]]) -> int:
                 if dist[src][v] == INF:
                     dist[src][v] = dist[src][u] + 1
                     q.append(v)
-    # Bitmask DP
     FULL = (1 << n) - 1
     dp = [[INF] * n for _ in range(1 << n)]
     for i in range(n):
-        dp[1 << i][i] = 0               # start from any single node
+        dp[1 << i][i] = 0
     for mask in range(1, 1 << n):
         for u in range(n):
-            if dp[mask][u] == INF:
-                continue
-            if not (mask >> u & 1):
-                continue
+            if dp[mask][u] == INF or not (mask >> u & 1): continue
             for v in range(n):
-                if mask >> v & 1:
-                    continue
+                if mask >> v & 1: continue
                 new_mask = mask | (1 << v)
                 dp[new_mask][v] = min(dp[new_mask][v], dp[mask][u] + dist[u][v])
     return min(dp[FULL])
@@ -700,19 +1069,14 @@ def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
     dp = [float('inf')] * (1 << n)
     dp[0] = 0
     for mask in range(1 << n):
-        i = bin(mask).count('1')        # how many of nums2 assigned so far
-        if i >= n:
-            continue
+        i = bin(mask).count('1')
+        if i >= n: continue
         for j in range(n):
-            if mask >> j & 1:
-                continue                # nums2[j] already assigned
+            if mask >> j & 1: continue
             dp[mask | (1 << j)] = min(dp[mask | (1 << j)],
                                        dp[mask] + (nums1[i] ^ nums2[j]))
     return dp[(1 << n) - 1]
 ```
-
-> [!TIP]
-> **Subset enumeration trick:** To iterate over all subsets of a mask `m`, use `sub = m; while sub > 0: process(sub); sub = (sub - 1) & m`. This runs in O(3^N) total over all masks — crucial for subset-sum style bitmask DP.
 
 ### Bitmask DP Problems
 
@@ -730,38 +1094,88 @@ def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
 
 ### Theory
 
-**Core idea:** All 6 stock variants share the same `dp[i][k][holding]` state machine. `holding = 0` (not holding) or `1` (holding). Constraints (k transactions, cooldown, fee) simply modify the transition rules.
+- **Core idea:** All variants share the same `dp[i][k][state]` state machine.
+- **State:** `dp[i][k][holding]` = max profit on day `i` with `k` transactions remaining and `holding` (0/1).
+- **Recurrence:** `Buy: -prices[i] + dp[i+1][k-1][1]`; `Sell: prices[i] + dp[i+1][k][0]`.
+- **Key rule:** Decrement `k` on **buy** (not sell). This tracks remaining complete transactions.
+- **Base case:** `dp[len][*][*] = 0` or `dp[*][0][*] = 0`.
+- **Space optimization:** O(K) variables or rolling row.
 
-**Key rule:** Decrement `k` on **buy** (not sell). This tracks remaining complete transactions.
+### The 4-Step Build (K-transactions)
+
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def stock_rec(prices, i, k, holding):
+            if i == len(prices) or k == 0: return 0
+            if holding:
+                return max(prices[i] + stock_rec(prices, i+1, k, 0),
+                           stock_rec(prices, i+1, k, 1))
+            return max(-prices[i] + stock_rec(prices, i+1, k-1, 1),
+                       stock_rec(prices, i+1, k, 0))
+        # Call: stock_rec(prices, 0, k, 0)
+        ```
+    - **Language & Logic:** "On any day: Buy, Sell, or Do Nothing. Buy starts a transaction; Sell finishes it."
+    - **Complexity:** O(2^n).
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def stock_memo(prices, k):
+            @lru_cache(maxsize=None)
+            def dp(i, k, holding):
+                if i == len(prices) or k == 0: return 0
+                if holding:
+                    return max(prices[i] + dp(i+1, k, 0), dp(i+1, k, 1))
+                return max(-prices[i] + dp(i+1, k-1, 1), dp(i+1, k, 0))
+            return dp(0, k, 0)
+        ```
+    - **Language & Logic:** "Cache results for `(day, k, holding)` states."
+    - **Complexity:** O(n\*k\*2) time and space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        # Fill 3D table: iterate days forward; k and holding as table dimensions
+        # dp[i][j][0/1] = max profit starting from day i with j transactions left, holding state
+        ```
+    - **Language & Logic:** "Fill day-by-day. Each state reads the next day's values (forward recursion → backward fill)."
+    - **Complexity:** O(n\*k\*2).
+
+- **Step 4 — Space optimization (rolling row — keep only current k state)**
+    - **Code:**
+        ```python
+        def max_profit_iv(k: int, prices: list[int]) -> int:
+            n = len(prices)
+            if k >= n // 2:
+                return sum(max(0, prices[i]-prices[i-1]) for i in range(1, n))
+            dp = [[0, float('-inf')] for _ in range(k + 1)]
+            for p in prices:
+                for j in range(k, 0, -1):   # backward prevents reuse of updated values
+                    dp[j][0] = max(dp[j][0], dp[j][1] + p)
+                    dp[j][1] = max(dp[j][1], dp[j-1][0] - p)
+            return dp[k][0]
+        ```
+    - **Language & Logic:** "Use only the previous day's state and iterate `k` backward to prevent using updated values in the same pass."
+    - **Complexity:** O(n\*k) time, O(k) space.
+
+**Common stock variants:**
 
 ```python
-# Unlimited transactions — 2 states
 def max_profit_ii(prices: list[int]) -> int:
     hold, free = -prices[0], 0
     for p in prices[1:]:
         hold, free = max(hold, free - p), max(free, hold + p)
     return free
 
-# K transactions — 2D DP with backward k-loop
-def max_profit_iv(k: int, prices: list[int]) -> int:
-    n = len(prices)
-    if k >= n // 2:   # unlimited case
-        return sum(max(0, prices[i]-prices[i-1]) for i in range(1, n))
-    dp = [[0, float('-inf')] for _ in range(k + 1)]
-    for p in prices:
-        for j in range(k, 0, -1):   # backward prevents reuse of updated values
-            dp[j][0] = max(dp[j][0], dp[j][1] + p)
-            dp[j][1] = max(dp[j][1], dp[j-1][0] - p)
-    return dp[k][0]
-
-# Cooldown — 3 states
 def max_profit_cooldown(prices: list[int]) -> int:
     hold, sold, rest = float('-inf'), 0, 0
     for p in prices:
         prev_sold = sold
         sold = hold + p
         hold = max(hold, rest - p)
-        rest = max(rest, prev_sold)   # prev_sold: can't buy same day as sell
+        rest = max(rest, prev_sold)
     return max(sold, rest)
 ```
 
@@ -784,37 +1198,77 @@ See [stock-trading-dp.md](stock-trading-dp.md) for all 6 variants with full code
 
 ### Theory
 
-**Core idea:** `s[i..j]` is a palindrome iff `s[i] == s[j]` AND `s[i+1..j-1]` is a palindrome. Fill `is_pal[i][j]` by increasing length. Then use it for:
-- Counting palindromic substrings
-- Longest palindromic subsequence (LCS shortcut)
-- Minimum cuts to partition into palindromes
+- **Core idea:** `s[i..j]` is a palindrome if `s[i] == s[j]` and middle is a palindrome.
+- **State:** `dp[i][j]` = True if `s[i..j]` is a palindrome.
+- **Recurrence:** `dp[i][j] = (s[i] == s[j]) and dp[i+1][j-1]`.
+- **Base case:** `dp[i][i] = True`, `dp[i][i+1] = (s[i] == s[i+1])`.
+- **Fill order:** `i` from high to low, `j` from `i` to high (so `dp[i+1][j-1]` is already filled).
+- **Space optimization:** Not possible for range queries; full table required.
+
+### The 4-Step Build (Palindrome Table)
+
+- **Step 1 — Recursion**
+    - **Code:**
+        ```python
+        def is_pal_rec(s, i, j):
+            if i >= j: return True
+            return s[i] == s[j] and is_pal_rec(s, i+1, j-1)
+        ```
+    - **Language & Logic:** "Check ends and recurse inward. Same `(i, j)` pairs get recomputed across different outer problems."
+    - **Complexity:** O(2^n) without memo.
+
+- **Step 2 — Memoization**
+    - **Code:**
+        ```python
+        from functools import lru_cache
+        def count_palindromes_memo(s):
+            @lru_cache(maxsize=None)
+            def is_pal(i, j):
+                if i >= j: return True
+                return s[i] == s[j] and is_pal(i+1, j-1)
+            return sum(is_pal(i, j) for i in range(len(s)) for j in range(i, len(s)))
+        ```
+    - **Language & Logic:** "Cache results for `(i, j)` intervals."
+    - **Complexity:** O(n²) time and space.
+
+- **Step 3 — Bottom-up tabulation**
+    - **Code:**
+        ```python
+        def build_palindrome_table(s: str) -> list[list[bool]]:
+            n = len(s)
+            is_pal = [[False] * n for _ in range(n)]
+            for i in range(n - 1, -1, -1):
+                for j in range(i, n):
+                    is_pal[i][j] = (s[i] == s[j]) and (j - i < 2 or is_pal[i+1][j-1])
+            return is_pal
+        ```
+    - **Language & Logic:** "Fill outer-in: `i` from high to low ensures `is_pal[i+1][j-1]` is always computed before `is_pal[i][j]`."
+    - **Complexity:** O(n²) time and space.
+
+- **Step 4 — Space optimization: Not Possible**
+    - **Language & Logic:** "Access to diagonal `[i+1, j-1]` requires the full table. Min-cut and partition problems read arbitrary `is_pal[l][r]` ranges."
+
+**Common palindrome DP implementations:**
 
 ```python
-def build_palindrome_table(s: str) -> list[list[bool]]:
-    n = len(s)
-    is_pal = [[False]*n for _ in range(n)]
-    for i in range(n - 1, -1, -1):
-        for j in range(i, n):
-            is_pal[i][j] = (s[i] == s[j]) and (j - i < 2 or is_pal[i+1][j-1])
-    return is_pal
-
 def longest_palindromic_subsequence(s: str) -> int:
-    """LCS(s, reverse(s)) — clean O(N²) reduction."""
     t = s[::-1]
     m, n = len(s), len(t)
-    dp = [[0]*(n+1) for _ in range(m+1)]
-    for i in range(1, m+1):
-        for j in range(1, n+1):
-            dp[i][j] = dp[i-1][j-1]+1 if s[i-1]==t[j-1] else max(dp[i-1][j], dp[i][j-1])
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            dp[i][j] = dp[i-1][j-1] + 1 if s[i-1] == t[j-1] else max(dp[i-1][j], dp[i][j-1])
     return dp[m][n]
 
 def min_cut_palindrome(s: str) -> int:
     n = len(s)
     is_pal = build_palindrome_table(s)
-    cut = list(range(n))          # worst case: n-1 cuts
+    cut = list(range(n))
     for i in range(1, n):
-        if is_pal[0][i]: cut[i] = 0; continue
-        for j in range(1, i+1):
+        if is_pal[0][i]:
+            cut[i] = 0
+            continue
+        for j in range(1, i + 1):
             if is_pal[j][i]:
                 cut[i] = min(cut[i], cut[j-1] + 1)
     return cut[n-1]
@@ -835,31 +1289,15 @@ See [string-palindrome-dp.md](string-palindrome-dp.md) for regex and wildcard ma
 
 ---
 
-
-```text
-Items: weight[1..n], value[1..n], capacity W
-
-knapsack(i, w):
-  if i == 0 or w == 0: return 0
-  if weight[i] > w: return knapsack(i-1, w)        # can't take — forced skip
-  return max(
-    knapsack(i-1, w),                               # skip
-    value[i] + knapsack(i-1, w - weight[i])         # take
-  )
-
-Bottom-up: dp[0..n][0..W], fill row by row
-Space-optimized: dp[0..W], iterate w from W down to weight[i]
-```
+## Knapsack Identification Checklist
 
 **Identification checklist:**
-- [ ] Each item picked at most once → 0/1
-- [ ] Items picked unlimited → Unbounded (forward loop)
+- [ ] Each item picked at most once → 0/1 Knapsack (backward loop)
+- [ ] Items picked unlimited → Unbounded Knapsack (forward loop)
 - [ ] Ask is "max/min/count" not "which" → DP (reconstruction is a follow-up)
 - [ ] Reduce sum problems: "subset sum to T" = knapsack with `value[i] = weight[i]`
 
----
-
-## Knapsack → Subset Sum Reductions
+### Knapsack → Subset Sum Reductions
 
 | Formulation | `dp` meaning | Base | Transition |
 | :--- | :--- | :--- | :--- |
@@ -918,8 +1356,6 @@ Space-optimized: dp[0..W], iterate w from W down to weight[i]
 | "Interval `[i,j]`", "split at `k`", "optimal order" | MCM / Interval DP |
 | Tree problem with "rob/skip", "path through root" | Tree DP (post-order DFS, return pair) |
 | N ≤ 20, "visit all nodes", "assign items" | Bitmask DP |
-
----
 
 ---
 
