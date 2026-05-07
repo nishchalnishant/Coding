@@ -326,6 +326,6 @@ class CircularQueue:
 ## See also
 
 - [Stack](stack.md) — stack vs queue; monotonic stack for next greater element
-- [Graph Algorithms](../algorithms/graph.md) — BFS shortest path; Dijkstra with priority queue
+- [Graph Algorithms](../algo/graph.md) — BFS shortest path; Dijkstra with priority queue
 - [Array](array.md) — sliding window (pointer-based); deque for window max variant
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — BFS and queue pattern recognition triggers
+- [Patterns Master](../../reference/patterns/patterns-master.md) — BFS and queue pattern recognition triggers

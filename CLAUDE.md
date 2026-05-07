@@ -21,7 +21,7 @@ archive/           # Legacy content, ignore unless asked
 
 | Task | File |
 |---|---|
-| Add / update a DSA topic | `tracks/foundations/algorithms/` or `tracks/foundations/data-structures/` |
+| Add / update a DSA topic | `tracks/foundatio../` or `tracks/foundatio../ds/` |
 | Update the Google SDE-2 problem list | `tracks/google-sde2/PROBLEM_SET.md` |
 | Update practice tracker | `tracks/google-sde2/PRACTICE_TRACKER.md` |
 | Add a pattern | `reference/patterns/patterns-master.md` |

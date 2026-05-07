@@ -466,6 +466,6 @@ def prim_mst(n: int, adj: dict) -> int:
 ## See also
 
 - [Union Find](union-find.md) — DSU for Kruskal's MST and connectivity
-- [data-structures/graphs.md](../data-structures/graphs.md) — BFS/DFS templates and grid problems
-- [Heap](../data-structures/heap.md) — Dijkstra uses a min-heap
+- [data-structures/graphs.md](../ds/graphs.md) — BFS/DFS templates and grid problems
+- [Heap](../ds/heap.md) — Dijkstra uses a min-heap
 - [Patterns Master](../../../reference/patterns/patterns-master.md) — graph pattern recognition triggers

@@ -34,5 +34,5 @@ In this section, we're not just going to talk about how to push to a stack. We'r
 
 ## Cross-links
 
-- **Graph algorithms** (Dijkstra, topo, MST): [../algo/graph.md](../algo/graph.md)  
-- **Union Find** (connectivity, Kruskal): [../algo/union-find.md](../algo/union-find.md)
+- **Graph algorithms** (Dijkstra, topo, MST): [../al../algo/graph.md](../al../algo/graph.md)  
+- **Union Find** (connectivity, Kruskal): [../al../algo/union-find.md](../al../algo/union-find.md)

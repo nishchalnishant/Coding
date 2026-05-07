@@ -352,6 +352,6 @@ For very large streams that don't fit in memory: partition the stream into chunk
 ## See also
 
 - [Queue](queue.md) — monotonic deque for sliding window max/min
-- [Graph](../algorithms/graph.md) — iterative DFS uses an explicit stack
-- [Greedy](../algorithms/greedy.md) — some monotonic stack problems have greedy structure
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — monotonic stack pattern triggers
+- [Graph](../algo/graph.md) — iterative DFS uses an explicit stack
+- [Greedy](../algo/greedy.md) — some monotonic stack problems have greedy structure
+- [Patterns Master](../../reference/patterns/patterns-master.md) — monotonic stack pattern triggers

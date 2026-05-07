@@ -228,7 +228,7 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 ---
 
 > [!TIP]
-> For weighted shortest path algorithms (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal's), see [Graph Algorithms](../algorithms/graph.md). This file covers graph **representation and traversal**; that file covers graph **algorithms on weighted edges**.
+> For weighted shortest path algorithms (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal's), see [Graph Algorithms](../algo/graph.md). This file covers graph **representation and traversal**; that file covers graph **algorithms on weighted edges**.
 
 ---
 
@@ -357,6 +357,6 @@ def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
 
 ## See also
 
-- [Graph (algorithms)](../algorithms/graph.md) — Dijkstra, Bellman-Ford, MST algorithms
-- [Union-Find](../algorithms/union-find.md) — DSU for Kruskal and connectivity
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — graph pattern recognition triggers
+- [Graph (algorithms)](../algo/graph.md) — Dijkstra, Bellman-Ford, MST algorithms
+- [Union-Find](../algo/union-find.md) — DSU for Kruskal and connectivity
+- [Patterns Master](../../reference/patterns/patterns-master.md) — graph pattern recognition triggers

@@ -400,6 +400,6 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 ## See also
 
 - [Array](array.md) — prefix sum + map for subarray problems
-- [String](../algorithms/string.md) — anagram key design; rolling hash (Rabin-Karp)
+- [String](../algo/string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](linked-list.md) — LRU cache DLL component
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — complement map and frequency map triggers
+- [Patterns Master](../../reference/patterns/patterns-master.md) — complement map and frequency map triggers

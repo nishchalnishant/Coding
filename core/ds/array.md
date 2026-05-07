@@ -460,6 +460,6 @@ def reservoir_sample(stream, k: int) -> list:
 ## See also
 
 - [Hashing](hashing.md) — two sum, subarray sum = K complement maps
-- [Searching](../algorithms/searching.md) — binary search on answer for array problems
+- [Searching](../algo/searching.md) — binary search on answer for array problems
 - [Stack](stack.md) — monotonic stack/deque for sliding window max and histogram
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — sliding window and two-pointer triggers
+- [Patterns Master](../../reference/patterns/patterns-master.md) — sliding window and two-pointer triggers

@@ -395,7 +395,7 @@ def deserialize(data: str):
 
 ## See also
 
-- [Graph](../algorithms/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
-- [Dynamic Programming](../algorithms/dynamic-programming/README.md) — Tree DP (postorder state propagation)
-- [Backtracking](../algorithms/backtracking.md) — path sum with backtracking
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — tree traversal pattern triggers
+- [Graph](../algo/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
+- [Dynamic Programming](../algo/dynamic-programming/README.md) — Tree DP (postorder state propagation)
+- [Backtracking](../algo/backtracking.md) — path sum with backtracking
+- [Patterns Master](../../reference/patterns/patterns-master.md) — tree traversal pattern triggers

@@ -521,7 +521,7 @@ def count_valid_numbers(limit: str) -> int:
 - [tips-and-gotchas.md](tips-and-gotchas.md) — 12 common bugs, recognition triggers, interview framework
 
 **Related files:**
-- [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 DP pattern recognition triggers
+- [Patterns Master](../../../reference/patterns/patterns-master.md) — 16 DP pattern recognition triggers
 - [Bit Manipulation](../bit-manipulation.md) — bitmask DP for subset problems
 - [Backtracking](../backtracking.md) — when to use backtracking vs. memoizing into DP
-- [Binary Search](../binary-search.md) — O(N log N) LIS via patience sort
+- [Searching](../searching.md) — O(N log N) LIS via patience sort

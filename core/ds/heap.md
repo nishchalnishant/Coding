@@ -335,7 +335,7 @@ For P99 latency from a live request stream:
 
 ## See also
 
-- [Sorting](../algorithms/sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
+- [Sorting](../algo/sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
 - [Queue](queue.md) — priority queue vs FIFO; blocking queue for concurrency
-- [Graph](../algorithms/graph.md) — Dijkstra's algorithm uses a min-heap
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — top-K and merge-K pattern triggers
+- [Graph](../algo/graph.md) — Dijkstra's algorithm uses a min-heap
+- [Patterns Master](../../reference/patterns/patterns-master.md) — top-K and merge-K pattern triggers

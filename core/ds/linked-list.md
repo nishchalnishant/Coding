@@ -372,4 +372,4 @@ class LRUCache:
 - [Heap](heap.md) — Merge K sorted lists via min-heap
 - [Hashing](hashing.md) — Copy list with random pointer; LRU cache hash map component
 - [Stack](stack.md) — Recursion uses call stack; iterative reversal eliminates it
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — fast & slow pointer pattern triggers
+- [Patterns Master](../../reference/patterns/patterns-master.md) — fast & slow pointer pattern triggers

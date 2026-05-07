@@ -1373,6 +1373,6 @@ See [string-palindrome-dp.md](string-palindrome-dp.md) for regex and wildcard ma
 - [tips-and-gotchas.md](tips-and-gotchas.md) — 12 common bugs, 30+ recognition triggers
 
 **Related files:**
-- [Patterns Master](../../../../reference/patterns/patterns-master.md) — 16 patterns with recognition triggers
+- [Patterns Master](../../../reference/patterns/patterns-master.md) — 16 patterns with recognition triggers
 - [greedy.md](../greedy.md) — when greedy replaces DP (fractional knapsack, interval scheduling)
 - [divide-and-conquer.md](../divide-and-conquer.md) — independent subproblems vs overlapping (DP)

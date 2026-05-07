@@ -737,5 +737,5 @@ Or convert to iterative (bottom-up DP / explicit stack).
 **Related files:**
 - [backtracking.md](../backtracking.md) — constraint satisfaction and pruning deep dive
 - [dp-aditya-verma.md](../dynamic-programming/dp-aditya-verma.md) — when recursion + memo becomes DP
-- [Patterns Master](../../../../reference/patterns/patterns-master.md)
+- [Patterns Master](../../../reference/patterns/patterns-master.md)
 

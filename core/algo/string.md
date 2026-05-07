@@ -437,7 +437,7 @@ class Trie:
 
 ## See also
 
-- [Array](../data-structures/array.md) — sliding window on arrays applies identically to strings
-- [Hashing](../data-structures/hashing.md) — frequency maps for anagram detection; rolling hash
+- [Array](../ds/array.md) — sliding window on arrays applies identically to strings
+- [Hashing](../ds/hashing.md) — frequency maps for anagram detection; rolling hash
 - [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance, LPS
 - [Patterns Master](../../../reference/patterns/patterns-master.md) — string pattern recognition triggers

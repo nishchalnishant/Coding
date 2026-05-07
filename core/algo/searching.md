@@ -425,7 +425,7 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
 ## See also
 
-- [Array](../data-structures/array.md) — sorted array prerequisites; binary search on rotated arrays
+- [Array](../ds/array.md) — sorted array prerequisites; binary search on rotated arrays
 - [Sorting](sorting.md) — ordering required for binary search on index
 - [Dynamic Programming](dynamic-programming/README.md) — some BS-on-answer problems reduce to DP feasibility checks
 - [Patterns Master](../../../reference/patterns/patterns-master.md) — binary search pattern triggers

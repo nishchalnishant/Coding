@@ -461,4 +461,4 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP and O(3^N) subset enumeration
 - [Patterns Master](../../../reference/patterns/patterns-master.md) — bitmask recognition triggers
-- [Trie](../data-structures/trie.md) — XOR Trie for maximum XOR pair
+- [Trie](../ds/trie.md) — XOR Trie for maximum XOR pair

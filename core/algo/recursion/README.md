@@ -374,6 +374,6 @@ def generate_parentheses(n: int) -> list[str]:
 **Related files:**
 - [Backtracking](../backtracking.md) — recursion with undo; choose / recurse / unchoose template
 - [Dynamic Programming](../dynamic-programming/README.md) — memoized recursion → tabulation conversion
-- [Tree](../../data-structures/tree.md) — structural recursion on binary trees
+- [Tree](../../ds/tree.md) — structural recursion on binary trees
 - [Divide and Conquer](../divide-and-conquer.md) — independent subproblems; parallel fork-join
 
