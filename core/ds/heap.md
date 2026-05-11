@@ -171,6 +171,9 @@ def schedule_tasks(tasks: list[Task]) -> list[str]:
 - **Add**: Push to `lo` (max-heap), then rebalance by moving `lo`'s max to `hi` if it's larger. Rebalance sizes.
 - **Median**: If sizes equal → average of tops; else → top of the larger heap.
 
+> [!TIP]
+> Think of two piles of sorted rocks — a max-heap for the smaller half and a min-heap for the larger half. The median is always at the top of one of the piles. After each insertion you may need to shift the top rock from one pile to the other to keep the piles balanced. This is why every `add_num` call pushes to `lo` then immediately checks whether the max of `lo` crossed over into `hi`'s territory.
+
 ```python
 class MedianFinder:
     def __init__(self):

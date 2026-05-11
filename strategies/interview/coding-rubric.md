@@ -25,6 +25,31 @@ Use this as a “runbook” for every timed practice and mock.
 
 ---
 
+## Time Budget Per Step (45-minute round)
+
+| Step | Budget | If running over |
+|------|--------|-----------------|
+| Restate + clarify | 2–3 min | Hard stop — don't over-clarify |
+| Examples (normal + edge) | 2–3 min | Pick the most adversarial edge case, drop the rest |
+| Brute force (name it, don't code it) | 1–2 min | Just say "O(N²) nested loop" and move on |
+| Optimal approach + invariant | 3–5 min | This is the most valuable time — don't rush it |
+| Code | 15–20 min | If stuck >5 min, state the assumption and move forward |
+| Test (trace 2 cases by hand) | 3–5 min | At minimum trace the one edge case you mentioned earlier |
+| Complexity + follow-up | 1–2 min | Always reserve this — interviewers dock for skipping it |
+
+> [!CAUTION]
+> If you hit 20 minutes and haven't started coding, you will almost certainly not finish. When approach discussion runs long, say: "I think I have enough to code — let me start and talk through it as I go."
+
+## SDE-3 Differentiators (beyond just solving it)
+
+- State the invariant before writing the loop, not after: "At all times, `left` points to the first unprocessed element."
+- Call out the edge case *before* the interviewer does: "I'll handle the empty input case first."
+- Drive the complexity conversation: "This is O(N log N) — if we need O(N) I'd switch to a counting sort approach."
+- After coding, proactively ask: "Want me to extend this to handle [natural follow-up]?" — shows you're thinking ahead.
+- Self-correct out loud: "Wait, this fails when all elements are negative — let me fix the initialization." Never silently patch a bug.
+
+---
+
 ## Must-say edge cases (default set)
 
 - Empty input, length 1, all duplicates, negative numbers, overflow (if sums).
@@ -40,6 +65,23 @@ Use this as a “runbook” for every timed practice and mock.
 - Visited/state bugs (graph BFS/DFS)
 - Mutation hazards (in-place edits, shared lists in recursion)
 - Forgot base case / return value meaning (tree DP)
+
+---
+
+## When You're Stuck — Recovery Protocol
+
+**Step 1 — Verbalize the block** (30 sec): “I know I need to find X but I'm not sure how to efficiently track Y. Let me think out loud.”
+
+**Step 2 — Fall back to brute force** (1 min): Code the O(N²) or naive version. A working slow solution scores better than no solution.
+
+**Step 3 — Ask a scoped question**: Not “can you give me a hint?” — instead: “Is it safe to assume the input fits in memory?” or “Would a hash map be the right data structure here?” Interviewers respond better to specific questions.
+
+**Step 4 — Pattern match out loud**: “This feels like it could be a sliding window problem because I'm looking for a contiguous subarray. Is that the right direction?”
+
+**Step 5 — State your plan, then code it**: Even if uncertain, say: “I'm going to try prefix sums here — I can optimize later if this doesn't work.”
+
+> [!TIP]
+> The worst response to being stuck is silence. An interviewer who sees you methodically working through possibilities will score you higher than one who sees you frozen. Thinking out loud IS part of the evaluation.
 
 ---
 
@@ -149,3 +191,46 @@ The interviewer expects you to start with the brute force, explain why it's slow
 **Student:** "And the communication during the code?"
 
 **Coach:** "Keep it high-level. Don't explain `i++`. Explain the **Invariant**. Instead of 'I'm incrementing the index,' say 'I'm moving the window boundary to maintain the uniqueness constraint.' Talk like a software architect, not a code monkey."
+
+---
+
+## SDE-3 Hard Problem Checklist
+
+Problems that appear at the ceiling of SDE-3 coding rounds. If you can solve these fluently, you are prepared.
+
+### Dynamic Programming
+- [ ] Edit Distance (2D DP, string alignment)
+- [ ] Burst Balloons (interval DP, non-standard state)
+- [ ] Strange Printer (interval DP)
+- [ ] Regular Expression Matching (2D DP with wildcards)
+- [ ] Minimum Cost to Cut a Stick (interval DP)
+- [ ] Longest Increasing Path in Matrix (DFS + memoization)
+
+### Graphs
+- [ ] Word Ladder II (BFS + backtracking, hard)
+- [ ] Alien Dictionary (topological sort, implicit graph)
+- [ ] Reconstruct Itinerary (Eulerian path, Hierholzer's)
+- [ ] Critical Connections (Tarjan's bridges)
+- [ ] Swim in Rising Water (Dijkstra or binary search + BFS)
+
+### Arrays / Sliding Window
+- [ ] Minimum Window Substring (sliding window, hard)
+- [ ] Trapping Rain Water (two pointers, hard)
+- [ ] Median of Two Sorted Arrays (binary search, very hard)
+- [ ] Sliding Window Maximum (monotonic deque)
+- [ ] Count of Smaller Numbers After Self (merge sort / BIT)
+
+### Trees
+- [ ] Serialize/Deserialize Binary Tree
+- [ ] Binary Tree Maximum Path Sum (tree DP)
+- [ ] Recover Binary Search Tree (Morris traversal)
+- [ ] Vertical Order Traversal of Binary Tree
+
+### Design
+- [ ] LRU Cache (O(1) get/put)
+- [ ] LFU Cache (O(1) get/put) — harder
+- [ ] Design Twitter / Top-K tweets (heap + hash map)
+- [ ] Implement Trie with Wildcard Search
+
+> [!TIP]
+> Track which of these you can solve in < 25 minutes without hints. That is the SDE-3 bar. Any you cannot → add to your next week's practice queue.

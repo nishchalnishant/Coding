@@ -375,6 +375,60 @@ def max_points_on_line(points: list[list[int]]) -> int:
 
 ---
 
+## Interview-Critical Math Patterns
+
+### GCD & LCM
+- `gcd(a, b) = gcd(b, a % b)` — Euclidean algorithm, O(log(min(a,b)))
+- `lcm(a, b) = a * b // gcd(a, b)`
+- **When**: "Minimum time for two events to coincide", "tile a rectangle with minimal tiles"
+
+### Modular Arithmetic
+- `(a + b) % m = ((a % m) + (b % m)) % m` — never let intermediate results overflow
+- `(a * b) % m = ((a % m) * (b % m)) % m`
+- **When**: "Count ways modulo 10^9 + 7" — apply mod at every addition/multiplication step, not just at the end
+
+### Sieve of Eratosthenes
+```python
+def sieve(n: int) -> list[bool]:
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    for i in range(2, int(n**0.5) + 1):
+        if is_prime[i]:
+            for j in range(i*i, n+1, i):
+                is_prime[j] = False
+    return is_prime
+```
+- **When**: "Count primes up to N", "prime factorization of many numbers" — O(N log log N) build, O(1) per query
+
+### Fast Exponentiation (Binary Exponentiation)
+```python
+def power(base: int, exp: int, mod: int) -> int:
+    result = 1
+    base %= mod
+    while exp > 0:
+        if exp & 1:
+            result = result * base % mod
+        base = base * base % mod
+        exp >>= 1
+    return result
+```
+- **When**: "x^n mod p" — O(log N) vs O(N) naive. Also used for matrix exponentiation (Fibonacci in O(log N)).
+
+### Combinatorics (nCr)
+```python
+from math import comb  # Python 3.8+
+# Or manually:
+def ncr(n: int, r: int, mod: int) -> int:
+    # Requires precomputed factorials and inverse factorials mod p
+    pass
+```
+- **When**: "Number of ways to choose K from N", "number of paths in a grid (m+n-2 choose m-1)"
+
+> [!TIP]
+> Pascal's triangle mod p: `dp[i][j] = (dp[i-1][j-1] + dp[i-1][j]) % mod`. Use when N is small enough for a 2D table. Use `math.comb` for direct computation when no mod is needed.
+
+---
+
 ## Quick Revision Triggers
 
 - "Is N prime?" → trial division up to √N; sieve if checking many numbers.

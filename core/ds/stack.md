@@ -60,6 +60,9 @@ LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next 
 - **Decreasing stack** (top = smallest): when a larger element arrives, all smaller stack elements have found their Next Greater → pop and record.
 - **Increasing stack** (top = largest): when a smaller element arrives, pop and record Next Smaller.
 
+> [!TIP]
+> Think of a monotonic stack as a bouncer at a club — when a new VIP arrives (larger element), the bouncer kicks out everyone shorter in the line before them. The kicked-out elements have found their "next greater"; the VIP takes their place. This is why each element is pushed and popped exactly once: O(N) total.
+
 ```python
 def next_greater_element(nums: list[int]) -> list[int]:
     n = len(nums)

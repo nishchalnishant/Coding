@@ -124,6 +124,23 @@ def single_number_iii(nums: list[int]) -> list[int]:
 
 ---
 
+### XOR Tricks — The Swiss Army Knife
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the **one element** that appears an odd number of times" — OR — "find **two missing** numbers" — OR — "swap without temp variable". XOR is its own inverse: `a ^ a = 0`, `a ^ 0 = a`. These two properties power most XOR interview tricks.
+
+Key patterns:
+- **Single number in array of pairs**: XOR all elements → pairs cancel, lone element survives.
+- **Missing number in [0..N]**: XOR all indices 0..N with all array elements → answer is what's left.
+- **Two unique numbers**: XOR all → get `x ^ y`. Find any set bit (the rightmost: `diff & -diff`). Partition array on that bit → XOR each partition separately → get x and y.
+- **Power of 2 check**: `n > 0 and (n & (n-1)) == 0` — a power of 2 has exactly one set bit; subtracting 1 flips all lower bits.
+- **Count set bits (Brian Kernighan)**: `while n: n &= n-1; count += 1` — each iteration strips the lowest set bit.
+
+> [!TIP]
+> `n & -n` isolates the rightmost set bit (two's complement trick). `n & (n-1)` clears the rightmost set bit. Memorize both — they appear in 80% of bit manipulation problems.
+
+---
+
 ### Count Set Bits — Brian Kernighan's Algorithm
 
 > [!IMPORTANT]

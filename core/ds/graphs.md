@@ -83,6 +83,9 @@ def get_neighbors_grid(r: int, c: int, rows: int, cols: int) -> list[tuple[int,i
 > [!IMPORTANT]
 > **The Click Moment**: "**Shortest path** in unweighted graph" — OR — "**minimum steps/moves**" — OR — "**multi-source** spread (rot, distance to nearest X)" — OR — "**level-order** traversal". BFS guarantees the first time you reach a node is via the shortest path. Weighted graphs → Dijkstra instead.
 
+> [!TIP]
+> BFS expands nodes in order of increasing distance from the source — like ripples in a pond. All nodes at distance 1 are processed before any at distance 2. The critical rule: mark a node visited **before enqueue** (not after dequeue). Marking after dequeue allows the same node to be queued multiple times from different neighbors, causing both duplicate work and incorrect distance counting.
+
 ```python
 from collections import deque
 

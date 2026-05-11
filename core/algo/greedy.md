@@ -308,6 +308,9 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ### When Greedy Fails: DP is Needed
 
+> [!TIP]
+> Imagine cutting a cake into slices to maximize the number of pieces. Greedily taking the largest slice first can leave you with awkward remainders that cannot be divided further — you would have gotten more pieces by taking medium slices in a specific order. This is the coin change failure: `[1, 3, 4]` to make 6 — greedily taking 4 leaves `1+1` (3 coins total), but `3+3` (2 coins) is better. The greedy choice blocked the optimal combination.
+
 > [!CAUTION]
 > Greedy fails when a locally optimal choice precludes a globally better one that requires "sacrificing" now for gain later. Classic greedy failures:
 > - **0/1 Knapsack**: Taking the highest value-density item can block a combination of smaller items with higher total value.

@@ -64,12 +64,70 @@ class BoundedBlockingQueue:
             return val
 ```
 
-### 3.2 Read-Write Lock (Reader Preference vs Writer Preference)
-- **Problem**: Standard Mutex is too slow for read-heavy workloads (e.g., a cache).
-- **Solution**: Multiple readers allowed; one writer exclusive.
-- **SDE-3 Deep Dive**: "Writer Starvation". If new readers keep arriving, the writer never gets in. **Solution**: If a writer is waiting, block new readers.
+### 3.2 Dining Philosophers (Deadlock Avoidance)
 
-### 3.3 Barrier / Phaser
+> [!IMPORTANT]
+> **The Click Moment**: "N threads share N resources in a circular dependency" — the textbook deadlock scenario. Every philosopher picks up left fork, then right fork → circular wait → deadlock. Fix by breaking circular wait: philosopher N picks up right fork first (resource ordering).
+
+Classic setup: 5 philosophers, 5 forks. Each needs both adjacent forks to eat.
+
+**Fix 1 — Resource Ordering** (simplest):
+- Philosophers 0–3: pick up left fork first, then right.
+- Philosopher 4 (the last): picks up right fork first, then left.
+- Breaks the circular wait condition — deadlock impossible.
+
+**Fix 2 — Arbitrator / Waiter**:
+- A waiter semaphore allows at most N-1 philosophers to attempt simultaneously.
+- Guarantees at least one can eat; others wait. Simple but introduces a bottleneck.
+
+**Fix 3 — Chandy/Misra (message-passing)**:
+- Forks are "dirty" or "clean". A philosopher with a dirty fork must hand it to a requester before eating again.
+- Starvation-free. Used in distributed systems where shared memory isn't available.
+
+> [!TIP]
+> For interviews: state the problem (circular wait → deadlock), name resource ordering as the fix, and explain why it breaks the Coffman condition. You don't need to implement Chandy/Misra unless asked.
+
+### 3.3 Read-Write Lock (Readers-Writers Problem)
+
+> [!IMPORTANT]
+> **The Click Moment**: "Many readers can read simultaneously, but a writer needs exclusive access." This is the exact access pattern of a database, config file, or shared cache. A plain mutex serializes all readers — wasteful. A read-write lock allows concurrent reads, exclusive writes.
+
+**Rules:**
+- Multiple readers can hold the lock simultaneously.
+- A writer must wait for all readers to finish.
+- No reader can acquire while a writer is waiting or writing.
+
+```python
+import threading
+
+class ReadWriteLock:
+    def __init__(self):
+        self._read_ready = threading.Condition(threading.Lock())
+        self._readers = 0
+
+    def acquire_read(self):
+        with self._read_ready:
+            self._readers += 1
+
+    def release_read(self):
+        with self._read_ready:
+            self._readers -= 1
+            if self._readers == 0:
+                self._read_ready.notify_all()
+
+    def acquire_write(self):
+        self._read_ready.acquire()
+        while self._readers > 0:
+            self._read_ready.wait()
+
+    def release_write(self):
+        self._read_ready.release()
+```
+
+> [!CAUTION]
+> Writer starvation: if readers arrive continuously, a writer may never get access. Fix: once a writer is waiting, new readers must queue behind it (use a second mutex for writer priority). Python's `threading.RLock` does not implement this — you must build it explicitly.
+
+### 3.4 Barrier / Phaser
 - **Problem**: N threads must all finish Phase 1 before any can start Phase 2.
 - **Solution**: Use a counter and a condition variable. The N-th thread to arrive calls `notify_all()`.
 
@@ -122,6 +180,22 @@ def atomic_increment(ref):
 3. **When would you use a Spinlock vs. a Mutex?**
    - **Spinlock**: Good for very short critical sections (just a few CPU cycles) to avoid the cost of a context switch.
    - **Mutex**: Better for long-running operations where you want the thread to go to sleep and free up the CPU.
+
+---
+
+## 5. SDE-3 Interview Questions — Concurrency
+
+| Question | Core Concept | What They're Testing |
+|----------|-------------|----------------------|
+| Implement a thread-safe LRU cache | Mutex on DLL + HashMap | Lock granularity, deadlock-free design |
+| Design a rate limiter shared across threads | Atomic counter or mutex on sliding window | Atomicity vs locking tradeoff |
+| Implement a countdown latch | Semaphore with count | Understanding of signaling primitives |
+| Fix this deadlocked code [given snippet] | Coffman conditions | Ability to identify and break circular wait |
+| How does a read-write lock differ from a mutex? | Concurrency primitives | Understanding of access patterns |
+| What is the ABA problem? | CAS-based lock-free code | Advanced lock-free knowledge |
+
+> [!TIP]
+> **ABA problem in one sentence**: Thread 1 reads value A, Thread 2 changes A→B→A, Thread 1's CAS succeeds (still sees A) but the world has changed. Fix: version stamps (tagged pointers) or hazard pointers.
 
 ---
 

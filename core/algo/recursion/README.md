@@ -43,6 +43,9 @@ A function that calls itself on a reduced subproblem. SDE-3 focus: recognizing w
 
 ## 1. Recursion Types & Click Moments
 
+> [!TIP]
+> The hardest mental shift in recursion: **don't trace the call stack**. Assume `f(subproblem)` already works correctly, then write only the one-level logic that combines it with the current node or choice. If you find yourself mentally simulating 5 levels of calls, stop — define the base case, assume the recursive result is correct, and combine. The call stack handles the rest.
+
 > [!IMPORTANT]
 > **The Click Moment**: "**Process a tree / list** node" → structural recursion (base: null/empty). "**Generate all** combinations/permutations" → backtracking (make choice, recurse, undo). "**Overlapping subproblems**" → add `@lru_cache` → top-down DP. "**Divide** into independent halves" → divide-and-conquer. Match the type first; write the base case before the recursive step.
 

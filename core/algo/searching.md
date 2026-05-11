@@ -141,6 +141,9 @@ def search_range(arr: list[int], target: int) -> list[int]:
 > [!IMPORTANT]
 > **The Click Moment**: "**Minimize the maximum**" — OR — "**maximize the minimum**" — OR — "what is the **minimum X** such that we can [achieve Y]?" — OR — "**how many** X can we fit given constraint Y?". Convert optimization to feasibility: `valid(mid)` = "can we achieve result ≤ mid?" Then binary search for the minimum `mid` where `valid` is true.
 
+> [!TIP]
+> Binary search on the answer is like guessing someone's age by asking "are you older than 30?" — a single yes/no tells you which half to discard. The key insight: you are not searching an array; you are searching a numeric range where the predicate "is this value feasible?" transitions cleanly from False to True (or True to False). Any optimization question that can be rephrased as "is X achievable?" has this monotone structure and is a candidate.
+
 ```python
 def min_eating_speed(piles: list[int], h: int) -> int:
     import math

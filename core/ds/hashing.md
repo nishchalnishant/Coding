@@ -177,6 +177,9 @@ def longest_subarray_sum_zero(nums: list[int]) -> int:
 > [!IMPORTANT]
 > **The Click Moment**: "Design a **hash map from scratch**" — OR — "explain collision handling". Two strategies: **chaining** (linked list per bucket) and **open addressing** (probe for next slot). Know the trade-offs.
 
+> [!TIP]
+> If two students are assigned the same locker (collision), they need a rule — either wait in a chain outside the locker (chaining) or look for the next free locker (open addressing). Chaining tolerates high load factors because each bucket can hold an unlimited chain; open addressing requires free slots in the array so its load factor must stay below ~0.7 before rehashing.
+
 ```python
 class HashMap:
     def __init__(self, capacity: int = 1009):  # prime capacity reduces clustering

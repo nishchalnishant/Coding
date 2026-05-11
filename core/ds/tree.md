@@ -64,6 +64,9 @@ Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects:
 > [!IMPORTANT]
 > **The Click Moment**: "Find the **common parent**" — OR — "**distance between two nodes** in a tree" — OR — "**lowest shared ancestor**". In a binary tree, recurse: if you find either target, return it up. If both sides return non-null, the current node is the LCA.
 
+> [!TIP]
+> Think of LCA as finding the closest common ancestor in a family tree — the first person who is an ancestor of both people you are looking for. In code: when recursion returns a non-null result from both the left and the right subtree, the current node is exactly that common ancestor — both targets were found on opposite sides.
+
 ```python
 def lowest_common_ancestor(root, p, q):
     if not root or root is p or root is q:

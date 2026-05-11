@@ -67,6 +67,9 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 > [!IMPORTANT]
 > **The Click Moment**: "Sort a **linked list**" — OR — "need a **stable** sort" — OR — "**count inversions** in an array" — OR — "guarantee O(N log N) **regardless** of input distribution". Merge sort is the only comparison sort that achieves all four simultaneously.
 
+> [!TIP]
+> Merge sort is like splitting a deck of cards in half, sorting each half separately, then merging the two sorted halves by repeatedly picking the smaller top card. Quicksort is like picking one card as a pivot and shuffling everything smaller to the left and everything larger to the right — then repeating on each side. Merge sort uses extra space for the merge step but guarantees O(N log N); quicksort sorts in-place and is faster in practice due to cache locality, but degrades to O(N²) on sorted input unless you randomize the pivot.
+
 - **Idea**: Split in half, recurse each half, merge two sorted halves with two pointers.
 - **Complexity**: O(N log N) time, O(N) auxiliary space (O(log N) stack).
 

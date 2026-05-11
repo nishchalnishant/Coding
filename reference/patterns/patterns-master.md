@@ -336,6 +336,33 @@ Ask interviewer:
 
 ---
 
+---
+
+## Progression Cheatsheet: Brute Force → Optimization → Optimal
+
+Use this when you have a brute-force solution and need to optimize under time pressure.
+
+| Pattern | Brute Force | Optimization | Optimal |
+|---------|-------------|--------------|---------|
+| **Subarray sum = K** | O(N²) nested loops | O(N) prefix sum + hash map | O(N) — same |
+| **Two-sum** | O(N²) double loop | O(N) hash set (one pass) | O(N) — same |
+| **Sliding window max** | O(NK) recompute each window | O(N log K) heap | O(N) monotonic deque |
+| **Top-K frequent** | O(N log N) full sort | O(N log K) min-heap of size K | O(N) bucket sort (if K = N) |
+| **Longest increasing subsequence** | O(2^N) backtrack | O(N²) DP | O(N log N) patience sort |
+| **Shortest path (unweighted)** | O(V × E) repeated BFS | — | O(V + E) BFS (already optimal) |
+| **Shortest path (weighted)** | O(V²) Bellman-Ford | O(E log V) Dijkstra | O(E log V) — same |
+| **Count inversions** | O(N²) nested loops | — | O(N log N) merge sort augmented |
+| **Kth largest element** | O(N log N) full sort | O(N log K) min-heap | O(N) avg quickselect |
+| **Word prefix search** | O(W × L) per query | — | O(L) trie |
+| **Next greater element** | O(N²) double scan | — | O(N) monotonic stack |
+| **Overlapping intervals (non-overlapping max)** | O(N²) all pairs | — | O(N log N) sort by end + greedy |
+| **Coin change** | O(K^(T/min)) backtrack | O(N × T) DP | O(N × T) — same |
+
+> [!TIP]
+> The most common upgrade paths: **O(N²) → O(N)** via hash map or two pointers; **O(N²) → O(N log N)** via sort + greedy; **exponential → polynomial** via DP or memoization. When stuck on optimization, ask: "Am I recomputing something? Can I cache it?" (hash/DP) or "Is the data sortable? Does sorting unlock a linear pass?" (sort + greedy/two-pointer).
+
+---
+
 ## See Also
 
 - Problem bank with logic & trickiness: `reference/problem-bank/`

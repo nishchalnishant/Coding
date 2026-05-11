@@ -142,6 +142,9 @@ def dfs_topo(adj: dict, n: int) -> list[int]:
 > [!IMPORTANT]
 > **The Click Moment**: "**Shortest path with edge weights**" — AND — "all weights are **non-negative**". The lazy deletion guard (`if d > dist[u]: continue`) is mandatory — without it, stale heap entries cause incorrect updates and silent bugs.
 
+> [!TIP]
+> Dijkstra is like a GPS that always recalculates from your cheapest unvisited waypoint — always expand the node you can reach most cheaply, not the one you added first. The min-heap enforces this ordering. A "stale entry" arises when you find a cheaper path to a node after it was already pushed onto the heap; the guard `if d > dist[u]: continue` discards those old records rather than re-processing the node at a higher cost.
+
 ```python
 import heapq
 

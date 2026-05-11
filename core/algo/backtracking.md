@@ -53,6 +53,9 @@ Build solutions incrementally; **backtrack** when constraints fail. DFS over the
 > [!IMPORTANT]
 > **The Click Moment**: "Generate **all** X" — OR — "find **one** valid assignment" — OR — "place N items with constraints". Any problem where you try choices, undo them, and try the next one maps to this template. The shape of the decision tree determines complexity before you write a line.
 
+> [!TIP]
+> Backtracking is like trying to solve a Sudoku by penciling in a guess, continuing until you get stuck, then erasing back to the last guess and trying the next number. The `apply → recurse → undo` cycle in code is exactly that pencil-and-eraser motion. Every recursive call is "go deeper with this guess"; the undo after the call is "erase and try the next digit".
+
 ```python
 def backtrack(path: list, state, choices) -> None:
     if is_goal(path, state):

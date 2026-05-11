@@ -121,6 +121,9 @@ def sliding_window_maximum(nums: list[int], k: int) -> list[int]:
 
 ### BFS Multi-Source — Simultaneous Spread
 
+> [!TIP]
+> BFS with a queue is like ripples in a pond — you process all nodes at distance 1 before any at distance 2. That ordering guarantee is what makes BFS find the shortest path: the first time a node is dequeued, it is reached via the minimum number of steps. Multi-source BFS is simply throwing multiple stones in the pond at once — all sources ripple outward simultaneously.
+
 > [!IMPORTANT]
 > **The Click Moment**: "All X cells spread **simultaneously**" — OR — "distance to **nearest** Y" — OR — "minimum time for all cells to reach state Z". Add all sources to the queue at distance 0 before starting BFS. The queue naturally interleaves all fronts, so each cell is first reached via the shortest path from any source.
 

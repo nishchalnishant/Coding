@@ -44,6 +44,9 @@ Solve optimization problems by breaking them into **overlapping subproblems** wi
 
 ## 1. The Four-Step Framework
 
+> [!TIP]
+> Before formulas: think of Climbing Stairs. To reach step 5, you came from step 4 or step 3. That is `dp[5] = dp[4] + dp[3]`. That insight — "where could I have come from?" — is the entire DP framework. State = what you are computing (`dp[i]` = ways to reach step `i`). Recurrence = the "came from" relationship. Base cases = the first one or two steps you can reach directly. Order = fill smaller steps before larger ones.
+
 > [!IMPORTANT]
 > **Before writing a single line of code, answer all four questions out loud. Interviewers at Google evaluate whether you can derive a recurrence — not just recall one.**
 

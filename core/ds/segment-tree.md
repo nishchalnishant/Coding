@@ -99,10 +99,21 @@ Don't update the children until you're forced to visit them. Store the "pending 
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Range Sum Query - Mutable** | Segment Tree | Frequent point updates + range queries | Standard recursive Segment Tree | $O(4N)$ space — don't forget the size! |
-| **Falling Squares** | Max-Segment Tree | Range updates (new height) + Range max query | Store max height in nodes; use lazy propagation for range updates | Relative heights: the square "lands" on the max height of its range. |
-| **Count of Smaller Numbers After Self** | Segment Tree / BIT | Frequency array update + Prefix sum query | Treat values as indices in the Segment Tree. Traverse right to left, query `sum(0, val-1)`, then update `freq(val)`. | Coordinate Compression needed if values are large or negative. |
-| **The Skyline Problem** | Max-Segment Tree | Max height in a range | Segment Tree over the x-coordinates (coordinate compressed). | This is often solved with a Heap, but a Segment Tree is more robust for range variations. |
+| **Range Sum Query - Mutable [M]** | Segment Tree | Frequent point updates + range queries | Standard recursive Segment Tree | $O(4N)$ space — don't forget the size! |
+| **Range Minimum Query [M]** | Segment Tree (Min) | Range min with updates | Same structure as sum tree; merge returns `min(left, right)` | Sentinel value is `float('inf')`, not `0` — wrong default silently breaks queries |
+| **Falling Squares [H]** | Max-Segment Tree + Lazy | Range updates (new height) + Range max query | Store max height; lazy propagation for range update | The square "lands" on the max height of its range — relative, not absolute heights |
+| **Count of Smaller Numbers After Self [H]** | Segment Tree / BIT | Frequency array update + Prefix sum query | Traverse right to left; query `sum(0, val-1)`, then `update(val)` | Coordinate compression required when values are large or negative |
+| **The Skyline Problem [H]** | Max-Segment Tree | Max height at each x-coordinate | Coordinate-compress x values; sweep left-to-right updating max height | Usually solved with heap, but segment tree handles arbitrary range queries more robustly |
+| **My Calendar I [M]** | Segment Tree / Sorted List | Overlap detection on interval add | Build lazily; query `[start, end-1]` before booking; set range to 1 | Booking requests can interleave unpredictably — segment tree handles non-sorted inserts naturally |
+| **My Calendar II [M]** | Segment Tree (count) | Triple booking detection | Maintain `bookings` (≥1) and `overlaps` (≥2) trees; reject if query on `overlaps` hits the new range | Two separate trees for "at least once" and "at least twice" |
+| **My Calendar III [H]** | Segment Tree + Lazy (max) | Max k concurrent events at any time | Range add +1 on `[start, end-1]`; global max query gives max concurrency | Lazy propagation critical — naive point updates are $O(N)$ per booking |
+| **Count of Range Sum [H]** | Segment Tree / Merge Sort | Count prefix sum pairs where `lower ≤ P[j] - P[i] ≤ upper` | Coordinate-compress prefix sums; for each `P[j]`, query `[P[j]-upper, P[j]-lower]` | Off-by-one in coordinate compression kills accuracy; merge sort alternative avoids it |
+| **Rectangle Area II [H]** | Segment Tree + Coordinate Compression | Union area of N rectangles | Sweep line over y; for active x-intervals, query covered length via segment tree | Counting distinct covered x-length via lazy tree is non-trivial — "count" node tracks segments |
+| **Maximum Sum of Subarray No Larger Than K [H]** | Segment Tree / Sorted Set | For each `j`, find max `P[i]` ≤ `P[j] - k` | Keep sorted prefix sums; binary search for `ceil(P[j] - k)` | Sorted set (SortedList in Python) with `bisect` achieves O(N log N); Segment Tree approach needs coordinate compression |
+| **Number of Longest Increasing Subsequences [M]** | Segment Tree on values | Max LIS length ending at val + count of such sequences | Maintain `(max_len, count)` pairs; query `[0, val-1]`, update at `val` | Merging `(len, count)` pairs requires handling ties correctly: same length → add counts |
+| **Interval Sum with Range Add [M]** | Segment Tree + Lazy Propagation | Range add on `[l, r]` then range sum query | Lazy node stores pending addend; push down before traversal | Must push lazy down before recursing into children — missing push causes stale values |
+| **Coordinate Compression Pattern** | Prerequisite technique | Values are too large for array indices | Map unique values to `[0, M)` range; use compressed index in the tree | Must sort **and** deduplicate; after compression, original problem logic is unchanged |
+| **Segment Tree Beats (Ji Driver) [H]** | Advanced: Range min-chmin | Range `a[i] = min(a[i], v)` + range sum query | Maintain per-node `max1`, `max2`, `cnt_max`, `sum`; break if `v ≥ max1`, push if `v > max2` | Extremely hard to implement under pressure — know the concept and complexity ($O(N \log^2 N)$); rarely asked in interviews |
 
 ---
 
