@@ -60,7 +60,8 @@
   * [The Leadership Story: Behavioral](strategies/interview/behavioral.md)
 
 * [The Recall Hub: 60-Sec Mastery](reference/README.md)
-  * [The Blitz: Interview Cheatsheet](reference/sheets/interview-cheatsheet.md)
+  * [Quick Sheets & Revision](reference/sheets/README.md)
+    * [The Blitz: Interview Cheatsheet](reference/sheets/interview-cheatsheet.md)
   * [The Triggers: Pattern Recognition](reference/patterns/patterns-master.md)
 
 * [Library & Resources](books/README.md)
