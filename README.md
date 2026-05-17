@@ -1,44 +1,53 @@
-# The SDE-3 Repository: A Guided Conversation with Your Coach
+# Google SDE-2 Interview Prep
 
-Welcome. If you're here, you're likely aiming for a senior role at Big Tech. You don't need another list of 500 problems; you need to understand the **logic** that connects them. Think of this repository as our shared workspace. I've stripped away the fluff and the rigid "30-day schedules" to give you a high-density, conversational guide to mastering the coding interview.
-
----
-
-## 🚀 Where Should We Start?
-
-If we were sitting down for our first session, I'd point you to these four pillars:
-
-1.  **[The Data Structures Tree](core/ds/ds_tree.md)**: "Show me the map." This is a hierarchical view of everything from basic Arrays to advanced Segment Trees. Use it to identify *what* tool you're reaching for.
-2.  **[The Algorithm Tree](core/algo/algorithm_tree.md)**: "How do we move?" This maps out DP, Graphs, and Greedy patterns. It’s your strategic guide for *how* to approach a problem.
-3.  **[Pattern Variants & Conversations](strategies/interview/leetcode-variants.md)**: This is where we discuss the "Click Moments"—those realizations that turn a hard problem into a simple one. We also talk about the "Twists" interviewers love to use.
-4.  **[The Reference Hub](reference/README.md)**: Think of this as our "cheat sheet" for 60-second pattern recognition and last-minute drills.
+A topic-first, high-signal prep repo targeting Google SDE-2 (L4) in a 4–6 week sprint. Every file is dense and practical — no padding, no 500-problem lists. Navigate by topic, read deep, drill problems.
 
 ---
 
-## 📦 A Walk Through the Folders
+## Directory Map
 
-### [The Engine Room](core/)
-This is the backbone. Every file here is built with "Pedagogical Depth"—not just what the code does, but **why** it’s the gold standard.
--   **[Data Structures](core/ds/)**: We go deep into *Monotonic Stacks*, *Two-Heap Patterns*, and *Multi-source BFS*.
--   **[Algorithms](core/algo/)**: This is where we break down the trickiest parts of *Bitmask DP*, *Backtracking Heuristics*, and *Distributed System Design*.
-
-### [Tactical Strategy](strategies/)
-Coding is only 50% of the SDE-3 interview. The rest is about how you think and how you lead.
--   **[System Design](strategies/interview/system-design.md)**: We talk about scalability, trade-offs, and the "Staff-level" nuances of distributed systems.
--   **[Coding Rubric](strategies/interview/coding-rubric.md)**: I'll show you exactly how I (and other interviewers) evaluate senior candidates. It’s not just about "Does it pass the test cases?"
-
-### [Quick Recall](reference/)
-When the interview starts, you need to bridge the gap between "I've seen this" and "I know how to solve this."
--   **[Patterns Master](reference/patterns/patterns-master.md)**: These are the "Logic Triggers." If you see *X*, you should think *Y*.
--   **[Interview Cheatsheet](reference/sheets/interview-cheatsheet.md)**: High-density sheets for that final 10-minute revision before the call.
+| Folder | Purpose | Start with |
+|--------|---------|------------|
+| `00-start-here/` | Navigation hub, study schedule, 48-hr sprint, interview-day guide | `00-start-here/README.md` |
+| `01-data-structures/` | 12 DS deep-dive files + index (arrays → segment trees) | `01-data-structures/README.md` |
+| `02-algorithms/` | Algorithm deep-dives + standalone technique files (two pointers, sliding window, binary search, DP, graphs…) | `02-algorithms/README.md` |
+| `03-patterns/` | Pattern recognition master, cheatsheets, revision guides, LC variants, system design | `03-patterns/patterns-master.md` |
+| `04-behavioral/` | Google's 4 attributes, STAR stories | `04-behavioral/README.md` |
+| `05-revision/` | Complexity table, Python gotchas, day-before checklist, coding rubric | `05-revision/README.md` |
+| `books/` | Algorithm design deep dives, CP3, DP book summaries | — |
 
 ---
 
-## 📖 How to Use This "Conversation"
+## Quick Links
 
-This repository is **non-linear**. Don't start at page 1 and read until page 100.
--   **The Trees**: Start with `ds_tree.md` or `algorithm_tree.md` to see the landscape.
--   **Deep Dives**: If a specific pattern (like *Digit DP* or *LPS*) feels fuzzy, jump into the atomic file in `core/`.
--   **The Triggers**: Use the `reference/` sheets for active recall.
+| What | Link |
+|------|------|
+| **Start here** | [`00-start-here/README.md`](00-start-here/README.md) |
+| **Patterns master** | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
+| **Cheatsheet + complexity** | [`05-revision/README.md`](05-revision/README.md) |
+| **Behavioral** | [`04-behavioral/README.md`](04-behavioral/README.md) |
 
-*For the full table of contents, see [SUMMARY.md](SUMMARY.md). Let's get to work.*
+---
+
+## 4-Week Overview
+
+| Week | Focus |
+|------|-------|
+| **Week 1** | Arrays, Strings, Hashing, Linked Lists + Two Pointers, Sliding Window |
+| **Week 2** | Trees, BST, Graphs, BFS/DFS, Topological Sort |
+| **Week 3** | DP (1D/2D/knapsack), Backtracking, Greedy, Recursion |
+| **Week 4** | Binary Search, Heap, Tries, Behavioral |
+
+---
+
+## If You Have N Days
+
+Full schedule with daily breakdown: [`00-start-here/README.md`](00-start-here/README.md)
+
+| Time | Strategy |
+|------|---------|
+| **28+ days** | Follow the 4-week plan above, one major topic per day |
+| **14 days** | Compress to must-nail topics: Arrays, Trees, Graphs, DP, Binary Search |
+| **7 days** | Patterns master → top-K problems per pattern → behavioral |
+| **48 hours** | See "48-hour sprint" section in `00-start-here/README.md` |
+| **Interview day** | See "Interview day" section in `00-start-here/README.md` |
