@@ -1,5 +1,60 @@
 # Hashing — SDE-3 Gold Standard
 
+```
+[HASHING — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: O(1) average lookup/insert/delete regardless of dataset size
+│   ├── Alternative (sorted array) gives O(log N) search but O(N) insert — too slow for frequent mutations
+│   └── Analogy: a hash table is a post-office with numbered boxes — hash function is the address formula
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: map arbitrary keys → fixed-range indices via a hash function h(k) = k mod M
+│   ├── Hash function requirements: deterministic, uniform distribution, fast to compute
+│   ├── Load factor α = n/M: keep α < 0.7 for open addressing; < 1.0 for chaining
+│   └── Collision: two keys map to the same slot — unavoidable by pigeonhole; strategy determines performance
+├── HOW IT WORKS
+│   ├── Collision Resolution
+│   │   ├── Chaining: each slot holds a linked list; worst case O(N) if all keys collide
+│   │   ├── Open Addressing (Linear Probing): probe slot+1, +2, ... — cache friendly, clustering issue
+│   │   ├── Quadratic Probing: probe slot+1², +2², ... — reduces primary clustering
+│   │   └── Double Hashing: probe slot + i·h2(k) — best distribution, harder to implement
+│   ├── Resizing (Dynamic Array Analogy)
+│   │   ├── When α exceeds threshold: allocate new table (2× size), rehash all keys — O(N) amortized O(1)
+│   │   └── Shrink when α < 0.25 to reclaim memory
+│   ├── Hash Functions
+│   │   ├── Integer keys: multiply-shift (k * A mod 2^w >> (w-p)) or k mod prime
+│   │   ├── String keys: polynomial rolling hash h = Σ s[i] * base^i mod prime
+│   │   └── Cryptographic (SHA-256): not for hash tables — too slow; used for integrity checks
+│   ├── Consistent Hashing (Distributed Systems)
+│   │   ├── Map both nodes and keys onto a ring [0, 2^32)
+│   │   ├── Key goes to first node clockwise on ring — adding/removing node moves only K/N keys on average
+│   │   └── Virtual nodes: each physical node owns multiple ring positions → more uniform load
+│   └── Bloom Filter
+│       ├── Space-efficient probabilistic set: k hash functions, bit array of size m
+│       ├── Insert: set k bits; Query: check k bits — all set → probably present; any 0 → definitely absent
+│       ├── False positive rate: (1 - e^(-kn/m))^k — tunable by m and k
+│       └── No deletions (standard); Counting Bloom Filter supports deletions
+├── COMPLEXITY SUMMARY
+│   ├── Insert / Lookup / Delete: O(1) average, O(N) worst (all collisions)
+│   ├── Resize: O(N) amortized O(1) per operation
+│   ├── Consistent hashing lookup: O(log N) with sorted ring + binary search
+│   └── Bloom filter insert/query: O(k) — constant if k is fixed
+├── WHEN TO USE
+│   ├── Signal: "two-sum / find complement" → hash map for O(N) vs O(N log N) sort
+│   ├── Signal: "group by property / frequency count" → hash map / Counter
+│   ├── Signal: "seen before / deduplication" → hash set
+│   ├── Signal: "cache with O(1) eviction" → hash map + doubly linked list (LRU)
+│   ├── Signal: "distributed key-value / load balancing" → consistent hashing
+│   ├── Signal: "membership test with low memory, false positives ok" → bloom filter
+│   └── Avoid when: need sorted order (use TreeMap/SortedDict) or worst-case O(1) (use perfect hashing)
+└── COMMON MISTAKES / GOTCHAS
+    ├── Mutable keys: using list/dict as key → TypeError; use tuple or frozenset
+    ├── Default hash in Python: custom objects use id() — must implement __hash__ + __eq__ together
+    ├── Integer overflow in rolling hash: use mod prime; Python arbitrary ints hide this in other languages
+    ├── Load factor neglect: never pre-size a hash map too small in hot paths — triggers repeated rehash
+    ├── Consistent hashing: forgetting virtual nodes leads to hotspots on real hardware
+    └── Bloom filter: cannot remove elements; false positives increase as n grows beyond design capacity
+```
+
 Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE-3: collision strategies, load factor tuning, consistent hashing for distributed systems, and bloom filters.
 
 ---
@@ -405,4 +460,4 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 - [Array](array.md) — prefix sum + map for subarray problems
 - [String](../algo/string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](linked-list.md) — LRU cache DLL component
-- [Patterns Master](../../reference/patterns/patterns-master.md) — complement map and frequency map triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers

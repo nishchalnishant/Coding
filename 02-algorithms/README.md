@@ -23,6 +23,7 @@ All algorithm files live in `02-algorithms/`. This file is the navigation index.
 | **Bit Manipulation** | XOR tricks, power of 2, subset enumeration, single number | MEDIUM | [`bit-manipulation.md`](./bit-manipulation.md) |
 | **Math** | GCD, primes, modular arithmetic, combinatorics | MEDIUM | [`maths.md`](./maths.md) |
 | **System Design Algorithms** | Consistent hashing, HyperLogLog, Bloom filters | GOOD-TO-HAVE | [`system-design-algorithms.md`](./system-design-algorithms.md) |
+| **SQL** | Window functions, JOINs, CTEs, aggregation patterns | HIGH | [`sql.md`](./sql.md) |
 
 ---
 
@@ -51,6 +52,8 @@ All algorithm files live in `02-algorithms/`. This file is the navigation index.
 - Segment Tree / Fenwick Tree
 - Bit manipulation tricks
 - Math (modular arithmetic, combinatorics)
+- SQL (window functions, JOINs, CTEs — common in data/analytics rounds)
+- System Design Algorithms (Bloom filter, Consistent Hashing, Raft — SDE-3 signal)
 
 ---
 
@@ -69,3 +72,7 @@ All algorithm files live in `02-algorithms/`. This file is the navigation index.
 | "Top K / Kth largest" | Heap (min-heap of size K) |
 | "Dependency ordering" | Topological Sort |
 | "Prefix / range query" | Prefix Sum or Segment Tree |
+| "Top N per group / running total / MoM growth" | SQL window function |
+| "Add/remove servers without data reshuffle" | Consistent Hashing |
+| "Unique count at scale" | HyperLogLog |
+| "Membership check, avoid DB hit" | Bloom Filter |

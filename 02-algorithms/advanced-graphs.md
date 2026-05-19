@@ -220,7 +220,7 @@ class DSU:
 
 ## See also
 
-- [Graph Foundations](../foundatio../graph.md) — BFS, DFS, and Dijkstra  
+- [Graph Fundamentals](../01-data-structures/graphs.md) — BFS, DFS, and Dijkstra  
 - [SDE-3 Roadmap](roadmap.md) — advanced study plan  
-- [Patterns Master](../../reference/patterns/patterns-master.md)
+- [Patterns Master](../../03-patterns/patterns-master.md)
 

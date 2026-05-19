@@ -217,7 +217,7 @@ def union(a, b):
         rank[ra] += 1
     return True
 ```
-Note: all pseudocode in this file is illustrative; runnable versions are in `tracks/google-sde2/LANGUAGE_TEMPLATES.md`.
+Note: all pseudocode in this file is illustrative.
 
 ---
 
@@ -365,6 +365,6 @@ Use this when you have a brute-force solution and need to optimize under time pr
 
 ## See Also
 
-- Problem bank with logic & trickiness: `reference/problem-bank/`
-- Quick revision sheets: `reference/quick-sheets/`
-- Track-specific problem sets: `tracks/google-sde2/`, `tracks/sde3-dsa/`
+- Problem bank with logic & trickiness: `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`
+- Canonical questions index: `03-patterns/canonical-questions.md`
+- Problem deep-dives with full walkthroughs: `02-algorithms/problem-deep-dives.md`

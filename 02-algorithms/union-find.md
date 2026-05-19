@@ -317,4 +317,4 @@ class RollbackDSU:
 
 - [Graph Algorithms](graph.md) — Kruskal; when DSU vs BFS/DFS for connectivity
 - [Sorting](sorting.md) — edge sorting for Kruskal
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — DSU pattern recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — DSU pattern recognition triggers

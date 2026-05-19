@@ -1,5 +1,62 @@
 # Graphs (Data Structure) — SDE-3 Gold Standard
 
+```
+[GRAPH]
+├── WHY IT EXISTS
+│   ├── Problem it solves: model pairwise relationships with no hierarchy constraint
+│   ├── Trees can't express: cycles, multiple parents, bidirectional peer links
+│   └── Real-world analogy: road network — cities = vertices, roads = edges, one-way = directed
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: G = (V, E) — set of vertices V, set of edges E ⊆ V × V
+│   ├── Directed (digraph): edges have direction; A→B ≠ B→A
+│   ├── Undirected: edges are symmetric; A-B means both can reach each other
+│   ├── Weighted: each edge carries a cost/distance
+│   ├── DAG (Directed Acyclic Graph): directed + no cycles → enables topological sort
+│   └── Degree: undirected = edge count; directed = in-degree + out-degree
+├── REPRESENTATIONS
+│   ├── Adjacency List: dict/array of neighbor lists
+│   │   ├── Space: O(V + E) — efficient for sparse graphs
+│   │   └── Neighbor iteration: O(degree) — preferred in interviews
+│   ├── Adjacency Matrix: V×V boolean/weight matrix
+│   │   ├── Space: O(V²) — only for dense graphs
+│   │   └── Edge existence check: O(1)
+│   └── Edge List: flat list of (u, v, w) tuples — used in Kruskal's MST
+├── HOW IT WORKS — CORE ALGORITHMS
+│   ├── BFS (Breadth-First Search)
+│   │   ├── Queue-based, explores layer by layer
+│   │   ├── Guarantees shortest path in UNWEIGHTED graphs
+│   │   ├── Multi-source BFS: seed queue with all sources simultaneously
+│   │   └── Time: O(V + E)
+│   ├── DFS (Depth-First Search)
+│   │   ├── Stack/recursion, explores as deep as possible first
+│   │   ├── Used for: cycle detection, connected components, topological sort
+│   │   └── Time: O(V + E)
+│   ├── Topological Sort (DAG only)
+│   │   ├── Kahn's (BFS): in-degree array + queue; detects cycles if not all processed
+│   │   └── DFS-based: push to stack on finish; reverse for order
+│   ├── Shortest Path
+│   │   ├── BFS: unweighted O(V + E)
+│   │   ├── Dijkstra: non-negative weights, O((V + E) log V) with min-heap
+│   │   ├── Bellman-Ford: negative weights, O(VE), detects negative cycles
+│   │   └── Floyd-Warshall: all-pairs, O(V³), dense graphs
+│   ├── MST (Minimum Spanning Tree)
+│   │   ├── Kruskal's: sort edges, union-find → O(E log E)
+│   │   └── Prim's: grow from seed with min-heap → O((V + E) log V)
+│   └── Union-Find: disjoint set structure for connectivity, O(α(N)) per op
+├── COMPLEXITY SUMMARY
+│   ├── BFS / DFS: O(V + E) time, O(V) space
+│   ├── Dijkstra: O((V + E) log V)
+│   ├── Topological sort: O(V + E)
+│   └── Floyd-Warshall: O(V³)
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use BFS when: shortest path, level-order, multi-source spread
+    ├── Use DFS when: cycle detection, topological order, connected components, backtracking
+    ├── Use Dijkstra when: weighted shortest path (no negative edges)
+    ├── Use Bellman-Ford when: negative edge weights or need cycle detection
+    ├── Use tree instead when: data is strictly hierarchical with one parent per node
+    └── Avoid adjacency matrix when: graph is sparse (V > 10³ and E << V²)
+```
+
 Vertices (nodes) + Edges (connections). SDE-3 focus: correct representation choice, clean traversal templates, multi-source BFS, topological sort, and knowing when each algorithm applies.
 
 ---
@@ -362,4 +419,4 @@ def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
 
 - [Graph (algorithms)](../algo/graph.md) — Dijkstra, Bellman-Ford, MST algorithms
 - [Union-Find](../algo/union-find.md) — DSU for Kruskal and connectivity
-- [Patterns Master](../../reference/patterns/patterns-master.md) — graph pattern recognition triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — graph pattern recognition triggers

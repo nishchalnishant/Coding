@@ -1,5 +1,35 @@
 # Backtracking — SDE-3 Gold Standard
 
+```
+[BACKTRACKING — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: enumeration / constraint satisfaction — find all valid configurations in an implicit search tree
+│   └── Intuition / real-world analogy: solving a maze — go forward until stuck, then retrace and try a different path
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: at each recursive call, the partial solution is valid; choices are made one-by-one and undone on return
+│   └── Mathematical basis: DFS over decision tree of depth d with branching factor b → O(b^d) nodes visited worst case; pruning cuts subtrees early
+├── HOW IT WORKS
+│   ├── Step 1: define the state (current partial solution) and the decision space (what choices exist at this level)
+│   ├── Step 2: base case — if state is complete and valid, record/return it
+│   ├── Step 3: for each candidate choice: apply choice → recurse → undo choice (backtrack)
+│   ├── Step 4: pruning — before recursing, check if partial state can possibly lead to a valid solution; skip if not
+│   └── Key condition/guard: undo step must perfectly reverse the apply step (no hidden state mutation)
+├── COMPLEXITY
+│   ├── Time: O(b^d) worst case without pruning | with pruning: problem-specific, often drastically reduced
+│   └── Space: O(d) recursion stack depth | O(d) for current path storage
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "generate all subsets / permutations / combinations" → backtracking over index/choice
+│   ├── Trigger 2: "constraint satisfaction: N-Queens, Sudoku, word search" → place + validate + backtrack
+│   ├── Trigger 3: "find any/all valid paths in a grid or graph" → DFS + visited set + backtrack
+│   ├── Trigger 4: "partition into subsets with equal sum" → try assigning element to each bucket, backtrack
+│   └── Trigger 5: "expression evaluation with operators inserted" → branching on operator choices
+└── COMMON MISTAKES
+    ├── Mistake 1: mutating shared state without undoing it — causes incorrect results across branches
+    ├── Mistake 2: missing pruning conditions → TLE; always ask "can I short-circuit this branch?"
+    ├── Mistake 3: not deduplicating when input has duplicates (sort + skip same-value siblings)
+    └── Mistake 4: confusing backtracking with DP — if subproblems overlap and you only need count/optimum, add memoization → DP
+```
+
 Build solutions incrementally; **backtrack** when constraints fail. DFS over the implicit decision tree. SDE-3 expects: pruning strategies, complexity derivation, and knowing when to add memoization to convert to DP.
 
 ---

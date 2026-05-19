@@ -1,5 +1,45 @@
 # Arrays — SDE-3 Gold Standard
 
+```
+[ARRAY]
+├── WHY IT EXISTS
+│   ├── Problem it solves: random-access to a collection of homogeneous elements in O(1)
+│   ├── Without it: linked traversal every time → O(N) reads even for indexed access
+│   └── Real-world analogy: numbered mailboxes in a row — slot 7 is instantly reachable
+├── WHAT IT IS (First Principles)
+│   ├── Core property: contiguous block of memory; all elements same size
+│   ├── Address formula: addr(i) = base_address + i × element_size
+│   ├── Index is arithmetic, not a pointer chase
+│   └── Memory model: stack-allocated (fixed) or heap-allocated (dynamic); cache-line friendly
+├── HOW IT WORKS
+│   ├── Read/Write by index: O(1) — single multiplication + addition
+│   ├── Insert at end (dynamic array, amortized): O(1) — append if capacity exists
+│   ├── Insert at arbitrary index: O(N) — shift all right-side elements one slot
+│   ├── Delete at arbitrary index: O(N) — shift all right-side elements one slot
+│   ├── Search (unsorted): O(N) linear scan
+│   ├── Search (sorted): O(log N) binary search
+│   ├── Resize (dynamic): allocate 2× buffer, copy all elements → amortized O(1) per append
+│   └── Range update (difference array trick): O(1) per update, O(N) to reconstruct
+├── KEY TECHNIQUES (SDE-3 level)
+│   ├── Two pointers: O(N) in-place reversal, partition, sorted-merge
+│   ├── Sliding window: O(N) subarray problems — fixed/variable window
+│   │   └── CAUTION: variable window breaks with negative numbers (use prefix sums instead)
+│   ├── Prefix sums: O(1) range-sum queries after O(N) build
+│   ├── Difference array: O(1) range-increment updates, O(N) reconstruction
+│   ├── Kadane's algorithm: O(N) maximum subarray
+│   ├── Dutch-national-flag / 3-way partition: O(N) sort 0/1/2
+│   └── Binary search on answer: when "find minimum K such that condition holds"
+├── COMPLEXITY
+│   ├── Time — access: O(1), search unsorted: O(N), search sorted: O(log N)
+│   ├── Time — insert/delete at end: O(1) amortized, at arbitrary: O(N)
+│   └── Space: O(N) total; O(1) extra for in-place operations
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use arrays when: index-based access is frequent, memory locality matters (cache), size is known or bounded
+    ├── Use linked list when: frequent O(1) mid-sequence inserts/deletes, size highly dynamic
+    ├── Use hash map when: key is not an integer index, O(1) lookup by arbitrary key
+    └── Avoid arrays when: prepend-heavy workload or unbounded growth with heavy mid-insertion
+```
+
 Fixed-size sequential collection in contiguous memory. Mastery at SDE-3 means choosing the right technique, proving it correct, knowing when sliding window fails (negatives), and handling range updates at scale.
 
 ---
@@ -462,4 +502,4 @@ def reservoir_sample(stream, k: int) -> list:
 - [Hashing](hashing.md) — two sum, subarray sum = K complement maps
 - [Searching](../algo/searching.md) — binary search on answer for array problems
 - [Stack](stack.md) — monotonic stack/deque for sliding window max and histogram
-- [Patterns Master](../../reference/patterns/patterns-master.md) — sliding window and two-pointer triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — sliding window and two-pointer triggers

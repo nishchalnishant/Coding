@@ -1,5 +1,51 @@
 # Tree — SDE-3 Gold Standard
 
+```
+[TREE]
+├── WHY IT EXISTS
+│   ├── Problem it solves: represent hierarchical relationships (file systems, DOM, org charts, syntax)
+│   ├── Without it: flat arrays/lists cannot express parent-child containment efficiently
+│   └── Real-world analogy: company org chart — CEO at root, each node owns its subtree
+├── WHAT IT IS (First Principles)
+│   ├── Core property: connected, acyclic graph with a designated root
+│   ├── Every non-root node has exactly ONE parent → no cycles, no ambiguity
+│   ├── Binary tree: each node has at most 2 children (left, right)
+│   ├── BST invariant: left subtree values < node.val < right subtree values (ALL descendants, not just direct children)
+│   ├── Height h: longest root-to-leaf path; balanced tree h = O(log N)
+│   └── Memory model: nodes allocated on heap; each node stores value + child pointers
+├── HOW IT WORKS
+│   ├── Traversals (DFS)
+│   │   ├── Inorder (L → Root → R): produces sorted sequence in BST
+│   │   ├── Preorder (Root → L → R): serialization, tree copy
+│   │   ├── Postorder (L → R → Root): deletion, subtree aggregation (Tree DP)
+│   │   └── Morris traversal: O(1) space inorder using threaded pointers
+│   ├── BFS (level-order): queue-based, processes nodes level by level
+│   ├── BST operations: search/insert/delete all O(h); O(log N) balanced, O(N) skewed
+│   ├── LCA (Lowest Common Ancestor)
+│   │   ├── Naive: O(N) per query via ancestor sets
+│   │   ├── Binary lifting: O(N log N) build, O(log N) per query
+│   │   └── Euler tour + RMQ: O(N log N) build, O(1) per query
+│   ├── Tree DP: post-order aggregation returning tuple of values per node
+│   │   └── Pattern: solve subtree → combine children → return to parent
+│   └── Serialization: preorder + null markers → unique reconstruction
+├── SELF-BALANCING VARIANTS
+│   ├── AVL: strict |balance_factor| ≤ 1, O(log N) guaranteed; more rotations
+│   ├── Red-Black: looser balance, O(log N) amortized; fewer rotations (used in std::map, TreeMap)
+│   ├── B-Tree: wide branching, disk-friendly, used in databases/filesystems
+│   └── Segment Tree / Fenwick: range query/update trees (see separate files)
+├── COMPLEXITY
+│   ├── Time — BST search/insert/delete: O(log N) balanced, O(N) worst (skewed)
+│   ├── Time — traversal (all nodes): O(N)
+│   ├── Time — LCA (binary lifting): O(log N) query after O(N log N) build
+│   └── Space: O(N) nodes + O(h) recursion stack; Morris = O(1) stack
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use BST when: sorted order + O(log N) search/insert/delete
+    ├── Use heap when: only need min/max repeatedly (not full sorted order)
+    ├── Use trie when: prefix-based string lookup
+    ├── Use graph when: multiple parents or cycles are possible
+    └── Avoid unbalanced BST: degenerates to O(N) linked list on sorted input
+```
+
 Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
 
 ---
@@ -401,4 +447,4 @@ def deserialize(data: str):
 - [Graph](../algo/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
 - [Dynamic Programming](../algo/dynamic-programming/README.md) — Tree DP (postorder state propagation)
 - [Backtracking](../algo/backtracking.md) — path sum with backtracking
-- [Patterns Master](../../reference/patterns/patterns-master.md) — tree traversal pattern triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers

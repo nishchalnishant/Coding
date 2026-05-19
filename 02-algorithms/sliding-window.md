@@ -1,5 +1,46 @@
 # Sliding Window
 
+```
+[SLIDING WINDOW — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Brute force subarray problems → O(N²) or O(N³)
+│   ├── Contiguous subarrays share overlap — recomputing from scratch wastes work
+│   └── Maintain a window state incrementally: add right element, remove left element
+├── WHAT IT IS
+│   ├── Core invariant: [left, right] window satisfies a constraint at all times
+│   ├── Right pointer expands window; left pointer shrinks it
+│   └── Answer is derived from window size, content, or running aggregate
+├── HOW IT WORKS
+│   ├── Fixed-size window (size K)
+│   │   ├── Step 1: build window for first K elements
+│   │   ├── Step 2: slide — add arr[right], remove arr[right-K]
+│   │   └── Step 3: record max/min/sum each step
+│   ├── Variable-size window — longest valid
+│   │   ├── Step 1: right++ always (expand)
+│   │   ├── Step 2: while constraint violated → left++ (shrink)
+│   │   └── Step 3: update ans = max(ans, right - left + 1)
+│   └── Variable-size window — shortest valid
+│       ├── Step 1: right++ (expand until valid)
+│       ├── Step 2: while valid → record ans, then left++ (shrink)
+│       └── Step 3: update ans = min(ans, right - left + 1)
+├── COMPLEXITY
+│   ├── Time:  O(N) — left and right each traverse array once
+│   └── Space: O(K) or O(charset) for frequency map
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Longest subarray/substring with at most K distinct" → variable window
+│   ├── "Maximum sum subarray of size K" → fixed window
+│   ├── "Minimum window substring containing all chars of T" → shortest valid
+│   ├── "Exactly K" → convert to atMost(K) - atMost(K-1)
+│   ├── "No repeating characters" → window + last-seen index map
+│   └── "Permutation of pattern in string" → fixed window with freq map
+└── GOTCHAS
+    ├── "Exactly K" is hard — reframe as difference of two at-most problems
+    ├── Char frequency map: decrement on left exit, only shrink when map invalid
+    ├── Negative numbers invalidate fixed-window sum assumption → use Kadane's instead
+    ├── Right pointer is inclusive — window length = right - left + 1
+    └── For character windows, reset is O(charset) not O(1) — account for it
+```
+
 ## When to Use
 
 **Trigger keywords:** contiguous subarray or substring, longest / shortest with constraint, maximum/minimum sum of size K, "at most K distinct", "exactly K", contains all characters of T.

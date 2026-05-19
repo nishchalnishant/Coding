@@ -2,7 +2,7 @@
 
 Use this document for **focused revision** before your Google interview. It complements the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Read **Part A** the day before; use **Part B** by topic; follow **Part C** for communication; use **Part D** for timing.
 
-**Per-topic drill:** Every file under `foundations/` now includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+**Per-topic drill:** Every file under `01-data-structures/` and `02-algorithms/` includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
 
 ---
 
@@ -144,8 +144,8 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Define state; recurrence; base case; space optimization when only previous row/column needed.
 
-- Full notes: [algorithms/dynamic-programming/README.md](algorithms/dynamic-programming/README.md)  
-- 16 patterns: [../patterns/dp-advanced.md](../patterns/dp-advanced.md)
+- Full notes: [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md)  
+- 16 patterns: [../02-algorithms/dynamic-programming/advanced-dp-optimizations.md](../02-algorithms/dynamic-programming/advanced-dp-optimizations.md)
 
 **Practice:** Coin Change, House Robber, Longest Increasing Subsequence, Longest Common Subsequence, Unique Paths, Edit Distance, Word Break.
 
@@ -199,7 +199,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | 2 | Strings + two pointers | [string](algorithms/string.md) + sliding window pattern; 4 problems |
 | 3 | Trees + BST | [tree](data-structures/tree.md); 3 problems |
 | 4 | Graphs | [graph](algorithms/graph.md); BFS/DFS/topo; 4 problems |
-| 5 | DP | [DP README](algorithms/dynamic-programming/README.md) + [dp-advanced](../patterns/dp-advanced.md); 4 problems |
+| 5 | DP | [DP README](../02-algorithms/dynamic-programming/README.md) + [dp-advanced](../02-algorithms/dynamic-programming/advanced-dp-optimizations.md); 4 problems |
 | 6 | Heap + binary search + stack | [heap](data-structures/heap.md), [searching](algorithms/searching.md), [stack](data-structures/stack.md); 4 problems |
 | 7 | Mixed mock | 2 timed problems (45 min each) + review mistakes |
 
@@ -228,7 +228,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
-- [SDE3_DSA_ROADMAP.md](../SDE3_DSA_ROADMAP.md) — longer problem order and weekly plan  
+- [SDE3_DSA_ROADMAP.md](../00-start-here/README.md) — longer problem order and weekly plan  
 - [sde-3-guide/sde-3-guide.md](../sde-3-guide/sde-3-guide.md) — Top 20 curated problems  
 - [patterns/leetcode-patterns.md](../patterns/leetcode-patterns.md) — condensed patterns  
 
@@ -244,5 +244,5 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | **Arrays / two pointers** | [data-structures/array.md](data-structures/array.md) |
 | **Graphs (compact)** | [algorithms/graph.md](algorithms/graph.md) |
 | **Graphs (long examples)** | [data-structures/graphs.md](data-structures/graphs.md) |
-| **DP** | [algorithms/dynamic-programming/README.md](algorithms/dynamic-programming/README.md) |
+| **DP** | [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md) |
 | **Full topic index** | [data-structures/README.md](data-structures/README.md), [algorithms/README.md](algorithms/README.md) |

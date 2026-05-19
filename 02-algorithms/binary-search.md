@@ -1,5 +1,35 @@
 # Binary Search
 
+```
+[BINARY SEARCH — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: finding a target or boundary in sorted / monotonic search spaces
+│   └── Intuition / real-world analogy: dictionary lookup — open to middle, discard irrelevant half, repeat
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: after every iteration, the answer lies within [lo, hi]; the invariant is never violated
+│   └── Mathematical basis: halving the interval each step → T(n) = T(n/2) + O(1) → O(log n) by Master Theorem
+├── HOW IT WORKS
+│   ├── Step 1: define lo = 0, hi = n-1 (or problem-specific bounds)
+│   ├── Step 2: compute mid = lo + (hi - lo) // 2  (avoids integer overflow)
+│   ├── Step 3: evaluate predicate f(mid) → if satisfied, record answer and move boundary; else move other boundary
+│   ├── Step 4: repeat until lo > hi (or lo == hi for boundary search)
+│   └── Key condition/guard: choose lo=mid or hi=mid carefully based on whether you seek lower/upper bound
+├── COMPLEXITY
+│   ├── Time: O(log n)  Why: search space halves each iteration → log₂(n) iterations max
+│   └── Space: O(1) iterative | O(log n) recursive call stack
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "sorted array + find target/index" → classic binary search
+│   ├── Trigger 2: "minimize/maximize X subject to a monotonic constraint" → binary search on answer
+│   ├── Trigger 3: "first/last occurrence", "leftmost/rightmost position" → lower/upper bound variant
+│   ├── Trigger 4: "rotated sorted array" → find pivot then binary search in correct half
+│   └── Trigger 5: "feasibility check is O(n), need overall O(n log n)" → binary search on answer space
+└── COMMON MISTAKES
+    ├── Mistake 1: mid = (lo + hi) / 2 → integer overflow for large values; use lo + (hi-lo)//2
+    ├── Mistake 2: off-by-one on loop termination (< vs <=) causing infinite loop or missed element
+    ├── Mistake 3: not anchoring the invariant — being unclear about what [lo,hi] represents at each step
+    └── Mistake 4: applying binary search to non-monotonic predicate → incorrect results
+```
+
 ## The Mental Model
 
 Binary search eliminates half the search space each step by asking: **"Is the answer in the left half or right half?"**

@@ -1,5 +1,36 @@
 # Greedy Algorithms — SDE-3 Gold Standard
 
+```
+[GREEDY ALGORITHMS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: optimization problems where local optimality provably implies global optimality
+│   └── Intuition / real-world analogy: paying with largest denomination coins first — each local choice is irrevocable and correct
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: the greedy choice is always part of some optimal solution (greedy choice property)
+│   └── Mathematical basis: optimal substructure + greedy choice property; proven via exchange argument or "stays ahead" induction
+├── HOW IT WORKS
+│   ├── Step 1: sort or use a priority queue to surface the locally optimal candidate
+│   ├── Step 2: make the greedy choice — commit irrevocably to the best current option
+│   ├── Step 3: reduce the problem and repeat; never reconsider past choices
+│   ├── Step 4: prove correctness — exchange argument: swapping any non-greedy choice for greedy doesn't worsen the solution
+│   └── Key condition/guard: verify greedy choice property holds; if it doesn't, fall back to DP
+├── COMPLEXITY
+│   ├── Time: O(n log n) if sorting dominates | O(n log n) with heap | O(n) for pre-sorted input
+│   └── Space: O(1) to O(n) depending on auxiliary structure (heap, sorted array)
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "interval scheduling / activity selection" → sort by end time, always pick earliest finish
+│   ├── Trigger 2: "minimum spanning tree" → Kruskal (sort edges) or Prim (min-heap)
+│   ├── Trigger 3: "Huffman encoding / minimum cost merge" → min-heap, always merge two smallest
+│   ├── Trigger 4: "jump game / coverage problems" → track furthest reachable, iterate greedily
+│   ├── Trigger 5: "task scheduling with deadlines" → sort by deadline or profit, greedy assignment
+│   └── Trigger 6: "fractional knapsack" → sort by value/weight ratio, take greedily
+└── COMMON MISTAKES
+    ├── Mistake 1: applying greedy to 0/1 knapsack → wrong; greedy only works for fractional variant
+    ├── Mistake 2: skipping the correctness proof — exchange argument is required at SDE-3 level
+    ├── Mistake 3: wrong sort key — e.g., sorting intervals by start time instead of end time for scheduling
+    └── Mistake 4: confusing "greedy works here" with "DP is needed" — always check if choices affect future subproblems
+```
+
 Make the **locally optimal choice** at each step; prove it leads to a **global optimum**. SDE-3 expects: proof intuition (exchange argument or "stays ahead"), knowing when greedy fails, and choosing between greedy and DP under pressure.
 
 ---
@@ -412,7 +443,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ## See also
 
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — greedy pattern triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — greedy pattern triggers
 
 ---
 

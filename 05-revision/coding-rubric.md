@@ -167,9 +167,9 @@ The interviewer expects you to start with the brute force, explain why it's slow
 
 ## Where to revise inside this repo
 
-- Full revision guide: [../foundations/GOOGLE_INTERVIEW_REVISION.md](../foundations/GOOGLE_INTERVIEW_REVISION.md)
-- One-page sheet: [../foundations/GOOGLE_QUICK_SHEET.md](../foundations/GOOGLE_QUICK_SHEET.md)
-- Canonical question index: [../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](../foundations/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
+- Full revision guide: [../03-patterns/GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md)
+- One-page sheet: [../03-patterns/GOOGLE_QUICK_SHEET.md](../03-patterns/GOOGLE_QUICK_SHEET.md)
+- Canonical question index: [../03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](../03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
 - [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md)
 
 ---

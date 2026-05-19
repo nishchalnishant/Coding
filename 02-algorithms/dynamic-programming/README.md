@@ -1,5 +1,37 @@
 # Dynamic Programming — SDE-3 Gold Standard
 
+```
+[DYNAMIC PROGRAMMING — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: optimization / counting over problems with overlapping subproblems (naive recursion recomputes the same state exponentially)
+│   └── Intuition / real-world analogy: memoizing intermediate Fibonacci values — compute fib(5) once, reuse everywhere it's needed
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: optimal substructure — optimal solution to problem contains optimal solutions to subproblems
+│   └── Mathematical basis: overlapping subproblems → DAG of states; DP fills this DAG bottom-up or top-down with memoization; total work = #states × work-per-state
+├── HOW IT WORKS
+│   ├── Step 1: define the state — what parameters uniquely identify a subproblem?
+│   ├── Step 2: write the recurrence — express dp[state] in terms of smaller states
+│   ├── Step 3: identify base cases — smallest subproblems with known answers
+│   ├── Step 4: choose top-down (memoization) or bottom-up (tabulation); bottom-up enables space optimization
+│   ├── Step 5: optimize space — if dp[i] depends only on dp[i-1], roll array to O(1) or O(n)
+│   └── Key condition/guard: if no optimal substructure (choices affect each other globally), DP is wrong — use backtracking or greedy
+├── COMPLEXITY
+│   ├── Time: O(#states × work-per-transition)  Why: each state computed once; transitions are constant or O(n) scans
+│   └── Space: O(#states) naive | O(smaller dimension) after rolling-array optimization
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "count number of ways to reach X" → DP counting (unbounded/0-1 knapsack pattern)
+│   ├── Trigger 2: "minimum/maximum cost to achieve X" → DP optimization
+│   ├── Trigger 3: "longest / shortest subsequence / substring" → LCS, LIS, edit distance patterns
+│   ├── Trigger 4: "partition array / string into valid segments" → interval DP or linear DP with split point
+│   ├── Trigger 5: "overlapping subproblems in recursion tree" → memoize the recursion
+│   └── Trigger 6: "on a grid, reach destination with min cost" → 2D DP, each cell from top/left
+└── COMMON MISTAKES
+    ├── Mistake 1: wrong state definition — missing a dimension that distinguishes subproblems → incorrect reuse
+    ├── Mistake 2: incorrect recurrence order in bottom-up — computing dp[i] before dp[i-1] is ready
+    ├── Mistake 3: off-by-one in base cases or array bounds (especially 1-indexed vs 0-indexed)
+    └── Mistake 4: premature space optimization before correctness is verified — optimize only after tabulation works
+```
+
 Solve optimization problems by breaking them into **overlapping subproblems** with **optimal substructure**; store solutions to avoid recomputation. SDE-3 expects: recurrence derivation from scratch, space optimization, and knowing when DP is wrong.
 
 ---
@@ -524,7 +556,7 @@ def count_valid_numbers(limit: str) -> int:
 - [tips-and-gotchas.md](tips-and-gotchas.md) — 12 common bugs, recognition triggers, interview framework
 
 **Related files:**
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — 16 DP pattern recognition triggers
+- [Patterns Master](../../../03-patterns/patterns-master.md) — 16 DP pattern recognition triggers
 - [Bit Manipulation](../bit-manipulation.md) — bitmask DP for subset problems
 - [Backtracking](../backtracking.md) — when to use backtracking vs. memoizing into DP
 - [Searching](../searching.md) — O(N log N) LIS via patience sort

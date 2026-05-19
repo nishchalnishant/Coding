@@ -1,5 +1,48 @@
 # Linked List — SDE-3 Gold Standard
 
+```
+[LINKED LIST]
+├── WHY IT EXISTS
+│   ├── Problem it solves: O(1) insertion/deletion at any known pointer position without shifting elements
+│   ├── Without it: array insert/delete at middle = O(N) shift of all subsequent elements
+│   └── Real-world analogy: a chain of train cars — adding/removing a car only requires relinking two couplings
+├── WHAT IT IS (First Principles)
+│   ├── Core property: sequence of nodes in non-contiguous memory linked by pointers
+│   ├── Singly linked: node = {val, next}; traversal in one direction only
+│   ├── Doubly linked: node = {val, prev, next}; O(1) delete given node reference
+│   ├── Circular: tail.next = head; used in round-robin, Josephus
+│   └── Memory model: each node heap-allocated independently; NO cache locality (vs array)
+├── HOW IT WORKS
+│   ├── Access by index: O(N) — must traverse from head (no arithmetic shortcut)
+│   ├── Insert at head: O(1) — update head pointer
+│   ├── Insert at tail: O(1) with tail pointer, O(N) without
+│   ├── Insert at known node (given pointer): O(1) — relink prev/next
+│   ├── Delete at head: O(1)
+│   ├── Delete given node (SLL): O(N) to find predecessor; DLL: O(1)
+│   ├── Search: O(N) linear scan
+│   └── Reversal (in-place): O(N) time, O(1) space — three-pointer technique
+├── KEY TECHNIQUES (SDE-3)
+│   ├── Fast/slow pointers (Floyd's)
+│   │   ├── Cycle detection: fast moves 2, slow moves 1 → meet if cycle exists
+│   │   ├── Cycle entry: reset one pointer to head, advance both at speed 1 → meet at entry
+│   │   └── Middle of list: fast reaches end when slow is at middle
+│   ├── Reverse in-place: prev=None, curr=head, while curr: next=curr.next; curr.next=prev; prev=curr; curr=next
+│   ├── Merge two sorted lists: O(N+M) with dummy head
+│   ├── K-group reversal: O(N) iterative with group tracking
+│   ├── LRU Cache: DLL + hash map → O(1) get/put
+│   └── Intersection of two lists: equalize lengths then walk together
+├── COMPLEXITY
+│   ├── Time — access: O(N), insert/delete at known pointer: O(1), search: O(N)
+│   ├── Time — reversal: O(N), merge sorted: O(N+M)
+│   └── Space: O(N) nodes; O(1) extra for in-place operations (no recursion stack)
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use linked list when: frequent O(1) inserts/deletes at known positions, size unpredictable
+    ├── Use array/deque when: index-based access is needed or cache performance matters
+    ├── Use DLL specifically when: need O(1) delete-given-node (e.g., LRU, undo history)
+    ├── Use deque when: O(1) insert/delete at BOTH ends (Python collections.deque)
+    └── Avoid linked list when: random access patterns dominate (O(N) access kills performance)
+```
+
 A linear data structure where nodes are stored in non-contiguous memory, connected via next pointers. SDE-3 expects: clean in-place pointer manipulation, cycle detection with proof, DLL-based design problems, and trade-offs vs arrays.
 
 ---
@@ -372,4 +415,4 @@ class LRUCache:
 - [Heap](heap.md) — Merge K sorted lists via min-heap
 - [Hashing](hashing.md) — Copy list with random pointer; LRU cache hash map component
 - [Stack](stack.md) — Recursion uses call stack; iterative reversal eliminates it
-- [Patterns Master](../../reference/patterns/patterns-master.md) — fast & slow pointer pattern triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — fast & slow pointer pattern triggers

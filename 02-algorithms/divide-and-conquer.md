@@ -366,4 +366,4 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 - [Sorting](sorting.md) — merge sort and quicksort derivation; TimSort
 - [Searching](searching.md) — binary search as D&C; median of two sorted arrays
 - [Dynamic Programming](dynamic-programming/README.md) — overlapping vs independent subproblems
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — D&C pattern recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — D&C pattern recognition triggers

@@ -1,5 +1,39 @@
 # Graphs (Algorithms) — SDE-3 Gold Standard
 
+```
+[GRAPH ALGORITHMS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: pairwise relationships, reachability, shortest paths, spanning trees, flow
+│   └── Intuition / real-world analogy: road maps, social networks, dependency graphs, network routing
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: a graph G=(V,E) encodes binary relationships; traversal visits each node/edge exactly once
+│   └── Mathematical basis: adjacency matrix (dense) vs adjacency list (sparse); directed ↔ symmetric vs asymmetric edges
+├── HOW IT WORKS
+│   ├── BFS — level-order expansion via queue; shortest path in unweighted graphs; O(V+E)
+│   ├── DFS — recursive/stack exploration; cycle detection, topological sort, SCC; O(V+E)
+│   ├── Dijkstra — greedy min-heap relaxation; SSSP for non-negative weights; O((V+E) log V)
+│   ├── Bellman-Ford — relax all edges V-1 times; detects negative cycles; O(VE)
+│   ├── Topological Sort — Kahn's (BFS in-degree) or DFS finish-time reversal; O(V+E)
+│   ├── Kruskal's MST — sort edges, union-find; O(E log E)
+│   ├── Prim's MST — grow MST via min-heap; O((V+E) log V)
+│   └── Key condition/guard: Dijkstra requires no negative weights; topo sort requires DAG; MST requires connected graph
+├── COMPLEXITY
+│   ├── Time: BFS/DFS O(V+E) | Dijkstra O((V+E)logV) | Bellman-Ford O(VE) | MST O(E logE)
+│   └── Space: O(V+E) adjacency list | O(V²) matrix | O(V) for queue/stack/visited
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "shortest path, no negative weights" → Dijkstra
+│   ├── Trigger 2: "shortest path, negative weights or detect negative cycle" → Bellman-Ford
+│   ├── Trigger 3: "order of tasks / dependencies" → Topological Sort
+│   ├── Trigger 4: "minimum cost to connect all nodes" → Kruskal / Prim MST
+│   ├── Trigger 5: "connected components, islands, reachability" → BFS/DFS
+│   └── Trigger 6: "strongly connected components" → Kosaraju / Tarjan DFS
+└── COMMON MISTAKES
+    ├── Mistake 1: forgetting to mark visited before pushing to queue → infinite loop in BFS
+    ├── Mistake 2: using Dijkstra with negative edges → incorrect distances
+    ├── Mistake 3: not handling disconnected graphs (outer loop over all nodes)
+    └── Mistake 4: lazy deletion guard in Dijkstra — skip stale (dist, node) pairs from heap
+```
+
 Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: correct algorithm selection, Dijkstra implementation with lazy deletion guard, Bellman-Ford for negative weights, and distributed graph thinking.
 
 ---
@@ -471,4 +505,4 @@ def prim_mst(n: int, adj: dict) -> int:
 - [Union Find](union-find.md) — DSU for Kruskal's MST and connectivity
 - [data-structures/graphs.md](../ds/graphs.md) — BFS/DFS templates and grid problems
 - [Heap](../ds/heap.md) — Dijkstra uses a min-heap
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — graph pattern recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — graph pattern recognition triggers

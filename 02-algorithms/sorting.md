@@ -1,5 +1,38 @@
 # Sorting — SDE-3 Gold Standard
 
+```
+[SORTING — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: ordering data to enable O(log n) search, O(n) deduplication, greedy decisions, merge operations
+│   └── Intuition / real-world analogy: filing cabinet — sorted folders make retrieval O(log n) instead of O(n)
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: after sorting, ∀ i < j: a[i] ≤ a[j]; comparisons define the ordering
+│   └── Mathematical basis: comparison-based sorting lower bound Ω(n log n) by decision-tree argument; non-comparison sorts break it using key structure
+├── HOW IT WORKS
+│   ├── Merge Sort — divide array in half, sort halves, merge; stable; always O(n log n)
+│   ├── Quick Sort — partition around pivot, recurse; unstable; O(n log n) avg, O(n²) worst; in-place
+│   ├── Heap Sort — build max-heap O(n), extract-max n times O(n log n); unstable, in-place
+│   ├── Counting Sort — count frequencies, prefix-sum positions; O(n+k); only for integer keys in [0,k]
+│   ├── Radix Sort — sort digit by digit (LSD/MSD) using stable sort; O(d·(n+k))
+│   ├── Tim Sort — merge sort + insertion sort for small runs; stable; used in Python/Java
+│   └── Key condition/guard: stability required → Merge/Tim/Counting; in-place required → Quick/Heap
+├── COMPLEXITY
+│   ├── Time: Merge O(n log n) always | Quick O(n log n) avg O(n²) worst | Heap O(n log n) | Counting O(n+k) | Radix O(d(n+k))
+│   └── Space: Merge O(n) | Quick O(log n) avg stack | Heap O(1) | Counting O(k) | Radix O(n+k)
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "need guaranteed O(n log n), stability required" → Merge Sort / Tim Sort
+│   ├── Trigger 2: "in-place, average case performance acceptable" → Quick Sort with random pivot
+│   ├── Trigger 3: "integer keys in bounded range" → Counting Sort
+│   ├── Trigger 4: "sort strings / multi-key tuples digit by digit" → Radix Sort
+│   ├── Trigger 5: "external sort, data > RAM" → k-way external merge sort
+│   └── Trigger 6: "partial sort / top-k elements" → Heap (partial heap sort) or Quickselect O(n) avg
+└── COMMON MISTAKES
+    ├── Mistake 1: choosing Quick Sort for nearly-sorted input without randomization → O(n²) pivot degeneracy
+    ├── Mistake 2: assuming built-in sort is stable without verifying (language-dependent)
+    ├── Mistake 3: Counting Sort with large k (e.g., k=10⁹) → O(k) space blows up; use Radix instead
+    └── Mistake 4: forgetting that custom comparators must be transitive and antisymmetric or sort is undefined
+```
+
 Arranging data to optimize subsequent operations. Senior interviews focus on **algorithm selection reasoning**, stability under constraints, external sorting for data > RAM, and parallel implementations.
 
 ---
@@ -437,4 +470,4 @@ For distributed sort (MapReduce model):
 - [Divide and Conquer](divide-and-conquer.md) — merge sort and quicksort derivation
 - [Heap](../ds/heap.md) — heap sort and top-K streaming
 - [Two Pointers](two-pointers.md) — Dutch National Flag, Meeting Rooms II
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — sorting-based pattern triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers

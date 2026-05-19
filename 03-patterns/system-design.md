@@ -1,5 +1,43 @@
 # Google SDE-2 (L4) System Design — What to Cover + Templates
 
+```
+System Design — First Principles
+│
+├── WHY it exists
+│   ├── Single machines have hard limits (CPU, RAM, disk, network)
+│   ├── Users demand low latency + high availability globally
+│   └── Failures are inevitable — systems must degrade gracefully
+│
+├── WHAT it is
+│   ├── The discipline of decomposing a problem into components
+│   │   each with well-defined responsibilities and failure modes
+│   ├── Core primitives
+│   │   ├── Compute   — stateless services, replicas, load balancers
+│   │   ├── Storage   — relational, NoSQL, blob, cache, queue
+│   │   ├── Network   — CDN, DNS, gateways, service mesh
+│   │   └── Async     — queues, streams, event buses
+│   └── Cross-cutting concerns
+│       ├── Consistency vs Availability (CAP / PACELC)
+│       ├── Latency vs Throughput
+│       └── Observability — metrics, logs, traces
+│
+├── HOW it works (design process)
+│   ├── 1. Requirements → scope, SLOs, scale estimates
+│   ├── 2. API contract → inputs, outputs, auth, pagination
+│   ├── 3. Data model → entities, indexes, query patterns
+│   ├── 4. High-level design → services + storage + async
+│   ├── 5. Deep dive → critical path (write or read)
+│   └── 6. Scale + reliability → sharding, caching, failures
+│
+└── WHERE to apply (decision triggers)
+    ├── Read-heavy   → cache aggressively, CDN, read replicas
+    ├── Write-heavy  → async queues, sharding, LSM storage
+    ├── Strong consistency needed → leader-follower replication, 2PC / Saga
+    ├── Eventual consistency ok → CRDT, leaderless replication
+    ├── Low latency  → co-locate data + compute, in-memory, edge
+    └── High availability → multi-region, circuit breakers, bulkheads
+```
+
 This is **not** an L5/L6 deep-dive. For L4, you're usually evaluated on clear thinking, fundamentals, and tradeoffs.
 
 **When to use this file:** you have a **general** system design round (e.g. URL shortener, feed, chat). If your schedule has an **AI / ML** interview instead, that round may focus on **model lifecycle, data, training, serving, and monitoring** — use the **AI / ML** section in [TWO_WEEK_REVISION.md](TWO_WEEK_REVISION.md) and treat this file as **supplementary** for scalable serving and storage. Some candidates get **both**; confirm with your recruiter.

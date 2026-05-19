@@ -1,5 +1,54 @@
 # Mathematics — SDE-3 Gold Standard
 
+```
+[MATHEMATICS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Many array/number problems have closed-form math shortcuts
+│   ├── Brute loops are O(N); number theory collapses them to O(√N) or O(log N)
+│   └── Modular arithmetic is mandatory for large-output competitive problems
+├── WHAT IT IS
+│   ├── Number theory: primes, GCD, LCM, modular ops
+│   ├── Combinatorics: permutations, combinations, pigeonhole
+│   ├── Geometry: integer-coordinate tricks, cross-product for orientation
+│   └── Fast algorithms: sieve, fast exponentiation, Euclidean GCD
+├── HOW IT WORKS
+│   ├── Sieve of Eratosthenes
+│   │   ├── Init boolean array [0..N], mark 0,1 false
+│   │   ├── For each i from 2 to √N: if prime, mark multiples false
+│   │   └── Result: all true indices are primes — O(N log log N)
+│   ├── Fast Exponentiation (binary exponentiation)
+│   │   ├── base^exp: if exp odd → ans *= base; base = base²; exp >>= 1
+│   │   └── O(log exp) multiplications instead of O(exp)
+│   ├── Modular Arithmetic
+│   │   ├── (a + b) % m = ((a % m) + (b % m)) % m
+│   │   ├── (a * b) % m = ((a % m) * (b % m)) % m
+│   │   └── Modular inverse (prime mod): a^(m-2) % m via fast exp (Fermat)
+│   ├── GCD / LCM
+│   │   ├── GCD(a, b) = GCD(b, a % b) — Euclidean, O(log min(a,b))
+│   │   └── LCM(a, b) = a / GCD(a, b) * b (divide first to avoid overflow)
+│   └── Combinatorics
+│       ├── C(n, k) = C(n-1, k-1) + C(n-1, k) — Pascal's triangle
+│       └── With mod: precompute factorials + modular inverses
+├── COMPLEXITY
+│   ├── Sieve: O(N log log N) time, O(N) space
+│   ├── Fast exp: O(log exp) time, O(1) space
+│   ├── GCD: O(log min(a, b)) time
+│   └── Modular inverse: O(log mod) via fast exp
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Count primes up to N" → Sieve
+│   ├── "a^b mod p, large b" → fast exponentiation
+│   ├── "Count combinations mod 10^9+7" → factorials + modular inverse
+│   ├── "Find GCD / reduce fraction" → Euclidean GCD
+│   ├── "Divisors of N" → iterate up to √N
+│   └── "Check if points are collinear / clockwise" → cross product
+└── GOTCHAS
+    ├── Integer overflow: use long before multiply, divide before multiply in LCM
+    ├── Modular inverse only exists when gcd(a, mod) = 1 (mod must be prime for Fermat)
+    ├── Sieve needs array of size N+1, not N
+    ├── GCD(0, x) = x — handle zero inputs
+    └── "Exactly divisible" problems: check both divisibility and remainder conditions
+```
+
 Mathematical patterns that collapse O(N) loops to O(√N) or O(log N). SDE-3 expects: sieve correctness, fast exponentiation, modular arithmetic fluency, and knowing when geometry reduces to integer algebra.
 
 ---
@@ -446,4 +495,4 @@ def ncr(n: int, r: int, mod: int) -> int:
 - [Bit Manipulation](bit-manipulation.md) — powers of two, parity, GCD via binary method
 - [Divide and Conquer](divide-and-conquer.md) — fast exponentiation derivation; Master Theorem
 - [Dynamic Programming](dynamic-programming/README.md) — DP for combinatorics (ways to sum, partition)
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — math pattern recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — math pattern recognition triggers

@@ -1,5 +1,46 @@
 # Heap / Priority Queue — SDE-3 Gold Standard
 
+```
+[HEAP / PRIORITY QUEUE]
+├── WHY IT EXISTS
+│   ├── Problem it solves: repeatedly extract the current minimum (or maximum) without sorting all elements
+│   ├── Without it: re-sort after each extraction → O(N log N) per round; heap gives O(log N)
+│   └── Real-world analogy: ER triage — patients sorted by severity, most critical always served next
+├── WHAT IT IS (First Principles)
+│   ├── Core property: complete binary tree satisfying heap property at every node
+│   ├── Min-heap: parent ≤ both children → root is the global minimum
+│   ├── Max-heap: parent ≥ both children → root is the global maximum
+│   ├── Complete binary tree: all levels full except possibly last, filled left-to-right
+│   └── Memory model: stored as a flat array
+│       ├── parent(i) = (i - 1) // 2
+│       ├── left_child(i) = 2i + 1
+│       └── right_child(i) = 2i + 2
+├── HOW IT WORKS
+│   ├── Insert (push): append to end → sift-up (swap with parent while heap property violated)
+│   │   └── O(log N) — path length = height of complete binary tree
+│   ├── Extract-min/max (pop): swap root with last element → remove last → sift-down (swap with smaller child while violated)
+│   │   └── O(log N)
+│   ├── Peek (top): return root without removing → O(1)
+│   ├── Heapify (build from array): apply sift-down from N/2 → 0 → O(N) (not O(N log N))
+│   ├── Decrease-key: update value → sift-up → O(log N); required for Dijkstra
+│   └── Heap sort: heapify + N extractions → O(N log N) in-place, O(1) space
+├── KEY PATTERNS (SDE-3)
+│   ├── K-th largest/smallest: min-heap of size K; push each element, pop if size > K → O(N log K)
+│   ├── Merge K sorted lists: min-heap of (value, list_index, element_index) → O(N log K)
+│   ├── Sliding window maximum: monotonic deque (not heap) → O(N)
+│   ├── Median of stream: two heaps (max-heap lower half + min-heap upper half) → O(log N) per insert, O(1) median
+│   └── Dijkstra shortest path: min-heap of (dist, node) → O((V + E) log V)
+├── COMPLEXITY
+│   ├── Time — push: O(log N), pop: O(log N), peek: O(1), build: O(N)
+│   └── Space: O(N) for array storage; O(1) extra for in-place heap sort
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use heap when: need repeated min/max extraction, streaming data, top-K queries
+    ├── Use sorted array when: data is static and you need binary search too
+    ├── Use BST (TreeMap) when: need min/max AND arbitrary search/delete by value
+    ├── Use monotonic deque when: sliding window min/max (O(N) vs O(N log N) heap)
+    └── Avoid heap when: need to find element by value (heap has no O(log N) search)
+```
+
 Complete binary tree with the heap property: parent ≤ children (min-heap) or parent ≥ children (max-heap). The canonical data structure for "always extract the current best" in O(log N).
 
 ---
@@ -341,4 +382,4 @@ For P99 latency from a live request stream:
 - [Sorting](../algo/sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
 - [Queue](queue.md) — priority queue vs FIFO; blocking queue for concurrency
 - [Graph](../algo/graph.md) — Dijkstra's algorithm uses a min-heap
-- [Patterns Master](../../reference/patterns/patterns-master.md) — top-K and merge-K pattern triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — top-K and merge-K pattern triggers

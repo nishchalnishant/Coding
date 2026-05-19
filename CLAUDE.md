@@ -5,15 +5,15 @@ DSA + System Design prep targeting Google SDE-2 / SDE-3 roles. All content is Ma
 
 ## Directory layout (don't explore, use this)
 ```
-tracks/
-  google-sde2/     # 2-week roadmap, problem set, behavioral, templates
-  sde3-dsa/        # Advanced DSA, LLD, system design
-  foundations/     # Atomic notes per data structure / algorithm
-reference/
-  patterns/        # 60-second pattern recognition triggers
-  problem-bank/    # Logic + trickiness for 100+ canonical questions
-  quick-sheets/    # Revision blitz cheat sheets
-books/             # Algorithm design deep dives, CP3, DP
+00-start-here/     # Navigation hub — read this first
+01-data-structures/  # Deep-dives: array, linked-list, tree, graph, heap, trie, segment-tree, hashing, stack, queue, string, advanced
+02-algorithms/       # Deep-dives: binary-search, two-pointers, sliding-window, sorting, greedy, backtracking, graph, union-find, string, bit-manipulation, maths, sql, concurrency, system-design-algorithms
+  dynamic-programming/  # DP sub-topic files (grid, stock, string, digit, interval, probability, tips)
+  recursion/            # Recursion sub-topic files
+03-patterns/       # Pattern triggers, canonical questions, revision guides, system-design overview
+04-behavioral/     # STAR stories, Google attributes (Googliness)
+05-revision/       # Complexity cheatsheet, coding rubric
+books/             # Algorithm design book notes (EPI, CP3, TADM)
 archive/           # Legacy content, ignore unless asked
 ```
 
@@ -21,17 +21,17 @@ archive/           # Legacy content, ignore unless asked
 
 | Task | File |
 |---|---|
-| Add / update a DSA topic | `tracks/foundatio../` or `tracks/foundatio../ds/` |
-| Update the Google SDE-2 problem list | `tracks/google-sde2/PROBLEM_SET.md` |
-| Update practice tracker | `tracks/google-sde2/PRACTICE_TRACKER.md` |
-| Add a pattern | `reference/patterns/patterns-master.md` |
-| Add a canonical problem | `reference/problem-bank/canonical-questions.md` |
-| Update quick-reference sheets | `reference/quick-sheets/` |
-| Behavioral / googliness | `tracks/google-sde2/BEHAVIORAL_GOOGLINESS.md` |
-| AI / ML round prep | `tracks/google-sde2/AIML_PREP.md` |
-| System design worked examples | `tracks/google-sde2/SYSTEM_DESIGN_L4.md` |
-| Common mistake patterns by topic | `tracks/google-sde2/PRACTICE_TRACKER.md` (Mistake library section) |
-| Brute→optimal progressions | `tracks/google-sde2/CODING_ROUNDS.md` |
+| Add / update a DSA topic | `01-data-structures/` or `02-algorithms/` |
+| Add a pattern trigger | `03-patterns/patterns-master.md` |
+| Add a canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
+| Add a problem with full walkthrough | `02-algorithms/problem-deep-dives.md` |
+| Behavioral / googliness | `04-behavioral/BEHAVIORAL_GOOGLINESS.md` |
+| System design overview | `03-patterns/system-design.md` |
+| System design algorithms (Bloom, HLL, Raft) | `02-algorithms/system-design-algorithms.md` |
+| Concurrency / LLD | `02-algorithms/concurrency.md` |
+| SQL queries | `02-algorithms/sql.md` |
+| Complexity cheatsheet | `05-revision/README.md` |
+| Interview rubric | `05-revision/coding-rubric.md` |
 
 ## Working norms
 - All files are Markdown. Edit in place — don't create new files unless asked.

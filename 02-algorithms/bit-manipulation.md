@@ -1,5 +1,55 @@
 # Bit Manipulation — SDE-3 Gold Standard
 
+```
+[BIT MANIPULATION — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Boolean state (on/off) maps directly to bits — no array needed
+│   ├── Bitwise ops execute in O(1) hardware instructions
+│   └── Subset enumeration, parity, power-of-2 checks collapse to single expressions
+├── WHAT IT IS
+│   ├── Core invariant: integers as binary sequences, manipulated via &, |, ^, ~, <<, >>
+│   ├── Masking: isolate, set, clear, or flip specific bits
+│   └── XOR: self-inverse (a ^ a = 0), identity (a ^ 0 = a) — key for duplicate removal
+├── HOW IT WORKS
+│   ├── Fundamental operations
+│   │   ├── Check bit i:    (n >> i) & 1
+│   │   ├── Set bit i:      n | (1 << i)
+│   │   ├── Clear bit i:    n & ~(1 << i)
+│   │   ├── Toggle bit i:   n ^ (1 << i)
+│   │   └── Lowest set bit: n & (-n)
+│   ├── Common tricks
+│   │   ├── n & (n-1) → clears lowest set bit (count set bits, check power of 2)
+│   │   ├── n & (-n)  → isolates lowest set bit
+│   │   ├── XOR all  → find single non-duplicate in array of pairs
+│   │   └── x ^ y    → bits that differ between x and y
+│   ├── Subset enumeration (bitmask DP)
+│   │   ├── All subsets of n elements: iterate mask 0..(1<<n)-1
+│   │   ├── Enumerate subsets of mask: for(s=mask; s>0; s=(s-1)&mask)
+│   │   └── O(3^N) total subsets across all masks
+│   └── XOR Trie (for max XOR queries)
+│       ├── Insert number bit by bit (MSB first) into trie
+│       └── Query: at each bit, greedily go opposite direction
+├── COMPLEXITY
+│   ├── Bit ops: O(1) per operation
+│   ├── Count set bits (Brian Kernighan): O(# set bits)
+│   ├── Bitmask DP over subsets: O(2^N * N) typical
+│   └── XOR Trie insert/query: O(32) = O(1) per number
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Find single number / missing number" → XOR
+│   ├── "Power of 2 check" → n > 0 && (n & (n-1)) == 0
+│   ├── "Count set bits" → Brian Kernighan or built-in popcount
+│   ├── "All subsets of small set (N ≤ 20)" → bitmask enumeration
+│   ├── "Maximize XOR of two numbers in array" → XOR Trie
+│   ├── "Swap without temp" → a^=b; b^=a; a^=b
+│   └── "State compression in DP (visited cities, chars used)" → bitmask
+└── GOTCHAS
+    ├── Signed vs unsigned right shift: >> preserves sign bit in Java/C; use >>> for unsigned
+    ├── 1 << 31 overflows int — use 1L << 31 for long
+    ├── Subset enumeration: s=(s-1)&mask terminates at s=0, handle mask=0 separately
+    ├── XOR trick for single number fails if element appears 3 times — use bit-count mod 3
+    └── n & (n-1) = 0 is true for n=0 too — guard with n > 0 for power-of-2 check
+```
+
 Use binary representation and bitwise operators for compact state and O(1) constant-time operations. SDE-3 mastery: masking, subset enumeration, bitmask DP, and XOR tries.
 
 ---
@@ -477,5 +527,5 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 ## See also
 
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP and O(3^N) subset enumeration
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — bitmask recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — bitmask recognition triggers
 - [Trie](../ds/trie.md) — XOR Trie for maximum XOR pair

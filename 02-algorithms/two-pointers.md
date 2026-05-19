@@ -1,5 +1,48 @@
 # Two Pointers
 
+```
+[TWO POINTERS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Brute force nested loops → O(N²) for pair/subarray problems
+│   ├── Sorted structure allows reasoning about element relationships
+│   └── Moving pointers inward/outward eliminates impossible pairs in O(1)
+├── WHAT IT IS
+│   ├── Core invariant: two indices (left, right) traversing a structure
+│   ├── Pointers move toward each other (opposite ends) OR in same direction
+│   └── Decision at each step: move left, move right, or record answer
+├── HOW IT WORKS
+│   ├── Variant A — Opposite ends (sorted array)
+│   │   ├── Step 1: left = 0, right = len-1
+│   │   ├── Step 2: check condition (sum vs target, palindrome, etc.)
+│   │   ├── Step 3: if too small → left++; if too large → right--
+│   │   └── Step 4: stop when left >= right
+│   ├── Variant B — Same direction (fast/slow, partition)
+│   │   ├── Step 1: slow = 0, fast = 0 (or fast = 1)
+│   │   ├── Step 2: fast advances every iteration
+│   │   ├── Step 3: slow advances only when condition is met
+│   │   └── Step 4: slow marks "last valid" position
+│   └── Variant C — Two arrays / merge
+│       ├── Step 1: pointer on each sorted array
+│       └── Step 2: advance the pointer with smaller element
+├── COMPLEXITY
+│   ├── Time:  O(N) — each pointer moves at most N steps total
+│   └── Space: O(1) — no auxiliary structure
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Sorted array" + "find pair with sum = target" → opposite ends
+│   ├── "Remove duplicates / move zeros in-place" → slow/fast same dir
+│   ├── "Palindrome check" → opposite ends meeting middle
+│   ├── "Container with most water / trapping rain water" → opposite ends
+│   ├── "3Sum / 4Sum" → fix outer loop, two-pointer inner
+│   ├── "Linked list: cycle, middle, kth from end" → fast/slow pointers
+│   └── "Merge two sorted arrays" → two-pointer merge
+└── GOTCHAS
+    ├── Only works on sorted input for pair-sum variant — sort first if needed
+    ├── Duplicate handling: skip duplicates after recording answer to avoid repeats
+    ├── Linked list cycle: Floyd's — fast moves 2, slow moves 1; meet ≠ cycle start
+    ├── Off-by-one: use left < right (not <=) to avoid processing same element twice
+    └── 3Sum time is O(N²) — sort + two-pointer inner; not O(N)
+```
+
 ## When to Use
 
 **Trigger keywords:** sorted array, pair/triplet sum, palindrome check, partition, remove duplicates, container/water, cycle detection, linked list middle.

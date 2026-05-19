@@ -383,7 +383,7 @@ class LRUCache:
 
 ## See also
 
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — 30-second recognition triggers for all patterns
+- [Patterns Master](../../03-patterns/patterns-master.md) — 30-second recognition triggers for all patterns
 - [Dynamic Programming](dynamic-programming/README.md) — optimal substructure; overlapping subproblems
 - [Sorting](sorting.md) — sort key choices; when sort unlocks a greedy solution
 - [Mathematics](maths.md) — number theory tricks; modular arithmetic

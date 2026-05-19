@@ -1,5 +1,68 @@
 # Strings — SDE-3 Gold Standard
 
+```
+[STRINGS (ALGORITHMS) — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: efficient search, match, and transform operations over character sequences
+│   ├── Naive matching is O(N·M) — unacceptable for large texts; algorithms cut this to O(N+M)
+│   └── Analogy: a string is a 1-D array with an alphabet constraint — that constraint is the key to all optimizations
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: ordered sequence of characters over a finite alphabet Σ
+│   ├── Immutability (Python/Java): concatenation creates a new object → O(N) per concat → use StringBuilder/join
+│   ├── Key properties
+│   │   ├── Substring: contiguous slice s[i..j]
+│   │   ├── Subsequence: non-contiguous characters preserving order
+│   │   └── Prefix / Suffix: special substrings anchored at start / end
+│   └── Alphabet size matters: 26 → freq arrays; 128 → ASCII array; arbitrary → hash map
+├── HOW IT WORKS
+│   ├── KMP (Knuth-Morris-Pratt)
+│   │   ├── Build failure function (LPS array): lps[i] = length of longest proper prefix of pattern[0..i] that is also suffix
+│   │   ├── Match phase: mismatch → jump via lps, never rewind text pointer
+│   │   └── Time: O(N+M) | Space: O(M)
+│   ├── Rabin-Karp (Rolling Hash)
+│   │   ├── Hash pattern; slide hash over text in O(1) per step using polynomial rolling hash
+│   │   ├── Collision → verify character by character
+│   │   ├── Power: find multiple patterns simultaneously (multi-hash)
+│   │   └── Time: O(N+M) average, O(N·M) worst | Space: O(1)
+│   ├── Z-Algorithm
+│   │   ├── Z[i] = length of longest substring starting at i that matches a prefix of s
+│   │   ├── Pattern search: concat pattern + '$' + text; Z[i] == len(pattern) → match
+│   │   └── Time: O(N+M) | Space: O(N+M)
+│   ├── Manacher's Algorithm
+│   │   ├── Finds ALL palindromic substrings in O(N) — classic O(N²) DP is insufficient at SDE-3
+│   │   ├── Transform: insert '#' between characters to unify odd/even cases
+│   │   └── P[i] = radius of palindrome centered at i; exploit symmetry to skip recomputation
+│   ├── Suffix Array + LCP
+│   │   ├── Suffix array: sorted order of all suffixes — built in O(N log N) or O(N)
+│   │   ├── LCP array: longest common prefix between adjacent suffixes in sorted order
+│   │   └── Enables: longest repeated substring, number of distinct substrings, pattern search — all O(N log N)
+│   └── Trie-based Matching
+│       ├── Aho-Corasick: multi-pattern matching in O(N + total_pattern_length + matches)
+│       └── Build trie of patterns + failure links (like KMP but for a set of patterns)
+├── COMPLEXITY SUMMARY
+│   ├── Naive pattern match: O(N·M)
+│   ├── KMP / Z / Rabin-Karp: O(N+M)
+│   ├── Manacher: O(N)
+│   ├── Suffix array build: O(N log N) or O(N)
+│   ├── Aho-Corasick build: O(Σ total pattern length)
+│   └── Aho-Corasick search: O(N + matches)
+├── WHEN TO USE
+│   ├── Signal: "does pattern P occur in text T?" → KMP (single pattern, linear guaranteed)
+│   ├── Signal: "find any of K patterns in text" → Aho-Corasick
+│   ├── Signal: "longest palindromic substring" → Manacher or expand-around-center O(N²)
+│   ├── Signal: "repeated substring / longest common substring" → suffix array + LCP
+│   ├── Signal: "rolling / sliding window over string with hash" → Rabin-Karp
+│   ├── Signal: "anagram / permutation in string" → sliding window + freq array
+│   └── Avoid KMP when: pattern is regex or multi-pattern — use Aho-Corasick or regex engine
+└── COMMON MISTAKES / GOTCHAS
+    ├── String concatenation in loop: O(N²) — always use list + join or StringBuilder
+    ├── KMP lps build: off-by-one in the mismatch branch (lps[len-1], not lps[len])
+    ├── Unicode vs ASCII: len() counts code points, not bytes — matters for emoji / CJK
+    ├── Palindrome even/even: expand-around-center needs TWO starting positions (i,i) and (i,i+1)
+    ├── Rabin-Karp collision: always verify on hash match — never skip verification
+    └── Suffix array indexing: SA[i] is the start index of the i-th lexicographically smallest suffix
+```
+
 Arrays of characters with immutability constraints. SDE-3 expects: KMP for O(N+M) pattern matching, rolling hash for multi-pattern problems, Manacher awareness, and production-grade handling of Unicode and concatenation cost.
 
 ---
@@ -440,4 +503,4 @@ class Trie:
 - [Array](../ds/array.md) — sliding window on arrays applies identically to strings
 - [Hashing](../ds/hashing.md) — frequency maps for anagram detection; rolling hash
 - [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance, LPS
-- [Patterns Master](../../../reference/patterns/patterns-master.md) — string pattern recognition triggers
+- [Patterns Master](../../03-patterns/patterns-master.md) — string pattern recognition triggers
