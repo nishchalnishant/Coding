@@ -1,3 +1,85 @@
+## First-Principles Map
+
+```
+WHY Tree Recursion exists
+└── Trees are recursively defined: a tree is a node + left subtree + right subtree
+    ├── Every subtree is itself a valid tree → recursion is structurally natural
+    ├── No explicit loop needed: structure drives traversal
+    └── Most tree properties decompose: height(T) = 1 + max(height(L), height(R))
+
+WHAT it is
+└── Two canonical information-flow directions on a tree
+    ├── Return-up (post-order): children compute first, parent aggregates
+    │   ├── Height, diameter, LCA, max path sum
+    │   └── Pattern: left_val = f(node.left); right_val = f(node.right); return combine(left_val, right_val)
+    └── Pass-down (pre-order): parent passes context to children
+        ├── Path sum with running total, BST range validation, level-order depth
+        └── Pattern: f(node.left, context + node.val); f(node.right, context + node.val)
+
+HOW it works
+├── Height (return-up)
+│   ├── base: node is None → return 0
+│   └── return 1 + max(height(node.left), height(node.right))
+├── Diameter (return-up, use nonlocal max)
+│   ├── base: node is None → return 0
+│   ├── left_h = height(node.left); right_h = height(node.right)
+│   ├── ans = max(ans, left_h + right_h)   # update global max
+│   └── return 1 + max(left_h, right_h)    # return height upward
+├── LCA (return-up, sentinel propagation)
+│   ├── base: node is None or node == p or node == q → return node
+│   ├── left = lca(node.left, p, q); right = lca(node.right, p, q)
+│   └── if left and right → node is LCA; else return left or right
+├── Path Sum (pass-down)
+│   ├── base: node is None → False
+│   ├── if leaf and remaining == node.val → True
+│   └── return pathSum(node.left, remaining-node.val) or pathSum(node.right, ...)
+└── Divide-and-conquer (merge sort on tree)
+    ├── Solve on left subtree independently
+    ├── Solve on right subtree independently
+    └── Merge results at root
+
+WHEN to use
+├── Problem asks for a property of the whole tree → return-up (post-order)
+├── Problem passes a constraint from root to leaves → pass-down (pre-order)
+├── Need both: global answer updated inside + height returned → combo pattern (diameter)
+├── BST problem: pass min/max bounds down, validate at each node
+└── LCA: return sentinel upward, detect when both sides non-null
+
+WHAT can go wrong
+├── Forgetting None base case → AttributeError on node.left of None
+├── Updating global var but returning wrong value → diameter classic bug
+├── LCA: returning node instead of None at base → wrong propagation
+├── Pass-down: not subtracting node.val before recursing → wrong running sum
+├── Diameter: using global correctly but forgetting +1 on return → height off
+└── Divide-and-conquer: merging results that assume disjoint sets (double-counting)
+
+Complexity
+├── Height / diameter / LCA: O(n) time, O(h) stack where h = tree height
+├── Balanced tree: h = O(log n); skewed tree (linked-list shaped): h = O(n)
+├── Path sum: O(n) time, O(h) space
+└── Divide-and-conquer (like merge sort on BST): O(n log n) time
+
+Decision tree
+    Tree problem — which direction?
+    ├── Answer aggregates info from subtrees?
+    │   └── YES → return-up (post-order)
+    │             ├── Single value up? → return it (height, count)
+    │             └── Global max + local value? → nonlocal ans + return local (diameter)
+    └── Answer needs info from ancestors?
+        └── YES → pass-down (pre-order)
+                  ├── Accumulated sum/product → pass running total
+                  └── Range constraint (BST) → pass (min_val, max_val)
+    Both directions needed? → combo: pass bound down, return result up
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Trees have no random-access index; the only way to visit all nodes is by following parent→child links, which maps directly to recursive calls with the call stack mirroring the path from root to current node.
+- **Core insight:** Every tree algorithm is either "I need my children's answers to compute mine" (return-up / post-order) or "I need my parent's context to compute mine" (pass-down / pre-order) — identifying which direction determines the entire code structure.
+- **Invariant:** A recursive tree function must return in O(1) work per node (excluding child calls); any per-node O(n) work makes the total O(n²) on a balanced tree and O(n²) on skewed.
+- **Why it's fast:** The tree structure guarantees each node is visited exactly once; O(n) total work regardless of problem (height, LCA, diameter) as long as merge step is O(1).
+- **Where it breaks:** Skewed trees (sorted input to BST) turn O(log n) stack depth into O(n), hitting Python's recursion limit; the fix is AVL/red-black trees or iterative DFS with an explicit stack.
+
 # Tree Recursion — Advanced Patterns
 
 Advanced structural recursion on binary trees and BSTs. For the recursion foundation see [README.md](README.md).

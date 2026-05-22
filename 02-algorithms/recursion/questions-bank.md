@@ -1,3 +1,51 @@
+## First-Principles Map
+
+```text
+WHY recursion & backtracking exist
+├── Problems with exponential state spaces can't be enumerated iteratively without explicit stacks
+│   ├── Combinatorial search: subsets, permutations, combinations — O(2^n) or O(n!) states
+│   └── Constraint satisfaction: N-Queens, Sudoku — pruning makes brute-force tractable
+WHAT it is
+├── Recursion: reduce problem to smaller subproblem of identical structure; call stack manages state
+│   ├── Base case: smallest valid input handled directly
+│   └── Recursive case: split, delegate, recombine
+├── Backtracking: DFS over a decision tree; undo choice (restore state) on return from branch
+│   ├── "Make choice → recurse → undo choice" is the universal template
+│   └── Pruning: reject a branch early when a constraint is already violated
+HOW it works
+├── Decision tree model
+│   ├── Each node = a partial solution; each edge = one choice
+│   ├── Leaf = complete solution or dead end
+│   └── Backtrack = pop the last choice and try the next sibling
+├── State management
+│   ├── Immutable state: pass modified copies down (safe, higher memory)
+│   └── Mutable state: modify in-place before recurse, restore after (O(1) overhead, error-prone)
+├── Complexity
+│   ├── Subsets: O(2^n · n); Permutations: O(n! · n); Combinations: O(C(n,k) · k)
+│   └── Pruning can reduce by orders of magnitude but worst case remains exponential
+WHEN to use
+├── "generate all X" (subsets, permutations, combinations) → backtracking template
+├── "find any valid assignment" (Sudoku, N-Queens) → backtracking + constraint pruning
+├── "tree/graph path exists" → DFS recursion with visited set
+└── Problem has overlapping subproblems → memoize recursion → DP
+WHAT can go wrong
+├── Missing base case → infinite recursion / stack overflow
+├── Forgetting to undo mutation → corrupted state in sibling branches
+└── Duplicate results → need sorted input + skip-same-value guard at each recursion level
+DECISION
+└── If all solutions needed → backtracking; if only optimal value needed + overlapping subproblems → DP over recursion
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Combinatorial search requires exploring an exponentially large state space in a structured, prunable way.
+- **Core insight**: The call stack IS the explicit state machine — each frame holds one level of the decision tree; returning from a frame undoes that decision for free.
+- **Invariant**: At every recursive call, the partial solution is valid with respect to all constraints imposed so far.
+- **Why it works**: Pruning eliminates entire subtrees early; in practice this reduces average-case from O(n!) to manageable depth-limited DFS.
+- **Where it breaks**: Forgetting to restore mutable state after recursion contaminates sibling branches and produces wrong or duplicate results.
+
+---
+
 # Recursion & Backtracking Question Bank — Tiered Drill
 
 Master the art of the "multiverse search". Every problem here follows the [Universal Recursion Recipe](aditya-verma.md).

@@ -1,4 +1,70 @@
+## First-Principles Map
+
+```
+WHY Union-Find exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                     │               │               │               │
+  [Checking if two nodes    [forest of       [find: follow   [connected      [naive find
+   are connected across a    trees where      parent pointers  components,     O(n) without
+   dynamic graph with many   each tree =      to root;         cycle detect    path compress;
+   union operations is       one component;   union: link      in Kruskal,     wrong parent
+   O(n) without structure;   each node has    one root to      number of       update in
+   BFS/DFS is O(V+E) per     parent pointer;  another; path    islands,        weighted union
+   query]                    root is          compression +    accounts merge, corrupts ranks;
+                             representative]  union by rank    redundant       can't undo
+                                              → O(α(n)) ≈ O(1)] connections]   unions]
+       │                     │               │
+  [real-world:              [invariant:      [path compression: on find,
+   Kruskal's MST;            all nodes in     set every node's parent
+   percolation problem;      same component   directly to root; amortizes
+   friend circles;           have same root   over m operations to
+   accounts linked by        after find;      O(m α(n)) total where
+   shared emails]            root.parent=root] α(n) ≤ 4 for all practical n]
+       ↓
+[Decision: Union-Find vs alternatives]
+  ├── vs BFS/DFS      → UF O(α) per query after O(n) build; BFS O(V+E) per query
+  ├── vs Adjacency +  → UF only answers "same component?"; graph answers "path?"
+      BFS
+  └── vs Segment Tree → ST for range queries; UF for set membership/merge
+```
+
+## First-Principles Breakdown
+- **Root problem**: Repeated "are A and B connected?" queries on a graph with dynamic edge additions require either O(V+E) BFS each time or a structure that maintains component identity incrementally.
+- **Core insight**: Represent each component as a tree with a canonical root (representative); union = merge two trees; find = navigate to root. Path compression makes subsequent finds near-O(1).
+- **Invariant**: All nodes in the same connected component share the same root after `find`; `root.parent == root` uniquely identifies a component.
+- **Why it's fast**: Path compression + union by rank gives amortized O(α(n)) per operation — α is the inverse Ackermann function, effectively ≤ 4 for any practical input size.
+- **Where it breaks**: Cannot support "undo" (split a component) without rollback tricks; only answers "same component?" not "what is the path?"; naive implementation without both optimizations degrades to O(log n) or O(n).
+
 # Union-Find (Disjoint Set Union) — SDE-3 Gold Standard
+
+```
+[UNION-FIND (DSU) — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: dynamic connectivity — online union and find queries on a set of elements partitioned into disjoint groups
+│   └── Intuition / real-world analogy: friend circles — to check if A and B are friends, follow the chain of representatives; merging circles links their roots
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: each component has a unique representative (root); find(x) always returns the root of x's component
+│   └── Mathematical basis: inverse Ackermann function α(n) — with path compression + union by rank, amortized cost per operation is O(α(n)) ≈ O(1) practically
+├── HOW IT WORKS
+│   ├── Step 1: initialize — parent[i] = i, rank[i] = 0 (or size[i] = 1 for weighted DSU)
+│   ├── Step 2: find(x) — follow parent pointers to root; apply path compression (parent[x] = find(parent[x])) on the way back
+│   ├── Step 3: union(x, y) — find roots rx, ry; if rx == ry, already connected; else link smaller rank under larger (union by rank) or smaller size under larger (union by size)
+│   ├── Step 4: connected(x, y) — return find(x) == find(y)
+│   └── Key condition/guard: path compression must be applied in find; union by rank/size must be applied in union — omitting either degrades to O(n) per op
+├── COMPLEXITY
+│   ├── Time: O(α(n)) amortized per find/union with both optimizations  Why: iterated logarithm collapses chain depth to near-constant
+│   └── Space: O(n) for parent and rank/size arrays
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "number of connected components / islands" → DSU, union adjacent cells
+│   ├── Trigger 2: "detect cycle in undirected graph" → union edges; if find(u)==find(v) before union, cycle found
+│   ├── Trigger 3: "Kruskal's MST" → sort edges by weight, union endpoints if not already connected
+│   ├── Trigger 4: "dynamic connectivity queries online" → DSU with rollback (link-cut tree for offline)
+│   └── Trigger 5: "weighted/ratio relationships between elements" → weighted DSU storing relative values to root
+└── COMMON MISTAKES
+    ├── Mistake 1: union by rank without path compression (or vice versa) → O(log n) instead of O(α(n))
+    ├── Mistake 2: mutating rank when doing path compression — rank is an upper bound, not exact depth; only update on union
+    ├── Mistake 3: using DSU for directed graphs — DSU models undirected connectivity only
+    └── Mistake 4: forgetting to decrement component count in union — if tracking #components, decrement only when rx != ry
+```
 
 Near-O(1) amortized connectivity. SDE-3 focus: correct optimizations (path compression + union by rank), DSU variants (weighted ratios, rollback), Kruskal's MST, and distributed dynamic connectivity.
 

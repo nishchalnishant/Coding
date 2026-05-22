@@ -1,3 +1,74 @@
+## First-Principles Map
+
+```text
+WHY data structures exist
+├── Different problems demand different access patterns
+│   ├── Lookup by key           → need O(1) average access           → HashMap / HashSet
+│   ├── Ordered traversal       → need sorted, dynamic insert        → BST / TreeMap
+│   ├── Priority access         → need min/max always available      → Heap (PriorityQueue)
+│   ├── Hierarchical data       → parent-child relationships         → Tree / Trie
+│   ├── Pairwise connections    → arbitrary edges, cycles            → Graph (adj list/matrix)
+│   ├── Range queries           → aggregate over sub-arrays          → Segment Tree / BIT
+│   └── Sequential access       → LIFO / FIFO discipline             → Stack / Queue / Deque
+│
+WHAT the core structures are
+├── Array         — contiguous memory, O(1) index, O(n) insert/delete
+├── Linked List   — O(1) insert at known node, O(n) search, no random access
+├── Stack         — LIFO; DFS, undo, monotonic problems
+├── Queue/Deque   — FIFO / both-ends; BFS, sliding window max
+├── Hash Map/Set  — O(1) amortized lookup, insert, delete; unordered
+├── BST/TreeMap   — O(log n) ordered ops; floor/ceil/rank
+├── Heap          — O(log n) push/pop, O(1) peek; top-k, median
+├── Trie          — O(L) prefix ops; autocomplete, word search
+├── Graph         — adjacency list O(V+E); matrix O(V²); traversal, shortest path
+└── Segment Tree  — O(log n) range query + point update; sum, min, max, GCD
+│
+HOW to pick the right one (access pattern → DS)
+├── "Find in O(1)"                    → HashMap
+├── "Maintain sorted + dynamic"       → TreeMap / SortedList
+├── "Always need min or max"          → Min-Heap / Max-Heap
+├── "Two extremes of a sequence"      → Deque
+├── "Prefix match / word existence"   → Trie
+├── "Range sum / range min"           → Segment Tree / BIT
+├── "Shortest path / connectivity"    → Graph + BFS/Dijkstra/Union-Find
+└── "Undo / balanced parens / NGE"    → Stack
+│
+WHEN each structure excels
+├── HashMap      — frequency counts, anagrams, two-sum, memoization
+├── Heap         — k-th largest, merge k sorted, median of stream
+├── Trie         — longest common prefix, word break, autocomplete
+├── Segment Tree — range min/max/sum with updates, sliding queries
+├── Graph        — network flow, island count, topological sort, cycle detection
+├── Deque        — sliding window maximum, monotonic deque, BFS level order
+└── Stack        — next greater element, valid parentheses, inorder iterative
+│
+WHAT CAN GO WRONG
+├── Using array where hash needed      → O(n) lookup bottleneck
+├── Using BST where heap needed        → can't peek min/max in O(1)
+├── Using adjacency matrix on V=10^5   → O(V²) space blowup
+├── Missing Trie, using set of strings → O(L·N) vs O(L) per query
+├── Segment Tree when prefix sum works → over-engineering, wasted time
+└── Wrong DS choice locks wrong complexity → no amount of algo cleverness fixes it
+│
+DECISION — access pattern → DS
+├── O(1) lookup by key          → HashMap / HashSet
+├── O(1) both ends              → Deque
+├── O(log n) min/max            → Heap
+├── O(log n) ordered ops        → BST / TreeMap
+├── O(L) prefix ops             → Trie
+├── O(log n) range query+update → Segment Tree / BIT
+├── Hierarchy / parent-child    → Tree
+└── Arbitrary connectivity      → Graph (adj list)
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Different problems expose different bottlenecks — lookup, ordering, range, hierarchy, connectivity — and no single structure solves all efficiently.
+- **Core insight:** Every DS is a trade-off: hash maps sacrifice order for O(1) lookup; heaps sacrifice arbitrary access for O(1) extremum; tries sacrifice space for O(L) prefix ops.
+- **Invariant:** The access pattern of the dominant operation determines the optimal DS; everything else is secondary.
+- **Why it works:** Each DS encodes a structural guarantee (heap property, BST ordering, trie prefix path) that makes its target operation cheap by construction.
+- **Where it breaks:** When the wrong DS is chosen upfront, no algorithmic optimization on top can recover the lost complexity — you must change the structure, not the algorithm.
+
 # Data Structures — Index
 
 Deep-dive files live in `01-data-structures/`. This file is the navigation index.

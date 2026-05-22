@@ -1,3 +1,41 @@
+## First-Principles Map
+
+```text
+WHY Binary Search exists
+├── Linear scan is O(n) — unacceptable on sorted data at scale
+│   ├── Each comparison on sorted data eliminates half the space
+│   └── Reduces O(n) search to O(log n) by exploiting monotonicity
+WHAT it is
+├── Iterative halving of a sorted search space
+│   ├── Maintains invariant: answer always in [lo, hi]
+│   └── Terminates when lo > hi or exact match found
+HOW it works
+├── mid = lo + (hi - lo) // 2  (avoids overflow)
+│   ├── If target == arr[mid] → found
+│   ├── If target < arr[mid]  → hi = mid - 1
+│   └── If target > arr[mid]  → lo = mid + 1
+WHEN to use
+├── "find X in sorted array" → classic binary search O(log n)
+├── "minimum X satisfying condition" → binary search on answer space
+└── "rotated sorted array / bitonic" → modified binary search
+WHAT can go wrong
+├── Off-by-one: lo = mid vs lo = mid+1 → infinite loop
+├── Integer overflow: (lo + hi) / 2 on large indices
+└── Applying to unsorted data → incorrect results silently
+DECISION
+└── Data is sorted OR answer space is monotone → binary search; unsorted small array → linear scan
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Locate a value (or boundary) in a large ordered space without scanning every element.
+- **Core insight**: A monotone predicate on a sorted space lets every comparison eliminate half the remaining candidates.
+- **Invariant**: The answer always lies within [lo, hi]; the loop shrinks this interval by at least 1 each iteration.
+- **Why it works**: Each step halves the interval → at most ⌈log₂ n⌉ steps → O(log n) time, O(1) space.
+- **Where it breaks**: Non-monotone predicates or unsorted data — the halving step may discard the answer.
+
+---
+
 # Binary Search
 
 ```

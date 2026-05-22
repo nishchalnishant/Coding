@@ -1,3 +1,57 @@
+## First-Principles Map
+
+```
+WHY Advanced DP Optimizations exist
+├── Standard DP is O(N²) or O(N²K); large N (10^5–10^6) requires sub-quadratic
+├── Transitions have hidden monotone / convex structure exploitable algebraically
+├── Invariant: optimization is valid only when transition cost satisfies required property
+└── Decision tree:
+    dp[i] = min over j<i of (dp[j] + cost(j,i))?
+        cost is linear in j (slope trick / CHT applicable)?   → Convex Hull Trick O(N)
+        opt[i] monotone increasing in i?                      → D&C DP O(N log N)
+        cost satisfies quadrangle inequality?                 → Knuth's opt O(N²)
+        cost is SMAWK-friendly (totally monotone matrix)?     → SMAWK O(N)
+    dp[i][j] = min split over k of dp[i][k]+dp[k][j]?        → Knuth O(N²)
+
+WHAT each optimization is
+├── CHT (Convex Hull Trick): maintain lower envelope of lines y=m*x+b; query in O(1) amortized
+├── D&C DP: if opt(i,j) ≤ opt(i,j+1), solve recursively — T(N)=2T(N/2)+O(N log N)→O(N log N)
+├── Knuth's Optimization: interval DP with w(i,j) satisfying QI + monotone opt → O(N²) from O(N³)
+├── SMAWK: find row-minima of totally monotone matrix in O(N) — generalizes CHT
+└── Slope Trick: track DP function as piecewise linear via two priority queues; O(N log N)
+
+HOW each optimization works
+├── CHT: dp[i] = min_j(dp[j] + b[j] + a[j]*x[i]); lines sorted by slope; convex hull query
+├── D&C DP: compute(lo,hi,opt_lo,opt_hi); find opt at mid, recurse left/right halves
+├── Knuth: precompute opt[i][i]=i; fill by length; for each (i,j) only scan [opt[i][j-1],opt[i+1][j]]
+├── Slope Trick (abs cost): maintain L-heap and R-heap for left/right slopes of f(x)
+└── Li Chao Tree: online CHT variant; insert lines into segment tree; O(log N) per query
+
+WHEN to use each
+├── Transition cost linear in prior state variable → CHT (offline sort by x) or Li Chao (online)
+├── Opt array monotone, cost not linear → D&C DP (verify monotonicity first!)
+├── Interval DP (stone merge, matrix chain) with QI cost → Knuth O(N²)
+├── 1D DP with absolute value cost, floor/ceiling answers → Slope Trick
+└── Totally monotone matrix row minima needed → SMAWK (rare in interviews; know existence)
+
+WHAT can go wrong
+├── CHT applied when cost is not linear → incorrect line representation, wrong minimum
+├── D&C DP when opt is not monotone → skips valid optima, silently wrong answers
+├── Knuth's used without verifying quadrangle inequality → wrong opt bounds, wrong answer
+├── Slope Trick: forgetting to apply lazy offset when shifting function → all values off
+└── Li Chao tree: not handling parallel lines (same slope) — must check before insert
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** O(N²K) DP is too slow for N=10^5; transitions hide a geometric structure (convex hull, monotone optima, quadrangle inequality) that algorithms exploit to skip work.
+- **Core insight:** CHT converts "minimize over all j" into "query lower convex hull at x" — only the hull vertices can be optimal, so non-hull lines are pruned permanently.
+- **Invariant (CHT):** The optimal line for query x_i is on the lower convex hull; as x_i increases monotonically, the optimal line index never decreases → pointer advances once per query.
+- **Why it's fast:** CHT: O(N) amortized with sorted queries; D&C DP: opt monotonicity halves the search space at each recursion level → O(N log N); Knuth: opt[i][j] ∈ [opt[i][j-1], opt[i+1][j]] shrinks each scan from O(N) to O(1) amortized.
+- **Where it breaks:** D&C DP requires offline (all transitions known) and strictly monotone opt — if cost function changes mid-algorithm (online updates), use Li Chao tree instead.
+
+---
+
 # Advanced DP Optimizations
 
 Techniques to reduce O(N²) or O(N²K) DP to O(N log N) or O(NK). For the DP foundation see [README.md](README.md).

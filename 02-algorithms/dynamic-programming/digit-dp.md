@@ -1,3 +1,57 @@
+## First-Principles Map
+
+```
+WHY Digit DP exists
+├── Counting integers in [L,R] with digit properties is O(R) brute force — too slow
+├── Numbers share digit prefixes → overlapping subproblems on (position, tight, state)
+├── Reduces to f(R) − f(L−1): count valid numbers in [0,X] with digit-by-digit build
+├── Invariant: once tight=False, all remaining digit choices are unconstrained (0-9)
+└── Decision tree:
+    count integers in range with property?      → digit DP with tight flag
+    property depends on digit sum?              → state = running sum mod k
+    property depends on digit count (no zeros)? → add leading_zero flag
+    property is "no two adjacent same digit"?   → state = last digit placed
+    property spans pairs of digits?             → state = last digit, track pair
+
+WHAT Digit DP is
+├── State: dp[pos][tight][...custom state...] = count of valid completions
+├── tight flag: True → current prefix == limit prefix; constrains max digit at pos
+├── leading_zero flag: True → haven't placed a nonzero digit yet (skip leading 0s)
+├── Custom state: digit sum mod k, last digit placed, count of 1s, etc.
+└── Template: solve(pos, tight, state) → memoize on (pos, tight, state)
+
+HOW Digit DP works
+├── Convert X to digit array: digits = [d0, d1, ..., dn-1] (most significant first)
+├── At each pos, iterate digit d in [0, tight ? digits[pos] : 9]
+├── new_tight = tight AND (d == digits[pos])
+├── Recurse: solve(pos+1, new_tight, update(state, d))
+└── Base: pos == len(digits) → return 1 if state satisfies property else 0
+
+WHEN to use Digit DP
+├── Count integers in [L,R] with digit sum divisible by k    → state = sum % k
+├── Count integers with no two adjacent equal digits         → state = last_digit
+├── Count "strobogrammatic" or "monotone increasing" numbers → state = last_digit
+├── Count integers with exactly k ones in binary repr        → state = count_ones
+└── Count lucky numbers (digit 4 and 7 only)                → state = is_lucky bool
+
+WHAT can go wrong
+├── Forgetting leading_zero: "007" is not 7; leading zeros inflate digit count
+├── tight not in memo key: same (pos, state) with different tight gives wrong count
+├── Off-by-one on f(L−1): compute f(L−1) carefully; L=0 edge needs special handling
+├── State explosion: too many state dimensions → MLE; minimize custom state
+└── Memoization with mutable state: use tuple for memo key, not list
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Enumerating all integers in [L,R] is O(R) — infeasible for R up to 10^18; digit-by-digit construction with shared prefixes reduces this to O(digits × states).
+- **Core insight:** Numbers with the same prefix face identical remaining choices — the `tight` flag cleanly partitions "constrained" from "free" positions, enabling memoization.
+- **Invariant:** Once `tight=False` at position `p`, every digit 0–9 is valid for all remaining positions — no future constraint from the upper bound.
+- **Why it's fast:** States = O(len × 2 × |custom_state|); each state computed once in O(10) work (10 digit choices) → typically O(10 × log10(N) × |state|).
+- **Where it breaks:** Missing `tight` in the memo key causes incorrect reuse of counts; missing `leading_zero` causes overcounting when the property excludes zero-padded numbers.
+
+---
+
 # Digit DP — Count Numbers with Digit-Level Properties
 
 Count integers in `[L, R]` satisfying a digit-level property. Converts to `f(R) − f(L−1)` where `f(X)` counts valid numbers in `[0, X]`, building numbers digit-by-digit with a `tight` flag.

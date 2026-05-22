@@ -1,3 +1,34 @@
+## First-Principles Map
+
+```
+WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                │                │               │               │
+  [Hierarchical data  [acyclic           [BST: left <    [file systems,  [unbalanced BST
+   can't be stored     connected graph;   root < right;   expression     degrades to O(n)
+   in flat arrays;     parent has 0+      traversal:      trees, DOM,     linked list;
+   sorted search       children; nodes    in/pre/post     autocomplete,   off-by-one in
+   needs O(log n)      form a rooted      order; height   sorted sets,    recursion base
+   insert+lookup]      hierarchy]         determines      priority queue] cases]
+       │                │                │
+  [real-world:        [invariant        [BST ops O(h): h=log n balanced,
+   org chart —         (BST): for every   h=n worst; AVL/Red-Black
+   CEO → VP → Mgr]    node x: all left   keep h=O(log n) via rotations;
+                       subtree < x.val    n-ary tree BFS uses queue,
+                       < all right]       DFS uses stack/recursion]
+       ↓
+[Decision: Tree vs alternatives]
+  ├── vs HashMap      → tree supports range queries + ordered iteration; hash O(1) exact
+  ├── vs Heap         → heap O(1) min/max but no search; BST O(log n) all ops + order
+  └── vs Trie         → trie for string prefix; BST for ordered comparable keys
+```
+
+## First-Principles Breakdown
+- **Root problem**: Flat structures can't represent hierarchy; sorted arrays pay O(n) for insert to maintain order.
+- **Core insight**: BST invariant (left < root < right) halves the search space at every node — O(log n) search without rebuilding.
+- **Invariant**: In a BST, every node's left subtree contains only smaller values and right subtree only larger values.
+- **Why it's fast**: A balanced tree of n nodes has height log₂n — binary search through levels, touching only log n nodes per operation.
+- **Where it breaks**: Without balancing (AVL/RB), repeated sorted insertions produce a O(n)-height linked list; recursion depth can overflow call stack on skewed trees.
+
 # Tree — SDE-3 Gold Standard
 
 ```
@@ -274,7 +305,43 @@ def morris_inorder(root) -> list[int]:
                 # Unthread: restore tree structure; visit current
                 predecessor.right = None
                 result.append(current.val)
-                current = current.right
+    return result
+```
+
+---
+
+### Morris Preorder Traversal — O(1) Space
+
+> [!IMPORTANT]
+> **The Click Moment**: Same as Morris Inorder, but you need **Preorder (Root → Left → Right)** order with O(1) auxiliary space. The only difference is the exact moment of visiting a node: we record the node's value the first time we establish a threaded link (before entering its left child), rather than on backtrack.
+
+```python
+def morris_preorder(root) -> list[int]:
+    """
+    Performs a preorder tree traversal in O(N) time and O(1) auxiliary space.
+    Mutates pointers temporarily and restores them on backtrack.
+    """
+    result = []
+    curr = root
+    while curr:
+        if not curr.left:
+            result.append(curr.val)  # Visit node with no left subtree
+            curr = curr.right
+        else:
+            # Find the inorder predecessor (rightmost node in left subtree)
+            pre = curr.left
+            while pre.right and pre.right is not curr:
+                pre = pre.right
+            
+            if not pre.right:
+                # Threading: Point predecessor's right to current
+                pre.right = curr
+                result.append(curr.val)  # Preorder visit: visit before going left!
+                curr = curr.left
+            else:
+                # Unthreading: Restore the original tree structure
+                pre.right = None
+                curr = curr.right
     return result
 ```
 
@@ -429,6 +496,8 @@ def deserialize(data: str):
 | **All Nodes Distance K in Binary Tree** [M] | "All nodes exactly K edges from target" | Build parent map (BFS); then BFS from target with visited set | Convert tree to undirected graph via parent map — enables upward traversal. |
 | **Vertical Order Traversal** [H] | "Nodes grouped by column, sorted by row then value" | BFS/DFS with `(col, row, val)`; sort globally or per-column | Multiple nodes at same `(col, row)` must be sorted by value — a common missed case. |
 | **Binary Tree Maximum Path Sum** [H] | "Max sum path (any node to any node)" | Post-order; at each node compute max one-arm gain; update global with both arms | Return single-arm to parent (max of left/right arm + node); update global with `node + left + right`. Drop negative arms (use 0 instead). |
+| **Step-By-Step Directions** [M] | LCA Path Generation | "Shortest path from start node to dest node" | Find LCA. Generate path LCA → start (convert all to 'U') and LCA → dest ('L'/'R'); concatenate | Both paths go through LCA; generating full paths from root and trimming common prefix is simpler than post-order traversal. |
+| **Path Sum III** [M] | DFS Prefix Sum Map | "Paths summing to target, not starting at root" | Running prefix sum DFS; look up `curr_sum - target` in complement count map; backtrack map on return | Must decrement `prefix_sum` count in map after child recursion to prevent leak into other branches. |
 
 ---
 

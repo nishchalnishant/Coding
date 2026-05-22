@@ -1,4 +1,74 @@
+## First-Principles Map
+
+```
+WHY concurrency exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                      │               │               │               │
+  [Single-threaded code      [multiple        [threads share  [I/O bound      [race condition:
+   underutilizes multi-       execution        heap, each has  work, parallel  two threads read-
+   core CPUs; I/O waits       contexts         own stack;      computation,    modify-write same
+   block the thread;          sharing memory   OS schedules;   producer-       variable; deadlock:
+   latency = throughput       and CPU;         synchronization  consumer,       T1 holds A waits B,
+   blocker in real            synchronization  via mutex/       event loop,     T2 holds B waits A;
+   systems]                   required for     semaphore/       thread pool     starvation: low
+                              shared state]    condition var]   patterns]       priority never runs]
+       │                      │               │
+  [real-world:               [happens-before  [mutex: mutual exclusion O(1)
+   web server handling        relation:        acquire/release; semaphore:
+   1000 concurrent            memory writes    counting resource slots;
+   requests; parallel         in one thread    condition variable: wait/
+   image processing;          visible in       notify for state change;
+   async I/O pipeline]        another only     Java synchronized / Python
+                              after sync point] threading.Lock]
+       ↓
+[Decision: Concurrency model]
+  ├── Thread pool     → bounded threads for CPU/IO tasks; avoids thread creation overhead
+  ├── Async/Await     → single thread, cooperative; great for I/O, bad for CPU-bound
+  ├── Actor model     → message passing, no shared state; Akka/Erlang
+  └── Lock-free       → CAS operations; highest perf, hardest to reason about
+```
+
+## First-Principles Breakdown
+- **Root problem**: Sequential execution wastes CPU cycles waiting on I/O and underutilizes multiple cores — concurrency extracts parallelism.
+- **Core insight**: Threads share memory, enabling fast communication, but shared mutable state requires synchronization to maintain consistency invariants.
+- **Invariant**: At most one thread holds a mutex at a time; happens-before edges (mutex release → acquire, volatile write → read) define the visibility guarantee.
+- **Why it's fast**: True parallelism on multi-core; I/O overlap hides latency; thread pools amortize thread creation cost over many tasks.
+- **Where it breaks**: Race conditions when happens-before is missing; deadlocks from circular lock acquisition; starvation when lock ordering isn't enforced; context switching overhead can make fine-grained locking slower than single-threaded.
+
 # Concurrency & Multithreading — SDE-3 Gold Standard
+
+```
+[CONCURRENCY & MULTITHREADING — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem class it solves: exploiting multi-core CPUs for parallelism; managing shared mutable state accessed by multiple threads
+│   └── Intuition / real-world analogy: multiple cashiers sharing a till — each is faster in isolation, but coordination (locking) is required to avoid double-charging
+├── WHAT IT IS (First Principles)
+│   ├── Core invariant: mutual exclusion — at most one thread accesses a critical section at a time; atomicity, visibility, and ordering must be explicitly enforced
+│   └── Mathematical basis: happens-before relation (Java Memory Model / C++ memory order); sequential consistency vs relaxed atomics; Amdahl's Law limits parallel speedup: S = 1/(1-p + p/n)
+├── HOW IT WORKS
+│   ├── Mutual Exclusion — mutex/lock: thread acquires lock → enters critical section → releases lock; others block
+│   ├── Condition Variables — wait (release lock + sleep) / notify (wake waiters); used for producer-consumer, bounded buffers
+│   ├── Semaphore — counter-based: P() decrements (blocks at 0), V() increments (wakes waiter); binary semaphore ≈ mutex
+│   ├── Read-Write Lock — multiple concurrent readers OR one exclusive writer; improves throughput for read-heavy workloads
+│   ├── Lock-Free / CAS — compare-and-swap atomically: if mem==expected, write new; retry loop; no blocking but ABA problem
+│   ├── Memory Barriers — prevent CPU/compiler reorder; acquire barrier (reads not moved before), release barrier (writes not moved after)
+│   └── Key condition/guard: always acquire locks in a fixed global order to prevent deadlock; prefer immutable data to eliminate races
+├── COMPLEXITY
+│   ├── Time: lock contention → O(1) uncontended | O(threads) contended; CAS retry loops → O(1) amortized low-contention
+│   └── Space: O(1) per lock/semaphore | O(n) for thread-local storage
+├── WHEN TO USE (trigger patterns)
+│   ├── Trigger 1: "shared mutable data between threads" → mutex or atomic operations
+│   ├── Trigger 2: "producer-consumer with bounded buffer" → mutex + condition variable (or semaphore pair)
+│   ├── Trigger 3: "high read, low write ratio" → read-write lock (shared_mutex in C++, RWMutex in Go)
+│   ├── Trigger 4: "non-blocking counter / flag" → std::atomic / AtomicInteger with CAS
+│   ├── Trigger 5: "thread pool / task queue" → bounded blocking queue + worker threads
+│   └── Trigger 6: "rate limiting / resource pool" → semaphore with capacity = max concurrent permits
+└── COMMON MISTAKES
+    ├── Mistake 1: lock ordering inconsistency across threads → deadlock; always acquire locks in same global order
+    ├── Mistake 2: checking condition outside synchronized block (check-then-act race) → use while loop inside lock for condition variables
+    ├── Mistake 3: ABA problem in CAS loops — value changes A→B→A; use versioned pointer or AtomicStampedReference
+    ├── Mistake 4: cache-line false sharing — two variables on same 64-byte cache line thrash between cores; pad to separate lines
+    └── Mistake 5: visibility without atomicity — volatile ensures visibility but not compound atomicity (e.g., i++ is not atomic)
+```
 
 Mastery of synchronization, memory models, and lock-free primitives. SDE-3 candidates are expected to go beyond "just using a lock" and discuss cache-line contention, memory barriers, and the ABA problem.
 

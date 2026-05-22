@@ -1,3 +1,65 @@
+# First-Principles Map — Google Behavioral & Googliness
+
+```
+WHY Behavioral rounds exist at Google
+├── Technical skill is necessary but not sufficient for L4+ impact
+├── Google hires for the team, not the role — culture fit predicts retention + effectiveness
+└── Googliness predicts whether you'll make the people around you better
+
+WHAT it is
+├── A structured evaluation of: leadership, collaboration, impact framing, growth mindset
+├── Four Google attributes: General Cognitive Ability, Leadership, Googleyness, Role-Related Knowledge
+└── Examples:
+    ├── Googleyness signal: "I noticed a gap nobody owned — I drove it to completion"
+    ├── Leadership signal: "I influenced the roadmap without authority"
+    └── Growth signal: "I was wrong about X; here's what I learned and changed"
+
+HOW it works
+├── STAR format (mandatory structure):
+│   ├── Situation: 1–2 sentences, set the stakes
+│   ├── Task: what was YOUR specific responsibility
+│   ├── Action: what YOU did (not "we") — concrete, technical, specific
+│   └── Result: quantified outcome + what you'd do differently
+├── Google-specific attribute signals:
+│   ├── Cognitive ability: "I structured the ambiguous problem as X, then solved Y"
+│   ├── Leadership: "I aligned 3 teams with conflicting priorities by doing Z"
+│   ├── Googleyness: "I raised the uncomfortable tradeoff no one wanted to discuss"
+│   └── Role knowledge: "I chose approach A over B because of SLA/scale/ops reason"
+├── Story bank structure:
+│   ├── 3 impact stories (shipped features, improved metrics)
+│   ├── 2 failure + learning stories (genuine failures, not "I worked too hard")
+│   ├── 2 conflict resolution stories (cross-team, not interpersonal drama)
+│   └── 1 ambiguity story (drove clarity in undefined situation)
+└── Anti-patterns:
+    ├── "We did X" — no individual ownership visible
+    ├── Vague outcomes — "it went well" with no metric
+    └── Failure story with no learning or change in behavior
+
+WHEN to use
+├── Any question starting with "Tell me about a time..." → STAR immediately
+├── Ambiguous question ("What's your biggest strength?") → anchor to a concrete story
+└── Decision:
+    ├── Multiple relevant stories → pick the one with highest quantified impact
+    ├── Negative story asked → ALWAYS pair failure with concrete behavioral change
+    └── "What would you do?" (hypothetical) → answer from a real story, then generalize
+
+WHAT can go wrong
+├── Over-preparing canned answers → sounds rehearsed, not genuine → Googleyness miss
+├── All stories from one project → signals limited scope of impact
+├── No quantification → interviewer can't calibrate the magnitude of your contribution
+└── Defensive when probed → "we had no choice" → leadership anti-signal
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Technical interviews filter for ability; behavioral interviews filter for impact potential and cultural alignment — both gates must be passed independently.
+- **Core insight:** Google doesn't evaluate what happened — it evaluates how you think about what happened (judgment, ownership, learning velocity).
+- **Invariant:** Every strong behavioral answer has: individual ownership + concrete action + quantified result + reflection; removing any element weakens the signal.
+- **Why it works:** STAR is a forcing function for specificity — vague stories can't be probed for signal, specific stories reveal actual decision-making quality.
+- **Where it breaks:** If the story bank doesn't cover all four Google attributes, you'll have gaps that get exposed when the interviewer probes your least-covered area.
+
+---
+
 # Behavioral + Googliness — Google SDE-2
 
 Google evaluates every candidate on four attributes. This file covers all four with signal phrases, anti-patterns, and STAR story guidance.

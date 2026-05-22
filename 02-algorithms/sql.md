@@ -1,3 +1,53 @@
+## First-Principles Map
+
+```text
+WHY SQL exists
+├── Structured data lives in relations (tables) — need declarative retrieval
+│   ├── Ad-hoc filtering over millions of rows without writing loops
+│   └── Multi-table joins replace manual cross-referencing
+WHAT it is
+├── A declarative set-based language evaluated by a query planner
+│   ├── Logical order: FROM → JOIN → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT
+│   └── Physical order decided by optimizer (indexes, hash joins, sort-merge joins)
+HOW it works
+├── Aggregation pipeline
+│   ├── GROUP BY partitions rows; aggregate functions (COUNT, SUM, AVG, MAX, MIN) collapse each partition
+│   └── HAVING filters after aggregation; WHERE filters before
+├── Window functions
+│   ├── OVER (PARTITION BY col ORDER BY col) — retains row granularity while computing group stats
+│   ├── ROW_NUMBER / RANK / DENSE_RANK — deduplicate, top-N per group
+│   └── LAG / LEAD / SUM OVER frame — running totals, delta between adjacent rows
+├── Joins
+│   ├── INNER — intersection; rows must match in both tables
+│   ├── LEFT/RIGHT OUTER — preserve all rows from one side, NULL-fill the other
+│   └── SELF JOIN / cross apply — hierarchies, consecutive-row comparisons
+├── CTEs (WITH clause)
+│   ├── Break multi-step logic into named subqueries — no performance penalty vs inline subquery
+│   └── Recursive CTEs — traverse trees/graphs (org charts, BOM)
+WHEN to use
+├── "top N per group" → ROW_NUMBER() + OVER(PARTITION BY) + WHERE rn = 1
+├── "running total / moving average" → SUM/AVG OVER (ORDER BY ... ROWS BETWEEN ...)
+├── "find duplicates" → COUNT(*) > 1 GROUP BY key columns
+├── "consecutive rows / gaps" → LAG/LEAD or self-join on row_number delta
+└── "hierarchy / recursive path" → recursive CTE WITH RECURSIVE
+WHAT can go wrong
+├── NULL propagation — NULL in JOIN key silently drops rows; NULL in aggregate is ignored
+├── HAVING vs WHERE confusion — filtering aggregated result needs HAVING, not WHERE
+└── Window function in WHERE — illegal; must wrap in subquery or CTE
+DECISION
+└── Need per-row context + group stat simultaneously → window function (not GROUP BY, which collapses rows)
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Relational data requires multi-table, multi-condition retrieval without imperative loops.
+- **Core insight**: SQL is evaluated as set operations; the optimizer chooses physical execution — write for correctness, let the planner choose the join strategy.
+- **Invariant**: Logical evaluation order (FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY) is fixed; aliases defined in SELECT are invisible to WHERE/HAVING.
+- **Why it works**: Window functions compute aggregates over a partition while preserving row identity, enabling top-N, running totals, and delta patterns in a single pass.
+- **Where it breaks**: NULL semantics, implicit type coercion in joins, and applying filters at the wrong pipeline stage (WHERE vs HAVING) produce silent wrong-answer bugs.
+
+---
+
 # SQL — Interview Quick Reference
 
 ```

@@ -1,4 +1,93 @@
+## First-Principles Map
+
+```
+WHY segment trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                        │                │               │               │
+  [Range queries (sum,         [binary tree     [each node      [range sum,     [lazy propagation
+   min, max) on mutable         covering array   stores aggregate range min/max,  bugs: forgetting
+   arrays are O(n) naive;       ranges; node i   of its range;   range GCD,      to push down
+   prefix arrays are O(n)       covers [l,r];    query: split    point update +  before recursing;
+   update and O(1) query —      left child [l,   into O(log n)   range query     off-by-one in
+   need O(log n) both]          mid], right      precomputed     problems]       range boundaries]
+                                [mid+1,r]]       nodes; O(log n)]
+       │                        │                │
+  [real-world: stock          [invariant:       [lazy propagation: defer range
+   analytics — max in          leaf i holds     updates; mark node "pending";
+   range [a,b], then           arr[i]; internal push down only when querying
+   update arr[k]]              node holds       children; O(log n) range update
+                               aggregate of     instead of O(n); critical for
+                               both children]   "add 5 to all elements in [l,r]"]
+       ↓
+[Decision: Segment Tree vs alternatives]
+  ├── vs Prefix Array   → prefix O(1) query but O(n) update; seg tree O(log n) both
+  ├── vs BIT/Fenwick    → BIT simpler code, O(log n) prefix queries only; seg tree handles arbitrary ranges
+  └── vs Sparse Table   → sparse table O(1) query but static (no update); seg tree handles updates
+```
+
+## First-Principles Breakdown
+- **Root problem**: Prefix arrays support O(1) range queries but O(n) point updates — need a structure that balances both at O(log n).
+- **Core insight**: Decompose any range query into O(log n) precomputed sub-ranges that together cover exactly the queried interval without overlap.
+- **Invariant**: Every internal node stores the aggregate (sum/min/max) of exactly the array elements in its range; leaves hold individual elements.
+- **Why it's fast**: Any query range [l,r] can be decomposed into at most 2 log n precomputed nodes — the tree's height is log n.
+- **Where it breaks**: Lazy propagation is required for range updates — missing pushdown causes stale data in subtrees; memory is 4n nodes for n elements; more complex to implement than BIT.
+
 # Segment Trees — SDE-3 Gold Standard
+
+```
+[SEGMENT TREE — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: range queries (sum, min, max, GCD) AND point/range updates — both in O(log N)
+│   ├── Prefix sum: O(1) query but O(N) update — unusable with frequent mutations
+│   ├── Naive scan: O(N) per query — too slow for large arrays with many queries
+│   └── Analogy: a segment tree is a binary tournament bracket — each internal node stores the "winner" (aggregate) of its subtree
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: binary tree where each node covers a contiguous range [l, r]; leaves cover [i, i]
+│   ├── Parent covers [l, r]; children cover [l, mid] and [mid+1, r]
+│   ├── Key property: any range query decomposes into O(log N) disjoint node ranges
+│   └── Storage: 1-indexed array of size 4·N (standard safe allocation for recursive build)
+├── HOW IT WORKS
+│   ├── Build
+│   │   ├── Recursively build left and right children, then merge: tree[node] = merge(tree[2n], tree[2n+1])
+│   │   └── Time: O(N) | Space: O(N)
+│   ├── Point Update
+│   │   ├── Walk root → leaf updating the target index
+│   │   └── Update all ancestors on the way back up — O(log N)
+│   ├── Range Query
+│   │   ├── If current node range is fully inside query range → return node value
+│   │   ├── If fully outside → return identity (0 for sum, ∞ for min)
+│   │   └── Partial overlap → recurse both children, merge results — O(log N)
+│   ├── Lazy Propagation (Range Update)
+│   │   ├── Defer updates: store pending update in lazy[] array instead of applying immediately
+│   │   ├── Propagate lazy to children only when a child is accessed (push-down)
+│   │   └── Enables range-update + range-query both in O(log N)
+│   ├── Merge Function (pluggable)
+│   │   ├── Sum: merge = a + b | identity = 0
+│   │   ├── Min: merge = min(a, b) | identity = +∞
+│   │   ├── Max: merge = max(a, b) | identity = -∞
+│   │   └── GCD: merge = gcd(a, b) | identity = 0
+│   └── Coordinate Compression + Dynamic Segment Tree
+│       ├── Values too large (1e9) → compress to rank indices before building
+│       └── Dynamic (pointer-based): create nodes on demand — supports sparse arrays
+├── COMPLEXITY SUMMARY
+│   ├── Build: O(N)
+│   ├── Point update: O(log N)
+│   ├── Range query: O(log N)
+│   ├── Range update (lazy): O(log N)
+│   └── Space: O(N) — 4·N array allocation
+├── WHEN TO USE
+│   ├── Signal: "range sum/min/max with updates" → segment tree (vs prefix sum which can't update)
+│   ├── Signal: "count inversions / elements in range" → segment tree on value space
+│   ├── Signal: "range assignment + range query" → lazy propagation
+│   ├── Signal: "rectangle area union / sweep line" → segment tree on coordinate-compressed axis
+│   └── Avoid when: no updates (use sparse table for O(1) range min/max query) or only prefix queries (use BIT/Fenwick)
+└── COMMON MISTAKES / GOTCHAS
+    ├── Array size: always allocate 4·N — 2·N is insufficient for non-power-of-2 N
+    ├── Lazy push-down order: always push down BEFORE recursing into children; pushing after corrupts children
+    ├── Identity element: wrong identity breaks merges — sum→0, min→+INF, max→-INF, product→1
+    ├── 0-indexed vs 1-indexed: 1-indexed node arithmetic (2n, 2n+1) is standard; mixing with 0-indexed array causes bugs
+    ├── Range update without lazy: updating all leaves in a range is O(N log N) — always use lazy for range updates
+    └── Forgetting to merge on build: internal nodes must aggregate children — leaf-only init is incorrect
+```
 
 Manage **Range Queries** and **Point/Range Updates** in $O(\log N)$. When a simple Prefix Sum fails due to frequent updates, the Segment Tree is your best friend.
 

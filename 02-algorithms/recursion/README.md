@@ -1,4 +1,89 @@
+## First-Principles Map
+
+```
+WHY recursion exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                    │               │               │               │
+  [Problems with           [function        [base case:     [tree traversal, [stack overflow
+   self-similar             calling itself   return without  divide & conquer, on deep input;
+   substructure (trees,     with smaller     recursion;      backtracking,   exponential
+   divide & conquer,        input;           recursive case: subsets/perms,  recomputation
+   subsets) have            call stack       reduce to       DFS, Fibonacci  without memo;
+   elegant recursive        holds each       subproblem +    (with memo →    off-by-one
+   decompositions —         frame's local    combine;        DP)]            base case;
+   iteration needs          state]           unwind on                       mutual recursion
+   explicit stack]                           return]                         cycle]
+       │                    │               │
+  [real-world:             [invariant:      [tail recursion: last op is
+   file system walk —       each recursive   recursive call; compiler
+   a directory contains     call makes       optimizes to iteration
+   subdirectories,          strictly smaller (TCO); not all languages
+   which contain            input toward     support TCO (Python doesn't);
+   more directories]        base case]       convert to iterative if stack
+                                             depth > ~1000]
+       ↓
+[Decision: Recursion vs alternatives]
+  ├── vs Iteration    → recursion clearer for tree/graph; iteration for tail calls
+  ├── vs DP           → recursion + memo = top-down DP; DP table = bottom-up
+  └── vs Backtracking → backtracking is recursion + undo; for constraint problems
+```
+
+## First-Principles Breakdown
+- **Root problem**: Self-similar substructure (trees, subsets, divide & conquer) is cumbersome to express with iteration — recursion mirrors the problem's natural decomposition.
+- **Core insight**: Every recursive problem needs: (1) a base case that terminates, (2) a recursive case that reduces toward the base case — the call stack implicitly manages state for you.
+- **Invariant**: Each recursive call receives strictly smaller input than its caller; the base case handles the smallest valid input without recursing.
+- **Why it's fast**: For problems with O(log n) or O(n) recursive calls (tree traversal, binary search, merge sort), recursion matches the problem's inherent complexity with minimal code.
+- **Where it breaks**: Python/Java default stack ≈ 1000 frames — deep recursion crashes; naive Fibonacci is O(2^n) without memoization; tail call optimization is language-dependent.
+
 # Recursion — SDE-3 Gold Standard
+
+```
+[RECURSION — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Some problems decompose naturally into "solve smaller version of same problem"
+│   ├── Tree/graph traversal, divide-and-conquer, and backtracking have recursive structure
+│   └── Expressing the recurrence is often cleaner than an equivalent iterative solution
+├── WHAT IT IS
+│   ├── Core invariant: each call solves a strictly smaller subproblem
+│   ├── Base case: smallest input with known answer (no further recursion)
+│   └── Recursive case: express f(n) in terms of f(smaller inputs)
+├── HOW IT WORKS
+│   ├── Types of recursion
+│   │   ├── Linear: one recursive call per frame (factorial, linked-list ops)
+│   │   ├── Binary: two recursive calls (merge sort, tree traversal, binary search)
+│   │   ├── Tree / multi-way: k recursive calls (N-ary tree, k-way merge)
+│   │   └── Mutual: f calls g, g calls f (rare; parser grammars)
+│   ├── Execution model
+│   │   ├── Call stack frame: local vars + return address per call
+│   │   ├── Depth = max simultaneous frames = O(depth of recursion)
+│   │   └── Stack overflow risk at depth > ~10^4 (language-dependent)
+│   ├── Tail recursion
+│   │   ├── Recursive call is last operation → compiler can reuse stack frame
+│   │   └── Python/Java do NOT optimize tail calls; must convert manually
+│   ├── Converting to iterative
+│   │   ├── Use explicit stack to simulate call frames
+│   │   └── Push (node, state) onto stack; process in while loop
+│   └── Memoization path to DP
+│       ├── Identify overlapping subproblems (same args called multiple times)
+│       ├── Cache return value: memo[args] = result
+│       └── Top-down DP = recursion + memo; bottom-up = iterative DP table
+├── COMPLEXITY
+│   ├── Time:  solve recurrence T(n) = aT(n/b) + f(n) via Master Theorem
+│   │   ├── T(n) = 2T(n/2) + O(n) → O(n log n) [merge sort]
+│   │   └── T(n) = T(n-1) + O(1) → O(n) [factorial]
+│   └── Space: O(depth) stack + O(memo table size) if memoized
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Generate all subsets / permutations / combinations" → backtracking recursion
+│   ├── "Tree: height, path sum, LCA, serialize" → recursive tree traversal
+│   ├── "Divide and conquer: sort, closest pair, matrix multiply" → binary recursion
+│   ├── "Expression evaluation / parsing" → recursive descent
+│   └── "Problem has optimal substructure + overlapping subproblems" → memo → DP
+└── GOTCHAS
+    ├── Always define base case FIRST — missing base case → infinite recursion
+    ├── Ensure subproblem is STRICTLY smaller (e.g., n-1 not n) to guarantee termination
+    ├── Shared mutable state across calls causes bugs — pass state as arguments or copy
+    ├── Memoization key must capture ALL parameters that affect the result
+    └── Python recursion limit ~1000; use sys.setrecursionlimit() or convert to iterative
+```
 
 A function that calls itself on a reduced subproblem. SDE-3 focus: recognizing which recursion type applies, converting to iterative for stack safety, the memoization path to top-down DP, and parallel fork-join recursion.
 

@@ -1,3 +1,41 @@
+## First-Principles Map
+
+```text
+WHY Mathematics exists in DSA
+├── Many problems reduce to number theory or combinatorics at their core
+│   ├── Brute force is infeasible → closed-form or modular arithmetic required
+│   └── Counting / probability problems need combinatorial identities
+WHAT it covers
+├── Number theory: GCD, LCM, primality, modular arithmetic, Euler's totient
+│   ├── Combinatorics: nCr, Catalan numbers, inclusion-exclusion
+│   └── Geometry: cross product, line intersection, convex hull
+HOW it works
+├── GCD via Euclidean: gcd(a,b) = gcd(b, a%b) → O(log min(a,b))
+│   ├── Sieve of Eratosthenes: all primes ≤ n in O(n log log n), O(n) space
+│   ├── Modular inverse: a^(p-2) mod p via fast exponentiation O(log p) (Fermat's little theorem, p prime)
+│   └── Fast exponentiation: x^n in O(log n) via repeated squaring
+WHEN to use
+├── "count ways" with large n → compute nCr mod p using precomputed factorials
+├── "check divisibility / GCD" → Euclidean algorithm
+└── "find all primes up to n" → Sieve O(n log log n)
+WHAT can go wrong
+├── Integer overflow: nCr intermediate products exceed 64-bit → use modular arithmetic throughout
+├── Mod applied incorrectly to subtraction → result goes negative; use (a - b + MOD) % MOD
+└── Assuming p is prime for Fermat's inverse → fails for composite moduli; use extended Euclidean
+DECISION
+└── Large counting problem → precompute fact[] and inv_fact[] mod 1e9+7; primality on single n → Miller-Rabin
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Combinatorial / number-theoretic quantities grow so fast that direct computation overflows or times out.
+- **Core insight**: Modular arithmetic preserves equality under +/−/× while keeping values bounded; precomputation amortises repeated queries to O(1).
+- **Invariant**: (a * b) % p == ((a % p) * (b % p)) % p — modular distribution holds for multiplication and addition, not division (use modular inverse instead).
+- **Why it works**: Fermat's little theorem gives a^(p−1) ≡ 1 (mod p) for prime p, so a^(p−2) is the multiplicative inverse — enabling exact division under mod.
+- **Where it breaks**: Non-prime moduli break Fermat's inverse; very large n with non-prime mod requires extended Euclidean or precomputed inverses via DP.
+
+---
+
 # Mathematics — SDE-3 Gold Standard
 
 ```

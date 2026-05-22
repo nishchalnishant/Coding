@@ -1,3 +1,42 @@
+## First-Principles Map
+
+```text
+WHY Bit Manipulation exists
+├── Integer arithmetic at word-level is 1 CPU cycle vs O(n) loop
+│   ├── State sets (flags, visited masks) fit in a single register
+│   └── XOR / AND / OR encode algebraic properties compactly
+WHAT it is
+├── Direct operations on binary representation of integers
+│   ├── Bitwise: AND(&), OR(|), XOR(^), NOT(~), shifts(<<,>>)
+│   └── Each bit is an independent boolean — vectorised in hardware
+HOW it works
+├── Key identities
+│   ├── x & (x-1)  → clears lowest set bit (kernighan trick, O(k) popcount)
+│   ├── x & (-x)   → isolates lowest set bit
+│   ├── x ^ x = 0, x ^ 0 = x → find single non-duplicate in O(n) O(1)
+│   └── x >> k = x // 2^k, x << k = x * 2^k
+WHEN to use
+├── "find the one element appearing odd times" → XOR all elements
+├── "subset enumeration of size n" → bitmask 0..(2^n - 1), O(2^n)
+└── "check / set / clear bit k" → (x >> k) & 1 / x | (1<<k) / x & ~(1<<k)
+WHAT can go wrong
+├── Signed vs unsigned shift → arithmetic vs logical right shift differs per language
+├── Overflow: 1 << 31 in 32-bit signed int is UB in C/C++; use 1LL
+└── Bitmask DP on n > 20 → 2^20 = 1M states, n > 25 generally TLE
+DECISION
+└── n ≤ 20 and need all subsets → bitmask DP; need O(1) set ops → bit tricks
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Perform set membership, parity checks, and power-of-2 arithmetic in O(1) time and O(1) space.
+- **Core insight**: Every integer is already a bit-vector; hardware executes AND/OR/XOR on all 64 bits in one instruction.
+- **Invariant**: XOR is its own inverse — applying the same value twice cancels out, enabling duplicate detection without extra memory.
+- **Why it works**: Bit operations map directly to CPU ALU instructions — no loops, no allocation, no cache misses.
+- **Where it breaks**: Readability suffers at scale; bitmask DP explodes past n ≈ 20–25 due to 2^n state space.
+
+---
+
 # Bit Manipulation — SDE-3 Gold Standard
 
 ```

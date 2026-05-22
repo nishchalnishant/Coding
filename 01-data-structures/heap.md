@@ -1,3 +1,34 @@
+## First-Principles Map
+
+```
+WHY heaps exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                │                │               │               │
+  [Need the min or    [complete binary  [heap property: [top-K, Dijkstra,[heapify on push
+   max element fast   tree stored as    parent ≤ child   Prim's, median   is O(log n) not
+   from a dynamic     flat array;       (min-heap);      stream, task     O(1); sorted
+   set — sorted       parent(i)=(i-1)/2 insert + sift-up; scheduling,    access is O(n
+   array is O(log n)  left=2i+1,        extract-min +    K-way merge]     log n), not O(1);
+   insert but O(n)    right=2i+2]       sift-down; O(log n)]              no O(1) search]
+   extract]                │
+       │               [invariant:      [heapify from array: O(n) —
+  [real-world:         every parent     NOT O(n log n); sift-down from
+   hospital triage —   dominates its    middle saves half the work;
+   urgent first,       children; root   key insight for heap sort]
+   not arrival order]  is global min]
+       ↓
+[Decision: Heap vs alternatives]
+  ├── vs Sorted Array → heap O(log n) insert vs O(n); sorted array O(1) access
+  ├── vs BST          → BST has O(log n) for all ops + ordered iteration; heap only min/max
+  └── vs Bucket Sort  → bucket for known range; heap for unknown/dynamic priorities
+```
+
+## First-Principles Breakdown
+- **Root problem**: Repeatedly need the minimum (or maximum) from a changing set — a sorted array is too slow to update.
+- **Core insight**: Partial order (only parent ≤ children) is sufficient to find min in O(1) and maintain in O(log n) — no need for full sort.
+- **Invariant**: Every parent dominates (≤ in min-heap) both children; root is always the global minimum.
+- **Why it's fast**: The tree height is log n (complete binary tree), so any sift operation touches at most log n nodes.
+- **Where it breaks**: Arbitrary search is O(n) — heap does not support "find element X" efficiently; no way to iterate in sorted order without O(n log n) repeated extraction.
+
 # Heap / Priority Queue — SDE-3 Gold Standard
 
 ```

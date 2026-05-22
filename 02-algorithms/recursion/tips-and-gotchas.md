@@ -1,3 +1,70 @@
+## First-Principles Map
+
+```
+WHY Recursion Tips & Gotchas exists
+└── Recursive code fails silently — wrong answer, crash, or infinite loop
+    ├── base case wrong → infinite loop or missed termination
+    ├── missing return → None propagates up, shadows correct result
+    ├── off-by-one in index → skips/repeats last element
+    ├── stack overflow → no upper bound on depth
+    └── mutual recursion cycle → A calls B calls A, no exit
+
+WHAT it is
+└── A catalog of the 15 most common recursion defects + their fixes
+    ├── Pattern: wrong base → fix: enumerate ALL termination conditions
+    ├── Pattern: missing return → fix: every branch must return a value
+    ├── Pattern: mutable default arg → fix: use None sentinel, not []
+    ├── Pattern: shared state → fix: pass state as param or copy on branch
+    └── Pattern: mutual cycle → fix: draw call graph, verify acyclic
+
+HOW it works (detection strategy)
+├── Add print(f"enter f({args})") at top of every recursive call
+├── Trace the call stack manually for n=2 or n=3
+├── Check: does every code path hit a return statement?
+├── Check: does base case cover n=0, n=1, AND empty input?
+└── Check: is the problem strictly smaller on every recursive call?
+
+WHEN to use (recognizing which gotcha applies)
+├── RecursionError → stack overflow → add sys.setrecursionlimit or convert to iterative
+├── Wrong answer on edge case → missing base case variant
+├── None returned → missing return keyword on recursive branch
+├── Exponential time → overlapping subproblems → memoize
+└── Infinite loop → mutual recursion or non-shrinking input → draw call graph
+
+WHAT can go wrong
+├── base case: forgot n==0, only handled n==1
+├── return: wrote recursive call but forgot `return` → always None
+├── off-by-one: slice [1:] vs [1:-1], index n-1 vs n
+├── shared mutable default: def f(x, acc=[]) — acc persists across calls
+├── stack depth: Python default 1000 frames → blows up on n>500 list
+├── mutual recursion: isEven/isOdd calling each other with no base
+└── global state: counter incremented in helper, not reset between test cases
+
+Complexity
+├── Stack depth = O(n) for linear recursion, O(log n) for divide-and-conquer
+├── Each frame: O(1) space (scalars) or O(k) if copying lists
+└── Overflow threshold: ~10^4 frames in Python, ~10^5 in Java/C++
+
+Decision tree
+    Has a RecursionError?
+    ├── YES → is input size > 1000?
+    │         ├── YES → convert to iterative with explicit stack
+    │         └── NO  → missing base case, add terminal condition
+    └── NO  → wrong answer?
+              ├── YES → trace n=2: is return missing on some branch?
+              │         ├── YES → add return keyword
+              │         └── NO  → is base case too narrow? widen it
+              └── NO  → slow (TLE)? → overlapping calls? → memoize
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Recursive functions rely on implicit call-stack bookkeeping; any gap in termination or return logic propagates invisibly to the caller.
+- **Core insight:** Every recursive function must (1) shrink the problem on every call, (2) hit a base case that needs no further recursion, and (3) return a value on every code path — violating any one of these causes a distinct class of bug.
+- **Invariant:** At each recursive call, the argument must be strictly closer to the base case (smaller n, shorter string, shallower tree depth) than the caller's argument.
+- **Why it's fast to debug:** Bugs manifest at the smallest inputs (n=0, n=1, empty string) — always test those first before larger cases.
+- **Where it breaks:** Python's default recursion limit (1000), shared mutable defaults, and off-by-one indexing on slices are the three most frequent production failures; mutual recursion cycles are the hardest to spot without a call graph.
+
 # Recursion Tips & Gotchas — Master Cheatsheet
 
 Quick-reference for the 15 most common recursion bugs, pattern recognition, and the SDE-3 interview communication framework. For full pattern details see [README.md](README.md).

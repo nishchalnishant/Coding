@@ -1,3 +1,63 @@
+# First-Principles Map — LeetCode Variants
+
+```
+WHY variant problems exist
+├── Interviewers verify depth: can you adapt when the base case is trivially known?
+├── Variants test invariant ownership — do you know WHY the base works, not just HOW?
+└── A candidate who solves the base but fails the variant signals memorization, not understanding
+
+WHAT it is
+├── A taxonomy of how canonical problems mutate: constraint change, output change, input change
+├── A map from variant surface → which invariant shifts → what to re-derive
+└── Examples:
+    ├── Two Sum → Two Sum II (sorted) → variant: use two-pointer instead of hash
+    ├── LCS → LCS of 3 strings → variant: add a third DP dimension
+    ├── BFS shortest path → BFS k stops → variant: track (node, stops) as state
+    └── Merge Intervals → Insert Interval → variant: binary search for insertion point
+
+HOW it works
+├── Variant taxonomy:
+│   ├── Constraint relaxation: remove "distinct" → handle duplicates explicitly
+│   ├── Constraint tightening: add "at most k distinct" → sliding window with freq map
+│   ├── Output change: "find count" vs "find path" → same algorithm, different tracking
+│   └── Input shape change: 1D array → 2D matrix → same logic, 2D indexing
+├── Invariant shifts per variant type:
+│   ├── Sorted input added → two-pointer replaces hash map (O(1) space gain)
+│   ├── "Exactly k" → use "at most k" − "at most k−1" trick
+│   └── Circular array → double the array or use modular indexing
+├── Edge case generation heuristic:
+│   ├── Empty input, single element, all same, all negative, sorted/reverse sorted
+│   ├── n=1, n=2 (catches off-by-one in binary search, DP base cases)
+│   └── Max constraints (overflow check, TLE check)
+└── Complexity impact of variants:
+    ├── Adding "return all solutions" → O(n) → O(2^n) or O(n!) typically
+    └── Adding "online queries" → preprocess O(n) → answer each O(1) or O(log n)
+
+WHEN to use
+├── After solving the base problem — immediately ask "what would change if X?"
+├── During interview: if interviewer adds a constraint, map it to the variant type first
+└── Decision:
+    ├── Constraint tightened → check if current data structure still works
+    ├── Output changed → check if algorithm changes or just the bookkeeping
+    └── Input dimensionality increased → generalize the state, not the algorithm
+
+WHAT can go wrong
+├── Applying base algorithm blindly to variant → wrong invariant → wrong answer
+├── Not recognizing "exactly k" as a two-pass trick → O(n²) solution instead of O(n)
+├── Missing overflow in variant with larger constraints (int → long)
+└── Forgetting that "all solutions" variants need backtracking, not just iteration
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Interviewers deliberately introduce variants to distinguish memorizers from thinkers — variants are the real test, the base is just calibration.
+- **Core insight:** Every variant changes at most one invariant; identify which invariant shifted and re-derive only that part, keep the rest.
+- **Invariant:** The core algorithm structure (DFS, DP recurrence, window expansion) is almost always preserved across variants — only the state or termination condition changes.
+- **Why it works:** Variant-awareness during prep means you're training the generalization muscle, not the recall muscle — interviewers can't exhaust a generalized thinker.
+- **Where it breaks:** When a variant is actually a disguised different problem (e.g., "Two Sum on a graph" is not Two Sum — it's a graph traversal) — always re-derive from the problem structure, not the surface label.
+
+---
+
 # The SDE-3 Pattern Playbook: A Guided Conversation
 
 Welcome to the heart of this repository. If you've ever felt like you're "memorizing" LeetCode instead of "learning" it, this document is for you. We’ve organized these problems not just as static code blocks, but as a series of **conversations**. 

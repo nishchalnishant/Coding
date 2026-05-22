@@ -1,3 +1,44 @@
+## First-Principles Map
+
+```text
+WHY Dynamic Programming exists
+├── Overlapping subproblems make brute recursion exponential
+│   ├── Same sub-problem re-solved from different call paths
+│   └── Naive recursion has O(2^n) or O(n!) time for many choices
+WHAT it is
+├── Optimization over exhaustive recursion via memoization or tabulation
+│   ├── Key property: optimal substructure — optimal global answer is built from optimal sub-answers
+│   └── Key property: overlapping subproblems — same (i, state) pair appears multiple times
+HOW it works
+├── Core mechanism: fix a state signature, store results, avoid recomputation
+│   ├── Step 1 — write recursive brute-force with correct base cases
+│   ├── Step 2 — add a memo table keyed on all recursion arguments
+│   ├── Step 3 — invert to bottom-up: fill table in dependency order
+│   └── Step 4 — compress table dimensions that are only needed one step back
+WHEN to use
+├── "count / max / min ways" + choice at each step → DP (not greedy)
+├── Two sequences to align → LCS / Edit Distance family
+├── Splitting an interval optimally → MCM / Interval DP
+├── Items with weight + value, limited capacity → Knapsack family
+└── Subtree aggregation needed → DP on Trees
+WHAT can go wrong
+├── Wrong state: missing a dimension that changes the subproblem identity
+├── Wrong base case: uninitialized cells propagate garbage values
+└── Wrong iteration order (bottom-up): computing dp[i] before dp[i-1] is ready
+DECISION
+└── If you see "choice + optimal over all choices" → try DP; if you see "always take the local best" → try greedy first
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Brute-force enumeration of all choices is exponential; DP prunes it by caching repeated sub-answers.
+- **Core insight**: Any optimal solution can be decomposed into optimal solutions to its sub-problems (optimal substructure).
+- **Invariant**: When `dp[i][w]` is computed, every sub-problem it depends on is already computed and correct.
+- **Why it works**: Memoization converts an exponential recursion tree into a DAG where each node is solved exactly once.
+- **Where it breaks**: Greedy counter-examples exist whenever a locally optimal choice forecloses a globally better path — use DP instead.
+
+---
+
 # Dynamic Programming — Aditya Verma Pattern Playbook
 
 Pattern-first DP: name the pattern, write the recurrence, code bottom-up, optimize space. For the main SDE-3 DP guide see [README.md](README.md).

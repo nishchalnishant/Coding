@@ -1,3 +1,57 @@
+## First-Principles Map
+
+```
+WHY String & Palindrome DP exists
+├── String alignment / edit operations have overlapping sub-alignments
+├── Palindrome expansion from center is O(N²); interval DP caches every [i,j]
+├── Regex / wildcard matching has exponential backtracking without memoization
+├── Invariant: answer for s[i..j] depends only on s[i+1..j-1] plus endpoints
+└── Decision tree:
+    two strings, measure similarity?    → LCS / edit distance (2D dp[i][j])
+    single string, palindrome struct?   → interval dp[i][j] expanding outward
+    pattern matching (.*)?             → regex dp[i][j] with careful '*' rule
+    wildcard (? *)?                    → wildcard dp, treat '*' as 0+ any chars
+    min cuts for palindrome partition? → two-pass: palindrome[i][j] then cuts[i]
+
+WHAT String & Palindrome DP is
+├── LCS: dp[i][j] = length of LCS of s1[0..i-1] and s2[0..j-1]
+├── Edit distance: dp[i][j] = min ops to convert s1[0..i-1] → s2[0..j-1]
+├── LPS (Longest Palindromic Subsequence): dp[i][j] over s[i..j]
+├── Palindrome partition: palindrome[i][j] bool + cuts[i] = min cuts for s[i..n]
+└── Regex/wildcard: dp[i][j] = p[0..j-1] matches s[0..i-1]; tricky '*' base
+
+HOW String & Palindrome DP works
+├── LCS: match → dp[i][j]=dp[i-1][j-1]+1; no match → max(dp[i-1][j], dp[i][j-1])
+├── Edit dist: match→no cost; else min(replace dp[i-1][j-1]+1, del dp[i-1][j]+1, ins dp[i][j-1]+1)
+├── LPS: s[i]==s[j] → dp[i][j]=dp[i+1][j-1]+2; else max(dp[i+1][j], dp[i][j-1])
+├── Regex '*': dp[i][j] = dp[i][j-2] (zero) OR (match dp[i-1][j]); '.' matches any
+└── Palindrome cuts: precompute isPalin[i][j]; cuts[i]=min over j where isPalin[i][j] of cuts[j+1]+1
+
+WHEN to use String & Palindrome DP
+├── Longest common subsequence of two strings              → 2D LCS table
+├── Min edits (insert/delete/replace) between strings      → edit distance
+├── Longest palindromic subsequence in one string          → interval dp[i][j]
+├── Regex/wildcard pattern matching                        → 2D dp with '*' rules
+└── Min cuts to partition string into palindromes          → precompute + 1D cuts
+
+WHAT can go wrong
+├── LCS: confusing substring (contiguous) vs subsequence (non-contiguous)
+├── Edit distance: base cases dp[0][j]=j, dp[i][0]=i — empty string edits
+├── LPS: filling order must be by increasing length (len=1,2,...,n) not row-by-row
+├── Regex '*': dp[i][0] initialization — pattern like "a*b*" can match empty string
+└── Palindrome cuts: off-by-one — cuts[n]=0 sentinel; answer is cuts[0]-1 or cuts[0]
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** String comparison / structure problems have subproblems defined on prefixes or intervals — recomputed exponentially without caching.
+- **Core insight:** For two-string problems, dp[i][j] encodes all prefix interactions; for single-string interval problems, dp[i][j] covers every substring — both O(N²) states with O(1) transitions.
+- **Invariant:** LCS dp[i][j] is non-decreasing as i or j grows; edit distance dp[i][j] satisfies triangle inequality over string operations.
+- **Why it's fast:** O(N²) states × O(1) transition = O(N²) time, O(N) space with rolling array (LCS, edit distance); interval DP is O(N²) states filled in length order.
+- **Where it breaks:** Regex '*' matching — wrong base case for dp[0][j] makes entire table wrong; interval DP filled row-by-row (not by length) gives wrong answers for LPS.
+
+---
+
 # String & Palindrome DP
 
 String DP problems: palindromic structures, regex matching, and transformations. For the broader DP guide see [README.md](README.md).

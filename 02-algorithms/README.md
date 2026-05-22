@@ -1,3 +1,74 @@
+## First-Principles Map
+
+```text
+WHY algorithm families matter
+├── Problems recur across domains in disguised forms
+│   ├── "Find shortest path in graph" ≡ "Minimum cost to convert word" ≡ BFS/Dijkstra
+│   ├── "Count valid arrangements"    ≡ "Number of ways to tile"        ≡ DP / backtracking
+│   └── "Merge k sorted streams"      ≡ "K-th smallest in matrix"       ≡ Heap / binary search
+├── Recognizing the family → skip brute-force → apply known template
+└── Wrong family → exponential where polynomial exists (backtracking vs DP)
+│
+WHAT the major algorithm families are
+├── Search         — binary search (sorted input), BFS (shortest unweighted), Dijkstra (weighted)
+├── Sort           — comparisons O(n log n); counting/radix O(n+k); sort-then-scan pattern
+├── Two Pointers   — O(n) scan replacing O(n²) nested loops; sorted array or linked list
+├── Sliding Window — O(n) variable/fixed window; substring, subarray problems
+├── Dynamic Prog.  — overlapping subproblems + optimal substructure; memoize or tabulate
+├── Greedy         — locally optimal choice → globally optimal; must prove exchange argument
+├── Backtracking   — all possibilities with pruning; permutations, combinations, Sudoku
+├── Graph          — BFS/DFS/Topo/SCC/MST/Shortest path; any connectivity / dependency problem
+├── Divide&Conquer — split → solve → merge; merge sort, closest pair, matrix multiply
+└── Union-Find     — O(α) connectivity queries; dynamic graph, Kruskal, redundant connections
+│
+HOW to map problem signals to families
+├── "Sorted array / search for value"         → Binary search
+├── "Optimize over choices, overlapping"      → DP (top-down or bottom-up)
+├── "Find all valid combos / arrangements"    → Backtracking (+ pruning)
+├── "Minimum spanning / shortest path"        → Greedy (Kruskal/Prim) / Dijkstra
+├── "Connected components / cycle detection"  → BFS/DFS / Union-Find
+├── "Ordering with dependencies"              → Topological sort (Kahn's / DFS)
+├── "Contiguous subarray / substring"         → Sliding window / prefix sum
+├── "Two elements summing to target"          → Two pointers (sorted) / hash map
+└── "Max/min across window"                   → Monotonic deque / segment tree
+│
+WHEN each family applies
+├── Binary search  — sorted structure, answer-space search (bisect on feasibility)
+├── DP             — counting ways, min cost, longest sequence, boolean reachability
+├── Greedy         — interval scheduling, Huffman, activity selection, gas station
+├── Backtracking   — N-queens, word search, generate parentheses, subsets
+├── Graph BFS      — shortest unweighted path, multi-source spread, 0-1 BFS
+├── Topo sort      — course schedule, build order, alien dictionary
+├── Union-Find     — dynamic connectivity, Kruskal's MST, account merge
+└── Divide&Conquer — merge sort, inversion count, Karatsuba, closest pair
+│
+WHAT CAN GO WRONG
+├── DP when greedy suffices          → O(n²) where O(n log n) works (e.g. activity selection)
+├── Backtracking when DP needed      → exponential where polynomial exists (e.g. edit distance)
+├── BFS for weighted shortest path   → wrong answer; use Dijkstra
+├── Greedy without exchange proof    → fails on counterexample (e.g. coin change with odd coins)
+├── Missing memoization in recursion → O(2^n) instead of O(n²) or O(n)
+└── Wrong family = wrong complexity class; algorithm tricks can't save a fundamentally wrong approach
+│
+DECISION — problem signal → algorithm family
+├── Sorted input + find value          → Binary search
+├── Optimize, overlapping subproblems  → DP
+├── All possibilities needed           → Backtracking
+├── Local choice → global optimum      → Greedy (verify exchange argument)
+├── Connectivity / path / cycle        → Graph (BFS/DFS/Dijkstra/Topo)
+├── Dynamic connectivity               → Union-Find
+├── Contiguous subarray / substring    → Sliding window / two pointers
+└── Divide large into halves           → Divide & Conquer
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Problems across domains share hidden structural similarities; recognizing the family eliminates the need to solve from scratch under pressure.
+- **Core insight:** Each algorithm family exploits one structural property — monotonicity (binary search), optimal substructure (DP), greedy exchange (greedy), adjacency (graph) — and is useless without it.
+- **Invariant:** The dominant constraint in the problem (sorted, overlapping, connected, all-possibilities) uniquely identifies the algorithm family before any code is written.
+- **Why it works:** Templates encode decades of proven solutions; applying the right template guarantees correctness and known complexity, while adaptation handles the problem-specific twist.
+- **Where it breaks:** Forcing the wrong family (backtracking on a DP problem, greedy on a non-exchange problem) produces exponential or incorrect solutions that no micro-optimization can fix.
+
 # Algorithms — Index
 
 All algorithm files live in `02-algorithms/`. This file is the navigation index.

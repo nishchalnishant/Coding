@@ -1,3 +1,58 @@
+## First-Principles Map
+
+```
+WHY DP Tips & Gotchas exists
+├── DP bugs are silent: code compiles, produces a number, but it's wrong
+├── Pattern misidentification wastes interview time on wrong approach
+├── State definition errors cascade — every transition inherits the wrong semantics
+├── Invariant: a correct DP has (1) well-defined state, (2) correct transition, (3) right base
+└── Decision tree for pattern recognition:
+    "count ways"?                      → additive DP, watch mod
+    "min/max over choices"?            → optimization DP, watch base = ±∞
+    "exist / is it possible"?          → boolean DP (OR over transitions)
+    "on string intervals"?             → interval DP, fill by length
+    "digits / range of integers"?      → digit DP with tight flag
+
+WHAT the common DP bugs are
+├── Wrong state: dp[i] = "something vague" → must encode exact info needed for transition
+├── Wrong base: dp[0]=1 vs dp[0]=0 flips entire count; dp[0]=-∞ for max kills answers
+├── Wrong iteration order: bottom-up must compute all dependencies before current cell
+├── Reusing updated value (unbounded vs 0-1 knapsack): inner loop direction matters
+└── Off-by-one: dp[n] vs dp[n-1], 1-indexed vs 0-indexed mixing
+
+HOW to recognize DP patterns
+├── Sequence + optimal substructure → LIS, LCS, edit distance, stock, knapsack
+├── Grid + right/down movement → grid DP (unique paths, min cost, dungeon)
+├── Tree + subtree answers → tree DP (diameter, max path sum, house robber III)
+├── Interval [i..j] → interval DP (burst balloons, stone merge, matrix chain)
+└── Digit constraints on integers → digit DP (count numbers with property)
+
+WHEN to apply specific optimizations
+├── Transition is linear function of previous state → Convex Hull Trick (CHT)
+├── Opt[i][j] monotone in i → Divide & Conquer DP: O(N log N)
+├── Quadrangle inequality holds → Knuth's optimization: O(N²) → O(N²) with smaller constant
+├── 1D knapsack inner loop forward (unbounded) vs backward (0-1) → direction critical
+└── Space: can rolling array reduce O(N²) to O(N)? check if only prev row/col needed
+
+WHAT can go wrong — the top 12 gotchas
+├── 1. State semantics drift: dp[i] means different things in different parts of code
+├── 2. Transition uses future state (top-down without memo → recomputes; bottom-up → reads unset cell)
+├── 3. Base case missing: forgetting dp[0][0] or dp[i][0] initializations
+├── 4. Modular arithmetic: (a - b) % MOD can be negative in Python? No, but in Java/C++ yes
+├── 5. Integer overflow: dp values exceed int range before mod is applied
+└── 6–12: wrong loop bounds, missing dimension, confusing 0/1 knapsack with unbounded, tight not in digit dp key, interval fill order, tree dp re-rooting bugs, probability DP not normalizing
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** DP correctness depends on three coupled choices — state, transition, base — and a single error in any one silently corrupts all answers.
+- **Core insight:** Always define state in plain English before writing code: "dp[i][j] = X given Y" — if you can't say it clearly, the code will be wrong.
+- **Invariant:** In a correct bottom-up DP, when computing dp[i], every value it depends on is already finalized — iteration order must enforce this.
+- **Why it's fast (when right):** Memoization/tabulation turns exponential recursion trees into DAG evaluation; each state computed once, each transition O(1) or O(branching).
+- **Where it breaks:** Missing a dimension in state (e.g., not tracking transactions left in stock DP, or not tracking tight in digit DP) makes distinct states collide → wrong memoization reuse.
+
+---
+
 # DP Tips & Gotchas — Master Cheatsheet
 
 Quick-reference for the 30-second pattern recognition, the 12 most common bugs, and the SDE-3 interview communication framework. For full pattern details see [README.md](README.md).

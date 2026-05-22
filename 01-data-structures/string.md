@@ -1,4 +1,93 @@
+## First-Principles Map
+
+```
+WHY string algorithms exist → WHAT strings are → HOW they work → WHEN to use → WHAT can go wrong
+       │                             │                  │               │               │
+  [Naive substring search         [immutable array    [sliding window: [pattern match,  [O(n×m) naive
+   is O(n×m); many problems        of characters;      two pointers    anagram detect,  search TLEs on
+   reduce to string matching,      encoding matters    over chars;     palindrome,      large inputs;
+   palindromes, anagrams —         (ASCII vs UTF-8     hashing for     longest without  off-by-one in
+   need specialized techniques]    affects indexing)]  rolling hash;   repeat, KMP/     two-pointer
+                                                        KMP failure     Rabin-Karp]     window updates]
+       │                             │                  │
+  [real-world:                    [invariant:         [KMP: precompute failure
+   grep, DNA sequence               string index is    function (proper prefix = suffix)
+   matching, search engine          byte offset not    to skip O(m) work on mismatch;
+   autocomplete]                    char offset in     Rabin-Karp: rolling hash O(1)
+                                    multibyte]         slide; Z-function: O(n) prefix match]
+       ↓
+[Decision: String technique vs alternatives]
+  ├── vs Trie          → trie for prefix/dictionary queries; sliding window for substrings
+  ├── vs KMP vs Rabin-Karp → KMP O(n+m) worst case; R-K O(n) avg but hash collision risk
+  └── vs Suffix Array  → suffix array for all substring queries; KMP for single pattern match
+```
+
+## First-Principles Breakdown
+- **Root problem**: Naive pattern matching checks all O(n×m) positions; string problems need O(n) or O(n+m) techniques.
+- **Core insight**: Precompute structure (KMP failure function, rolling hash, Z-array) to avoid redundant comparisons on mismatch — reuse already-matched information.
+- **Invariant**: In a valid sliding window, the window contains exactly the characters satisfying the constraint; expanding/shrinking maintains the invariant.
+- **Why it's fast**: KMP's failure function means each character is processed at most twice total — O(n+m) not O(n×m); rolling hash updates in O(1) per slide.
+- **Where it breaks**: Multibyte encodings (UTF-8) make character indexing non-trivial; rolling hash has collision probability; KMP's failure function precomputation is easy to implement incorrectly.
+
 # Strings — Data Structure Deep-Dive
+
+```
+[STRINGS (DATA STRUCTURE) — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: represent and manipulate ordered sequences of characters — the most common interview input type
+│   ├── Alphabet structure (finite σ) unlocks optimizations impossible on generic arrays
+│   └── Analogy: string is a 1-D array with a fixed alphabet — every array technique applies, plus character-specific ones
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: contiguous array of characters; indexable in O(1); immutable in Python/Java
+│   ├── Immutability consequence: s + t creates a new object → O(N) per concatenation → use list + ''.join()
+│   ├── Substring s[i:j]: O(j-i) in Python (copy); O(1) view possible in C++ with string_view
+│   └── Character encoding: ASCII (128), Extended ASCII (256), Unicode (21-bit code points, UTF-8 variable-byte)
+├── HOW IT WORKS — CORE TECHNIQUES
+│   ├── Frequency Array / Counter
+│   │   ├── 26-bucket array for lowercase letters: freq[c - 'a']++
+│   │   ├── Replaces hash map for alphabet-bounded problems — O(1) space (constant 26 or 128)
+│   │   └── Anagram check: compare two freq arrays in O(1) after O(N) build
+│   ├── Two Pointers on Strings
+│   │   ├── Palindrome check: l=0, r=len-1; move inward comparing s[l] and s[r]
+│   │   └── Reverse / partition in-place: swap s[l] and s[r] — works only on mutable string (char array)
+│   ├── Sliding Window
+│   │   ├── Fixed window: maintain freq of window; slide by adding right char, removing left char
+│   │   └── Variable window: expand right until constraint violated; shrink left to restore
+│   ├── Prefix Hashing (Rolling Hash)
+│   │   ├── Precompute hash[i] = hash of s[0..i-1] using polynomial base and mod prime
+│   │   ├── Substring hash in O(1): hash(s[l..r]) = (hash[r+1] - hash[l] * pow[r-l+1]) mod prime
+│   │   └── Use: check substring equality in O(1) — enables O(N) duplicate detection
+│   ├── Palindrome Techniques
+│   │   ├── Expand around center: O(N²) — check both odd (center=i) and even (center=i,i+1) cases
+│   │   ├── DP table dp[i][j] = True if s[i..j] is palindrome: O(N²) time and space
+│   │   └── Manacher: O(N) — insert '#' sentinels, exploit symmetry of already-computed radii
+│   └── String DP
+│       ├── LCS (Longest Common Subsequence): dp[i][j] = LCS of s1[:i] and s2[:j] — O(N·M)
+│       ├── Edit Distance: dp[i][j] = min ops to convert s1[:i] to s2[:j] — O(N·M)
+│       └── Longest Palindromic Subsequence: LCS(s, reverse(s)) — O(N²)
+├── COMPLEXITY SUMMARY
+│   ├── Frequency array build: O(N) | compare: O(σ) = O(1) for fixed alphabet
+│   ├── Sliding window (fixed/variable): O(N)
+│   ├── Rolling hash build: O(N) | substring query: O(1)
+│   ├── Expand-around-center palindrome: O(N²)
+│   ├── String DP (LCS, edit distance): O(N·M)
+│   └── Concatenation in loop: O(N²) — always use join
+├── WHEN TO USE
+│   ├── Signal: "anagram / permutation check" → freq array or Counter comparison
+│   ├── Signal: "longest substring with at most K distinct chars" → sliding window + hash map
+│   ├── Signal: "check if s2 contains a permutation of s1" → sliding window + freq array
+│   ├── Signal: "longest palindromic substring" → expand-around-center or Manacher
+│   ├── Signal: "minimum window substring" → variable sliding window
+│   ├── Signal: "edit distance / longest common subsequence" → 2D DP
+│   └── Avoid freq array when: alphabet is not fixed/small — use hash map instead
+└── COMMON MISTAKES / GOTCHAS
+    ├── Concatenation in loop: O(N²) — always accumulate in list then join
+    ├── Palindrome even-length: must check both (i,i) and (i,i+1) centers — missing one gives wrong answer
+    ├── Sliding window character removal: decrement freq before or after moving left pointer determines correctness
+    ├── Unicode pitfall: len("😀") == 1 in Python (code points) but 4 bytes in UTF-8 — differs by language
+    ├── Prefix hash overflow: in languages with fixed-width ints, always apply mod to avoid overflow
+    └── LCS vs edit distance: LCS counts matches; edit distance counts operations — different recurrences
+```
 
 ## Mental Model
 

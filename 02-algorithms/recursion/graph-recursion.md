@@ -1,3 +1,88 @@
+## First-Principles Map
+
+```
+WHY Graph Recursion exists
+└── Graphs have no inherent root or direction → need explicit traversal
+    ├── DFS naturally maps to recursion: go deep, backtrack, try next neighbor
+    ├── Call stack = current path from source to current node
+    └── Visited set = prevents re-entering nodes (cycles would cause infinite recursion)
+
+WHAT it is
+└── Recursive DFS with four primary applications
+    ├── Connected components: DFS floods each unvisited node, marks its component
+    ├── Cycle detection: detect back-edge (revisit in-progress node)
+    ├── Topological sort: post-order DFS, push node after all descendants visited
+    └── Path/reachability: DFS with path tracking, record on reaching target
+
+HOW it works
+├── Basic DFS template
+│   ├── dfs(node, visited):
+│   │   visited.add(node)
+│   │   for neighbor in graph[node]:
+│   │       if neighbor not in visited:
+│   │           dfs(neighbor, visited)
+│   └── O(V+E) time, O(V) stack depth worst case
+├── Connected components
+│   ├── for each node: if not visited → dfs(node) → component_count++
+│   └── Each DFS call floods one component completely
+├── Cycle detection (directed graph)
+│   ├── Two sets: visited (ever seen) and in_stack (current DFS path)
+│   ├── On enter: add to both; on exit: remove from in_stack
+│   └── Cycle if neighbor is in in_stack (back edge found)
+├── Cycle detection (undirected graph)
+│   ├── Track parent: if neighbor is visited AND neighbor != parent → cycle
+│   └── Simpler than directed: no need for in_stack set
+├── Topological sort (Kahn's is iterative; DFS version)
+│   ├── dfs(node): recurse on all unvisited neighbors; append node to result
+│   └── Reverse result at end → topological order
+└── Path finding
+    ├── dfs(node, target, path, visited):
+    ├── if node == target → record path; return
+    └── for neighbor: dfs(neighbor, target, path+[neighbor], visited|{neighbor})
+
+WHEN to use
+├── "Find connected components" → DFS flood fill on each unvisited node
+├── "Detect cycle in directed graph" → DFS with in_stack tracking
+├── "Topological ordering" → post-order DFS, reverse result
+├── "All paths from source to target" → DFS with path accumulation
+└── "Reachability" → simple DFS, return True if target found
+
+WHAT can go wrong
+├── Forgetting visited set → infinite recursion on any cycle
+├── Directed vs undirected: undirected cycle check needs parent tracking
+├── Topological sort on cyclic graph → undefined; must detect cycle first
+├── Stack overflow: dense graph with V=10^5 → O(V) stack → use iterative DFS
+├── Mutating adjacency list during DFS → skip or double-visit neighbors
+└── In_stack not cleaned on backtrack → false cycle detection on other paths
+
+Complexity
+├── DFS traversal: O(V+E) time, O(V) space (visited set + stack)
+├── Connected components: O(V+E) total across all DFS calls
+├── Cycle detection: O(V+E) time, O(V) space (visited + in_stack)
+├── Topological sort: O(V+E) time, O(V) space
+└── All paths: O(V! / (V-k)!) worst case (exponential for dense graphs)
+
+Decision tree
+    Graph problem needing DFS?
+    ├── Undirected graph?
+    │   ├── Count regions/islands? → DFS flood fill, count calls
+    │   └── Has cycle?             → DFS with parent tracking
+    └── Directed graph?
+        ├── Has cycle?             → DFS with in_stack (color: white/gray/black)
+        ├── Ordering of tasks?     → topological sort (post-order DFS, reverse)
+        └── All paths to target?  → DFS with path list, record at target
+    Stack overflow risk (V > 10^4)?
+    └── YES → convert to iterative DFS with explicit stack
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Graphs can have cycles and disconnected components — unlike trees, a naive recursive traversal will loop forever without a visited set, and will miss nodes in separate components without an outer loop over all nodes.
+- **Core insight:** DFS on a graph = DFS on a tree where the visited set prunes the "revisit" edges that would otherwise create false children; the call stack implicitly represents the current DFS path from the starting node.
+- **Invariant:** A node must be marked visited before recursing into its neighbors (not after), otherwise two branches can simultaneously enter the same node on graphs with shared neighbors.
+- **Why it's fast:** O(V+E) — each vertex is entered and exited exactly once, each edge is examined exactly once per direction (twice for undirected), regardless of graph density.
+- **Where it breaks:** Graphs with V > ~10,000 nodes risk Python stack overflow with recursive DFS; directed graphs require the stronger in_stack (gray) check for cycle detection — just the visited set is insufficient and gives false negatives.
+
 # Graph Recursion — DFS-Based Algorithms
 
 Recursive DFS on graphs: traversal, connectivity, cycle detection, topological sort, and pathfinding. For the recursion foundation see [README.md](README.md).

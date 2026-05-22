@@ -1,3 +1,57 @@
+## First-Principles Map
+
+```
+WHY Probability & Combinatorics DP exists
+├── Counting paths / arrangements has exponential naive enumeration
+├── Expected value problems have recursive structure: E[state] = Σ p_i * E[next_i] + cost
+├── Combinatorial identities (Pascal's, stars-and-bars) alone don't handle constraints
+├── Invariant: probabilities at each state sum to 1; expected values satisfy linearity
+└── Decision tree:
+    count distinct arrangements with constraints?   → counting DP (mod 1e9+7)
+    what is expected number of steps/cost?          → expected value DP
+    probability of reaching state X?                → probability DP (float or fraction)
+    game theory — optimal play both sides?          → minimax DP
+    combinatorics with memoization (nCr large)?     → Pascal's triangle or Fermat's little theorem
+
+WHAT Probability & Combinatorics DP is
+├── Counting DP: dp[i][state] = number of valid sequences/arrangements up to i
+├── Expected value DP: dp[state] = E[cost to reach terminal from state]
+├── Probability DP: dp[state] = probability of being in / reaching state
+├── Game DP: dp[state] = True if current player wins with optimal play
+└── Combinatorics with mod: precompute fact[], inv_fact[]; nCr = fact[n]*inv_fact[r]*inv_fact[n-r]%MOD
+
+HOW each variant works
+├── Counting: dp[i][j] = dp[i-1][j] + dp[i-1][j-1] (choose/skip); watch mod at every step
+├── Expected: dp[i] = 1 + (1/faces)*Σ dp[i-face] (dice roll); solve from base backward
+├── Probability forward: dp[i][j] += dp[i-1][j-1] * p; normalize at end if needed
+├── Game DP: dp[state] = any(not dp[next_state] for next_state in moves(state))
+└── Circular / symmetry: break symmetry by fixing first element; multiply by count
+
+WHEN to use
+├── Count strings with no two adjacent same chars, length N over alphabet k  → counting DP
+├── Expected rolls to reach sum ≥ target (dice)                              → expected value DP
+├── Probability all N people pick distinct hats (derangement)                → inclusion-exclusion DP
+├── Nim / stone game — does first player win?                                → game DP
+└── Number of ways to tile M×N board with 1×2 dominoes                      → profile DP (bitmask)
+
+WHAT can go wrong
+├── Probability DP with floats: accumulate rounding error over many states → use exact fractions or mod
+├── Expected value DP with cycles (random walk): must solve linear system, not simple recurrence
+├── Counting mod: forgetting to mod intermediate products causes overflow in C++/Java
+├── Game DP: not considering all move sets; missing a move flips win/loss incorrectly
+└── nCr mod prime: if n > MOD, Lucas' theorem needed; standard Fermat inverse fails
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Counting valid arrangements or computing expectations over stochastic processes has exponential naive complexity; states share structure across choices → DP over state space.
+- **Core insight:** Linearity of expectation lets E[total cost] = Σ E[cost at each stage] — each stage's expected cost depends only on current state, not full history → Markov property enables DP.
+- **Invariant:** In counting DP with mod, every intermediate value must be taken mod p — a single missed mod causes overflow; in probability DP, Σ(all transitions from state) = 1 must hold.
+- **Why it's fast:** State space is polynomial in problem parameters; each state's value computed from O(branching factor) prior states → O(states × branching) total.
+- **Where it breaks:** Cycles in the state graph (e.g., random walk that can revisit states) break simple recurrence — must detect and solve the resulting linear system; standard DP assumes DAG.
+
+---
+
 # Probability & Combinatorics DP
 
 DP problems involving expected values, counting paths, game theory, and combinatorial structures. For the DP foundation see [README.md](README.md).

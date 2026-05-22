@@ -1,3 +1,40 @@
+## First-Principles Map
+
+```
+WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                │              │               │               │
+  [DP explores all      [make the      [sort by key    [interval       [greedy works
+   subproblems (too      locally        criterion;      scheduling,     only when greedy
+   slow); greedy         optimal choice iterate once    jump game,      choice property
+   collapses to          at each step   making locally  coin change     holds — easy to
+   O(n log n) when       without        best decision;  (canonical),    convince yourself
+   local → global        reconsidering  prove: exchange Huffman coding, it works when
+   optimality holds]     previous       argument shows  Kruskal's MST,  it doesn't;
+                         choices]       no swap helps]  activity select] counterexamples
+                                                                         on coin change
+                                                                         (non-canonical)]
+       │                │              │
+  [real-world:          [greedy choice [exchange argument proof:
+   hiring cheapest       property: a    assume optimal ≠ greedy;
+   qualified worker      greedy choice  show swapping one element
+   first; Huffman        is always part toward greedy solution
+   encoding compresses   of some        doesn't worsen result;
+   by making frequent    optimal        by induction, greedy = optimal]
+   chars shortest]       solution]
+       ↓
+[Decision: Greedy vs DP vs alternatives]
+  ├── vs DP         → greedy O(n log n) when greedy-choice property provable; DP when not
+  ├── vs Backtrack  → backtrack when greedy fails; greedy never undoes choices
+  └── vs Network Flow → flow for matching/assignment; greedy approximation otherwise
+```
+
+## First-Principles Breakdown
+- **Root problem**: DP examines all O(2^n) subsets in naive form; when local optimal choices always lead to global optimum, we can skip enumeration entirely.
+- **Core insight**: The greedy choice property guarantees that making the locally best decision at each step is always part of some globally optimal solution — proven by the exchange argument.
+- **Invariant**: After each greedy step, the remaining subproblem is a valid smaller instance of the same problem (optimal substructure).
+- **Why it's fast**: One pass (after optional sorting) — O(n) or O(n log n) total; no recursion tree, no memoization table.
+- **Where it breaks**: Fails when local optimum ≠ global optimum (e.g., coin change with non-canonical denominations like {1,3,4} for target 6 — greedy gives 4+1+1=3 coins, DP gives 3+3=2 coins).
+
 # Greedy Algorithms — SDE-3 Gold Standard
 
 ```

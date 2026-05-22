@@ -1,3 +1,73 @@
+## First-Principles Map
+
+```
+WHY Divide & Conquer exists
+├── Problems with overlapping or independent sub-structure grow too slow naively
+│   ├── Sorting n items: brute O(n²) → D&C gives O(n log n)
+│   ├── Multiplying n-digit numbers: schoolbook O(n²) → Karatsuba O(n^1.585)
+│   └── Closest pair of points: brute O(n²) → D&C O(n log n)
+│
+WHAT it is
+├── Algorithmic paradigm: recursively split → solve independently → merge
+│   ├── Split: divide input into k ≥ 2 subproblems of size n/b
+│   ├── Conquer: recurse until base case (size 1 or threshold)
+│   └── Merge: combine subproblem solutions into full solution
+│       └── Merge cost drives total complexity via Master Theorem
+│
+HOW it works
+├── Recurrence: T(n) = aT(n/b) + f(n)
+│   ├── a = number of subproblems, b = split factor, f(n) = merge cost
+│   ├── Master Theorem cases:
+│   │   ├── Case 1: f(n) = O(n^(log_b a - ε)) → T(n) = Θ(n^log_b a)   [subproblems dominate]
+│   │   ├── Case 2: f(n) = Θ(n^log_b a)       → T(n) = Θ(n^log_b a · log n) [balanced]
+│   │   └── Case 3: f(n) = Ω(n^(log_b a + ε)) → T(n) = Θ(f(n))        [merge dominates]
+│   ├── Merge Sort:   a=2, b=2, f=O(n)   → T=O(n log n)  [Case 2]
+│   ├── Binary Search: a=1, b=2, f=O(1)  → T=O(log n)    [Case 1]
+│   ├── Karatsuba:    a=3, b=2, f=O(n)   → T=O(n^1.585)  [Case 1]
+│   └── Strassen:     a=7, b=2, f=O(n²)  → T=O(n^2.807)  [Case 1]
+├── Canonical algorithms:
+│   ├── Merge Sort — split mid, sort halves, merge in O(n); stable, O(n log n)
+│   ├── Quicksort — partition around pivot, recurse; O(n log n) avg, O(n²) worst
+│   ├── Closest Pair — sort by x, split, recurse each half, strip merge in O(n)
+│   └── Counting Inversions — augmented merge sort; count cross-half inversions during merge
+│
+WHEN to use
+├── Input can be split into independent (not overlapping) halves/thirds
+│   ├── Sorting, searching on sorted input → always consider D&C
+│   ├── "Count pairs / triples with property" → augmented merge sort
+│   ├── Big-integer / polynomial multiplication → Karatsuba / FFT
+│   └── Geometric problems on point sets → closest pair, convex hull
+├── NOT when subproblems overlap with shared state → use DP instead
+│   └── Fibonacci via D&C = O(2^n); DP = O(n)
+│
+WHAT can go wrong
+├── Wrong split: unbalanced split → O(n²) worst case (quicksort on sorted input)
+├── Merge cost dominates: if merge is O(n²), total is O(n² log n) — worse than brute
+├── Stack overflow: recursion depth O(log n) normally safe; O(n) depth → overflow
+├── Off-by-one in mid: mid = lo + (hi - lo) / 2 NOT (lo + hi) / 2 (overflow)
+├── Forgetting base case: infinite recursion when subproblem size doesn't shrink
+└── Confusing with DP: D&C subproblems are disjoint; DP subproblems overlap
+
+Decision tree
+├── Does the problem split into non-overlapping halves? YES → D&C candidate
+│   ├── Can I sort or search? → Merge sort / Binary search / Quickselect
+│   ├── Count pairs with a property? → Augmented merge sort (inversions)
+│   ├── Big number arithmetic? → Karatsuba
+│   ├── Matrix multiply? → Strassen
+│   └── Geometric (point distances)? → Closest pair D&C
+└── Do subproblems overlap / share results? NO→ D&C, YES → DP
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Naive algorithms scan all combinations; D&C exploits problem structure to prune redundant work by ensuring each element is processed O(log n) times instead of O(n) times.
+- **Core insight:** If a problem of size n can be split into a subproblems of size n/b with O(f(n)) merge cost, the recursion tree has log_b n levels and total work telescopes to the Master Theorem bound.
+- **Invariant:** At every recursive call, the subproblem is strictly smaller than the parent; merge produces a fully correct solution for the parent given correct child solutions — no global state is mutated between calls.
+- **Why it's fast:** The split halves the problem size each level, so the recursion tree has only O(log n) depth; merge sort's O(n) merge across O(log n) levels yields O(n log n) total — each element participates in exactly one merge per level.
+- **Where it breaks:** Unbalanced splits (pivot = min/max in quicksort) degrade depth to O(n), making total work O(n²); also fails when subproblems are not independent — if merging requires re-solving shared subproblems, DP is required instead.
+
+---
+
 # Divide and Conquer — SDE-3 Gold Standard
 
 Break a problem into **independent subproblems**, solve recursively, and **combine** results. SDE-3 expects: Master Theorem application, recognizing D&C vs DP vs Greedy, and key augmentations (counting inversions, closest pair).

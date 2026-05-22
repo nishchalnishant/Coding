@@ -1,3 +1,79 @@
+## First-Principles Map
+
+```text
+WHY systematic algorithm selection beats intuition
+├── Under interview pressure, intuition produces the most recently seen algorithm
+│   ├── Not necessarily the right one — leads to brute force or wrong complexity
+│   └── Trial-and-error wastes 10-15 minutes on wrong family before pivoting
+├── A systematic map gives deterministic O(1) family selection from problem signal
+└── SDE-3 expectation: name the algorithm family and its complexity before coding starts
+│
+WHAT the strategic algorithm families are
+├── Sort / Partition  — O(n log n); prerequisite for two-pointer, binary search, greedy
+├── Search            — binary search O(log n); BFS O(V+E); Dijkstra O((V+E) log V)
+├── Strings           — KMP / Z-function O(n); rolling hash O(n); trie O(L·n)
+├── Union-Find        — O(α) per op; dynamic connectivity, Kruskal, redundancy
+├── Dynamic Prog.     — O(n²) to O(n·k); memoize or tabulate; count / optimize
+├── Backtracking      — O(k^n) worst case; prune aggressively; all valid states
+├── Greedy            — O(n log n) with sort; exchange argument must hold
+├── Math / Bits       — O(1) or O(log n); number theory, bit manipulation, modular
+├── Concurrency       — lock/semaphore discipline; producer-consumer, readers-writers
+└── Distributed       — Raft/Paxos consensus; consistent hashing; vector clocks
+│
+HOW to map a problem to a family in seconds
+├── Core question → family
+│   ├── "Has dependency ordering?"              → Topological sort (Kahn's / DFS)
+│   ├── "Optimize with overlapping choices?"    → DP (define state, write recurrence)
+│   ├── "Need ALL valid configurations?"        → Backtracking + pruning
+│   ├── "Local choice provably global optimal?" → Greedy (prove exchange argument)
+│   ├── "Connected / path / reachability?"      → Graph BFS/DFS/Dijkstra
+│   ├── "Dynamic connectivity / merge sets?"    → Union-Find
+│   ├── "Sorted input / search for target?"     → Binary search (value or answer space)
+│   ├── "Pattern in string?"                    → KMP / Z-function / rolling hash
+│   └── "Counting / modular arithmetic?"        → Math (combinatorics, Fermat's little theorem)
+├── Complexity budget → family
+│   ├── O(n) needed (n=10^6)     → Two pointers / sliding window / prefix sum
+│   ├── O(n log n) (n=10^5)      → Sort + scan / heap / binary search / BFS
+│   ├── O(n²) acceptable (n=10³) → DP / backtracking with strong pruning
+│   └── O(2^n) only (n≤20)       → Full backtracking / bitmask DP
+│
+WHEN to upgrade from brute force
+├── O(n²) nested loop → O(n log n) with sort + two pointers (pair sum, closest)
+├── O(n²) repeated scan → O(n) with sliding window (max subarray, longest substring)
+├── O(2^n) recursion → O(n²) with DP memoization (fibonacci, coin change)
+├── O(n²) connectivity → O(n·α) with Union-Find (dynamic component queries)
+└── O(n·L) string search → O(n+L) with KMP / Z-function (pattern matching)
+│
+WHAT CAN GO WRONG
+├── DP when greedy suffices          → O(n²) for activity selection (should be O(n log n))
+├── Backtracking when DP needed      → O(2^n) for edit distance (should be O(n·m))
+├── BFS for weighted shortest path   → wrong answer (unweighted only); use Dijkstra
+├── Greedy without exchange proof    → wrong on coin change with arbitrary denominations
+├── Topo sort ignoring cycle check   → infinite loop or missed impossible case
+├── Missing memoization key          → duplicate subproblem work → TLE
+└── Wrong recurrence direction       → bottom-up built in wrong order → incorrect DP
+│
+DECISION — problem signal → algorithm family
+├── Dependency order / DAG                → Topological sort
+├── Overlapping subproblems + optimize    → DP (memoize or tabulate)
+├── All valid states / exhaustive         → Backtracking (+ pruning)
+├── Local greedy provably optimal         → Greedy (sort first, exchange arg)
+├── Unweighted shortest path              → BFS
+├── Weighted shortest path                → Dijkstra / Bellman-Ford
+├── Dynamic merge / connectivity          → Union-Find
+├── Sorted + search / minimize max        → Binary search (on value or answer space)
+├── String pattern / substring            → KMP / Z / rolling hash / trie
+└── Count modulo / combinatorics          → Math (nCr, Fermat, modular inverse)
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Under pressure, the human brain defaults to recently seen solutions — a systematic strategic map replaces pattern-matching with deterministic family selection from problem signals.
+- **Core insight:** Each algorithm family exploits exactly one structural property (optimal substructure → DP; exchange argument → greedy; adjacency → graph; monotonicity → binary search); the family is invalid without that property.
+- **Invariant:** Problem signal (dependency, optimization, exhaustive, connectivity, sorted) maps 1-to-1 to an algorithm family; constraint size (n ≤ 20 vs 10^5) narrows to the specific variant within the family.
+- **Why it works:** Templates encode proven solutions with known correctness guarantees and complexity bounds — the only work is identifying the match and applying the problem-specific twist.
+- **Where it breaks:** Applying backtracking on DP problems produces exponential solutions; applying greedy without a valid exchange argument produces wrong answers — both are unrecoverable within the interview window.
+
 # The Algorithm Tree: Your Strategic Map
 
 If the Data Structure Tree was your "Toolkit," this is your **"Battle Plan."** Most candidates panic because they try to solve every problem from scratch. We don't do that. We recognize the **Pattern**, apply the **Template**, and then handle the **Twist.**

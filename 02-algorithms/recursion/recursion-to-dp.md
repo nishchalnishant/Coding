@@ -1,3 +1,74 @@
+## First-Principles Map
+
+```
+WHY Recursion-to-DP conversion exists
+└── Naive recursion recomputes the same subproblems exponentially
+    ├── fib(5) calls fib(3) twice, fib(2) four times → O(2^n)
+    ├── LCS(i,j) recomputed for every (i,j) pair O(2^(m+n)) naively
+    └── Without memoization: correct but unusably slow on n > 40
+
+WHAT it is
+└── A mechanical 3-step bridge: recursion → top-down memo → bottom-up table
+    ├── Step 1 — Write plain recursion: identify state = function arguments
+    ├── Step 2 — Add memo: cache[state] = result before returning
+    └── Step 3 — Tabulate: fill dp[...] in dependency order (reverse of recursion)
+
+HOW it works
+├── Identify overlapping subproblems
+│   ├── Draw recursion tree for small input
+│   ├── Same (i,j) / (n,W) appearing more than once → memoizable
+│   └── Optimal substructure: f(n) built from f(n-1), f(n-2) etc.
+├── Top-down memoization
+│   ├── @lru_cache(None) or memo = {}
+│   ├── if state in memo: return memo[state]
+│   └── memo[state] = recursive_result; return memo[state]
+├── Bottom-up tabulation
+│   ├── Determine iteration order (smaller subproblems first)
+│   ├── dp[base] = base_value
+│   ├── Loop filling dp[i] from dp[i-1], dp[i-2] etc.
+│   └── Answer = dp[n] or dp[n][m]
+└── Space optimization
+    ├── If dp[i] only depends on dp[i-1]: use two variables (prev, curr)
+    └── If 2D dp[i][j] depends only on row i-1: use 1D rolling array
+
+WHEN to use
+├── Overlapping subproblems detected in recursion tree → memoize
+├── Recursion hits TLE → convert to tabulation
+├── Need O(1) space answer → rolling array after tabulation works
+└── State space is DAG (no cycles in subproblem dependency) → tabulation safe
+
+WHAT can go wrong
+├── Wrong state: forgot a dimension (e.g., index AND remaining capacity)
+├── Wrong base: dp[0] or dp[-1] initialized incorrectly → cascading errors
+├── Wrong order: filling dp[i] before dp[i-1] is ready → stale values
+├── Circular dependency: subproblem calls itself (not strictly smaller)
+├── Off-by-one: dp has size n vs n+1, index goes [1..n] vs [0..n-1]
+└── Mutable default in memo: sharing cache across test cases → wrong answer
+
+Complexity
+├── Time: O(states × transition_cost) — e.g., O(n·W) for 0/1 knapsack
+├── Space: O(states) top-down (stack + cache), O(states) bottom-up table
+└── Optimized: O(W) space for knapsack with rolling 1D array
+
+Decision tree
+    Is recursion correct but slow (TLE)?
+    ├── YES → draw recursion tree, same args repeated?
+    │         ├── YES → add @lru_cache → top-down done
+    │         │         → then convert to table for stack safety
+    │         └── NO  → not DP-able; try greedy or divide-and-conquer
+    └── NO  → is recursion wrong?
+              ├── YES → fix base cases and return statements first
+              └── NO  → recursion fast enough? → done, no DP needed
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Recursive solutions to optimization/counting problems often recompute identical subproblems, inflating time from polynomial to exponential.
+- **Core insight:** If a problem has overlapping subproblems + optimal substructure, storing each subproblem's result the first time it's computed reduces time to O(unique states × transition cost).
+- **Invariant:** Every subproblem in the DP table must be computed before any subproblem that depends on it; the recursion tree's topological order defines the correct fill direction.
+- **Why it's fast:** Memoization cuts the recursion tree from an exponential branching factor to a DAG with at most O(states) nodes, each visited exactly once.
+- **Where it breaks:** When the state space is too large to cache (exponential dimensions), when subproblems have cyclic dependencies, or when the recursion has side effects that prevent safe caching.
+
 # Recursion → Memoization → Tabulation
 
 The mechanical three-step bridge from naive recursion to optimized DP. For every problem: write the recursive solution first, then memoize, then convert to bottom-up tabulation. For pattern theory see [README.md](README.md).

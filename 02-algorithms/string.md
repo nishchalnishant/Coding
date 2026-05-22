@@ -1,3 +1,53 @@
+## First-Principles Map
+
+```text
+WHY string algorithms exist
+├── Naive substring search is O(n·m) — too slow for large text corpora and bioinformatics
+│   ├── Need O(n + m) or O(n log n) guarantees for search, compression, and matching
+│   └── Pattern pre-processing amortizes cost across many queries
+WHAT they are
+├── Algorithms that exploit structural redundancy in text
+│   ├── KMP — failure function encodes longest proper prefix-suffix (LPS) of pattern; O(n + m) search
+│   ├── Rabin-Karp — rolling polynomial hash; O(n + m) average, O(nm) worst (hash collisions)
+│   ├── Z-algorithm — Z[i] = length of longest substring starting at i matching a prefix; O(n + m)
+│   └── Suffix Array + LCP — lexicographically sorted suffixes; O(n log n) build, O(m log n) search
+HOW they work
+├── KMP
+│   ├── Build LPS array: lps[i] = length of longest prefix of pattern[0..i] that is also a suffix
+│   └── On mismatch at j, jump to lps[j-1] — never retreat the text pointer
+├── Rabin-Karp
+│   ├── hash(window) = (hash(prev_window) - text[i]*base^(m-1)) * base + text[i+m]  mod p
+│   └── Match hash → verify char-by-char to handle collisions
+├── Z-algorithm
+│   ├── Concatenate pattern + '$' + text; Z[i] in text portion = match length from text[i]
+│   └── Maintain [l, r] Z-box; extend only when i > r, reuse z[i-l] otherwise
+├── Suffix Array (SA-IS / prefix doubling)
+│   ├── Prefix doubling: rank pairs of length-2^k suffixes; O(n log^2 n) or O(n log n) with radix sort
+│   └── LCP array via Kasai's algorithm in O(n); enables O(m log n) binary-search pattern matching
+WHEN to use
+├── Single pattern in long text → KMP (O(n + m), zero extra space beyond LPS array)
+├── Multiple patterns / plagiarism detection → Rabin-Karp (rolling hash handles many windows)
+├── Pattern + text prefix matching in one pass → Z-algorithm
+├── Repeated substring / longest duplicate substring → Suffix Array + LCP
+└── Anagram / sliding window over chars → frequency array + two-pointer, O(n)
+WHAT can go wrong
+├── KMP — incorrect LPS build (off-by-one on the fallback lps[len-1] step) gives wrong matches
+├── Rabin-Karp — single modulus risks collision; use double hashing for correctness guarantees
+└── Suffix Array — 0-indexed vs 1-indexed suffix boundaries cause off-by-one in LCP queries
+DECISION
+└── If m << n and single pattern → KMP; if need all pattern occurrences fast + many patterns → Aho-Corasick; if substring queries dominate → Suffix Array + LCP
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Substring search and pattern matching on length-n text with length-m pattern must beat the O(nm) brute-force baseline.
+- **Core insight**: Pre-process the pattern (KMP/Z) or the text (suffix array) once to encode all self-similarity, then search in linear or log-linear time.
+- **Invariant**: KMP's text pointer never moves backward; Z-algorithm's [l, r] Z-box shrinks the number of character comparisons to O(n) total.
+- **Why it works**: Rolling hash (Rabin-Karp) and suffix arrays both reduce the search problem to integer comparison, which is O(1) per step.
+- **Where it breaks**: Hash collisions (Rabin-Karp), incorrect LPS fallback (KMP), and off-by-one in suffix array LCP bounds are the dominant failure modes.
+
+---
+
 # Strings — SDE-3 Gold Standard
 
 ```
@@ -398,6 +448,73 @@ class Trie:
 > - **Rabin-Karp** is also streaming: maintain the rolling hash across chunk boundaries. The last `m-1` characters of each chunk must be prepended to the next chunk for correct window computation.
 >
 > For **multi-pattern streaming** (thousands of patterns): **Aho-Corasick automaton** — build a trie of all patterns with failure links; scan text once in O(N + M) total where M = sum of pattern lengths. Used in antivirus engines, network intrusion detection (Snort), and content moderation.
+
+```python
+from collections import deque, defaultdict
+
+class AhoCorasickNode:
+    def __init__(self):
+        self.children: dict[str, 'AhoCorasickNode'] = {}
+        self.fail: 'AhoCorasickNode' | None = None
+        self.output: list[str] = []  # Patterns ending at this state
+
+class AhoCorasick:
+    """
+    Aho-Corasick Multi-Pattern Matcher.
+    Time: O(Σ length of patterns) to build, O(Text Length + Matches) to search.
+    Space: O(Σ length of patterns) for Trie and failure/output links.
+    """
+    def __init__(self, patterns: list[str]):
+        self.root = AhoCorasickNode()
+        self._build_trie(patterns)
+        self._build_automaton()
+
+    def _build_trie(self, patterns: list[str]) -> None:
+        for pattern in patterns:
+            node = self.root
+            for ch in pattern:
+                if ch not in node.children:
+                    node.children[ch] = AhoCorasickNode()
+                node = node.children[ch]
+            node.output.append(pattern)
+
+    def _build_automaton(self) -> None:
+        queue = deque()
+        # Initialize queue with root's immediate children; their failure links point to root
+        for ch, child in self.root.children.items():
+            child.fail = self.root
+            queue.append(child)
+            
+        while queue:
+            curr = queue.popleft()
+            for ch, child in curr.children.items():
+                fail_state = curr.fail
+                while fail_state and ch not in fail_state.children:
+                    fail_state = fail_state.fail
+                
+                child.fail = fail_state.children[ch] if fail_state else self.root
+                
+                # Merge matches from the failure path to optimize output link jumping
+                child.output.extend(child.fail.output)
+                queue.append(child)
+
+    def search(self, text: str) -> dict[str, list[int]]:
+        """
+        Searches for all patterns in the input text.
+        Returns a dict mapping pattern -> list of starting indexes in text.
+        """
+        results = defaultdict(list)
+        curr = self.root
+        for idx, ch in enumerate(text):
+            while curr and ch not in curr.children:
+                curr = curr.fail
+            curr = curr.children[ch] if curr else self.root
+            
+            for pattern in curr.output:
+                start_idx = idx - len(pattern) + 1
+                results[pattern].append(start_idx)
+        return dict(results)
+```
 
 ### Scalability: Suffix Arrays for Large-Scale Text
 

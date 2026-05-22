@@ -1,3 +1,34 @@
+## First-Principles Map
+
+```
+WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                  │               │               │               │
+  [O(1) lookup by key  [deterministic  [hash(key) →    [frequency      [hash collisions
+   is impossible with   function maps   index in array;  count, cache,   degrade to O(n);
+   arrays (unknown      arbitrary key   collision        two-sum, anagram poor hash
+   key space) or        to bounded       handled by       detection,      function clusters
+   trees (O(log n))]    integer index]   chaining or      grouping,       keys; worst-case
+                                         open addressing]  LRU cache]      is always O(n)]
+       │                  │               │
+  [real-world:          [invariant:     [load factor α = n/m;
+   dictionary —          same key always  resize when α > 0.7;
+   word → page           same bucket;     amortized O(1) insert;
+   number in O(1)]       hash is          chaining: O(1+α) lookup;
+                         deterministic]   open addressing: O(1/(1-α))]
+       ↓
+[Decision: HashMap vs alternatives]
+  ├── vs Array        → hash for arbitrary key types; array for integer 0..n index
+  ├── vs BST/TreeMap  → hash O(1) avg vs BST O(log n); BST supports range queries
+  └── vs Trie         → trie for prefix operations; hash for exact key lookup
+```
+
+## First-Principles Breakdown
+- **Root problem**: Need O(1) lookup for arbitrary key types (strings, objects) — arrays only handle integer indices in a known range.
+- **Core insight**: A good hash function uniformly distributes keys across buckets, making collision probability O(1/m) per pair — effectively O(1) lookup.
+- **Invariant**: Same key always hashes to the same bucket; the hash function is deterministic and stable during a session.
+- **Why it's fast**: With low load factor, expected chain length is ≈1 — lookup touches ~1 element regardless of table size.
+- **Where it breaks**: Adversarial inputs can force all keys to one bucket (hash DoS); ordering is lost; worst-case is O(n); non-hashable types (mutable lists) cannot be keys.
+
 # Hashing — SDE-3 Gold Standard
 
 ```

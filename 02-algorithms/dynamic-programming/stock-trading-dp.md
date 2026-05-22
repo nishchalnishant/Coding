@@ -1,3 +1,59 @@
+## First-Principles Map
+
+```
+WHY Stock Trading DP exists
+├── Naive simulation tries all buy/sell pairs: O(2^N) for k-transaction variant
+├── Overlapping subproblems: profit at day i with j txns remaining reused many times
+├── State machine models discrete choices (hold / not-hold) at each day exactly
+├── Invariant: only one share held at a time; buy before sell within each transaction
+└── Decision tree:
+    unlimited transactions?    → greedy (sum all positive diffs) or dp[i][0/1]
+    at most k transactions?    → dp[i][k][0/1], O(NK) time
+    cooldown after sell?       → add "rest" state; dp[i][0/1/2]
+    transaction fee?           → subtract fee on sell; same state machine
+    at most 2 transactions?    → k=2 special case, or 4 variables inline
+
+WHAT Stock Trading DP is
+├── State: dp[i][k][h] = max profit on day i, k txns remaining, h=holding(1)/not(0)
+├── Dimensions: N days × (K+1) transaction counts × 2 holding states
+├── Transition (buy counts as using a txn):
+│   dp[i][k][0] = max(dp[i-1][k][0],  dp[i-1][k][1] + price[i])   ← sell
+│   dp[i][k][1] = max(dp[i-1][k][1],  dp[i-1][k-1][0] - price[i]) ← buy
+├── Base: dp[-1][k][0]=0, dp[-1][k][1]=-∞, dp[i][0][0]=0, dp[i][0][1]=-∞
+└── Answer: dp[N-1][K][0]  (never profitable to hold on last day)
+
+HOW Stock Trading DP works
+├── LC121 (one txn): track min price so far; profit = price[i] - min_price
+├── LC122 (unlimited): dp[i][1] = max(dp[i-1][1], dp[i-1][0]-p); dp[i][0] = max(dp[i-1][0], dp[i-1][1]+p)
+├── LC123 (k=2): 4 variables: buy1, sell1, buy2, sell2 updated in one pass
+├── LC188 (k txns): O(NK) table; if K≥N/2 collapse to unlimited case
+└── LC309 (cooldown): sell → rest → can buy; 3 states: held, sold, rest
+
+WHEN to use Stock Trading DP
+├── Single buy+sell, maximize profit              → O(N) min-prefix scan
+├── Unlimited transactions                        → state machine or greedy
+├── At most K transactions                        → dp[i][k][h], watch K≥N/2
+├── Cooldown period after sell                    → add "sold" rest state
+└── Per-transaction fee                           → subtract fee at sell event
+
+WHAT can go wrong
+├── Buy-counts-as-txn vs sell-counts-as-txn: pick one convention, be consistent
+├── K ≥ N/2: unlimited transactions; skip the k-dimension or TLE/MLE
+├── Cooldown: dp[i][hold] must reference dp[i-2][not_hold] not dp[i-1]
+├── Base case dp[i][0][1] = -∞ not 0: can't hold stock with 0 txns left
+└── Off-by-one on k: buying uses k-1 txns remaining, not k
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** At each day, choose buy / sell / rest — exponential choices; profit of remaining days after a decision recomputed identically without memoization.
+- **Core insight:** Compress all state into (day, txns_left, holding) — only 3 dimensions, each small → polynomial table.
+- **Invariant:** `dp[i][k][0] >= 0` always (can always do nothing); `dp[i][0][1] = -∞` (illegal state — held with 0 txns left).
+- **Why it's fast:** Each state transitions from at most 2 prior states in O(1); total work O(NK) with O(K) space using rolling array over days.
+- **Where it breaks:** Very large K with small N — must detect K ≥ N/2 and switch to unlimited mode; missing this causes TLE or MLE.
+
+---
+
 # Stock Trading DP — State Machine Approach
 
 Six LC stock problems unified under one `dp[i][k][holding]` state machine. For the broader DP guide see [README.md](README.md).

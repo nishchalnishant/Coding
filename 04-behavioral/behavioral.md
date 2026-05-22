@@ -1,3 +1,67 @@
+# First-Principles Map — Behavioral Interview
+
+```
+WHY Behavioral interviews exist
+├── Past behavior is the strongest predictor of future behavior at scale
+├── Resumes are unverifiable; stories under probing reveal real judgment quality
+└── Culture fit mismatch is the #1 cause of early attrition at senior IC levels
+
+WHAT it is
+├── A structured oral exam: STAR stories + impact framing + failure analysis + conflict resolution
+├── Tests: growth mindset, ownership, influence without authority, resilience
+└── Examples:
+    ├── Impact framing: "reduced P95 latency by 40% → unblocked 3 downstream teams"
+    ├── Failure story: "I underestimated the migration risk; here's what I changed"
+    └── Conflict: "Engineering wanted X, PM wanted Y; I structured a data-driven decision"
+
+HOW it works
+├── STAR execution:
+│   ├── Situation: scope and stakes in ≤2 sentences
+│   ├── Task: your specific accountability (not the team's)
+│   ├── Action: step-by-step of YOUR decisions — this is where signal lives
+│   └── Result: metric + timeline + secondary effects + what you'd change
+├── Impact framing heuristics:
+│   ├── Quantify: latency, revenue, reliability, velocity, team size influenced
+│   ├── Scope: cross-team vs single-team impact scores differently
+│   └── Ownership: "I drove" vs "I contributed" — choose language deliberately
+├── Failure story structure:
+│   ├── Real failure (not "I over-delivered") → credibility
+│   ├── Root cause analysis → analytical signal
+│   └── Behavioral change since → growth signal
+├── Conflict resolution structure:
+│   ├── Acknowledge both perspectives genuinely
+│   ├── Show your process for driving alignment (data, stakeholder mapping, escalation)
+│   └── Result: decision made + relationship preserved
+└── Growth mindset signals:
+    ├── "I sought feedback from X even though it was uncomfortable"
+    ├── "I was wrong about Y; I updated my mental model as follows"
+    └── "I proactively asked for stretch scope to close my skill gap"
+
+WHEN to use
+├── "Tell me about a time..." → STAR immediately, no preamble
+├── "What's your approach to X?" → anchor with a real story, then generalize
+└── Decision:
+    ├── Asked for failure → don't minimize it, don't catastrophize it, show learning
+    ├── Asked for conflict → never name-blame, show system thinking
+    └── Asked for leadership → show influence without authority, not just title
+
+WHAT can go wrong
+├── "We" language throughout → no individual signal extracted
+├── No quantification → impact is unverifiable → weak signal
+├── Conflict story becomes a complaint → anti-Googleyness signal
+└── Growth story is vague ("I learned a lot") → no evidence of actual change
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Behavioral interviews fail when candidates treat them as narrative exercises rather than evidence-based demonstrations of judgment under real constraints.
+- **Core insight:** The Action step of STAR is where signal density is highest — interviewers skip S/T quickly and probe deeply on A and R.
+- **Invariant:** Every story must show: individual agency + measurable outcome + honest reflection; a story missing any of these cannot carry the behavioral signal.
+- **Why it works:** Specific past actions are hard to fabricate under probing — concrete stories self-verify through detail consistency, which is why interviewers drill into them.
+- **Where it breaks:** If your story bank is shallow (all from one domain, one team, or one type of challenge), probing on coverage reveals thin breadth of experience.
+
+---
+
 # Google Behavioral / Googliness (SDE-2) — Story Bank + Prompts
 
 Behavioral rounds at Google often evaluate:

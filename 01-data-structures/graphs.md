@@ -1,3 +1,35 @@
+## First-Principles Map
+
+```
+WHY graphs exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                 │                │               │               │
+  [Many real problems   [V vertices +    [adjacency list: [social networks,[DFS on cyclic
+   are pairwise         E edges; directed O(V+E) space;    route finding,  graph infinite
+   relationships —       or undirected;   matrix: O(V²)   dependency      loops without
+   no hierarchy,         weighted or      space O(1) edge  resolution,     visited set;
+   no fixed order;       unweighted;      check; traversal: course schedule, adjacency matrix
+   trees are just        can have cycles] BFS/DFS from     network flow]   too large for
+   restricted graphs]                     any start node]                  sparse graphs]
+       │                 │                │
+  [real-world:          [invariant:      [BFS: O(V+E), level order,
+   road map — cities     all edges must   shortest path (unweighted);
+   as nodes,             connect vertices DFS: O(V+E), cycle detect,
+   roads as edges]       in V; no self-   topological sort (DAG);
+                         loops (usually)] connected components: union-find O(α)]
+       ↓
+[Decision: Adjacency List vs Matrix vs alternatives]
+  ├── vs Adj Matrix  → list O(V+E) space for sparse; matrix O(1) edge check
+  ├── vs Tree        → tree = acyclic connected graph; add cycle → graph
+  └── vs Union-Find  → UF for connected components only; graph for full traversal
+```
+
+## First-Principles Breakdown
+- **Root problem**: Pairwise relationships (friendships, roads, dependencies) can't be modeled by trees or flat arrays — need arbitrary connectivity.
+- **Core insight**: Separating vertices (entities) from edges (relationships) lets you model any network topology.
+- **Invariant**: Every edge connects two vertices in V; directed edges have a defined source and sink.
+- **Why it's fast**: Adjacency list stores only existing edges — O(V+E) space instead of O(V²), critical for sparse real-world graphs.
+- **Where it breaks**: Cycle detection requires explicit visited tracking; DFS on large graphs overflows the call stack; dense graphs make adjacency lists slower than matrices for edge lookups.
+
 # Graphs (Data Structure) — SDE-3 Gold Standard
 
 ```

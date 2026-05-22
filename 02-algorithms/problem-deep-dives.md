@@ -1,3 +1,44 @@
+## First-Principles Map
+
+```text
+WHY deep-dive walkthroughs exist
+├── Knowing an algorithm name is not enough for SDE-2/3 interviews
+│   ├── Interviewers probe why you chose an approach, not just that it passes
+│   └── Edge-case handling, complexity justification, and trade-off articulation are scored separately
+WHAT this file is
+├── Curated set of hard problems with full problem → approach → solution breakdowns
+│   ├── Key property: every entry anchors to a recognizable pattern (prefix sum, sliding window, etc.)
+│   └── Key property: pseudocode is language-agnostic and uses canonical helper names
+HOW to use each deep-dive
+├── Core mechanism: problem → identify signal → pick pattern → verify with constraints
+│   ├── Step 1 — read constraints first (n size, negative numbers, duplicates) to rule out approaches
+│   ├── Step 2 — match to a pattern trigger (sorted? → two-pointer; prefix? → hash map; optimal? → DP)
+│   ├── Step 3 — write pseudocode focusing on invariant maintenance
+│   └── Step 4 — derive time/space complexity before coding
+WHEN to use a specific pattern
+├── Sum / count subarray with condition → prefix-sum + hash map
+├── Contiguous subarray, maximize/minimize → sliding window or Kadane
+├── Sorted input, find pair/triplet → two-pointer
+├── Optimal over choices → DP or greedy (check greedy counter-example first)
+└── Graph connectivity / shortest path → BFS/DFS/Dijkstra depending on weights
+WHAT can go wrong
+├── Skipping constraint analysis — a valid O(n log n) idea fails if n = 10^7 and you have 1s
+├── Off-by-one in sliding window / prefix indexing
+└── Assuming input properties (sorted, distinct, positive) not stated in the problem
+DECISION
+└── Dominant signal: match problem shape to pattern in under 60 s, then validate with one example before coding
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Hard interview problems require not just a working solution but clear articulation of why the approach is correct and optimal.
+- **Core insight**: Every hard problem is a composition of 2–3 elementary patterns — identifying those patterns reduces an unfamiliar problem to known machinery.
+- **Invariant**: At every step of a correct algorithm, a well-defined condition holds that guarantees progress toward the answer.
+- **Why it works**: Canonical patterns have proven invariants; translating a new problem into a known pattern inherits that correctness guarantee.
+- **Where it breaks**: Pattern mismatch — forcing a sliding-window template onto a problem with negative numbers, or greedy onto a problem with non-monotone payoffs.
+
+---
+
 # Problem Details (Descriptions + Pseudocode) — Google SDE-2
 
 This file expands every coding question mentioned in this folder into:

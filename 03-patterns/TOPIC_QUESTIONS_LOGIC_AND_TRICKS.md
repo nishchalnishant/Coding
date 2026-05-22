@@ -1,4 +1,106 @@
+## First-Principles Map
+
+```
+WHY topic questions → WHAT they test → HOW to approach → WHEN each arises → WHAT can go wrong
+       │                    │                  │                  │                   │
+  [Each topic has           [pattern           [read constraints  [arrays: index      [misreading
+   canonical "gotcha"        recognition +      first; identify    tricks, prefix;     constraints
+   problems that             implementation     the 1-2 non-       strings: sliding    (0-indexed vs
+   appear repeatedly         precision;         obvious insights;  window, KMP;        1-indexed);
+   across companies;         time/space         template → adapt;  trees: recursion    forgetting
+   knowing them cold         tradeoff           handle edge        DFS/BFS; graphs:    edge cases
+   frees mental cycles       awareness;         cases (empty,      shortest path;      (empty array,
+   for novel variants]       edge case          single element,    DP: subproblems;    n=1, negative
+                             discipline]        overflow)]         greedy: exchange]   numbers)]
+       │                    │                  │
+  [real-world:             [non-obvious        [key tricks by topic:
+   FAANG interviews          insights:           Array: two-pointer, prefix sum, sort first;
+   repeat 80% of problems    1. restate in       Stack: monotonic for next-greater;
+   across cycles;             simpler terms;     Tree: think in terms of subtree return values;
+   recognizing the            2. try small        Graph: when to use BFS vs DFS;
+   "type" cuts solution       example;            DP: state = smallest info to decide next step;
+   time in half]              3. write recurrence  Heap: whenever "top K" appears in problem]
+                              before code]
+       ↓
+[Decision: How to identify the right approach quickly]
+  ├── Sorted input           → Binary search or two pointers
+  ├── "All combinations/subsets" → Backtracking with pruning
+  ├── "Minimum/maximum count of ways" → DP
+  ├── "Contiguous subarray" → Sliding window or prefix sum
+  └── "Can we achieve X?" (binary yes/no) → Binary search on answer
+```
+
+## First-Principles Breakdown
+- **Root problem**: Without knowing canonical problems per topic, every interview problem requires derivation from scratch — knowing the "trick" converts O(30 min) to O(5 min).
+- **Core insight**: Each topic has 3-5 non-obvious insights that unlock 80% of its problems — e.g., for trees: "what information does each recursive call need to return upward?"
+- **Invariant**: For any topic problem: constraints → pattern → template → edge cases — this order prevents jumping to code before understanding the problem.
+- **Why it's fast**: Recognizing "this is a monotonic stack problem" immediately recalls the template, the O(n) approach, and the common edge cases — no re-derivation needed.
+- **Where it breaks**: Pattern over-confidence — problems sometimes combine two patterns (e.g., DP + binary search, graph + DP); edge cases (empty input, single element, all-equal) break templates that weren't written defensively.
+
 # Topic Questions — Logic, Patterns, and Trickiness
+
+```
+[TOPIC QUESTIONS — LOGIC & TRICKINESS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: cross-topic index of canonical questions with solution logic and gotchas in one place
+│   ├── Gap it fills: topic files go deep; this file goes wide — fast lookup across all domains
+│   └── Analogy: this is the table of contents with spoilers — you know the punchline before the interview
+├── WHAT IT IS (First Principles)
+│   ├── Structure: per-question row with (problem name, core logic, trickiness + follow-ups)
+│   ├── Questions chosen for: frequency at FAANG, non-obvious insight, rich follow-up potential
+│   └── Complementary to: topic deep-dive files in 01-data-structures/ and 02-algorithms/
+├── HOW TO USE THIS FILE
+│   ├── Pre-interview scan: read core logic column for each topic to prime pattern recognition
+│   ├── Trickiness column: memorize gotchas — these are exactly what interviewers probe after your first solution
+│   ├── Follow-ups: signals the interviewer will escalate complexity — prepare the O(better) solution
+│   └── Cross-reference: open the full topic file for code template + complexity derivation
+├── TOPIC COVERAGE MAP
+│   ├── Arrays & Hashing
+│   │   ├── Two Sum → hash map complement lookup — O(N)
+│   │   ├── Subarray Sum = K → prefix sum + hash map — O(N)
+│   │   └── Longest Consecutive Sequence → hash set, only start chains at n where n-1 absent — O(N)
+│   ├── Strings
+│   │   ├── Minimum Window Substring → variable sliding window + char freq — O(N)
+│   │   ├── Longest Palindromic Substring → expand-around-center — O(N²)
+│   │   └── Group Anagrams → sort each word as key, group by key — O(N·L log L)
+│   ├── Trees
+│   │   ├── Binary Tree Max Path Sum → DFS returning max single-arm; track global max — O(N)
+│   │   ├── Serialize / Deserialize → preorder with null markers — O(N)
+│   │   └── LCA → recurse; if both sides non-null → current node is LCA — O(N)
+│   ├── Graphs
+│   │   ├── Number of Islands → BFS/DFS flood fill, mark visited in-place — O(N·M)
+│   │   ├── Course Schedule (Cycle Detection) → DFS with 3-color or Kahn's topological sort — O(V+E)
+│   │   └── Word Ladder → BFS on word graph with wildcard bucket optimization — O(N·L²)
+│   ├── Dynamic Programming
+│   │   ├── Longest Increasing Subsequence → DP O(N²) or patience sort O(N log N)
+│   │   ├── Edit Distance → 2D DP; recurrence: insert/delete/replace transitions — O(N·M)
+│   │   └── Coin Change → unbounded knapsack DP; dp[amount] = min coins — O(N·amount)
+│   ├── Intervals
+│   │   ├── Merge Intervals → sort by start, merge overlapping — O(N log N)
+│   │   ├── Meeting Rooms II → min heap of end times OR sweep line — O(N log N)
+│   │   └── Insert Interval → find overlap range, merge, reconstruct — O(N)
+│   └── Heaps / Priority Queues
+│       ├── K Closest Points → max-heap of size K — O(N log K)
+│       ├── Merge K Sorted Lists → min-heap of (val, list_idx) — O(N log K)
+│       └── Find Median from Data Stream → two heaps (max-heap left, min-heap right) — O(log N) insert
+├── TRICKINESS TAXONOMY
+│   ├── Off-by-one: index boundaries in binary search, sliding window, DP initialization
+│   ├── Edge cases: empty input, single element, all duplicates, negative numbers
+│   ├── Complexity traps: nested loops hiding O(N²); hash map making O(N) look like O(1)
+│   ├── Wrong data structure: using list where heap needed → O(N) vs O(log N) per op
+│   └── Follow-up escalations: "what if input is a stream?" / "what if it doesn't fit in memory?"
+├── COMPLEXITY SUMMARY
+│   ├── Most optimal array/string: O(N) with hash map or two pointers
+│   ├── Most optimal tree/graph: O(V+E) BFS/DFS
+│   ├── Most optimal DP: O(N²) or O(N·M) — optimize space with rolling array
+│   └── Most optimal interval: O(N log N) sort-based
+└── COMMON MISTAKES / GOTCHAS
+    ├── LCS vs LIS: completely different recurrences — don't mix them up under pressure
+    ├── BFS layer tracking: must snapshot queue size at start of each level, not check dynamically
+    ├── Graph visited set: must mark visited WHEN enqueued (BFS), not when dequeued — else revisits
+    ├── DP base cases: missing dp[0] = 0 or dp[0][0] = 0 causes silent wrong answers
+    └── Heap in Python: heapq is a min-heap; for max-heap negate values — always double check sign
+```
 
 This guide lists **canonical interview questions** by topic, **why** they appear, the **core solution logic**, and **what makes them tricky** (gotchas, wrong turns, follow-ups). Use with the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md).
 

@@ -1,3 +1,81 @@
+## First-Principles Map
+
+```
+WHY Combination/Permutation Recursion exists
+└── Need to enumerate all valid arrangements or selections from a set
+    ├── Subsets: 2^n selections (include or exclude each element)
+    ├── Permutations: n! orderings (place each element at each position)
+    ├── Combinations: C(n,k) selections of k from n (order irrelevant)
+    └── Backtracking: explore + undo to enumerate without duplication
+
+WHAT it is
+└── A recursive decision tree where each node = a choice
+    ├── Subsets: at each index, branch into include vs exclude
+    ├── Permutations: at each position, branch over all unused elements
+    ├── Combinations: at each index, branch include (advance) or skip (advance)
+    └── Backtrack: add to path → recurse → remove from path (undo)
+
+HOW it works
+├── Subsets (all 2^n)
+│   ├── f(i, path): if i==n → record path; return
+│   ├── exclude: f(i+1, path)
+│   └── include: f(i+1, path + [nums[i]])
+├── Permutations (all n!)
+│   ├── f(used, path): if len(path)==n → record; return
+│   └── for each i not in used: f(used|{i}, path+[nums[i]])
+├── Combinations (choose k from n)
+│   ├── f(start, path): if len(path)==k → record; return
+│   └── for i in range(start, n): f(i+1, path+[nums[i]])
+├── Combination Sum (reuse allowed)
+│   └── for i in range(start, n): f(i, path+[nums[i]], rem-nums[i])
+│       (start stays i, not i+1, to allow reuse)
+└── Deduplication (duplicates in input)
+    ├── Sort input first
+    └── if i > start and nums[i]==nums[i-1]: continue  # skip duplicate branch
+
+WHEN to use
+├── "Find all subsets / power set" → include/exclude recursion
+├── "Find all permutations" → used-set recursion
+├── "Find all combinations of size k" → start-index recursion
+├── "Combination sum / partition" → start-index + remaining target
+└── "Avoid duplicates in result" → sort + skip same-value sibling branches
+
+WHAT can go wrong
+├── Forgetting to pass start index → re-uses earlier elements → duplicates
+├── Reuse allowed but forgot to keep start=i (not i+1) → misses reuse
+├── Duplicate input not sorted → dedup skip condition fails silently
+├── Mutating path without copying → all recorded entries point to same list
+│   → Fix: record path[:] or tuple(path), not path
+├── Used-set for permutations: using index vs value matters when duplicates exist
+└── Off-by-one: range(start, n) vs range(start, n+1) for 1-indexed inputs
+
+Complexity
+├── Subsets: O(2^n) time, O(n) stack depth, O(n·2^n) to store all results
+├── Permutations: O(n!) time, O(n) stack depth
+├── Combinations C(n,k): O(C(n,k)·k) time
+├── Combination sum: O(2^target) worst case with small denominations
+└── Dedup pruning: reduces constant factor but not asymptotic class
+
+Decision tree
+    Combination-type problem?
+    ├── Order matters?
+    │   ├── YES → Permutations → used-set recursion
+    │   └── NO  → order doesn't matter
+    │             ├── Fixed size k? → Combinations → start-index recursion
+    │             └── Any size?    → Subsets → include/exclude recursion
+    ├── Reuse elements allowed? → keep start=i (not i+1) in loop
+    ├── Duplicates in input?    → sort first + skip same-sibling condition
+    └── Target sum constraint?  → prune branch when remaining < 0
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Enumerating exponentially many valid configurations without explicitly generating invalid ones — brute force is the goal, but branching must be structured to avoid duplicates and respect constraints.
+- **Core insight:** Every combination/permutation problem is a decision tree; the recursive function represents "given choices made so far (path), make the next choice and recurse" — backtracking = undo the last choice before the next sibling branch.
+- **Invariant:** The start index (for combinations) or used-set (for permutations) must strictly prevent re-visiting a position in the same recursive path, ensuring each leaf represents a distinct valid selection.
+- **Why it's fast:** Early pruning (remaining < 0, path too long) cuts entire subtrees; sorting enables the "skip duplicate sibling" optimization that eliminates redundant branches without a hash set.
+- **Where it breaks:** Mutating and recording the same list object is the most common bug — always record `path[:]`; for large n, combinations/permutations hit memory limits before time limits since storing O(n! × n) results dominates.
+
 # Combination Problems — Complete Family
 
 All combination-type recursive problems unified. The key distinction: **order matters (permutations)** vs **order doesn't matter (combinations)** vs **unlimited reuse vs single use**. For the pattern foundation see [aditya-verma.md](aditya-verma.md).

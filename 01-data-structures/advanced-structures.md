@@ -1,4 +1,89 @@
+## First-Principles Map
+
+```
+WHY advanced structures exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                              │                │               │               │
+  [Standard structures hit         [Trie: prefix     [Trie: O(L)     [Trie: autocomp, [Trie: memory
+   O(n) or O(n log n) walls         tree exploiting   per op;         word search;     blowup for
+   for specialized queries          shared prefixes;  Seg Tree:       Seg Tree: range  large alphabet;
+   (prefix search, range            Seg Tree: binary  O(log n) per    queries + point  Seg Tree: lazy
+   updates) — specialized           decomposition     op with lazy    updates;         propagation
+   decomposition needed]            of ranges]        propagation]    BIT: prefix sum] complexity]
+       │                              │                │
+  [real-world:                     [Trie invariant:   [BIT/Fenwick alternative:
+   autocomplete (Trie);              each path spells  simpler code O(log n) prefix
+   range analytics (Seg Tree);       one word; prefixes operations; uses bit tricks
+   DNS longest-prefix (radix         shared; Seg Tree: lowbit(i)=i&(-i) to navigate
+   trie); financial time-            node = aggregate  parent/child; only prefix sums,
+   series aggregation (Seg)]         of its subrange]  not arbitrary range aggregate]
+       ↓
+[Decision: Advanced Structure vs alternatives]
+  ├── Trie vs HashMap      → Trie for prefix/range; HashMap O(1) exact lookup only
+  ├── Seg Tree vs BIT      → BIT simpler, O(log n) prefix only; Seg Tree arbitrary range ops
+  └── Seg Tree vs Sparse   → Sparse Table O(1) query but static; Seg Tree handles updates
+      Table
+```
+
+## First-Principles Breakdown
+- **Root problem**: Standard arrays, trees, and hash maps cannot simultaneously support prefix queries (Trie) or range queries with point updates (Segment Tree) in sub-linear time.
+- **Core insight**: Exploit the structure of the problem — shared prefixes (Trie) or hierarchical range decomposition (Segment Tree) — to precompute partial answers.
+- **Invariant**: Trie: every root-to-marked-leaf path spells a dictionary word; Segment Tree: every internal node aggregates exactly its range.
+- **Why it's fast**: Both structures reduce the problem to O(log n) or O(L) subproblems by exploiting structural overlap rather than recomputing from scratch.
+- **Where it breaks**: Trie memory grows with alphabet size × max word length × word count; Segment Tree requires 4n nodes and lazy propagation for range updates (complex to debug).
+
 # Advanced Data Structures: Tries and Segment Trees
+
+```
+[ADVANCED DATA STRUCTURES — MINDMAP]
+├── WHY THEY EXIST
+│   ├── Standard structures (array, hash map, heap) hit walls: no prefix queries, no range updates, no order statistics
+│   ├── Advanced structures trade implementation complexity for asymptotic gains on specialized query patterns
+│   └── SDE-3 bar: know when to reach for these and implement them from scratch under interview pressure
+├── TRIE (PREFIX TREE)
+│   ├── WHAT: tree where root→leaf path spells a string; shared prefixes share nodes
+│   ├── HOW
+│   │   ├── Insert/Search/StartsWith: walk/create nodes char by char — O(L)
+│   │   └── is_end flag distinguishes prefix-only nodes from valid word termini
+│   ├── VARIANTS
+│   │   ├── Compressed Trie (Radix): merge single-child chains → fewer nodes
+│   │   └── Bitwise / XOR Trie: integer keys, branch on bits MSB→LSB — maximize XOR in O(32·N)
+│   ├── COMPLEXITY: O(L) insert/search/delete | Space O(N·L·σ)
+│   └── WHEN: autocomplete, dictionary word search, board DFS pruning, max XOR
+├── SEGMENT TREE
+│   ├── WHAT: binary tree; each node = aggregate of [l,r]; leaves = single elements
+│   ├── HOW
+│   │   ├── Build: O(N) bottom-up merge
+│   │   ├── Point update: walk root→leaf, update ancestors — O(log N)
+│   │   ├── Range query: decompose into O(log N) disjoint nodes — O(log N)
+│   │   └── Lazy propagation: defer range updates; push-down on access — O(log N)
+│   ├── COMPLEXITY: O(N) build | O(log N) update/query | O(N) space (4·N array)
+│   └── WHEN: range sum/min/max with updates, sweep line, count in value range
+├── FENWICK TREE (BINARY INDEXED TREE)
+│   ├── WHAT: compact array using lowest set bit (LSB) trick to store partial sums
+│   ├── HOW
+│   │   ├── Update i: add to i and all ancestors → i += i & (-i)
+│   │   └── Prefix query [1..i]: sum nodes → i -= i & (-i)
+│   ├── COMPLEXITY: O(log N) update/query | O(N) space — constant factor 3–5× faster than segment tree
+│   └── WHEN: prefix sum with point updates, count inversions, order statistics (simpler than seg tree)
+├── SPARSE TABLE
+│   ├── WHAT: 2D table dp[i][j] = aggregate of [i, i+2^j-1] — precomputed for all ranges
+│   ├── HOW: query [l,r] = merge(dp[l][k], dp[r-2^k+1][k]) where k = floor(log2(r-l+1))
+│   ├── COMPLEXITY: O(N log N) build | O(1) query (idempotent ops only: min, max, GCD) | O(N log N) space
+│   └── WHEN: static array, range min/max, RMQ — no updates; never use with sum (not idempotent)
+├── DISJOINT SET UNION (UNION-FIND)
+│   ├── WHAT: forest of trees; each tree = one component; find root = component ID
+│   ├── HOW
+│   │   ├── Find with path compression: flatten tree during lookup — nearly O(1) amortized
+│   │   └── Union by rank/size: attach smaller tree under larger → keeps height O(log N)
+│   ├── COMPLEXITY: O(α(N)) amortized per operation (α = inverse Ackermann, practically constant)
+│   └── WHEN: connected components, Kruskal MST, cycle detection, dynamic connectivity
+└── COMMON MISTAKES / GOTCHAS
+    ├── Trie: missing is_end → "app" matches "apple" incorrectly
+    ├── Segment tree: 4·N allocation required; wrong identity element breaks merges
+    ├── Fenwick tree: 1-indexed only — converting 0-indexed arrays requires +1 offset
+    ├── Sparse table: only works for idempotent operations — sum gives wrong answers
+    └── Union-Find: path compression alone without union by rank → O(log N) not O(α(N))
+```
 
 ## Tries (Prefix Trees)
 Tries are mainly used in SDE 3 interviews for problems involving prefix matching, wildcard string searches, or bitwise XOR maximization.

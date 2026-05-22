@@ -1,3 +1,40 @@
+## First-Principles Map
+
+```text
+WHY Sliding Window exists
+├── Brute-force O(n²) / O(n³) over all subarrays is too slow
+│   ├── Adjacent subarrays share n-1 elements — recomputing from scratch wastes work
+│   └── Maintain a running aggregate; update it in O(1) per step
+WHAT it is
+├── Two pointers [left, right] defining a contiguous subarray/substring
+│   ├── Fixed window: right - left == k always; slide both by 1 each step
+│   └── Variable window: expand right greedily; shrink left when constraint violated
+HOW it works
+├── Expand right by 1 → update window state (sum, freq map, count)
+│   ├── While constraint violated → shrink from left by 1, update state
+│   └── Record answer at each valid [left, right] → O(n) total
+WHEN to use
+├── "longest / shortest subarray/substring satisfying condition" → variable window
+├── "maximum sum / average over k elements" → fixed window O(n)
+└── "number of subarrays with at most K distinct" → sliding window + at-most trick
+WHAT can go wrong
+├── Off-by-one on window size: right - left + 1 vs right - left
+├── Not shrinking left far enough → window state stale / constraint still violated
+└── Hashmap not cleaned up when left advances → incorrect frequency counts
+DECISION
+└── Contiguous subarray + monotone constraint → sliding window O(n); non-contiguous → two-pointers or DP
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Evaluate a property of every contiguous subarray in better than O(n²) time.
+- **Core insight**: Moving the window by one position changes exactly two elements (add right+1, remove left) — maintain state incrementally rather than recomputing.
+- **Invariant**: The window [left, right] always satisfies the problem constraint; the answer is extracted at each valid state.
+- **Why it works**: Each element enters the window once and leaves once → O(n) pointer movements total regardless of window size.
+- **Where it breaks**: Non-contiguous subsets, or constraints that are not monotone (adding more elements doesn't consistently worsen/improve) — the shrink step becomes ambiguous.
+
+---
+
 # Sliding Window
 
 ```

@@ -1,3 +1,43 @@
+## First-Principles Map
+
+```
+WHY DP exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │              │               │               │               │
+  [Brute force        [memoization    [identify       [longest common  [wrong state
+   recomputes the      of overlapping  overlapping     subsequence,     definition (too
+   same subproblems    subproblems in  subproblems;    knapsack,        few dimensions);
+   exponentially;      recursion       define state;   coin change,     incorrect
+   backtracking        (top-down) or   write transition matrix paths,   transition (not
+   can't prune         filling table   function; base  string edit      covering all
+   without structure]  bottom-up]      case; fill or   distance, DP on  cases); int
+                                       memoize; O(states trees/graphs]  overflow in
+                                       × transition)]                   large tables]
+       │              │               │
+  [real-world:        [two conditions  [state compression: bitmask DP
+   navigation app      must hold:       for subset problems O(2^n × n);
+   shortest route      1. optimal       interval DP for palindromes,
+   (Dijkstra = DP);    substructure:    matrix chain; digit DP for
+   autocorrect edit    optimal solution "count numbers with property";
+   distance; genome    uses optimal     DP on DAG = topological order
+   alignment]          subproblems      + relaxation]
+                        2. overlapping
+                        subproblems]
+       ↓
+[Decision: Which DP pattern]
+  ├── Linear (1D state)     → Fibonacci, house robber, coin change O(n)
+  ├── 2D grid / string      → LCS, edit distance, paths O(n×m)
+  ├── Interval DP           → palindrome partition, matrix chain O(n³)
+  ├── Knapsack              → 0/1 knapsack O(n×W), unbounded O(n×W)
+  └── Bitmask DP            → TSP, assignment O(2^n × n)
+```
+
+## First-Principles Breakdown
+- **Root problem**: Exponential recursion trees recompute the same subproblems — memoizing results reduces exponential to polynomial.
+- **Core insight**: Two conditions enable DP: (1) optimal substructure (optimal solution contains optimal sub-solutions), (2) overlapping subproblems (same subproblems recur). Both must hold.
+- **Invariant**: `dp[state]` is correctly computed before it's used in any transition — bottom-up fill order must respect dependencies; top-down recursion with memo achieves this automatically.
+- **Why it's fast**: With n states and O(1) transition each, total work is O(n) — recomputing naively costs O(n × branching_factor) or worse.
+- **Where it breaks**: Wrong state dimensionality loses information (need more dimensions); forgetting a transition case gives suboptimal results silently; large state spaces (e.g., 2D with constraints) can exceed memory limits.
+
 # Dynamic Programming — SDE-3 Gold Standard
 
 ```

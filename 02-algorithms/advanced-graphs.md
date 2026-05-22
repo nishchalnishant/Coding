@@ -1,4 +1,96 @@
+## First-Principles Map
+
+```
+WHY advanced graph algos → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                         │                │               │               │
+  [Basic BFS/DFS/Dijkstra       [MST: spanning    [Kruskal: sort  [MST: network   [Bellman-Ford
+   can't handle: minimum         tree min weight;  edges, union-   design min cost; O(VE) TLE on
+   spanning trees, strongly      SCC: maximal      find; O(E log E) SCC: dependency  dense graphs;
+   connected components,         strongly connected Prim: grow MST  resolution,     Tarjan SCC
+   max network flow —            subgraphs;        by min edge;    2-SAT; Max Flow: base case off;
+   need specialized              Articulation:     Tarjan SCC:     traffic routing, Dijkstra fails
+   algorithms]                   bridges/cutpoints] DFS with low[] assignment]      negative weights]
+       │                         │                │
+  [real-world:                   [SCC invariant:  [Max Flow: Ford-Fulkerson
+   cable laying (MST);           every node in     BFS to find augmenting path;
+   Twitter follow graph          SCC can reach      saturate; repeat; O(VE²) Edmonds-
+   (SCC = mutual follower        every other;       Karp; min cut = max flow by
+   group); internet routing      Kosaraju: 2 DFS    max-flow min-cut theorem;
+   (flow algorithms)]            passes]           key for bipartite matching]
+       ↓
+[Decision: Which advanced algorithm]
+  ├── Min cost spanning tree → Kruskal (sparse) or Prim (dense) O(E log V)
+  ├── Strongly connected     → Tarjan (one DFS) or Kosaraju (two DFS)
+  ├── Max flow / matching    → Edmonds-Karp O(VE²) or Dinic O(V²E)
+  └── Shortest path DAG      → Topological relaxation O(V+E)
+```
+
+## First-Principles Breakdown
+- **Root problem**: MST, SCCs, and max flow require exploiting global graph structure that local BFS/DFS misses — each needs a specialized invariant-preserving traversal.
+- **Core insight**: Kruskal's correctness follows from the cut property (lightest edge crossing any cut is in some MST); Tarjan's SCC uses DFS finish times and a "low" array to detect back edges that define SCC boundaries.
+- **Invariant**: Kruskal: edges added in weight order, no cycle (union-find enforces); Tarjan: low[v] = minimum DFS discovery time reachable from v's subtree via back edges.
+- **Why it's fast**: Kruskal O(E log E) — just sort + union-find; Tarjan O(V+E) — single DFS with O(1) per node low-value update.
+- **Where it breaks**: Bellman-Ford O(VE) is too slow for dense graphs; Dijkstra breaks on negative edges; Tarjan's low-link computation has subtle bugs when counting tree vs back edges.
+
 # Advanced Graph Algorithms — SDE-3 Level
+
+```
+[ADVANCED GRAPH ALGORITHMS — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Standard BFS/DFS insufficient for: strongly connected components, bridges,
+│   │   articulation points, max-flow, shortest path with negative weights
+│   ├── Real systems (network routing, dependency resolution, scheduling) map to
+│   │   these graph structures
+│   └── SDE-3 signal: knowing which algorithm to invoke for which graph property
+├── WHAT IT IS
+│   ├── Kosaraju / Tarjan → Strongly Connected Components (SCCs)
+│   ├── Tarjan / bridge-finding DFS → Bridges & Articulation Points
+│   ├── Bellman-Ford → Shortest path with negative edges / negative cycle detection
+│   ├── Floyd-Warshall → All-pairs shortest paths (dense graphs, small N)
+│   └── Ford-Fulkerson / Edmonds-Karp → Max flow / min cut
+├── HOW IT WORKS
+│   ├── Kosaraju's SCC
+│   │   ├── Step 1: DFS on original graph, push to stack in finish order
+│   │   ├── Step 2: transpose graph (reverse all edges)
+│   │   └── Step 3: DFS on transposed graph in reverse finish order → each DFS = 1 SCC
+│   ├── Tarjan's SCC (single pass)
+│   │   ├── Track disc[] (discovery time) and low[] (lowest reachable disc)
+│   │   ├── Use explicit stack; node is SCC root when low[u] == disc[u]
+│   │   └── Pop stack until root found → that set is one SCC
+│   ├── Bridge / Articulation Point (Tarjan)
+│   │   ├── Bridge: edge (u,v) is bridge if low[v] > disc[u]
+│   │   └── Articulation: u is AP if low[v] >= disc[u] for any child v (root: ≥ 2 children)
+│   ├── Bellman-Ford
+│   │   ├── Relax all edges N-1 times
+│   │   ├── If N-th relaxation still updates → negative cycle exists
+│   │   └── O(VE) — slower than Dijkstra but handles negative weights
+│   └── Edmonds-Karp (BFS-based max flow)
+│       ├── Find augmenting path via BFS (shortest path in hops)
+│       ├── Push flow along path, update residual graph
+│       └── Repeat until no augmenting path → max flow found
+├── COMPLEXITY
+│   ├── Kosaraju:       O(V + E) time, O(V) space
+│   ├── Tarjan SCC:     O(V + E) time, O(V) space
+│   ├── Bridge finding: O(V + E) time
+│   ├── Bellman-Ford:   O(VE) time, O(V) space
+│   ├── Floyd-Warshall: O(V³) time, O(V²) space
+│   └── Edmonds-Karp:   O(VE²) time
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Find all SCCs / group mutually reachable nodes" → Kosaraju or Tarjan
+│   ├── "Critical connections in network / bridges" → Tarjan bridge-finding
+│   ├── "Single point of failure in network" → Articulation points
+│   ├── "Shortest path with negative edges (no negative cycle)" → Bellman-Ford
+│   ├── "Detect negative cycle" → Bellman-Ford N-th relaxation check
+│   ├── "Max flow / bipartite matching / min cut" → Edmonds-Karp
+│   └── "All-pairs shortest path, small graph N ≤ 500" → Floyd-Warshall
+└── GOTCHAS
+    ├── Kosaraju needs TWO DFS passes and explicit graph transposition
+    ├── Tarjan: do NOT use visited[] — use disc[]/low[]; node on stack ≠ visited
+    ├── Bellman-Ford: initialize dist[src]=0, all others=INF; use copy of dist each round
+    ├── Floyd-Warshall: dp[i][j] = min(dp[i][j], dp[i][k]+dp[k][j]); k is outermost loop
+    ├── Max flow: always update BOTH forward and backward residual edges
+    └── Negative cycle in Bellman-Ford invalidates all shortest paths through it
+```
 
 SDE-3 interviews focus on complex topologies, strongly connected components, and network robustness.
 

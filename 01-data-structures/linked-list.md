@@ -1,3 +1,32 @@
+## First-Principles Map
+
+```
+WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                      │                 │                │               │
+  [Arrays require O(n)    [nodes holding     [pointer chain:  [O(1) front/    [no random access;
+   shift on insert;        value + pointer    traversal is      back insert;    cache-unfriendly;
+   pre-allocating is       to next node;      pointer follow    LRU cache;      cycle causes
+   wasteful if size        doubly-linked       O(n)]            iterator        infinite loop]
+   unknown]                adds prev pointer]                   patterns]
+       │                      │                 │
+  [real-world analogy:    [invariant: last   [O(1) insert at known pointer;
+   train cars —            node.next = null;  O(n) search; O(n) delete
+   add/remove car          head points to     without tail pointer for end]
+   without moving others]  first element]
+       ↓
+[Decision: Linked List vs alternatives]
+  ├── vs Array      → insert/delete O(1) vs O(n); but no O(1) random access
+  ├── vs Deque      → deque is array-backed linked list hybrid; better cache
+  └── vs Skip List  → skip list adds O(log n) search over sorted linked list
+```
+
+## First-Principles Breakdown
+- **Root problem**: Arrays pay O(n) to insert/delete mid-sequence because everything must shift.
+- **Core insight**: Indirection through pointers decouples element position from memory location — splice in O(1) by rewiring two pointers.
+- **Invariant**: Every node reachable from head via next; tail.next = null (singly); head.prev = null (doubly).
+- **Why it's fast**: Insert/delete at a known node is O(1) — just pointer surgery; no memory movement.
+- **Where it breaks**: Sequential access only (O(n) to reach index k); pointer overhead doubles memory vs array; poor cache locality kills performance on large lists.
+
 # Linked List — SDE-3 Gold Standard
 
 ```

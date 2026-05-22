@@ -1,4 +1,74 @@
+## First-Principles Map
+
+```
+WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                 │                │               │               │
+  [Recursion and      [LIFO abstract   [push to top;  [expression       [stack overflow
+   expression         data type;        pop from top;  parsing, DFS,     on deep recursion;
+   parsing require    backed by         peek is O(1);  undo/redo,        monotonic stack
+   last-in-first-     array or linked   all ops O(1)   backtracking,     misuse if invariant
+   out semantics]     list]             amortized]     call frames]      not maintained]
+       │                 │                │
+  [real-world:        [invariant:      [monotonic stack: maintain
+   stack of plates    top always        increasing/decreasing order
+   — only access      points to most    to find next greater/smaller
+   the top]           recent element]   element in O(n) total]
+       ↓
+[Decision: Stack vs alternatives]
+  ├── vs Queue       → LIFO vs FIFO; stack for DFS/backtrack, queue for BFS/levels
+  ├── vs Recursion   → explicit stack avoids call-stack overflow, same semantics
+  └── vs Deque       → deque generalizes stack; use stack when LIFO is all you need
+```
+
+## First-Principles Breakdown
+- **Root problem**: Many algorithms (expression eval, DFS, undo) need to process the most recently seen item first — LIFO ordering.
+- **Core insight**: Restricting access to one end (the top) enforces LIFO and enables O(1) push/pop without any shifting.
+- **Invariant**: The top element is always the most recently pushed, not-yet-popped element.
+- **Why it's fast**: Push/pop only touch the top pointer — no traversal, no rebalancing, O(1) always.
+- **Where it breaks**: Unbounded recursion overflows the call stack; monotonic stack loses its invariant if push/pop conditions are wrong; not suitable when you need arbitrary access.
+
 # Stack — SDE-3 Gold Standard
+
+```
+[STACK]
+├── WHY IT EXISTS
+│   ├── Problem it solves: track state in reverse-chronological order; undo the most recent action first
+│   ├── Without it: managing "what was the last open thing" requires O(N) array scan
+│   └── Real-world analogy: stack of plates — you always take from (and add to) the top
+├── WHAT IT IS (First Principles)
+│   ├── Core property: LIFO — Last In, First Out; only the top element is accessible
+│   ├── Abstract data type: push, pop, peek operations; implementation-agnostic
+│   ├── Implementation — array: push/pop at tail, O(1) amortized, cache-friendly (preferred)
+│   └── Implementation — linked list: push/pop at head, O(1) guaranteed, more memory overhead
+├── HOW IT WORKS
+│   ├── Push: add element to top → O(1)
+│   ├── Pop: remove and return top element → O(1)
+│   ├── Peek/Top: return top without removing → O(1)
+│   ├── isEmpty: check if stack is empty → O(1)
+│   └── All operations are at one end — the top
+├── KEY TECHNIQUES (SDE-3)
+│   ├── Monotonic Stack — the most critical SDE-3 pattern
+│   │   ├── Monotonic increasing: pop while top ≥ current → finds next smaller element
+│   │   ├── Monotonic decreasing: pop while top ≤ current → finds next greater element
+│   │   ├── Each element pushed/popped at most once → O(N) total
+│   │   └── Problems: next greater element, largest rectangle in histogram, trapping rain water
+│   ├── Expression parsing
+│   │   ├── Balanced parentheses: push opens, pop on close, check match
+│   │   └── Evaluate RPN / infix→postfix conversion
+│   ├── DFS simulation: replace recursion stack with explicit stack (avoids stack overflow)
+│   ├── Min-stack: maintain auxiliary stack tracking current minimum → O(1) getMin
+│   └── Stack with deque extension: deque supports O(1) at both ends → sliding window max
+├── COMPLEXITY
+│   ├── Time — push/pop/peek: O(1) all operations
+│   ├── Time — monotonic stack over N elements: O(N) total (each element processed once)
+│   └── Space: O(N) worst case (all elements pushed, none popped)
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use stack when: need LIFO order, undo/redo, DFS traversal, expression evaluation
+    ├── Use monotonic stack when: "next greater/smaller" for each element in O(N)
+    ├── Use queue when: FIFO order needed (BFS, scheduling)
+    ├── Use deque when: need O(1) access at both ends (sliding window, palindrome check)
+    └── Avoid stack when: random access to elements is needed
+```
 
 LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next greater/smaller" in O(N), expression parsing, and the deque extension for sliding window problems.
 

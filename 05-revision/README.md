@@ -1,3 +1,71 @@
+# First-Principles Map — Complexity Cheatsheet
+
+```
+WHY a Complexity Cheatsheet exists
+├── Under pressure, complexity is derived incorrectly → wrong complexity claim → credibility hit
+├── Memorizing the right Big-O for canonical structures eliminates a derivation step during interview
+└── Space/time tradeoffs must be communicated instantly — lookup table beats re-derivation
+
+WHAT it is
+├── A reference map: data structure / algorithm → time complexity (avg/worst) → space complexity
+├── Covers: all core DS, all sorting algorithms, graph algorithms, DP patterns, Master Theorem
+└── Examples:
+    ├── Hash map: O(1) avg lookup, O(n) worst (all collisions), O(n) space
+    ├── Heap insert/delete: O(log n), heapify: O(n), peek: O(1)
+    └── DFS/BFS: O(V+E) time, O(V) space (recursion stack / queue)
+
+HOW it works
+├── Data structure complexities:
+│   ├── Array: access O(1), search O(n), insert/delete O(n)
+│   ├── Linked list: access O(n), insert/delete O(1) at head
+│   ├── BST (balanced): search/insert/delete O(log n); unbalanced: O(n)
+│   ├── Hash map: O(1) avg all ops; O(n) worst
+│   ├── Heap: insert O(log n), extract-min O(log n), build O(n)
+│   └── Trie: insert/search O(L) where L = key length
+├── Sorting complexities:
+│   ├── Merge sort: O(n log n) time, O(n) space — stable
+│   ├── Quick sort: O(n log n) avg, O(n²) worst, O(log n) space — in-place
+│   ├── Heap sort: O(n log n) time, O(1) space — not stable
+│   └── Counting/Radix: O(n+k) time — only for bounded integer keys
+├── Graph algorithm complexities:
+│   ├── BFS/DFS: O(V+E) time, O(V) space
+│   ├── Dijkstra (binary heap): O((V+E) log V)
+│   ├── Bellman-Ford: O(VE)
+│   └── Floyd-Warshall: O(V³)
+├── Master Theorem (T(n) = aT(n/b) + f(n)):
+│   ├── f(n) = O(n^(log_b a - ε)) → T(n) = Θ(n^log_b a)
+│   ├── f(n) = Θ(n^log_b a) → T(n) = Θ(n^log_b a · log n)
+│   └── f(n) = Ω(n^(log_b a + ε)) → T(n) = Θ(f(n))
+└── Space/time tradeoff landmarks:
+    ├── Hash map: O(n) space → O(1) lookup (classic tradeoff)
+    ├── Prefix sum: O(n) preprocess → O(1) range query
+    └── Memoization: O(n) space → eliminates exponential recomputation
+
+WHEN to use
+├── Immediately after arriving at a solution: state complexity before interviewer asks
+├── When choosing between two approaches: use complexity to justify selection
+└── Decision:
+    ├── Both O(n log n) → prefer lower constant (e.g., merge sort vs heap sort)
+    ├── Space constrained → prefer in-place (quick sort, two-pointer)
+    └── Need stable sort → merge sort (not heap sort, not quick sort)
+
+WHAT can go wrong
+├── Stating O(n log n) for a BST on unsorted input (insert n elements = O(n log n), not O(n))
+├── Forgetting recursion stack space in DFS complexity (O(h) space, not O(1))
+├── Claiming O(1) hash map without noting worst-case O(n) for hash collisions
+└── Applying Master Theorem when subproblems are unequal size (not applicable)
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Complexity analysis requires holding the algorithm structure in working memory while deriving — under pressure, this fails; a lookup table removes the derivation load.
+- **Core insight:** Almost all interview complexity claims reduce to 5 families: O(1), O(log n), O(n), O(n log n), O(n²) — any other answer requires explicit justification.
+- **Invariant:** Time complexity is dominated by the innermost loop or recursion depth × branching factor; space is dominated by the largest auxiliary structure allocated.
+- **Why it works:** Memorizing the table once is O(1) amortized retrieval during any future interview — the investment cost is front-loaded.
+- **Where it breaks:** Hash map worst-case and amortized costs are frequently confused; always clarify "average case" vs "worst case" when stating O(1) for hash operations.
+
+---
+
 # Revision Hub — Cheatsheets + Day-Before Checklist
 
 ## Key Resources

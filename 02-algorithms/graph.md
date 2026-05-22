@@ -1,3 +1,38 @@
+## First-Principles Map
+
+```
+WHY graph algorithms exist → WHAT they do → HOW they work → WHEN to use → WHAT can go wrong
+       │                           │               │               │               │
+  [Connectivity, shortest         [systematically [BFS: layer-by- [shortest path, [BFS/DFS skip
+   path, cycle detection,          visit all       layer using     cycle detect,   visited check →
+   topological order are           vertices and    queue; DFS:     topo sort,      infinite loop;
+   all graph problems;             edges to        depth-first     connected       Dijkstra with
+   naive brute force is            extract         using stack/    components,     negative edges
+   exponential]                    structural      recursion;      bipartite check,→ wrong answers;
+                                   properties]     Dijkstra: greedy graph coloring] DFS topo on
+                                                   by distance]                     cyclic graph]
+       │                           │               │
+  [real-world:                    [BFS invariant:  [Dijkstra: min-heap extracts
+   GPS navigation (shortest        all level-k      nearest unvisited; relaxation:
+   path); build systems            nodes visited    dist[v] = min(dist[v], dist[u]+w);
+   (topo sort); network             before level    Bellman-Ford: O(VE) handles
+   connectivity (DFS)]             k+1]            negative edges; Floyd: O(V³)
+                                                    all-pairs shortest path]
+       ↓
+[Decision: Which graph algorithm]
+  ├── Unweighted shortest path  → BFS O(V+E)
+  ├── Weighted non-negative     → Dijkstra O((V+E) log V)
+  ├── Negative edges            → Bellman-Ford O(VE)
+  └── Topological order         → DFS-based topo sort or Kahn's BFS O(V+E)
+```
+
+## First-Principles Breakdown
+- **Root problem**: Graph problems require visiting all reachable nodes systematically — without a strategy, you revisit nodes exponentially.
+- **Core insight**: BFS explores by distance layers (guarantees shortest path in unweighted graphs); DFS explores to full depth first (enables cycle detection, topological sort via finish times).
+- **Invariant**: Visited set ensures each vertex processed exactly once — O(V+E) total work; BFS queue ensures nodes processed in non-decreasing distance order.
+- **Why it's fast**: Each vertex and edge is processed at most once in BFS/DFS — O(V+E) is optimal for graph traversal; Dijkstra's greedy correctness relies on non-negative edge weights (no shorter path can appear later).
+- **Where it breaks**: Dijkstra fails with negative edges (use Bellman-Ford); DFS topo sort fails on cyclic graphs (detect with gray/black coloring); BFS on implicit graphs (e.g., word ladder) can use excessive memory.
+
 # Graphs (Algorithms) — SDE-3 Gold Standard
 
 ```
@@ -164,6 +199,31 @@ def dfs_topo(adj: dict, n: int) -> list[int]:
 2. **Reconstruct Itinerary**:
    - **What (The Problem & Goal):** Given a list of airline tickets, reconstruct the itinerary in order, starting from "JFK". If multiple valid itineraries exist, return the one with the smallest lexicographical order.
    - **How (Intuition & Mental Model):** This is a search for an **Eulerian Path** in a directed graph. Use Hierholzer's algorithm: DFS through neighbors in lexicographical order. When a node has no more outgoing edges, push it to the result stack. The final itinerary is the reversed stack.
+3. **Is Graph Bipartite (2-Coloring Check)**:
+   - **What (The Problem & Goal):** Can you color the graph using 2 colors such that no two adjacent nodes have the same color?
+   - **How (Intuition & Mental Model):** Use DFS. Alternate coloring neighbors with `1 - color[node]`. If you hit an already colored neighbor with the same color as the current node, a color conflict cycle exists (not bipartite). Handle disconnected graphs by calling the search from every unvisited node.
+
+   ```python
+   def isBipartite(adj: dict[int, list[int]], n: int) -> bool:
+       color = {}  # maps node -> color (0 or 1)
+       
+       def dfs(node: int, c: int) -> bool:
+           color[node] = c
+           for neighbor in adj.get(node, []):
+               if neighbor in color:
+                   if color[neighbor] == c:
+                       return False  # Same color conflict
+               else:
+                   if not dfs(neighbor, 1 - c):
+                       return False
+           return True
+
+       for u in range(n):
+           if u not in color:
+               if not dfs(u, 0):
+                   return False
+       return True
+   ```
 ```
 
 > [!CAUTION]

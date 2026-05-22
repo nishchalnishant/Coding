@@ -1,3 +1,44 @@
+## First-Principles Map
+
+```text
+WHY Two Pointers exists
+├── Brute-force pair enumeration is O(n²) — too slow for n ≥ 10⁵
+│   ├── Sorted order creates monotone structure: moving one pointer predictably affects the other
+│   └── Eliminate invalid pairs in O(1) instead of checking all combinations
+WHAT it is
+├── Two indices moving through a sequence, together encoding the current candidate
+│   ├── Opposite ends: left=0, right=n-1, converge inward (2-sum, container with most water)
+│   └── Same direction: slow/fast (cycle detection, remove duplicates, nth-from-end)
+HOW it works
+├── Opposite-ends pattern (sorted array required)
+│   ├── sum < target → move left rightward (increase sum)
+│   ├── sum > target → move right leftward (decrease sum)
+│   └── sum == target → record; advance both
+├── Fast/slow pattern (linked list or array)
+│   ├── fast advances 2, slow advances 1 → meet in cycle if one exists
+│   └── Separate by k: advance fast k steps first, then move both
+WHEN to use
+├── "pair / triplet summing to target in sorted array" → opposite-ends O(n)
+├── "detect cycle in linked list" → Floyd's fast/slow O(n) O(1)
+└── "remove duplicates / partition in-place" → slow/fast write pointer O(n)
+WHAT can go wrong
+├── Using on unsorted array for sum problems → correctness breaks (sort first)
+├── Infinite loop: forgetting to advance both pointers on match
+└── Triplet/k-sum: not deduplicating pointers → duplicate results
+DECISION
+└── Sorted array + pair/triplet constraint → two pointers O(n); unsorted + O(n) needed → hashmap instead
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Find pairs or partition a sequence in O(n) without nested loops, by exploiting sorted order or pointer separation.
+- **Core insight**: In a sorted array, the sum of arr[left] + arr[right] is monotonically controlled — moving one pointer has a guaranteed directional effect on the sum.
+- **Invariant**: At every step, all pairs that could involve indices already passed have been correctly handled (accepted or rejected).
+- **Why it works**: Each pointer moves at most n steps in one direction → O(n) total comparisons for the whole search.
+- **Where it breaks**: Unsorted data (sort first, adding O(n log n)); problems requiring non-contiguous or multi-pass pairing where pointer convergence doesn't cover all candidates.
+
+---
+
 # Two Pointers
 
 ```

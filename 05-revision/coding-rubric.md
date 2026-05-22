@@ -1,3 +1,67 @@
+# First-Principles Map — Coding Interview Rubric
+
+```
+WHY a Scoring Rubric exists
+├── Interviewers don't score "did they solve it" — they score on 4–5 axes independently
+├── A candidate can solve the problem and still get a no-hire on communication or testing axes
+└── Knowing the rubric lets you optimize for all axes, not just correctness
+
+WHAT it is
+├── A multi-axis scoring framework: Problem Solving, Coding, Testing, Communication + optional Optimization
+├── Each axis has explicit "hire" and "no-hire" signals — these are the actual levers
+└── Examples:
+    ├── Problem Solving hire signal: arrives at optimal approach, states tradeoffs
+    ├── Coding hire signal: clean variable names, no major bugs, handles edge cases in code
+    ├── Testing hire signal: tests happy path + 2 edge cases voluntarily, catches own bugs
+    └── Communication hire signal: thinks aloud, names patterns, non-defensive to feedback
+
+HOW it works
+├── Problem Solving axis:
+│   ├── Hire: correct approach within 10 min, awareness of suboptimal alternatives
+│   ├── Strong hire: optimal approach + proactively discusses tradeoffs
+│   └── No hire: brute force only, can't move toward optimal with hints
+├── Coding axis:
+│   ├── Hire: compiles mentally, no major bugs, readable names, appropriate abstractions
+│   ├── Strong hire: concise + handles edge cases inline + no dead code
+│   └── No hire: major logic bugs, unreadable variable names, can't debug own code
+├── Testing axis:
+│   ├── Hire: tests with example + 1 edge case + 1 stress case voluntarily
+│   ├── Strong hire: derives test cases from invariants, not just examples given
+│   └── No hire: no testing step, or only tests the given example
+├── Communication axis:
+│   ├── Hire: narrates reasoning, asks clarifying questions, responsive to hints
+│   ├── Strong hire: structures the conversation ("I'll start with brute force, then optimize")
+│   └── No hire: silent coding, defensive when corrected, never clarifies
+└── Complexity scoring:
+    ├── Must state both time AND space complexity unprompted
+    ├── Must be able to derive it, not just recite it
+    └── Wrong complexity = downgrade on Problem Solving axis
+
+WHEN to use
+├── During every mock: self-score on all 4 axes after each problem
+├── Before the real interview: internalize what "hire" looks like on each axis
+└── Decision:
+    ├── Time running out → prioritize working brute force + complexity over clean optimal
+    ├── Bug found late → fix and say "I caught a bug here" — shows testing signal
+    └── Hint received → incorporate cleanly, acknowledge it — shows non-defensiveness
+
+WHAT can go wrong
+├── Solving optimally but silently → Communication = no hire → overall no hire
+├── Clean code but no complexity stated → Problem Solving downgrade
+├── Testing only the happy path → Testing = no hire at L4+
+└── Getting defensive when interviewer probes a mistake → Googleyness anti-signal
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Candidates optimize for the wrong signal (correctness) when the actual scoring is multi-axis — a rubric-aware candidate allocates effort across all scored dimensions.
+- **Core insight:** Communication and testing axes are scored even when you solve correctly — they are not bonus points, they are required for a hire signal at L4.
+- **Invariant:** A no-hire on any single axis can override strong performance on others — all axes must clear the bar, not just problem solving.
+- **Why it works:** The rubric externalizes the interviewer's internal scoring model — once you know the model, you can practice to each axis explicitly rather than practicing blind.
+- **Where it breaks:** Rubric-gaming (performing communication without genuine understanding) is detectable under probing — the rubric guides practice focus, not interview theater.
+
+---
+
 # Google Coding Rounds (SDE-2) — Rubric + Checklist
 
 Use this as a “runbook” for every timed practice and mock.

@@ -1,3 +1,82 @@
+## First-Principles Map
+
+```
+WHY String Recursion exists
+└── Strings have natural recursive structure: prefix + suffix
+    ├── A palindrome: s[0]==s[-1] AND s[1:-1] is palindrome
+    ├── A reversed string: reverse(s[1:]) + s[0]
+    ├── Regex match: match first char, recurse on rest with reduced pattern
+    └── Interleaving: take from s1 OR s2, recurse on remainder
+
+WHAT it is
+└── Decomposing string problems by peeling one char (or prefix) per call
+    ├── Substring generation: include/exclude each character
+    ├── Palindrome check: compare ends, shrink inward
+    ├── Reverse: base=empty, recurse on s[1:] then append s[0]
+    ├── Interleaving: two-pointer recursion on s1[i:], s2[j:], s3[k:]
+    └── Regex matching: '.' matches any; '*' matches 0 or more of prev char
+
+HOW it works
+├── Palindrome
+│   ├── base: len(s) <= 1 → True
+│   └── recurse: s[0]==s[-1] and isPalin(s[1:-1])
+├── Reverse
+│   ├── base: s == "" → ""
+│   └── recurse: reverse(s[1:]) + s[0]
+├── All substrings / subsequences
+│   ├── At each index i: include s[i] (add to path) OR exclude
+│   └── base: i == len(s) → record path
+├── Interleaving check (s1, s2 → s3)
+│   ├── base: i==len(s1) and j==len(s2) and k==len(s3) → True
+│   ├── take from s1: s1[i]==s3[k] and recurse(i+1, j, k+1)
+│   └── take from s2: s2[j]==s3[k] and recurse(i, j+1, k+1)
+└── Regex match (s, p)
+    ├── base: p empty → s empty?
+    ├── first_match = s and p[0] in {s[0], '.'}
+    ├── if len(p)>=2 and p[1]=='*':
+    │   └── skip pattern (0 use) OR consume char (1+ use)
+    └── else: first_match and match(s[1:], p[1:])
+
+WHEN to use
+├── Problem shrinks on every recursive call (shorter string) → safe recursion
+├── Need all subsets/subsequences of a string → include/exclude recursion
+├── Pattern matching with wildcards → regex-style recursion
+├── String construction from parts → interleaving / decode-ways style
+└── Overlapping subproblems in string recursion → memoize (i,j) pairs
+
+WHAT can go wrong
+├── Slice s[1:-1] on single char → returns "" not error, but check len first
+├── Regex '*': forgetting the 0-match branch → misses "ab*" matching "a"
+├── Interleaving: forgetting k index → treats s3 as implicit, off-by-one
+├── Subsequence vs substring confusion → subsequence skips, substring is contiguous
+├── Exponential blowup without memo: interleaving and regex are O(2^n) bare
+└── Unicode / multi-byte: s[0] is safe in Python 3 but not byte-level in C
+
+Complexity
+├── Palindrome check: O(n) time, O(n) stack
+├── Reverse: O(n^2) time (string concat), O(n) with list then join
+├── All subsequences: O(2^n) time, O(n) stack depth
+├── Interleaving (memoized): O(m*n) time, O(m*n) space
+└── Regex match (memoized): O(m*n) time, O(m*n) space
+
+Decision tree
+    String problem with recursive feel?
+    ├── Check ends and shrink inward? → palindrome pattern
+    ├── Build all possible strings? → include/exclude at each index
+    ├── Match against pattern with wildcards? → regex recursion
+    │   └── has '*'? → handle 0-use branch first
+    └── Merge two strings into one preserving order? → interleaving
+        └── slow? → memoize (i, j) state
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Strings lack the explicit left/right children of trees, but every string has a head character and a tail substring — this prefix/suffix structure is the natural recursion anchor.
+- **Core insight:** Most string recursion reduces to "decide what to do with s[0], then recurse on s[1:]" or "compare s[0] with s[-1], then recurse on s[1:-1]" — the two canonical decompositions.
+- **Invariant:** Each recursive call must operate on a strictly shorter string (or advance at least one index pointer); any call that passes the same string/indices without progress causes infinite recursion.
+- **Why it's fast (with memo):** Interleaving and regex matching have only O(m×n) distinct (i,j) states; memoization collapses the exponential tree into a polynomial DAG.
+- **Where it breaks:** String slicing in Python creates new objects (O(k) cost); passing indices instead of slices reduces hidden copy overhead from O(n²) to O(n) for deep recursion.
+
 # String Recursion — Parsing, Matching & Manipulation
 
 String problems solved recursively: pattern matching, expression evaluation, string transformation and generation. For the recursion foundation see [README.md](README.md).

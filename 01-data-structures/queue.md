@@ -1,4 +1,77 @@
+## First-Principles Map
+
+```
+WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                │                │               │               │
+  [BFS requires       [FIFO abstract   [enqueue at     [BFS level      [naive array
+   processing nodes   data type;        rear, dequeue   traversal,      queue wastes
+   in arrival order;  backed by         from front;     task scheduling, space (front
+   producers must     circular array    O(1) both ends; rate limiting,   pointer drifts);
+   decouple from      or doubly-        circular array  producer-       priority queue
+   consumers]         linked list]      avoids O(n)     consumer]       ≠ FIFO queue]
+       │                │                │
+  [real-world:        [invariant:      [monotonic deque: sliding
+   ticket queue —     front = oldest    window max/min in O(n)
+   first come,        element; rear =   by evicting from back when
+   first served]      newest]           new element dominates]
+       ↓
+[Decision: Queue vs alternatives]
+  ├── vs Stack        → FIFO vs LIFO; queue for BFS/levels, stack for DFS/backtrack
+  ├── vs Priority Queue → PQ dequeues by priority not arrival; use for Dijkstra/top-K
+  └── vs Deque        → deque is double-ended generalization; use for sliding window
+```
+
+## First-Principles Breakdown
+- **Root problem**: BFS and producer-consumer patterns require processing in arrival order — FIFO semantics.
+- **Core insight**: Separate front (dequeue) and rear (enqueue) pointers on a circular buffer give O(1) both ends without shifting.
+- **Invariant**: Oldest element is always at front; newest at rear; no element is skipped.
+- **Why it's fast**: Circular array means enqueue/dequeue just move a pointer modulo capacity — no memory allocation per operation.
+- **Where it breaks**: Fixed-size circular buffer overflows; non-circular array wastes O(n) space as front drifts; priority queue semantics are confused with FIFO semantics.
+
 # Queue — SDE-3 Gold Standard
+
+```
+[QUEUE]
+├── WHY IT EXISTS
+│   ├── Problem it solves: process items in the order they arrive — fairness, breadth-first exploration
+│   ├── Without it: BFS would explore nodes in wrong order; scheduling loses arrival-order guarantee
+│   └── Real-world analogy: supermarket checkout line — first person in line is first served
+├── WHAT IT IS (First Principles)
+│   ├── Core property: FIFO — First In, First Out; enqueue at rear, dequeue from front
+│   ├── Abstract data type: enqueue, dequeue, peek-front operations
+│   ├── Implementation — circular array (ring buffer): O(1) enqueue/dequeue, fixed capacity, cache-friendly
+│   ├── Implementation — linked list: O(1) enqueue/dequeue, dynamic size, more memory overhead
+│   └── Implementation — two stacks: push to stack1; on dequeue, if stack2 empty, reverse stack1 into stack2 → O(1) amortized
+├── HOW IT WORKS
+│   ├── Enqueue: add element to rear → O(1)
+│   ├── Dequeue: remove and return front element → O(1)
+│   ├── Peek/Front: return front without removing → O(1)
+│   ├── Ring buffer mechanics: front and rear pointers wrap around with modulo
+│   └── Two-stack queue: amortized O(1) — each element moves at most twice total
+├── VARIANTS
+│   ├── Deque (double-ended queue): O(1) insert/delete at BOTH ends
+│   │   └── Python: collections.deque; used for sliding window, BFS, palindrome check
+│   ├── Priority Queue (Heap): dequeue returns min/max, not oldest → O(log N)
+│   ├── Monotonic Deque: deque maintaining increasing/decreasing order for sliding window extremes
+│   │   └── O(N) total for sliding window max/min (each element pushed/popped once)
+│   └── Circular Queue: fixed-size ring buffer for producer-consumer, OS scheduling
+├── KEY PATTERNS (SDE-3)
+│   ├── BFS shortest path: enqueue start, process level by level, track visited
+│   ├── Multi-source BFS: seed queue with ALL sources at step 0 (e.g., 0-1 matrix, rotting oranges)
+│   ├── Sliding window maximum: monotonic deque — pop from front if out of window, pop from rear if ≤ current
+│   ├── Level-order tree traversal: BFS with level separator (None sentinel or size-based loop)
+│   └── Task scheduling / rate limiting: circular queue or deque with timestamps
+├── COMPLEXITY
+│   ├── Time — enqueue/dequeue/peek: O(1) for array/linked-list/two-stack (amortized)
+│   ├── Time — monotonic deque over N elements: O(N) total
+│   └── Space: O(N) for N elements; ring buffer uses fixed O(capacity)
+└── WHEN TO USE vs ALTERNATIVES
+    ├── Use queue (FIFO) when: BFS, level-order processing, task scheduling, producer-consumer
+    ├── Use deque when: need O(1) at both ends, sliding window problems
+    ├── Use priority queue when: order by priority not arrival time
+    ├── Use stack when: LIFO order, DFS, expression evaluation
+    └── Avoid plain queue for sliding window max — use monotonic deque for O(N) instead of O(N log N)
+```
 
 FIFO ordered processing. SDE-3 focus: BFS shortest path, monotonic deque for sliding-window max, two-stack queue, circular ring buffer, and lock-free queue design for production systems.
 
@@ -156,6 +229,38 @@ def multi_source_bfs(grid: list[list[int]], sources: list[tuple[int, int]]) -> l
 3. **Shortest Path in Binary Matrix**:
    - **What (The Problem & Goal):** Find the shortest clear path from the top-left to the bottom-right of a grid.
    - **How (Intuition & Mental Model):** A classic single-source BFS from `(0, 0)`. The twist is that movement is 8-directional instead of 4-directional, so your direction array must include diagonals: `[(1,0), (-1,0), (0,1), (0,-1), (1,1), (-1,-1), (1,-1), (-1,1)]`.
+
+### Monotonic Queue — Custom OOP Helper Class
+
+> [!IMPORTANT]
+> **The Click Moment**: When a sliding window problem requires tracking the maximum (or minimum) in a window, but you want to encapsulate the queue details. Maintaining a clean OOP `MonotonicQueue` class simplifies your main sliding window logic, separating indexing from the structural invariants. Highly recommended for SDE-3/LLD coding interviews.
+
+```python
+from collections import deque
+
+class MonotonicQueue:
+    """
+    A queue that maintains elements in monotonic decreasing order.
+    Enables retrieving the maximum element of a sliding window in O(1) time.
+    """
+    def __init__(self) -> None:
+        self.dq = deque()
+
+    def push(self, val: int) -> None:
+        """Pushes a new value, popping all smaller values to maintain order."""
+        while self.dq and self.dq[-1] < val:
+            self.dq.pop()
+        self.dq.append(val)
+
+    def pop(self, val: int) -> None:
+        """Pops the value from the front only if it matches the leaving window element."""
+        if self.dq and self.dq[0] == val:
+            self.dq.popleft()
+
+    def get_max(self) -> int | None:
+        """Returns the maximum element in the queue in O(1) time."""
+        return self.dq[0] if self.dq else None
+```
 
 ---
 

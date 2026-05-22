@@ -1,3 +1,79 @@
+## First-Principles Map
+
+```
+WHY Miscellaneous Algorithms exist
+├── Real problems don't always map cleanly to one paradigm
+│   ├── Random sampling from unknown-size streams → Reservoir Sampling
+│   ├── Unbiased in-place shuffle with no extra space → Fisher-Yates
+│   ├── Find majority without sorting or hash map → Boyer-Moore Voting
+│   └── Randomized algorithms trade determinism for average-case speed
+│
+WHAT they are
+├── Reservoir Sampling — uniformly sample k items from stream of unknown size n
+│   ├── Fill reservoir with first k items
+│   └── For item i (i > k): keep with prob k/i; replace random reservoir element
+├── Fisher-Yates Shuffle — generate unbiased random permutation in O(n) time
+│   ├── For i from n-1 down to 1: swap A[i] with A[rand(0..i)]
+│   └── Each permutation equally likely; proof: n! outcomes, each with prob 1/n!
+├── Boyer-Moore Voting — find majority element (appears > n/2 times) in O(n), O(1)
+│   ├── Maintain candidate + count; increment if same, decrement otherwise
+│   ├── Reset candidate when count hits 0
+│   └── Invariant: if majority exists, it survives cancellation
+├── Randomized Algorithms
+│   ├── Las Vegas: always correct, random runtime (quicksort with random pivot)
+│   └── Monte Carlo: always fast, correct with high probability (Miller-Rabin)
+│
+HOW they work
+├── Reservoir Sampling (k=1 for simplicity):
+│   ├── i=1: keep item 1 (prob 1/1)
+│   ├── i=2: keep item 2 with prob 1/2; item 1 survives with prob 1/2
+│   ├── i=n: each item kept with prob 1/n → uniform  [by induction]
+│   └── General k: item i kept with prob k/i; displaced with prob k/i · 1/k = 1/i
+├── Fisher-Yates:
+│   ├── At step i, n-i elements remain unshuffled
+│   ├── Pick any of (i+1) positions uniformly → correct marginal probability
+│   └── Total: n · (n-1) · ... · 1 = n! equally likely permutations
+├── Boyer-Moore:
+│   ├── Each "cancellation" removes one majority + one non-majority element
+│   ├── After all cancellations, majority element has remaining count > 0
+│   └── Verification pass required if majority not guaranteed to exist
+│
+WHEN to use
+├── Reservoir Sampling: streaming data, unknown n, need uniform k samples
+│   └── Never load full stream; sample in single pass
+├── Fisher-Yates: shuffle array in-place, unbiased, O(n) time
+│   └── DO NOT use sort with random comparator — biased and O(n log n)
+├── Boyer-Moore: "majority element" in O(n) time, O(1) space
+│   └── Requires majority to exist OR add verification pass
+├── Randomized algorithms: when deterministic worst case is too slow
+│   └── Quicksort random pivot avoids O(n²) adversarial input
+│
+WHAT can go wrong
+├── Reservoir Sampling: using biased RNG or wrong probability → non-uniform sample
+├── Fisher-Yates: swapping A[i] with A[rand(0..n-1)] instead of A[rand(0..i)] → biased
+├── Boyer-Moore: claiming majority without verification → wrong if no majority exists
+├── Monte Carlo: not running enough iterations → failure probability too high
+└── Randomized quicksort: not randomizing pivot → adversarial sorted input → O(n²)
+
+Decision tree
+├── Need k random samples from unknown-length stream? → Reservoir Sampling
+├── Need unbiased shuffle in-place? → Fisher-Yates (rand in [0..i], not [0..n-1])
+├── Find element appearing > n/2 times, O(1) space? → Boyer-Moore Voting
+│   └── Not guaranteed majority? → add verification pass after
+├── Deterministic worst case is O(n²) or worse? → Randomize (random pivot, hashing)
+└── Need primality check for large numbers? → Miller-Rabin (Monte Carlo, run 20x)
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Certain problems — uniform streaming samples, unbiased permutations, majority detection — have no obvious reduction to standard sorting/searching paradigms; each requires a dedicated algorithmic idea exploiting a specific structural property.
+- **Core insight:** Reservoir sampling maintains a uniform invariant at every stream position i by adjusting acceptance probability to k/i; Fisher-Yates maintains uniform distribution over permutations by choosing from shrinking prefix; Boyer-Moore exploits the arithmetic fact that a majority element cannot be fully cancelled by minorities.
+- **Invariant:** Reservoir: after processing i items, each is in the reservoir with probability k/i. Fisher-Yates: after processing position i, the suffix A[0..i] is a uniformly random permutation of its original elements. Boyer-Moore: if a majority element exists, its net count after all cancellations is strictly positive.
+- **Why it's fast:** All three run in a single linear pass with O(1) extra space; no sorting, no hashing, no auxiliary arrays — the cleverness is entirely in maintaining the invariant incrementally.
+- **Where it breaks:** Boyer-Moore gives a wrong answer (not just incorrect candidate) if you skip the verification pass when majority existence is not guaranteed; Fisher-Yates is subtly biased if the random index is drawn from [0, n-1] instead of [0, i] at each step — a mistake that produces non-uniform shuffles even though the code "looks right."
+
+---
+
 # Miscellaneous Algorithms — SDE-3 Gold Standard
 
 Advanced data structures and cross-cutting patterns that don't fit neatly into one category. SDE-3 expects: Fenwick tree for dynamic prefix sums, segment tree for range queries, and rapid problem-category recognition for "disguised" problems.

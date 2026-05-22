@@ -1,3 +1,65 @@
+# First-Principles Map — Interview Cheatsheet
+
+```
+WHY an Interview Cheatsheet exists
+├── Cognitive load spikes under interview pressure → known frameworks collapse
+├── Time is fixed (45 min); every unstructured minute is a lost signal
+└── Interviewers score on process, not just output — structure IS the signal
+
+WHAT it is
+├── A compressed decision tree: time allocation + communication script + complexity reminders
+├── A list of failure modes and their real-time fixes
+└── Examples:
+    ├── "5 min clarify, 5 min design, 25 min code, 10 min test" — time box
+    ├── "I'm going to think out loud" — communication anchor
+    └── "O(n log n) is the default bar for n ≤ 10⁵" — complexity reminder
+
+HOW it works
+├── Time management:
+│   ├── 0–5 min: clarify constraints, I/O, edge cases
+│   ├── 5–10 min: brute force → optimize → agree on approach
+│   ├── 10–35 min: implement, talk while coding
+│   └── 35–45 min: trace example, test edge cases, discuss complexity
+├── Communication framework:
+│   ├── State what you're doing before you do it
+│   ├── Name the pattern ("I'll use a sliding window here")
+│   └── Flag uncertainty ("I think this is O(n) — let me verify")
+├── Complexity reminders:
+│   ├── n ≤ 10⁸ → O(n) only
+│   ├── n ≤ 10⁶ → O(n log n) ok
+│   ├── n ≤ 10⁴ → O(n²) ok
+│   └── n ≤ 500 → O(n³) ok
+└── Common mistakes under pressure:
+    ├── Skipping clarification → solving the wrong problem
+    ├── Silent coding → interviewer loses signal
+    ├── No edge case test → leaves bugs on the table
+    └── Wrong complexity claim → credibility hit
+
+WHEN to use
+├── Before mock: internalize the time box
+├── During real interview: follow the script mechanically
+└── Decision:
+    ├── Stuck > 3 min → verbalize the sticking point, ask for hint gracefully
+    ├── Brute force done → explicitly say "I can optimize, want me to?"
+    └── Bug found in test → say "caught a bug, fixing" — never silently patch
+
+WHAT can go wrong
+├── Over-clarifying → wastes coding time
+├── Under-clarifying → wrong solution entirely
+├── Rushing complexity analysis → stating O(n) for O(n²) code
+└── No runthrough of example at end → misses off-by-one bugs
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Pressure degrades structured thinking; a cheatsheet externalizes the structure so working memory stays free for the problem.
+- **Core insight:** Interviewers evaluate the process signal (communication, reasoning) as heavily as the correctness signal — both must be deliberate.
+- **Invariant:** Time box + think-aloud + complexity check must happen on every problem, regardless of difficulty.
+- **Why it works:** Following a fixed protocol under pressure prevents the most common failure modes (wrong problem, silent coding, no testing).
+- **Where it breaks:** Cheatsheet becomes a crutch if the underlying pattern recognition is weak — protocol can't substitute for domain knowledge.
+
+---
+
 # SDE Interview Click Logic: Pattern Recognition Master Hub
 
 Identify the underlying DSA pattern within 60 seconds. Focus on the trigger, not the full solution.

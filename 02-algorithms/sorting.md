@@ -1,3 +1,38 @@
+## First-Principles Map
+
+```
+WHY sorting exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                  │              │               │               │
+  [Many problems         [rearranging   [comparison     [binary search  [comparison
+   reduce to sorted       elements in    sorts: O(n log  prereq, interval sort lower
+   order: binary          monotone       n) lower bound  merge, dedup,   bound O(n log n)
+   search, interval       order by       by information  two-pointer     broken by
+   merge, top-K,          key; stable    theory; merge   technique,      non-comparison
+   closest pair]          = equal keys   sort: divide,   top-K (use      sorts on wrong
+                          preserve       sort, merge;    heap instead)]  data type; stable
+                          original order] quicksort: pivot]               sort for multi-key]
+       │                  │              │
+  [real-world:           [lower bound:  [counting/radix sort: O(n+k)
+   sort contacts by       O(n log n)     for bounded integers; beats
+   name; merge sorted     provable from  O(n log n) when k = O(n);
+   external files;        decision tree  bucket sort: O(n) avg for
+   sort events for        height ≥ log(n!) uniform distribution]
+   timeline processing]   = n log n]
+       ↓
+[Decision: Which sort to use]
+  ├── General purpose    → Timsort (Python/Java) — O(n log n), stable, adaptive
+  ├── Memory constrained → Heapsort — O(n log n), O(1) space, not stable
+  ├── Integer keys 0..k  → Counting/Radix sort — O(n+k)
+  └── Stable + linked    → Merge sort — O(n log n), O(n) space, stable
+```
+
+## First-Principles Breakdown
+- **Root problem**: Unordered data requires O(n) scan for every query; sorting pays O(n log n) once to enable O(log n) queries forever.
+- **Core insight**: Comparison-based sorting has a provable O(n log n) lower bound (decision tree has ≥ n! leaves, height ≥ log(n!)); non-comparison sorts bypass this by exploiting key structure.
+- **Invariant**: After sorting, element at index i ≤ element at index i+1 for all i; stable sort additionally preserves original relative order of equal-key elements.
+- **Why it's fast**: Merge sort divides the problem into two halves each time — T(n) = 2T(n/2) + O(n) solves to O(n log n) by master theorem.
+- **Where it breaks**: Non-comparison sorts (counting, radix) break if keys aren't bounded integers; unstable sorts (heapsort, quicksort) break multi-key sort correctness; quicksort degrades to O(n²) on already-sorted input without pivot randomization.
+
 # Sorting — SDE-3 Gold Standard
 
 ```

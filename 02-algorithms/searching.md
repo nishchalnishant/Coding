@@ -1,4 +1,85 @@
+## First-Principles Map
+
+```
+WHY binary search exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
+       │                        │              │               │               │
+  [Linear scan is O(n);       [divide and    [maintain lo,   [sorted array   [off-by-one:
+   any monotone predicate       conquer on    hi pointers;    lookup, search   lo+hi overflow
+   can be exploited to          a sorted or   mid=(lo+hi)/2;  space for min    in C/Java;
+   eliminate half the           monotone      if pred(mid)    feasible answer, wrong predicate
+   search space per step]       search space] true → shrink;  rotated array,  direction;
+                                              false → expand; matrix search]  infinite loop
+                                              O(log n) steps]                 when lo=hi]
+       │                        │              │
+  [real-world:                 [invariant:    [binary search on answer:
+   dictionary lookup —          answer always  "is X feasible?" as predicate;
+   open middle page,            lies in [lo,   e.g., min days to ship
+   discard half the book]       hi]; loop      packages, koko eating bananas,
+                                terminates     split array largest sum —
+                                when lo=hi]    apply whenever monotone exists]
+       ↓
+[Decision: Binary Search vs alternatives]
+  ├── vs Linear Search  → BS O(log n) requires sorted; linear O(n) works on unsorted
+  ├── vs Hash Lookup    → hash O(1) exact; BS for ordered range queries and boundaries
+  └── vs Interpolation  → interpolation O(log log n) for uniform; BS is robust
+```
+
+## First-Principles Breakdown
+- **Root problem**: Unsorted linear scan is O(n) — too slow for large data; sorting + binary search amortizes to O(log n) per query.
+- **Core insight**: Any monotone predicate (false...false...true...true) allows binary search — not just sorted arrays of numbers.
+- **Invariant**: The answer always lies within [lo, hi]; each iteration strictly reduces the interval; loop terminates when lo = hi.
+- **Why it's fast**: Each comparison eliminates half the remaining search space — n elements need only log₂n comparisons.
+- **Where it breaks**: Requires monotonicity (sorted or monotone predicate); integer overflow in `(lo+hi)/2`; infinite loops when boundary conditions are wrong (off-by-one in lo/hi updates).
+
 # Searching & Binary Search — SDE-3 Gold Standard
+
+```
+[SEARCHING & BINARY SEARCH — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Linear scan is O(N) — unacceptable for large sorted inputs
+│   ├── Sorted order = monotone property → cut search space in half each step
+│   └── "Binary search on answer" extends beyond arrays to any monotone predicate
+├── WHAT IT IS
+│   ├── Core invariant: search space [lo, hi] always contains the answer
+│   ├── Each iteration: evaluate midpoint, eliminate half the space
+│   └── Terminates when lo > hi (not found) or lo == hi (found)
+├── HOW IT WORKS
+│   ├── Template A — exact match
+│   │   ├── lo=0, hi=n-1
+│   │   ├── mid = lo + (hi-lo)/2
+│   │   ├── if arr[mid]==target → return mid
+│   │   ├── if arr[mid] < target → lo = mid+1
+│   │   └── else → hi = mid-1
+│   ├── Template B — lower bound (first position ≥ target)
+│   │   ├── lo=0, hi=n (inclusive right allows insertion point)
+│   │   ├── if arr[mid] < target → lo = mid+1
+│   │   └── else → hi = mid  (keep mid as candidate)
+│   ├── Template C — binary search on answer
+│   │   ├── Define predicate P(x): "is x a feasible answer?"
+│   │   ├── P must be monotone: false...false|true...true
+│   │   ├── lo = min_possible_answer, hi = max_possible_answer
+│   │   └── Find first x where P(x) is true
+│   └── Rotated sorted array
+│       ├── Determine which half is sorted: compare arr[mid] vs arr[lo]
+│       ├── If target in sorted half → search there; else → other half
+│       └── Handles rotation without finding pivot first
+├── COMPLEXITY
+│   ├── Time:  O(log N) per query
+│   └── Space: O(1) iterative; O(log N) recursive stack
+├── TRIGGER PATTERNS (when to use)
+│   ├── "Sorted array, find element / first/last occurrence" → standard BS
+│   ├── "Minimum/maximum value satisfying a condition" → BS on answer
+│   ├── "Koko eating bananas / ship packages in D days" → BS on answer
+│   ├── "Rotated sorted array, no duplicates" → modified BS
+│   ├── "Search in 2D matrix (row/col sorted)" → treat as 1D or two-level BS
+│   └── "Find peak element" → BS on gradient (move toward larger neighbor)
+└── GOTCHAS
+    ├── mid = lo + (hi-lo)/2 avoids integer overflow (not (lo+hi)/2)
+    ├── Loop condition lo <= hi (exact match) vs lo < hi (bound finding) — pick correctly
+    ├── Off-by-one in bounds: hi = n (not n-1) for lower-bound/insertion-point templates
+    ├── Rotated array with duplicates: cannot determine sorted half — worst case O(N)
+    └── BS on answer: verify predicate is truly monotone before applying
+```
 
 Find an element or the optimal value satisfying a predicate. SDE-3 focus: **binary search on answer** (predicate function), rotated arrays, lower/upper bound semantics, and knowing which template to use for each variant.
 

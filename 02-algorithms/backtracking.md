@@ -1,3 +1,41 @@
+## First-Principles Map
+
+```text
+WHY Backtracking exists
+├── Need to explore combinatorial search spaces exhaustively
+│   ├── Cannot enumerate all solutions upfront (exponential count)
+│   └── Constraint satisfaction prunes invalid branches early
+WHAT it is
+├── Depth-first systematic enumeration with undo
+│   ├── At each step: choose → explore → unchoose
+│   └── State is fully restored on backtrack (invariant)
+HOW it works
+├── Recursive DFS over decision tree
+│   ├── Base case: solution complete → record/return
+│   ├── Pruning: constraint violated → return immediately
+│   └── Undo: reverse the choice before next sibling
+WHEN to use
+├── "all combinations / permutations / subsets" → backtracking
+├── Constraint satisfaction (N-Queens, Sudoku) → backtracking + pruning
+└── "does a valid assignment exist?" → backtracking with early exit
+WHAT can go wrong
+├── Missing undo step → state corruption across branches
+├── Pruning too late → TLE on large inputs
+└── Revisiting same element → need used[] or index tracking
+DECISION
+└── Search space is a decision tree with hard constraints → backtracking; if subproblems overlap → DP instead
+```
+
+## First-Principles Breakdown
+
+- **Root problem**: Enumerate valid solutions in a combinatorial space too large to build explicitly.
+- **Core insight**: Incrementally build a candidate; abandon it the moment a constraint is violated (prune early, not late).
+- **Invariant**: After returning from a recursive call, program state is identical to what it was before the call.
+- **Why it works**: DFS visits every branch exactly once; pruning skips entire subtrees in O(1) per pruned node.
+- **Where it breaks**: Overlapping subproblems (use DP); pure enumeration with no pruning degenerates to brute-force O(n!).
+
+---
+
 # Backtracking — SDE-3 Gold Standard
 
 ```

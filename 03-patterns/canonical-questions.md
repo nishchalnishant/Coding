@@ -1,3 +1,59 @@
+# First-Principles Map — Canonical Interview Questions
+
+```
+WHY Canonical Questions exist
+├── Interviewers reuse ~80 problems across all FAANG rounds
+├── Each problem is a compressed signal detector for a specific skill
+└── Recognizing the canonical form → unlocks all variants instantly
+
+WHAT it is
+├── A curated map: problem → pattern → key insight → complexity
+├── Not a solution database — a recognition database
+└── Examples: Two Sum (hashing), LCA (tree traversal), Course Schedule (cycle detection)
+
+HOW it works
+├── Problem surface (array, graph, string) → trigger pattern
+│   ├── Sorted + search → binary search / two-pointer
+│   ├── Subarray sum / window → prefix sum / sliding window
+│   ├── Dependencies / ordering → topological sort
+│   └── Overlapping subproblems → DP (memoization or tabulation)
+├── Invariant per problem:
+│   ├── Two Sum: complement exists in seen-set
+│   ├── Merge Intervals: sort by start, extend if overlap
+│   └── Word Ladder: BFS level = min transformations
+└── Complexity landmarks:
+    ├── O(n) hashing beats O(n²) brute on lookup
+    ├── O(n log n) sort unlocks greedy/two-pointer
+    └── O(V+E) BFS/DFS for all reachability problems
+
+WHEN to use
+├── Immediately after reading constraints (n ≤ 10⁵ → O(n log n) or better)
+├── When the problem "smells like" a known structure
+└── Decision:
+    ├── Pairs / complements → hash set/map
+    ├── Contiguous subarray → sliding window or prefix sum
+    ├── Tree + path queries → DFS with return value
+    ├── Shortest path unweighted → BFS
+    ├── Shortest path weighted → Dijkstra
+    └── Counting arrangements → DP
+
+WHAT can go wrong
+├── Misidentifying the canonical form (e.g., treating variant as base)
+├── Correct pattern, wrong invariant (off-by-one in window bounds)
+├── Forgetting edge cases: empty input, single element, all duplicates
+└── Complexity mismatch: O(n²) DP when O(n log n) is expected at SDE-3 bar
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Interviews are pattern tests disguised as novel problems; brute-forcing novelty is unscalable prep.
+- **Core insight:** Every hard problem is a composition of 2–3 canonical sub-problems; identify the sub-problems, not the surface story.
+- **Invariant:** The key insight of a canonical problem never changes across variants — only the data shape changes.
+- **Why it works:** Recognition of a canonical form collapses search space from "all algorithms" to "one family of solutions."
+- **Where it breaks:** Hybrid problems (e.g., BFS + DP, segment tree + lazy prop) — no single canonical form applies; need compositional thinking.
+
+---
+
 # Canonical Questions — Logic + Trickiness Index
 
 One-line insight per problem. Use this to check your mental model before opening the solution. If you can state the key insight cold, you know the problem.
@@ -22,6 +78,9 @@ One-line insight per problem. Use this to check your mental model before opening
 | Jump Game II | Medium | Greedy | BFS layers — count jumps when you cross current layer end |
 | Find Minimum in Rotated Array | Medium | Binary Search | Pivot is where arr[mid] > arr[right] |
 | Search in Rotated Array | Medium | Binary Search | Identify sorted half first; then standard binary search |
+| Subarray Sums Divisible by K | Medium | Prefix Sum Modulo | Frequency map of prefix sum mod K; normalize negative remainder with `(prefix_sum % k + k) % k` |
+| Subarrays with K Different Integers | Hard | Sliding Window | Exactly K distinct = At Most K - At Most K-1; subtraction makes non-monotonic window linear |
+| Range Sum Query 2D - Immutable | Medium | 2D Prefix Sum | Precompute 2D prefix array; answer queries in O(1) via standard 2D inclusion-exclusion subtraction |
 
 ---
 
@@ -90,6 +149,8 @@ One-line insight per problem. Use this to check your mental model before opening
 | Right Side View | Medium | BFS | Last node at each BFS level |
 | Count Good Nodes | Medium | DFS | Pass max_so_far down; count if node >= max |
 | Construct from Pre+Inorder | Medium | DFS + Index Map | Preorder[0] = root; find in inorder to split |
+| Step-By-Step Directions | Medium | LCA + Path Generation | Find path from root to start and root to dest; LCA is the last common node; start-to-LCA becomes all 'U's, LCA-to-dest is appended |
+| Path Sum III | Medium | DFS + Prefix Sum | Track running prefix sum frequency in map during DFS; lookup `current_sum - target` to count paths; decrement counts on backtrack |
 
 ---
 
@@ -108,6 +169,8 @@ One-line insight per problem. Use this to check your mental model before opening
 | Alien Dictionary | Hard | Topological Sort | Build graph from adjacent word pairs; topo sort |
 | Network Delay Time | Medium | Dijkstra | Single-source shortest path; return max dist |
 | Swim in Rising Water | Hard | Binary Search + BFS / Dijkstra | Min time = min max-height path from (0,0) to (n-1,n-1) |
+| Is Graph Bipartite? | Medium | 2-Coloring DFS/BFS | Use DFS/BFS to alternate coloring nodes 0 and 1; a same-color conflict between neighbors means it's not bipartite |
+| Redundant Connection | Medium | Union-Find | Cycle detection in undirected graph; the edge that connects two vertices already belonging to the same Union-Find set is redundant |
 
 ---
 
@@ -172,3 +235,65 @@ One-line insight per problem. Use this to check your mental model before opening
 | Word Search | Medium | DFS + Backtrack | Mark visited; recurse 4 dirs; unmark on return |
 | N-Queens | Hard | Row-by-row | Track col, diag1, diag2 as sets |
 | Palindrome Partitioning | Medium | Backtrack + precompute | Precompute is_palindrome[i][j]; then backtrack |
+
+---
+
+## Trie
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Implement Trie | Medium | Prefix Tree | Dictionary-based children map plus end-of-word boolean marker |
+| Word Search II | Hard | Trie + Backtracking DFS | Build Trie of search words; DFS on grid pruning paths immediately when prefix is absent in Trie |
+| Design Add and Search Words | Medium | Trie + DFS Wildcard | Use recursion on Trie children for wildcard '.' characters; standard lookup for normal characters |
+| Prefix and Suffix Search | Hard | Trie of wrapped words | Insert wrapped words `suffix + '#' + word` into Trie; search prefix is resolved as `suffix + '#' + prefix` |
+
+---
+
+## Segment Tree & Fenwick Tree
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Range Sum Query - Mutable | Medium | Segment Tree / Fenwick | Segment Tree for O(log N) point update and range query, or Fenwick Tree for space-optimized prefix sums |
+| Range Sum Query 2D - Mutable | Hard | 2D Fenwick / QuadTree | Generalize Fenwick Tree to 2D; point update and prefix range queries are O(log R * log C) |
+| Count of Smaller Numbers After Self | Hard | Fenwick / Merge Sort | Traverse array right-to-left; query smaller count, then update Fenwick with current number's frequency |
+
+---
+
+## Disjoint Set Union (DSU)
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Redundant Connection II | Hard | Directed DSU + Cycle | Track two parent pointers to find node with two parents; check cycle; remove correct edge to restore tree |
+| Accounts Merge | Medium | DSU Connected Components | Treat emails as nodes, map to parent email; run DSU; group emails by absolute component root |
+| Number of Good Paths | Hard | DSU + Sorted Nodes | Sort nodes by value; union components starting from smallest; size of equal values within component determines paths |
+
+---
+
+## Greedy
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Gas Station | Medium | Circular Greedy | If total gas >= total cost, a start index exists; start over from i+1 if tank ever goes negative |
+| Task Scheduler | Medium | Greedy Frequency Math | Highly frequent tasks drive cycle bounds; max idle slots can be derived mathematically from max task count |
+| Candy | Hard | Two-pass Greedy | Left-to-right pass satisfying left neighbors, right-to-left pass satisfying right neighbors; merge via max |
+
+---
+
+## Bit Manipulation
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Single Number | Easy | XOR Properties | `a ^ a = 0` and `a ^ 0 = a`; XORing all elements cancels duplicates and leaves the unique element |
+| Single Number II | Medium | Bit counting modulo 3 | Count set bits at each of 32 positions modulo 3; or use state machine masks `ones` and `twos` |
+| Counting Bits | Easy | Bit DP | `dp[i] = dp[i >> 1] + (i & 1)`; the bit count of `i` is the count of its right shift plus its last bit |
+| Sum of Two Integers | Medium | Bit addition | Simulate half-adder: `a ^ b` computes sum without carry, `(a & b) << 1` computes carry; repeat until carry is zero |
+
+---
+
+## Math & Number Theory
+
+| Problem | Difficulty | Pattern | Key Insight |
+|---------|-----------|---------|-------------|
+| Happy Number | Easy | Floyd's Cycle Detection | Sequence of digit-square sums eventually loops; use fast/slow pointers on values instead of linked list |
+| Pow(x, n) | Medium | Binary Exponentiation | `O(log N)` reduction: `pow(x, n) = pow(x*x, n//2)` for even, `x * pow(x, n-1)` for odd. Handle negative bounds |
+| Sieve of Eratosthenes | Easy | Prime Sieving | Incrementally mark multiples of discovered primes as composite up to `sqrt(N)`; count unmarked |

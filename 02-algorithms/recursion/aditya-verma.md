@@ -1,3 +1,93 @@
+## First-Principles Map
+
+```
+WHY Aditya Verma Recursion Framework exists
+└── Most recursion problems share the same skeleton: choice at each step
+    ├── Without a framework: reinvent the structure every problem
+    ├── With choice diagram: mechanically derive IP/OP code in 3 steps
+    └── Same framework extends to DP: memoize the recursive call = top-down DP
+
+WHAT it is
+└── A 4-step mechanical framework for any recursion problem
+    ├── Step 1 — Draw the Choice Diagram: at each position, what are my options?
+    ├── Step 2 — Write IP/OP (Input/Output) signature: what shrinks? what grows?
+    ├── Step 3 — Code base case + recursive cases from the choice diagram
+    └── Step 4 — Convert to DP: add memo → then tabulate
+
+HOW it works
+├── Choice Diagram (include/exclude paradigm)
+│   ├── At each item i: INCLUDE it → recurse with smaller input + updated output
+│   ├── At each item i: EXCLUDE it → recurse with smaller input + same output
+│   └── Leaf of decision tree = base case reached
+├── IP/OP template
+│   ├── IP (input): what's getting smaller? → index i, remaining capacity W, string
+│   ├── OP (output): what's being built? → path list, running sum, count
+│   └── f(IP, OP): base(IP empty) → record OP; else branch on choices
+├── 0/1 Knapsack (canonical example)
+│   ├── Include item[i]: f(i-1, W-w[i], val+v[i])
+│   ├── Exclude item[i]: f(i-1, W, val)
+│   └── base: i==0 or W==0 → return 0 (or val accumulated)
+├── Subset Sum
+│   ├── Include: f(i-1, sum-arr[i]) if arr[i]<=sum
+│   ├── Exclude: f(i-1, sum)
+│   └── base: sum==0 → True; i==0 and sum!=0 → False
+├── Equal Partition, Count of Subsets, Min Subset Diff
+│   └── All variants of 0/1 knapsack; change return value / base condition
+└── Conversion to DP
+    ├── Identify the changing parameters (i, W, sum etc.)
+    ├── Create dp table of those dimensions
+    ├── Fill base cases (row 0, col 0)
+    └── Fill table in order: for i in 1..n, for w in 0..W
+
+WHEN to use
+├── Problem says "find subset with property X" → 0/1 knapsack variant
+├── Problem says "count ways to reach target" → knapsack count variant
+├── Problem says "all arrangements / permutations" → choice = which element next
+├── Problem says "all subsets of size k" → choice = include/exclude + size limit
+└── Problem gives items + capacity/budget → 0/1 knapsack or unbounded knapsack
+
+WHAT can go wrong
+├── Not drawing choice diagram first → code direction reversed (include vs exclude)
+├── Wrong base: i<0 vs i==0; capacity <0 vs ==0
+├── Knapsack: including item when w[i] > W → index error or wrong answer
+├── Count variant: return 1 (not True) at base; add (not OR) the branches
+├── DP table size: dp[n+1][W+1] not dp[n][W] → off-by-one on index boundary
+└── Unbounded knapsack: not changing i→i (vs i→i-1) on include branch
+
+Complexity
+├── Recursive (no memo): O(2^n) time, O(n) stack
+├── Top-down memo: O(n×W) time, O(n×W) space (+ O(n) stack)
+├── Bottom-up tabulation: O(n×W) time, O(n×W) space, O(1) extra
+└── Space-optimized: O(W) space with 1D rolling array (forward or backward fill)
+
+Decision tree
+    New recursion problem?
+    Step 1: Draw choice diagram
+    ├── How many choices at each step? (usually 2: include / exclude)
+    └── What does the input look like after each choice?
+
+    Step 2: Write IP/OP
+    ├── IP = [array/string index, remaining capacity/target]
+    └── OP = [accumulated path / value / count]
+
+    Step 3: Code
+    ├── base case: IP exhausted → return/record OP
+    ├── branch 1: make choice A → f(smaller IP, updated OP)
+    └── branch 2: make choice B → f(smaller IP, same/other OP)
+
+    Step 4: Optimize
+    ├── Repeated (i, W) pairs? → add memo dict → top-down DP
+    └── Need iterative? → build dp[n+1][W+1] table, fill from base cases
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Most recursion problems appear unique but share an identical skeleton — a choice is made at each step, input shrinks, output grows — and lacking a reusable framework causes slow, error-prone code each time.
+- **Core insight:** The "include/exclude" choice diagram is universal: every item is either taken (input shrinks + output updated) or skipped (input shrinks + output unchanged); the leaf conditions are the base cases; the return value determines whether it's a search, count, or optimization.
+- **Invariant:** At every recursive call, at least one dimension of the IP (input parameter) must decrease — either the index i decreases by 1 or the remaining capacity/target decreases by at least the item's weight/value.
+- **Why it's fast (with DP):** The (i, W) state space has n×W unique pairs; memoizing reduces the exponential recursion tree to a polynomial DAG; tabulation then eliminates stack overhead entirely.
+- **Where it breaks:** The framework assumes items are processed left-to-right and each item has a fixed cost/benefit — unbounded knapsack (reuse) and problems with ordering constraints require modifying which dimension of IP changes on the include branch.
+
 # Recursion — Aditya Verma Pattern Playbook
 
 Pattern-first recursion: name the technique, sketch the decision tree, write IP/OP code, then convert to DP. For the formal template see [recursion/README.md](README.md) and [backtracking.md](../backtracking.md).

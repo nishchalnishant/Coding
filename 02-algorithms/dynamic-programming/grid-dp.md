@@ -1,3 +1,57 @@
+## First-Principles Map
+
+```
+WHY Grid DP exists
+├── Counting / optimizing over structured 2D space with overlapping subproblems
+├── Brute-force exponential (2^(M+N) paths); DP caches repeated sub-rectangles
+├── Natural DAG: cell (i,j) depends only on (i-1,j) and (i,j-1) → no cycles
+├── Invariant: every cell's answer is fully determined before it is used
+└── Decision tree:
+    movement constrained (right/down only)?  → standard 2D tabulation
+    obstacles / walls?                       → guard with if grid[i][j] != '#'
+    arbitrary movement?                      → BFS/DFS or add direction state
+    diagonal / all-4-directions?             → memoized DFS, not tabulation
+    optimize weight on path?                 → dp[i][j] = min/max + transition
+
+WHAT Grid DP is
+├── State: dp[i][j] = answer for subproblem ending at (i,j)
+├── Dimension: 2D table of size M×N (space O(MN), reducible to O(N) per row)
+├── Transition: dp[i][j] = f(dp[i-1][j], dp[i][j-1], dp[i-1][j-1], grid[i][j])
+├── Base cases: row 0 and col 0 (boundary fill); watch for blocked cells
+└── Variants: count paths, min-cost path, max-gold, dungeon health, unique paths II
+
+HOW Grid DP works
+├── Fill row-by-row left-to-right; each cell reads already-computed neighbors
+├── Unique Paths: dp[i][j] = dp[i-1][j] + dp[i][j-1]; dp[0][*]=dp[*][0]=1
+├── Min-cost path: dp[i][j] = grid[i][j] + min(dp[i-1][j], dp[i][j-1])
+├── Dungeon game: fill bottom-right to top-left; dp[i][j]=max(1, min(right,down)-grid)
+└── Count paths with obstacles: dp[i][j] = 0 if obstacle else sum of neighbors
+
+WHEN to use Grid DP
+├── Robot/person moving right+down on M×N grid                   → unique paths
+├── Minimize/maximize cumulative cost along any path              → min-cost path
+├── Count paths avoiding obstacles                                → unique paths II
+├── Reach destination with minimum health (must stay > 0)        → dungeon game
+└── Collect max gold, no revisit, arbitrary start                 → DFS+memo (not pure grid DP)
+
+WHAT can go wrong
+├── Off-by-one on base cases: forgetting dp[0][0] = grid[0][0] for cost problems
+├── Obstacle overwrite: setting dp[i][j] on a blocked cell pollutes neighbors
+├── Dungeon direction: must fill reverse (bottom-right→top-left) not forward
+├── Space: allocating M×N when rolling 1D array suffices (interviewer may ask)
+└── Integer overflow: path-count problems on large grids; use modular arithmetic
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Grid traversal has exponential naive complexity; subproblems overlap whenever two paths share a suffix sub-rectangle.
+- **Core insight:** Restrict movement (right/down) creates a topological order on cells — dp[i][j] is always computed after all its dependencies.
+- **Invariant:** `dp[i][j]` is final when written; no cell is revisited, so each is computed exactly once → O(MN) time.
+- **Why it's fast:** DAG structure eliminates recomputation; 1D rolling array eliminates redundant space; cache-friendly row-major access.
+- **Where it breaks:** Arbitrary movement (all 4 directions) breaks the DAG — cycles require Dijkstra/BFS or DFS with visited set, not tabulation.
+
+---
+
 # Grid DP — 2D Dynamic Programming on Grids
 
 DP problems on M×N grids where movement is constrained (usually right/down) or where you optimize paths, counts, or regions. For the broader guide see [README.md](README.md).

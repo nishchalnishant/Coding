@@ -1,3 +1,62 @@
+# First-Principles Map — Google Interview Revision
+
+```
+WHY a structured revision plan exists
+├── Random LeetCode grinding has diminishing returns after week 1
+├── Spaced repetition on high-signal topics outperforms breadth grinding
+└── Two weeks before interview = consolidation phase, not learning phase
+
+WHAT it is
+├── A time-boxed, priority-ordered revision schedule targeting Google SDE-2/SDE-3 bar
+├── Covers: topic priority order, daily time allocation, revision triggers, mock cadence
+└── Examples:
+    ├── Day 1–3: arrays, hashing, two-pointer, sliding window (highest frequency)
+    ├── Day 4–6: trees, graphs, BFS/DFS, backtracking
+    ├── Day 7–9: DP (1D, 2D, interval), heap, greedy
+    └── Day 10–14: mocks, weak-area drilling, behavioral prep
+
+HOW it works
+├── Topic priority (by Google frequency):
+│   ├── Tier 1 (every round): arrays, strings, trees, graphs
+│   ├── Tier 2 (most rounds): DP, heap, binary search, backtracking
+│   └── Tier 3 (occasional): trie, segment tree, union-find, bit manipulation
+├── Revision triggers (when to revisit a topic):
+│   ├── Solved correctly but slowly → 1 more rep
+│   ├── Needed a hint → 2 more reps on variants
+│   └── Wrong approach → full re-read of the topic file
+├── Time allocation per session:
+│   ├── 30 min: solve 2 problems cold (no notes)
+│   ├── 15 min: review solutions + complexity
+│   └── 15 min: write key insight in one line
+└── Complexity:
+    ├── Each topic session: O(problems × insight_depth)
+    └── Total revision arc: O(14 days × 3 sessions) = ~42 focused sessions
+
+WHEN to use
+├── T-14 days: start the plan from Day 1
+├── T-3 days: switch to mocks only, no new topics
+└── Decision:
+    ├── Behind on Tier 1 topics → drop Tier 3 entirely
+    ├── Consistent on mocks → add one new hard problem per day
+    └── Behavioral unprepped → allocate 1 session/day from Day 7 onward
+
+WHAT can go wrong
+├── Starting from Day 1 on hard DP → demoralizing, wrong warm-up order
+├── No mocks → can't detect timing/communication gaps until interview day
+├── Treating revision as first-time learning → wrong mode, wrong pace
+└── Skipping behavioral → Google scores behavioral as heavily as coding
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Pre-interview time is finite and anxiety-amplified; without a plan, effort concentrates on comfortable topics instead of high-signal gaps.
+- **Core insight:** Revision is about retrieval practice (can I solve cold?), not re-reading — the metric is cold solve speed, not familiarity.
+- **Invariant:** Tier 1 topics must be fully solid before touching Tier 3; frequency-weighted priority always dominates recency bias.
+- **Why it works:** A fixed schedule eliminates decision fatigue ("what do I study today?") — that cognitive budget goes to actual problem solving.
+- **Where it breaks:** If mock feedback isn't incorporated daily, the plan becomes a reading exercise rather than a performance calibration loop.
+
+---
+
 # Google Coding Interview — Foundations Revision Guide
 
 Use this document for **focused revision** before your Google interview. It complements the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Read **Part A** the day before; use **Part B** by topic; follow **Part C** for communication; use **Part D** for timing.

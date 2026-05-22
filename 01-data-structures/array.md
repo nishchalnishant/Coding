@@ -1,3 +1,32 @@
+## First-Principles Map
+
+```
+WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to use → WHAT can go wrong
+       │                      │                        │                 │               │
+  [O(1) random access    [contiguous block of      [index =         [need index-    [cache thrash on
+   impossible without     memory; address =          base_addr +      based lookup,   large stride;
+   contiguous layout]     base + i×size]             i×element_size]  iteration,      resize copies
+                                                                       prefix sums]    all O(n)]
+       │                      │                        │
+  [CPU cache lines:       [invariant: element i    [time: O(1) read/write,
+   spatial locality        is always at a fixed     O(n) insert/delete mid;
+   makes arrays ~3-10×     offset from base]        space: O(n) contiguous]
+   faster than linked
+   list for iteration]
+       ↓
+[Decision: Array vs alternatives]
+  ├── vs Linked List → random access O(1) vs O(n); array wins for index lookups
+  ├── vs HashMap     → array is ordered, cache-friendly; map wins for sparse keys
+  └── vs Deque       → array for fixed-size; deque for O(1) front insert/delete
+```
+
+## First-Principles Breakdown
+- **Root problem**: Need O(1) access to the k-th element; linked structures require k traversals.
+- **Core insight**: Contiguous memory + uniform element size means any element's address is a simple arithmetic formula.
+- **Invariant**: Element i lives at exactly `base + i × elem_size` — never changes after allocation.
+- **Why it's fast**: CPU fetches cache lines (64 bytes), so iterating an array prefetches neighbors for free.
+- **Where it breaks**: Insertion/deletion at arbitrary index is O(n) due to shifting; resizing copies the whole array; sparse keys waste memory.
+
 # Arrays — SDE-3 Gold Standard
 
 ```
@@ -484,6 +513,8 @@ def reservoir_sample(stream, k: int) -> list:
 | **Set Matrix Zeroes** [M] | "Zero out row and col for each zero cell" | First pass: record zeroed rows/cols; second pass: apply | O(1) space: use first row and col as markers; handle them last with a separate `first_row_zero` flag. |
 | **Longest Consecutive Sequence** [H] | "Longest run, O(N) time" | Hash set; only start counting from `n` if `n-1` not in set | Starting only from sequence beginnings avoids O(N²) — each element processed once. |
 | **Minimum Window Substring** [H] | "Smallest window containing all of T" | Sliding window; `have` tracks satisfied char counts | `have` tracks characters meeting their target count — not just counts; `have == need` means window is valid. |
+| **Subarray Sums Divisible by K** [M] | Prefix Sum Modulo | "Count subarrays whose sum is divisible by K" | Track running prefix sum modulo K; `(prefix_sum % k + k) % k` to handle negatives; add count of seen remainders | Python modulo is always positive; Java/C++ can be negative. Normalize: `(pref % k + k) % k`. `seen[0]=1` for subarray from index 0. |
+| **Subarrays with K Different Integers** [H] | Sliding Window | "Count subarrays with exactly K distinct integers" | Exactly K = At Most K - At Most K-1; write helper `atMost(K)` and subtract | Exactly K is non-monotonic (growing window can make it invalid, shrinking can also make it invalid). At Most K is monotonic (expanding always preserves or increases distinct counts). |
 
 ---
 

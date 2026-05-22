@@ -1,3 +1,75 @@
+## First-Principles Map
+
+```text
+WHY tactical DS selection matters
+├── Wrong DS = correct algorithm at wrong complexity
+│   ├── Linear scan where O(1) lookup exists      → HashMap not Array
+│   ├── Sorting repeatedly where heap suffices    → Heap not Sort
+│   └── Prefix sum when segment tree overkill     → don't over-engineer
+├── DS choice is the first decision — made before writing a single line
+└── At SDE-3 level, interviewer expects O(1) time to name the right DS given constraints
+│
+WHAT the decision criteria are
+├── Access pattern   — lookup by key? sequential? both ends? range?
+├── Mutability       — static data (prefix sum) vs dynamic updates (segment tree / BIT)
+├── Ordering needed  — arbitrary (hash) vs sorted (BST/TreeMap) vs partial (heap)
+├── Key type         — integer (array/BIT) vs string (trie/hash) vs generic (TreeMap)
+└── Frequency of ops — which operation dominates? optimize for that one
+│
+HOW to navigate the decision tree
+├── Step 1: What is the dominant operation? (lookup / insert / delete / range / extremum)
+├── Step 2: What are the key constraints? (sorted? dynamic? integer keys? prefix?)
+├── Step 3: Map to DS family
+│   ├── Lookup O(1)           → HashMap / HashSet
+│   ├── Sorted + dynamic      → TreeMap / BST
+│   ├── Min/Max always ready  → Heap (PriorityQueue)
+│   ├── Prefix match          → Trie
+│   ├── Range query + update  → Segment Tree / BIT
+│   ├── Both ends             → Deque
+│   ├── LIFO / NGE / parens   → Stack
+│   └── Connectivity          → Graph + Union-Find
+├── Step 4: Check for upgrade — does naive choice hit TLE?
+│   ├── O(n) per query on n queries → O(n²) total → need O(log n) per query
+│   └── Static range → prefix sum; dynamic range → segment tree
+└── Step 5: Confirm complexity fits the constraint (n ≤ 10^5 → need O(n log n) or better)
+│
+WHEN advanced structures beat basics
+├── Monotonic stack over simple stack  — next greater element (NGE), largest histogram
+├── Two-heap over single heap          — running median (max-heap + min-heap)
+├── Segment tree over prefix sum       — range queries WITH point updates
+├── BIT (Fenwick) over segment tree    — simpler code when only prefix sums needed
+├── Trie over set<string>              — O(L) per query vs O(L·log N) with set
+└── Deque over queue                   — sliding window max needs O(1) front removal
+│
+WHAT CAN GO WRONG
+├── Segment tree when prefix sum works     → over-engineered, coding time wasted
+├── Array for key-value lookup             → O(n) search vs O(1) hash
+├── HashMap when sorted order needed       → can't do floor/ceil; need TreeMap
+├── Single heap for median                 → can't balance halves; need two heaps
+├── Adjacency matrix for sparse graph      → O(V²) space, O(V) neighbor iteration
+└── Brute force string matching over trie  → O(N·L) vs O(L) per query with trie
+│
+DECISION — access pattern → DS (tactical lookup table)
+├── O(1) lookup by key (unordered)     → HashMap / HashSet
+├── O(log n) ordered ops (floor/ceil)  → TreeMap / BST
+├── O(1) min or max peek               → Heap (min or max)
+├── Running median                     → Two heaps (max + min)
+├── O(1) both-end access/removal       → Deque
+├── LIFO / undo / NGE                  → Stack
+├── Prefix word / autocomplete         → Trie
+├── Static range sum/min/max           → Prefix sum array
+├── Dynamic range sum/min/max          → Segment Tree / BIT
+└── Dynamic connectivity               → Union-Find
+```
+
+## First-Principles Breakdown
+
+- **Root problem:** Every problem has a dominant operation, and choosing a DS that makes that operation slow (O(n) instead of O(1) or O(log n)) produces a solution that is correct but fails at scale.
+- **Core insight:** DS selection is a constraint-matching problem — map (access pattern, ordering requirement, key type, mutability) to the unique DS that satisfies all constraints at minimum complexity cost.
+- **Invariant:** The dominant operation determines the DS; secondary operations determine variants (e.g., max-heap vs min-heap, segment tree vs BIT, deque vs queue).
+- **Why it works:** Each DS encodes a structural invariant (heap property, BST ordering, trie prefix path, LIFO stack discipline) that makes its target operation cheap by definition — no runtime trick can replicate this.
+- **Where it breaks:** Over-engineering (segment tree when prefix sum suffices) wastes interview time and signals poor judgment; under-engineering (array where hash needed) produces TLE — both are failure modes.
+
 # The Data Structure Tree: Your Tactical Toolkit
 
 Think of this as your "Map of the Hardware." When you're in an interview and the problem feels overwhelming, I want you to come back here. The secret to SDE-3 mastery isn't knowing every data structure; it's knowing **which tool to grab for which constraint.** 

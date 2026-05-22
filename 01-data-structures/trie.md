@@ -1,4 +1,88 @@
+## First-Principles Map
+
+```
+WHY tries exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
+       │                │                │               │               │
+  [HashMaps can't      [tree where each  [insert: follow [autocomplete,  [memory blowup:
+   answer "all words   edge = one char;  path char by    spell check,    26 children per
+   with prefix 'pre'"; nodes share       char, create    IP routing,     node × depth =
+   sorted arrays pay   common prefixes;  node if missing; word search,   O(alphabet×L×n)
+   O(L×log n) for      each leaf/marked  search: follow  prefix count,   for n words of
+   prefix queries]     node = word end]  until mismatch; longest prefix  length L]
+                                         O(L) all ops]   matching]
+       │                │                │
+  [real-world:         [invariant:      [compressed trie (radix tree):
+   phone book prefix   root is empty;    merge single-child chains;
+   search; DNS         all strings in    reduces O(alphabet×L×n) nodes
+   longest-prefix      the trie share    to O(n) nodes for n words;
+   match]              common prefixes]  used in Linux kernel routing]
+       ↓
+[Decision: Trie vs alternatives]
+  ├── vs HashMap    → trie supports prefix queries; hash only exact match O(1)
+  ├── vs BST        → trie O(L) vs BST O(L×log n) for string keys
+  └── vs Suffix Array → suffix array for substring queries; trie for prefix queries
+```
+
+## First-Principles Breakdown
+- **Root problem**: Prefix-based operations (autocomplete, "all words starting with X") need O(L) time regardless of dictionary size — no hash or tree achieves this.
+- **Core insight**: Sharing common prefixes as tree paths means each character is stored once per distinct prefix, not once per word.
+- **Invariant**: The path from root to any marked node spells exactly one dictionary word; every node's depth equals the length of the shared prefix to that point.
+- **Why it's fast**: Any operation (insert, search, prefix query) takes O(L) where L = string length — independent of dictionary size n.
+- **Where it breaks**: Memory is O(alphabet_size × L × n) in the worst case; for Unicode alphabets this is impractical — use a HashMap of children instead of fixed array.
+
 # Trie (Prefix Tree)
+
+```
+[TRIE (PREFIX TREE) — MINDMAP]
+├── WHY IT EXISTS
+│   ├── Problem it solves: O(L) prefix lookup / insert / delete where L = word length — hash maps can't do prefix range queries
+│   ├── Hash map: O(L) per word but no shared structure → wastes memory for common prefixes
+│   └── Analogy: a trie is like a directory tree — every path from root to leaf spells out a word; shared prefixes share nodes
+├── WHAT IT IS (First Principles)
+│   ├── Core definition: tree where each edge is labeled with a character; root = empty string; path root→node = prefix
+│   ├── Node stores: children map (char → node), is_end flag (marks valid word terminus)
+│   ├── Key property: all strings sharing a prefix share the same path segment from root
+│   └── Alphabet size σ: 26 for lowercase English → fixed array[26]; arbitrary → hash map children
+├── HOW IT WORKS
+│   ├── Insert(word)
+│   │   ├── Walk existing nodes character by character
+│   │   ├── Create missing child nodes along the way
+│   │   └── Set is_end = True on last node — O(L)
+│   ├── Search(word)
+│   │   ├── Walk nodes; if any child missing → word absent
+│   │   └── Return is_end on last node — O(L)
+│   ├── StartsWith(prefix)
+│   │   ├── Walk nodes for each prefix char
+│   │   └── If all chars found → prefix exists (don't check is_end) — O(L)
+│   ├── Delete(word)
+│   │   ├── DFS to end of word; unset is_end
+│   │   └── Prune childless, non-terminal nodes on backtrack — O(L)
+│   ├── Compressed Trie (Radix Tree / Patricia Trie)
+│   │   ├── Merge single-child chains into one edge with a substring label
+│   │   └── Reduces node count from O(total chars) to O(number of words)
+│   └── Bitwise Trie (XOR Trie)
+│       ├── Keys are integers; branch on bits from MSB to LSB (depth = 32 or 64)
+│       └── Classic use: maximize XOR of two numbers in array — O(32·N)
+├── COMPLEXITY SUMMARY
+│   ├── Insert / Search / StartsWith: O(L) time, O(L·σ) space per node worst case
+│   ├── Space total: O(N·L·σ) worst, O(N·L) with hash map children
+│   ├── Autocomplete (all words with prefix): O(L + output_size)
+│   └── XOR maximization: O(32·N) build + O(32) per query
+├── WHEN TO USE
+│   ├── Signal: "autocomplete / type-ahead" → trie with DFS from prefix node
+│   ├── Signal: "count / list all words with given prefix" → trie
+│   ├── Signal: "word search on a board with dictionary" → trie to prune DFS early
+│   ├── Signal: "maximum XOR of any two numbers" → bitwise trie
+│   ├── Signal: "wildcard match (. = any char)" → trie DFS with branching on '.'
+│   └── Avoid when: only exact-match lookups needed (hash set is simpler and faster in practice)
+└── COMMON MISTAKES / GOTCHAS
+    ├── Forgetting is_end flag: "app" and "apple" share nodes — must mark word boundary separately
+    ├── Fixed-size children array: wastes 26× memory for sparse alphabets — use dict children instead
+    ├── Delete without pruning: leaves dead nodes, memory leak in long-running systems
+    ├── Bitwise trie bit order: always process MSB first; mixing up order corrupts XOR queries
+    ├── Off-by-one in depth: 32-bit int needs depth 32, not 31 — include sign bit if needed
+    └── Returning prefix match as word match: StartsWith returning True ≠ Search returning True
+```
 
 ---
 
@@ -66,7 +150,7 @@ class TrieNode:
     def __init__(self):
         self.children: dict[str, TrieNode] = {}
         self.is_end = False
-        self.count = 0  # optional: number of words passing through this node
+        self.count = 0  # number of words passing through this node
 
 class Trie:
     def __init__(self):
@@ -95,6 +179,35 @@ class Trie:
                 return None
             node = node.children[ch]
         return node
+
+    def delete(self, word: str) -> bool:
+        """
+        Deletes a word from the Trie. Prunes dead nodes recursively and 
+        synchronizes prefix count tracking. Returns True if word existed and was deleted.
+        """
+        def _recurse(node: TrieNode, word: str, depth: int) -> bool:
+            if depth == len(word):
+                if not node.is_end:
+                    return False  # Target word does not exist
+                node.is_end = False
+                return len(node.children) == 0  # Safe to prune if it is a leaf node
+
+            ch = word[depth]
+            if ch not in node.children:
+                return False  # Path mismatch
+            
+            should_prune_child = _recurse(node.children[ch], word, depth + 1)
+            
+            if should_prune_child:
+                del node.children[ch]
+                # If current node is not a word endpoint and has no children left, prune it
+                return not node.is_end and len(node.children) == 0
+            
+            # Decrement prefix count on backtrack if the child was not pruned
+            node.children[ch].count -= 1
+            return False
+
+        return _recurse(self.root, word, 0)
 ```
 
 > [!TIP]
