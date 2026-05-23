@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Algorithm Tree
+subtopic: 
+status: unread
+tags: [algorithms, upsc, algorithm-tree]
+---
 ## First-Principles Map
 
 ```text

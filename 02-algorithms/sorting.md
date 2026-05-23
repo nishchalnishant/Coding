@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Sorting
+subtopic: 
+status: unread
+tags: [algorithms, upsc, sorting]
+---
 ## First-Principles Map
 
 ```
@@ -506,3 +513,26 @@ For distributed sort (MapReduce model):
 - [Heap](../ds/heap.md) — heap sort and top-K streaming
 - [Two Pointers](two-pointers.md) — Dutch National Flag, Meeting Rooms II
 - [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers
+
+## Flashcards
+
+**"Problem becomes easy after sorting" → sort first; two pointers / greedy / binary search then apply.?** #flashcard
+"Problem becomes easy after sorting" → sort first; two pointers / greedy / binary search then apply.
+
+**"Need stable sort preserving original order of equal elements" → merge sort or Python's TimSort (`sorted()`).?** #flashcard
+"Need stable sort preserving original order of equal elements" → merge sort or Python's TimSort (`sorted()`).
+
+**"Sort and count inversions simultaneously" → merge sort; count cross-half pairs during merge step.?** #flashcard
+"Sort and count inversions simultaneously" → merge sort; count cross-half pairs during merge step.
+
+**"Interval problems?** #flashcard
+merge overlapping" → sort by start; greedy merge.
+
+**"Interval problems?** #flashcard
+non-overlapping / scheduling" → sort by end; greedy pick earliest ending.
+
+**"Values bounded by small range (0–K)" → counting sort O(N+K); or radix sort O(N·d) for integers.?** #flashcard
+"Values bounded by small range (0–K)" → counting sort O(N+K); or radix sort O(N·d) for integers.
+
+**"Custom comparator in Python" → `functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).?** #flashcard
+"Custom comparator in Python" → `functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).

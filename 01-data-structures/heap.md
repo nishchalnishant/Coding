@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Heap
+subtopic: 
+status: unread
+tags: [data-structures, upsc, heap]
+---
 ## First-Principles Map
 
 ```
@@ -414,3 +421,26 @@ For P99 latency from a live request stream:
 - [Queue](queue.md) — priority queue vs FIFO; blocking queue for concurrency
 - [Graph](../algo/graph.md) — Dijkstra's algorithm uses a min-heap
 - [Patterns Master](../03-patterns/patterns-master.md) — top-K and merge-K pattern triggers
+
+## Flashcards
+
+**If the problem says "top K largest/smallest" → think Min-Heap of size K; pop when size exceeds K; root = K-th largest.?** #flashcard
+If the problem says "top K largest/smallest" → think Min-Heap of size K; pop when size exceeds K; root = K-th largest.
+
+**If the problem says "median of a stream" → think Two Heaps; max-heap for lower half (negated in Python), min-heap for upper half; rebalance on every insert.?** #flashcard
+If the problem says "median of a stream" → think Two Heaps; max-heap for lower half (negated in Python), min-heap for upper half; rebalance on every insert.
+
+**If the problem says "merge K sorted lists/arrays" → think K-Way Merge Heap; push `(value, list_idx, element_idx)` tuples with tie-breaking index.?** #flashcard
+If the problem says "merge K sorted lists/arrays" → think K-Way Merge Heap; push `(value, list_idx, element_idx)` tuples with tie-breaking index.
+
+**If the problem says "shortest path in weighted graph" → think Dijkstra with min-heap; `(cost, node)` tuple; skip already-settled nodes.?** #flashcard
+If the problem says "shortest path in weighted graph" → think Dijkstra with min-heap; `(cost, node)` tuple; skip already-settled nodes.
+
+**If the problem says "scheduling with deadlines or priorities" → think Max-Heap of available tasks; unlock tasks as capacity grows.?** #flashcard
+If the problem says "scheduling with deadlines or priorities" → think Max-Heap of available tasks; unlock tasks as capacity grows.
+
+**If you need a max-heap in Python → negate values before pushing and negate again after popping; use `(-priority, counter, item)` for stability.?** #flashcard
+If you need a max-heap in Python → negate values before pushing and negate again after popping; use `(-priority, counter, item)` for stability.
+
+**If the problem says "build heap from array" → use `heapq.heapify()` which is O(N)?** #flashcard
+not O(N log N).

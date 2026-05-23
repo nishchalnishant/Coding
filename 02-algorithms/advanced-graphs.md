@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Advanced Graphs
+subtopic: 
+status: unread
+tags: [algorithms, upsc, advanced-graphs]
+---
 ## First-Principles Map
 
 ```
@@ -315,4 +322,3 @@ class DSU:
 - [Graph Fundamentals](../01-data-structures/graphs.md) — BFS, DFS, and Dijkstra  
 - [SDE-3 Roadmap](roadmap.md) — advanced study plan  
 - [Patterns Master](../../03-patterns/patterns-master.md)
-

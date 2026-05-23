@@ -1,3 +1,10 @@
+---
+module: books
+topic: The Algorithm Design Manual
+subtopic: 
+status: unread
+tags: [books, upsc, the-algorithm-design-manual]
+---
 # The algorithm design manual
 
 #### Detailed Notes on Chapter 1 of "The Algorithm Design Manual" by Steven S. Skiena
@@ -1466,6 +1473,3 @@ This section discusses the availability of algorithmic resources on the internet
 The chapter concludes with exercises designed to help readers familiarize themselves with the discussed resources, encouraging practical engagement with the tools and libraries mentioned.
 
 In essence, Chapter 19 serves as a guide to the tools and resources available to practitioners of algorithm design, emphasizing the importance of leveraging existing software systems and internet resources to enhance algorithm development and implementation .
-
-
-

@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Recursion
+subtopic: Recursion To Dp
+status: unread
+tags: [algorithms, upsc, recursion]
+---
 ## First-Principles Map
 
 ```

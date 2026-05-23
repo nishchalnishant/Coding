@@ -1,3 +1,10 @@
+---
+module: 03-patterns
+topic: Leetcode Variants
+subtopic: 
+status: unread
+tags: [patterns, upsc, leetcode-variants]
+---
 # First-Principles Map — LeetCode Variants
 
 ```

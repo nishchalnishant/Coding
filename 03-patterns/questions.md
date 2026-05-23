@@ -1,3 +1,10 @@
+---
+module: 03-patterns
+topic: Questions
+subtopic: 
+status: unread
+tags: [patterns, upsc, questions]
+---
 # Repository Interview Questions Tracker
 
 This file serves as a centralized, interactive checklist for all the canonical interview questions covered in this repository. Use it to track your progress. Each question links directly to the detailed walkthrough, logic, and gotchas inside the deep-dive files.

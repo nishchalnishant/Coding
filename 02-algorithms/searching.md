@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Searching
+subtopic: 
+status: unread
+tags: [algorithms, upsc, searching]
+---
 ## First-Principles Map
 
 ```
@@ -513,3 +520,26 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 - [Sorting](sorting.md) — ordering required for binary search on index
 - [Dynamic Programming](dynamic-programming/README.md) — some BS-on-answer problems reduce to DP feasibility checks
 - [Patterns Master](../../03-patterns/patterns-master.md) — binary search pattern triggers
+
+## Flashcards
+
+**"Find exact value in sorted array" → `lo≤hi` template; `mid = (lo+hi)//2`; shrink both sides on match.?** #flashcard
+"Find exact value in sorted array" → `lo≤hi` template; `mid = (lo+hi)//2`; shrink both sides on match.
+
+**"Find leftmost / rightmost position satisfying a condition" → `lo<hi` boundary template; never return inside loop.?** #flashcard
+"Find leftmost / rightmost position satisfying a condition" → `lo<hi` boundary template; never return inside loop.
+
+**"Answer is a value in a range and feasibility is monotone" → binary search on the answer space, not the array.?** #flashcard
+"Answer is a value in a range and feasibility is monotone" → binary search on the answer space, not the array.
+
+**"Sorted array rotated at unknown pivot" → binary search; determine which half is sorted before choosing direction.?** #flashcard
+"Sorted array rotated at unknown pivot" → binary search; determine which half is sorted before choosing direction.
+
+**"Array is sorted but has duplicates; find boundary" → `lo<hi` template; use `mid+1` carefully to avoid infinite loop.?** #flashcard
+"Array is sorted but has duplicates; find boundary" → `lo<hi` template; use `mid+1` carefully to avoid infinite loop.
+
+**"Peak element?** #flashcard
+find any element greater than its neighbors" → binary search; move toward the higher neighbor.
+
+**"Two templates exist; never mix them" → `lo≤hi` returns inside loop (exact search); `lo<hi` returns `lo` after loop (boundary search).?** #flashcard
+"Two templates exist; never mix them" → `lo≤hi` returns inside loop (exact search); `lo<hi` returns `lo` after loop (boundary search).

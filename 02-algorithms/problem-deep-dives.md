@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Problem Deep Dives
+subtopic: 
+status: unread
+tags: [algorithms, upsc, problem-deep-dives]
+---
 ## First-Principles Map
 
 ```text
@@ -2409,4 +2416,3 @@ return dp[(1 << num_skills) - 1]
 | **Greedy** | Intervals | Task Scheduler | Math Formula or Heap |
 | **Heap** | Top K | Median from Stream | Two Heaps (Min/Max) |
 | **DSU** | Connectivity | Accounts Merge | Grouping strings |
-

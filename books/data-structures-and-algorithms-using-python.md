@@ -1,3 +1,10 @@
+---
+module: books
+topic: Data Structures And Algorithms Using Python
+subtopic: 
+status: unread
+tags: [books, upsc, data-structures-and-algorithms]
+---
 # Data structures and algorithms using python
 
 ## <mark style="color:blue;">Chapter 1: Abstract Data Types</mark>
@@ -1912,34 +1919,3 @@ Dynamic programming is a crucial technique for solving many complex problems eff
 ***
 
 These notes provide a comprehensive overview of Chapter 20, focusing on the essential concepts, steps, examples, techniques, and practice problems associated with dynamic programming.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

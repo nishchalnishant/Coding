@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Recursion
+subtopic: Aditya Verma
+status: unread
+tags: [algorithms, upsc, recursion]
+---
 ## First-Principles Map
 
 ```
@@ -829,3 +836,28 @@ Or convert to iterative (bottom-up DP / explicit stack).
 - [dp-aditya-verma.md](../dynamic-programming/dp-aditya-verma.md) — when recursion + memo becomes DP
 - [Patterns Master](../../../03-patterns/patterns-master.md)
 
+## Flashcards
+
+**If asked for **all subsets / combinations** → Include/Exclude tree; `solve(i+1, cur+[x])` and `solve(i+1, cur)`; snapshot at base.?** #flashcard
+If asked for **all subsets / combinations** → Include/Exclude tree; `solve(i+1, cur+[x])` and `solve(i+1, cur)`; snapshot at base.
+
+**If asked for **all permutations** → `used[]` boolean or swap-based; depth = n; sort + `not used[i-1]` guard for duplicates.?** #flashcard
+If asked for **all permutations** → `used[]` boolean or swap-based; depth = n; sort + `not used[i-1]` guard for duplicates.
+
+**If the recursion tree has **repeated states** (`f(i, w)` seen twice) → add `@lru_cache` immediately; that's top-down DP.?** #flashcard
+If the recursion tree has **repeated states** (`f(i, w)` seen twice) → add `@lru_cache` immediately; that's top-down DP.
+
+**If the problem is on a **tree** → DFS returning a value; design the return type first (single value vs. tuple); use closure for global answer.?** #flashcard
+If the problem is on a **tree** → DFS returning a value; design the return type first (single value vs. tuple); use closure for global answer.
+
+**If the constraint is **hard** (n-queens, sudoku) → add sets for forbidden states; prune before recursing; undo on return.?** #flashcard
+If the constraint is **hard** (n-queens, sudoku) → add sets for forbidden states; prune before recursing; undo on return.
+
+**If asked to **build a valid string** (parentheses, palindromes) → IP/OP with validity guard; guard replaces explicit backtracking.?** #flashcard
+If asked to **build a valid string** (parentheses, palindromes) → IP/OP with validity guard; guard replaces explicit backtracking.
+
+**If problem involves **exponentiation or series** → check if it has a clean recurrence (fast-pow?** #flashcard
+`pow(x, n//2)^2`); mathematical recursion, not decision tree.
+
+**If Python stack blows up (`RecursionError`) → either `sys.setrecursionlimit` (quick fix) or convert to bottom-up DP (proper fix).?** #flashcard
+If Python stack blows up (`RecursionError`) → either `sys.setrecursionlimit` (quick fix) or convert to bottom-up DP (proper fix).

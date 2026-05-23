@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Backtracking
+subtopic: 
+status: unread
+tags: [algorithms, upsc, backtracking]
+---
 ## First-Principles Map
 
 ```text
@@ -610,3 +617,26 @@ def dfs_iterative(start, choices):
 **Student:** "One last thing—how do I avoid the 'Duplicate' trap?"
 
 **Coach:** "Sort. Always sort. If you have `[1, 1, 2]`, and you skip the second `1` because it looks just like the first one you already tried at this level, you've saved yourself thousands of redundant calculations. Sorting is the preamble to efficient backtracking."
+
+## Flashcards
+
+**"Generate all valid combinations / permutations / subsets" → backtracking with choose / recurse / unchoose.?** #flashcard
+"Generate all valid combinations / permutations / subsets" → backtracking with choose / recurse / unchoose.
+
+**"Constraint says order matters, use each element once" → permutation backtracking with `visited[]` array.?** #flashcard
+"Constraint says order matters, use each element once" → permutation backtracking with `visited[]` array.
+
+**"Constraint says order doesn't matter, no reuse" → combination backtracking with `start` index advancing.?** #flashcard
+"Constraint says order doesn't matter, no reuse" → combination backtracking with `start` index advancing.
+
+**"Find paths in a grid with obstacles" → DFS backtracking marking cell visited, unmark on return.?** #flashcard
+"Find paths in a grid with obstacles" → DFS backtracking marking cell visited, unmark on return.
+
+**"Decision tree branches explode but many share the same failure condition" → prune before recursing.?** #flashcard
+"Decision tree branches explode but many share the same failure condition" → prune before recursing.
+
+**"Duplicate elements in input; distinct results required" → sort first, skip `nums[i] == nums[i-1]` at the same depth level.?** #flashcard
+"Duplicate elements in input; distinct results required" → sort first, skip `nums[i] == nums[i-1]` at the same depth level.
+
+**"State is mutable (list, grid) and must be restored after recursing" → explicit undo; immutable state (string, int) needs no undo.?** #flashcard
+"State is mutable (list, grid) and must be restored after recursing" → explicit undo; immutable state (string, int) needs no undo.

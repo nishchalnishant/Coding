@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: String
+subtopic: 
+status: unread
+tags: [data-structures, upsc, string]
+---
 ## First-Principles Map
 
 ```

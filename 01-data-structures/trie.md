@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Trie
+subtopic: 
+status: unread
+tags: [data-structures, upsc, trie]
+---
 ## First-Principles Map
 
 ```

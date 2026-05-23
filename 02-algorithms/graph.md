@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Graph
+subtopic: 
+status: unread
+tags: [algorithms, upsc, graph]
+---
 ## First-Principles Map
 
 ```
@@ -566,3 +573,26 @@ def prim_mst(n: int, adj: dict) -> int:
 - [data-structures/graphs.md](../ds/graphs.md) — BFS/DFS templates and grid problems
 - [Heap](../ds/heap.md) — Dijkstra uses a min-heap
 - [Patterns Master](../../03-patterns/patterns-master.md) — graph pattern recognition triggers
+
+## Flashcards
+
+**"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).?** #flashcard
+"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).
+
+**"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).?** #flashcard
+"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).
+
+**"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).?** #flashcard
+"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).
+
+**"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).?** #flashcard
+"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).
+
+**"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.?** #flashcard
+"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.
+
+**"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).?** #flashcard
+"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).
+
+**"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.?** #flashcard
+"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.

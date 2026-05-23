@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Union Find
+subtopic: 
+status: unread
+tags: [algorithms, upsc, union-find]
+---
 ## First-Principles Map
 
 ```
@@ -384,3 +391,26 @@ class RollbackDSU:
 - [Graph Algorithms](graph.md) — Kruskal; when DSU vs BFS/DFS for connectivity
 - [Sorting](sorting.md) — edge sorting for Kruskal
 - [Patterns Master](../../03-patterns/patterns-master.md) — DSU pattern recognition triggers
+
+## Flashcards
+
+**"Are two elements in the same group after a series of merges?" → DSU `find(x) == find(y)`.?** #flashcard
+"Are two elements in the same group after a series of merges?" → DSU `find(x) == find(y)`.
+
+**"Add edges one by one; query connectivity after each addition" → DSU; O(α(N)) per operation.?** #flashcard
+"Add edges one by one; query connectivity after each addition" → DSU; O(α(N)) per operation.
+
+**"Detect cycle in undirected graph without BFS/DFS" → DSU; `union` returns False when already connected.?** #flashcard
+"Detect cycle in undirected graph without BFS/DFS" → DSU; `union` returns False when already connected.
+
+**"Minimum spanning tree with sparse edge list" → Kruskal?** #flashcard
+sort edges, DSU for cycle detection.
+
+**"Group accounts / emails by shared identifier" → DSU on the shared element (email), not the container (account).?** #flashcard
+"Group accounts / emails by shared identifier" → DSU on the shared element (email), not the container (account).
+
+**"Need to undo a union (offline queries)" → rollback DSU?** #flashcard
+union by rank only, no path compression.
+
+**"Variables with ratios (a/b = k)" → weighted DSU storing ratio relative to root; accumulate on path compression.?** #flashcard
+"Variables with ratios (a/b = k)" → weighted DSU storing ratio relative to root; accumulate on path compression.

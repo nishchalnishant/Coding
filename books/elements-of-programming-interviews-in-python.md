@@ -1,3 +1,10 @@
+---
+module: books
+topic: Elements Of Programming Interviews In Python
+subtopic: 
+status: unread
+tags: [books, upsc, elements-of-programming-interv]
+---
 # Elements of programming interviews in python
 
 ## <mark style="color:blue;">Chapter 1: Getting Ready</mark>
@@ -2265,8 +2272,3 @@ Chapter 24 is titled **"Honors Class"** and includes a variety of complex algori
    * **Algorithm**: Efficiently uses two passes through the array, resulting in a time complexity of O(n) and space complexity of O(n).
 
 The solutions in this chapter demonstrate various algorithmic strategies, including recursive algorithms, hash table utilization, dynamic programming, and efficient array manipulation techniques to solve complex problems with optimal time and space complexity.
-
-
-
-
-

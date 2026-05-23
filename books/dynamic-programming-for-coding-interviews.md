@@ -1,7 +1,10 @@
 ---
-description: Bottom-up approach to problem solving
+module: books
+topic: Dynamic Programming For Coding Interviews
+subtopic: 
+status: unread
+tags: [books, upsc, dynamic-programming-for-coding]
 ---
-
 # Dynamic programming for coding interviews
 
 ## Note to self
@@ -450,6 +453,3 @@ Recursive
 Dynamic
 
 Problem: Dropping eggs puzzle We have two iddentical eggs and access to a 100 floor building. we don't know how string the eggs are eggs can be really strong and may not break even when dropped from 100th floor or they may be fragile and break if dropped from first floor . we want to find out the highest floor from where the eggs can be drroped but we have only&#x20;
-
-
-

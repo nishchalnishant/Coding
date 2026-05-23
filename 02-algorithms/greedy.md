@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Greedy
+subtopic: 
+status: unread
+tags: [algorithms, upsc, greedy]
+---
 ## First-Principles Map
 
 ```
@@ -501,3 +508,26 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 **Student:** "What's the one 'Gotcha' that trips up SDE-3 candidates?"
 
 **Coach:** "The **Overlap Boundary**. In 'Minimum Arrows to Burst Balloons,' if two balloons touch at `x=5`, one arrow pops both. In 'Non-overlapping Intervals,' if they touch at `x=5`, they *don't* overlap. Interviewers will watch your `>` vs `>=` like a hawk. One character difference is the gap between a Senior and a Junior hire."
+
+## Flashcards
+
+**"Always pick the locally best option (largest profit, earliest deadline, minimum cost)" → greedy; verify exchange argument before coding.?** #flashcard
+"Always pick the locally best option (largest profit, earliest deadline, minimum cost)" → greedy; verify exchange argument before coding.
+
+**"Interval scheduling?** #flashcard
+maximize non-overlapping intervals" → sort by end time; greedily pick earliest-ending.
+
+**"Interval merging / covering" → sort by start time; merge overlapping or count gaps.?** #flashcard
+"Interval merging / covering" → sort by start time; merge overlapping or count gaps.
+
+**"Coin change with standard denominations" → greedy works; arbitrary denominations → DP.?** #flashcard
+"Coin change with standard denominations" → greedy works; arbitrary denominations → DP.
+
+**"Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints" → greedy scan left to right, extend reach.?** #flashcard
+"Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints" → greedy scan left to right, extend reach.
+
+**"Sort by ratio or combined key (profit/weight, deadline−duration)" → greedy on sorted order.?** #flashcard
+"Sort by ratio or combined key (profit/weight, deadline−duration)" → greedy on sorted order.
+
+**"Greedy fails on a small counterexample" → switch to DP immediately.?** #flashcard
+"Greedy fails on a small counterexample" → switch to DP immediately.

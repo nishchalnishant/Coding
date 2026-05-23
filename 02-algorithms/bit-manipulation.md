@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Bit Manipulation
+subtopic: 
+status: unread
+tags: [algorithms, upsc, bit-manipulation]
+---
 ## First-Principles Map
 
 ```text
@@ -568,3 +575,26 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP and O(3^N) subset enumeration
 - [Patterns Master](../../03-patterns/patterns-master.md) — bitmask recognition triggers
 - [Trie](../ds/trie.md) — XOR Trie for maximum XOR pair
+
+## Flashcards
+
+**"Check / set / clear the k-th bit" → `n >> k & 1`, `n | (1<<k)`, `n & ~(1<<k)`.?** #flashcard
+"Check / set / clear the k-th bit" → `n >> k & 1`, `n | (1<<k)`, `n & ~(1<<k)`.
+
+**"Count set bits" → `bin(n).count('1')` or `n & (n-1)` loop or `popcount`.?** #flashcard
+"Count set bits" → `bin(n).count('1')` or `n & (n-1)` loop or `popcount`.
+
+**"Find the single non-repeating element; all others appear twice" → XOR all elements.?** #flashcard
+"Find the single non-repeating element; all others appear twice" → XOR all elements.
+
+**"Enumerate all subsets of N items (N ≤ 20)" → bitmask `0` to `(1<<N)-1`; each bit = include/exclude.?** #flashcard
+"Enumerate all subsets of N items (N ≤ 20)" → bitmask `0` to `(1<<N)-1`; each bit = include/exclude.
+
+**"Maximize XOR of two numbers in an array" → XOR Trie; greedy bit-by-bit from MSB.?** #flashcard
+"Maximize XOR of two numbers in an array" → XOR Trie; greedy bit-by-bit from MSB.
+
+**"In Python, `~x` gives `-(x+1)`, not the unsigned complement" → mask with `& 0xFFFFFFFF` for 32-bit semantics.?** #flashcard
+"In Python, `~x` gives `-(x+1)`, not the unsigned complement" → mask with `& 0xFFFFFFFF` for 32-bit semantics.
+
+**"DP state is a subset of N elements (N ≤ 20)" → bitmask DP, O(2^N × N) time.?** #flashcard
+"DP state is a subset of N elements (N ≤ 20)" → bitmask DP, O(2^N × N) time.

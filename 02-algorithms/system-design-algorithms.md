@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: System Design Algorithms
+subtopic: 
+status: unread
+tags: [algorithms, upsc, system-design-algorithms]
+---
 ## First-Principles Map
 
 ```
@@ -695,3 +702,38 @@ Query Service + UI (trace reconstruction, search by trace-id, service, duration)
 **Span storage**: each span is a JSON/Protobuf record with trace-id, span-id, parent-span-id, service name, operation name, start time, duration, tags, logs. Query by trace-id = look up all spans sharing that trace-id → reconstruct tree by parent-span-id.
 
 **Interview context:** "We'd add distributed tracing by instrumenting each service with OpenTelemetry SDK, propagating W3C TraceContext headers, and sending spans to a central Jaeger/Zipkin collector. We'd use tail-based sampling to ensure 100% capture of error traces while keeping storage costs bounded."
+
+## Flashcards
+
+**"Count unique visitors at scale" → HyperLogLog.?** #flashcard
+"Count unique visitors at scale" → HyperLogLog.
+
+**"Is this key in the database?" → Bloom Filter.?** #flashcard
+"Is this key in the database?" → Bloom Filter.
+
+**"Add/Remove servers without reshuffling data" → Consistent Hashing.?** #flashcard
+"Add/Remove servers without reshuffling data" → Consistent Hashing.
+
+**"Find top-K in a stream" → Count-Min Sketch.?** #flashcard
+"Find top-K in a stream" → Count-Min Sketch.
+
+**"Proximity search / Uber" → Quadtree / Geohash.?** #flashcard
+"Proximity search / Uber" → Quadtree / Geohash.
+
+**"Leader election" → Raft / Paxos.?** #flashcard
+"Leader election" → Raft / Paxos.
+
+**"Are two replicas in sync?" → Merkle Tree.?** #flashcard
+"Are two replicas in sync?" → Merkle Tree.
+
+**"How does Cassandra detect node failures?" → Gossip + SWIM.?** #flashcard
+"How does Cassandra detect node failures?" → Gossip + SWIM.
+
+**"Distributed transaction across microservices?" → SAGA (not 2PC).?** #flashcard
+"Distributed transaction across microservices?" → SAGA (not 2PC).
+
+**"P2P key lookup / DHT?" → Chord (academic), Kademlia (practical).?** #flashcard
+"P2P key lookup / DHT?" → Chord (academic), Kademlia (practical).
+
+**"Generate unique sortable IDs at scale?" → Snowflake / ULID; prime modulus for hash tables.?** #flashcard
+"Generate unique sortable IDs at scale?" → Snowflake / ULID; prime modulus for hash tables.

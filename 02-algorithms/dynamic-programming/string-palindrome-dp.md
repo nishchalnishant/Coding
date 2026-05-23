@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Dynamic Programming
+subtopic: String Palindrome Dp
+status: unread
+tags: [algorithms, upsc, dynamic-programming]
+---
 ## First-Principles Map
 
 ```

@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: String
+subtopic: 
+status: unread
+tags: [algorithms, upsc, string]
+---
 ## First-Principles Map
 
 ```text
@@ -621,3 +628,26 @@ class AhoCorasick:
 - [Hashing](../ds/hashing.md) — frequency maps for anagram detection; rolling hash
 - [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance, LPS
 - [Patterns Master](../../03-patterns/patterns-master.md) — string pattern recognition triggers
+
+## Flashcards
+
+**"Find pattern P in text T efficiently" → KMP, O(N+M); build LPS array first.?** #flashcard
+"Find pattern P in text T efficiently" → KMP, O(N+M); build LPS array first.
+
+**"Check if two strings are anagrams / find all anagram windows" → sliding window with frequency map, O(N).?** #flashcard
+"Check if two strings are anagrams / find all anagram windows" → sliding window with frequency map, O(N).
+
+**"Longest palindromic substring" → Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.?** #flashcard
+"Longest palindromic substring" → Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.
+
+**"Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.?** #flashcard
+"Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.
+
+**"Minimum window containing all characters of T" → sliding window with two pointers and character count.?** #flashcard
+"Minimum window containing all characters of T" → sliding window with two pointers and character count.
+
+**"Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).?** #flashcard
+"Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).
+
+**"Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.?** #flashcard
+"Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.

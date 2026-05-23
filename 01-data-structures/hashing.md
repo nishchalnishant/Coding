@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Hashing
+subtopic: 
+status: unread
+tags: [data-structures, upsc, hashing]
+---
 ## First-Principles Map
 
 ```
@@ -492,3 +499,26 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 - [String](../algo/string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](linked-list.md) — LRU cache DLL component
 - [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers
+
+## Flashcards
+
+**If the problem says "find pair summing to target" → think Complement Map; store `x → index` and look up `target - x`.?** #flashcard
+If the problem says "find pair summing to target" → think Complement Map; store `x → index` and look up `target - x`.
+
+**If the problem says "count subarrays with sum = K" (with negatives) → think Prefix Sum + Hash Map; initialize `seen = {0?** #flashcard
+1}` before the loop.
+
+**If the problem says "group strings by pattern" or "anagrams" → think Frequency-Key Map; key = `tuple(sorted(s))` or 26-count tuple.?** #flashcard
+If the problem says "group strings by pattern" or "anagrams" → think Frequency-Key Map; key = `tuple(sorted(s))` or 26-count tuple.
+
+**If the problem says "O(1) insert, delete, getRandom" → think Hash Map + Array; swap-with-last on delete to preserve O(1) random access.?** #flashcard
+If the problem says "O(1) insert, delete, getRandom" → think Hash Map + Array; swap-with-last on delete to preserve O(1) random access.
+
+**If the problem says "longest consecutive sequence" → think Hash Set; only start a chain from `x` if `x-1` is not in the set.?** #flashcard
+If the problem says "longest consecutive sequence" → think Hash Set; only start a chain from `x` if `x-1` is not in the set.
+
+**If the problem says "sliding window with at most K distinct" → think Frequency Map as window state; delete key only when its count drops to 0.?** #flashcard
+If the problem says "sliding window with at most K distinct" → think Frequency Map as window state; delete key only when its count drops to 0.
+
+**If the problem involves custom hash map design → think Prime-sized bucket array + chaining; rehash when load factor exceeds 0.7.?** #flashcard
+If the problem involves custom hash map design → think Prime-sized bucket array + chaining; rehash when load factor exceeds 0.7.

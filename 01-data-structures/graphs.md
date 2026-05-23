@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Graphs
+subtopic: 
+status: unread
+tags: [data-structures, upsc, graphs]
+---
 ## First-Principles Map
 
 ```
@@ -452,3 +459,26 @@ def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
 - [Graph (algorithms)](../algo/graph.md) — Dijkstra, Bellman-Ford, MST algorithms
 - [Union-Find](../algo/union-find.md) — DSU for Kruskal and connectivity
 - [Patterns Master](../03-patterns/patterns-master.md) — graph pattern recognition triggers
+
+## Flashcards
+
+**If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.?** #flashcard
+If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.
+
+**If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.?** #flashcard
+If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.
+
+**If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.?** #flashcard
+If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.
+
+**If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.?** #flashcard
+If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.
+
+**If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.?** #flashcard
+If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.
+
+**If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.?** #flashcard
+If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
+
+**If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.?** #flashcard
+If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.

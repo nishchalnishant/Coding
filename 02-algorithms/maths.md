@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Maths
+subtopic: 
+status: unread
+tags: [algorithms, upsc, maths]
+---
 ## First-Principles Map
 
 ```text
@@ -534,3 +541,26 @@ def ncr(n: int, r: int, mod: int) -> int:
 - [Divide and Conquer](divide-and-conquer.md) — fast exponentiation derivation; Master Theorem
 - [Dynamic Programming](dynamic-programming/README.md) — DP for combinatorics (ways to sum, partition)
 - [Patterns Master](../../03-patterns/patterns-master.md) — math pattern recognition triggers
+
+## Flashcards
+
+**"Is N prime?" → trial division up to √N; sieve if checking many numbers.?** #flashcard
+"Is N prime?" → trial division up to √N; sieve if checking many numbers.
+
+**"All primes up to N" → Sieve of Eratosthenes, O(N log log N).?** #flashcard
+"All primes up to N" → Sieve of Eratosthenes, O(N log log N).
+
+**"GCD / LCM of two numbers" → `math.gcd(a, b)`; `lcm = a * b // gcd`.?** #flashcard
+"GCD / LCM of two numbers" → `math.gcd(a, b)`; `lcm = a * b // gcd`.
+
+**"Compute `a^b mod m` efficiently" → `pow(a, b, m)` in Python (built-in fast exponentiation).?** #flashcard
+"Compute `a^b mod m` efficiently" → `pow(a, b, m)` in Python (built-in fast exponentiation).
+
+**"Division under modular arithmetic (mod is prime)" → Fermat?** #flashcard
+`a^(-1) mod p = pow(a, p-2, p)`.
+
+**"Count combinations `nCr mod p`" → precompute factorials and inverse factorials; `nCr = fact[n] * inv_fact[r] * inv_fact[n-r] % p`.?** #flashcard
+"Count combinations `nCr mod p`" → precompute factorials and inverse factorials; `nCr = fact[n] * inv_fact[r] * inv_fact[n-r] % p`.
+
+**"Avoid float for slope / ratio comparisons" → normalize to `(dy/gcd, dx/gcd)` tuple; use integer arithmetic.?** #flashcard
+"Avoid float for slope / ratio comparisons" → normalize to `(dy/gcd, dx/gcd)` tuple; use integer arithmetic.

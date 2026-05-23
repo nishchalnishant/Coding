@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Concurrency
+subtopic: 
+status: unread
+tags: [algorithms, upsc, concurrency]
+---
 ## First-Principles Map
 
 ```
@@ -275,3 +282,20 @@ def atomic_increment(ref):
 - "Circular dependency" → Resource ordering to break deadlock.
 - "Performance bottleneck in high-thread-count" → Check for False Sharing or Lock Contention.
 - "Wait for N events" → CountDownLatch / Barrier.
+
+## Flashcards
+
+**"Buffer size K" → Bounded Blocking Queue (Condition variables).?** #flashcard
+"Buffer size K" → Bounded Blocking Queue (Condition variables).
+
+**"Read-heavy" → ReadWriteLock.?** #flashcard
+"Read-heavy" → ReadWriteLock.
+
+**"Circular dependency" → Resource ordering to break deadlock.?** #flashcard
+"Circular dependency" → Resource ordering to break deadlock.
+
+**"Performance bottleneck in high-thread-count" → Check for False Sharing or Lock Contention.?** #flashcard
+"Performance bottleneck in high-thread-count" → Check for False Sharing or Lock Contention.
+
+**"Wait for N events" → CountDownLatch / Barrier.?** #flashcard
+"Wait for N events" → CountDownLatch / Barrier.

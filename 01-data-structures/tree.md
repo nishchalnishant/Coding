@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Tree
+subtopic: 
+status: unread
+tags: [data-structures, upsc, tree]
+---
 ## First-Principles Map
 
 ```
@@ -517,3 +524,26 @@ def deserialize(data: str):
 - [Dynamic Programming](../algo/dynamic-programming/README.md) — Tree DP (postorder state propagation)
 - [Backtracking](../algo/backtracking.md) — path sum with backtracking
 - [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers
+
+## Flashcards
+
+**If the problem says "validate BST" → think Range Propagation; pass `(lo, hi)` bounds through recursion, not just local child comparison.?** #flashcard
+If the problem says "validate BST" → think Range Propagation; pass `(lo, hi)` bounds through recursion, not just local child comparison.
+
+**If the problem says "lowest common ancestor" → think Postorder DFS; if both sides return non-null, current node is LCA.?** #flashcard
+If the problem says "lowest common ancestor" → think Postorder DFS; if both sides return non-null, current node is LCA.
+
+**If the problem says "diameter" or "maximum path sum" → think Tree DP with global variable; return single-arm gain to parent, update global with both arms at each node.?** #flashcard
+If the problem says "diameter" or "maximum path sum" → think Tree DP with global variable; return single-arm gain to parent, update global with both arms at each node.
+
+**If the problem says "K-th smallest in BST" → think Iterative Inorder; stop after K pops to avoid O(N) stack for large skewed trees.?** #flashcard
+If the problem says "K-th smallest in BST" → think Iterative Inorder; stop after K pops to avoid O(N) stack for large skewed trees.
+
+**If the problem says "serialize/deserialize tree" → think Preorder with explicit `None` markers; inorder alone is insufficient for reconstruction.?** #flashcard
+If the problem says "serialize/deserialize tree" → think Preorder with explicit `None` markers; inorder alone is insufficient for reconstruction.
+
+**If the problem says "O(1) space traversal" → think Morris Threading; temporarily link predecessor back to current, restore on second visit.?** #flashcard
+If the problem says "O(1) space traversal" → think Morris Threading; temporarily link predecessor back to current, restore on second visit.
+
+**If the problem says "level-order" or "connect level pointers" → think BFS with `len(queue)` snapshot per level.?** #flashcard
+If the problem says "level-order" or "connect level pointers" → think BFS with `len(queue)` snapshot per level.

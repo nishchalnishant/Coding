@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Stack
+subtopic: 
+status: unread
+tags: [data-structures, upsc, stack]
+---
 ## First-Principles Map
 
 ```
@@ -428,3 +435,26 @@ For very large streams that don't fit in memory: partition the stream into chunk
 - [Graph](../algo/graph.md) — iterative DFS uses an explicit stack
 - [Greedy](../algo/greedy.md) — some monotonic stack problems have greedy structure
 - [Patterns Master](../03-patterns/patterns-master.md) — monotonic stack pattern triggers
+
+## Flashcards
+
+**If the problem says "next greater/smaller element" → think Monotonic Stack; brute force O(N²) → stack O(N) because each element pushed/popped once.?** #flashcard
+If the problem says "next greater/smaller element" → think Monotonic Stack; brute force O(N²) → stack O(N) because each element pushed/popped once.
+
+**If the problem says "valid brackets" or "nested structure matching" → think Stack; push on open, pop-and-verify on close.?** #flashcard
+If the problem says "valid brackets" or "nested structure matching" → think Stack; push on open, pop-and-verify on close.
+
+**If the problem says "undo/redo" or "backtrack to previous state" → think Stack because LIFO naturally reverses recent actions.?** #flashcard
+If the problem says "undo/redo" or "backtrack to previous state" → think Stack because LIFO naturally reverses recent actions.
+
+**If the problem says "largest rectangle in histogram" → think Monotonic Increasing Stack; pop when a shorter bar arrives, compute width using remaining stack top.?** #flashcard
+If the problem says "largest rectangle in histogram" → think Monotonic Increasing Stack; pop when a shorter bar arrives, compute width using remaining stack top.
+
+**If the problem says "evaluate expression with parentheses" → think Stack saving `(result, sign)` context on `(` and restoring on `)`.?** #flashcard
+If the problem says "evaluate expression with parentheses" → think Stack saving `(result, sign)` context on `(` and restoring on `)`.
+
+**If the problem says "iterative DFS" → think explicit Stack replacing the call stack; push neighbors in reverse order to preserve traversal direction.?** #flashcard
+If the problem says "iterative DFS" → think explicit Stack replacing the call stack; push neighbors in reverse order to preserve traversal direction.
+
+**If the problem needs O(1) getMin with push/pop → think Parallel Min-Stack synced with main stack.?** #flashcard
+If the problem needs O(1) getMin with push/pop → think Parallel Min-Stack synced with main stack.

@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Queue
+subtopic: 
+status: unread
+tags: [data-structures, upsc, queue]
+---
 ## First-Principles Map
 
 ```
@@ -437,3 +444,26 @@ class CircularQueue:
 - [Graph Algorithms](../algo/graph.md) — BFS shortest path; Dijkstra with priority queue
 - [Array](array.md) — sliding window (pointer-based); deque for window max variant
 - [Patterns Master](../03-patterns/patterns-master.md) — BFS and queue pattern recognition triggers
+
+## Flashcards
+
+**If the problem says "shortest path in unweighted graph" or "minimum steps" → think BFS with `deque` because first reach = shortest path.?** #flashcard
+If the problem says "shortest path in unweighted graph" or "minimum steps" → think BFS with `deque` because first reach = shortest path.
+
+**If the problem says "level-order traversal" or "process layer by layer" → think BFS; snapshot `len(queue)` at the start of each level.?** #flashcard
+If the problem says "level-order traversal" or "process layer by layer" → think BFS; snapshot `len(queue)` at the start of each level.
+
+**If the problem says "all sources spread simultaneously" (rotten oranges, 01 matrix) → think Multi-Source BFS; enqueue all sources at distance 0 before starting.?** #flashcard
+If the problem says "all sources spread simultaneously" (rotten oranges, 01 matrix) → think Multi-Source BFS; enqueue all sources at distance 0 before starting.
+
+**If the problem says "maximum in every sliding window of size K" → think Monotonic Deque; store indices in decreasing value order.?** #flashcard
+If the problem says "maximum in every sliding window of size K" → think Monotonic Deque; store indices in decreasing value order.
+
+**If the problem says "fixed-capacity ring buffer" or "producer-consumer" → think Circular Queue with `front`/`size`/`cap` and modular arithmetic.?** #flashcard
+If the problem says "fixed-capacity ring buffer" or "producer-consumer" → think Circular Queue with `front`/`size`/`cap` and modular arithmetic.
+
+**If the problem says "implement queue using stacks" → think Two-Stack Queue; lazy transfer from push-stack to pop-stack only when pop-stack is empty.?** #flashcard
+If the problem says "implement queue using stacks" → think Two-Stack Queue; lazy transfer from push-stack to pop-stack only when pop-stack is empty.
+
+**If you see `list.pop(0)` in your solution → replace with `deque.popleft()` because `list.pop(0)` is O(N).?** #flashcard
+If you see `list.pop(0)` in your solution → replace with `deque.popleft()` because `list.pop(0)` is O(N).

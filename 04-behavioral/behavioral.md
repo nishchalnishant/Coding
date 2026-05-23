@@ -1,3 +1,10 @@
+---
+module: 04-behavioral
+topic: Behavioral
+subtopic: 
+status: unread
+tags: [behavioral, upsc]
+---
 # First-Principles Map — Behavioral Interview
 
 ```

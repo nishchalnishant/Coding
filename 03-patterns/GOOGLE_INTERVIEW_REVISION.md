@@ -1,3 +1,10 @@
+---
+module: 03-patterns
+topic: Google Interview Revision
+subtopic: 
+status: unread
+tags: [patterns, upsc, google-interview-revision]
+---
 # First-Principles Map — Google Interview Revision
 
 ```

@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Array
+subtopic: 
+status: unread
+tags: [data-structures, upsc, array]
+---
 ## First-Principles Map
 
 ```
@@ -534,3 +541,26 @@ def reservoir_sample(stream, k: int) -> list:
 - [Searching](../algo/searching.md) — binary search on answer for array problems
 - [Stack](stack.md) — monotonic stack/deque for sliding window max and histogram
 - [Patterns Master](../03-patterns/patterns-master.md) — sliding window and two-pointer triggers
+
+## Flashcards
+
+**If the problem needs O(1) access by position → think Array because index = base + i×size.?** #flashcard
+If the problem needs O(1) access by position → think Array because index = base + i×size.
+
+**If the problem says "contiguous subarray satisfying a condition" → think Sliding Window (monotone) or Prefix Sum + Map (with negatives).?** #flashcard
+If the problem says "contiguous subarray satisfying a condition" → think Sliding Window (monotone) or Prefix Sum + Map (with negatives).
+
+**If the problem says "range sum queries on static data" → think Prefix Sum; O(1) per query after O(N) build.?** #flashcard
+If the problem says "range sum queries on static data" → think Prefix Sum; O(1) per query after O(N) build.
+
+**If the problem says "many range-add updates, read final values" → think Difference Array; O(1) update, O(N) reconstruct.?** #flashcard
+If the problem says "many range-add updates, read final values" → think Difference Array; O(1) update, O(N) reconstruct.
+
+**If the problem says "maximum subarray sum" → think Kadane's; initialize to `nums[0]`, not 0.?** #flashcard
+If the problem says "maximum subarray sum" → think Kadane's; initialize to `nums[0]`, not 0.
+
+**If the problem says "sorted array + find pair/triplet with target sum" → think Two Pointers; advance the side that moves you toward the target.?** #flashcard
+If the problem says "sorted array + find pair/triplet with target sum" → think Two Pointers; advance the side that moves you toward the target.
+
+**If the problem says "partition into 3 groups in one pass" → think Dutch National Flag; three-pointer dance.?** #flashcard
+If the problem says "partition into 3 groups in one pass" → think Dutch National Flag; three-pointer dance.

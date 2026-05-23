@@ -1,3 +1,10 @@
+---
+module: root
+topic: Questions
+subtopic: 
+status: unread
+tags: [root, upsc, questions]
+---
 # Data Structures and Algorithms Questions
 
 This file contains a comprehensive list of all questions covered in the `01-data-structures` and `02-algorithms` sections, grouped by topic.
@@ -561,4 +568,3 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] Binary Tree Cameras
 - [ ] TSP / Shortest Path All Nodes
 - [ ] Smallest Sufficient Team
-

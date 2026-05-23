@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Binary Search
+subtopic: 
+status: unread
+tags: [algorithms, upsc, binary-search]
+---
 ## First-Principles Map
 
 ```text

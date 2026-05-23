@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Miscellaneous
+subtopic: 
+status: unread
+tags: [algorithms, upsc, miscellaneous]
+---
 ## First-Principles Map
 
 ```
@@ -464,3 +471,26 @@ class LRUCache:
 - [Sorting](sorting.md) — sort key choices; when sort unlocks a greedy solution
 - [Mathematics](maths.md) — number theory tricks; modular arithmetic
 - [Graph Algorithms](graph.md) — when a problem is really a graph in disguise
+
+## Flashcards
+
+**"Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.?** #flashcard
+"Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.
+
+**"Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).?** #flashcard
+"Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).
+
+**"Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.?** #flashcard
+"Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.
+
+**"Events at coordinates?** #flashcard
+intervals, rectangles, skyline" → sweep line; sort events by x, process with sorted structure.
+
+**"O(1) average get/put with eviction of least recently used" → LRU?** #flashcard
+`OrderedDict` or doubly-linked list + hash map.
+
+**"O(1) average get/put with eviction of least frequently used" → LFU?** #flashcard
+two hash maps + min_freq pointer; reset min_freq=1 on put.
+
+**"Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).?** #flashcard
+"Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).

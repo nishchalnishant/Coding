@@ -1,3 +1,10 @@
+---
+module: 02-algorithms
+topic: Divide And Conquer
+subtopic: 
+status: unread
+tags: [algorithms, upsc, divide-and-conquer]
+---
 ## First-Principles Map
 
 ```
@@ -437,3 +444,26 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 - [Searching](searching.md) — binary search as D&C; median of two sorted arrays
 - [Dynamic Programming](dynamic-programming/README.md) — overlapping vs independent subproblems
 - [Patterns Master](../../03-patterns/patterns-master.md) — D&C pattern recognition triggers
+
+## Flashcards
+
+**"Split the input in half, solve each half independently, merge results" → divide and conquer.?** #flashcard
+"Split the input in half, solve each half independently, merge results" → divide and conquer.
+
+**"Count inversions / cross-half pairs while sorting" → merge sort variant with counting during merge.?** #flashcard
+"Count inversions / cross-half pairs while sorting" → merge sort variant with counting during merge.
+
+**"Find median of two sorted arrays in O(log N)" → binary search on partition point (D&C on index).?** #flashcard
+"Find median of two sorted arrays in O(log N)" → binary search on partition point (D&C on index).
+
+**"Recurrence fits `T(n) = aT(n/b) + f(n)`" → apply Master Theorem to read off complexity immediately.?** #flashcard
+"Recurrence fits `T(n) = aT(n/b) + f(n)`" → apply Master Theorem to read off complexity immediately.
+
+**"Closest pair of points in 2D" → D&C; strip merge in O(N); overall O(N log N).?** #flashcard
+"Closest pair of points in 2D" → D&C; strip merge in O(N); overall O(N log N).
+
+**"Fast exponentiation?** #flashcard
+`a^n` in O(log n)" → `pow(a, n//2, mod)` squared, times `a` if n is odd.
+
+**"Subproblems overlap (same arguments repeated)" → D&C becomes DP; add memoization.?** #flashcard
+"Subproblems overlap (same arguments repeated)" → D&C becomes DP; add memoization.

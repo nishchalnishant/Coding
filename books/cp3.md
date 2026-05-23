@@ -1,3 +1,10 @@
+---
+module: books
+topic: Cp3
+subtopic: 
+status: unread
+tags: [books, upsc, cp3]
+---
 # CP3
 
 ## <mark style="color:blue;">Chapter 1</mark> <mark style="color:blue;"></mark>_<mark style="color:blue;">Competitive Programming 3</mark>_
@@ -762,8 +769,3 @@ These advanced topics provide powerful tools and techniques for competitive prog
 * The chapter closes with a list of other exotic data structures and algorithms that were not covered due to time constraints, such as Fibonacci heap, various hashing techniques, interval tree, k-d tree, and many more.
 
 By studying these rare topics, competitive programmers can prepare themselves for a wider range of challenges and deepen their understanding of complex algorithms and data structures
-
-
-
-
-

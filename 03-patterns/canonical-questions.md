@@ -1,3 +1,10 @@
+---
+module: 03-patterns
+topic: Canonical Questions
+subtopic: 
+status: unread
+tags: [patterns, upsc, canonical-questions]
+---
 # First-Principles Map — Canonical Interview Questions
 
 ```

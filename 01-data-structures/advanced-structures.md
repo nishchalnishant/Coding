@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Advanced Structures
+subtopic: 
+status: unread
+tags: [data-structures, upsc, advanced-structures]
+---
 ## First-Principles Map
 
 ```
@@ -370,3 +377,14 @@ class SkipList:
             new_node.forward[i] = update[i].forward[i]
             update[i].forward[i] = new_node
 ```
+
+## Flashcards
+
+****Trie**?** #flashcard
+insert/search/startsWith O(L). Binary trie for max XOR. Word Search II: Trie + backtrack.
+
+****Segment tree**?** #flashcard
+4*N nodes; build O(N); query/update O(log N). Lazy for range update.
+
+****Fenwick**?** #flashcard
+update(i, delta), query(i) prefix sum; i += i&-i / i -= i&-i.

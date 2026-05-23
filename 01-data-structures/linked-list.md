@@ -1,3 +1,10 @@
+---
+module: 01-data-structures
+topic: Linked List
+subtopic: 
+status: unread
+tags: [data-structures, upsc, linked-list]
+---
 ## First-Principles Map
 
 ```
@@ -445,3 +452,26 @@ class LRUCache:
 - [Hashing](hashing.md) — Copy list with random pointer; LRU cache hash map component
 - [Stack](stack.md) — Recursion uses call stack; iterative reversal eliminates it
 - [Patterns Master](../03-patterns/patterns-master.md) — fast & slow pointer pattern triggers
+
+## Flashcards
+
+**If the problem needs O(1) insert/delete at a known position without shifting → think Linked List because pointer relinking is O(1).?** #flashcard
+If the problem needs O(1) insert/delete at a known position without shifting → think Linked List because pointer relinking is O(1).
+
+**If the problem says "detect cycle" or "find cycle entry" → think Floyd's fast & slow pointers; use `is` not `==` for identity.?** #flashcard
+If the problem says "detect cycle" or "find cycle entry" → think Floyd's fast & slow pointers; use `is` not `==` for identity.
+
+**If the problem says "find middle" or "check palindrome" → think Fast & Slow pointers; slow lands at left-middle for even-length lists.?** #flashcard
+If the problem says "find middle" or "check palindrome" → think Fast & Slow pointers; slow lands at left-middle for even-length lists.
+
+**If the problem says "LRU Cache" or "O(1) eviction" → think Doubly Linked List + Hash Map; dummy head/tail eliminate edge cases.?** #flashcard
+If the problem says "LRU Cache" or "O(1) eviction" → think Doubly Linked List + Hash Map; dummy head/tail eliminate edge cases.
+
+**If the problem says "merge K sorted lists" → think Min-Heap of K nodes with tie-breaking by list index.?** #flashcard
+If the problem says "merge K sorted lists" → think Min-Heap of K nodes with tie-breaking by list index.
+
+**If the problem says "reverse in K-groups" → think count K nodes first, reverse exactly K, recurse on remainder.?** #flashcard
+If the problem says "reverse in K-groups" → think count K nodes first, reverse exactly K, recurse on remainder.
+
+**If the problem says "remove Nth from end without knowing length" → think Two-pointer with N-step head start.?** #flashcard
+If the problem says "remove Nth from end without knowing length" → think Two-pointer with N-step head start.
