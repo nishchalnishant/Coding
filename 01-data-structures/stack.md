@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Stack
 subtopic: 
 status: unread
-tags: [data-structures, upsc, stack]
+tags: [data-structures, stack]
 ---
 ## First-Principles Map
 

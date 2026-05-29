@@ -649,6 +649,754 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
+## Core Trie Operations (Extended)
+
+### Add and Search Word
+
+> [!example] Problem
+> Design a data structure with `addWord(word)` and `search(word)`. `search` supports the wildcard character `.` which matches any single letter. Return true if the word (with wildcards) matches any previously added word.
+
+> [!info] Approach
+> - **WHY:** Exact-match trie search is O(L). The `.` wildcard requires branching — at each `.` we must try all children. A standard trie provides the tree structure needed for this DFS with branching.
+> - **WHAT:** Standard trie insert. Search becomes a recursive DFS: literal characters follow the exact child; `.` recursively searches all children at the current node.
+> - **HOW:** `addWord`: standard trie insert. `search(word, node, i)`: if `i == len(word)` return `node.is_end`. If `word[i] == '.'`, recurse into every child and return True if any succeeds. Otherwise follow the exact child as usual.
+
+> [!note]- Python Solution
+> ```python
+> class WCNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, WCNode] = {}
+>         self.is_end: bool = False
+> 
+> class WordDictionary:
+>     def __init__(self) -> None:
+>         self.root = WCNode()
+> 
+>     def addWord(self, word: str) -> None:
+>         node = self.root
+>         for c in word:
+>             if c not in node.children:
+>                 node.children[c] = WCNode()
+>             node = node.children[c]
+>         node.is_end = True
+> 
+>     def search(self, word: str) -> bool:
+>         return self._dfs(self.root, word, 0)
+> 
+>     def _dfs(self, node: WCNode, word: str, i: int) -> bool:
+>         if i == len(word):
+>             return node.is_end
+>         c = word[i]
+>         if c == '.':
+>             return any(self._dfs(child, word, i + 1) for child in node.children.values())
+>         if c not in node.children:
+>             return False
+>         return self._dfs(node.children[c], word, i + 1)
+> ```
+
+> [!success] Complexity
+> Time O(L) average; O(26^L) worst case for an all-`.` pattern against a full dictionary of L-length words. Space O(N × L) for the trie.
+
+> [!tip] Alternatives
+> - Regex: `re.fullmatch` on every stored word — O(N × L) per query. Simple but doesn't scale.
+> - Hash map per word length: group words by length; for `.` patterns, scan the right bucket — still O(N × L) per query in the worst case.
+
+---
+
+## Prefix Problems
+
+### Search Suggestions System
+
+> [!example] Problem
+> Given a list of products and a search word, return for each prefix of the search word (after typing each character) the top 3 lexicographically smallest products that start with that prefix.
+
+> [!info] Approach
+> - **WHY:** After inserting and sorting, a trie lets us walk to the prefix node once and collect the first 3 words in lexicographic order via a bounded DFS — O(prefix_length + output) per query.
+> - **WHAT:** Insert all products (sorted) into the trie. At each node store up to 3 of the lexicographically smallest words that pass through it (filled at insert time since we sort first).
+> - **HOW:** Sort `products`. Insert each: at every node on the path, append the word to `node.suggestions` if `len < 3`. Query: walk the search word prefix character by character; at each step return `node.suggestions` (or `[]` if the branch doesn't exist, and stay dead for subsequent characters).
+
+> [!note]- Python Solution
+> ```python
+> class SSNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, SSNode] = {}
+>         self.suggestions: list[str] = []
+> 
+> class Solution:
+>     def suggestedProducts(self, products: list[str], searchWord: str) -> list[list[str]]:
+>         root = SSNode()
+>         for product in sorted(products):
+>             node = root
+>             for c in product:
+>                 if c not in node.children:
+>                     node.children[c] = SSNode()
+>                 node = node.children[c]
+>                 if len(node.suggestions) < 3:
+>                     node.suggestions.append(product)
+> 
+>         result: list[list[str]] = []
+>         node: SSNode | None = root
+>         for c in searchWord:
+>             if node and c in node.children:
+>                 node = node.children[c]
+>             else:
+>                 node = None
+>             result.append(node.suggestions if node else [])
+>         return result
+> ```
+
+> [!success] Complexity
+> Time O(N × L log(N × L)) to sort and insert + O(|searchWord|) to query. Space O(N × L).
+
+> [!tip] Alternatives
+> - Binary search on sorted list: for each prefix, binary-search the start and collect next 3 — O(N log N) sort + O(L × log N) query. Simpler, nearly as fast in practice.
+> - Two-pointer on sorted array: same idea but with `bisect_left` — O(log N) per prefix.
+
+---
+
+### Prefix and Suffix Search
+
+> [!example] Problem
+> Design a class `WordFilter` with `f(pref, suff)` returning the index of the word with the given prefix AND suffix (highest index if multiple). Given a list of words at construction.
+
+> [!info] Approach
+> - **WHY:** Checking all words for every query is O(N × L). We need O(1) or O(L) query. The trick: for a word `w`, it has suffix `s` iff the string `s + '#' + w` is a prefix we can look up. Build a trie of all `suff#word` combinations and store the word index at each terminal.
+> - **WHAT:** For each word `words[i]`, for every suffix `suff` of that word, insert `suff + '#' + words[i]` into the trie with value `i`. Query `f(pref, suff)` looks up `suff + '#' + pref` in the trie.
+> - **HOW:** At each trie end-node store the maximum index seen (later words overwrite with higher index). `f(pref, suff)` walks `suff + '#' + pref` and returns the stored index, or -1 if not found.
+
+> [!note]- Python Solution
+> ```python
+> class WordFilter:
+>     def __init__(self, words: list[str]) -> None:
+>         self.lookup: dict[str, int] = {}
+>         for idx, word in enumerate(words):
+>             n = len(word)
+>             for k in range(n + 1):
+>                 # all suffix+#prefix combinations for this word
+>                 key = word[k:] + '#' + word
+>                 self.lookup[key] = idx   # later index overwrites — higher index wins
+> 
+>     def f(self, pref: str, suff: str) -> int:
+>         return self.lookup.get(suff + '#' + pref, -1)
+> ```
+
+> [!success] Complexity
+> Build O(N × L²) — N words, each generates O(L) suffixes, each key is O(L). Query O(L). Space O(N × L²).
+
+> [!tip] Alternatives
+> - Trie-based (true trie of `suff#word`): same O(N × L²) build, O(L) query, more memory per node but no Python dict overhead.
+> - Pair of tries (prefix trie + suffix trie): intersect candidate sets — O(N × L) build but O(output) query for intersection.
+
+---
+
+### Count Words With Given Prefix
+
+> [!example] Problem
+> Given a list of words and a prefix string `pref`, return the number of strings in `words` that contain `pref` as a prefix.
+
+> [!info] Approach
+> - **WHY:** A trie answers prefix-count queries in O(L) after O(N × L) build — count of words in the subtree rooted at the prefix node.
+> - **WHAT:** Trie where each node stores `count` = number of words inserted through it (prefix count).
+> - **HOW:** Insert each word, incrementing `node.count` at every node on the path. Query: walk `pref`; if the walk succeeds, return `node.count`. If any character is missing, return 0.
+
+> [!note]- Python Solution
+> ```python
+> class CWNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, CWNode] = {}
+>         self.count: int = 0
+> 
+> def prefixCount(words: list[str], pref: str) -> int:
+>     root = CWNode()
+>     for word in words:
+>         node = root
+>         for c in word:
+>             if c not in node.children:
+>                 node.children[c] = CWNode()
+>             node = node.children[c]
+>             node.count += 1
+> 
+>     node = root
+>     for c in pref:
+>         if c not in node.children:
+>             return 0
+>         node = node.children[c]
+>     return node.count
+> ```
+
+> [!success] Complexity
+> Time O(N × L) build + O(|pref|) query. Space O(N × L).
+
+> [!tip] Alternatives
+> - Linear scan: `sum(1 for w in words if w.startswith(pref))` — O(N × L), one-liner, fine for small inputs or one-off queries.
+
+---
+
+### Implement Magic Dictionary
+
+> [!example] Problem
+> Design a `MagicDictionary` that builds from a list of words and supports `search(word)`: return true if there exists a word in the dictionary that differs from `word` by exactly one character.
+
+> [!info] Approach
+> - **WHY:** We need "exactly one substitution" match, not exact or prefix match. A trie DFS lets us track a mismatch counter — proceed only if mismatches ≤ 1, returning True only if we reach `is_end` with exactly 1 mismatch.
+> - **WHAT:** Standard trie of dictionary words. `search`: recursive DFS passing a `diff` counter (max 1 allowed). At each character, follow exact child (diff unchanged) or any other child (diff += 1, only if diff < 1 before).
+> - **HOW:** `_dfs(node, word, i, diff)`: base case `i == len(word)` → return `node.is_end and diff == 1`. At each step: for exact char, recurse with same diff. For all other children, recurse with `diff + 1` (only if `diff == 0`). Return True if any branch returns True.
+
+> [!note]- Python Solution
+> ```python
+> class MDNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, MDNode] = {}
+>         self.is_end: bool = False
+> 
+> class MagicDictionary:
+>     def __init__(self) -> None:
+>         self.root = MDNode()
+> 
+>     def buildDict(self, dictionary: list[str]) -> None:
+>         for word in dictionary:
+>             node = self.root
+>             for c in word:
+>                 if c not in node.children:
+>                     node.children[c] = MDNode()
+>                 node = node.children[c]
+>             node.is_end = True
+> 
+>     def search(self, searchWord: str) -> bool:
+>         return self._dfs(self.root, searchWord, 0, 0)
+> 
+>     def _dfs(self, node: MDNode, word: str, i: int, diff: int) -> bool:
+>         if diff > 1:
+>             return False
+>         if i == len(word):
+>             return node.is_end and diff == 1
+>         c = word[i]
+>         for ch, child in node.children.items():
+>             next_diff = diff + (0 if ch == c else 1)
+>             if next_diff <= 1 and self._dfs(child, word, i + 1, next_diff):
+>                 return True
+>         return False
+> ```
+
+> [!success] Complexity
+> Time O(N × L) build; O(26 × L) search — at each node we try at most 26 children but with the diff constraint we only branch once. Space O(N × L).
+
+> [!tip] Alternatives
+> - For each stored word, count character differences — O(N × L) per query. Simple, no trie needed for small N.
+> - Generate all one-off variants of `searchWord` and check membership in a set — O(L × 26) query with O(N × L) build. Equivalent complexity.
+
+---
+
+## XOR Trie (Extended)
+
+### Maximum XOR With an Element From Array
+
+> [!example] Problem
+> Given an array `nums` and queries `[xi, mi]`, for each query find the maximum XOR of `xi` with any element in `nums` that is ≤ `mi`. Queries are independent.
+
+> [!info] Approach
+> - **WHY:** If we could insert all `nums` freely, a standard XOR trie answers each query in O(32). The constraint `num ≤ mi` complicates things. Offline processing sorts both arrays and inserts elements into the trie incrementally as `mi` increases — this way the trie always contains only valid elements.
+> - **WHAT:** Sort queries by `mi`. Sort `nums`. Process queries in order; before answering query `(xi, mi)`, insert all `nums[j] ≤ mi` into the XOR trie. Then query the trie for max XOR with `xi`.
+> - **HOW:** Sort `nums`. Sort queries by `mi` (keep original index for output). Two pointers: pointer `j` into nums. For each query `(xi, mi)`, advance `j` while `nums[j] <= mi`, inserting into trie. If trie is empty (no `num ≤ mi`), answer is -1. Otherwise query `max_xor(xi)`.
+
+> [!note]- Python Solution
+> ```python
+> class XNode:
+>     def __init__(self) -> None:
+>         self.children: dict[int, XNode] = {}
+> 
+> class XORTrie2:
+>     def __init__(self) -> None:
+>         self.root = XNode()
+>         self.size = 0
+> 
+>     def insert(self, num: int) -> None:
+>         node = self.root
+>         for bit in range(31, -1, -1):
+>             b = (num >> bit) & 1
+>             if b not in node.children:
+>                 node.children[b] = XNode()
+>             node = node.children[b]
+>         self.size += 1
+> 
+>     def max_xor(self, num: int) -> int:
+>         node = self.root
+>         xor = 0
+>         for bit in range(31, -1, -1):
+>             b = (num >> bit) & 1
+>             want = 1 - b
+>             if want in node.children:
+>                 xor |= (1 << bit)
+>                 node = node.children[want]
+>             else:
+>                 node = node.children[b]
+>         return xor
+> 
+> def maximizeXor(nums: list[int], queries: list[list[int]]) -> list[int]:
+>     nums.sort()
+>     indexed_queries = sorted(enumerate(queries), key=lambda x: x[1][1])
+>     ans = [-1] * len(queries)
+>     trie = XORTrie2()
+>     j = 0
+>     for orig_idx, (xi, mi) in indexed_queries:
+>         while j < len(nums) and nums[j] <= mi:
+>             trie.insert(nums[j])
+>             j += 1
+>         if trie.size > 0:
+>             ans[orig_idx] = trie.max_xor(xi)
+>     return ans
+> ```
+
+> [!success] Complexity
+> Time O((N + Q) log(N + Q)) for sorting + O((N + Q) × 32) for trie operations = O((N + Q) log(N + Q)). Space O(N × 32).
+
+> [!tip] Alternatives
+> - Brute force per query: O(N × Q) — too slow.
+> - Persistent segment tree on sorted values: O(N log V + Q log V) — same complexity, more complex.
+
+---
+
+### Count Pairs With XOR in a Range
+
+> [!example] Problem
+> Given an array and two integers `low` and `high`, count pairs `(i, j)` with `i < j` such that `low ≤ nums[i] XOR nums[j] ≤ high`.
+
+> [!info] Approach
+> - **WHY:** Brute force O(n²). XOR trie allows us to count, for a fixed `num`, how many previously inserted numbers produce XOR < `threshold` in O(32) — so `count_pairs_xor_leq(high) - count_pairs_xor_leq(low - 1)`.
+> - **WHAT:** Insert numbers one by one. Before inserting `nums[i]`, query the trie for how many existing numbers produce XOR ≤ T with `nums[i]`. The answer is `count(high) - count(low - 1)`.
+> - **HOW:** `count_leq(num, limit)`: walk bit by bit from MSB. At each bit `b` of `num` and `l` of `limit`: if `l == 1`, all numbers with XOR bit 0 at this position contribute (they have XOR < current prefix) — add `node.children[b].size` if it exists, then continue down the `1-b` branch to keep XOR bit = 1. If `l == 0`, must go down `b` branch (XOR bit = 0).
+
+> [!note]- Python Solution
+> ```python
+> class CPNode:
+>     def __init__(self) -> None:
+>         self.children: dict[int, CPNode] = {}
+>         self.cnt: int = 0   # numbers passing through this node
+> 
+> class XORTrieCount:
+>     def __init__(self) -> None:
+>         self.root = CPNode()
+> 
+>     def insert(self, num: int) -> None:
+>         node = self.root
+>         for bit in range(14, -1, -1):   # nums[i] <= 2^14
+>             b = (num >> bit) & 1
+>             if b not in node.children:
+>                 node.children[b] = CPNode()
+>             node = node.children[b]
+>             node.cnt += 1
+> 
+>     def count_leq(self, num: int, limit: int) -> int:
+>         """Count of inserted numbers x such that num XOR x <= limit."""
+>         node = self.root
+>         result = 0
+>         for bit in range(14, -1, -1):
+>             b = (num >> bit) & 1
+>             l = (limit >> bit) & 1
+>             if l == 1:
+>                 # XOR bit = 0 branch: go down b (same bit as num → XOR = 0 < 1)
+>                 if b in node.children:
+>                     result += node.children[b].cnt
+>                 # Continue with XOR bit = 1: go down 1 - b
+>                 nxt = 1 - b
+>                 if nxt not in node.children:
+>                     break
+>                 node = node.children[nxt]
+>             else:
+>                 # Must keep XOR bit = 0: go down b
+>                 if b not in node.children:
+>                     break
+>                 node = node.children[b]
+>         else:
+>             result += 1   # equal case: num XOR x == limit
+>         return result
+> 
+> def countPairs(nums: list[int], low: int, high: int) -> int:
+>     trie = XORTrieCount()
+>     ans = 0
+>     for num in nums:
+>         ans += trie.count_leq(num, high) - trie.count_leq(num, low - 1)
+>         trie.insert(num)
+>     return ans
+> ```
+
+> [!success] Complexity
+> Time O(N × 32). Space O(N × 32).
+
+> [!tip] Alternatives
+> - Brute force: O(N²) — correct for small N.
+> - Merge sort / divide and conquer: O(N log N × log(max_val)) — more complex, same asymptotic.
+
+---
+
+## Bitwise Trie / Other
+
+### Design File System
+
+> [!example] Problem
+> Design a file system supporting `createPath(path, value)` (creates the path with a value; fails if it already exists or parent doesn't exist) and `get(path)` (returns value or -1).
+
+> [!info] Approach
+> - **WHY:** A trie over path components (split by `/`) models the hierarchical file system naturally. `createPath` is insert with a parent-existence check; `get` is lookup.
+> - **WHAT:** Trie where children keys are path component strings (directory names). Each node stores a `value` (default -1 meaning not created).
+> - **HOW:** `createPath(path, value)`: split path by `/`, ignore leading empty string. Walk all but the last component — if any is missing, return False. At the last component, if the node already exists and was explicitly created (value != -1), return False; else create it with the value. `get(path)`: walk all components; return node's value or -1 if path doesn't exist.
+
+> [!note]- Python Solution
+> ```python
+> class FSNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, FSNode] = {}
+>         self.value: int = -1
+> 
+> class FileSystem:
+>     def __init__(self) -> None:
+>         self.root = FSNode()
+> 
+>     def createPath(self, path: str, value: int) -> bool:
+>         parts = path.split('/')[1:]   # skip leading empty string from '/'
+>         node = self.root
+>         for part in parts[:-1]:
+>             if part not in node.children:
+>                 return False   # parent doesn't exist
+>             node = node.children[part]
+>         last = parts[-1]
+>         if last in node.children and node.children[last].value != -1:
+>             return False   # already exists
+>         if last not in node.children:
+>             node.children[last] = FSNode()
+>         node.children[last].value = value
+>         return True
+> 
+>     def get(self, path: str) -> int:
+>         parts = path.split('/')[1:]
+>         node = self.root
+>         for part in parts:
+>             if part not in node.children:
+>                 return -1
+>             node = node.children[part]
+>         return node.value
+> ```
+
+> [!success] Complexity
+> Time O(L) per operation where L = path length (number of components). Space O(N × L) total.
+
+> [!tip] Alternatives
+> - Hash map: store full path strings as keys — O(1) average get, O(1) insert, but parent-existence check requires `path.rsplit('/', 1)[0]` lookup. Simpler, slightly less intuitive.
+
+---
+
+### Stream of Characters
+
+> [!example] Problem
+> Design `StreamChecker` initialized with a list of words. `query(letter)` adds the letter to an internal stream and returns true if any word in the list is a suffix of the current stream.
+
+> [!info] Approach
+> - **WHY:** Checking all words against the current stream suffix by suffix is O(W × L) per query. Building a trie of reversed words and maintaining an active set of in-progress matches reduces this significantly.
+> - **WHAT:** Insert all words reversed into a trie. Maintain a list of active trie nodes — the nodes currently being matched by the stream's recent suffix. On each `query(c)`: advance all active nodes by `c` (on the reversed trie = checking if `c` is a character moving backwards from the end of any word). Add root's child for `c` to start new potential matches.
+> - **HOW:** Build trie of reversed words. Keep `active: list[TrieNode]`. On `query(c)`: new_active = []; for each node in active, if `c` in node.children, add child to new_active. Also check root for `c` (new suffix starting). If any node in new_active has `is_end = True`, return True.
+
+> [!note]- Python Solution
+> ```python
+> class SCNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, SCNode] = {}
+>         self.is_end: bool = False
+> 
+> class StreamChecker:
+>     def __init__(self, words: list[str]) -> None:
+>         self.root = SCNode()
+>         for word in words:
+>             node = self.root
+>             for c in reversed(word):   # insert reversed
+>                 if c not in node.children:
+>                     node.children[c] = SCNode()
+>                 node = node.children[c]
+>             node.is_end = True
+>         self.active: list[SCNode] = []   # nodes currently being extended
+> 
+>     def query(self, letter: str) -> bool:
+>         new_active: list[SCNode] = []
+>         # Try to extend root (start of new suffix match)
+>         if letter in self.root.children:
+>             new_active.append(self.root.children[letter])
+>         # Extend all ongoing matches
+>         for node in self.active:
+>             if letter in node.children:
+>                 new_active.append(node.children[letter])
+>         self.active = new_active
+>         return any(n.is_end for n in self.active)
+> ```
+
+> [!success] Complexity
+> Build O(W × L). Query O(|active| × 1) per call — `active` is bounded by the number of distinct word lengths in the dictionary (at most min(stream_length, W × L)). Space O(W × L) trie + O(stream_length) active list.
+
+> [!tip] Alternatives
+> - Aho-Corasick on reversed stream: equivalent approach, handles the same problem with failure links for guaranteed O(text_length + matches) — more complex to implement.
+> - KMP per word: O(W × L) per query character — degrades with large dictionaries.
+
+---
+
+### Palindrome Pairs
+
+> [!example] Problem
+> Given a list of unique words, find all pairs `(i, j)` such that `words[i] + words[j]` is a palindrome.
+
+> [!info] Approach
+> - **WHY:** Brute force O(N² × L). A trie of reversed words reduces the search: for each word `w`, we look for reversed words that can pair with it to form a palindrome.
+> - **WHAT:** Insert all reversed words into a trie, tagging each end node with the word's index. For each word `w`, walk the trie with `w`'s characters; if we reach a word end before exhausting `w`, check if the remaining suffix of `w` is a palindrome (then `w + rev_word` is a palindrome). If we exhaust `w` first, collect all words in the trie subtree whose corresponding remaining suffix is a palindrome.
+> - **HOW:** At each trie node, store a list of word indices whose reversed word ends here but the trie path continues — these are "prefix palindrome" candidates. Walk trie with `w`; if `node.word_idx != -1` and the remaining `w[i:]` is a palindrome, record `(word_idx, i_word)`. After exhausting `w`, collect from `node.palindrome_suffixes` (stored during build).
+
+> [!note]- Python Solution
+> ```python
+> def palindromePairs(words: list[str]) -> list[list[int]]:
+>     def is_palindrome(s: str) -> bool:
+>         return s == s[::-1]
+> 
+>     word_map = {w: i for i, w in enumerate(words)}
+>     result: list[list[int]] = []
+> 
+>     for i, word in enumerate(words):
+>         n = len(word)
+>         for j in range(n + 1):
+>             # Case 1: word[:j] is palindrome → rev(word[j:]) + word is palindrome
+>             prefix, suffix = word[:j], word[j:]
+>             if is_palindrome(prefix):
+>                 rev_suf = suffix[::-1]
+>                 if rev_suf in word_map and word_map[rev_suf] != i:
+>                     result.append([word_map[rev_suf], i])
+>             # Case 2: word[j:] is palindrome → word + rev(word[:j]) is palindrome
+>             if j < n and is_palindrome(suffix):
+>                 rev_pre = prefix[::-1]
+>                 if rev_pre in word_map and word_map[rev_pre] != i:
+>                     result.append([i, word_map[rev_pre]])
+>         # Avoid duplicates when j == 0 in both cases (empty prefix/suffix overlap)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(N × L²) — N words, each generates O(L) splits, palindrome check O(L) each. Space O(N × L) for hash map.
+
+> [!tip] Alternatives
+> - Trie of reversed words (true trie approach): walk each word through the reversed-word trie; at each step check partial palindromes — same O(N × L²) complexity, more complex code with similar performance in Python.
+> - Brute force with hash map: check `word + rev(other_word)` — O(N² × L).
+
+---
+
+### Design Search Autocomplete System (Trie + DFS Variant)
+
+> [!example] Problem (Variant)
+> Same as LC 642 but store only word-end frequencies (not per-node sentence lists). On each query, DFS from the prefix node to collect all sentences, then return top 3. Useful when memory per node must be minimized.
+
+> [!info] Approach
+> - **WHY:** The main LC 642 solution stores all sentences at every ancestor node — O(S × L) extra space. This variant stores only frequency at terminal nodes; DFS is O(output) per query but saves memory.
+> - **WHAT:** Trie with `freq` at terminal nodes only. Query: walk to prefix node, run DFS to collect all `(freq, sentence)` pairs, return top 3 by `(-freq, sentence)`.
+> - **HOW:** `insert(sentence, freq)`: standard trie, set `node.freq = freq` at terminal. `query(prefix)`: walk to prefix node. DFS collecting `(freq, built_string)` for all `is_end` nodes. Sort and return top 3.
+
+> [!note]- Python Solution
+> ```python
+> class ACNode2:
+>     def __init__(self) -> None:
+>         self.children: dict[str, ACNode2] = {}
+>         self.freq: int = 0
+> 
+> class AutocompleteSystemV2:
+>     def __init__(self, sentences: list[str], times: list[int]) -> None:
+>         self.root = ACNode2()
+>         self.curr_prefix: list[str] = []
+>         self.curr_node: ACNode2 | None = self.root
+>         for s, t in zip(sentences, times):
+>             self._insert(s, t)
+> 
+>     def _insert(self, sentence: str, freq: int) -> None:
+>         node = self.root
+>         for c in sentence:
+>             if c not in node.children:
+>                 node.children[c] = ACNode2()
+>             node = node.children[c]
+>         node.freq += freq
+> 
+>     def _dfs(self, node: ACNode2, path: list[str], results: list[tuple[int, str]]) -> None:
+>         if node.freq > 0:
+>             results.append((node.freq, ''.join(path)))
+>         for ch, child in node.children.items():
+>             path.append(ch)
+>             self._dfs(child, path, results)
+>             path.pop()
+> 
+>     def input(self, c: str) -> list[str]:
+>         if c == '#':
+>             sentence = ''.join(self.curr_prefix)
+>             self._insert(sentence, 1)
+>             self.curr_prefix = []
+>             self.curr_node = self.root
+>             return []
+>         self.curr_prefix.append(c)
+>         if self.curr_node and c in self.curr_node.children:
+>             self.curr_node = self.curr_node.children[c]
+>         else:
+>             self.curr_node = None
+>         if not self.curr_node:
+>             return []
+>         results: list[tuple[int, str]] = []
+>         self._dfs(self.curr_node, self.curr_prefix[:], results)
+>         results.sort(key=lambda x: (-x[0], x[1]))
+>         return [s for _, s in results[:3]]
+> ```
+
+> [!success] Complexity
+> Time O(p + output × L) per input character where p = prefix length, output = matching sentences. Space O(N × L) — no per-node sentence lists.
+
+> [!tip] Alternatives
+> - Per-node cached lists (LC 642 main solution): O(1) query time after O(S × L) build space — trades memory for speed.
+
+---
+
+## Suffix Trie / Advanced
+
+### Implement Trie II (Count Operations)
+
+> [!example] Problem
+> Implement a trie with `insert(word)`, `countWordsEqualTo(word)` (exact count of that word inserted), `countWordsStartingWith(prefix)` (count of all inserted words with that prefix), and `erase(word)` (remove one occurrence).
+
+> [!info] Approach
+> - **WHY:** The basic trie only tracks `is_end` (bool). Tracking insertion counts enables frequency-aware operations — needed when words are inserted multiple times and erased individually.
+> - **WHAT:** Each node stores `pass_count` (how many words passed through during insert) and `end_count` (how many words ended here). `erase` decrements both along the path.
+> - **HOW:** `insert`: walk, incrementing `node.pass_count` at every node, `node.end_count` at terminal. `countWordsStartingWith(prefix)`: walk to prefix node, return `node.pass_count`. `countWordsEqualTo(word)`: walk to terminal, return `node.end_count`. `erase(word)`: walk, decrementing `node.pass_count`; decrement `node.end_count` at terminal. Optionally prune nodes where `pass_count == 0`.
+
+> [!note]- Python Solution
+> ```python
+> class T2Node:
+>     def __init__(self) -> None:
+>         self.children: dict[str, T2Node] = {}
+>         self.pass_count: int = 0
+>         self.end_count: int = 0
+> 
+> class Trie2:
+>     def __init__(self) -> None:
+>         self.root = T2Node()
+> 
+>     def insert(self, word: str) -> None:
+>         node = self.root
+>         for c in word:
+>             if c not in node.children:
+>                 node.children[c] = T2Node()
+>             node = node.children[c]
+>             node.pass_count += 1
+>         node.end_count += 1
+> 
+>     def countWordsEqualTo(self, word: str) -> int:
+>         node = self.root
+>         for c in word:
+>             if c not in node.children:
+>                 return 0
+>             node = node.children[c]
+>         return node.end_count
+> 
+>     def countWordsStartingWith(self, prefix: str) -> int:
+>         node = self.root
+>         for c in prefix:
+>             if c not in node.children:
+>                 return 0
+>             node = node.children[c]
+>         return node.pass_count
+> 
+>     def erase(self, word: str) -> None:
+>         node = self.root
+>         for c in word:
+>             node = node.children[c]
+>             node.pass_count -= 1
+>         node.end_count -= 1
+> ```
+
+> [!success] Complexity
+> Time O(L) per operation. Space O(N × L).
+
+> [!tip] Alternatives
+> - Hash map `word → count` + prefix counter using a separate hash map — O(1) exact count, O(N × L) prefix scan. Simpler but slow for prefix queries.
+
+---
+
+### Shortest Unique Prefix for Every Word
+
+> [!example] Problem
+> Given a list of words, find the shortest prefix for each word that uniquely identifies it (no other word starts with that prefix).
+
+> [!info] Approach
+> - **WHY:** "Unique prefix" means the trie node at the end of the prefix has `pass_count == 1` — only one word passes through it. Walk each word's trie path and stop at the first node with `pass_count == 1`.
+> - **WHAT:** Trie with `pass_count` at each node. For each word, walk until `pass_count == 1` — that depth gives the shortest unique prefix.
+> - **HOW:** Insert all words, incrementing `node.pass_count` at each node. For each word, walk character by character; the first node with `pass_count == 1` marks the end of the shortest unique prefix.
+
+> [!note]- Python Solution
+> ```python
+> class SUPNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, SUPNode] = {}
+>         self.pass_count: int = 0
+> 
+> def shortestUniquePrefixes(words: list[str]) -> list[str]:
+>     root = SUPNode()
+>     for word in words:
+>         node = root
+>         for c in word:
+>             if c not in node.children:
+>                 node.children[c] = SUPNode()
+>             node = node.children[c]
+>             node.pass_count += 1
+> 
+>     result: list[str] = []
+>     for word in words:
+>         node = root
+>         for i, c in enumerate(word):
+>             node = node.children[c]
+>             if node.pass_count == 1:
+>                 result.append(word[:i + 1])
+>                 break
+>         else:
+>             result.append(word)   # entire word is needed (duplicate or full match)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(N × L) build + O(N × L) query. Space O(N × L).
+
+> [!tip] Alternatives
+> - Sort words; compare adjacent: O(N × L log N). For each word find the LCP with its neighbor, take LCP+1 as the unique prefix length.
+
+---
+
+### Maximum XOR of Two Numbers — Prefix Hash Approach
+
+> [!example] Problem (Variant of LC 421)
+> Same as LC 421 (max XOR in array) but solved without an explicit trie node class — using a set-based prefix approach to contrast with the trie solution.
+
+> [!info] Approach
+> - **WHY:** Demonstrates the equivalence of "XOR trie greedy" and "prefix hash greedy" for this problem. Useful to know both for interviews.
+> - **WHAT:** Iterate from bit 31 to 0. At each step maintain a set of prefixes (first `k` bits) of all numbers. Assume the answer's current bit is 1; check if any two prefixes XOR to match the assumed answer so far. If yes, keep the 1-bit; otherwise set it to 0.
+> - **HOW:** `max_xor = 0`. For bit `b` from 31 to 0: `mask = max_xor | (1 << b)`. Compute prefix set `{num & mask for num in nums}`. Try `candidate = max_xor | (1 << b)`. If any two prefixes `a, b` in the set satisfy `a ^ b == candidate` (i.e., `candidate ^ a` is in the set), then `max_xor = candidate`. Else leave `max_xor` unchanged (this bit stays 0).
+
+> [!note]- Python Solution
+> ```python
+> def findMaximumXOR_hash(nums: list[int]) -> int:
+>     max_xor = 0
+>     mask = 0
+>     for bit in range(31, -1, -1):
+>         mask |= (1 << bit)
+>         prefixes = {num & mask for num in nums}
+>         candidate = max_xor | (1 << bit)
+>         # Check if any two prefixes XOR to candidate
+>         if any((candidate ^ p) in prefixes for p in prefixes):
+>             max_xor = candidate
+>     return max_xor
+> ```
+
+> [!success] Complexity
+> Time O(32 × N). Space O(N) for prefix set. Same asymptotic as trie approach.
+
+> [!tip] Alternatives
+> - XOR Trie (see earlier entry): O(32 × N) time, O(32 × N) space — same complexity, trie is more intuitive for the greedy argument.
+
+---
+
 ## See Also
 
 [[string-algorithms]] | [[backtracking]] | [[hashing]]

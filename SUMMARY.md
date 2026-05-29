@@ -3,7 +3,7 @@ module: root
 topic: Summary
 subtopic: 
 status: unread
-tags: [root, upsc, summary]
+tags: [root, summary]
 ---
 # Summary
 

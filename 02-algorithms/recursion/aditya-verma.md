@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Recursion
 subtopic: Aditya Verma
 status: unread
-tags: [algorithms, upsc, recursion]
+tags: [algorithms, recursion]
 ---
 ## First-Principles Map
 

@@ -351,6 +351,43 @@ difficulty: mixed
 
 ---
 
+### Happy Number
+
+> [!example] Problem
+> Determine if a number `n` is "happy": repeatedly replace it with the sum of the squares of its digits. If the process eventually reaches 1, it is happy. Otherwise it loops forever.
+
+> [!info] Approach
+> **Floyd's cycle detection on the implicit sequence.**
+> - **WHY:** The sequence either terminates at 1 or enters a cycle. Instead of tracking all seen numbers in a hash set (O(n) space), we apply Floyd's on the sequence `f(n), f(f(n)), ...` where `f` computes the digit-square sum.
+> - **WHAT:** Fast pointer applies `f` twice per step, slow applies once. If they meet at 1 → happy. If they meet at any other value → cycle, not happy.
+> - **HOW:** Define `digit_square_sum`. Run slow/fast until `slow == fast`. If the meeting value is 1, return True. Else return False.
+
+> [!note]- Python Solution
+> ```python
+> def is_happy(n: int) -> bool:
+>     def digit_square_sum(x: int) -> int:
+>         total = 0
+>         while x:
+>             x, d = divmod(x, 10)
+>             total += d * d
+>         return total
+> 
+>     slow, fast = n, digit_square_sum(n)
+>     while fast != 1 and slow != fast:
+>         slow = digit_square_sum(slow)
+>         fast = digit_square_sum(digit_square_sum(fast))
+>     return fast == 1
+> ```
+
+> [!success] Complexity
+> Time O(log n) per step, converges in O(log n) steps, Space O(1).
+
+> [!tip] Alternatives
+> - Hash set of seen values: simpler, O(k) space where k is cycle length (bounded by ~3 digits → small constant in practice).
+> - Known fact: unhappy numbers always cycle through 4. Check `if fast == 4: return False` as early exit.
+
+---
+
 ## Floyd's Cycle Detection
 
 ### Linked List Cycle II
@@ -579,6 +616,42 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > - Top-down recursive merge sort: O(n log n) time, O(log n) stack. Simpler to write; acceptable unless O(1) space is required.
+
+---
+
+### Insertion Sort List
+
+> [!example] Problem
+> Sort a linked list using insertion sort. Return the sorted head.
+
+> [!info] Approach
+> **Dummy head + find-insertion-point per node.**
+> - **WHY:** Insertion sort builds a sorted prefix. On a linked list we can't binary search, so finding the insertion point is O(n) per element, giving O(n²) total — acceptable when asked specifically for insertion sort.
+> - **WHAT:** Maintain a sorted prefix after a dummy head. For each new node from the original list, find where it fits in the sorted prefix and splice it in.
+> - **HOW:** Detach each node from the original list. Walk the sorted prefix from `dummy` until `prev.next.val > node.val` or `prev.next` is None. Insert `node` between `prev` and `prev.next`.
+
+> [!note]- Python Solution
+> ```python
+> def insertion_sort_list(head: Optional[ListNode]) -> Optional[ListNode]:
+>     dummy = ListNode(float('-inf'))
+>     curr = head
+>     while curr:
+>         nxt = curr.next          # save next before relinking
+>         prev = dummy
+>         while prev.next and prev.next.val <= curr.val:
+>             prev = prev.next
+>         curr.next = prev.next    # insert curr between prev and prev.next
+>         prev.next = curr
+>         curr = nxt
+>     return dummy.next
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(1).
+
+> [!tip] Alternatives
+> - Optimization: if `curr.val >= last sorted node.val`, skip the inner scan — useful for nearly-sorted input.
+> - For O(n log n), use Sort List (LC 148) with merge sort instead.
 
 ---
 
@@ -846,6 +919,38 @@ difficulty: mixed
 
 ---
 
+### Remove Duplicates from Sorted List
+
+> [!example] Problem
+> Given a sorted linked list, remove all duplicates so each value appears at most once. Return the sorted list.
+
+> [!info] Approach
+> **Single pass: skip consecutive equal nodes.**
+> - **WHY:** The list is sorted, so duplicates are adjacent. One pass suffices — no need for a hash set.
+> - **WHAT:** For each node, skip all successors with the same value by jumping `curr.next` forward.
+> - **HOW:** Iterate `curr`. While `curr.next` exists and `curr.next.val == curr.val`, set `curr.next = curr.next.next`. After the inner loop, advance `curr = curr.next`.
+
+> [!note]- Python Solution
+> ```python
+> def delete_duplicates_i(head: Optional[ListNode]) -> Optional[ListNode]:
+>     curr = head
+>     while curr and curr.next:
+>         if curr.val == curr.next.val:
+>             curr.next = curr.next.next  # skip duplicate
+>         else:
+>             curr = curr.next
+>     return head
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - No dummy head needed here — we always keep the current node and only skip successors.
+> - Contrast with LC 82 (Remove Duplicates II): there we skip ALL occurrences including the first; here we keep one copy.
+
+---
+
 ### Remove Duplicates from Sorted List II
 
 > [!example] Problem
@@ -881,6 +986,47 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Recursion: `if head.val == head.next.val: skip all then return delete_duplicates(curr)`. Elegant, O(n) stack.
 > - Do not advance `prev` when a duplicate is found — `prev` stays to potentially connect to the next valid node.
+
+---
+
+### Partition List
+
+> [!example] Problem
+> Given a linked list and a value `x`, partition it so all nodes with values less than `x` come before nodes with values >= `x`. Preserve relative order within each partition.
+
+> [!info] Approach
+> **Two dummy heads — collect two sublists, then join.**
+> - **WHY:** In-place partition on a linked list is tricky because pointers travel only forward. Simpler: collect "<x" nodes and ">=x" nodes into two separate chains, then concatenate.
+> - **WHAT:** `less_dummy` heads the "<x" partition; `greater_dummy` heads the ">=x" partition. Walk the list, routing each node into the appropriate chain. Connect: `less_tail.next = greater_dummy.next`.
+> - **HOW:** Null-terminate the greater chain (`greater_tail.next = None`) to avoid cycles if the original tail landed in the less chain.
+
+> [!note]- Python Solution
+> ```python
+> def partition(head: Optional[ListNode], x: int) -> Optional[ListNode]:
+>     less_dummy = ListNode(0)
+>     greater_dummy = ListNode(0)
+>     less = less_dummy
+>     greater = greater_dummy
+>     curr = head
+>     while curr:
+>         if curr.val < x:
+>             less.next = curr
+>             less = less.next
+>         else:
+>             greater.next = curr
+>             greater = greater.next
+>         curr = curr.next
+>     greater.next = None          # must terminate — curr may have had .next set
+>     less.next = greater_dummy.next
+>     return less_dummy.next
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - In-place pointer manipulation: find a "<x" node after a ">=x" node and move it forward. Harder to write correctly; same complexity.
+> - The `greater.next = None` line is critical — without it you can create a cycle if the last node ended up in the less chain.
 
 ---
 
@@ -931,6 +1077,71 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS with a stack: push `next_node` before recursing into `child`. O(depth) stack space. Conceptually cleaner but O(1) iterative is preferred.
 > - Recursion: `flatten(child)` returns child_tail; splice. O(depth) call stack.
+
+---
+
+### LFU Cache
+
+> [!example] Problem
+> Implement a Least Frequently Used cache with O(1) `get` and `put`. On a tie in frequency, evict the least recently used among tied entries.
+
+> [!info] Approach
+> **Two hash maps + one frequency-keyed map of doubly linked lists.**
+> - **WHY:** LRU is frequency=1-only. LFU needs per-frequency ordering. A `freq → OrderedDict` (or DLL) groups nodes by frequency; `min_freq` tracks the lowest frequency bucket for O(1) eviction.
+> - **WHAT:** `key_map: {key → (val, freq)}`. `freq_map: {freq → OrderedDict[key]}` (OrderedDict preserves insertion order = LRU within each frequency). `min_freq` is the current minimum.
+> - **HOW:** On `get`: increment freq, move key from old freq bucket to new freq bucket, update `min_freq` if old bucket is now empty and `min_freq` was that old freq. On `put`: if over capacity, evict from `freq_map[min_freq]` (popitem from the front = LRU). Then insert at freq=1, set `min_freq = 1`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import OrderedDict
+> 
+> class LFUCache:
+>     def __init__(self, capacity: int):
+>         self.cap = capacity
+>         self.min_freq = 0
+>         self.key_map: dict[int, list] = {}          # key -> [val, freq]
+>         self.freq_map: dict[int, OrderedDict] = {}  # freq -> OrderedDict{key: None}
+> 
+>     def _update(self, key: int) -> None:
+>         val, freq = self.key_map[key]
+>         self.key_map[key] = [val, freq + 1]
+>         self.freq_map[freq].pop(key)
+>         if not self.freq_map[freq]:
+>             del self.freq_map[freq]
+>             if self.min_freq == freq:
+>                 self.min_freq += 1
+>         self.freq_map.setdefault(freq + 1, OrderedDict())[key] = None
+> 
+>     def get(self, key: int) -> int:
+>         if key not in self.key_map:
+>             return -1
+>         self._update(key)
+>         return self.key_map[key][0]
+> 
+>     def put(self, key: int, value: int) -> None:
+>         if self.cap <= 0:
+>             return
+>         if key in self.key_map:
+>             self.key_map[key][0] = value
+>             self._update(key)
+>             return
+>         if len(self.key_map) >= self.cap:
+>             evict_key, _ = self.freq_map[self.min_freq].popitem(last=False)
+>             if not self.freq_map[self.min_freq]:
+>                 del self.freq_map[self.min_freq]
+>             del self.key_map[evict_key]
+>         self.key_map[key] = [value, 1]
+>         self.freq_map.setdefault(1, OrderedDict())[key] = None
+>         self.min_freq = 1
+> ```
+
+> [!success] Complexity
+> Time O(1) per get/put, Space O(capacity).
+
+> [!tip] Alternatives
+> - Two DLLs per frequency (like LRU but nested): avoids OrderedDict; pure pointer operations. More code, same complexity.
+> - Segment tree / heap-based: O(log n) per op; overkill.
+> - Key insight: `min_freq` only resets to 1 on `put` of a new key; on `get`/`update` it can only increase by 1.
 
 ---
 

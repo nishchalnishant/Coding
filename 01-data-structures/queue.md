@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Queue
 subtopic: 
 status: unread
-tags: [data-structures, upsc, queue]
+tags: [data-structures, queue]
 ---
 ## First-Principles Map
 

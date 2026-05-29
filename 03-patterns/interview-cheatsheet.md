@@ -3,7 +3,7 @@ module: 03-patterns
 topic: Interview Cheatsheet
 subtopic: 
 status: unread
-tags: [patterns, upsc, interview-cheatsheet]
+tags: [patterns, interview-cheatsheet]
 ---
 # First-Principles Map — Interview Cheatsheet
 

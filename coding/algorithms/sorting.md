@@ -1001,6 +1001,608 @@ difficulty: mixed
 
 ---
 
+## Radix / Counting Sort
+
+### Sort an Array (Counting Sort Variant)
+
+> [!example] Problem
+> Sort an array of integers in O(n) when values are bounded (LC 912 variant). Use counting sort when the value range is small relative to n.
+
+> [!info] Approach
+> - WHY: Comparison-based sorts bottom out at O(n log n); counting sort exploits a bounded integer domain to achieve O(n + k).
+> - WHAT: Build a frequency array of size `max - min + 1`, accumulate prefix counts, then scatter elements into output in stable order.
+> - HOW: Shift values by `min` so indices stay non-negative. Reconstruct the sorted array by iterating the count array.
+
+> [!note]- Python Solution
+> ```python
+> def sortArray(nums: list[int]) -> list[int]:
+>     lo, hi = min(nums), max(nums)
+>     count = [0] * (hi - lo + 1)
+>     for x in nums:
+>         count[x - lo] += 1
+>     idx = 0
+>     for v, c in enumerate(count):
+>         for _ in range(c):
+>             nums[idx] = v + lo
+>             idx += 1
+>     return nums
+> ```
+
+> [!success] Complexity
+> Time O(n + k), Space O(k), where k = max − min + 1.
+
+> [!tip] Alternatives
+> Radix sort for large k; merge sort / heap sort for unbounded integers.
+
+---
+
+### Radix Sort Implementation
+
+> [!example] Problem
+> Sort a list of non-negative integers using radix sort — process digits from LSD (least significant) to MSD using a stable counting sort per digit pass.
+
+> [!info] Approach
+> - WHY: Achieves O(d · (n + b)) where d = number of digits, b = base (10). Beats comparison sort when d is small.
+> - WHAT: For each digit position (units, tens, hundreds, …), perform a stable counting sort keyed on that digit only.
+> - HOW: Extract digit with `(x // exp) % base`. Counting sort must be stable so relative order from previous passes is preserved.
+
+> [!note]- Python Solution
+> ```python
+> def radixSort(nums: list[int]) -> list[int]:
+>     if not nums:
+>         return nums
+>     base = 10
+>     exp = 1
+>     max_val = max(nums)
+>     while max_val // exp > 0:
+>         count = [0] * base
+>         for x in nums:
+>             count[(x // exp) % base] += 1
+>         for i in range(1, base):
+>             count[i] += count[i - 1]
+>         output = [0] * len(nums)
+>         for x in reversed(nums):          # reversed for stability
+>             d = (x // exp) % base
+>             count[d] -= 1
+>             output[count[d]] = x
+>         nums = output
+>         exp *= base
+>     return nums
+> ```
+
+> [!success] Complexity
+> Time O(d · n), Space O(n + b). d = ⌈log_b(max_val)⌉.
+
+> [!tip] Alternatives
+> For signed integers, sort by absolute value then handle negatives separately. For strings, same LSD approach on characters.
+
+---
+
+### Maximum Number After Digit Swaps (LC 2231)
+
+> [!example] Problem
+> Given a positive integer `num`, swap digits that are at even indices (0-indexed from the left) with digits at even indices only (similarly odd with odd) any number of times. Return the maximum number obtainable.
+
+> [!info] Approach
+> - WHY: Digits at even positions can only be rearranged among themselves; same for odd positions. Maximize each group independently.
+> - WHAT: Use counting sort (digit frequency array) to greedily fill even positions with the largest available even-position digits, then do the same for odd positions.
+> - HOW: Collect digits at even indices into a sorted (descending) pool, refill positions left-to-right from the pool; repeat for odd indices.
+
+> [!note]- Python Solution
+> ```python
+> def maximumSwap(num: int) -> int:
+>     digits = list(str(num))
+>     for parity in (0, 1):
+>         pool = sorted(
+>             [digits[i] for i in range(parity, len(digits), 2)],
+>             reverse=True
+>         )
+>         j = 0
+>         for i in range(parity, len(digits), 2):
+>             digits[i] = pool[j]; j += 1
+>     return int("".join(digits))
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for the sort (n ≤ 9 digits → effectively O(1)), Space O(n).
+
+> [!tip] Alternatives
+> Counting sort bucket per parity group is O(n + 10) = O(n). Note: LC 2231 specifically restricts swaps to same-parity indices.
+
+---
+
+## Interval / Sweep Line
+
+### Insert Interval (LC 57)
+
+> [!example] Problem
+> Given a list of non-overlapping intervals sorted by start time and a new interval, insert the new interval and merge if necessary. Return the resulting list.
+
+> [!info] Approach
+> - WHY: The list is already sorted — no re-sort needed. A single linear pass suffices to find overlap and merge.
+> - WHAT: Three phases: (1) copy all intervals that end before the new interval starts, (2) merge all overlapping intervals into the new interval, (3) copy remaining intervals.
+> - HOW: Overlap condition: `existing.end >= new.start` AND `existing.start <= new.end`.
+
+> [!note]- Python Solution
+> ```python
+> def insert(intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
+>     res = []
+>     i, n = 0, len(intervals)
+>     while i < n and intervals[i][1] < newInterval[0]:
+>         res.append(intervals[i]); i += 1
+>     while i < n and intervals[i][0] <= newInterval[1]:
+>         newInterval[0] = min(newInterval[0], intervals[i][0])
+>         newInterval[1] = max(newInterval[1], intervals[i][1])
+>         i += 1
+>     res.append(newInterval)
+>     res.extend(intervals[i:])
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> Binary search to find insertion point — still O(n) for the merge phase but reduces comparisons in phase 1.
+
+---
+
+### Non-overlapping Intervals (LC 435)
+
+> [!example] Problem
+> Given a list of intervals, find the minimum number of intervals to remove so the rest are non-overlapping.
+
+> [!info] Approach
+> - WHY: Greedy by earliest end time maximizes the number of non-overlapping intervals kept (classic activity selection).
+> - WHAT: Sort by end time. Keep a running `last_end`. For each interval: if it starts ≥ `last_end`, keep it (update `last_end`); otherwise, discard it (increment removal count).
+> - HOW: Removals = total − number kept. Ties in end time: keep the one with the earlier end (already handled by sort).
+
+> [!note]- Python Solution
+> ```python
+> def eraseOverlapIntervals(intervals: list[list[int]]) -> int:
+>     intervals.sort(key=lambda x: x[1])
+>     last_end = float('-inf')
+>     kept = 0
+>     for start, end in intervals:
+>         if start >= last_end:
+>             last_end = end
+>             kept += 1
+>     return len(intervals) - kept
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(1).
+
+> [!tip] Alternatives
+> Sort by start time and greedily remove the interval with the later end — same result, slightly different framing.
+
+---
+
+### Minimum Number of Arrows to Burst Balloons (LC 452)
+
+> [!example] Problem
+> Balloons are represented as horizontal intervals on the x-axis. An arrow shot vertically at x bursts all balloons whose interval includes x. Find the minimum number of arrows needed to burst all balloons.
+
+> [!info] Approach
+> - WHY: Same greedy activity-selection structure as LC 435. Sort by end point; one arrow at the earliest end bursts as many overlapping balloons as possible.
+> - WHAT: Sort intervals by end. Fire an arrow at the first interval's end. Skip all balloons burst by this arrow. Fire again at the next unbursted balloon's end.
+> - HOW: A balloon `[start, end]` is burst by arrow at position `pos` iff `start <= pos <= end`.
+
+> [!note]- Python Solution
+> ```python
+> def findMinArrowShots(points: list[list[int]]) -> int:
+>     points.sort(key=lambda x: x[1])
+>     arrows = 1
+>     arrow_pos = points[0][1]
+>     for start, end in points[1:]:
+>         if start > arrow_pos:
+>             arrows += 1
+>             arrow_pos = end
+>     return arrows if points else 0
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(1).
+
+> [!tip] Alternatives
+> Sort by start time with a priority queue (overkill here). Note the strict inequality vs LC 435 — touching endpoints count as burst.
+
+---
+
+## Offline Sorting Tricks
+
+### Sort Array by Parity (LC 905)
+
+> [!example] Problem
+> Given an array of integers, move all even integers to the front and all odd integers to the back. Order within each group does not matter.
+
+> [!info] Approach
+> - WHY: Classic two-pointer Dutch-flag-style partition. O(n) time, O(1) extra space.
+> - WHAT: Left pointer seeks odd from the left; right pointer seeks even from the right. Swap when both are found.
+> - HOW: Invariant: everything left of `lo` is even; everything right of `hi` is odd.
+
+> [!note]- Python Solution
+> ```python
+> def sortArrayByParity(nums: list[int]) -> list[int]:
+>     lo, hi = 0, len(nums) - 1
+>     while lo < hi:
+>         while lo < hi and nums[lo] % 2 == 0:
+>             lo += 1
+>         while lo < hi and nums[hi] % 2 == 1:
+>             hi -= 1
+>         nums[lo], nums[hi] = nums[hi], nums[lo]
+>         lo += 1; hi -= 1
+>     return nums
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> `sorted(nums, key=lambda x: x % 2)` — O(n log n), stable but extra space. For stable in-place: insertion sort by parity — O(n²).
+
+---
+
+### Relative Sort Array (LC 1122)
+
+> [!example] Problem
+> Given `arr1` and `arr2` (all elements of `arr2` are distinct and present in `arr1`), sort `arr1` so that elements appearing in `arr2` come first in the relative order defined by `arr2`. Elements not in `arr2` follow in ascending order.
+
+> [!info] Approach
+> - WHY: Custom rank sort: elements in `arr2` get rank equal to their index in `arr2`; elements not in `arr2` get rank `len(arr2) + value` to sort them ascending after the defined group.
+> - WHAT: Build a rank map from `arr2`. Sort `arr1` with a key function using this rank map.
+> - HOW: Key = `rank[x]` if `x in rank` else `len(arr2) + x`.
+
+> [!note]- Python Solution
+> ```python
+> def relativeSortArray(arr1: list[int], arr2: list[int]) -> list[int]:
+>     rank = {v: i for i, v in enumerate(arr2)}
+>     return sorted(arr1, key=lambda x: rank[x] if x in rank else len(arr2) + x)
+> ```
+
+> [!success] Complexity
+> Time O(n log n + m), Space O(m), where m = len(arr2).
+
+> [!tip] Alternatives
+> Counting sort: collect elements by their `arr2` position bucket, then append remaining sorted. O(n + m + max_val).
+
+---
+
+### Advantages Shuffle (LC 870)
+
+> [!example] Problem
+> Given `nums1` and `nums2` of equal length, reorder `nums1` to maximize the number of positions where `nums1[i] > nums2[i]`. Return the reordered `nums1`.
+
+> [!info] Approach
+> - WHY: Greedy: for each element of `nums2` (sorted descending), try to "beat" it with the smallest element of `nums1` that is still larger. If none can beat it, assign the globally smallest remaining element (sacrifice it).
+> - WHAT: Sort `nums1`. Use a deque sorted ascending. Process `nums2` sorted by value descending. For each `nums2[i]`, if `nums1`'s max > `nums2[i]`, assign that max; otherwise assign the min (sacrifice).
+> - HOW: Track original indices of `nums2` to place answers correctly.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> def advantageCount(nums1: list[int], nums2: list[int]) -> list[int]:
+>     nums1.sort()
+>     order = sorted(range(len(nums2)), key=lambda i: -nums2[i])
+>     lo, hi = 0, len(nums1) - 1
+>     res = [0] * len(nums1)
+>     dq = deque(sorted(nums1))
+>     for i in order:
+>         if dq[-1] > nums2[i]:
+>             res[i] = dq.pop()
+>         else:
+>             res[i] = dq.popleft()
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> Two-pointer on sorted `nums1` and sorted `(value, original_index)` pairs from `nums2` — same complexity, slightly cleaner.
+
+---
+
+## Topological Sort
+
+### Course Schedule II (LC 210)
+
+> [!example] Problem
+> There are `n` courses labeled 0 to n-1 with prerequisites as directed edges. Return a valid order to finish all courses, or an empty list if a cycle exists.
+
+> [!info] Approach
+> - WHY: Topological sort detects cycles and produces a valid linear ordering of a DAG. Kahn's BFS is iterative and cycle-detection falls out naturally (unprocessed nodes remain).
+> - WHAT: Build adjacency list + in-degree array. Enqueue all nodes with in-degree 0. BFS: pop node → add to order → decrement neighbors' in-degrees → enqueue any that reach 0.
+> - HOW: If `len(order) < n`, a cycle exists → return `[]`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> def findOrder(numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+>     graph = [[] for _ in range(numCourses)]
+>     indegree = [0] * numCourses
+>     for a, b in prerequisites:
+>         graph[b].append(a)
+>         indegree[a] += 1
+>     queue = deque(i for i in range(numCourses) if indegree[i] == 0)
+>     order = []
+>     while queue:
+>         node = queue.popleft()
+>         order.append(node)
+>         for nei in graph[node]:
+>             indegree[nei] -= 1
+>             if indegree[nei] == 0:
+>                 queue.append(nei)
+>     return order if len(order) == numCourses else []
+> ```
+
+> [!success] Complexity
+> Time O(V + E), Space O(V + E).
+
+> [!tip] Alternatives
+> DFS-based topological sort with `visited` / `in-stack` coloring. Post-order DFS reversal gives topo order; back edge → cycle.
+
+---
+
+### Alien Dictionary (LC 269)
+
+> [!example] Problem
+> Given a sorted list of words in an alien language, derive the character ordering (alphabet order) of the alien language. Return any valid ordering, or `""` if contradictory.
+
+> [!info] Approach
+> - WHY: Adjacent words in the sorted list reveal relative character ordering. Build a directed graph from these relations, then topological sort gives the alphabet.
+> - WHAT: Compare each consecutive pair of words character-by-character; the first mismatch gives an edge `u → v` (u comes before v). Detect invalid input: if word A is a prefix of shorter word B, that's impossible.
+> - HOW: Kahn's BFS topological sort on the character graph. Cycle → return `""`. Unconnected characters can appear anywhere.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict, deque
+> def alienOrder(words: list[str]) -> str:
+>     graph = defaultdict(set)
+>     indegree = {c: 0 for w in words for c in w}
+>     for i in range(len(words) - 1):
+>         w1, w2 = words[i], words[i + 1]
+>         min_len = min(len(w1), len(w2))
+>         if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:
+>             return ""
+>         for c1, c2 in zip(w1, w2):
+>             if c1 != c2:
+>                 if c2 not in graph[c1]:
+>                     graph[c1].add(c2)
+>                     indegree[c2] += 1
+>                 break
+>     queue = deque(c for c in indegree if indegree[c] == 0)
+>     order = []
+>     while queue:
+>         c = queue.popleft()
+>         order.append(c)
+>         for nei in graph[c]:
+>             indegree[nei] -= 1
+>             if indegree[nei] == 0:
+>                 queue.append(nei)
+>     return "".join(order) if len(order) == len(indegree) else ""
+> ```
+
+> [!success] Complexity
+> Time O(C) where C = total characters across all words, Space O(U + E), U = unique chars.
+
+> [!tip] Alternatives
+> DFS with cycle detection (white/gray/black coloring). Output is reverse post-order.
+
+---
+
+## External Sort / K-way Merge
+
+### Find K Pairs with Smallest Sums (LC 373)
+
+> [!example] Problem
+> Given two sorted arrays `nums1` and `nums2`, find the k pairs `(nums1[i], nums2[j])` with the smallest sums.
+
+> [!info] Approach
+> - WHY: K-way merge pattern: each row `i` of the implicit (nums1 × nums2) matrix is sorted. A min-heap efficiently extracts the global minimum at each step.
+> - WHAT: Seed the heap with `(nums1[i] + nums2[0], i, 0)` for all i < min(k, len(nums1)). Each pop yields the next best pair; push the next pair in the same row (increment j).
+> - HOW: At most k pops → O(k log k) after O(min(k, m) log min(k, m)) initial heapify.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> def kSmallestPairs(nums1: list[int], nums2: list[int], k: int) -> list[list[int]]:
+>     if not nums1 or not nums2:
+>         return []
+>     heap = [(nums1[i] + nums2[0], i, 0) for i in range(min(k, len(nums1)))]
+>     heapq.heapify(heap)
+>     res = []
+>     while heap and len(res) < k:
+>         _, i, j = heapq.heappop(heap)
+>         res.append([nums1[i], nums2[j]])
+>         if j + 1 < len(nums2):
+>             heapq.heappush(heap, (nums1[i] + nums2[j + 1], i, j + 1))
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(k log k), Space O(k).
+
+> [!tip] Alternatives
+> Binary search on sum value + counting — complex but useful when k is very large. Brute force: generate all pairs and heap-select top-k — O(mn log k).
+
+---
+
+### Kth Smallest Element in a Sorted Matrix (LC 378)
+
+> [!example] Problem
+> Given an n × n matrix where each row and column is sorted in ascending order, find the kth smallest element.
+
+> [!info] Approach
+> - WHY: Two canonical approaches — heap-based k-way merge and binary search on value range. Binary search is O(n log(max − min)) and avoids heap overhead.
+> - WHAT (binary search): Binary search on the answer value in [matrix[0][0], matrix[n-1][n-1]]. Count elements ≤ mid using a two-pointer staircase from top-right corner.
+> - HOW: Count function: start at top-right; if `matrix[r][c] <= mid` → add `r+1` to count, move right; else move up. O(n) per count call.
+
+> [!note]- Python Solution
+> ```python
+> def kthSmallest(matrix: list[list[int]], k: int) -> int:
+>     n = len(matrix)
+>     def count_le(mid):
+>         r, c = 0, n - 1
+>         cnt = 0
+>         while r < n and c >= 0:
+>             if matrix[r][c] <= mid:
+>                 cnt += r + 1
+>                 c -= 1
+>             else:
+>                 r += 1
+>         return cnt
+>     lo, hi = matrix[0][0], matrix[n - 1][n - 1]
+>     while lo < hi:
+>         mid = (lo + hi) // 2
+>         if count_le(mid) < k:
+>             lo = mid + 1
+>         else:
+>             hi = mid
+>     return lo
+> ```
+
+> [!success] Complexity
+> Time O(n log(max − min)), Space O(1). Heap approach: O(k log n), Space O(n).
+
+> [!tip] Alternatives
+> Min-heap k-way merge: push first column, pop k times each time pushing the next in the same row — O(k log n).
+
+---
+
+## Partial Sort / Order Statistics
+
+### Kth Largest Element in a Stream (LC 703)
+
+> [!example] Problem
+> Design a class that finds the kth largest element in a stream. Initialize with k and an initial list; support `add(val)` returning the kth largest after each insertion.
+
+> [!info] Approach
+> - WHY: A min-heap of size k maintains exactly the k largest elements seen so far. The heap root is always the kth largest.
+> - WHAT: On initialization, add all elements and trim to size k. On `add`: push new value, pop if size > k, return heap[0].
+> - HOW: Heap size invariant: always ≤ k. After each add, heap[0] = k-th largest among all seen elements.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> class KthLargest:
+>     def __init__(self, k: int, nums: list[int]):
+>         self.k = k
+>         self.heap = nums[:]
+>         heapq.heapify(self.heap)
+>         while len(self.heap) > k:
+>             heapq.heappop(self.heap)
+>     def add(self, val: int) -> int:
+>         heapq.heappush(self.heap, val)
+>         if len(self.heap) > self.k:
+>             heapq.heappop(self.heap)
+>         return self.heap[0]
+> ```
+
+> [!success] Complexity
+> Init O(n log k), add O(log k), Space O(k).
+
+> [!tip] Alternatives
+> Balanced BST / order-statistics tree for O(log n) add and O(1) kth query. Overkill for fixed k.
+
+---
+
+### Find Median from Data Stream (LC 295)
+
+> [!example] Problem
+> Design a data structure that supports adding integers and querying the current median at any time.
+
+> [!info] Approach
+> - WHY: Two heaps maintain a balanced partition: a max-heap for the lower half and a min-heap for the upper half. Median is always accessible at the tops.
+> - WHAT: `lo` = max-heap (negate values for Python's min-heap), `hi` = min-heap. Invariant: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. Median = `lo[0]` if odd total, else `(-lo[0] + hi[0]) / 2`.
+> - HOW: On add: push to `lo` (negate), rebalance by moving top of `lo` to `hi`, then if `len(hi) > len(lo)` move top of `hi` back to `lo`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> class MedianFinder:
+>     def __init__(self):
+>         self.lo = []  # max-heap (negated)
+>         self.hi = []  # min-heap
+>     def addNum(self, num: int) -> None:
+>         heapq.heappush(self.lo, -num)
+>         heapq.heappush(self.hi, -heapq.heappop(self.lo))
+>         if len(self.hi) > len(self.lo):
+>             heapq.heappush(self.lo, -heapq.heappop(self.hi))
+>     def findMedian(self) -> float:
+>         if len(self.lo) > len(self.hi):
+>             return -self.lo[0]
+>         return (-self.lo[0] + self.hi[0]) / 2
+> ```
+
+> [!success] Complexity
+> addNum O(log n), findMedian O(1), Space O(n).
+
+> [!tip] Alternatives
+> Sorted list with bisect — O(n) insert, O(1) median. Order-statistics tree — O(log n) insert/query. For follow-up: if values are bounded integers, use two BITs for O(log M) all operations.
+
+---
+
+### Sliding Window Median (LC 480)
+
+> [!example] Problem
+> Given an array and window size k, return the median of each sliding window as it moves from left to right.
+
+> [!info] Approach
+> - WHY: Extends the two-heap median approach with lazy deletion to handle outgoing elements.
+> - WHAT: Two heaps (`lo` max-heap, `hi` min-heap) as in LC 295. Keep a `to_remove` counter map. When sliding the window, mark the outgoing element for lazy removal. Rebalance heap sizes. Before reading median, skip heap tops that are flagged for removal.
+> - HOW: Rebalance: after each add/remove, ensure `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. Lazy removal: pop from heap top while `heap[0]` is in `to_remove`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import defaultdict
+> def medianSlidingWindow(nums: list[int], k: int) -> list[float]:
+>     lo, hi = [], []  # lo: max-heap (neg), hi: min-heap
+>     remove = defaultdict(int)
+>
+>     def push(x):
+>         if lo and -lo[0] >= x:
+>             heapq.heappush(lo, -x)
+>         else:
+>             heapq.heappush(hi, x)
+>
+>     def rebalance():
+>         while lo and remove[-lo[0]]:
+>             remove[-lo[0]] -= 1; heapq.heappop(lo)
+>         while hi and remove[hi[0]]:
+>             remove[hi[0]] -= 1; heapq.heappop(hi)
+>         while len(lo) > len(hi) + 1:
+>             heapq.heappush(hi, -heapq.heappop(lo))
+>         while len(hi) > len(lo):
+>             heapq.heappush(lo, -heapq.heappop(hi))
+>
+>     def get_median():
+>         rebalance()
+>         if k % 2 == 1:
+>             return float(-lo[0])
+>         return (-lo[0] + hi[0]) / 2.0
+>
+>     for x in nums[:k]:
+>         push(x)
+>     rebalance()
+>     res = [get_median()]
+>     for i in range(k, len(nums)):
+>         push(nums[i])
+>         remove[nums[i - k]] += 1
+>         rebalance()
+>         res.append(get_median())
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(n log k), Space O(k).
+
+> [!tip] Alternatives
+> Two `SortedList` (from `sortedcontainers`) — O(n log k), cleaner code. Segment tree on compressed coordinates — O(n log n).
+
+---
+
 ## See Also
 
 [[divide-and-conquer]] | [[heap]] | [[binary-search]] | [[greedy]]

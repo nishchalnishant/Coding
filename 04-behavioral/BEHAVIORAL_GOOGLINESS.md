@@ -3,7 +3,7 @@ module: 04-behavioral
 topic: Behavioral Googliness
 subtopic: 
 status: unread
-tags: [behavioral, upsc, behavioral-googliness]
+tags: [behavioral, behavioral-googliness]
 ---
 # First-Principles Map — Google Behavioral & Googliness
 

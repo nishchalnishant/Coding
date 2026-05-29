@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Backtracking
 subtopic: 
 status: unread
-tags: [algorithms, upsc, backtracking]
+tags: [algorithms, backtracking]
 ---
 ## First-Principles Map
 

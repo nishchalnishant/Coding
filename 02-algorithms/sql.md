@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Sql
 subtopic: 
 status: unread
-tags: [algorithms, upsc, sql]
+tags: [algorithms, sql]
 ---
 ## First-Principles Map
 

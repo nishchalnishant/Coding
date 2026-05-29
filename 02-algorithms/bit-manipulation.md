@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Bit Manipulation
 subtopic: 
 status: unread
-tags: [algorithms, upsc, bit-manipulation]
+tags: [algorithms, bit-manipulation]
 ---
 ## First-Principles Map
 

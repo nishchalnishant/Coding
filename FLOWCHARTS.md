@@ -3,7 +3,7 @@ module: root
 topic: Flowcharts
 subtopic: 
 status: unread
-tags: [root, upsc, flowcharts]
+tags: [root, flowcharts]
 ---
 # Google SDE-2 Prep — Flowcharts
 _Last updated: 2026-05-17 (gap audit pass)_

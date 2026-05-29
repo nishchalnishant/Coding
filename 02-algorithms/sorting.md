@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Sorting
 subtopic: 
 status: unread
-tags: [algorithms, upsc, sorting]
+tags: [algorithms, sorting]
 ---
 ## First-Principles Map
 

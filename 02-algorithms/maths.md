@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Maths
 subtopic: 
 status: unread
-tags: [algorithms, upsc, maths]
+tags: [algorithms, maths]
 ---
 ## First-Principles Map
 

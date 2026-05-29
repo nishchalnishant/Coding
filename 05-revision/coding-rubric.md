@@ -3,7 +3,7 @@ module: 05-revision
 topic: Coding Rubric
 subtopic: 
 status: unread
-tags: [revision, upsc, coding-rubric]
+tags: [revision, coding-rubric]
 ---
 # First-Principles Map — Coding Interview Rubric
 
@@ -270,38 +270,38 @@ The interviewer expects you to start with the brute force, explain why it's slow
 Problems that appear at the ceiling of SDE-3 coding rounds. If you can solve these fluently, you are prepared.
 
 ### Dynamic Programming
-- [ ] Edit Distance (2D DP, string alignment)
-- [ ] Burst Balloons (interval DP, non-standard state)
-- [ ] Strange Printer (interval DP)
-- [ ] Regular Expression Matching (2D DP with wildcards)
-- [ ] Minimum Cost to Cut a Stick (interval DP)
-- [ ] Longest Increasing Path in Matrix (DFS + memoization)
+- [ ] Edit Distance — **2D DP**; `dp[i][j]` = edit distance of `s1[:i]` and `s2[:j]`; transition: match → diagonal, else min(insert, delete, replace) + 1
+- [ ] Burst Balloons — **Interval DP**; key trick: think of `k` as the *last* balloon burst in range `[l,r]`, not the first; avoids dependency on already-burst neighbors
+- [ ] Strange Printer — **Interval DP**; key trick: a turn can extend an existing character's print range for free; `dp[i][j] = dp[i+1][j]` then check if any `k` where `s[k]==s[i]` can merge
+- [ ] Regular Expression Matching — **2D DP with `*` lookahead**; `*` means 0 or more of preceding; key: `dp[i][j]` = does `s[:i]` match `p[:j]`; `*` case: zero uses (`dp[i][j-2]`) or one-more use (`dp[i-1][j]` if chars match)
+- [ ] Minimum Cost to Cut a Stick — **Interval DP**; add 0 and n as sentinel cuts; `dp[i][j]` = min cost to make all cuts between sentinel[i] and sentinel[j]; cost of a cut = length of current segment
+- [ ] Longest Increasing Path in Matrix — **DFS + memoization on DAG**; key: no visited set needed because strictly increasing means no cycles; memoize result per cell
 
 ### Graphs
-- [ ] Word Ladder II (BFS + backtracking, hard)
-- [ ] Alien Dictionary (topological sort, implicit graph)
-- [ ] Reconstruct Itinerary (Eulerian path, Hierholzer's)
-- [ ] Critical Connections (Tarjan's bridges)
-- [ ] Swim in Rising Water (Dijkstra or binary search + BFS)
+- [ ] Word Ladder II — **BFS for shortest path length + DFS/backtrack for all paths**; key trick: build neighbor graph during BFS, then DFS only along edges that decrease level (next level = current + 1)
+- [ ] Alien Dictionary — **Topological sort on implicit graph**; key: compare adjacent words in list — if `word[i]` is a prefix of `word[i+1]` but longer, return `""`; each differing char gives a directed edge
+- [ ] Reconstruct Itinerary — **Eulerian path via Hierholzer's**; key: use min-heap for lexicographic order; post-order DFS (add to result *after* all neighbors visited); reverse at end
+- [ ] Critical Connections (Tarjan's) — **DFS with `disc[]` and `low[]`**; edge `u→v` is a bridge iff `low[v] > disc[u]`; `low[v]` = earliest disc reachable from v's subtree without using parent edge
+- [ ] Swim in Rising Water — **Dijkstra** (min-cost path where cost = max edge weight); or binary search on answer + BFS/DFS to verify reachability at that water level
 
 ### Arrays / Sliding Window
-- [ ] Minimum Window Substring (sliding window, hard)
-- [ ] Trapping Rain Water (two pointers, hard)
-- [ ] Median of Two Sorted Arrays (binary search, very hard)
-- [ ] Sliding Window Maximum (monotonic deque)
-- [ ] Count of Smaller Numbers After Self (merge sort / BIT)
+- [ ] Minimum Window Substring — **Sliding window with frequency map**; expand right until valid, then contract left; track `have` vs `need` counts; O(n)
+- [ ] Trapping Rain Water — **Two pointers**; key: water at cell = `min(left_max, right_max) - height[i]`; process from the shorter-max side, no precompute needed; O(n) O(1)
+- [ ] Median of Two Sorted Arrays — **Binary search on partition**; partition both arrays such that left halves ≤ right halves; binary search on the smaller array's partition index; O(log min(m,n))
+- [ ] Sliding Window Maximum — **Monotonic deque** (decreasing); deque stores indices; pop front if out of window, pop back if smaller than current; front is always max
+- [ ] Count of Smaller Numbers After Self — **Merge sort**: during merge, count how many right-half elements end up before each left-half element; or **BIT** with coordinate compression
 
 ### Trees
-- [ ] Serialize/Deserialize Binary Tree
-- [ ] Binary Tree Maximum Path Sum (tree DP)
-- [ ] Recover Binary Search Tree (Morris traversal)
-- [ ] Vertical Order Traversal of Binary Tree
+- [ ] Serialize/Deserialize Binary Tree — **Preorder with null markers**; serialize: `val,left,right`; deserialize: use a queue/iterator, build node then recurse; no delimiter needed if you use fixed-width or comma-separated
+- [ ] Binary Tree Maximum Path Sum — **Tree DP**; at each node: `gain = node.val + max(0, left_gain) + max(0, right_gain)`; update global max; return `node.val + max(0, left_gain, right_gain)` (single path up)
+- [ ] Recover Binary Search Tree — **Morris in-order traversal** (O(1) space); find two swapped nodes: first swap = where `prev > curr` first time, second swap = where it happens again (or same `curr`); swap their values
+- [ ] Vertical Order Traversal — **BFS with (row, col) coordinates**; group nodes by col, sort by row within col, sort by val within same (row, col); use `collections.defaultdict` + sort
 
 ### Design
-- [ ] LRU Cache (O(1) get/put)
-- [ ] LFU Cache (O(1) get/put) — harder
-- [ ] Design Twitter / Top-K tweets (heap + hash map)
-- [ ] Implement Trie with Wildcard Search
+- [ ] LRU Cache — **HashMap + Doubly Linked List**; map stores key→node; DLL maintains recency order; `get` and `put` both O(1); use sentinel head/tail to avoid null checks
+- [ ] LFU Cache — **HashMap of key→(val, freq) + HashMap of freq→OrderedDict**; track min_freq; on access, move key from `freq[f]` to `freq[f+1]`; evict from `freq[min_freq]`; all O(1)
+- [ ] Design Twitter / Top-K tweets — **Heap** of size 10; each user has a tweet list (id, timestamp); merge across followees using min-heap; maintain follow/unfollow sets per user
+- [ ] Implement Trie with Wildcard Search — **Trie + DFS for `.` wildcard**; `search` recurses into all children at `.` nodes; `addWord` is standard trie insert; key: wildcard only in search, not insert
 
 > [!TIP]
 > Track which of these you can solve in < 25 minutes without hints. That is the SDE-3 bar. Any you cannot → add to your next week's practice queue.

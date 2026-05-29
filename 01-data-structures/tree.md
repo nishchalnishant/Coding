@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Tree
 subtopic: 
 status: unread
-tags: [data-structures, upsc, tree]
+tags: [data-structures, tree]
 ---
 ## First-Principles Map
 

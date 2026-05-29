@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: String
 subtopic: 
 status: unread
-tags: [algorithms, upsc, string]
+tags: [algorithms, string]
 ---
 ## First-Principles Map
 

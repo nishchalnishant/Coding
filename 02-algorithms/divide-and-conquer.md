@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Divide And Conquer
 subtopic: 
 status: unread
-tags: [algorithms, upsc, divide-and-conquer]
+tags: [algorithms, divide-and-conquer]
 ---
 ## First-Principles Map
 

@@ -1,6 +1,6 @@
-# Start Here — Google SDE-2 (L4) Prep Hub
+# Start Here — Google SDE-3 (L5) Prep Hub
 
-**Goal:** Crack Google SDE-2 (L4) in a 4–6 week sprint.  
+**Goal:** Crack Google SDE-3 (L5) in a 6-week sprint.  
 **Approach:** Topic-first navigation — pick a DS or algorithm category, read the deep-dive, drill problems, repeat.
 
 ---
@@ -28,16 +28,18 @@
 
 ---
 
-## Recommended 4-Week Study Order
+## 6-Week SDE-3 Study Plan
 
 | Week | Topics | Files |
 |------|--------|-------|
 | **Week 1** | Arrays, Strings, Hashing, Linked Lists | `01-data-structures/array.md`, `01-data-structures/hashing.md`, `01-data-structures/linked-list.md` + `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md` |
 | **Week 2** | Trees, BST, Graphs, BFS/DFS | `01-data-structures/tree.md`, `01-data-structures/graphs.md`, `02-algorithms/graph.md`, `02-algorithms/advanced-graphs.md` |
 | **Week 3** | DP, Backtracking, Greedy, Recursion | `02-algorithms/dynamic-programming/`, `02-algorithms/backtracking.md`, `02-algorithms/greedy.md`, `02-algorithms/recursion/` |
-| **Week 4** | Binary Search, Heap, Tries, Behavioral | `02-algorithms/binary-search.md`, `01-data-structures/heap.md`, `01-data-structures/trie.md`, `04-behavioral/` |
+| **Week 4** | Binary Search, Heap, Tries, Segment Tree, Union-Find, Bit Manipulation | `02-algorithms/binary-search.md`, `01-data-structures/heap.md`, `01-data-structures/trie.md`, `01-data-structures/segment-tree.md`, `02-algorithms/union-find.md` |
+| **Week 5** | SDE-3 Hard Problems — full checklist | `05-revision/coding-rubric.md` §SDE-3 Hard Problem Checklist; log every attempt in `05-revision/mock-log.md` |
+| **Week 6** | Mock interviews (2/week minimum), LLD round prep, behavioral polish | `03-patterns/lld.md`, `04-behavioral/behavioral.md`, `03-patterns/system-design.md` |
 
-> **If you have 6 weeks:** Add a Week 5 (Segment Trees, Union-Find, Bit Manipulation, Math) and Week 6 (full mock interviews + revision).
+> **SDE-3 bar:** Mediums fluent, hards cold in < 25 min, system design at scale, LLD + SOLID, leadership signals in behavioral.
 
 ---
 
@@ -51,6 +53,9 @@
 | Complexity + syntax quick sheet | `05-revision/README.md` |
 | Behavioral STAR stories | `04-behavioral/behavioral.md` |
 | System design guide | `03-patterns/system-design.md` |
+| LLD guide (OOP/design patterns) | `03-patterns/lld.md` |
+| Mock interview log | `05-revision/mock-log.md` |
+| SDE-3 hard checklist + annotations | `05-revision/coding-rubric.md` |
 
 ---
 

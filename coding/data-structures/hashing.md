@@ -304,6 +304,76 @@ difficulty: mixed
 
 ---
 
+### Top K Frequent Elements
+
+> [!example] Problem
+> Given an integer array `nums` and integer `k`, return the `k` most frequent elements. Order of output does not matter.
+
+> [!info] Approach
+> - **WHY:** Sorting by frequency is O(n log n). Bucket sort on frequency gives O(n).
+> - **WHAT:** Count frequencies, then place each number into a bucket indexed by its frequency. Collect from the highest-frequency buckets downward.
+> - **HOW:** `Counter` → buckets list of size `n+1` where `buckets[f]` holds all numbers with frequency `f`. Iterate from index `n` down and collect until we have `k` elements.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+>
+> def top_k_frequent(nums: list[int], k: int) -> list[int]:
+>     freq = Counter(nums)
+>     buckets: list[list[int]] = [[] for _ in range(len(nums) + 1)]
+>     for num, count in freq.items():
+>         buckets[count].append(num)
+>     result: list[int] = []
+>     for i in range(len(buckets) - 1, 0, -1):
+>         for num in buckets[i]:
+>             result.append(num)
+>             if len(result) == k:
+>                 return result
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> `heapq.nlargest(k, freq, key=freq.get)` — O(n log k), clean one-liner but not O(n). QuickSelect on frequencies — O(n) average, O(n²) worst.
+
+---
+
+### Subdomain Visit Count
+
+> [!example] Problem
+> Each entry in `cpdomains` is `"count domain"`. A visit to `a.b.c` also counts as a visit to `b.c` and `c`. Return the count for every subdomain.
+
+> [!info] Approach
+> - **WHY:** Each domain contributes its count to itself and all suffix domains. Aggregate with a frequency map.
+> - **WHAT:** Parse count and domain. Split domain on `.` and generate all suffixes. Accumulate counts.
+> - **HOW:** For `"9 discuss.leetcode.com"` add 9 to `discuss.leetcode.com`, `leetcode.com`, and `com`. Format output as `"count domain"` strings.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def subdomain_visits(cpdomains: list[str]) -> list[str]:
+>     counts: dict[str, int] = defaultdict(int)
+>     for entry in cpdomains:
+>         count_str, domain = entry.split()
+>         count = int(count_str)
+>         parts = domain.split('.')
+>         for i in range(len(parts)):
+>             subdomain = '.'.join(parts[i:])
+>             counts[subdomain] += count
+>     return [f"{v} {k}" for k, v in counts.items()]
+> ```
+
+> [!success] Complexity
+> Time O(n * L) where L = max domain depth; Space O(n * L).
+
+> [!tip] Alternatives
+> No significantly different approach — the suffix enumeration is inherent.
+
+---
+
 ### Sort Characters by Frequency
 
 > [!example] Problem
@@ -381,6 +451,107 @@ difficulty: mixed
 ---
 
 ## Prefix Sum + Map
+
+### Longest Subarray with Sum K
+
+> [!example] Problem
+> Find the maximum length of a contiguous subarray with sum equal to `k`. Array may contain negatives.
+
+> [!info] Approach
+> - **WHY:** Sliding window fails with negatives. Prefix sum trick: subarray `[i+1, j]` has sum `k` iff `prefix[j] - prefix[i] = k`, i.e., `prefix[i] = prefix[j] - k`.
+> - **WHAT:** For maximum length, store the *first* occurrence of each prefix sum. When we see `prefix - k` again later, the gap is as large as possible.
+> - **HOW:** `first_seen = {0: -1}`. At index `i`, if `prefix - k` in map, update `best = max(best, i - first_seen[prefix - k])`. Only insert prefix if not already present (preserve earliest index).
+
+> [!note]- Python Solution
+> ```python
+> def max_subarray_len(nums: list[int], k: int) -> int:
+>     first_seen: dict[int, int] = {0: -1}
+>     prefix = 0
+>     best = 0
+>     for i, x in enumerate(nums):
+>         prefix += x
+>         if prefix - k in first_seen:
+>             best = max(best, i - first_seen[prefix - k])
+>         if prefix not in first_seen:
+>             first_seen[prefix] = i
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> For non-negative arrays only: sliding window O(n) O(1). For the general case this prefix-map approach is optimal.
+
+---
+
+### Count Number of Nice Subarrays
+
+> [!example] Problem
+> Count subarrays with exactly `k` odd numbers (LC 1248).
+
+> [!info] Approach
+> - **WHY:** Map odd/even to 1/0. Problem becomes: count subarrays with sum exactly `k` — identical to LC 560.
+> - **WHAT:** Parity prefix sum. `prefix[j] - prefix[i] = k` means subarray `[i+1, j]` has exactly `k` odd numbers.
+> - **HOW:** `seen = {0: 1}`. Running sum increments by 1 for odd elements, 0 for even. Look up `prefix - k` in `seen` before updating map.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def number_of_subarrays(nums: list[int], k: int) -> int:
+>     seen: dict[int, int] = defaultdict(int)
+>     seen[0] = 1
+>     prefix = 0
+>     count = 0
+>     for x in nums:
+>         prefix += x & 1  # 1 if odd, 0 if even
+>         count += seen[prefix - k]
+>         seen[prefix] += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> `exactly(k) = at_most(k) - at_most(k-1)` sliding window decomposition — O(n) O(1) space, useful when "at most k" variant is easy.
+
+---
+
+### Binary Subarrays with Sum
+
+> [!example] Problem
+> Binary array `nums`, count subarrays with sum equal to `goal` (LC 930).
+
+> [!info] Approach
+> - **WHY:** Same prefix sum framework as LC 560. Binary values make the prefix strictly non-decreasing.
+> - **WHAT:** `seen = {0: 1}`. At each index track running sum; add `seen[prefix - goal]` to answer.
+> - **HOW:** Identical to subarray sum equals k. The binary constraint doesn't change the algorithm, only guarantees prefix is non-negative.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def num_subarrays_with_sum(nums: list[int], goal: int) -> int:
+>     seen: dict[int, int] = defaultdict(int)
+>     seen[0] = 1
+>     prefix = 0
+>     count = 0
+>     for x in nums:
+>         prefix += x
+>         count += seen[prefix - goal]
+>         seen[prefix] += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> `at_most(goal) - at_most(goal - 1)` with sliding window — O(n) O(1) space, exploits binary non-negativity.
+
+---
 
 ### Subarray Sum Equals K
 
@@ -680,6 +851,96 @@ difficulty: mixed
 
 ---
 
+## Set Operations
+
+### Contains Duplicate
+
+> [!example] Problem
+> Return `true` if any value appears at least twice in `nums` (LC 217).
+
+> [!info] Approach
+> - **WHY:** Membership check in O(1) is exactly what a hash set provides.
+> - **WHAT:** Insert elements one by one. If an element is already in the set, a duplicate exists.
+> - **HOW:** Single pass: if `x in seen` return True; else `seen.add(x)`. Short-circuits on first duplicate.
+
+> [!note]- Python Solution
+> ```python
+> def contains_duplicate(nums: list[int]) -> bool:
+>     seen: set[int] = set()
+>     for x in nums:
+>         if x in seen:
+>             return True
+>         seen.add(x)
+>     return False
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> `len(nums) != len(set(nums))` — one-liner, same complexity. Sort and scan adjacent pairs — O(n log n) O(1) space.
+
+---
+
+### Intersection of Two Arrays
+
+> [!example] Problem
+> Return an array of unique elements that appear in both `nums1` and `nums2` (LC 349).
+
+> [!info] Approach
+> - **WHY:** Set intersection directly models the problem. O(1) membership check makes it efficient.
+> - **WHAT:** Convert both to sets. Return their intersection as a list.
+> - **HOW:** `set(nums1) & set(nums2)` in Python. For an explicit approach: iterate the smaller set, check membership in the larger.
+
+> [!note]- Python Solution
+> ```python
+> def intersection(nums1: list[int], nums2: list[int]) -> list[int]:
+>     set1, set2 = set(nums1), set(nums2)
+>     return list(set1 & set2)
+> ```
+
+> [!success] Complexity
+> Time O(n + m); Space O(min(n, m)) for the result.
+
+> [!tip] Alternatives
+> Sort both + two pointers — O(n log n + m log m), O(1) extra space. Use for follow-up "what if arrays are sorted?"
+
+---
+
+### Two Sum Less Than K
+
+> [!example] Problem
+> Find the maximum sum of two distinct elements in `nums` that is strictly less than `k`. Return -1 if no such pair exists.
+
+> [!info] Approach
+> - **WHY:** We want the largest valid pair sum — greedy with two pointers after sorting is cleanest. Hash set alternative: for each `x`, check if any value in `[k - x - (n-1)..k - x - 1]` is present.
+> - **WHAT:** Sort. Use two pointers. If `nums[l] + nums[r] < k`, record sum and advance `l`. Else shrink `r`.
+> - **HOW:** After sort, `l = 0`, `r = n - 1`. Converge inward. Track `best = max(best, sum)` when `sum < k`.
+
+> [!note]- Python Solution
+> ```python
+> def two_sum_less_than_k(nums: list[int], k: int) -> int:
+>     nums.sort()
+>     l, r = 0, len(nums) - 1
+>     best = -1
+>     while l < r:
+>         s = nums[l] + nums[r]
+>         if s < k:
+>             best = max(best, s)
+>             l += 1
+>         else:
+>             r -= 1
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(n log n); Space O(1).
+
+> [!tip] Alternatives
+> Hash set per element: O(n * k) worst case — avoid. Counting sort if values are bounded (e.g., 1–1000): O(max_val) space.
+
+---
+
 ## Miscellaneous
 
 ### Longest Consecutive Sequence
@@ -814,6 +1075,132 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > O(n³) brute force checking all triples for collinearity — correct but cubic. The slope map approach is canonical.
+
+---
+
+## Rolling Hash / Dedup
+
+### Longest Duplicate Substring (Rabin-Karp)
+
+> [!example] Problem
+> Find the longest substring that appears at least twice in `s`. Return `""` if none. (LC 1044)
+
+> [!info] Approach
+> - **WHY:** Binary search on length `L`: if a duplicate of length `L` exists, so does one of length `L-1`. Check feasibility via rolling hash to avoid O(n²) string comparison.
+> - **WHAT:** Binary search `L` in `[1, n-1]`. For each `L`, use Rabin-Karp: compute polynomial rolling hash for every window of length `L`; if any hash repeats, verify the match (hash collision guard).
+> - **HOW:** Hash = `sum(ord(s[i]) * base^(L-1-i)) % mod` for window. Rolling update: `new_hash = (old_hash * base - ord(left) * base^L + ord(right)) % mod`. Store hashes in a set. Return the window on collision.
+
+> [!note]- Python Solution
+> ```python
+> def longest_dup_substring(s: str) -> str:
+>     n = len(s)
+>     BASE, MOD = 31, (1 << 61) - 1  # Mersenne prime
+>     nums = [ord(c) - ord('a') + 1 for c in s]
+>
+>     def search(length: int) -> str:
+>         h = 0
+>         power = pow(BASE, length, MOD)
+>         for i in range(length):
+>             h = (h * BASE + nums[i]) % MOD
+>         seen: dict[int, list[int]] = {h: [0]}
+>         for i in range(1, n - length + 1):
+>             h = (h * BASE - nums[i - 1] * power + nums[i + length - 1]) % MOD
+>             if h in seen:
+>                 candidate = s[i:i + length]
+>                 for start in seen[h]:
+>                     if s[start:start + length] == candidate:
+>                         return candidate
+>                 seen[h].append(i)
+>             else:
+>                 seen[h] = [i]
+>         return ""
+>
+>     lo, hi, result = 1, n - 1, ""
+>     while lo <= hi:
+>         mid = (lo + hi) // 2
+>         found = search(mid)
+>         if found:
+>             result = found
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n log n) expected; Space O(n).
+
+> [!tip] Alternatives
+> Suffix array + LCP array — O(n log n) deterministic, no hash collisions. Binary search + suffix array is the production approach.
+
+---
+
+### Find Duplicate File in System
+
+> [!example] Problem
+> Given a list of path strings `"root/dir file1.txt(content1) file2.txt(content2)"`, group files with identical content (LC 609).
+
+> [!info] Approach
+> - **WHY:** Files with the same content are duplicates. Content is the natural key for a hash map.
+> - **WHAT:** Parse each string into `(directory, filename, content)`. Group file paths by content string.
+> - **HOW:** For each entry split on spaces: first token is directory, rest are `name(content)` tokens. Extract content between `(` and `)`. Map `content → list[full_path]`. Return groups with size ≥ 2.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def find_duplicate(paths: list[str]) -> list[list[str]]:
+>     content_map: dict[str, list[str]] = defaultdict(list)
+>     for path in paths:
+>         parts = path.split()
+>         directory = parts[0]
+>         for file_entry in parts[1:]:
+>             name, _, content = file_entry.partition('(')
+>             content = content.rstrip(')')
+>             content_map[content].append(f"{directory}/{name}")
+>     return [files for files in content_map.values() if len(files) > 1]
+> ```
+
+> [!success] Complexity
+> Time O(total characters); Space O(total characters).
+
+> [!tip] Alternatives
+> Real-world: hash file contents (MD5/SHA) rather than store raw content — avoids loading entire files. Then group by hash, verify collisions by byte comparison.
+
+---
+
+### 4Sum II
+
+> [!example] Problem
+> Given four integer arrays `A, B, C, D`, count tuples `(i, j, k, l)` such that `A[i] + B[j] + C[k] + D[l] == 0` (LC 454).
+
+> [!info] Approach
+> - **WHY:** Brute force O(n⁴). Split into two pairs: count all `A[i] + B[j]` sums, then for each `C[k] + D[l]` check if its negation was seen.
+> - **WHAT:** Hash map `ab_sum → count`. Then iterate all C, D pairs and look up `-(C[k] + D[l])`.
+> - **HOW:** Two nested loops for AB → Counter. Two nested loops for CD → look up complement. Sum all matching counts.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def four_sum_count(nums1: list[int], nums2: list[int],
+>                    nums3: list[int], nums4: list[int]) -> int:
+>     ab: dict[int, int] = defaultdict(int)
+>     for a in nums1:
+>         for b in nums2:
+>             ab[a + b] += 1
+>     count = 0
+>     for c in nums3:
+>         for d in nums4:
+>             count += ab[-(c + d)]
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n²); Space O(n²).
+
+> [!tip] Alternatives
+> Meet-in-the-middle generalizes: split k arrays into two halves of k/2, hash one half's sums, probe with the other. Always yields O(n^(k/2)) for k-sum variants.
 
 ---
 

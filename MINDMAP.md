@@ -3,7 +3,7 @@ module: root
 topic: Mindmap
 subtopic: 
 status: unread
-tags: [root, upsc, mindmap]
+tags: [root, mindmap]
 ---
 # Google SDE-2 Prep — Mind Map
 _Last updated: 2026-05-17 (gap audit pass)_

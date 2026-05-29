@@ -41,12 +41,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "coding/data-structures/array.md",
+                "file": "02-algorithms/backtracking.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "array"
+              "title": "backtracking"
             }
           }
         ],
@@ -211,9 +211,15 @@
   },
   "active": "a82caa0c4cf9adee",
   "lastOpenFiles": [
+    "03-patterns/lld.md",
+    "05-revision/mock-log.md",
+    "coding/algorithms/recursion.md.tmp.52333.ad8b436f2cef",
     "coding/algorithms/backtracking.md",
-    "01-data-structures/array.md",
     "coding/algorithms/divide-and-conquer.md",
+    "coding/algorithms/bit-manipulation.md",
+    "coding/algorithms/binary-search.md",
+    "01-data-structures/array.md",
+    "coding/data-structures/array.md",
     "coding/data-structures/advanced.md",
     "coding/algorithms/recursion.md",
     "coding/data-structures/segment-tree.md",
@@ -223,7 +229,6 @@
     "coding/algorithms/union-find.md",
     "coding/algorithms/dynamic-programming.md",
     "coding/data-structures/stack.md",
-    "coding/data-structures/array.md",
     "coding/data-structures/graph.md",
     "coding/data-structures/tree.md",
     "coding/data-structures/linked-list.md",
@@ -233,10 +238,6 @@
     "coding/data-structures/hashing.md",
     "coding/algorithms/sorting.md",
     "coding/data-structures/string.md",
-    "coding/algorithms/bit-manipulation.md",
-    "coding/algorithms/binary-search.md",
-    "coding/algorithms/greedy.md",
-    "coding/algorithms/two-pointers.md",
     "coding/data-structures",
     "coding/algorithms",
     "coding"

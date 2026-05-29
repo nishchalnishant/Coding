@@ -67,6 +67,135 @@ difficulty: mixed
 
 ---
 
+### Number of Islands (BFS)
+
+> [!example] Problem
+> Given a 2D grid of '1' (land) and '0' (water), count the number of islands (connected components of land, 4-directional).
+
+> [!info] Approach
+> - **WHY:** Each island is a connected component. BFS naturally fans out level-by-level from a source cell, marking all reachable land as visited.
+> - **WHAT:** Iterate every cell; when '1' found, BFS to mark all connected land as visited ('0'), increment count.
+> - **HOW:** Seed the queue with the trigger cell; mark visited on enqueue (not dequeue) to prevent duplicate entries. Mutating the grid avoids an extra visited array.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def numIslands(grid):
+>     if not grid:
+>         return 0
+>     rows, cols = len(grid), len(grid[0])
+>     count = 0
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+> 
+>     for r in range(rows):
+>         for c in range(cols):
+>             if grid[r][c] == '1':
+>                 count += 1
+>                 grid[r][c] = '0'
+>                 queue = deque([(r, c)])
+>                 while queue:
+>                     cr, cc = queue.popleft()
+>                     for dr, dc in dirs:
+>                         nr, nc = cr+dr, cc+dc
+>                         if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == '1':
+>                             grid[nr][nc] = '0'
+>                             queue.append((nr, nc))
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(M×N), Space O(min(M,N)) queue width worst case.
+
+> [!tip] Alternatives
+> - DFS sinking: same logic recursively; simpler code but risks recursion depth on large grids.
+> - Union-Find: union adjacent '1' cells; count unique roots. O(M×N·α). Better for dynamic updates.
+
+---
+
+### Walls and Gates (LC 286)
+
+> [!example] Problem
+> Given a grid of INF (empty room), -1 (wall), 0 (gate), fill each empty room with the distance to its nearest gate. If unreachable, leave as INF.
+
+> [!info] Approach
+> - **WHY:** Multi-source BFS from all gates simultaneously guarantees every room is reached via the shortest path to any gate in O(M×N) rather than O(M×N × gates) from separate BFS per room.
+> - **WHAT:** Seed queue with all gates (value 0); BFS outward; assign `dist[gate] + 1` to unvisited INF neighbors.
+> - **HOW:** Only enqueue cells that are INF — this acts as the visited guard. The first time a room is reached is always via its nearest gate.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def wallsAndGates(rooms):
+>     if not rooms:
+>         return
+>     rows, cols = len(rooms), len(rooms[0])
+>     INF = float('inf')
+>     queue = deque()
+>     for r in range(rows):
+>         for c in range(cols):
+>             if rooms[r][c] == 0:
+>                 queue.append((r, c))
+> 
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+>     while queue:
+>         r, c = queue.popleft()
+>         for dr, dc in dirs:
+>             nr, nc = r+dr, c+dc
+>             if 0 <= nr < rows and 0 <= nc < cols and rooms[nr][nc] == INF:
+>                 rooms[nr][nc] = rooms[r][c] + 1
+>                 queue.append((nr, nc))
+> ```
+
+> [!success] Complexity
+> Time O(M×N), Space O(M×N).
+
+> [!tip] Alternatives
+> - BFS from each gate separately: O(M×N × G) where G = number of gates — valid but far slower.
+> - DFS from each gate: same O(M×N × G) issue; also won't guarantee shortest distance without revisit tracking.
+
+---
+
+### 01 Matrix (LC 542)
+
+> [!example] Problem
+> Given a binary matrix, return a matrix where each cell contains the distance to the nearest 0.
+
+> [!info] Approach
+> - **WHY:** Multi-source BFS from all 0-cells simultaneously propagates shortest distances outward in O(M×N). The alternative (BFS from each 1-cell) is O(M²×N²).
+> - **WHAT:** Seed queue with all 0-positions (distance 0); mark 1-cells as unvisited (distance INF); BFS expanding to unvisited neighbors with distance + 1.
+> - **HOW:** Initialize dist matrix with 0 for zeroes, INF for ones. Enqueue all zeroes at start. Only update a cell if current dist > neighbor dist + 1.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def updateMatrix(mat):
+>     rows, cols = len(mat), len(mat[0])
+>     dist = [[0 if mat[r][c] == 0 else float('inf') for c in range(cols)] for r in range(rows)]
+>     queue = deque((r, c) for r in range(rows) for c in range(cols) if mat[r][c] == 0)
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+> 
+>     while queue:
+>         r, c = queue.popleft()
+>         for dr, dc in dirs:
+>             nr, nc = r+dr, c+dc
+>             if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] > dist[r][c] + 1:
+>                 dist[nr][nc] = dist[r][c] + 1
+>                 queue.append((nr, nc))
+>     return dist
+> ```
+
+> [!success] Complexity
+> Time O(M×N), Space O(M×N).
+
+> [!tip] Alternatives
+> - DP two-pass (top-left then bottom-right): O(M×N) time, O(1) extra space. Elegant but harder to reason about correctness.
+> - DFS: can reach the same cell multiple times before finding minimum — not correct without full relaxation.
+
+---
+
 ### Word Ladder
 
 > [!example] Problem
@@ -553,6 +682,84 @@ difficulty: mixed
 
 ---
 
+### Number of Provinces (LC 547)
+
+> [!example] Problem
+> Given an n×n adjacency matrix `isConnected`, return the number of provinces (connected components of cities).
+
+> [!info] Approach
+> - **WHY:** Each province is a connected component of an undirected graph. DFS marks all cities in a component as visited in one pass.
+> - **WHAT:** Iterate each city; if unvisited, DFS to mark all reachable cities, increment province count.
+> - **HOW:** Use a visited array instead of mutating the matrix. The matrix is symmetric but you only need to follow one direction per city.
+
+> [!note]- Python Solution
+> ```python
+> def findCircleNum(isConnected):
+>     n = len(isConnected)
+>     visited = [False] * n
+> 
+>     def dfs(city):
+>         for neighbor in range(n):
+>             if isConnected[city][neighbor] == 1 and not visited[neighbor]:
+>                 visited[neighbor] = True
+>                 dfs(neighbor)
+> 
+>     provinces = 0
+>     for i in range(n):
+>         if not visited[i]:
+>             visited[i] = True
+>             dfs(i)
+>             provinces += 1
+>     return provinces
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n) recursion + visited array.
+
+> [!tip] Alternatives
+> - Union-Find: union(i, j) for all isConnected[i][j] == 1; count unique roots. O(n²·α). Better if the graph evolves dynamically.
+> - BFS: identical logic with a queue; avoids deep recursion on large n.
+
+---
+
+### Number of Enclaves (LC 1020)
+
+> [!example] Problem
+> Given a binary grid (0=sea, 1=land), return the number of land cells that cannot "walk off" the boundary in any number of moves (4-directional).
+
+> [!info] Approach
+> - **WHY:** Any land cell connected to the border can reach the sea — it is NOT an enclave. Mirror of Surrounded Regions: mark all border-reachable land, then count remaining interior land.
+> - **WHAT:** DFS/BFS from every border land cell, mark visited. Count unvisited land cells in the interior.
+> - **HOW:** Walk all 4 borders; DFS from each '1' encountered, sinking to 0. After traversal, sum remaining 1-cells.
+
+> [!note]- Python Solution
+> ```python
+> def numEnclaves(grid):
+>     rows, cols = len(grid), len(grid[0])
+> 
+>     def dfs(r, c):
+>         if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != 1:
+>             return
+>         grid[r][c] = 0
+>         dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+> 
+>     for r in range(rows):
+>         dfs(r, 0); dfs(r, cols-1)
+>     for c in range(cols):
+>         dfs(0, c); dfs(rows-1, c)
+> 
+>     return sum(grid[r][c] for r in range(rows) for c in range(cols))
+> ```
+
+> [!success] Complexity
+> Time O(M×N), Space O(M×N) recursion stack.
+
+> [!tip] Alternatives
+> - BFS from borders: iterative, avoids recursion stack overflow on large grids.
+> - Union-Find with virtual border node: union all land cells; union border land with a sentinel; count non-sentinel roots. Same complexity, more code.
+
+---
+
 ### Clone Graph
 
 > [!example] Problem
@@ -935,6 +1142,53 @@ difficulty: mixed
 
 ---
 
+### Path with Minimum Effort (LC 1631)
+
+> [!example] Problem
+> Given a 2D grid of heights, find a path from top-left to bottom-right that minimizes the maximum absolute difference between adjacent cells. Return that minimum effort.
+
+> [!info] Approach
+> - **WHY:** Minimize the maximum edge weight on a path = bottleneck shortest path. Modified Dijkstra: `dist[r][c]` = minimum possible max-absolute-diff to reach (r,c); greedily process cells in order of current effort.
+> - **WHAT:** Min-heap of `(effort, r, c)`. Transition: `new_effort = max(current_effort, abs(heights[nr][nc] - heights[r][c]))`.
+> - **HOW:** First pop of (rows-1, cols-1) from the heap is the answer. Mark visited on pop to avoid reprocessing.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> 
+> def minimumEffortPath(heights):
+>     rows, cols = len(heights), len(heights[0])
+>     dist = [[float('inf')] * cols for _ in range(rows)]
+>     dist[0][0] = 0
+>     heap = [(0, 0, 0)]  # (effort, r, c)
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+> 
+>     while heap:
+>         effort, r, c = heapq.heappop(heap)
+>         if r == rows-1 and c == cols-1:
+>             return effort
+>         if effort > dist[r][c]:
+>             continue
+>         for dr, dc in dirs:
+>             nr, nc = r+dr, c+dc
+>             if 0 <= nr < rows and 0 <= nc < cols:
+>                 new_effort = max(effort, abs(heights[nr][nc] - heights[r][c]))
+>                 if new_effort < dist[nr][nc]:
+>                     dist[nr][nc] = new_effort
+>                     heapq.heappush(heap, (new_effort, nr, nc))
+> 
+>     return dist[rows-1][cols-1]
+> ```
+
+> [!success] Complexity
+> Time O(M×N log(M×N)), Space O(M×N).
+
+> [!tip] Alternatives
+> - Binary search on effort + BFS feasibility: O(M×N log(max_height)). Binary search on answer ∈ [0, 10^6]; BFS checks if path exists using only edges with diff ≤ mid.
+> - Union-Find with sorted edges: sort all edges by absolute diff; union endpoints one by one; stop when (0,0) and (M-1,N-1) are connected. O(M×N log(M×N)).
+
+---
+
 ## Bipartite / Coloring
 
 ### Is Graph Bipartite?
@@ -979,6 +1233,52 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS coloring: same logic recursively. O(V+E). Stack overflow risk on deep graphs.
 > - Odd-cycle detection: explicitly find cycles and check parity. Equivalent, more complex.
+
+---
+
+### Possible Bipartition (LC 886)
+
+> [!example] Problem
+> Given n people and a list of dislikes pairs, determine if it's possible to split everyone into two groups such that no two people who dislike each other are in the same group.
+
+> [!info] Approach
+> - **WHY:** Equivalent to bipartite checking on an undirected graph where edges represent dislikes. 2-colorable iff no odd cycle.
+> - **WHAT:** Build adjacency list from dislikes; BFS 2-coloring over all components (graph may be disconnected).
+> - **HOW:** People labeled 1..n — initialize color array of size n+1. For each uncolored node, BFS alternating colors; return False if same-color conflict found.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque, defaultdict
+> 
+> def possibleBipartition(n, dislikes):
+>     graph = defaultdict(list)
+>     for a, b in dislikes:
+>         graph[a].append(b)
+>         graph[b].append(a)
+> 
+>     color = [-1] * (n + 1)
+>     for start in range(1, n + 1):
+>         if color[start] != -1:
+>             continue
+>         color[start] = 0
+>         queue = deque([start])
+>         while queue:
+>             node = queue.popleft()
+>             for nei in graph[node]:
+>                 if color[nei] == -1:
+>                     color[nei] = 1 - color[node]
+>                     queue.append(nei)
+>                 elif color[nei] == color[node]:
+>                     return False
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(V+E), Space O(V+E).
+
+> [!tip] Alternatives
+> - Union-Find per person: for each person u with dislike-list, union all disliked people together (they must be in the same group) and check u is not in that group. O((V+E)·α).
+> - DFS 2-coloring: same logic recursively. Watch recursion depth.
 
 ---
 
@@ -1133,6 +1433,144 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS with memoization: `@lru_cache` on node; top-down. O(V+E). Equivalent but less explicit about ordering.
 > - Bellman-Ford with negated weights: O(VE) — much slower; use only when you can't confirm DAG property.
+
+---
+
+### Reconstruct Itinerary (LC 332)
+
+> [!example] Problem
+> Given a list of airline tickets `[from, to]`, reconstruct the itinerary starting from "JFK" using all tickets exactly once. If multiple valid itineraries exist, return the lexicographically smallest one.
+
+> [!info] Approach
+> - **WHY:** Eulerian path problem on a directed multigraph — visit every edge exactly once. Hierholzer's algorithm finds an Eulerian path in O(E log E): greedily follow edges; when stuck (no outgoing edges left), backtrack and prepend the current node.
+> - **WHAT:** Build adjacency list with sorted neighbors (for lexicographic order) using a min-heap or sorted list. DFS: always pick the smallest neighbor; when a node has no more outgoing edges, prepend to result.
+> - **HOW:** Use a stack-based iterative post-order DFS: push node to result when its adjacency list is exhausted; reverse at the end.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def findItinerary(tickets):
+>     graph = defaultdict(list)
+>     for src, dst in sorted(tickets, reverse=True):
+>         graph[src].append(dst)
+>     # sorted(reverse=True) so that pop() gives smallest destination
+> 
+>     result = []
+>     stack = ["JFK"]
+>     while stack:
+>         while graph[stack[-1]]:
+>             stack.append(graph[stack[-1]].pop())
+>         result.append(stack.pop())
+>     return result[::-1]
+> ```
+
+> [!success] Complexity
+> Time O(E log E) for sorting. Space O(V+E).
+
+> [!tip] Alternatives
+> - Recursive Hierholzer: same logic with the call stack as the DFS stack; risks Python recursion limit with many tickets.
+> - Priority queue (min-heap) per node: `heapq` ensures lexicographic order without pre-sorting all tickets. Same O(E log E).
+
+---
+
+### Critical Connections / Bridges (LC 1192)
+
+> [!example] Problem
+> Given a network of n servers and connections, find all critical connections — edges whose removal makes some server unreachable (bridges in the graph).
+
+> [!info] Approach
+> - **WHY:** Bridge detection requires Tarjan's algorithm. A bridge is an edge (u, v) where no back-edge from v's subtree reaches u or any ancestor of u — detected via `low[v] > disc[u]`.
+> - **WHAT:** DFS with two arrays: `disc[u]` = discovery time, `low[u]` = lowest discovery time reachable from u's subtree (via back edges). If `low[v] > disc[u]`, edge (u,v) is a bridge.
+> - **HOW:** Track parent to avoid treating the tree edge back to parent as a back-edge. Update `low[u] = min(low[u], low[v])` after recursing into v; `low[u] = min(low[u], disc[v])` for back-edges.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def criticalConnections(n, connections):
+>     graph = defaultdict(list)
+>     for u, v in connections:
+>         graph[u].append(v)
+>         graph[v].append(u)
+> 
+>     disc = [-1] * n
+>     low  = [-1] * n
+>     result = []
+>     timer = [0]
+> 
+>     def dfs(node, parent):
+>         disc[node] = low[node] = timer[0]
+>         timer[0] += 1
+>         for nei in graph[node]:
+>             if nei == parent:
+>                 continue
+>             if disc[nei] == -1:
+>                 dfs(nei, node)
+>                 low[node] = min(low[node], low[nei])
+>                 if low[nei] > disc[node]:
+>                     result.append([node, nei])
+>             else:
+>                 low[node] = min(low[node], disc[nei])
+> 
+>     dfs(0, -1)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(V+E), Space O(V+E).
+
+> [!tip] Alternatives
+> - Naive: remove each edge and run DFS to check connectivity. O(E × (V+E)) — too slow for large graphs.
+> - Articulation points (Tarjan variant): `low[v] >= disc[u]` (note: >=, not >) detects articulation points (nodes) rather than bridges (edges).
+> - Handle parallel edges: if multiple edges between u and v exist, none is a bridge; track edge index rather than parent node to handle multigraphs.
+
+---
+
+### Minimum Height Trees (LC 310)
+
+> [!example] Problem
+> Given a tree of n nodes, find all roots that produce minimum height trees. Return the list of such root values.
+
+> [!info] Approach
+> - **WHY:** The roots of minimum height trees are the "center" nodes of the tree — at most 2 nodes lying on the longest path (diameter). Topological leaf-trimming: iteratively remove all current leaves; the last 1–2 remaining nodes are the answer.
+> - **WHAT:** Build adjacency list and degree array. Seed a queue with all leaves (degree == 1). BFS layer-by-layer: remove current leaves, expose new leaves (nodes whose degree drops to 1). Stop when ≤ 2 nodes remain.
+> - **HOW:** Decrement `n` by the number of leaves removed each round; stop when `n <= 2` — remaining nodes are the answer.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def findMinHeightTrees(n, edges):
+>     if n == 1:
+>         return [0]
+>     graph = [set() for _ in range(n)]
+>     for u, v in edges:
+>         graph[u].add(v)
+>         graph[v].add(u)
+> 
+>     leaves = deque(i for i in range(n) if len(graph[i]) == 1)
+>     remaining = n
+> 
+>     while remaining > 2:
+>         leaf_count = len(leaves)
+>         remaining -= leaf_count
+>         for _ in range(leaf_count):
+>             leaf = leaves.popleft()
+>             for nei in graph[leaf]:
+>                 graph[nei].discard(leaf)
+>                 if len(graph[nei]) == 1:
+>                     leaves.append(nei)
+> 
+>     return list(leaves)
+> ```
+
+> [!success] Complexity
+> Time O(V), Space O(V).
+
+> [!tip] Alternatives
+> - Two BFS to find diameter endpoints: find the farthest node from any node (BFS 1), then farthest from that node (BFS 2) — diameter endpoints found. Center of diameter path = answer. O(V) but more complex to implement.
+> - DFS with height computation: O(V) per root × O(V) roots = O(V²) — far too slow.
 
 ---
 

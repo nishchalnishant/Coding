@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Binary Search
 subtopic: 
 status: unread
-tags: [algorithms, upsc, binary-search]
+tags: [algorithms, binary-search]
 ---
 ## First-Principles Map
 

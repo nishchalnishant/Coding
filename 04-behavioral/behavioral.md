@@ -3,7 +3,7 @@ module: 04-behavioral
 topic: Behavioral
 subtopic: 
 status: unread
-tags: [behavioral, upsc]
+tags: [behavioral]
 ---
 # First-Principles Map — Behavioral Interview
 

@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Two Pointers
 subtopic: 
 status: unread
-tags: [algorithms, upsc, two-pointers]
+tags: [algorithms, two-pointers]
 ---
 ## First-Principles Map
 

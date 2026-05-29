@@ -802,6 +802,342 @@ difficulty: mixed
 
 ---
 
+## Classic / Miscellaneous
+
+---
+
+### Guess Number Higher or Lower (LC 374)
+
+> [!example] Problem
+> A number is picked in `[1, n]`. An API `guess(num)` returns -1 (pick < num), 1 (pick > num), or 0 (correct). Find the picked number.
+
+> [!info] Approach
+> - WHY: Search space `[1, n]` is totally ordered and the API gives three-way comparison — textbook binary search.
+> - WHAT: Standard BS template with the API replacing a direct comparison.
+> - HOW: `lo=1, hi=n`. While `lo <= hi`: if `guess(mid)==0` return mid; if `guess(mid)==-1` the answer is lower → `hi=mid-1`; else `lo=mid+1`.
+
+> [!note]- Python Solution
+> ```python
+> def guess_number(n: int) -> int:
+>     lo, hi = 1, n
+>     while lo <= hi:
+>         mid = lo + (hi - lo) // 2
+>         result = guess(mid)   # API call
+>         if result == 0:
+>             return mid
+>         elif result == -1:    # picked number < mid
+>             hi = mid - 1
+>         else:                 # picked number > mid
+>             lo = mid + 1
+>     return -1
+> ```
+
+> [!success] Complexity
+> O(log n) time, O(1) space.
+
+> [!tip] Alternatives
+> Linear scan O(n); ternary search O(log n) — but BS is simpler and has lower constant.
+
+---
+
+### Find First and Last Position (LC 34)
+
+> [!example] Problem
+> Sorted array of integers, possibly with duplicates. Find the starting and ending position of a given target. Return `[-1, -1]` if not found.
+
+> [!info] Approach
+> - WHY: Need leftmost and rightmost occurrence — two separate lower/upper bound searches.
+> - WHAT: `bisect_left` gives the first index where `nums[i] >= target`; `bisect_right` gives the first index where `nums[i] > target` (so last occurrence = that - 1).
+> - HOW: First = lower_bound(target). If `nums[first] != target` → not found. Last = upper_bound(target) - 1.
+
+> [!note]- Python Solution
+> ```python
+> def search_range(nums: list[int], target: int) -> list[int]:
+>     def lower_bound(val: int) -> int:
+>         lo, hi = 0, len(nums)
+>         while lo < hi:
+>             mid = lo + (hi - lo) // 2
+>             if nums[mid] < val:
+>                 lo = mid + 1
+>             else:
+>                 hi = mid
+>         return lo
+> 
+>     first = lower_bound(target)
+>     if first == len(nums) or nums[first] != target:
+>         return [-1, -1]
+>     last = lower_bound(target + 1) - 1
+>     return [first, last]
+> ```
+
+> [!success] Complexity
+> O(log n) time, O(1) space. Two binary search passes.
+
+> [!tip] Alternatives
+> `bisect.bisect_left` / `bisect.bisect_right` from stdlib; single linear scan O(n) trivial but not O(log n).
+
+---
+
+### Minimum Number of Days to Make m Bouquets (LC 1482)
+
+> [!example] Problem
+> `bloomDay[i]` = day flower `i` blooms. Make `m` bouquets, each requiring `k` **adjacent** bloomed flowers. Minimum day to make all `m` bouquets (or -1 if impossible).
+
+> [!info] Approach
+> - WHY: More days → more flowers bloomed → easier to form bouquets. Monotone predicate on day.
+> - WHAT: Binary search on `day` in `[min(bloomDay), max(bloomDay)]`. Feasibility: scan the array counting consecutive bloomed flowers; form a bouquet every time we accumulate `k` in a row.
+> - HOW: Count bouquets formed; if `>= m` → feasible. Early exit: if `m * k > len(bloomDay)` → impossible.
+
+> [!note]- Python Solution
+> ```python
+> def min_days(bloomDay: list[int], m: int, k: int) -> int:
+>     n = len(bloomDay)
+>     if m * k > n:
+>         return -1
+> 
+>     def feasible(day: int) -> bool:
+>         bouquets = consecutive = 0
+>         for d in bloomDay:
+>             if d <= day:
+>                 consecutive += 1
+>                 if consecutive == k:
+>                     bouquets += 1
+>                     consecutive = 0
+>             else:
+>                 consecutive = 0
+>         return bouquets >= m
+> 
+>     lo, hi = min(bloomDay), max(bloomDay)
+>     while lo < hi:
+>         mid = lo + (hi - lo) // 2
+>         if feasible(mid):
+>             hi = mid
+>         else:
+>             lo = mid + 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> O(n log(max_day)) time, O(1) space.
+
+> [!tip] Alternatives
+> None practical — greedy simulation alone is O(n · max_day); BS + greedy is the canonical approach.
+
+---
+
+### Find K Closest Elements (LC 658)
+
+> [!example] Problem
+> Sorted array `arr` and integers `k`, `x`. Return the `k` closest elements to `x`, sorted ascending. Ties broken by smaller value.
+
+> [!info] Approach
+> - WHY: The answer is always a contiguous subarray of length `k`. Binary search for the left boundary of this window.
+> - WHAT: Search left index `i` in `[0, len(arr) - k]`. Window `[i, i+k)` is optimal if `x - arr[i] <= arr[i+k] - x` (left element is at least as close as the right element just outside).
+> - HOW: If `x - arr[mid] > arr[mid+k] - x` → window is too far left → `lo = mid + 1`; else `hi = mid`. Answer is `arr[lo : lo + k]`.
+
+> [!note]- Python Solution
+> ```python
+> def find_closest_elements(arr: list[int], k: int, x: int) -> list[int]:
+>     lo, hi = 0, len(arr) - k
+>     while lo < hi:
+>         mid = lo + (hi - lo) // 2
+>         if x - arr[mid] > arr[mid + k] - x:
+>             lo = mid + 1   # left boundary too far left
+>         else:
+>             hi = mid
+>     return arr[lo : lo + k]
+> ```
+
+> [!success] Complexity
+> O(log(n - k) + k) time, O(1) extra space (output excluded).
+
+> [!tip] Alternatives
+> Sort by distance O(n log n) — correct but loses sorted order and is slower; two-pointer shrink from both ends O(n - k) — simpler to reason about but O(n).
+
+---
+
+### Count of Smaller Numbers After Self (LC 315)
+
+> [!example] Problem
+> For each `nums[i]`, count how many elements to its right are strictly smaller. Return the counts array.
+
+> [!info] Approach
+> - WHY: Process right to left, maintaining a sorted structure. Binary search for insertion position gives the count of smaller elements already seen.
+> - WHAT: Build a sorted list of "seen" elements (right to left). For each new element, `bisect_left` gives its insertion rank = count of smaller elements to its right.
+> - HOW: Insert `nums[i]` into the sorted list (using `insort`). Count = `bisect_left(sorted_list, nums[i])`.
+
+> [!note]- Python Solution
+> ```python
+> from bisect import bisect_left, insort
+> 
+> def count_smaller(nums: list[int]) -> list[int]:
+>     sorted_seen: list[int] = []
+>     result = []
+>     for num in reversed(nums):
+>         count = bisect_left(sorted_seen, num)
+>         result.append(count)
+>         insort(sorted_seen, num)
+>     result.reverse()
+>     return result
+> ```
+
+> [!success] Complexity
+> O(n²) worst case (insort is O(n) due to list shifts) — passes LC constraints for n ≤ 10^5. O(n log n) with a Fenwick tree or merge-sort.
+
+> [!tip] Alternatives
+> **Merge sort** O(n log n) — count inversions during merge; **Fenwick/BIT tree** O(n log n) with coordinate compression — optimal.
+
+---
+
+## Second Occurrence / Exact Match Variants
+
+---
+
+### Search a 2D Matrix — Row + Column BS (LC 74 variant note)
+
+> [!example] Problem
+> Same as LC 74 but solved explicitly with two binary searches: first find the row, then search within it.
+
+> [!info] Approach
+> - WHY: Useful when the single-index trick is not obvious in an interview. Also illustrates composing two independent binary searches.
+> - WHAT: BS on rows: find the last row where `matrix[row][0] <= target` (this is the only row that can contain target). Then BS within that row.
+> - HOW: Row search: `if matrix[mid][0] <= target: lo = mid` else `hi = mid - 1`. Then standard column search.
+
+> [!note]- Python Solution
+> ```python
+> def search_matrix_two_pass(matrix: list[list[int]], target: int) -> bool:
+>     m, n = len(matrix), len(matrix[0])
+>     # find candidate row
+>     lo, hi = 0, m - 1
+>     while lo < hi:
+>         mid = lo + (hi - lo + 1) // 2   # upper-mid to avoid infinite loop
+>         if matrix[mid][0] <= target:
+>             lo = mid
+>         else:
+>             hi = mid - 1
+>     row = lo
+>     # binary search within row
+>     lo, hi = 0, n - 1
+>     while lo <= hi:
+>         mid = lo + (hi - lo) // 2
+>         if matrix[row][mid] == target:
+>             return True
+>         elif matrix[row][mid] < target:
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return False
+> ```
+
+> [!success] Complexity
+> O(log m + log n) = O(log(mn)) time, O(1) space.
+
+> [!tip] Alternatives
+> Single flattened-index BS is more concise; this form is useful for understanding the row-then-column decomposition.
+
+---
+
+### Sqrt(x) — Integer Square Root (LC 69)
+
+> [!example] Problem
+> Given a non-negative integer `x`, return the integer square root (floor). Do not use `sqrt()`.
+
+> [!info] Approach
+> - WHY: Find the largest integer `k` such that `k² <= x`. Classic "find upper bound of predicate" problem.
+> - WHAT: Binary search `k` in `[0, x]` (or `[0, x//2 + 1]` for efficiency). Find the last `k` where `k*k <= x`.
+> - HOW: If `mid * mid <= x` → `lo = mid + 1` (can go larger); else `hi = mid - 1`. Answer is `hi` (the last valid mid).
+
+> [!note]- Python Solution
+> ```python
+> def my_sqrt(x: int) -> int:
+>     if x < 2:
+>         return x
+>     lo, hi = 1, x // 2
+>     while lo <= hi:
+>         mid = lo + (hi - lo) // 2
+>         sq = mid * mid
+>         if sq == x:
+>             return mid
+>         elif sq < x:
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return hi   # hi is the floor when loop ends
+> ```
+
+> [!success] Complexity
+> O(log x) time, O(1) space.
+
+> [!tip] Alternatives
+> Newton's method converges faster in practice; `int(x**0.5)` uses hardware FP (may have precision issues for large x).
+
+---
+
+### Find the Duplicate Number (LC 287) — BS on Value
+
+> [!example] Problem
+> Array of `n+1` integers, each in `[1, n]`. Exactly one duplicate (may repeat multiple times). Find it. O(1) extra space required.
+
+> [!info] Approach
+> - WHY: Count of integers in `[1, mid]` that appear in `nums` — if > `mid`, by pigeonhole the duplicate is ≤ `mid`. Monotone predicate → binary search on value.
+> - WHAT: Search `mid` in `[1, n]`. Count elements in `nums` that are `<= mid`. If count > mid → duplicate in lower half.
+> - HOW: `if count > mid: hi = mid` else `lo = mid + 1`. Not a standard in-place BS — it's BS on the value space, not the index space.
+
+> [!note]- Python Solution
+> ```python
+> def find_duplicate(nums: list[int]) -> int:
+>     lo, hi = 1, len(nums) - 1
+>     while lo < hi:
+>         mid = lo + (hi - lo) // 2
+>         count = sum(1 for x in nums if x <= mid)
+>         if count > mid:
+>             hi = mid   # duplicate is in [lo, mid]
+>         else:
+>             lo = mid + 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(1) space (no extra data structures).
+
+> [!tip] Alternatives
+> Floyd's cycle detection O(n) O(1) — optimal; XOR/sum tricks work only when exactly one duplicate appears exactly twice.
+
+---
+
+### Longest Increasing Subsequence — Length via BS (LC 300)
+
+> [!example] Problem
+> Find the length of the longest strictly increasing subsequence in `nums`.
+
+> [!info] Approach
+> - WHY: Patience sorting uses a `tails` array where `tails[i]` is the smallest tail of all LIS of length `i+1`. `tails` is always sorted → binary search for insertion point.
+> - WHAT: For each element, `bisect_left(tails, num)` gives the position to replace (or extend if at end). The length of `tails` at the end is the LIS length.
+> - HOW: If `num > tails[-1]` → append (extend LIS). Else → replace `tails[pos]` = num (maintain smallest tails for future options).
+
+> [!note]- Python Solution
+> ```python
+> from bisect import bisect_left
+> 
+> def length_of_lis(nums: list[int]) -> int:
+>     tails: list[int] = []
+>     for num in nums:
+>         pos = bisect_left(tails, num)
+>         if pos == len(tails):
+>             tails.append(num)
+>         else:
+>             tails[pos] = num
+>     return len(tails)
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(n) space.
+
+> [!tip] Alternatives
+> DP O(n²) — classic; this BS approach is the O(n log n) optimisation. Note `tails` is NOT the actual LIS — only its length is correct.
+
+---
+
 ## See Also
 
 [[two-pointers]] | [[sliding-window]] | [[sorting]] | [[dynamic-programming]]

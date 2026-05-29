@@ -3,7 +3,7 @@ module: books
 topic: Cp3
 subtopic: 
 status: unread
-tags: [books, upsc, cp3]
+tags: [books, cp3]
 ---
 # CP3
 

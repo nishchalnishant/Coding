@@ -229,6 +229,140 @@ difficulty: mixed
 
 ---
 
+## BFS / Level-order
+
+### Binary Tree Level Order Traversal
+
+> [!example] Problem
+> Given the root of a binary tree, return its level-order traversal as a list of lists, where each inner list contains node values at that depth (LC 102).
+
+> [!info] Approach
+> - **WHY:** DFS mixes levels; BFS processes nodes level-by-level naturally.
+> - **WHAT:** BFS with level-size snapshotting — record `len(queue)` before processing each level so we know when one level ends and the next begins.
+> - **HOW:** Enqueue root. At the start of each BFS iteration snapshot `size = len(queue)`. Dequeue exactly `size` nodes, collect their values, enqueue their children. Append the level list to results.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> from typing import Optional
+>
+> class TreeNode:
+>     def __init__(self, val: int = 0, left: 'Optional[TreeNode]' = None, right: 'Optional[TreeNode]' = None):
+>         self.val = val; self.left = left; self.right = right
+>
+> def levelOrder(root: Optional[TreeNode]) -> list[list[int]]:
+>     if not root:
+>         return []
+>     result: list[list[int]] = []
+>     queue: deque[TreeNode] = deque([root])
+>     while queue:
+>         level: list[int] = []
+>         for _ in range(len(queue)):
+>             node = queue.popleft()
+>             level.append(node.val)
+>             if node.left:
+>                 queue.append(node.left)
+>             if node.right:
+>                 queue.append(node.right)
+>         result.append(level)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n) — queue holds at most one full level (up to n/2 nodes).
+
+> [!tip] Alternatives
+> - DFS with depth parameter: `dfs(node, depth)` appends to `result[depth]` — same O(n), avoids queue but uses call stack space.
+> - Sentinel `None` in queue to mark level boundaries: works but is error-prone.
+
+---
+
+### Binary Tree Zigzag Level Order Traversal
+
+> [!example] Problem
+> Same as level-order traversal but alternate the direction each level: left-to-right at even depths, right-to-left at odd depths (LC 103).
+
+> [!info] Approach
+> - **WHY:** BFS naturally produces left-to-right order; reversing odd levels is cheaper than changing traversal direction.
+> - **WHAT:** Standard level-order BFS with a `left_to_right` flag; reverse odd-depth level lists before appending.
+> - **HOW:** Toggle `left_to_right` after each level. When False, reverse the collected level list. Children are always enqueued left-to-right; only the output list is reversed.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> from typing import Optional
+>
+> def zigzagLevelOrder(root: Optional[TreeNode]) -> list[list[int]]:
+>     if not root:
+>         return []
+>     result: list[list[int]] = []
+>     queue: deque[TreeNode] = deque([root])
+>     left_to_right = True
+>     while queue:
+>         level: list[int] = []
+>         for _ in range(len(queue)):
+>             node = queue.popleft()
+>             level.append(node.val)
+>             if node.left:
+>                 queue.append(node.left)
+>             if node.right:
+>                 queue.append(node.right)
+>         result.append(level if left_to_right else level[::-1])
+>         left_to_right = not left_to_right
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n).
+
+> [!tip] Alternatives
+> - Double-ended deque per level: append to front or back based on direction, avoiding the reversal. O(n) same, slightly more complex.
+> - DFS with depth parity: same O(n), call-stack based.
+
+---
+
+### Binary Tree Right Side View
+
+> [!example] Problem
+> Given the root of a binary tree, return the values of nodes visible when looking at the tree from the right side — i.e., the last node at each level (LC 199).
+
+> [!info] Approach
+> - **WHY:** The rightmost node at each level is exactly the last node dequeued in a level-order BFS.
+> - **WHAT:** Level-order BFS; record the last node value at each level.
+> - **HOW:** Standard level-size snapshotting. After processing all nodes in a level, the most recently processed node value is the rightmost — append it to results.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> from typing import Optional
+>
+> def rightSideView(root: Optional[TreeNode]) -> list[int]:
+>     if not root:
+>         return []
+>     result: list[int] = []
+>     queue: deque[TreeNode] = deque([root])
+>     while queue:
+>         rightmost = 0
+>         for _ in range(len(queue)):
+>             node = queue.popleft()
+>             rightmost = node.val
+>             if node.left:
+>                 queue.append(node.left)
+>             if node.right:
+>                 queue.append(node.right)
+>         result.append(rightmost)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n).
+
+> [!tip] Alternatives
+> - DFS right-first: visit right child before left; first node seen at each depth is the rightmost. O(n) time, O(h) space.
+> - To get left side view: swap child enqueue order (right before left) or take `level[0]` instead of `level[-1]`.
+
+---
+
 ## BFS Multi-Source
 
 ### Rotting Oranges
@@ -755,7 +889,182 @@ difficulty: mixed
 
 ---
 
+## Topological Sort (Kahn's BFS)
+
+### Course Schedule
+
+> [!example] Problem
+> Given `numCourses` and a list of `prerequisites [a, b]` meaning "to take course `a`, you must first take course `b`", return `true` if it is possible to finish all courses (LC 207).
+
+> [!info] Approach
+> - **WHY:** The prerequisites form a directed graph; a cycle makes it impossible to finish all courses. Kahn's algorithm detects cycles via in-degree tracking.
+> - **WHAT:** Topological sort using BFS (Kahn's algorithm). If all nodes are processed, the graph is a DAG (no cycle).
+> - **HOW:** Build adjacency list and in-degree array. Enqueue all nodes with in-degree 0. For each dequeued node, decrement neighbors' in-degrees; enqueue any that reach 0. Count processed nodes — if count equals `numCourses`, return True.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+>
+> def canFinish(numCourses: int, prerequisites: list[list[int]]) -> bool:
+>     graph: list[list[int]] = [[] for _ in range(numCourses)]
+>     in_degree = [0] * numCourses
+>     for a, b in prerequisites:
+>         graph[b].append(a)
+>         in_degree[a] += 1
+>
+>     queue: deque[int] = deque(i for i in range(numCourses) if in_degree[i] == 0)
+>     processed = 0
+>     while queue:
+>         node = queue.popleft()
+>         processed += 1
+>         for neighbor in graph[node]:
+>             in_degree[neighbor] -= 1
+>             if in_degree[neighbor] == 0:
+>                 queue.append(neighbor)
+>     return processed == numCourses
+> ```
+
+> [!success] Complexity
+> Time O(V + E). Space O(V + E).
+
+> [!tip] Alternatives
+> - DFS cycle detection: color nodes white/grey/black; a back edge (grey → grey) indicates a cycle. O(V + E), same complexity, uses recursion stack.
+> - Union-Find: detects cycles in undirected graphs but not directed — not applicable here.
+
+---
+
+### Course Schedule II
+
+> [!example] Problem
+> Same setup as Course Schedule, but return one valid ordering of courses to take. Return an empty list if impossible (LC 210).
+
+> [!info] Approach
+> - **WHY:** Topological sort produces a valid linear ordering of a DAG. Kahn's BFS directly yields this order.
+> - **WHAT:** Same Kahn's BFS as Course Schedule, but record the processing order.
+> - **HOW:** Append each dequeued node to `order`. If `len(order) == numCourses`, the graph is a DAG and `order` is a valid schedule. Otherwise return `[]`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+>
+> def findOrder(numCourses: int, prerequisites: list[list[int]]) -> list[int]:
+>     graph: list[list[int]] = [[] for _ in range(numCourses)]
+>     in_degree = [0] * numCourses
+>     for a, b in prerequisites:
+>         graph[b].append(a)
+>         in_degree[a] += 1
+>
+>     queue: deque[int] = deque(i for i in range(numCourses) if in_degree[i] == 0)
+>     order: list[int] = []
+>     while queue:
+>         node = queue.popleft()
+>         order.append(node)
+>         for neighbor in graph[node]:
+>             in_degree[neighbor] -= 1
+>             if in_degree[neighbor] == 0:
+>                 queue.append(neighbor)
+>     return order if len(order) == numCourses else []
+> ```
+
+> [!success] Complexity
+> Time O(V + E). Space O(V + E).
+
+> [!tip] Alternatives
+> - DFS postorder: process a node after all its descendants; reverse postorder gives topological order. O(V + E).
+> - Multiple valid orderings exist; both BFS and DFS give one valid answer but may differ.
+
+---
+
+### Alien Dictionary
+
+> [!example] Problem
+> Given a list of words from an alien dictionary sorted in alien lexicographic order, derive the order of letters in the alien alphabet. Return any valid order, or `""` if the ordering is invalid (contains a cycle or a word is a prefix-violated neighbor).
+
+> [!info] Approach
+> - **WHY:** Comparing adjacent words in the sorted list reveals ordering constraints between characters (directed edges). The full ordering is a topological sort of these constraints.
+> - **WHAT:** Build a directed graph from character ordering constraints. Run Kahn's BFS topological sort.
+> - **HOW:** For each adjacent word pair, find the first differing character — that gives an edge. If word A is a prefix of word B but appears after B, return `""` (invalid). Run Kahn's BFS. If all characters are processed, the BFS output is the alien alphabet order.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque, defaultdict
+>
+> def alienOrder(words: list[str]) -> str:
+>     # initialize all chars
+>     graph: dict[str, list[str]] = defaultdict(list)
+>     in_degree: dict[str, int] = {c: 0 for word in words for c in word}
+>
+>     for i in range(len(words) - 1):
+>         w1, w2 = words[i], words[i + 1]
+>         min_len = min(len(w1), len(w2))
+>         # prefix violation: "abc" before "ab" is invalid
+>         if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:
+>             return ""
+>         for j in range(min_len):
+>             if w1[j] != w2[j]:
+>                 graph[w1[j]].append(w2[j])
+>                 in_degree[w2[j]] += 1
+>                 break
+>
+>     queue: deque[str] = deque(c for c in in_degree if in_degree[c] == 0)
+>     order: list[str] = []
+>     while queue:
+>         c = queue.popleft()
+>         order.append(c)
+>         for neighbor in graph[c]:
+>             in_degree[neighbor] -= 1
+>             if in_degree[neighbor] == 0:
+>                 queue.append(neighbor)
+>
+>     return "".join(order) if len(order) == len(in_degree) else ""
+> ```
+
+> [!success] Complexity
+> Time O(C) where C = total characters across all words. Space O(U) where U = unique characters.
+
+> [!tip] Alternatives
+> - DFS with cycle detection: same complexity, different code structure.
+> - Note: multiple valid orderings may exist; any one is acceptable.
+
+---
+
 ## Design
+
+### Design Hit Counter
+
+> [!example] Problem
+> Design a hit counter that counts hits in the past 5 minutes (300 seconds). Implement `hit(timestamp)` and `getHits(timestamp)` where timestamps are in seconds (LC 362).
+
+> [!info] Approach
+> - **WHY:** Hits older than 300 seconds are never useful again. A queue naturally evicts stale hits from the front.
+> - **WHAT:** Deque of timestamps. At each operation, evict timestamps older than `timestamp - 300`.
+> - **HOW:** `hit`: append timestamp. `getHits`: evict front while `front <= timestamp - 300`, then return `len(deque)`. Works even with out-of-order calls as long as timestamps are non-decreasing.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+>
+> class HitCounter:
+>     def __init__(self) -> None:
+>         self._q: deque[int] = deque()
+>
+>     def hit(self, timestamp: int) -> None:
+>         self._q.append(timestamp)
+>
+>     def getHits(self, timestamp: int) -> int:
+>         while self._q and self._q[0] <= timestamp - 300:
+>             self._q.popleft()
+>         return len(self._q)
+> ```
+
+> [!success] Complexity
+> Time O(1) amortized per operation (each hit added/removed at most once). Space O(hits in last 300s).
+
+> [!tip] Alternatives
+> - Circular array of size 300: store `(count, timestamp)` per second bucket — O(1) time, O(300) fixed space. Better for high-throughput systems where many hits share the same second.
+> - Follow-up: if hits come in multi-threaded, use locks around the deque operations.
+
+---
 
 ### Design Circular Queue
 
@@ -970,6 +1279,98 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Two queues: push to q2, move all of q1 behind it, swap names — same O(n) push but uses more memory.
 > - Make pop O(n) instead: keep push O(1), rotate on pop. Choose based on which operation is called more frequently.
+
+---
+
+## Priority Queue / Heap
+
+### Task Scheduler
+
+> [!example] Problem
+> Given a list of CPU tasks (letters) and a cooldown `n`, return the minimum intervals needed to finish all tasks. During cooldown, the CPU can be idle or execute a different task (LC 621).
+
+> [!info] Approach
+> - **WHY:** We always want to execute the most frequent remaining task next (greedy). A max-heap gives the most frequent task in O(log k). When a task is on cooldown, it sits in a queue until it can be re-used.
+> - **WHAT:** Max-heap of `(-count, task)` + cooldown queue of `(count_after_use, available_at_time)`.
+> - **HOW:** Build frequency map; push all `(-count,)` entries to the heap. At each time tick: if the cooldown queue front is ready (available_at <= time), push it back onto the heap. If the heap is non-empty, pop and execute the most frequent task, push it to the cooldown queue with updated count. Otherwise, idle. Increment time.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import Counter, deque
+>
+> def leastInterval(tasks: list[str], n: int) -> int:
+>     freq = Counter(tasks)
+>     heap = [-count for count in freq.values()]
+>     heapq.heapify(heap)
+>
+>     cooldown: deque[tuple[int, int]] = deque()  # (neg_remaining, available_time)
+>     time = 0
+>     while heap or cooldown:
+>         time += 1
+>         if cooldown and cooldown[0][1] <= time:
+>             neg_rem, _ = cooldown.popleft()
+>             heapq.heappush(heap, neg_rem)
+>         if heap:
+>             neg_rem = heapq.heappop(heap)
+>             neg_rem += 1  # task count decreases by 1
+>             if neg_rem < 0:
+>                 cooldown.append((neg_rem, time + n + 1))
+>     return time
+> ```
+
+> [!success] Complexity
+> Time O(T log k) where T = total intervals, k = unique task types. Space O(k).
+
+> [!tip] Alternatives
+> - Math formula: `max(len(tasks), (max_freq - 1) * (n + 1) + count_of_max_freq_tasks)` — O(T) computation, O(1) space. Derivation: most frequent task creates `(max_freq - 1)` cycles of length `(n + 1)` plus a final batch.
+> - The heap simulation is easier to adapt for follow-ups (e.g., order must be preserved, variable cooldowns).
+
+---
+
+### Find Median from Data Stream
+
+> [!example] Problem
+> Design a data structure that supports `addNum(num)` and `findMedian()`. The median is the middle value of the sorted dataset; for even count it is the average of the two middle values (LC 295).
+
+> [!info] Approach
+> - **WHY:** Sorting on every query is O(n log n). Maintaining two heaps — a max-heap of the lower half and a min-heap of the upper half — lets us access the median in O(1).
+> - **WHAT:** `lo` = max-heap (lower half), `hi` = min-heap (upper half). Invariant: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. The median is `lo[0]` (odd count) or `(lo[0] + hi[0]) / 2` (even count).
+> - **HOW:** `addNum`: push to `lo` (negate for max-heap), then balance by moving `lo`'s max to `hi` if `lo[0] > hi[0]` or sizes diverge. Rebalance so `lo` is never smaller than `hi`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> class MedianFinder:
+>     def __init__(self) -> None:
+>         self._lo: list[int] = []  # max-heap (negated)
+>         self._hi: list[int] = []  # min-heap
+>
+>     def addNum(self, num: int) -> None:
+>         heapq.heappush(self._lo, -num)
+>         # ensure every element in lo <= every element in hi
+>         if self._hi and -self._lo[0] > self._hi[0]:
+>             heapq.heappush(self._hi, -heapq.heappop(self._lo))
+>         # balance sizes: lo can have at most 1 more element than hi
+>         if len(self._lo) > len(self._hi) + 1:
+>             heapq.heappush(self._hi, -heapq.heappop(self._lo))
+>         elif len(self._hi) > len(self._lo):
+>             heapq.heappush(self._lo, -heapq.heappop(self._hi))
+>
+>     def findMedian(self) -> float:
+>         if len(self._lo) > len(self._hi):
+>             return float(-self._lo[0])
+>         return (-self._lo[0] + self._hi[0]) / 2.0
+> ```
+
+> [!success] Complexity
+> Time O(log n) per `addNum`, O(1) per `findMedian`. Space O(n).
+
+> [!tip] Alternatives
+> - Sorted list with bisect: O(n) insert, O(1) median — too slow for large streams.
+> - Order statistics tree (e.g., `sortedcontainers.SortedList`): O(log n) insert, O(1) median — clean but not standard library.
+> - Follow-up: if numbers are in range [0, 100], use a 101-bucket count array + prefix sums — O(100) per operation.
 
 ---
 

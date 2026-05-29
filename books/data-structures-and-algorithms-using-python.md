@@ -3,7 +3,7 @@ module: books
 topic: Data Structures And Algorithms Using Python
 subtopic: 
 status: unread
-tags: [books, upsc, data-structures-and-algorithms]
+tags: [books, data-structures-and-algorithms]
 ---
 # Data structures and algorithms using python
 

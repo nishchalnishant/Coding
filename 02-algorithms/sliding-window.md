@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Sliding Window
 subtopic: 
 status: unread
-tags: [algorithms, upsc, sliding-window]
+tags: [algorithms, sliding-window]
 ---
 ## First-Principles Map
 

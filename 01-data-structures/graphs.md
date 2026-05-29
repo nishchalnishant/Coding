@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Graphs
 subtopic: 
 status: unread
-tags: [data-structures, upsc, graphs]
+tags: [data-structures, graphs]
 ---
 ## First-Principles Map
 
@@ -274,7 +274,7 @@ def grid_dfs_flood_fill(grid: list[list[int]], r: int, c: int, target: int, fill
    - **How (Intuition & Mental Model):** First, run DFS on all 0s on the perimeter of the grid and mark them as non-closed (or turn them into 1s). Then, run a standard DFS component count on the remaining interior 0s to find the closed islands.
 3. **Regions Cut By Slashes**:
    - **What (The Problem & Goal):** A grid consists of `/`, `\`, or blank spaces. Count the number of isolated regions they divide the grid into.
-   - **How (Intuition & Mental Model):** The upscaling twist. A single cell can contain multiple disconnected regions. Upscale the `n x n` grid into a `3n x 3n` grid. Represent slashes with 1s and empty space with 0s. Then, run standard DFS/BFS flood fill to count the components of 0s.
+   - **How (Intuition & Mental Model):** Thealing twist. A single cell can contain multiple disconnected regions. Upscale the `n x n` grid into a `3n x 3n` grid. Represent slashes with 1s and empty space with 0s. Then, run standard DFS/BFS flood fill to count the components of 0s.
 
 > [!CAUTION]
 > For large grids (200×200 = 40,000 cells), recursive DFS will hit Python's recursion limit. Use **iterative DFS** (explicit stack) or increase `sys.setrecursionlimit` — mention this trade-off to the interviewer. Iterative DFS is always preferable in production.

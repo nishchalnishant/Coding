@@ -185,6 +185,72 @@ difficulty: mixed
 
 ---
 
+### Kth Largest Element in an Array
+
+> [!example] Problem
+> Find the `k`th largest element in an unsorted array (not the `k`th distinct element).
+
+> [!info] Approach
+> - **WHY:** Sorting is O(n log n) but we only need one order-statistic. A size-k min-heap scans once.
+> - **WHAT:** Min-heap of size exactly `k`. After processing all elements, the root is the k-th largest.
+> - **HOW:** For each number, push to heap. If heap exceeds size `k`, pop the minimum. Root after full pass is the answer in O(1).
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def find_kth_largest(nums: list[int], k: int) -> int:
+>     heap: list[int] = []
+>     for n in nums:
+>         heapq.heappush(heap, n)
+>         if len(heap) > k:
+>             heapq.heappop(heap)
+>     return heap[0]
+> ```
+
+> [!success] Complexity
+> Time O(n log k); Space O(k).
+
+> [!tip] Alternatives
+> QuickSelect — O(n) average, O(n²) worst; in-place, no extra memory. `heapq.nlargest(k, nums)[-1]` is idiomatic but O(n log k) internally.
+
+---
+
+### Top K Frequent Words
+
+> [!example] Problem
+> Given a list of words, return the `k` most frequent words sorted by frequency (descending), with ties broken lexicographically.
+
+> [!info] Approach
+> - **WHY:** Two sort keys — frequency (desc) and lexicographic (asc) — make a plain max-heap awkward. A min-heap with negated frequency and regular string comparison handles both.
+> - **WHAT:** Min-heap of `(-freq, word)`. Python compares tuples element-by-element: ties on frequency fall through to lexicographic comparison, keeping the lexicographically larger word at the top (to be evicted first).
+> - **HOW:** Count with `Counter`. Push `(-freq, word)` for each unique word. When heap exceeds `k`, pop. Collect remaining `k` entries and reverse-sort for output order.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import Counter
+>
+> def top_k_frequent_words(words: list[str], k: int) -> list[str]:
+>     count = Counter(words)
+>     heap: list[tuple[int, str]] = []
+>     for word, freq in count.items():
+>         heapq.heappush(heap, (-freq, word))
+>         if len(heap) > k:
+>             heapq.heappop(heap)
+>     # heap has k entries; sort for correct output order
+>     result = sorted(heap, key=lambda x: (x[0], x[1]))
+>     return [word for _, word in result]
+> ```
+
+> [!success] Complexity
+> Time O(n + m log k) where m = unique words; Space O(m).
+
+> [!tip] Alternatives
+> `Counter.most_common()` then sort by `(-freq, word)` — O(m log m), clean for interviews. The heap version is O(m log k) which matters when k << m.
+
+---
+
 ## Scheduling / Reorganization
 
 ### Task Scheduler
@@ -570,6 +636,302 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Merge all lists with source tags, sort, then sliding window to find minimum range with all k sources — same O(n log n) but simpler to reason about at the cost of O(n) extra space.
+
+---
+
+### K-th Smallest in M Sorted Arrays
+
+> [!example] Problem
+> Given `m` sorted arrays of total `n` elements, find the `k`th smallest element across all arrays.
+
+> [!info] Approach
+> - **WHY:** This is the general form of "Kth Smallest in a Sorted Matrix" — M sorted sequences, find the k-th minimum globally.
+> - **WHAT:** Min-heap seeded with the first element of each array. Pop once per step, advance that array's pointer. After k pops, the last popped is the answer.
+> - **HOW:** Push `(arrays[i][0], i, 0)` for all i. Pop and push `(arrays[i][j+1], i, j+1)` until k pops done.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def kth_smallest_m_arrays(arrays: list[list[int]], k: int) -> int:
+>     heap: list[tuple[int, int, int]] = []
+>     for i, arr in enumerate(arrays):
+>         if arr:
+>             heapq.heappush(heap, (arr[0], i, 0))
+>     val = 0
+>     for _ in range(k):
+>         val, i, j = heapq.heappop(heap)
+>         if j + 1 < len(arrays[i]):
+>             heapq.heappush(heap, (arrays[i][j + 1], i, j + 1))
+>     return val
+> ```
+
+> [!success] Complexity
+> Time O(k log m); Space O(m).
+
+> [!tip] Alternatives
+> Binary search on value + count function — O(m log(max-min) * log(total_n)). Useful when k is large or m is huge.
+
+---
+
+### Maximum CPU Load
+
+> [!example] Problem
+> Given a list of jobs `[start, end, load]`, find the maximum CPU load at any point in time (jobs can overlap).
+
+> [!info] Approach
+> - **WHY:** Classic interval overlap problem — need to track which jobs are active at each moment.
+> - **WHAT:** Sort by start time. Use a min-heap keyed by end time to track active jobs. At each new job's start, evict all jobs that have ended.
+> - **HOW:** Sort jobs by start. For each job, pop from heap all jobs with `end <= job.start`. Push current job's end time and load. Track running sum of active loads and record maximum.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def find_max_cpu_load(jobs: list[list[int]]) -> int:
+>     jobs.sort(key=lambda x: x[0])
+>     heap: list[tuple[int, int]] = []  # (end_time, load)
+>     current_load = 0
+>     max_load = 0
+>     for start, end, load in jobs:
+>         # Remove all jobs that ended before this one starts
+>         while heap and heap[0][0] <= start:
+>             _, ended_load = heapq.heappop(heap)
+>             current_load -= ended_load
+>         heapq.heappush(heap, (end, load))
+>         current_load += load
+>         max_load = max(max_load, current_load)
+>     return max_load
+> ```
+
+> [!success] Complexity
+> Time O(n log n); Space O(n).
+
+> [!tip] Alternatives
+> Sweep line with events — O(n log n), same complexity; easier to reason about when jobs have fractional times. Heap approach is more intuitive for interval problems in interviews.
+
+---
+
+## Dijkstra / Graph
+
+### Network Delay Time
+
+> [!example] Problem
+> A directed weighted graph of `n` nodes; given signal source `k`, find the time for all nodes to receive the signal. Return `-1` if unreachable.
+
+> [!info] Approach
+> - **WHY:** Shortest path from a single source to all nodes — Dijkstra's algorithm.
+> - **WHAT:** Min-heap of `(dist, node)`. Relax edges greedily. Once all nodes popped from heap, the maximum dist is the answer.
+> - **HOW:** Build adjacency list. Push `(0, k)`. Pop min dist node; skip if already visited. Relax neighbors. Track visited set. Answer = `max(dist.values())` if `len(dist) == n` else `-1`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import defaultdict
+>
+> def network_delay_time(times: list[list[int]], n: int, k: int) -> int:
+>     graph: dict[int, list[tuple[int, int]]] = defaultdict(list)
+>     for u, v, w in times:
+>         graph[u].append((w, v))
+>     dist: dict[int, int] = {}
+>     heap: list[tuple[int, int]] = [(0, k)]
+>     while heap:
+>         d, u = heapq.heappop(heap)
+>         if u in dist:
+>             continue
+>         dist[u] = d
+>         for w, v in graph[u]:
+>             if v not in dist:
+>                 heapq.heappush(heap, (d + w, v))
+>     return max(dist.values()) if len(dist) == n else -1
+> ```
+
+> [!success] Complexity
+> Time O((V + E) log V); Space O(V + E).
+
+> [!tip] Alternatives
+> Bellman-Ford — O(VE), handles negative weights but much slower. Floyd-Warshall — O(V³), all-pairs; overkill for single-source.
+
+---
+
+### Path with Minimum Effort
+
+> [!example] Problem
+> Grid of heights; move in 4 directions. Effort of a path = max absolute height difference between consecutive cells. Find min effort from top-left to bottom-right.
+
+> [!info] Approach
+> - **WHY:** Minimizing the maximum edge weight along a path — modified Dijkstra where "dist" is the bottleneck edge.
+> - **WHAT:** Min-heap of `(effort, row, col)`. `effort` = max diff seen so far on the current path. Relax: new effort = `max(current_effort, abs(neighbor_height - current_height))`.
+> - **HOW:** Push `(0, 0, 0)`. For each pop, update neighbors with `max(effort, abs diff)`. Skip if already visited at a better effort.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def minimum_effort_path(heights: list[list[int]]) -> int:
+>     rows, cols = len(heights), len(heights[0])
+>     dist = [[float('inf')] * cols for _ in range(rows)]
+>     dist[0][0] = 0
+>     heap: list[tuple[float, int, int]] = [(0, 0, 0)]
+>     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+>     while heap:
+>         effort, r, c = heapq.heappop(heap)
+>         if r == rows - 1 and c == cols - 1:
+>             return int(effort)
+>         if effort > dist[r][c]:
+>             continue
+>         for dr, dc in dirs:
+>             nr, nc = r + dr, c + dc
+>             if 0 <= nr < rows and 0 <= nc < cols:
+>                 new_effort = max(effort, abs(heights[nr][nc] - heights[r][c]))
+>                 if new_effort < dist[nr][nc]:
+>                     dist[nr][nc] = new_effort
+>                     heapq.heappush(heap, (new_effort, nr, nc))
+>     return 0
+> ```
+
+> [!success] Complexity
+> Time O(m*n log(m*n)); Space O(m*n).
+
+> [!tip] Alternatives
+> Binary search on effort + BFS/DFS reachability check — O(m*n log(max_height)). Union-Find on edges sorted by weight — O(E log E), finds the answer when source and dest become connected.
+
+---
+
+### Swim in Rising Water
+
+> [!example] Problem
+> Grid where `grid[i][j]` is the elevation. Rain rises uniformly — at time `t` you can swim from any cell with elevation ≤ `t` to an adjacent one. Find minimum `t` to reach bottom-right from top-left.
+
+> [!info] Approach
+> - **WHY:** Same bottleneck-path structure as "Path with Minimum Effort" — minimize the maximum elevation encountered.
+> - **WHAT:** Min-heap of `(elevation, row, col)`. The answer is the max elevation on the optimal path, i.e. when we reach `(n-1, n-1)` via Dijkstra-style expansion.
+> - **HOW:** Push `(grid[0][0], 0, 0)`. Pop min elevation; if it's the destination return it. Mark visited. Push unvisited neighbors with `max(current_t, grid[nr][nc])`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def swim_in_water(grid: list[list[int]]) -> int:
+>     n = len(grid)
+>     visited = [[False] * n for _ in range(n)]
+>     heap: list[tuple[int, int, int]] = [(grid[0][0], 0, 0)]
+>     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+>     while heap:
+>         t, r, c = heapq.heappop(heap)
+>         if r == n - 1 and c == n - 1:
+>             return t
+>         if visited[r][c]:
+>             continue
+>         visited[r][c] = True
+>         for dr, dc in dirs:
+>             nr, nc = r + dr, c + dc
+>             if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc]:
+>                 heapq.heappush(heap, (max(t, grid[nr][nc]), nr, nc))
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(n² log n²); Space O(n²).
+
+> [!tip] Alternatives
+> Binary search on `t` + BFS connectivity — O(n² log n). Union-Find adding edges in elevation order — O(n² α(n²)), essentially linear. All three approaches appear in interviews.
+
+---
+
+## Design
+
+### Design Twitter
+
+> [!example] Problem
+> Design a simplified Twitter: `post_tweet(userId, tweetId)`, `get_news_feed(userId)` (10 most recent tweets from self + followees), `follow(followerId, followeeId)`, `unfollow`.
+
+> [!info] Approach
+> - **WHY:** News feed merges multiple sorted tweet streams (one per followee) — this is K-way merge on recency.
+> - **WHAT:** Store each user's tweets as a list (ordered by insertion = by time using a global counter). `get_news_feed` collects all candidate tweet lists and uses a max-heap on timestamp to extract the 10 most recent.
+> - **HOW:** Global `time` counter increments with each tweet. Each user has a list of `(time, tweetId)`. For feed: seed heap with latest tweet from each followee+self. Pop max; push that user's next tweet. Collect 10.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import defaultdict
+>
+> class Twitter:
+>     def __init__(self) -> None:
+>         self._time = 0
+>         self._tweets: dict[int, list[tuple[int, int]]] = defaultdict(list)
+>         self._follows: dict[int, set[int]] = defaultdict(set)
+>
+>     def post_tweet(self, userId: int, tweetId: int) -> None:
+>         self._tweets[userId].append((self._time, tweetId))
+>         self._time += 1
+>
+>     def get_news_feed(self, userId: int) -> list[int]:
+>         heap: list[tuple[int, int, int, int]] = []  # (-time, tweetId, userId, idx)
+>         users = self._follows[userId] | {userId}
+>         for uid in users:
+>             tweets = self._tweets[uid]
+>             if tweets:
+>                 idx = len(tweets) - 1
+>                 t, tid = tweets[idx]
+>                 heapq.heappush(heap, (-t, tid, uid, idx - 1))
+>         result: list[int] = []
+>         while heap and len(result) < 10:
+>             _, tid, uid, idx = heapq.heappop(heap)
+>             result.append(tid)
+>             if idx >= 0:
+>                 t, next_tid = self._tweets[uid][idx]
+>                 heapq.heappush(heap, (-t, next_tid, uid, idx - 1))
+>         return result
+>
+>     def follow(self, followerId: int, followeeId: int) -> None:
+>         self._follows[followerId].add(followeeId)
+>
+>     def unfollow(self, followerId: int, followeeId: int) -> None:
+>         self._follows[followerId].discard(followeeId)
+> ```
+
+> [!success] Complexity
+> `post_tweet` O(1); `get_news_feed` O(F log F + 10 log F) where F = followees; `follow/unfollow` O(1).
+
+> [!tip] Alternatives
+> Pre-materialized feeds with a write-fan-out — O(F) on each post, O(1) read; used in real systems for read-heavy workloads (Twitter's "fanout on write").
+
+---
+
+### Ugly Number II
+
+> [!example] Problem
+> An "ugly number" has only prime factors 2, 3, and 5. Return the `n`th ugly number (sequence: 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, …).
+
+> [!info] Approach
+> - **WHY:** We need to generate ugly numbers in order without iterating all integers.
+> - **WHAT:** Min-heap seeded with `{1}`. Each pop gives the next ugly number; multiply by 2, 3, 5 to generate candidates. Use a visited set to avoid duplicates.
+> - **HOW:** Push 1. Pop min (= current ugly). Push `val*2, val*3, val*5` if not seen. Repeat n times.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def nth_ugly_number(n: int) -> int:
+>     heap: list[int] = [1]
+>     seen: set[int] = {1}
+>     val = 1
+>     for _ in range(n):
+>         val = heapq.heappop(heap)
+>         for factor in (2, 3, 5):
+>             nxt = val * factor
+>             if nxt not in seen:
+>                 seen.add(nxt)
+>                 heapq.heappush(heap, nxt)
+>     return val
+> ```
+
+> [!success] Complexity
+> Time O(n log n); Space O(n).
+
+> [!tip] Alternatives
+> Three-pointer DP — O(n) time and space, no set needed. Maintain indices `i2, i3, i5` into the result array; next ugly = `min(ugly[i2]*2, ugly[i3]*3, ugly[i5]*5)`. More cache-friendly and the canonical solution.
 
 ---
 

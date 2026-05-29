@@ -862,6 +862,510 @@ Key pruning sources: (1) constraint violation (invalid partial state), (2) struc
 
 ---
 
+## Constraint Satisfaction / Pruning-Heavy
+
+### Combination Sum III
+
+> [!example] Problem
+> Find all combinations of exactly k numbers from 1-9 that sum to target n. Each number used at most once, no duplicates in output.
+
+> [!info] Approach
+> - **WHY:** Fixed-size (exactly k elements), fixed-sum, fixed universe (1-9). Tight structural bounds enable strong pruning: (1) more than k elements chosen → stop; (2) remaining sum impossible with remaining numbers → stop (min achievable = sum of smallest k-len remaining numbers).
+> - **WHAT:** Backtrack over digits 1-9 with `start`, tracking `remaining` and `count`. Prune when `count > k` or `remaining < 0`. Record when `count == k and remaining == 0`.
+> - **HOW:** Because the domain is tiny (1-9), no sorting needed — it's inherently sorted. Upper bound prune: if `remaining > sum(range(start, 10))[:k-len(path)]`, stop.
+
+> [!note]- Python Solution
+> ```python
+> def combinationSum3(k: int, n: int) -> list[list[int]]:
+>     res: list[list[int]] = []
+>     path: list[int] = []
+> 
+>     def bt(start: int, remaining: int) -> None:
+>         if len(path) == k and remaining == 0:
+>             res.append(path[:])
+>             return
+>         if len(path) == k or remaining <= 0:
+>             return
+>         for i in range(start, 10):
+>             # Prune: even taking the smallest available numbers won't reach 0
+>             slots_left = k - len(path)
+>             if i > remaining:
+>                 break  # i is the smallest we'd add; can't decrease remaining to 0
+>             if slots_left == 1 and i != remaining:
+>                 # Only one slot; must match exactly
+>                 if i < remaining:
+>                     continue
+>                 break
+>             path.append(i)
+>             bt(i + 1, remaining - i)
+>             path.pop()
+> 
+>     bt(1, n)
+>     return res
+> ```
+
+> [!success] Complexity
+> O(C(9,k) · k) — at most C(9,k) valid subsets of size k from {1..9}; O(k) recursion depth.
+
+> [!tip] Alternatives
+> Bitmask: iterate all 2^9 = 512 subsets, check popcount == k and sum == n — O(512 · 9), perfectly fine for this fixed domain. Simpler code, not generalizable.
+
+---
+
+### Target Sum
+
+> [!example] Problem
+> Given an integer array and a target, assign `+` or `-` to each element and count the number of ways to reach target.
+
+> [!info] Approach
+> - **WHY:** Binary choice per element (+ or -) → 2^n branches. DP solution exists, but backtracking is instructive. Pruning: track remaining reachable range — if `current + sum(remaining) < target` or `current - sum(remaining) > target`, prune. DP (subset sum variant) is O(n · total_sum) and preferred at scale.
+> - **WHAT:** At each index, branch into `+nums[i]` and `-nums[i]`. Count paths reaching target at depth n.
+> - **HOW:** Backtracking here: O(2^n). DP reduction: let P = sum of positives, N = sum of negatives. P - N = target, P + N = total → P = (target + total) / 2. Count subsets summing to P.
+
+> [!note]- Python Solution
+> ```python
+> def findTargetSumWays(nums: list[int], target: int) -> int:
+>     # Backtracking approach (educational)
+>     count = 0
+>     n = len(nums)
+>     suffix_sum = [0] * (n + 1)
+>     for i in range(n - 1, -1, -1):
+>         suffix_sum[i] = suffix_sum[i + 1] + nums[i]
+> 
+>     def bt(i: int, current: int) -> None:
+>         nonlocal count
+>         if i == n:
+>             if current == target:
+>                 count += 1
+>             return
+>         # Pruning: even if all remaining are +, can't reach target
+>         if current + suffix_sum[i] < target:
+>             return
+>         # Pruning: even if all remaining are -, can't reach target
+>         if current - suffix_sum[i] > target:
+>             return
+>         bt(i + 1, current + nums[i])
+>         bt(i + 1, current - nums[i])
+> 
+>     bt(0, 0)
+>     return count
+> ```
+
+> [!success] Complexity
+> O(2^n) backtracking (with pruning, much less); O(n) space. DP alternative: O(n · S) where S = sum of all nums.
+
+> [!tip] Alternatives
+> Subset-sum DP: P = (target + total) / 2; count subsets summing to P using 1D DP — O(n · S), much better for large n. Memoization on (index, current_sum) — O(n · 2S) states.
+
+---
+
+### Beautiful Arrangement
+
+> [!example] Problem
+> Count permutations of 1..n where position i (1-indexed) satisfies: `perm[i] % i == 0` or `i % perm[i] == 0`.
+
+> [!info] Approach
+> - **WHY:** Permutation backtracking where each position has a constraint. Fill positions 1..n left to right; at position `pos`, only place number `num` if `num % pos == 0 or pos % num == 0`. A `used` boolean array tracks which numbers remain.
+> - **WHAT:** Backtrack over positions 1 to n. For each position, try all unused numbers satisfying the divisibility constraint. Track with `used` array.
+> - **HOW:** Pruning is implicit: invalid choices are simply not tried. Iterate numbers in decreasing order to hit more valid placements early (empirically faster).
+
+> [!note]- Python Solution
+> ```python
+> def countArrangement(n: int) -> int:
+>     used = [False] * (n + 1)
+>     count = 0
+> 
+>     def bt(pos: int) -> None:
+>         nonlocal count
+>         if pos > n:
+>             count += 1
+>             return
+>         for num in range(n, 0, -1):  # descending: hits valid earlier
+>             if not used[num] and (num % pos == 0 or pos % num == 0):
+>                 used[num] = True
+>                 bt(pos + 1)
+>                 used[num] = False
+> 
+>     bt(1)
+>     return count
+> ```
+
+> [!success] Complexity
+> O(k) where k = number of valid arrangements; in practice much less than O(n!) due to constraint pruning. Space O(n).
+
+> [!tip] Alternatives
+> Bitmask DP: `dp[mask]` = count of arrangements for the set of numbers in `mask` filling positions 1..popcount(mask) — O(n · 2^n) time and space. Faster for large n but uses significant memory.
+
+---
+
+### Restore IP Addresses
+
+> [!example] Problem
+> Given a string of digits, return all valid IPv4 addresses. Each segment 0-255, no leading zeros.
+
+> [!info] Approach
+> - **WHY:** Exactly 4 segments, each 1-3 digits. Backtracking tries all split points. Pruning: (1) segment value > 255; (2) leading zeros (segment starting with '0' must be exactly '0'); (3) remaining digits can't form the remaining segments (each needs 1-3 digits).
+> - **WHAT:** At each step, try taking 1, 2, or 3 characters as the next segment. If the segment is valid, recurse for the next segment.
+> - **HOW:** After choosing 4 segments, the entire string must be consumed. Feasibility check: `remaining_digits` must be between `remaining_segments` and `3 * remaining_segments`.
+
+> [!note]- Python Solution
+> ```python
+> def restoreIpAddresses(s: str) -> list[str]:
+>     res: list[str] = []
+>     path: list[str] = []
+> 
+>     def bt(start: int) -> None:
+>         if len(path) == 4:
+>             if start == len(s):
+>                 res.append('.'.join(path))
+>             return
+>         remaining_segs = 4 - len(path)
+>         remaining_chars = len(s) - start
+>         # Pruning: feasibility window
+>         if remaining_chars < remaining_segs or remaining_chars > 3 * remaining_segs:
+>             return
+>         for length in range(1, 4):
+>             if start + length > len(s):
+>                 break
+>             segment = s[start:start + length]
+>             # No leading zeros for multi-digit segments
+>             if len(segment) > 1 and segment[0] == '0':
+>                 break
+>             if int(segment) > 255:
+>                 break
+>             path.append(segment)
+>             bt(start + length)
+>             path.pop()
+> 
+>     bt(0)
+>     return res
+> ```
+
+> [!success] Complexity
+> O(1) — at most 3^4 = 81 combinations to check (4 segments × 3 length choices); O(1) space (path depth fixed at 4).
+
+> [!tip] Alternatives
+> Triple nested loops over the three split points — O(n^3) but bounded by string length constraints, equivalent. Iterative with explicit segment validation is slightly simpler.
+
+---
+
+## String Backtracking (continued)
+
+### Word Break II
+
+> [!example] Problem
+> Given a string `s` and a dictionary, return all ways to segment `s` into space-separated dictionary words.
+
+> [!info] Approach
+> - **WHY:** Try every possible first word; recurse on the suffix. Without memoization this is O(2^n) — many suffixes are explored repeatedly. Memoize the list of sentences producible from each suffix to eliminate redundant work.
+> - **WHAT:** For each prefix `s[start:end]` that is in the word set, recurse on `s[end:]`. At `start == len(s)`, return `['']` (empty sentence). Cache results per `start`.
+> - **HOW:** Memoization key is `start` index. Value is list of sentence suffixes from that position. Build full sentences by prepending current word.
+
+> [!note]- Python Solution
+> ```python
+> def wordBreak(s: str, wordDict: list[str]) -> list[str]:
+>     word_set = set(wordDict)
+>     memo: dict[int, list[str]] = {}
+> 
+>     def bt(start: int) -> list[str]:
+>         if start in memo:
+>             return memo[start]
+>         if start == len(s):
+>             return ['']
+>         sentences: list[str] = []
+>         for end in range(start + 1, len(s) + 1):
+>             word = s[start:end]
+>             if word in word_set:
+>                 for rest in bt(end):
+>                     if rest:
+>                         sentences.append(word + ' ' + rest)
+>                     else:
+>                         sentences.append(word)
+>         memo[start] = sentences
+>         return sentences
+> 
+>     return bt(0)
+> ```
+
+> [!success] Complexity
+> O(n^2 · 2^n / n) in worst case (exponential output); memoization ensures each suffix is solved once. O(n^2) time if output size is ignored; space O(n · output_size).
+
+> [!tip] Alternatives
+> Two-phase: (1) DP to check reachable positions; backtrack only through reachable ones — prunes dead-end paths early, same asymptotic. Trie for O(1) prefix lookups instead of O(n) hash.
+
+---
+
+### Palindrome Partitioning II (Minimum Cuts)
+
+> [!example] Problem
+> Return the minimum number of cuts to partition a string so every substring is a palindrome.
+
+> [!info] Approach
+> - **WHY:** Pure backtracking (enumerate all partitions) is O(n · 2^n). This is an optimization problem — we want the minimum, not all solutions. DP with palindrome precomputation achieves O(n^2). Backtracking is included for completeness but DP is the correct approach here.
+> - **WHAT (DP):** Precompute `is_pal[i][j]`. Then `dp[i]` = min cuts for `s[:i]`. Transition: `dp[j] = min(dp[j], dp[i] + 1)` if `s[i:j]` is palindrome.
+> - **HOW:** `dp[0] = 0` (empty prefix needs 0 cuts). Final answer: `dp[n] - 1` (subtracting the artificial initial cut). Equivalently, `dp[i]` = min cuts for first `i` chars → `dp[n]`.
+
+> [!note]- Python Solution
+> ```python
+> def minCut(s: str) -> int:
+>     n = len(s)
+>     # Precompute palindrome table
+>     is_pal = [[False] * n for _ in range(n)]
+>     for i in range(n - 1, -1, -1):
+>         for j in range(i, n):
+>             if s[i] == s[j] and (j - i <= 2 or is_pal[i + 1][j - 1]):
+>                 is_pal[i][j] = True
+> 
+>     # dp[i] = min cuts for s[0:i]
+>     dp = list(range(n))  # worst case: cut between every character
+>     for i in range(1, n):
+>         if is_pal[0][i]:
+>             dp[i] = 0
+>             continue
+>         for j in range(1, i + 1):
+>             if is_pal[j][i]:
+>                 dp[i] = min(dp[i], dp[j - 1] + 1)
+>     return dp[n - 1]
+> ```
+
+> [!success] Complexity
+> O(n^2) time (palindrome table + DP); O(n^2) space. Manacher's reduces palindrome precomputation to O(n).
+
+> [!tip] Alternatives
+> Pure backtracking: O(n · 2^n) — impractical. Expand-around-center for palindrome check during DP: avoids the O(n^2) table but requires careful integration. Manacher's + DP achieves O(n) time with O(n) space.
+
+---
+
+## Grid Traversal
+
+### Rat in a Maze
+
+> [!example] Problem
+> Find all paths for a rat from top-left (0,0) to bottom-right (n-1,n-1) in an n×n binary maze (1=open, 0=blocked), moving in 4 directions without revisiting.
+
+> [!info] Approach
+> - **WHY:** Enumerate all valid root-to-destination paths in a grid graph. DFS with backtracking; mark cells visited to prevent cycles; unmark on backtrack.
+> - **WHAT:** From current cell (r,c), try all 4 directions. Move to neighbor if it's in bounds, open (value 1), and not visited. Mark visited before recursing; unmark after. Record path direction string at destination.
+> - **HOW:** Path encoded as direction string ('D','L','R','U'). Sort output lexicographically — lexicographic DFS order (try D,L,R,U alphabetically) naturally produces sorted output.
+
+> [!note]- Python Solution
+> ```python
+> def findPath(maze: list[list[int]]) -> list[str]:
+>     n = len(maze)
+>     if not maze or maze[0][0] == 0 or maze[n-1][n-1] == 0:
+>         return []
+>     res: list[str] = []
+>     visited = [[False] * n for _ in range(n)]
+>     # Try directions in alphabetical order for sorted output
+>     dirs = [('D', 1, 0), ('L', 0, -1), ('R', 0, 1), ('U', -1, 0)]
+> 
+>     def bt(r: int, c: int, path: list[str]) -> None:
+>         if r == n - 1 and c == n - 1:
+>             res.append(''.join(path))
+>             return
+>         visited[r][c] = True
+>         for d, dr, dc in dirs:
+>             nr, nc = r + dr, c + dc
+>             if 0 <= nr < n and 0 <= nc < n and maze[nr][nc] == 1 and not visited[nr][nc]:
+>                 path.append(d)
+>                 bt(nr, nc, path)
+>                 path.pop()
+>         visited[r][c] = False
+> 
+>     bt(0, 0, [])
+>     return res
+> ```
+
+> [!success] Complexity
+> O(4^(n^2)) worst case; O(n^2) recursion depth.
+
+> [!tip] Alternatives
+> BFS for shortest path only (not all paths). Bitmask visited for small n. In practice, paths are few due to maze constraints.
+
+---
+
+### Word Search (All Occurrences)
+
+> [!example] Problem
+> Given a 2D board and a word, return all starting positions where the word exists as an adjacent non-revisiting path.
+
+> [!info] Approach
+> - **WHY:** Extension of Word Search I: instead of stopping at the first match, collect all starting (r,c) positions. Same DFS + backtracking logic; just collect results instead of returning early.
+> - **WHAT:** From each unvisited cell matching `word[0]`, run DFS. If DFS succeeds (all chars matched), add `(r,c)` to results.
+> - **HOW:** Each DFS is independent — board restored fully between starting cells. Use in-place `'#'` marking within a single DFS call.
+
+> [!note]- Python Solution
+> ```python
+> def findWordOccurrences(board: list[list[str]], word: str) -> list[tuple[int, int]]:
+>     m, n = len(board), len(board[0])
+>     results: list[tuple[int, int]] = []
+> 
+>     def dfs(r: int, c: int, i: int) -> bool:
+>         if i == len(word):
+>             return True
+>         if not (0 <= r < m and 0 <= c < n) or board[r][c] != word[i]:
+>             return False
+>         tmp, board[r][c] = board[r][c], '#'
+>         found = any(
+>             dfs(r + dr, c + dc, i + 1)
+>             for dr, dc in ((0, 1), (0, -1), (1, 0), (-1, 0))
+>         )
+>         board[r][c] = tmp
+>         return found
+> 
+>     for r in range(m):
+>         for c in range(n):
+>             if dfs(r, c, 0):
+>                 results.append((r, c))
+>     return results
+> ```
+
+> [!success] Complexity
+> O(m · n · 4^L) where L = len(word); O(L) recursion depth per starting cell.
+
+> [!tip] Alternatives
+> Trie-based (Word Search II) if searching for multiple words simultaneously. Frequency pruning: if board character counts can't satisfy word character counts, skip entirely.
+
+---
+
+## Advanced Backtracking
+
+### N-Queens II (Count Only)
+
+> [!example] Problem
+> Count the number of distinct solutions to the N-Queens problem (without constructing the boards).
+
+> [!info] Approach
+> - **WHY:** Same algorithm as N-Queens but without board construction or path copying — just increment a counter at the leaf. The absence of O(n^2) board copying makes each leaf O(1) instead of O(n^2), which matters for large n.
+> - **WHAT:** Backtrack row by row; use three integer bitmasks for columns, diagonals, anti-diagonals. At each row, iterate valid column positions using bitmask operations.
+> - **HOW:** Bitmask trick: valid columns = `((1<<n) - 1) & ~(cols | diags | anti_diags)`. Extract LSB: `pos = available & (-available)`. Iterate: `available &= available - 1`.
+
+> [!note]- Python Solution
+> ```python
+> def totalNQueens(n: int) -> int:
+>     count = 0
+>     limit = (1 << n) - 1  # n lowest bits set
+> 
+>     def bt(cols: int, diags: int, anti_diags: int) -> None:
+>         nonlocal count
+>         if cols == limit:
+>             count += 1
+>             return
+>         available = limit & ~(cols | diags | anti_diags)
+>         while available:
+>             pos = available & (-available)  # isolate lowest set bit
+>             available &= available - 1       # clear lowest set bit
+>             bt(cols | pos,
+>                (diags | pos) << 1,
+>                (anti_diags | pos) >> 1)
+> 
+>     bt(0, 0, 0)
+>     return count
+> ```
+
+> [!success] Complexity
+> O(n!) upper bound; bitmask operations are O(1) per step. Space O(n) recursion depth.
+
+> [!tip] Alternatives
+> Same set-based approach as N-Queens I but skip board construction — marginally slower than bitmask due to set overhead. For n ≤ 15, results can be hardcoded (OEIS A000170).
+
+---
+
+### Word Break (Decision — Backtracking + Memo)
+
+> [!example] Problem
+> Given string s and a word dictionary, return true if s can be segmented into dictionary words.
+
+> [!info] Approach
+> - **WHY:** At each position, try every dictionary word as the next segment. Naive recursion re-solves the same suffix repeatedly. Memoization on the start index reduces it to O(n^2 · L) where L = max word length.
+> - **WHAT:** `bt(start)` returns True if `s[start:]` can be fully segmented. For each word in the dictionary that matches `s[start:start+len(word)]`, recurse on `start+len(word)`. Cache False results to avoid re-exploration.
+> - **HOW:** Check only words in the dictionary (not all prefixes). Short-circuit on first True. BFS or DP are preferred in interviews.
+
+> [!note]- Python Solution
+> ```python
+> def wordBreakDecision(s: str, wordDict: list[str]) -> bool:
+>     word_set = set(wordDict)
+>     max_len = max(len(w) for w in word_set) if word_set else 0
+>     memo: dict[int, bool] = {}
+> 
+>     def bt(start: int) -> bool:
+>         if start == len(s):
+>             return True
+>         if start in memo:
+>             return memo[start]
+>         for end in range(start + 1, min(start + max_len, len(s)) + 1):
+>             if s[start:end] in word_set and bt(end):
+>                 memo[start] = True
+>                 return True
+>         memo[start] = False
+>         return False
+> 
+>     return bt(0)
+> ```
+
+> [!success] Complexity
+> O(n · max_len) states × O(max_len) per transition = O(n · max_len^2); O(n) memo space.
+
+> [!tip] Alternatives
+> BFS: queue of reachable positions — O(n · |dict|), simpler. DP bottom-up: `dp[i] = any(dp[i-len(w)] and s[i-len(w):i] == w)` — same complexity. Trie for O(1) prefix lookup.
+
+---
+
+### Generate All Valid IP Addresses (Generalized Segmentation)
+
+> [!example] Problem
+> Same as Restore IP Addresses above, but with explicit segment count and segment range as parameters — useful for understanding the generalizable pattern.
+
+> [!info] Approach
+> - **WHY:** Generalizes Restore IP Addresses: given a digit string, split into exactly `k` segments each in range `[lo, hi]` with no leading zeros. Parameterized backtracking applies to many partitioning problems (CIDR, version strings).
+> - **WHAT:** At each step, try taking 1 to `max_seg_len` characters. Validate the segment. Recurse on remainder with `k-1` segments left. Feasibility pruning bounds the remaining characters.
+> - **HOW:** Feasibility: `remaining_chars` must be in `[k-1, (k-1)*max_seg_len + max_seg_len]` — i.e., between 1 and `max_seg_len` per remaining segment.
+
+> [!note]- Python Solution
+> ```python
+> def segmentString(s: str, k: int, lo: int, hi: int, max_val: int) -> list[str]:
+>     """Split s into exactly k segments, each integer in [lo, max_val], no leading zeros."""
+>     res: list[str] = []
+>     path: list[str] = []
+>     max_len = len(str(max_val))
+> 
+>     def bt(start: int) -> None:
+>         if len(path) == k:
+>             if start == len(s):
+>                 res.append('.'.join(path))
+>             return
+>         segs_left = k - len(path)
+>         chars_left = len(s) - start
+>         # Feasibility: each remaining segment needs 1..max_len chars
+>         if chars_left < segs_left or chars_left > segs_left * max_len:
+>             return
+>         for length in range(1, max_len + 1):
+>             if start + length > len(s):
+>                 break
+>             seg = s[start:start + length]
+>             if len(seg) > 1 and seg[0] == '0':
+>                 break
+>             val = int(seg)
+>             if val > max_val:
+>                 break
+>             if val < lo:
+>                 continue
+>             path.append(seg)
+>             bt(start + length)
+>             path.pop()
+> 
+>     bt(0)
+>     return res
+> ```
+
+> [!success] Complexity
+> O(max_val^k) bounded by feasibility window; for IP: O(3^4) = O(81). Space O(k).
+
+> [!tip] Alternatives
+> For k=4 and IP validation specifically, three explicit loops over split points are O(n^3) but typically simpler in interviews. This parameterized version is better for system design or templating.
+
+---
+
 ## See Also
 
 [[recursion]] | [[dynamic-programming]] | [[trie]] | [[graph]]

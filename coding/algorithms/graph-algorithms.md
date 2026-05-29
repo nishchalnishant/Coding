@@ -584,6 +584,69 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
+### Strongly Connected Components (Kosaraju's Algorithm)
+
+> [!example] Problem
+> Directed graph with `n` nodes and `edges`. Find all strongly connected components (SCCs) — maximal subgraphs where every node is reachable from every other node.
+
+> [!info] Approach
+> - **WHY:** SCC decomposition reveals the "condensation DAG" of a graph — each SCC collapses into one node. Essential for dependency analysis, 2-SAT, and reachability.
+> - **WHAT:** Kosaraju's two-pass DFS: first pass on original graph records finish order; second pass on reversed graph processes in reverse finish order — each DFS tree in pass 2 is one SCC.
+> - **HOW:** Pass 1 — DFS original graph, push nodes to stack in finish order. Pass 2 — reverse all edges, pop from stack, DFS the reversed graph; each connected component found = one SCC.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def kosaraju_sccs(n: int, edges: list[list[int]]) -> list[list[int]]:
+>     graph: dict[int, list[int]] = defaultdict(list)
+>     rev_graph: dict[int, list[int]] = defaultdict(list)
+>     for u, v in edges:
+>         graph[u].append(v)
+>         rev_graph[v].append(u)
+> 
+>     visited: set[int] = set()
+>     order: list[int] = []          # finish order
+> 
+>     def dfs1(u: int) -> None:
+>         visited.add(u)
+>         for v in graph[u]:
+>             if v not in visited:
+>                 dfs1(v)
+>         order.append(u)            # post-order
+> 
+>     for node in range(n):
+>         if node not in visited:
+>             dfs1(node)
+> 
+>     visited.clear()
+>     sccs: list[list[int]] = []
+> 
+>     def dfs2(u: int, component: list[int]) -> None:
+>         visited.add(u)
+>         component.append(u)
+>         for v in rev_graph[u]:
+>             if v not in visited:
+>                 dfs2(v, component)
+> 
+>     while order:
+>         node = order.pop()
+>         if node not in visited:
+>             comp: list[int] = []
+>             dfs2(node, comp)
+>             sccs.append(comp)
+> 
+>     return sccs
+> ```
+
+> [!success] Complexity
+> Time O(V + E), Space O(V + E).
+
+> [!tip] Alternatives
+> Tarjan's SCC — single-pass DFS using a stack and low-link values; same O(V + E). Kosaraju's is simpler to reason about; Tarjan's uses less memory (one pass).
+
+---
+
 ### Find Eventual Safe States (Reverse Graph / Kahn's)
 
 > [!example] Problem
@@ -627,6 +690,50 @@ See full Bellman-Ford solution in the next section.
 
 > [!tip] Alternatives
 > DFS with 3-color marking — node is safe iff all successors are safe. Memoize per node. Same O(V + E) but Kahn's is cleaner.
+
+---
+
+## Cycle Detection in Directed Graph
+
+### Detect Cycle in Directed Graph (DFS 3-Color)
+
+> [!example] Problem
+> Given a directed graph, determine whether it contains a cycle.
+
+> [!info] Approach
+> - **WHY:** Kahn's BFS detects cycles implicitly via count, but DFS 3-color is the canonical O(V+E) approach that also identifies the cycle. In a directed graph, a cycle exists iff a DFS discovers a back edge — an edge to an ancestor currently on the DFS stack.
+> - **WHAT:** 3-color DFS: WHITE (unvisited), GRAY (in current DFS path), BLACK (fully processed). A gray→gray edge is a back edge = cycle.
+> - **HOW:** For each unvisited node, run DFS. Mark GRAY on entry, BLACK on exit. If we ever encounter a GRAY neighbor, we've found a cycle.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def hasCycle(n: int, edges: list[list[int]]) -> bool:
+>     WHITE, GRAY, BLACK = 0, 1, 2
+>     graph: dict[int, list[int]] = defaultdict(list)
+>     for u, v in edges:
+>         graph[u].append(v)
+>     color = [WHITE] * n
+> 
+>     def dfs(u: int) -> bool:
+>         color[u] = GRAY
+>         for v in graph[u]:
+>             if color[v] == GRAY:
+>                 return True          # back edge → cycle
+>             if color[v] == WHITE and dfs(v):
+>                 return True
+>         color[u] = BLACK
+>         return False
+> 
+>     return any(dfs(node) for node in range(n) if color[node] == WHITE)
+> ```
+
+> [!success] Complexity
+> Time O(V + E), Space O(V) for recursion stack.
+
+> [!tip] Alternatives
+> Kahn's BFS — cycle exists iff processed count < V. Iterative DFS with explicit stack — avoids Python recursion limit for large graphs. For undirected graphs: cycle exists iff DFS finds a visited non-parent neighbor.
 
 ---
 
@@ -816,6 +923,70 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
+### Word Ladder II (All Shortest Transformation Sequences)
+
+> [!example] Problem
+> Same as Word Ladder, but return **all** shortest transformation sequences from `beginWord` to `endWord`.
+
+> [!info] Approach
+> - **WHY:** Finding all shortest paths requires BFS to establish the level structure (shortest distance to each node), then backtracking to reconstruct paths — DFS alone is exponential without the level constraint.
+> - **WHAT:** Two-phase: BFS to build a DAG of "parent → children" edges that lie on shortest paths; then DFS/backtracking on that DAG to enumerate all paths.
+> - **HOW:** BFS level-by-level. For each word, generate all 1-letter variants in the word set. Record `parents[new_word].add(word)`. Remove words from the set only after the full level is processed (so multiple parents at the same level can be recorded). Then DFS from `endWord` back to `beginWord` using the `parents` map.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict, deque
+> 
+> def findLadders(beginWord: str, endWord: str, wordList: list[str]) -> list[list[str]]:
+>     word_set = set(wordList)
+>     if endWord not in word_set:
+>         return []
+> 
+>     parents: dict[str, set[str]] = defaultdict(set)
+>     current_level = {beginWord}
+>     found = False
+> 
+>     while current_level and not found:
+>         word_set -= current_level      # remove current level to prevent back-edges
+>         next_level: set[str] = set()
+>         for word in current_level:
+>             for i in range(len(word)):
+>                 for c in 'abcdefghijklmnopqrstuvwxyz':
+>                     new_word = word[:i] + c + word[i+1:]
+>                     if new_word in word_set:
+>                         next_level.add(new_word)
+>                         parents[new_word].add(word)
+>                         if new_word == endWord:
+>                             found = True
+>         current_level = next_level
+> 
+>     if not found:
+>         return []
+> 
+>     # Backtrack from endWord to beginWord
+>     result: list[list[str]] = []
+> 
+>     def backtrack(word: str, path: list[str]) -> None:
+>         if word == beginWord:
+>             result.append(path[::-1])
+>             return
+>         for parent in parents[word]:
+>             path.append(parent)
+>             backtrack(parent, path)
+>             path.pop()
+> 
+>     backtrack(endWord, [endWord])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(M² · N + P) where M = word length, N = wordList size, P = total characters in all output paths. Space O(M · N).
+
+> [!tip] Alternatives
+> BFS + DFS without the parent-map — enumerate during DFS and prune by depth; same complexity but harder to implement correctly. Bidirectional BFS reduces the search space but makes parent tracking trickier.
+
+---
+
 ### Shortest Path in Binary Matrix
 
 > [!example] Problem
@@ -999,6 +1170,76 @@ See full Bellman-Ford solution in the next section.
 
 > [!tip] Alternatives
 > Kruskal's O(n² log n) — generate all n² edges, sort, Union-Find; same asymptotic. Prim's with array (no heap) is O(n²) — optimal for dense graphs; track `min_cost[v]` as the minimum edge into v from current MST.
+
+---
+
+## Graph Coloring
+
+### M-Coloring Problem (Backtracking)
+
+> [!example] Problem
+> Given an undirected graph and `m` colors, determine whether the graph can be colored using at most `m` colors such that no two adjacent nodes share the same color.
+
+> [!info] Approach
+> - **WHY:** Graph coloring is NP-complete in general; backtracking with pruning is the standard approach for exact solutions on small graphs.
+> - **WHAT:** Assign colors 1..m to nodes one at a time; backtrack if any color assignment conflicts with an already-colored neighbor.
+> - **HOW:** Try each color for the current node. Before assigning, check all neighbors — if a neighbor already has that color, skip. If all m colors fail → backtrack. If all nodes assigned → return True.
+
+> [!note]- Python Solution
+> ```python
+> def graphColoring(graph: list[list[int]], m: int) -> bool:
+>     """
+>     graph: adjacency list (0-indexed)
+>     m: number of available colors
+>     Returns True if m-coloring is possible.
+>     """
+>     n = len(graph)
+>     color = [0] * n   # 0 = uncolored
+> 
+>     def is_safe(node: int, c: int) -> bool:
+>         return all(color[nb] != c for nb in graph[node])
+> 
+>     def backtrack(node: int) -> bool:
+>         if node == n:
+>             return True
+>         for c in range(1, m + 1):
+>             if is_safe(node, c):
+>                 color[node] = c
+>                 if backtrack(node + 1):
+>                     return True
+>                 color[node] = 0          # undo
+>         return False
+> 
+>     return backtrack(0)
+> 
+> 
+> # Variant: return one valid coloring or []
+> def graphColoringAssignment(graph: list[list[int]], m: int) -> list[int]:
+>     n = len(graph)
+>     color = [0] * n
+> 
+>     def is_safe(node: int, c: int) -> bool:
+>         return all(color[nb] != c for nb in graph[node])
+> 
+>     def backtrack(node: int) -> bool:
+>         if node == n:
+>             return True
+>         for c in range(1, m + 1):
+>             if is_safe(node, c):
+>                 color[node] = c
+>                 if backtrack(node + 1):
+>                     return True
+>                 color[node] = 0
+>         return False
+> 
+>     return color if backtrack(0) else []
+> ```
+
+> [!success] Complexity
+> Time O(m^V) worst case with pruning reducing practical performance significantly. Space O(V) for color array + O(V) recursion stack.
+
+> [!tip] Alternatives
+> Greedy coloring (not optimal — can use up to Δ+1 colors where Δ = max degree). DSatur heuristic — color nodes in order of saturation (most distinct neighbor colors); often near-optimal in practice. For bipartite check (2-coloring): use BFS O(V+E).
 
 ---
 

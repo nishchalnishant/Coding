@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Miscellaneous
 subtopic: 
 status: unread
-tags: [algorithms, upsc, miscellaneous]
+tags: [algorithms, miscellaneous]
 ---
 ## First-Principles Map
 

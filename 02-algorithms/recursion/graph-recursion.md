@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Recursion
 subtopic: Graph Recursion
 status: unread
-tags: [algorithms, upsc, recursion]
+tags: [algorithms, recursion]
 ---
 ## First-Principles Map
 

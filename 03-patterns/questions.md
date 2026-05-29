@@ -3,7 +3,7 @@ module: 03-patterns
 topic: Questions
 subtopic: 
 status: unread
-tags: [patterns, upsc, questions]
+tags: [patterns, questions]
 ---
 # Repository Interview Questions Tracker
 

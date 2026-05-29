@@ -777,6 +777,341 @@ difficulty: mixed
 
 ---
 
+## Binary Search D&C
+
+### Search in Rotated Sorted Array
+
+> [!example] Problem
+> Given a sorted array rotated at some pivot, search for a target. Return its index, or -1 if not found.
+
+> [!info] Approach
+> - **WHY:** Full scan is O(n). Binary search still works because at least one half of any split is always sorted — identify which half is sorted, check if target lies inside it, recurse into that half; otherwise recurse into the other.
+> - **WHAT:** At each binary search step, determine the sorted half using the midpoint vs boundary comparison. Narrow to the half that can contain the target.
+> - **HOW:** If `nums[lo] <= nums[mid]`, left half is sorted. If `nums[lo] <= target < nums[mid]`, go left; else go right. Mirror logic when right half is sorted.
+
+> [!note]- Python Solution
+> ```python
+> def search(nums: list[int], target: int) -> int:
+>     lo, hi = 0, len(nums) - 1
+>     while lo <= hi:
+>         mid = (lo + hi) // 2
+>         if nums[mid] == target:
+>             return mid
+>         if nums[lo] <= nums[mid]:          # left half sorted
+>             if nums[lo] <= target < nums[mid]:
+>                 hi = mid - 1
+>             else:
+>                 lo = mid + 1
+>         else:                               # right half sorted
+>             if nums[mid] < target <= nums[hi]:
+>                 lo = mid + 1
+>             else:
+>                 hi = mid - 1
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(log n). Space O(1).
+
+> [!tip] Alternatives
+> Find pivot index first (separate binary search), then binary search in the correct segment — two passes but same O(log n). Works for duplicates with minor modification (LC 81).
+
+---
+
+### Find Minimum in Rotated Sorted Array
+
+> [!example] Problem
+> Find the minimum element in a rotated sorted array with no duplicates.
+
+> [!info] Approach
+> - **WHY:** The minimum is the only point where `nums[i] > nums[i+1]` — the rotation inflection. Binary search exploits: if `nums[mid] > nums[hi]`, the minimum must be in the right half; otherwise it's in the left half (including mid).
+> - **WHAT:** Binary search maintaining the invariant that the minimum is within `[lo, hi]`.
+> - **HOW:** Compare `nums[mid]` with `nums[hi]`. If `nums[mid] > nums[hi]`, `lo = mid + 1`. Else `hi = mid`. Converges when `lo == hi`.
+
+> [!note]- Python Solution
+> ```python
+> def findMin(nums: list[int]) -> int:
+>     lo, hi = 0, len(nums) - 1
+>     while lo < hi:
+>         mid = (lo + hi) // 2
+>         if nums[mid] > nums[hi]:
+>             lo = mid + 1
+>         else:
+>             hi = mid
+>     return nums[lo]
+> ```
+
+> [!success] Complexity
+> Time O(log n). Space O(1).
+
+> [!tip] Alternatives
+> With duplicates (LC 154): when `nums[mid] == nums[hi]`, shrink `hi -= 1` — degrades to O(n) worst case. Linear scan is O(n) but simpler.
+
+---
+
+## Tree Construction D&C
+
+### Construct Binary Tree from Preorder and Inorder
+
+> [!example] Problem
+> Given preorder and inorder traversal arrays, reconstruct the binary tree.
+
+> [!info] Approach
+> - **WHY:** The first element of preorder is always the root. Finding root in inorder splits it into left and right subtrees — the lengths of those segments tell us how many elements belong to each side in preorder. Classic D&C: each call solves an independent subproblem with no overlap.
+> - **WHAT:** Root = `preorder[0]`. Locate root in inorder at index `k`. Left subtree uses `preorder[1:k+1]` and `inorder[:k]`; right uses the rest.
+> - **HOW:** Precompute an index map of `{value: inorder_index}` for O(1) lookup. Track preorder start offset instead of slicing to stay O(n) total.
+
+> [!note]- Python Solution
+> ```python
+> from typing import Optional
+> 
+> class TreeNode:
+>     def __init__(self, val=0, left=None, right=None):
+>         self.val = val; self.left = left; self.right = right
+> 
+> def buildTree(preorder: list[int], inorder: list[int]) -> Optional[TreeNode]:
+>     idx_map = {v: i for i, v in enumerate(inorder)}
+>     pre_iter = iter(preorder)
+> 
+>     def build(in_lo: int, in_hi: int) -> Optional[TreeNode]:
+>         if in_lo > in_hi:
+>             return None
+>         root_val = next(pre_iter)
+>         root = TreeNode(root_val)
+>         k = idx_map[root_val]
+>         root.left = build(in_lo, k - 1)
+>         root.right = build(k + 1, in_hi)
+>         return root
+> 
+>     return build(0, len(inorder) - 1)
+> ```
+
+> [!success] Complexity
+> Time O(n) — each node created once, O(1) lookup. Space O(n) for index map + O(h) call stack (h = tree height).
+
+> [!tip] Alternatives
+> Construct from postorder+inorder: root = `postorder[-1]`, same idea reversed. Construct from preorder+postorder only works for full binary trees.
+
+---
+
+## Maximum Subarray D&C
+
+### Maximum Subarray (Divide and Conquer)
+
+> [!example] Problem
+> Find the contiguous subarray with the largest sum (Kadane's is O(n); implement the D&C version to demonstrate the pattern).
+
+> [!info] Approach
+> - **WHY:** The max-sum subarray either lies entirely in the left half, entirely in the right half, or crosses the midpoint. Cross-subarray max = max suffix of left + max prefix of right, computable in O(n). T(n) = 2T(n/2) + O(n) → O(n log n).
+> - **WHAT:** At each level: compute best-in-left, best-in-right, and best-crossing; return the maximum of the three.
+> - **HOW:** Cross sum: scan left from `mid` accumulating suffix max; scan right from `mid+1` accumulating prefix max; sum them.
+
+> [!note]- Python Solution
+> ```python
+> def maxSubArray(nums: list[int]) -> int:
+>     def max_cross(lo: int, mid: int, hi: int) -> int:
+>         left_sum = float('-inf')
+>         s = 0
+>         for i in range(mid, lo - 1, -1):
+>             s += nums[i]
+>             left_sum = max(left_sum, s)
+>         right_sum = float('-inf')
+>         s = 0
+>         for i in range(mid + 1, hi + 1):
+>             s += nums[i]
+>             right_sum = max(right_sum, s)
+>         return left_sum + right_sum
+> 
+>     def dc(lo: int, hi: int) -> int:
+>         if lo == hi:
+>             return nums[lo]
+>         mid = (lo + hi) // 2
+>         return max(dc(lo, mid), dc(mid + 1, hi), max_cross(lo, mid, hi))
+> 
+>     return dc(0, len(nums) - 1)
+> ```
+
+> [!success] Complexity
+> Time O(n log n) — T(n) = 2T(n/2) + O(n). Space O(log n) call stack.
+
+> [!tip] Alternatives
+> Kadane's algorithm — O(n) time, O(1) space; preferred in practice. D&C version is the textbook CLRS approach and demonstrates the crossing-subarray technique used in many harder problems.
+
+---
+
+## Expression D&C
+
+### Different Ways to Add Parentheses
+
+> [!example] Problem
+> Given a string of numbers and operators, return all possible results from computing all different ways to group numbers and operators.
+
+> [!info] Approach
+> - **WHY:** Each operator can be the "last operation" (the root of an expression tree). Dividing on operator `i` creates independent left and right sub-expressions — classic D&C. The number of distinct expression trees is the Catalan number, exponential in the number of operators.
+> - **WHAT:** For each operator in the string, split into left and right sub-expressions. Recurse each side to get all possible values. Combine every pair from left × right using the current operator.
+> - **HOW:** Base case: string is a number → return `[int(string)]`. Memoize on `(lo, hi)` or the sub-string to avoid recomputing overlapping sub-expressions.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+> 
+> def diffWaysToCompute(expression: str) -> list[int]:
+>     @lru_cache(maxsize=None)
+>     def solve(s: str) -> list[int]:
+>         results: list[int] = []
+>         for i, ch in enumerate(s):
+>             if ch in '+-*':
+>                 left = solve(s[:i])
+>                 right = solve(s[i+1:])
+>                 for l in left:
+>                     for r in right:
+>                         if ch == '+':
+>                             results.append(l + r)
+>                         elif ch == '-':
+>                             results.append(l - r)
+>                         else:
+>                             results.append(l * r)
+>         if not results:          # pure number, no operators
+>             results.append(int(s))
+>         return results
+> 
+>     return solve(expression)
+> ```
+
+> [!success] Complexity
+> Time O(n · Cₙ) where Cₙ is the nth Catalan number (exponential in operator count). Space O(Cₙ) for memoization and result lists.
+
+> [!tip] Alternatives
+> Without memoization: same asymptotic but with redundant recomputation. DP bottom-up on interval `[i, j]` — same values, avoids recursion stack. This problem is the same structure as Matrix Chain Multiplication.
+
+---
+
+### Expression Add Operators
+
+> [!example] Problem
+> Given a string of digits and a target, return all expressions formed by inserting `+`, `-`, `*` between digits that evaluate to the target.
+
+> [!info] Approach
+> - **WHY:** D&C/backtracking on the string: at each position, try all splits — take a prefix as a number and recurse on the suffix with an operator choice. Multiplication requires tracking the last operand for correct precedence.
+> - **WHAT:** Backtracking that builds the expression; carry `curr_val` and `last_operand` to handle `*` precedence without re-parsing.
+> - **HOW:** At each position, try every prefix length as the next number. Append `+`, `-`, `*`, or nothing (first number). For `*`: `curr_val = curr_val - last + last * num`; `last = last * num`.
+
+> [!note]- Python Solution
+> ```python
+> def addOperators(num: str, target: int) -> list[str]:
+>     results: list[str] = []
+> 
+>     def backtrack(idx: int, path: str, curr: int, last: int) -> None:
+>         if idx == len(num):
+>             if curr == target:
+>                 results.append(path)
+>             return
+>         for end in range(idx + 1, len(num) + 1):
+>             token = num[idx:end]
+>             if len(token) > 1 and token[0] == '0':  # no leading zeros
+>                 break
+>             n = int(token)
+>             if idx == 0:
+>                 backtrack(end, token, n, n)
+>             else:
+>                 backtrack(end, path + '+' + token, curr + n, n)
+>                 backtrack(end, path + '-' + token, curr - n, -n)
+>                 backtrack(end, path + '*' + token, curr - last + last * n, last * n)
+> 
+>     backtrack(0, '', 0, 0)
+>     return results
+> ```
+
+> [!success] Complexity
+> Time O(4ⁿ · n) — 3 operator choices per gap plus no-split, n to build string. Space O(n) per path on the stack.
+
+> [!tip] Alternatives
+> Evaluate with a stack to avoid tracking `last` — cleaner but slower. Memoization does not apply here because the target constraint makes sub-problems context-dependent.
+
+---
+
+## QuickSelect Variants
+
+### Kth Smallest Element in a Sorted Matrix
+
+> [!example] Problem
+> Given an n×n matrix where each row and column is sorted, find the kth smallest element.
+
+> [!info] Approach
+> - **WHY:** Flatten + sort is O(n² log n). Binary search on value range: for a given mid value, count elements ≤ mid using the sorted structure in O(n). This is a D&C search on the answer space rather than the index space.
+> - **WHAT:** Binary search on `[matrix[0][0], matrix[n-1][n-1]]`. Count elements ≤ mid using staircase traversal. Shrink range until `lo == hi`.
+> - **HOW:** Staircase count: start at top-right corner; if `matrix[r][c] <= mid`, add `r+1` (all rows above in column c are ≤ mid), move right; else move up. O(n) per count step.
+
+> [!note]- Python Solution
+> ```python
+> def kthSmallest(matrix: list[list[int]], k: int) -> int:
+>     n = len(matrix)
+> 
+>     def count_le(mid: int) -> int:
+>         count = 0
+>         r, c = n - 1, 0
+>         while r >= 0 and c < n:
+>             if matrix[r][c] <= mid:
+>                 count += r + 1
+>                 c += 1
+>             else:
+>                 r -= 1
+>         return count
+> 
+>     lo, hi = matrix[0][0], matrix[n-1][n-1]
+>     while lo < hi:
+>         mid = (lo + hi) // 2
+>         if count_le(mid) < k:
+>             lo = mid + 1
+>         else:
+>             hi = mid
+>     return lo
+> ```
+
+> [!success] Complexity
+> Time O(n log(max-min)) — log of value range × O(n) count. Space O(1).
+
+> [!tip] Alternatives
+> Min-heap with (value, row, col): O(k log n) — efficient when k is small. Flatten + `heapq.nsmallest` — O(n² log k). For interviews, binary-search-on-value is the expected O(n log(V)) approach.
+
+---
+
+### Kth Largest in a Stream (Running QuickSelect Concept)
+
+> [!example] Problem
+> Design a class that finds the kth largest element in a stream as new elements are added.
+
+> [!info] Approach
+> - **WHY:** Maintaining a sorted structure is O(log n) per insertion. A min-heap of size k keeps the k largest elements seen so far; its root is always the kth largest. No QuickSelect needed — heap gives O(1) answer, O(log k) insert.
+> - **WHAT:** Maintain a min-heap of exactly k elements. When a new element arrives: push it; if heap size exceeds k, pop the minimum. Root = kth largest.
+> - **HOW:** Initialize heap with first elements; prune to size k. Each `add`: `heappush` then `heappop` if len > k. Return `heap[0]`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> 
+> class KthLargest:
+>     def __init__(self, k: int, nums: list[int]) -> None:
+>         self.k = k
+>         self.heap: list[int] = []
+>         for n in nums:
+>             self.add(n)
+> 
+>     def add(self, val: int) -> int:
+>         heapq.heappush(self.heap, val)
+>         if len(self.heap) > self.k:
+>             heapq.heappop(self.heap)
+>         return self.heap[0]
+> ```
+
+> [!success] Complexity
+> Time O(log k) per `add`. Space O(k).
+
+> [!tip] Alternatives
+> QuickSelect on the full array each time — O(n) per query, acceptable for offline batch. Sorted list with `bisect` — O(n) insert due to shifting. Order-statistics tree — O(log n) insert + query but no built-in in Python.
+
+---
+
 ## See Also
 
 [[sorting]] | [[recursion]] | [[binary-search]] | [[heap]]

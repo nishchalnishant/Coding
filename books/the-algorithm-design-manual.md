@@ -3,7 +3,7 @@ module: books
 topic: The Algorithm Design Manual
 subtopic: 
 status: unread
-tags: [books, upsc, the-algorithm-design-manual]
+tags: [books, the-algorithm-design-manual]
 ---
 # The algorithm design manual
 

@@ -1410,6 +1410,440 @@ difficulty: mixed
 
 ---
 
+## Range / Immutable Prefix Queries
+
+### Range Sum Query — Immutable (LC 303)
+
+> [!example] Problem
+> Given an integer array, handle multiple queries each asking for the sum of elements between indices `left` and `right` (inclusive). Preprocess once, answer each query in O(1).
+
+> [!info] Approach
+> **Prefix sum array — O(1) per query.**
+> - **WHY:** Recomputing a range sum from scratch is O(n) per query. A prefix sum table converts any range-sum query to O(1) subtraction.
+> - **WHAT:** Build `prefix[i] = nums[0] + ... + nums[i-1]` (1-indexed offset). Then `sum(l, r) = prefix[r+1] - prefix[l]`.
+> - **HOW:** Precompute `prefix[0..n]` where `prefix[0] = 0` and `prefix[i] = prefix[i-1] + nums[i-1]`. Each query: return `prefix[right+1] - prefix[left]`.
+
+> [!note]- Python Solution
+> ```python
+> class NumArray:
+>     def __init__(self, nums: list[int]) -> None:
+>         self.prefix = [0] * (len(nums) + 1)
+>         for i, x in enumerate(nums):
+>             self.prefix[i + 1] = self.prefix[i] + x
+>
+>     def sumRange(self, left: int, right: int) -> int:
+>         return self.prefix[right + 1] - self.prefix[left]
+> ```
+
+> [!success] Complexity
+> Time O(n) build, O(1) per query. Space O(n).
+
+> [!tip] Alternatives
+> - Brute-force sum each query: O(n) per query — unacceptable for many queries.
+> - Segment tree / BIT: O(n) build, O(log n) query — only needed when the array is mutable (LC 307).
+
+---
+
+### Range Sum Query 2D — Immutable (LC 304)
+
+> [!example] Problem
+> Given a 2D matrix, handle multiple queries each returning the sum of elements in the sub-rectangle defined by its upper-left `(row1, col1)` and lower-right `(row2, col2)` corners.
+
+> [!info] Approach
+> **2D prefix sum (inclusion-exclusion).**
+> - **WHY:** Each query touching O(m×n) cells is too slow for many queries. 2D prefix sums extend the 1D idea: `prefix[i][j]` = sum of the rectangle from `(0,0)` to `(i-1, j-1)`.
+> - **WHAT:** Build `prefix[i][j] = prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1] + matrix[i-1][j-1]`. Query: inclusion-exclusion of four corners.
+> - **HOW:** `sum(r1,c1,r2,c2) = prefix[r2+1][c2+1] - prefix[r1][c2+1] - prefix[r2+1][c1] + prefix[r1][c1]`.
+
+> [!note]- Python Solution
+> ```python
+> class NumMatrix:
+>     def __init__(self, matrix: list[list[int]]) -> None:
+>         m, n = len(matrix), len(matrix[0])
+>         self.prefix = [[0] * (n + 1) for _ in range(m + 1)]
+>         for i in range(1, m + 1):
+>             for j in range(1, n + 1):
+>                 self.prefix[i][j] = (matrix[i-1][j-1]
+>                                      + self.prefix[i-1][j]
+>                                      + self.prefix[i][j-1]
+>                                      - self.prefix[i-1][j-1])
+>
+>     def sumRegion(self, row1: int, col1: int, row2: int, col2: int) -> int:
+>         p = self.prefix
+>         return (p[row2+1][col2+1]
+>                 - p[row1][col2+1]
+>                 - p[row2+1][col1]
+>                 + p[row1][col1])
+> ```
+
+> [!success] Complexity
+> Time O(m×n) build, O(1) per query. Space O(m×n).
+
+> [!tip] Alternatives
+> - Row-wise prefix sums only: O(n) per query. Acceptable for skinny matrices, not general.
+> - 2D BIT / segment tree: O(log²(mn)) updates and queries — only if the matrix is mutable.
+
+---
+
+### Contiguous Array (LC 525)
+
+> [!example] Problem
+> Find the maximum length of a contiguous subarray with equal numbers of 0s and 1s.
+
+> [!info] Approach
+> **Prefix sum with 0→−1 transform + first-occurrence hash map.**
+> - **WHY:** Replace every 0 with −1. A balanced subarray now has sum 0. We need the longest subarray with sum 0 — classic prefix-sum problem.
+> - **WHAT:** Track running sum. If `prefix[j] == prefix[i]`, then `sum(i+1..j) == 0`. Maximize `j - i` using first-occurrence map.
+> - **HOW:** Seed `seen = {0: -1}`. For each index `i`, update `running`. If `running` in `seen`, candidate length = `i - seen[running]`. Else store `seen[running] = i`. Never overwrite (want earliest occurrence for max length).
+
+> [!note]- Python Solution
+> ```python
+> def findMaxLength(nums: list[int]) -> int:
+>     seen: dict[int, int] = {0: -1}
+>     running = best = 0
+>     for i, x in enumerate(nums):
+>         running += 1 if x == 1 else -1
+>         if running in seen:
+>             best = max(best, i - seen[running])
+>         else:
+>             seen[running] = i
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Brute force O(n²): count 0s and 1s for all subarrays. Too slow.
+> - The 0→−1 substitution is the key insight; without it, prefix sums don't detect balance directly.
+
+---
+
+## Two-pass / Greedy
+
+### Jump Game (LC 55)
+
+> [!example] Problem
+> Given an array where `nums[i]` is the max jump length from index `i`, determine if you can reach the last index.
+
+> [!info] Approach
+> **Greedy — track farthest reachable index.**
+> - **WHY:** We don't need to know which path reaches the end, only whether any path does. A greedy max-reach scan is sufficient.
+> - **WHAT:** Single pass maintaining `reach = max index reachable so far`. If current index `i > reach`, we're stuck.
+> - **HOW:** `reach = 0`. For each `i` in `0..n-1`: if `i > reach`, return False. Update `reach = max(reach, i + nums[i])`. If `reach >= n-1` at any point, return True.
+
+> [!note]- Python Solution
+> ```python
+> def canJump(nums: list[int]) -> bool:
+>     reach = 0
+>     for i, v in enumerate(nums):
+>         if i > reach:
+>             return False
+>         reach = max(reach, i + v)
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - DP `dp[i] = True if reachable`: O(n²) worst case (inner loop per position). Correct but slow.
+> - Backward scan (find last "good" index): O(n), same greedy idea in reverse.
+
+---
+
+### Candy (LC 135)
+
+> [!example] Problem
+> `n` children stand in a line. Each child has a rating. Each child must receive at least one candy. Children with a higher rating than their immediate neighbor must receive more candies. Return the minimum total candies.
+
+> [!info] Approach
+> **Two-pass greedy — left then right.**
+> - **WHY:** The constraints are local (left neighbor, right neighbor). A single left-to-right pass satisfies left neighbors; a right-to-left pass fixes right neighbors without breaking left.
+> - **WHAT:** Pass 1 (L→R): if `ratings[i] > ratings[i-1]`, `candy[i] = candy[i-1] + 1`, else `candy[i] = 1`. Pass 2 (R→L): if `ratings[i] > ratings[i+1]`, `candy[i] = max(candy[i], candy[i+1] + 1)`.
+> - **HOW:** Initialize all to 1. Left pass enforces left-rising constraint. Right pass enforces right-rising constraint using `max` to preserve the larger requirement.
+
+> [!note]- Python Solution
+> ```python
+> def candy(ratings: list[int]) -> int:
+>     n = len(ratings)
+>     candies = [1] * n
+>     for i in range(1, n):
+>         if ratings[i] > ratings[i - 1]:
+>             candies[i] = candies[i - 1] + 1
+>     for i in range(n - 2, -1, -1):
+>         if ratings[i] > ratings[i + 1]:
+>             candies[i] = max(candies[i], candies[i + 1] + 1)
+>     return sum(candies)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Single-pass with slope tracking (ascending/descending run lengths): O(n) time, O(1) space. More complex; handles "valley" ties.
+> - Greedy priority queue: O(n log n). No benefit over two-pass.
+
+---
+
+### Gas Station (LC 134)
+
+> [!example] Problem
+> There are `n` gas stations in a circle. `gas[i]` is the gas available at station `i`; `cost[i]` is the cost to travel from `i` to `i+1`. Find the starting station index from which you can complete the full circle, or return −1 if impossible.
+
+> [!info] Approach
+> **Greedy — reset start on deficit.**
+> - **WHY:** If total gas < total cost, no solution exists. Otherwise, a solution always exists. The greedy key: if we can't reach station `j` starting from `start`, then no station between `start` and `j` can be a valid start either (they would start with less surplus).
+> - **WHAT:** Single pass tracking cumulative surplus. Reset start candidate whenever cumulative drops below zero.
+> - **HOW:** `total = 0, tank = 0, start = 0`. For each `i`: `tank += gas[i] - cost[i]`, `total += gas[i] - cost[i]`. If `tank < 0`, set `start = i + 1`, reset `tank = 0`. Return `start` if `total >= 0` else `-1`.
+
+> [!note]- Python Solution
+> ```python
+> def canCompleteCircuit(gas: list[int], cost: list[int]) -> int:
+>     total = tank = start = 0
+>     for i in range(len(gas)):
+>         diff = gas[i] - cost[i]
+>         tank += diff
+>         total += diff
+>         if tank < 0:
+>             start = i + 1
+>             tank = 0
+>     return start if total >= 0 else -1
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Brute force: try each starting station — O(n²). Too slow.
+> - Two-pointer circular simulation: equivalent logic, no asymptotic improvement.
+
+---
+
+## Matrix
+
+### Rotate Image (LC 48)
+
+> [!example] Problem
+> Rotate an n×n matrix 90 degrees clockwise in-place.
+
+> [!info] Approach
+> **Transpose then reverse each row.**
+> - **WHY:** A 90° clockwise rotation of a matrix equals: transpose (swap `matrix[i][j]` with `matrix[j][i]`) followed by reversing each row. Both operations are O(n²) and in-place.
+> - **WHAT:** Step 1: Transpose — swap upper-triangle elements across the main diagonal. Step 2: Reverse each row.
+> - **HOW:** Transpose: `for i in range(n): for j in range(i+1, n): swap matrix[i][j] and matrix[j][i]`. Reverse: `for row in matrix: row.reverse()`.
+
+> [!note]- Python Solution
+> ```python
+> def rotate(matrix: list[list[int]]) -> None:
+>     n = len(matrix)
+>     # Transpose
+>     for i in range(n):
+>         for j in range(i + 1, n):
+>             matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+>     # Reverse each row
+>     for row in matrix:
+>         row.reverse()
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(1).
+
+> [!tip] Alternatives
+> - Four-way simultaneous swap per cell: O(n²) time, O(1) space. Rotates groups of 4 in a single pass — no transpose step. Harder to index correctly.
+> - Counterclockwise 90°: transpose then reverse each column (or reverse rows then transpose).
+> - 180°: reverse each row then reverse the matrix rows order.
+
+---
+
+### Search a 2D Matrix (LC 74)
+
+> [!example] Problem
+> Given an m×n matrix where each row is sorted and the first element of each row is greater than the last element of the previous row, search for a target value in O(log(m×n)).
+
+> [!info] Approach
+> **Binary search treating the matrix as a flat sorted array.**
+> - **WHY:** The matrix is essentially a sorted 1D array laid out in rows. We can map a 1D index to 2D coordinates: `row = mid // n`, `col = mid % n`.
+> - **WHAT:** Single binary search over the virtual index range `[0, m*n - 1]`.
+> - **HOW:** `lo=0, hi=m*n-1`. At each `mid`: `val = matrix[mid//n][mid%n]`. Compare with target; adjust `lo`/`hi` accordingly.
+
+> [!note]- Python Solution
+> ```python
+> def searchMatrix(matrix: list[list[int]], target: int) -> bool:
+>     m, n = len(matrix), len(matrix[0])
+>     lo, hi = 0, m * n - 1
+>     while lo <= hi:
+>         mid = (lo + hi) // 2
+>         val = matrix[mid // n][mid % n]
+>         if val == target:
+>             return True
+>         elif val < target:
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return False
+> ```
+
+> [!success] Complexity
+> Time O(log(m×n)), Space O(1).
+
+> [!tip] Alternatives
+> - Staircase search (top-right to bottom-left): O(m+n). Used for LC 240 (Search a 2D Matrix II) where rows and cols are independently sorted but the stronger "row-start > prev row-end" property doesn't hold.
+> - Binary search per row: O(m log n). Suboptimal.
+
+---
+
+## Intervals
+
+### Merge Intervals (LC 56)
+
+> [!example] Problem
+> Given a list of intervals, merge all overlapping intervals and return the result.
+
+> [!info] Approach
+> **Sort by start, linear merge scan.**
+> - **WHY:** After sorting by start time, overlapping intervals are adjacent. We only need to check if the current interval overlaps with the last merged one.
+> - **WHAT:** Sort, then greedily extend the last merged interval or append a new one.
+> - **HOW:** Sort by `start`. Initialize `merged = [intervals[0]]`. For each subsequent interval: if `interval.start <= merged[-1].end`, merge by updating `merged[-1].end = max(merged[-1].end, interval.end)`. Else append.
+
+> [!note]- Python Solution
+> ```python
+> def merge(intervals: list[list[int]]) -> list[list[int]]:
+>     intervals.sort(key=lambda x: x[0])
+>     merged: list[list[int]] = [intervals[0]]
+>     for start, end in intervals[1:]:
+>         if start <= merged[-1][1]:
+>             merged[-1][1] = max(merged[-1][1], end)
+>         else:
+>             merged.append([start, end])
+>     return merged
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> - Without sorting: O(n²) — check every pair. Never acceptable.
+> - Event-based (sweep line): same O(n log n). More general but more code.
+
+---
+
+### Insert Interval (LC 57)
+
+> [!example] Problem
+> Given a list of non-overlapping intervals sorted by start, insert a new interval (merging as needed) and return the result.
+
+> [!info] Approach
+> **Three-phase linear scan: before, overlap, after.**
+> - **WHY:** The existing intervals are already sorted and non-overlapping. We can scan in one pass: collect all intervals that end before the new one starts, merge all that overlap, collect the rest.
+> - **WHAT:** Three phases: (1) add intervals entirely before new interval; (2) merge all overlapping intervals into new interval; (3) add remaining intervals.
+> - **HOW:** Phase 1: while `intervals[i].end < new.start`, append. Phase 2: while `intervals[i].start <= new.end`, extend `new.start = min(new.start, ...)` and `new.end = max(new.end, ...)`. Append merged. Phase 3: append remaining.
+
+> [!note]- Python Solution
+> ```python
+> def insert(intervals: list[list[int]], newInterval: list[int]) -> list[list[int]]:
+>     result: list[list[int]] = []
+>     i = 0
+>     n = len(intervals)
+>     # Phase 1: intervals entirely before newInterval
+>     while i < n and intervals[i][1] < newInterval[0]:
+>         result.append(intervals[i])
+>         i += 1
+>     # Phase 2: merge overlapping intervals
+>     while i < n and intervals[i][0] <= newInterval[1]:
+>         newInterval[0] = min(newInterval[0], intervals[i][0])
+>         newInterval[1] = max(newInterval[1], intervals[i][1])
+>         i += 1
+>     result.append(newInterval)
+>     # Phase 3: intervals entirely after newInterval
+>     while i < n:
+>         result.append(intervals[i])
+>         i += 1
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Add new interval and run full Merge Intervals: O(n log n). Wastes the pre-sorted property.
+> - Binary search for insertion point: O(log n) to find start, but merging still O(n) — same overall.
+
+---
+
+### Non-overlapping Intervals (LC 435)
+
+> [!example] Problem
+> Find the minimum number of intervals to remove so that the rest are non-overlapping.
+
+> [!info] Approach
+> **Greedy — sort by end, keep earliest-ending non-conflicting interval.**
+> - **WHY:** Classic interval scheduling maximization (keep max non-overlapping intervals). Minimum removals = n − max kept. The greedy is: always keep the interval that ends earliest — it leaves the most room for future intervals.
+> - **WHAT:** Sort by end time. Greedily keep an interval if it starts at or after the previous kept interval's end.
+> - **HOW:** Sort by `end`. `prev_end = -inf, kept = 0`. For each interval: if `start >= prev_end`, keep it (`kept++`, update `prev_end = end`). Else skip (remove it). Answer = `n - kept`.
+
+> [!note]- Python Solution
+> ```python
+> def eraseOverlapIntervals(intervals: list[list[int]]) -> int:
+>     intervals.sort(key=lambda x: x[1])
+>     prev_end = float('-inf')
+>     kept = 0
+>     for start, end in intervals:
+>         if start >= prev_end:
+>             kept += 1
+>             prev_end = end
+>     return len(intervals) - kept
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(1).
+
+> [!tip] Alternatives
+> - Sort by start, keep track of min end among conflicting: equivalent logic, less intuitive.
+> - DP `dp[i]` = max intervals ending at i: O(n²). Too slow.
+> - Key insight: sort by end (not start) for greedy interval scheduling.
+
+---
+
+## Miscellaneous (Continued)
+
+### First Missing Positive (LC 41)
+
+> [!example] Problem
+> Given an unsorted integer array, return the smallest missing positive integer. Must run in O(n) time and O(1) extra space.
+
+> [!info] Approach
+> **Index-as-hash — cyclic placement of values in range [1, n].**
+> - **WHY:** Any value outside [1, n] is irrelevant (answer is in [1, n+1]). We can treat the array itself as a hash table mapping value `v` to index `v-1`.
+> - **WHAT:** Place each value `v` in [1, n] at index `v-1` by swapping. After rearrangement, the first index `i` where `nums[i] != i+1` gives answer `i+1`.
+> - **HOW:** Swap phase: for each `i`, while `1 <= nums[i] <= n` and `nums[nums[i]-1] != nums[i]`, swap `nums[i]` with `nums[nums[i]-1]`. Scan phase: return first `i+1` where `nums[i] != i+1`, else return `n+1`.
+
+> [!note]- Python Solution
+> ```python
+> def firstMissingPositive(nums: list[int]) -> int:
+>     n = len(nums)
+>     # Place each number in its correct bucket
+>     for i in range(n):
+>         while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:
+>             correct = nums[i] - 1
+>             nums[i], nums[correct] = nums[correct], nums[i]
+>     # Find first position where value is wrong
+>     for i in range(n):
+>         if nums[i] != i + 1:
+>             return i + 1
+>     return n + 1
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Hash set of positives, scan 1..n+1: O(n) time, O(n) space. Simpler but violates space constraint.
+> - Sign-flip marking (negating values): O(n) time, O(1) space. Requires two clean-up passes; works but swapping approach is cleaner.
+> - The while-loop swap looks O(n²) but is O(n) amortized — each element is swapped into its correct slot at most once.
+
+---
+
 ## See Also
 
 [[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]

@@ -12,6 +12,40 @@ difficulty: mixed
 
 ## DFS Traversal
 
+### Binary Tree Inorder Traversal
+
+> [!example] Problem
+> Return inorder traversal (left → root → right) of a binary tree's node values. Implement iteratively (LC 94).
+
+> [!info] Approach
+> - **WHY:** Recursive inorder is trivial; the iterative version uses an explicit stack to simulate the call stack. Key pattern: push all left children first, then process on pop, then pivot to right child.
+> - **WHAT:** Iterative inorder — maintain a stack; keep going left until None, then pop and visit, then move to right child.
+> - **HOW:** `while curr or stack`: inner `while curr` pushes all lefts; `curr = stack.pop()` processes node, appends value; `curr = curr.right` to explore right subtree.
+
+> [!note]- Python Solution
+> ```python
+> def inorderTraversal(root):
+>     result, stack = [], []
+>     curr = root
+>     while curr or stack:
+>         while curr:
+>             stack.append(curr)
+>             curr = curr.left
+>         curr = stack.pop()
+>         result.append(curr.val)
+>         curr = curr.right
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(h).
+
+> [!tip] Alternatives
+> - Recursive: trivial but O(h) call stack — same space, disallowed in some interview variants.
+> - Morris inorder: O(1) space by threading right pointers — only when space is critical. See Morris section.
+
+---
+
 ### Invert Binary Tree
 
 > [!example] Problem
@@ -101,6 +135,39 @@ difficulty: mixed
 
 ---
 
+### Minimum Depth of Binary Tree
+
+> [!example] Problem
+> Return the minimum depth — number of nodes on the shortest root-to-leaf path. LC 111.
+
+> [!info] Approach
+> - **WHY:** Critical trap: a node with only one child is NOT a leaf. Minimum depth must reach a node where BOTH children are None. Simply returning `1 + min(left_depth, right_depth)` fails for nodes with a single child — the zero-depth from the absent child would win incorrectly.
+> - **WHAT:** Post-order recursion with explicit single-child guard. If left is None, return `1 + right_depth`; if right is None, return `1 + left_depth`; otherwise `1 + min(left, right)`.
+> - **HOW:** Base case: `not root → 0`. Then check left/right nullity before min.
+
+> [!note]- Python Solution
+> ```python
+> def minDepth(root):
+>     if not root:
+>         return 0
+>     left  = minDepth(root.left)
+>     right = minDepth(root.right)
+>     if not root.left:
+>         return 1 + right
+>     if not root.right:
+>         return 1 + left
+>     return 1 + min(left, right)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(h).
+
+> [!tip] Alternatives
+> - BFS with early exit: return depth the moment the first leaf is dequeued. O(d * w) where d = min depth, w = width — faster in practice when min depth is shallow.
+> - Common bug: `1 + min(minDepth(left), minDepth(right))` — wrong for single-child nodes.
+
+---
+
 ### Path Sum
 
 > [!example] Problem
@@ -129,6 +196,112 @@ difficulty: mixed
 > [!tip] Alternatives
 > - BFS with `(node, running_sum)` queue: check at leaves. O(n)/O(n).
 > - Path Sum II (all paths): backtracking — maintain current path list, append/pop during DFS, collect at leaves.
+
+---
+
+### Path Sum II
+
+> [!example] Problem
+> Return all root-to-leaf paths where the path sum equals `targetSum`. LC 113.
+
+> [!info] Approach
+> - **WHY:** Collecting all paths requires backtracking — extend the path on entry, collect at leaves, pop on exit. The pop on the way back up is essential; without it the path list carries values from sibling branches.
+> - **WHAT:** DFS backtracking — maintain a mutable `path` list; append on enter, pop on exit; collect a copy at leaves.
+> - **HOW:** At leaf (`not left and not right`) and `remaining == 0`: `result.append(list(path))` (copy! not reference). Then `path.pop()` on return regardless of whether this was a leaf.
+
+> [!note]- Python Solution
+> ```python
+> def pathSum(root, targetSum):
+>     result = []
+>     def dfs(node, remaining, path):
+>         if not node:
+>             return
+>         path.append(node.val)
+>         remaining -= node.val
+>         if not node.left and not node.right and remaining == 0:
+>             result.append(list(path))  # copy — not a reference
+>         dfs(node.left,  remaining, path)
+>         dfs(node.right, remaining, path)
+>         path.pop()  # backtrack
+>     dfs(root, targetSum, [])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n²) worst case (copying path of length n at each leaf in a skewed tree). Space O(n) output + O(h) stack.
+
+> [!tip] Alternatives
+> - Pass immutable `path + [node.val]`: cleaner but O(n) copy per node → O(n²) time. Same complexity, higher constant.
+> - Iterative DFS with `(node, remaining, path)` stack: avoids recursion limit; requires manual path bookkeeping.
+
+---
+
+### Sum Root to Leaf Numbers
+
+> [!example] Problem
+> Each root-to-leaf path represents a number (digits from root to leaf form an integer). Return the total sum. LC 129.
+
+> [!info] Approach
+> - **WHY:** As we descend, the current number is `parent_number * 10 + node.val`. At a leaf, this is the fully formed number. DFS naturally threads this accumulated value downward.
+> - **WHAT:** DFS passing accumulated value; sum up leaf contributions.
+> - **HOW:** `dfs(node, curr_num)` — `curr_num = curr_num * 10 + node.val`; at leaf return `curr_num`; otherwise return `dfs(left, curr_num) + dfs(right, curr_num)`.
+
+> [!note]- Python Solution
+> ```python
+> def sumNumbers(root):
+>     def dfs(node, curr):
+>         if not node:
+>             return 0
+>         curr = curr * 10 + node.val
+>         if not node.left and not node.right:
+>             return curr
+>         return dfs(node.left, curr) + dfs(node.right, curr)
+>     return dfs(root, 0)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(h).
+
+> [!tip] Alternatives
+> - BFS with `(node, curr_num)` queue: same logic iteratively. O(n)/O(n).
+> - Iterative DFS with `(node, curr)` stack: O(n)/O(h). Avoids recursion limit for deeply skewed trees.
+
+---
+
+### Count Complete Tree Nodes
+
+> [!example] Problem
+> Count the number of nodes in a complete binary tree. Must be better than O(n). LC 222.
+
+> [!info] Approach
+> - **WHY:** A naive O(n) traversal ignores the complete tree property. In a complete binary tree, every level except possibly the last is fully filled and the last level fills left to right. We can determine whether the left or right subtree is a perfect binary tree in O(log n) by comparing heights, then apply the formula `2^h - 1` for the perfect half and recurse on the other.
+> - **WHAT:** At each node compare left height vs right height. If equal, left subtree is perfect → `left_count = 2^left_h - 1 + 1 (root)`, recurse only on right. If not equal, right subtree is a perfect tree of height (right_h): `right_count = 2^right_h - 1 + 1`, recurse only on left.
+> - **HOW:** Height = keep going left (or right) until None. `left_h == right_h` means left subtree is perfect; otherwise right subtree is perfect (one level shorter).
+
+> [!note]- Python Solution
+> ```python
+> def countNodes(root):
+>     if not root:
+>         return 0
+>     left_h = right_h = 0
+>     left = right = root
+>     while left:
+>         left_h += 1
+>         left = left.left
+>     while right:
+>         right_h += 1
+>         right = right.right
+>     if left_h == right_h:
+>         return (1 << left_h) - 1  # perfect tree: 2^h - 1
+>     return 1 + countNodes(root.left) + countNodes(root.right)
+> ```
+
+> [!success] Complexity
+> Time O(log²n) — O(log n) recursive calls, each doing O(log n) height computation. Space O(log n).
+
+> [!tip] Alternatives
+> - O(n) linear traversal: correct but misses the point of the problem.
+> - Binary search on last level with bit-path encoding: same O(log²n) but more complex to implement.
 
 ---
 
@@ -161,6 +334,71 @@ difficulty: mixed
 > [!tip] Alternatives
 > - BFS with `(node, path_max)` queue: same logic iteratively. O(n)/O(n).
 > - Iterative DFS with `(node, path_max)` stack: O(n)/O(h) — preferred for deep trees.
+
+---
+
+### Same Tree
+
+> [!example] Problem
+> Given two binary trees, return true if they are structurally identical with the same node values at every position. LC 100.
+
+> [!info] Approach
+> - **WHY:** Two trees are the same iff their roots match and both subtrees are recursively the same. A null/non-null mismatch immediately returns false.
+> - **WHAT:** Simultaneous pre-order DFS on both trees; fail on any structural or value mismatch.
+> - **HOW:** Base cases: both None → True; exactly one None → False; `p.val != q.val` → False. Recurse: `isSameTree(p.left, q.left) and isSameTree(p.right, q.right)`.
+
+> [!note]- Python Solution
+> ```python
+> def isSameTree(p, q):
+>     if not p and not q:
+>         return True
+>     if not p or not q:
+>         return False
+>     if p.val != q.val:
+>         return False
+>     return isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
+> ```
+
+> [!success] Complexity
+> Time O(n) where n = min(nodes in p, nodes in q). Space O(h).
+
+> [!tip] Alternatives
+> - Iterative with paired stack/queue: push `(p_node, q_node)` pairs; compare and push children. O(n)/O(h).
+> - Serialize both and compare strings: O(n) but O(n) space and fragile with delimiter choices.
+
+---
+
+### Subtree of Another Tree
+
+> [!example] Problem
+> Given trees `root` and `subRoot`, return true if `subRoot` is a subtree of `root` (subRoot exists as an exact match rooted at some node in root). LC 572.
+
+> [!info] Approach
+> - **WHY:** For each node in `root`, check if the subtree rooted there matches `subRoot`. Reuses `isSameTree` as a subroutine — classic compositional approach.
+> - **WHAT:** DFS over `root`; at each node invoke `isSameTree(node, subRoot)`. Short-circuit on match.
+> - **HOW:** `isSubtree(root, subRoot)` — if not root: False; if `isSameTree(root, subRoot)`: True; else recurse left and right.
+
+> [!note]- Python Solution
+> ```python
+> def isSubtree(root, subRoot):
+>     def isSameTree(p, q):
+>         if not p and not q: return True
+>         if not p or not q:  return False
+>         return p.val == q.val and isSameTree(p.left, q.left) and isSameTree(p.right, q.right)
+> 
+>     if not root:
+>         return False
+>     if isSameTree(root, subRoot):
+>         return True
+>     return isSubtree(root.left, subRoot) or isSubtree(root.right, subRoot)
+> ```
+
+> [!success] Complexity
+> Time O(m * n) where m = nodes in root, n = nodes in subRoot. Space O(h_root).
+
+> [!tip] Alternatives
+> - Serialize both trees and use string substring search (KMP): O(m + n) time — optimal but tricky to handle null markers and delimiter collisions correctly.
+> - Hashing subtrees: O(m + n) expected — hash each subtree, check if any hash matches subRoot's hash.
 
 ---
 
@@ -287,6 +525,49 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS with depth parameter: `dfs(node, depth)` appends to `result[depth]`. O(n)/O(h) — better space for tall trees.
 > - Two-list swap: maintain `current_level` and `next_level`, swap after each level. Same complexity.
+
+---
+
+### Binary Tree Zigzag Level Order Traversal
+
+> [!example] Problem
+> Return the level-order traversal of a binary tree where alternate levels are traversed right-to-left (zigzag). LC 103.
+
+> [!info] Approach
+> - **WHY:** Same as level-order BFS but every other level needs reversal. Toggle a flag per level rather than using a deque with dual-end insertion — simpler and avoids subtle off-by-one errors.
+> - **WHAT:** BFS with level-size snapshot; after building each level list, conditionally reverse it before appending.
+> - **HOW:** `left_to_right = True` initially; after collecting each level: if `not left_to_right`, `level.reverse()`; then `left_to_right = not left_to_right`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def zigzagLevelOrder(root):
+>     if not root:
+>         return []
+>     result = []
+>     queue = deque([root])
+>     left_to_right = True
+>     while queue:
+>         level = []
+>         for _ in range(len(queue)):
+>             node = queue.popleft()
+>             level.append(node.val)
+>             if node.left:  queue.append(node.left)
+>             if node.right: queue.append(node.right)
+>         if not left_to_right:
+>             level.reverse()
+>         result.append(level)
+>         left_to_right = not left_to_right
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Deque with appendleft/append based on direction: avoids the reverse() call; same O(n)/O(n) but harder to follow.
+> - DFS with depth parity: `result[depth].append(val)` with conditional insert at front vs back. O(n)/O(n).
 
 ---
 
@@ -784,6 +1065,56 @@ difficulty: mixed
 
 ---
 
+### Insert and Delete in BST
+
+> [!example] Problem
+> Insert a value into a BST (LC 701) and delete a node from a BST (LC 450). Return the root of the modified tree.
+
+> [!info] Approach
+> - **WHY:** Insert follows BST search path to find the null slot. Delete has three cases: leaf (just remove), one child (bypass the node), two children (replace with inorder successor or predecessor then delete that successor).
+> - **WHAT:** Insert — recurse into left or right based on comparison; on hitting None, return a new node. Delete — recurse to find target; on finding it, handle the three cases.
+> - **HOW:** Delete's two-child case: find inorder successor (leftmost in right subtree), copy its value to current node, then delete successor from right subtree.
+
+> [!note]- Python Solution
+> ```python
+> def insertIntoBST(root, val):
+>     if not root:
+>         return TreeNode(val)
+>     if val < root.val:
+>         root.left  = insertIntoBST(root.left,  val)
+>     else:
+>         root.right = insertIntoBST(root.right, val)
+>     return root
+> 
+> def deleteNode(root, key):
+>     if not root:
+>         return None
+>     if key < root.val:
+>         root.left  = deleteNode(root.left,  key)
+>     elif key > root.val:
+>         root.right = deleteNode(root.right, key)
+>     else:  # found
+>         if not root.left:  return root.right
+>         if not root.right: return root.left
+>         # two children: replace with inorder successor
+>         successor = root.right
+>         while successor.left:
+>             successor = successor.left
+>         root.val   = successor.val
+>         root.right = deleteNode(root.right, successor.val)
+>     return root
+> ```
+
+> [!success] Complexity
+> Time O(h) — O(log n) balanced, O(n) skewed. Space O(h) call stack.
+
+> [!tip] Alternatives
+> - Iterative insert: track parent pointer, attach new node. O(h)/O(1).
+> - Delete with inorder predecessor (rightmost in left subtree): symmetric approach.
+> - Iterative delete: more complex; requires tracking parent pointer to relink.
+
+---
+
 ### Range Sum of BST
 
 > [!example] Problem
@@ -949,6 +1280,45 @@ difficulty: mixed
 > - Slice arrays on each call: O(n²) due to repeated slicing — avoid for large inputs.
 > - Iterative with explicit stack: simulate recursion; O(n) time and space, no recursion limit issues.
 > - Postorder + inorder: symmetric — last element of postorder is root; construct right before left.
+
+---
+
+### Construct Binary Tree from Inorder and Postorder Traversal
+
+> [!example] Problem
+> Given `inorder` and `postorder` arrays, reconstruct the binary tree. LC 106.
+
+> [!info] Approach
+> - **WHY:** Postorder's last element is always the root. Find it in inorder — elements to its left form the left subtree, elements to its right form the right subtree. Symmetric to the preorder+inorder problem.
+> - **WHAT:** Walk postorder array right-to-left (using a decrementing index); build right subtree before left (reversed postorder visits root, right, left).
+> - **HOW:** `build(in_left, in_right)` — take `postorder[post_idx]` as root, decrement index, find root in inorder hash map as `mid`, build right subtree `(mid+1, in_right)` FIRST, then left `(in_left, mid-1)`.
+
+> [!note]- Python Solution
+> ```python
+> def buildTree(inorder, postorder):
+>     idx_map = {val: i for i, val in enumerate(inorder)}
+>     post_idx = [len(postorder) - 1]
+> 
+>     def build(in_left, in_right):
+>         if in_left > in_right:
+>             return None
+>         root_val = postorder[post_idx[0]]
+>         post_idx[0] -= 1
+>         root = TreeNode(root_val)
+>         mid = idx_map[root_val]
+>         root.right = build(mid + 1, in_right)   # right BEFORE left
+>         root.left  = build(in_left, mid - 1)
+>         return root
+> 
+>     return build(0, len(inorder) - 1)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n) hash map + O(h) stack.
+
+> [!tip] Alternatives
+> - Slice arrays: O(n²) due to slicing — avoid.
+> - Key trap: must build right subtree before left when consuming postorder right-to-left. Reversing this order corrupts the construction.
 
 ---
 

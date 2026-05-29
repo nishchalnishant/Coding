@@ -3,7 +3,7 @@ module: 03-patterns
 topic: System Design
 subtopic: 
 status: unread
-tags: [patterns, upsc, system-design]
+tags: [patterns, system-design]
 ---
 ## First-Principles Map
 

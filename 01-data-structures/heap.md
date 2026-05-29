@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Heap
 subtopic: 
 status: unread
-tags: [data-structures, upsc, heap]
+tags: [data-structures, heap]
 ---
 ## First-Principles Map
 

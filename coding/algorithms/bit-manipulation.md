@@ -741,6 +741,131 @@ difficulty: mixed
 
 ---
 
+## Encoding / Decoding with Bits
+
+### UTF-8 Validation
+
+> [!example] Problem
+> Given an array of integers `data` (each 0–255 representing one byte), determine if it is a valid UTF-8 encoding. A character may use 1–4 bytes following RFC 3629 rules: 1-byte chars begin with `0xxxxxxx`; multi-byte leading bytes begin with `110`, `1110`, or `11110`; continuation bytes begin with `10xxxxxx`.
+
+> [!info] Approach
+> - **WHY:** Each byte's high bits determine its role. Bit masks isolate the relevant prefix bits. No parsing needed — pure bit-check.
+> - **WHAT:** For each byte, determine if it's a 1-byte char, 2/3/4-byte leader, or continuation byte using masks. Track how many continuation bytes are expected; each subsequent byte must match `10xxxxxx`.
+> - **HOW:** Iterate bytes. If `expected_continuations > 0`, check `byte & 0xC0 == 0x80`. Otherwise classify the byte's prefix to set new expected count. Invalid if counts mismatch or byte is out of range.
+
+> [!note]- Python Solution
+> ```python
+> def validUtf8(data: list[int]) -> bool:
+>     expected = 0
+>     for byte in data:
+>         byte &= 0xFF  # ensure 8-bit
+>         if expected > 0:
+>             if (byte >> 6) != 0b10:   # must be 10xxxxxx
+>                 return False
+>             expected -= 1
+>         elif (byte >> 7) == 0:        # 0xxxxxxx — 1-byte
+>             expected = 0
+>         elif (byte >> 5) == 0b110:    # 110xxxxx — 2-byte leader
+>             expected = 1
+>         elif (byte >> 4) == 0b1110:   # 1110xxxx — 3-byte leader
+>             expected = 2
+>         elif (byte >> 3) == 0b11110:  # 11110xxx — 4-byte leader
+>             expected = 3
+>         else:
+>             return False
+>     return expected == 0
+> ```
+
+> [!success] Complexity
+> Time O(N), Space O(1).
+
+> [!tip] Alternatives
+> Convert to binary string and use regex — readable but slow. This bitmask approach is the expected interview solution.
+
+---
+
+### Gray Code
+
+> [!example] Problem
+> Return the Gray code sequence for `n` bits — a sequence of `2^n` integers where consecutive entries differ in exactly one bit, starting at 0.
+
+> [!info] Approach
+> - **WHY:** The standard binary-reflected Gray code has a closed-form formula: Gray code of integer `i` is `i ^ (i >> 1)`. Adjacent integers in Gray code differ by exactly one bit.
+> - **WHAT:** Generate `[i ^ (i >> 1) for i in range(1 << n)]`.
+> - **HOW:** For `i` and `i+1`, `(i ^ (i>>1)) ^ ((i+1) ^ ((i+1)>>1))` always has exactly one bit set (the carry bit). This is provable by induction on the binary addition carry chain.
+
+> [!note]- Python Solution
+> ```python
+> def grayCode(n: int) -> list[int]:
+>     return [i ^ (i >> 1) for i in range(1 << n)]
+> ```
+
+> [!success] Complexity
+> Time O(2^N), Space O(2^N).
+
+> [!tip] Alternatives
+> Recursive bit-reflection construction — build for n-1, then reflect and prepend 0/1. Same O(2^N) but less concise. The `i ^ (i >> 1)` formula is the canonical closed-form answer.
+
+---
+
+### Decode XORed Array
+
+> [!example] Problem
+> Array `encoded` of length `n-1` is constructed as `encoded[i] = arr[i] ^ arr[i+1]`. Given `encoded` and `first = arr[0]`, recover `arr`.
+
+> [!info] Approach
+> - **WHY:** XOR is its own inverse: `encoded[i] = arr[i] ^ arr[i+1]` → `arr[i+1] = encoded[i] ^ arr[i]`. Given `arr[0]`, each subsequent element is uniquely determined.
+> - **WHAT:** Sequential XOR: `arr[i+1] = encoded[i] ^ arr[i]`.
+> - **HOW:** Initialize `arr = [first]`. For each value in `encoded`, append `encoded[i] ^ arr[-1]`.
+
+> [!note]- Python Solution
+> ```python
+> def decode(encoded: list[int], first: int) -> list[int]:
+>     arr = [first]
+>     for val in encoded:
+>         arr.append(val ^ arr[-1])
+>     return arr
+> ```
+
+> [!success] Complexity
+> Time O(N), Space O(N).
+
+> [!tip] Alternatives
+> No meaningful alternative — XOR inversion is the only O(N)/O(1)-extra approach. The problem is straightforwardly determined once `first` is known.
+
+---
+
+### Find the Duplicate Number (Bit Approach)
+
+> [!example] Problem
+> Array `nums` of length `n+1` contains integers in `[1, n]` with exactly one duplicate (may appear > 2 times). Find the duplicate. O(N log N) time, O(1) space; no modification of array.
+
+> [!info] Approach
+> - **WHY:** For each bit position, count how many numbers in `[1, n]` have that bit set (call it `expected`) vs. how many in `nums` have it set (call it `actual`). If `actual > expected`, the duplicate has this bit set.
+> - **WHAT:** For each of the 32 bit positions, compare bit frequency in `nums` vs. `[1..n]`. Reconstruct the duplicate from the differing bits.
+> - **HOW:** Outer loop over 32 bit positions; inner loop counts set bits in `nums` and in `range(1, n+1)`. If `count_nums > count_range`, set that bit in the answer.
+
+> [!note]- Python Solution
+> ```python
+> def findDuplicate(nums: list[int]) -> int:
+>     n = len(nums) - 1
+>     result = 0
+>     for bit in range(32):
+>         count_nums  = sum(1 for x in nums       if (x >> bit) & 1)
+>         count_range = sum(1 for x in range(1, n + 1) if (x >> bit) & 1)
+>         if count_nums > count_range:
+>             result |= (1 << bit)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(32·N) = O(N log N), Space O(1). Does not modify the array.
+
+> [!tip] Alternatives
+> Floyd's cycle detection (tortoise and hare) — O(N) time, O(1) space, treats array as linked list; optimal. Binary search on value space — O(N log N), O(1). Bit approach is a clean alternative when the interviewer asks for a non-pointer solution.
+
+---
+
 ## See Also
 
 [[dynamic-programming]] | [[graph-algorithms]] | [[trie]]

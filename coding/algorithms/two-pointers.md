@@ -560,6 +560,361 @@ difficulty: mixed
 
 ---
 
+### 3Sum Closest (LC 16)
+
+> [!example] Problem
+> Find three integers in `nums` whose sum is closest to `target`. Return the sum. Exactly one answer guaranteed.
+
+> [!info] Approach
+> - WHY: Same scaffold as 3Sum — fix anchor, converging two-pointer on remainder. Track closest sum instead of exact match.
+> - WHAT: Sort array. For each anchor `i`, run `lo = i+1, hi = n-1`. Update best if `|s - target| < |best - target|`. Move pointer based on whether sum is too small or too large.
+> - HOW: If `s < target` → `lo += 1` (need larger sum); if `s > target` → `hi -= 1`; if equal → return immediately.
+
+> [!note]- Python Solution
+> ```python
+> def three_sum_closest(nums: list[int], target: int) -> int:
+>     nums.sort()
+>     best = float('inf')
+>     for i in range(len(nums) - 2):
+>         lo, hi = i + 1, len(nums) - 1
+>         while lo < hi:
+>             s = nums[i] + nums[lo] + nums[hi]
+>             if abs(s - target) < abs(best - target):
+>                 best = s
+>             if s < target:
+>                 lo += 1
+>             elif s > target:
+>                 hi -= 1
+>             else:
+>                 return s   # exact match
+>     return best
+> ```
+
+> [!success] Complexity
+> O(n²) time, O(1) extra space.
+
+> [!tip] Alternatives
+> Brute force O(n³) — no benefit; three nested loops. Sorting + two-pointer is optimal.
+
+---
+
+## Hash Map Two-Sum Variant
+
+---
+
+### 4Sum II (LC 454)
+
+> [!example] Problem
+> Four integer arrays A, B, C, D each of length n. Count tuples (i, j, k, l) such that `A[i] + B[j] + C[k] + D[l] == 0`.
+
+> [!info] Approach
+> - WHY: O(n⁴) brute force is infeasible. Split into two pairs: store all A+B sums in a hash map, then check if -(C+D) exists in it.
+> - WHAT: Build `count` map of all `a + b` sums → frequency. For every `c + d`, add `count[-(c+d)]` to result.
+> - HOW: Two nested loops each O(n²) rather than O(n⁴). This is a hash-map complement pattern, not classic two-pointer, but pairs with kSum problems.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def four_sum_count(
+>     nums1: list[int], nums2: list[int],
+>     nums3: list[int], nums4: list[int]
+> ) -> int:
+>     ab = defaultdict(int)
+>     for a in nums1:
+>         for b in nums2:
+>             ab[a + b] += 1
+>     count = 0
+>     for c in nums3:
+>         for d in nums4:
+>             count += ab[-(c + d)]
+>     return count
+> ```
+
+> [!success] Complexity
+> O(n²) time, O(n²) space for the hash map.
+
+> [!tip] Alternatives
+> Sort all four arrays and use four pointers — O(n³) and complex; hash-map split is strictly better here.
+
+---
+
+## Partition Variants
+
+---
+
+### Partition Array According to Given Pivot (LC 2161)
+
+> [!example] Problem
+> Rearrange `nums` so all elements less than `pivot` come first, then elements equal to `pivot`, then elements greater — maintaining relative order within each group. Return the rearranged array.
+
+> [!info] Approach
+> - WHY: Relative order must be preserved, so an in-place swap (DNF-style) would break ordering. A stable partition using three buckets is correct and O(n).
+> - WHAT: Single pass: collect elements into `less`, `equal`, `greater` lists. Concatenate.
+> - HOW: `less + equal + greater` preserves original relative order within each group.
+
+> [!note]- Python Solution
+> ```python
+> def pivot_array(nums: list[int], pivot: int) -> list[int]:
+>     less, equal, greater = [], [], []
+>     for x in nums:
+>         if x < pivot:
+>             less.append(x)
+>         elif x == pivot:
+>             equal.append(x)
+>         else:
+>             greater.append(x)
+>     return less + equal + greater
+> ```
+
+> [!success] Complexity
+> O(n) time, O(n) space.
+
+> [!tip] Alternatives
+> In-place DNF (LC 75 style) — O(1) extra space but does not preserve relative order; only valid when order doesn't matter.
+
+---
+
+### Minimum Difference Between Highest and Lowest of K Scores (LC 1984)
+
+> [!example] Problem
+> Given an unsorted array `nums` and integer `k`, return the minimum difference between the highest and lowest score of any `k` students.
+
+> [!info] Approach
+> - WHY: After sorting, the k elements with minimum spread must be contiguous (any non-contiguous selection can be improved by replacing the outlier with a neighbor). So the answer is the minimum of `nums[i+k-1] - nums[i]` over all valid windows.
+> - WHAT: Sort then slide a fixed window of size k, record `nums[i + k - 1] - nums[i]`.
+> - HOW: This is a two-pointer fixed window (lo = i, hi = i + k - 1). Single pass after sort.
+
+> [!note]- Python Solution
+> ```python
+> def minimum_difference(nums: list[int], k: int) -> int:
+>     nums.sort()
+>     return min(nums[i + k - 1] - nums[i] for i in range(len(nums) - k + 1))
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sort dominates), O(1) extra space.
+
+> [!tip] Alternatives
+> Brute force all k-subsets — exponential; sorting + sliding window is the canonical approach.
+
+---
+
+## Sorted Array / Two-Pointer Greedy
+
+---
+
+### Number of Subsequences That Satisfy the Given Sum Condition (LC 1498)
+
+> [!example] Problem
+> Given sorted array `nums` and `target`, count non-empty subsequences where `min + max <= target`. Return count mod 1e9+7.
+
+> [!info] Approach
+> - WHY: After sorting, for a fixed minimum at index `lo`, find the furthest `hi` where `nums[lo] + nums[hi] <= target`. Every subset of elements between `lo+1` and `hi` can pair with `nums[lo]` as min — there are `2^(hi-lo)` such subsequences.
+> - WHAT: Converging two-pointer. Precompute powers of 2 mod MOD. For each `lo`, binary-search or slide `hi` left until valid; add `pow2[hi - lo]`.
+> - HOW: `hi` never moves right (as `lo` increases, the valid range can only shrink), so two-pointer is O(n).
+
+> [!note]- Python Solution
+> ```python
+> def num_subseq(nums: list[int], target: int) -> int:
+>     MOD = 10**9 + 7
+>     nums.sort()
+>     n = len(nums)
+>     pow2 = [1] * n
+>     for i in range(1, n):
+>         pow2[i] = pow2[i - 1] * 2 % MOD
+> 
+>     lo, hi = 0, n - 1
+>     result = 0
+>     while lo <= hi:
+>         if nums[lo] + nums[hi] <= target:
+>             result = (result + pow2[hi - lo]) % MOD
+>             lo += 1
+>         else:
+>             hi -= 1
+>     return result
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sort), O(n) space for power table.
+
+> [!tip] Alternatives
+> Binary search for `hi` given each `lo` — O(n log n) same asymptotic but with log factor in the main loop; sliding hi is cleaner.
+
+---
+
+### Boats to Save People (LC 881)
+
+> [!example] Problem
+> Each person has a weight. Each boat carries at most 2 people with weight sum ≤ `limit`. Find minimum number of boats needed.
+
+> [!info] Approach
+> - WHY: Greedily pair the heaviest person with the lightest. If they fit together, both board one boat; otherwise the heaviest goes alone. Sorting enables this pairing in O(n).
+> - WHAT: Sort weights. `lo = 0, hi = n-1`. If `weights[lo] + weights[hi] <= limit` → both fit, `lo += 1`; always `hi -= 1` (heaviest always takes a boat). Boats += 1 per iteration.
+> - HOW: The greedy is optimal: the heaviest person must go on some boat — it's never worse to pair them with the lightest available.
+
+> [!note]- Python Solution
+> ```python
+> def num_rescue_boats(people: list[int], limit: int) -> int:
+>     people.sort()
+>     lo, hi = 0, len(people) - 1
+>     boats = 0
+>     while lo <= hi:
+>         if people[lo] + people[hi] <= limit:
+>             lo += 1   # lightest fits with heaviest
+>         hi -= 1       # heaviest always takes a boat
+>         boats += 1
+>     return boats
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sort), O(1) space.
+
+> [!tip] Alternatives
+> Priority queue / greedy simulation — O(n log n) but more complex; sorted two-pointer is cleaner.
+
+---
+
+### Max Number of K-Sum Pairs (LC 1679)
+
+> [!example] Problem
+> Array of integers. In one operation pick two elements summing to `k` and remove them. Maximize number of operations.
+
+> [!info] Approach
+> - WHY: Each operation removes a pair summing to k. After sorting, the same converging two-pointer as Two Sum II finds all such pairs greedily.
+> - WHAT: Sort. `lo = 0, hi = n-1`. If sum == k → count++, lo++, hi--; if sum < k → lo++; if sum > k → hi--.
+> - HOW: Greedy pairing of smallest + largest exhausts all valid pairs optimally (each element can only be used once).
+
+> [!note]- Python Solution
+> ```python
+> def max_operations(nums: list[int], k: int) -> int:
+>     nums.sort()
+>     lo, hi = 0, len(nums) - 1
+>     ops = 0
+>     while lo < hi:
+>         s = nums[lo] + nums[hi]
+>         if s == k:
+>             ops += 1
+>             lo += 1
+>             hi -= 1
+>         elif s < k:
+>             lo += 1
+>         else:
+>             hi -= 1
+>     return ops
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sort), O(1) space.
+
+> [!tip] Alternatives
+> HashMap: count frequencies, for each x check if k-x exists — O(n) time, O(n) space. Use when extra space is acceptable and sorting is undesirable.
+
+---
+
+### Bag of Tokens (LC 948)
+
+> [!example] Problem
+> Tokens with power values. Play a token face-up (costs `tokens[i]` power, gains 1 point) or face-down (costs 1 point, gains `tokens[i]` power). Start with `power` and 0 points. Maximize points.
+
+> [!info] Approach
+> - WHY: To maximize points, spend power on the cheapest token (face-up) and spend points on the most expensive token to regain power (face-down). Sorting enables greedy selection of cheapest/most-expensive with two pointers.
+> - WHAT: Sort tokens. Greedily: if `power >= tokens[lo]` → play face-up (lo++, points++, power -= tokens[lo]); else if `points > 0` → play face-down (hi--, points--, power += tokens[hi]); else break.
+> - HOW: Always track `best = max(best, points)` — we may want to stop before spending all points.
+
+> [!note]- Python Solution
+> ```python
+> def bag_of_tokens_score(tokens: list[int], power: int) -> int:
+>     tokens.sort()
+>     lo, hi = 0, len(tokens) - 1
+>     points = 0
+>     best = 0
+>     while lo <= hi:
+>         if power >= tokens[lo]:
+>             power -= tokens[lo]
+>             points += 1
+>             lo += 1
+>             best = max(best, points)
+>         elif points > 0:
+>             power += tokens[hi]
+>             points -= 1
+>             hi -= 1
+>         else:
+>             break
+>     return best
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sort), O(1) space.
+
+> [!tip] Alternatives
+> DP — token values can be large so DP state space is infeasible; greedy two-pointer is the only practical approach.
+
+---
+
+## Two-Pointer on Strings
+
+---
+
+### Reverse String (LC 344)
+
+> [!example] Problem
+> Reverse a character array in-place using O(1) extra memory.
+
+> [!info] Approach
+> - WHY: Swapping from both ends converges in n/2 steps — the simplest two-pointer pattern.
+> - WHAT: `lo = 0, hi = n-1`. Swap `s[lo]` and `s[hi]`, advance both, until they meet.
+> - HOW: Loop condition `lo < hi`; each iteration does one swap and two pointer moves.
+
+> [!note]- Python Solution
+> ```python
+> def reverse_string(s: list[str]) -> None:
+>     lo, hi = 0, len(s) - 1
+>     while lo < hi:
+>         s[lo], s[hi] = s[hi], s[lo]
+>         lo += 1
+>         hi -= 1
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space.
+
+> [!tip] Alternatives
+> Python slice `s[::-1]` — not in-place (creates new list); in-place two-pointer is the expected interview answer.
+
+---
+
+### Long Pressed Name (LC 925)
+
+> [!example] Problem
+> Someone types `name` but keys can be long-pressed (a character typed once can appear multiple times). Return true if `typed` could result from typing `name` with some long presses.
+
+> [!info] Approach
+> - WHY: Both strings share a subsequence structure — `name` characters must appear in `typed` in order, with possible repetitions in `typed`. Two pointers on both strings handles this in a single pass.
+> - WHAT: Pointer `i` on `name`, `j` on `typed`. Advance both when chars match. If `typed[j] == typed[j-1]`, it's a long press — advance `j` only. Otherwise mismatch → false.
+> - HOW: After the loop, `i` must have consumed all of `name`.
+
+> [!note]- Python Solution
+> ```python
+> def is_long_pressed_name(name: str, typed: str) -> bool:
+>     i = 0
+>     for j in range(len(typed)):
+>         if i < len(name) and name[i] == typed[j]:
+>             i += 1
+>         elif j == 0 or typed[j] != typed[j - 1]:
+>             return False
+>         # else: typed[j] == typed[j-1] — long press, skip
+>     return i == len(name)
+> ```
+
+> [!success] Complexity
+> O(n + m) time where n = len(name), m = len(typed). O(1) space.
+
+> [!tip] Alternatives
+> Regex matching — `re.fullmatch` with a pattern built from name; more code, harder to reason about; two-pointer is cleaner.
+
+---
+
 ## See Also
 
 [[binary-search]] | [[sliding-window]] | [[array]] | [[linked-list]]

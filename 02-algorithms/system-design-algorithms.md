@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: System Design Algorithms
 subtopic: 
 status: unread
-tags: [algorithms, upsc, system-design-algorithms]
+tags: [algorithms, system-design-algorithms]
 ---
 ## First-Principles Map
 

@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Advanced Graphs
 subtopic: 
 status: unread
-tags: [algorithms, upsc, advanced-graphs]
+tags: [algorithms, advanced-graphs]
 ---
 ## First-Principles Map
 

@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Problem Deep Dives
 subtopic: 
 status: unread
-tags: [algorithms, upsc, problem-deep-dives]
+tags: [algorithms, problem-deep-dives]
 ---
 ## First-Principles Map
 

@@ -841,6 +841,75 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
+## Sorting-Based Greedy
+
+### Queue Reconstruction by Height (LC 406)
+
+> [!example] Problem
+> People described as `[h, k]` where h = height, k = number of people in front with height ≥ h. Reconstruct the original queue.
+
+> [!info] Approach
+> - **WHY:** Taller people are invisible to shorter ones for the k-count. So place taller people first — their relative order is determined by k alone. Inserting shorter people later doesn't affect any already-placed taller person's k value.
+> - **WHAT:** Sort by height descending (ties: k ascending). Insert each person at index k into the result list.
+> - **HOW:** `result.insert(k, person)` — O(n) per insert, but n is small enough; taller people already placed are unaffected by later insertions.
+
+> [!note]- Python Solution
+> ```python
+> def reconstructQueue(people: list[list[int]]) -> list[list[int]]:
+>     # Sort: tallest first; among same height, smallest k first
+>     people.sort(key=lambda x: (-x[0], x[1]))
+>     result: list[list[int]] = []
+>     for person in people:
+>         result.insert(person[1], person)
+>     return result
+> ```
+
+> [!success] Complexity
+> O(n² ) time (n insertions each O(n)), O(n) space. For n ≤ 2000 (LC constraint) this is fine.
+
+> [!tip] Alternatives
+> BIT/segment tree to find the k-th empty slot: O(n log n). Linked list for O(1) insert at position after O(n) traversal.
+
+---
+
+### IPO (Maximize Capital, LC 502)
+
+> [!example] Problem
+> Start with capital W. Do at most k projects. Each project has `profit[i]` and `capital[i]` (min capital to start). Maximize capital after k projects.
+
+> [!info] Approach
+> - **WHY:** At each step, among all affordable projects, the greedy optimal is to pick the highest-profit one — taking less profit now can't help unlock better future projects than taking more profit. This is provable by exchange argument.
+> - **WHAT:** Min-heap sorted by capital requirement (to find newly affordable projects efficiently). Max-heap of profits of all currently affordable projects.
+> - **HOW:** Sort projects by capital. For each of k steps: push all projects with `capital[i] ≤ W` into max-heap; pop the most profitable; add to W. If max-heap empty, can't proceed.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> 
+> def findMaximizedCapital(k: int, w: int, profits: list[int], capital: list[int]) -> int:
+>     # Min-heap by capital requirement
+>     projects = sorted(zip(capital, profits))
+>     available: list[int] = []  # max-heap (negate profits)
+>     i = 0
+>     for _ in range(k):
+>         # Unlock all projects affordable with current capital w
+>         while i < len(projects) and projects[i][0] <= w:
+>             heapq.heappush(available, -projects[i][1])
+>             i += 1
+>         if not available:
+>             break  # no affordable project
+>         w += -heapq.heappop(available)
+>     return w
+> ```
+
+> [!success] Complexity
+> O(n log n) time (sorting + heap ops), O(n) space.
+
+> [!tip] Alternatives
+> Brute force O(k * n): scan all projects each step. Sorting + binary search to find boundary: already implicit in the two-heap approach.
+
+---
+
 ## See Also
 
 [[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]]

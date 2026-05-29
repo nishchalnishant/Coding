@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Graph
 subtopic: 
 status: unread
-tags: [algorithms, upsc, graph]
+tags: [algorithms, graph]
 ---
 ## First-Principles Map
 

@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Dynamic Programming
 subtopic: Questions Bank
 status: unread
-tags: [algorithms, upsc, dynamic-programming]
+tags: [algorithms, dynamic-programming]
 ---
 ## First-Principles Map
 

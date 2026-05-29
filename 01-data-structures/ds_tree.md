@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Ds Tree
 subtopic: 
 status: unread
-tags: [data-structures, upsc, ds-tree]
+tags: [data-structures, ds-tree]
 ---
 ## First-Principles Map
 

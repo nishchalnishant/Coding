@@ -1226,6 +1226,659 @@ difficulty: mixed
 
 ---
 
+## Longest Increasing Subsequence (LIS) Family
+
+### Longest Increasing Subsequence
+
+> [!example] Problem
+> Given an integer array `nums`, return the length of the longest strictly increasing subsequence.
+
+> [!info] Approach
+> - **WHY:** Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n).
+> - **WHAT:** `tails[i]` = smallest tail element of all increasing subsequences of length `i+1` seen so far.
+> - **HOW:** For each `x` in `nums`, binary search `tails` for the first element `>= x`. If found, replace it with `x`; otherwise append `x`. Answer = `len(tails)`.
+
+> [!note]- Python Solution
+> ```python
+> import bisect
+> def lengthOfLIS(nums: list[int]) -> int:
+>     tails = []
+>     for x in nums:
+>         pos = bisect.bisect_left(tails, x)
+>         if pos == len(tails):
+>             tails.append(x)
+>         else:
+>             tails[pos] = x
+>     return len(tails)
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> O(n²) DP: `dp[i] = max(dp[j]+1 for j<i if nums[j]<nums[i])`. To reconstruct the actual subsequence, maintain a `parent` array alongside the patience sort.
+
+---
+
+### Number of LIS
+
+> [!example] Problem
+> Given `nums`, return the number of longest increasing subsequences (LC 673).
+
+> [!info] Approach
+> - **WHY:** Length alone isn't enough; need to count paths. Two parallel arrays track both.
+> - **WHAT:** `length[i]` = LIS length ending at index `i`. `count[i]` = number of such subsequences.
+> - **HOW:** For each `i`, scan `j < i`. If `nums[j] < nums[i]`: if `length[j]+1 > length[i]`, update both; if equal, add `count[j]` to `count[i]`. Answer = sum of `count[i]` where `length[i] == max_length`.
+
+> [!note]- Python Solution
+> ```python
+> def findNumberOfLIS(nums: list[int]) -> int:
+>     n = len(nums)
+>     length = [1] * n
+>     count = [1] * n
+>     for i in range(n):
+>         for j in range(i):
+>             if nums[j] < nums[i]:
+>                 if length[j] + 1 > length[i]:
+>                     length[i] = length[j] + 1
+>                     count[i] = count[j]
+>                 elif length[j] + 1 == length[i]:
+>                     count[i] += count[j]
+>     max_len = max(length)
+>     return sum(c for l, c in zip(length, count) if l == max_len)
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n).
+
+> [!tip] Alternatives
+> O(n log n) with a BIT/segment tree storing (max_length, count) pairs per compressed value.
+
+---
+
+### Longest Bitonic Subsequence
+
+> [!example] Problem
+> A bitonic subsequence first increases then decreases (either part may be empty). Find its maximum length.
+
+> [!info] Approach
+> - **WHY:** Decompose into LIS from the left and LIS from the right (longest decreasing = LIS reversed). The peak at index `i` contributes `lis[i] + lds[i] - 1`.
+> - **WHAT:** `lis[i]` = LIS length ending at `i`; `lds[i]` = longest decreasing subsequence starting at `i`.
+> - **HOW:** Compute `lis` left-to-right O(n²), `lds` right-to-left O(n²). Answer = `max(lis[i] + lds[i] - 1)`.
+
+> [!note]- Python Solution
+> ```python
+> def longestBitonicSubsequence(nums: list[int]) -> int:
+>     n = len(nums)
+>     lis = [1] * n
+>     lds = [1] * n
+>     for i in range(1, n):
+>         for j in range(i):
+>             if nums[j] < nums[i]:
+>                 lis[i] = max(lis[i], lis[j] + 1)
+>     for i in range(n - 2, -1, -1):
+>         for j in range(i + 1, n):
+>             if nums[j] < nums[i]:
+>                 lds[i] = max(lds[i], lds[j] + 1)
+>     return max(lis[i] + lds[i] - 1 for i in range(n))
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n).
+
+> [!tip] Alternatives
+> Combine with O(n log n) patience sort for each direction to reduce to O(n log n) overall.
+
+---
+
+## String DP
+
+### Distinct Subsequences
+
+> [!example] Problem
+> Given strings `s` and `t`, count the number of distinct subsequences of `s` that equal `t` (LC 115).
+
+> [!info] Approach
+> - **WHY:** At each position we either use `s[i]` to match `t[j]` or we skip it; both branches must be counted.
+> - **WHAT:** `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`.
+> - **HOW:** If `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use or skip). Else: `dp[i][j] = dp[i-1][j]`. Base: `dp[i][0] = 1` for all `i`.
+
+> [!note]- Python Solution
+> ```python
+> def numDistinct(s: str, t: str) -> int:
+>     m, n = len(s), len(t)
+>     dp = [0] * (n + 1)
+>     dp[0] = 1
+>     for ch in s:
+>         for j in range(n, 0, -1):
+>             if ch == t[j - 1]:
+>                 dp[j] += dp[j - 1]
+>     return dp[n]
+> ```
+
+> [!success] Complexity
+> Time O(mn), Space O(n) with 1-D rolling array.
+
+> [!tip] Alternatives
+> Full 2-D table is clearer for derivation; rolling array suffices for space optimization.
+
+---
+
+### Interleaving String
+
+> [!example] Problem
+> Given `s1`, `s2`, `s3`, return true if `s3` is formed by an interleaving of `s1` and `s2` (LC 97).
+
+> [!info] Approach
+> - **WHY:** At each position in `s3` we choose whether the next character comes from `s1` or `s2`; overlapping subproblems arise.
+> - **WHAT:** `dp[i][j]` = true if `s3[:i+j]` can be formed from `s1[:i]` and `s2[:j]`.
+> - **HOW:** `dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])`. Base: `dp[0][0] = True`.
+
+> [!note]- Python Solution
+> ```python
+> def isInterleave(s1: str, s2: str, s3: str) -> bool:
+>     m, n = len(s1), len(s2)
+>     if m + n != len(s3):
+>         return False
+>     dp = [False] * (n + 1)
+>     dp[0] = True
+>     for j in range(1, n + 1):
+>         dp[j] = dp[j - 1] and s2[j - 1] == s3[j - 1]
+>     for i in range(1, m + 1):
+>         dp[0] = dp[0] and s1[i - 1] == s3[i - 1]
+>         for j in range(1, n + 1):
+>             dp[j] = (dp[j] and s1[i-1] == s3[i+j-1]) or \
+>                     (dp[j-1] and s2[j-1] == s3[i+j-1])
+>     return dp[n]
+> ```
+
+> [!success] Complexity
+> Time O(mn), Space O(n).
+
+> [!tip] Alternatives
+> BFS/DFS with memoization on `(i, j)` state is equivalent and sometimes clearer.
+
+---
+
+### Regular Expression Matching
+
+> [!example] Problem
+> Implement regex matching with `.` (any single char) and `*` (zero or more of preceding element) (LC 10).
+
+> [!info] Approach
+> - **WHY:** `*` introduces branching — match zero occurrences (skip pattern pair) or one-or-more — creating overlapping sub-problems.
+> - **WHAT:** `dp[i][j]` = true if `s[:i]` matches `p[:j]`.
+> - **HOW:** If `p[j-1] == '*'`: `dp[i][j] = dp[i][j-2]` (zero uses) or `(dp[i-1][j] and (p[j-2]=='.' or p[j-2]==s[i-1]))` (one+ uses). Else: `dp[i][j] = dp[i-1][j-1] and (p[j-1]=='.' or p[j-1]==s[i-1])`.
+
+> [!note]- Python Solution
+> ```python
+> def isMatch(s: str, p: str) -> bool:
+>     m, n = len(s), len(p)
+>     dp = [[False] * (n + 1) for _ in range(m + 1)]
+>     dp[0][0] = True
+>     for j in range(2, n + 1):
+>         if p[j - 1] == '*':
+>             dp[0][j] = dp[0][j - 2]
+>     for i in range(1, m + 1):
+>         for j in range(1, n + 1):
+>             if p[j - 1] == '*':
+>                 dp[i][j] = dp[i][j - 2] or \
+>                     (dp[i - 1][j] and p[j - 2] in {'.', s[i - 1]})
+>             else:
+>                 dp[i][j] = dp[i - 1][j - 1] and p[j - 1] in {'.', s[i - 1]}
+>     return dp[m][n]
+> ```
+
+> [!success] Complexity
+> Time O(mn), Space O(mn); reducible to O(n) with two rows.
+
+> [!tip] Alternatives
+> LC 44 (Wildcard Matching) replaces `*` semantics — similar structure but `*` matches any sequence directly.
+
+---
+
+## Probability / Expected Value DP
+
+### Knight Probability in Chessboard
+
+> [!example] Problem
+> A knight starts at `(r, c)` on an `n×n` board. After `k` moves, return the probability it stays on the board (LC 688).
+
+> [!info] Approach
+> - **WHY:** After each move, probability distributes over up to 8 neighbours; cells off-board contribute 0. Iterating forward avoids recomputing overlapping sums.
+> - **WHAT:** `dp[i][j]` = probability of being at `(i, j)` after the current step.
+> - **HOW:** Start with probability 1 at `(r, c)`. Each step: new `dp[ni][nj] += dp[i][j] / 8` for each valid knight move. Repeat `k` times; answer = `sum(dp)`.
+
+> [!note]- Python Solution
+> ```python
+> def knightProbability(n: int, k: int, row: int, column: int) -> float:
+>     moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
+>     dp = [[0.0] * n for _ in range(n)]
+>     dp[row][column] = 1.0
+>     for _ in range(k):
+>         ndp = [[0.0] * n for _ in range(n)]
+>         for i in range(n):
+>             for j in range(n):
+>                 if dp[i][j]:
+>                     for di, dj in moves:
+>                         ni, nj = i + di, j + dj
+>                         if 0 <= ni < n and 0 <= nj < n:
+>                             ndp[ni][nj] += dp[i][j] / 8
+>         dp = ndp
+>     return sum(dp[i][j] for i in range(n) for j in range(n))
+> ```
+
+> [!success] Complexity
+> Time O(k · n²), Space O(n²).
+
+> [!tip] Alternatives
+> Memoized recursion `prob(step, i, j)` is equivalent; forward DP avoids redundant division.
+
+---
+
+### New 21 Game
+
+> [!example] Problem
+> Start at 0 points. Each turn draw a number in `[1, maxPts]` uniformly at random and add it. Stop once reaching `>= k`. Return probability the final score is `<= n` (LC 837).
+
+> [!info] Approach
+> - **WHY:** `dp[x]` = probability of reaching exactly `x` before stopping. Each `dp[x]` is the average of `dp[x-1], ..., dp[x-maxPts]` (for `x < k`). A sliding window sum avoids O(n·maxPts) recomputation.
+> - **WHAT:** `dp[x]` = probability of landing on score `x`.
+> - **HOW:** Base `dp[0] = 1`. Maintain `window_sum`. For `x` in `1..n`: `dp[x] = window_sum / maxPts`. If `x < k`, add `dp[x]` to window; if `x >= maxPts`, subtract `dp[x - maxPts]`. Answer = `sum(dp[k..n])`.
+
+> [!note]- Python Solution
+> ```python
+> def new21Game(n: int, k: int, maxPts: int) -> float:
+>     if k == 0 or n >= k + maxPts:
+>         return 1.0
+>     dp = [0.0] * (n + 1)
+>     dp[0] = 1.0
+>     window_sum = 1.0
+>     for x in range(1, n + 1):
+>         dp[x] = window_sum / maxPts
+>         if x < k:
+>             window_sum += dp[x]
+>         if x >= maxPts:
+>             window_sum -= dp[x - maxPts]
+>     return sum(dp[k:])
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> Brute-force convolution is O(n · maxPts); the prefix-sum trick reduces it to O(n).
+
+---
+
+## Bitmask DP
+
+### Shortest Path Visiting All Nodes (TSP Bitmask DP)
+
+> [!example] Problem
+> Find the shortest path that visits every node in an undirected graph (LC 847). Generalises to the Travelling Salesman bitmask DP template.
+
+> [!info] Approach
+> - **WHY:** With up to 12 nodes, 2^12 states × 12 nodes is feasible. BFS on `(node, visited_mask)` gives shortest path; DP on the same state gives minimum cost for weighted TSP.
+> - **WHAT:** `dist[mask][v]` = min steps to have visited exactly the nodes in `mask` and currently be at `v`.
+> - **HOW:** BFS (unweighted): enqueue all `(node, 1<<node)` with distance 0. Expand neighbours; stop when `mask == (1<<n)-1`. For weighted TSP: `dp[mask | (1<<u)][u] = min(dp[mask][v] + w(v,u))` over all `v` in `mask`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> def shortestPathLength(graph: list[list[int]]) -> int:
+>     n = len(graph)
+>     full = (1 << n) - 1
+>     dist = [[float('inf')] * n for _ in range(1 << n)]
+>     q = deque()
+>     for i in range(n):
+>         dist[1 << i][i] = 0
+>         q.append((1 << i, i))
+>     while q:
+>         mask, v = q.popleft()
+>         if mask == full:
+>             return dist[mask][v]
+>         for u in graph[v]:
+>             nmask = mask | (1 << u)
+>             if dist[nmask][u] == float('inf'):
+>                 dist[nmask][u] = dist[mask][v] + 1
+>                 q.append((nmask, u))
+>     return 0
+> ```
+
+> [!success] Complexity
+> Time O(2^n · n), Space O(2^n · n).
+
+> [!tip] Alternatives
+> For weighted complete graphs (classic TSP): same DP, O(2^n · n²). Prim's/Kruskal's gives MST (not TSP) — use bitmask DP when visiting-all-nodes with revisits is the goal.
+
+---
+
+### Partition to K Equal Subset Sums
+
+> [!example] Problem
+> Given `nums` and integer `k`, return true if the array can be partitioned into `k` subsets each with equal sum (LC 698).
+
+> [!info] Approach
+> - **WHY:** Subset assignment is NP-hard in general but `n ≤ 16` makes 2^n bitmask DP feasible.
+> - **WHAT:** `dp[mask]` = true if the elements indicated by `mask` can be perfectly distributed into some number of full buckets.
+> - **HOW:** `target = total / k`. Iterate all masks in order. For each set mask, compute `current_sum = sum of selected elements % target`. Try adding each unselected element; if it fits, `dp[mask | (1<<i)] = True`. Answer = `dp[(1<<n)-1]`.
+
+> [!note]- Python Solution
+> ```python
+> def canPartitionKSubsets(nums: list[int], k: int) -> bool:
+>     total = sum(nums)
+>     if total % k:
+>         return False
+>     target = total // k
+>     nums.sort(reverse=True)
+>     if nums[0] > target:
+>         return False
+>     n = len(nums)
+>     dp = [False] * (1 << n)
+>     dp[0] = True
+>     current_sum = [0] * (1 << n)
+>     for mask in range(1 << n):
+>         if not dp[mask]:
+>             continue
+>         for i in range(n):
+>             if mask & (1 << i):
+>                 continue
+>             next_mask = mask | (1 << i)
+>             if current_sum[mask] + nums[i] <= target:
+>                 current_sum[next_mask] = (current_sum[mask] + nums[i]) % target
+>                 dp[next_mask] = True
+>     return dp[(1 << n) - 1]
+> ```
+
+> [!success] Complexity
+> Time O(2^n · n), Space O(2^n).
+
+> [!tip] Alternatives
+> Backtracking with pruning often faster in practice. Bitmask DP guarantees polynomial in 2^n so preferred when n ≤ 20.
+
+---
+
+## Digit DP
+
+### Count Numbers with Unique Digits
+
+> [!example] Problem
+> Given `n`, count numbers in `[0, 10^n)` with all unique digits (LC 357).
+
+> [!info] Approach
+> - **WHY:** At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
+> - **WHAT:** `dp[i]` = count of valid `i`-digit numbers (no leading zeros counted separately).
+> - **HOW:** `dp[0] = 1`. For length `i`: first digit has 9 choices (1–9); each subsequent digit has `10 - (i-1)` choices (avoid used). `dp[i] = 9 * 9 * 8 * ... * (10-i+1)`. Accumulate sum.
+
+> [!note]- Python Solution
+> ```python
+> def countNumbersWithUniqueDigits(n: int) -> int:
+>     if n == 0:
+>         return 1
+>     res, unique = 10, 9
+>     available = 9
+>     for _ in range(n - 1):
+>         unique *= available
+>         res += unique
+>         available -= 1
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1). (n ≤ 10 by constraint so effectively O(1).)
+
+> [!tip] Alternatives
+> General digit DP template below handles arbitrary digit constraints for larger ranges.
+
+---
+
+### Digit DP Template
+
+> [!example] Problem
+> Count integers in `[1, n]` satisfying an arbitrary digit constraint (e.g., digit sum divisible by `k`, no two adjacent equal digits). General template with tight/free flag.
+
+> [!info] Approach
+> - **WHY:** Digit-by-digit construction with a `tight` flag tracks whether we are still bounded by `n`'s prefix, enabling safe enumeration without brute force.
+> - **WHAT:** State = `(position, constraint_state, tight, started)`. `tight=True` means all digits chosen so far match `n`'s prefix exactly.
+> - **HOW:** At each position, iterate digit 0–9 (or 0–`n[pos]` if tight). Recurse; memoize on `(pos, state, tight, started)`. Base case: `pos == len(digits)` — check if constraint satisfied.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+>
+> def digitDP(n: int, k: int) -> int:
+>     """Count integers in [1, n] whose digit sum % k == 0."""
+>     digits = list(map(int, str(n)))
+>     L = len(digits)
+>
+>     @lru_cache(maxsize=None)
+>     def dp(pos: int, remainder: int, tight: bool, started: bool) -> int:
+>         if pos == L:
+>             return int(started and remainder == 0)
+>         limit = digits[pos] if tight else 9
+>         result = 0
+>         for d in range(0, limit + 1):
+>             new_started = started or d > 0
+>             new_rem = (remainder + d) % k if new_started else 0
+>             result += dp(pos + 1, new_rem, tight and d == limit, new_started)
+>         return result
+>
+>     return dp(0, 0, True, False)
+> ```
+
+> [!success] Complexity
+> Time O(L · S · 2 · 2 · 10) where S = number of constraint states, L = digits in n. Effectively O(L · S).
+
+> [!tip] Alternatives
+> Iterative digit DP with explicit tables avoids recursion overhead. For constraints on digit counts/patterns, expand the state accordingly.
+
+---
+
+## Game Theory DP
+
+### Stone Game
+
+> [!example] Problem
+> Alice and Bob alternately take stones from either end of a row of piles. Both play optimally; Alice goes first. Return true if Alice wins (LC 877).
+
+> [!info] Approach
+> - **WHY:** Each player maximises their own score minus the opponent's; the decision at each subarray depends on what the opponent will optimally do.
+> - **WHAT:** `dp[i][j]` = maximum score difference (current player − other player) achievable on subarray `piles[i..j]`.
+> - **HOW:** `dp[i][j] = max(piles[i] - dp[i+1][j], piles[j] - dp[i][j-1])`. Base: `dp[i][i] = piles[i]`. Alice wins iff `dp[0][n-1] > 0`.
+
+> [!note]- Python Solution
+> ```python
+> def stoneGame(piles: list[int]) -> bool:
+>     n = len(piles)
+>     dp = piles[:]
+>     for length in range(2, n + 1):
+>         for i in range(n - length + 1):
+>             j = i + length - 1
+>             dp[i] = max(piles[i] - dp[i + 1], piles[j] - dp[i])
+>             # reusing 1-D; careful index mapping needed for full 2-D
+>     # Full 2-D version is clearer:
+>     dp2 = [[0] * n for _ in range(n)]
+>     for i in range(n):
+>         dp2[i][i] = piles[i]
+>     for length in range(2, n + 1):
+>         for i in range(n - length + 1):
+>             j = i + length - 1
+>             dp2[i][j] = max(piles[i] - dp2[i+1][j], piles[j] - dp2[i][j-1])
+>     return dp2[0][n - 1] > 0
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n²); reducible to O(n) with rolling array.
+
+> [!tip] Alternatives
+> LC 877 Alice always wins (mathematical proof: take all even or all odd piles). The DP generalises to arbitrary pile values and variants like Stone Game II.
+
+---
+
+### Stone Game II
+
+> [!example] Problem
+> Players can take `1..2M` piles from the front; `M` updates to `max(M, X)` after taking `X`. Maximise stones for Alice (LC 1140).
+
+> [!info] Approach
+> - **WHY:** The value of `M` changes each turn, so state must encode both position and current `M`.
+> - **WHAT:** `dp[i][m]` = max stones the current player can get from `piles[i:]` with current multiplier `m`.
+> - **HOW:** Precompute suffix sums. `dp[i][m] = suffix[i] - min(dp[i+x][max(m,x)] for x in 1..2m)` — the current player takes whatever minimises the opponent's haul. Fill right-to-left.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+> def stoneGameII(piles: list[int]) -> int:
+>     n = len(piles)
+>     suffix = [0] * (n + 1)
+>     for i in range(n - 1, -1, -1):
+>         suffix[i] = suffix[i + 1] + piles[i]
+>
+>     @lru_cache(maxsize=None)
+>     def dp(i: int, m: int) -> int:
+>         if i + 2 * m >= n:
+>             return suffix[i]
+>         return suffix[i] - min(dp(i + x, max(m, x)) for x in range(1, 2 * m + 1))
+>
+>     return dp(0, 1)
+> ```
+
+> [!success] Complexity
+> Time O(n² log n) amortised, Space O(n²) for memo.
+
+> [!tip] Alternatives
+> Bottom-up DP iterating `i` from right and `m` from large to small avoids recursion.
+
+---
+
+### Predict the Winner
+
+> [!example] Problem
+> Two players pick from either end of `nums`. Return true if Player 1 can win or tie (LC 486).
+
+> [!info] Approach
+> - **WHY:** Identical structure to Stone Game. `dp[i][j]` = score advantage of the current player over the opponent on subarray `nums[i..j]`.
+> - **WHAT:** `dp[i][j]` = max(nums[i] − dp[i+1][j], nums[j] − dp[i][j−1]).
+> - **HOW:** Fill by increasing subarray length. Player 1 wins iff `dp[0][n-1] >= 0`.
+
+> [!note]- Python Solution
+> ```python
+> def predictTheWinner(nums: list[int]) -> bool:
+>     n = len(nums)
+>     dp = [[0] * n for _ in range(n)]
+>     for i in range(n):
+>         dp[i][i] = nums[i]
+>     for length in range(2, n + 1):
+>         for i in range(n - length + 1):
+>             j = i + length - 1
+>             dp[i][j] = max(nums[i] - dp[i+1][j], nums[j] - dp[i][j-1])
+>     return dp[0][n - 1] >= 0
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n²); 1-D rolling possible.
+
+> [!tip] Alternatives
+> Minimax with memoization is equivalent. Note: Player 1 always wins when `n` is odd (same parity argument as Stone Game).
+
+---
+
+## DP on Sequences
+
+### Jump Game II
+
+> [!example] Problem
+> Given `nums` where `nums[i]` is max jump length from index `i`, return the minimum number of jumps to reach the last index (LC 45).
+
+> [!info] Approach
+> - **WHY:** Greedy DP: at each jump, greedily extend to the farthest reachable index. Counting jumps only when forced to jump.
+> - **WHAT:** Track `current_end` (end of current jump range) and `farthest` (max reachable from within range).
+> - **HOW:** Iterate; update `farthest = max(farthest, i + nums[i])`. When `i == current_end` and not at last index: increment jumps, set `current_end = farthest`.
+
+> [!note]- Python Solution
+> ```python
+> def jump(nums: list[int]) -> int:
+>     jumps = current_end = farthest = 0
+>     for i in range(len(nums) - 1):
+>         farthest = max(farthest, i + nums[i])
+>         if i == current_end:
+>             jumps += 1
+>             current_end = farthest
+>     return jumps
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> O(n) DP: `dp[i] = min jumps to reach i`; update via `dp[j] = min(dp[j], dp[i]+1)` for `j` in `[i+1, i+nums[i]]`. Greedy is simpler and equivalent.
+
+---
+
+### Maximum Product Subarray
+
+> [!example] Problem
+> Find the contiguous subarray with the largest product (LC 152).
+
+> [!info] Approach
+> - **WHY:** A negative number flips max↔min, so both must be tracked at each position.
+> - **WHAT:** `max_prod` and `min_prod` ending at index `i`.
+> - **HOW:** At each element `x`: `max_prod, min_prod = max(x, max_prod*x, min_prod*x), min(x, max_prod*x, min_prod*x)`. Update global answer with `max_prod`.
+
+> [!note]- Python Solution
+> ```python
+> def maxProduct(nums: list[int]) -> int:
+>     max_p = min_p = res = nums[0]
+>     for x in nums[1:]:
+>         candidates = (x, max_p * x, min_p * x)
+>         max_p, min_p = max(candidates), min(candidates)
+>         res = max(res, max_p)
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> Prefix product with reset at zeros; or observe the answer is always a prefix or suffix product between zeros.
+
+---
+
+### Arithmetic Slices II — Subsequence
+
+> [!example] Problem
+> Count the number of arithmetic subsequences (length ≥ 3) in `nums` (LC 446).
+
+> [!info] Approach
+> - **WHY:** Unlike subarrays, subsequences can skip elements; tracking every possible common difference per ending index is necessary.
+> - **WHAT:** `dp[i]` is a dict mapping common difference `d` → count of **weak** arithmetic subsequences (length ≥ 2) ending at index `i` with difference `d`.
+> - **HOW:** For each pair `(j, i)` with `j < i`, `d = nums[i] - nums[j]`: `dp[i][d] += dp[j].get(d, 0) + 1`. The `+1` starts a new weak subsequence `(j,i)`. Each existing weak subseq extended to length ≥ 3 contributes `dp[j][d]` to the answer.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> def numberOfArithmeticSlices(nums: list[int]) -> int:
+>     n = len(nums)
+>     dp = [defaultdict(int) for _ in range(n)]
+>     ans = 0
+>     for i in range(n):
+>         for j in range(i):
+>             d = nums[i] - nums[j]
+>             cnt = dp[j][d]
+>             ans += cnt
+>             dp[i][d] += cnt + 1
+>     return ans
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n²) in the worst case (all distinct differences).
+
+> [!tip] Alternatives
+> No known sub-quadratic solution for the general case. For subarrays (contiguous), O(n) is achievable.
+
+---
+
 ## See Also
 
 [[recursion]] | [[greedy]] | [[graph-algorithms]] | [[tree]] | [[string-algorithms]]

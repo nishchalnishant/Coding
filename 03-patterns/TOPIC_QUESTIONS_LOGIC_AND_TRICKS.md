@@ -3,7 +3,7 @@ module: 03-patterns
 topic: Topic Questions Logic And Tricks
 subtopic: 
 status: unread
-tags: [patterns, upsc, topic-questions-logic-and-tric]
+tags: [patterns, topic-questions-logic-and-tric]
 ---
 ## First-Principles Map
 

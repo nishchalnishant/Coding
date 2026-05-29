@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Array
 subtopic: 
 status: unread
-tags: [data-structures, upsc, array]
+tags: [data-structures, array]
 ---
 ## First-Principles Map
 

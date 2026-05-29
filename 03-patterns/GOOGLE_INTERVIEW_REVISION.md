@@ -3,7 +3,7 @@ module: 03-patterns
 topic: Google Interview Revision
 subtopic: 
 status: unread
-tags: [patterns, upsc, google-interview-revision]
+tags: [patterns, google-interview-revision]
 ---
 # First-Principles Map — Google Interview Revision
 
@@ -125,8 +125,8 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Two pointers (opposite ends + same direction), sliding window (variable/fixed), prefix sum, Kadane.
 
-- Full notes: [data-structures/array.md](data-structures/array.md)  
-- Patterns: [../patterns/two-pointers-sliding-window.md](../patterns/two-pointers-sliding-window.md)
+- Full notes: [../01-data-structures/array.md](../01-data-structures/array.md)  
+- Patterns: `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md`
 
 **Google-style practice (names only — use your platform):** Two Sum, 3Sum, Subarray Sum Equals K, Longest Substring Without Repeating Characters, Minimum Window Substring, Trapping Rain Water, Merge Intervals, Product of Array Except Self.
 
@@ -261,7 +261,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 | Day | Focus | Action |
 |-----|--------|--------|
-| 1 | Arrays + hashing | Review [array](data-structures/array.md) + [hashing](data-structures/hashing.md); 4 problems |
+| 1 | Arrays + hashing | Review [array](../01-data-structures/array.md) + [hashing](../01-data-structures/hashing.md); 4 problems |
 | 2 | Strings + two pointers | [string](algorithms/string.md) + sliding window pattern; 4 problems |
 | 3 | Trees + BST | [tree](data-structures/tree.md); 3 problems |
 | 4 | Graphs | [graph](algorithms/graph.md); BFS/DFS/topo; 4 problems |
@@ -294,9 +294,8 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
-- [SDE3_DSA_ROADMAP.md](../00-start-here/README.md) — longer problem order and weekly plan  
-- [sde-3-guide/sde-3-guide.md](../sde-3-guide/sde-3-guide.md) — Top 20 curated problems  
-- [patterns/leetcode-patterns.md](../patterns/leetcode-patterns.md) — condensed patterns  
+- [00-start-here/README.md](../00-start-here/README.md) — weekly plan and 6-week SDE-3 schedule  
+- [03-patterns/patterns-master.md](patterns-master.md) — condensed patterns with triggers  
 
 **Good luck.** You’ve already done the hard work building this repo — use Part A + one full mock in the last 48 hours to walk in confident.
 
@@ -307,7 +306,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | Need | File |
 |------|------|
 | **One-page patterns** | [GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md) |
-| **Arrays / two pointers** | [data-structures/array.md](data-structures/array.md) |
+| **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/array.md) |
 | **Graphs (compact)** | [algorithms/graph.md](algorithms/graph.md) |
 | **Graphs (long examples)** | [data-structures/graphs.md](data-structures/graphs.md) |
 | **DP** | [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md) |

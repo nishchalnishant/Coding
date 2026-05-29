@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Concurrency
 subtopic: 
 status: unread
-tags: [algorithms, upsc, concurrency]
+tags: [algorithms, concurrency]
 ---
 ## First-Principles Map
 

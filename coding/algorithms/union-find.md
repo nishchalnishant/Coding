@@ -626,6 +626,462 @@ difficulty: mixed
 
 ---
 
+## Directed Graph Union-Find
+
+### Redundant Connection II
+
+> [!example] Problem
+> Directed graph built from a tree by adding exactly one extra directed edge. Return the redundant edge. Each node has in-degree ≤ 2. If multiple answers, return the one appearing last.
+
+> [!info] Approach
+> - **WHY:** In a directed tree (rooted), every non-root has in-degree 1. The extra edge creates either (a) a node with in-degree 2, or (b) a cycle with all in-degrees 1, or (c) both. These three cases need separate handling.
+> - **WHAT:** First detect any node with in-degree 2 — candidates `cand1` (first edge into it) and `cand2` (second edge). Then run DSU on all edges, skipping `cand2` if it exists. If a cycle forms, the redundant edge is `cand1` (if cand2 exists) or the cycle-forming edge (if no cand2).
+> - **HOW:** Pass 1: record in-degree-2 candidates. Pass 2: DSU union excluding `cand2`. If no cycle detected with `cand2` excluded → return `cand2`. If cycle detected and `cand1` exists → return `cand1`. If cycle and no candidate → return the cycle edge.
+
+> [!note]- Python Solution
+> ```python
+> def findRedundantDirectedConnection(edges: list[list[int]]) -> list[int]:
+>     n = len(edges)
+>     in_degree = [0] * (n + 1)
+>     for u, v in edges:
+>         in_degree[v] += 1
+> 
+>     # Identify candidates: edges pointing to a node with in-degree 2
+>     cand1 = cand2 = None
+>     for u, v in edges:
+>         if in_degree[v] == 2:
+>             if cand1 is None:
+>                 cand1 = [u, v]
+>             else:
+>                 cand2 = [u, v]
+> 
+>     def has_cycle_excluding(skip: list[int] | None) -> list[int] | None:
+>         dsu = DSU(n + 1)
+>         for u, v in edges:
+>             if [u, v] == skip:
+>                 continue
+>             if not dsu.union(u, v):
+>                 return [u, v]
+>         return None
+> 
+>     if cand2:
+>         # Try excluding cand2; if no cycle → cand2 is answer, else cand1
+>         if has_cycle_excluding(cand2) is None:
+>             return cand2
+>         else:
+>             return cand1
+>     else:
+>         # No in-degree-2 node; the cycle-forming edge is the answer
+>         return has_cycle_excluding(None)
+> ```
+
+> [!success] Complexity
+> Time O(N·α(N)) ≈ O(N), Space O(N).
+
+> [!tip] Alternatives
+> Tarjan's SCC — overkill. DFS cycle detection on the directed graph — works but messier to get all three cases right. DSU with two-pass candidate detection is the cleanest.
+
+---
+
+## Grid / Coordinate Union-Find
+
+### Swim in Rising Water
+
+> [!example] Problem
+> `n×n` grid where `grid[r][c]` is the elevation. At time `t`, you can swim to adjacent cells with elevation ≤ `t`. Find minimum `t` to swim from `(0,0)` to `(n-1,n-1)`.
+
+> [!info] Approach
+> - **WHY:** Sort all cells by elevation. Process them in order, unioning each cell with already-processed adjacent cells. The answer is the elevation of the last cell processed when `(0,0)` and `(n-1,n-1)` first become connected.
+> - **WHAT:** Kruskal-style: sort cells by elevation, add them one by one, union with processed neighbors. Stop when start and end are connected.
+> - **HOW:** Create list of `(elevation, r, c)`, sort it. Maintain `visited` set. For each cell in order, mark visited, union with adjacent visited cells, check connectivity.
+
+> [!note]- Python Solution
+> ```python
+> def swimInWater(grid: list[list[int]]) -> int:
+>     n = len(grid)
+>     cells = sorted((grid[r][c], r, c) for r in range(n) for c in range(n))
+>     dsu = DSU(n * n)
+>     visited = set()
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+> 
+>     for elev, r, c in cells:
+>         visited.add((r, c))
+>         idx = r * n + c
+>         for dr, dc in dirs:
+>             nr, nc = r + dr, c + dc
+>             if (nr, nc) in visited:
+>                 dsu.union(idx, nr * n + nc)
+>         if dsu.connected(0, (n-1)*n + (n-1)):
+>             return elev
+>     return grid[n-1][n-1]
+> ```
+
+> [!success] Complexity
+> Time O(N²·log N) for sort, Space O(N²).
+
+> [!tip] Alternatives
+> Binary search + BFS/DFS — O(N²·log N). Dijkstra (min-heap over max elevation on path) — O(N²·log N), arguably more intuitive. DSU is elegant for the "when do two cells become connected" framing.
+
+---
+
+### Most Stones Removed with Same Row or Column
+
+> [!example] Problem
+> Stones on a 2D grid (at most one per cell). A stone can be removed if it shares a row or column with another stone. Return max stones removable.
+
+> [!info] Approach
+> - **WHY:** Stones in the same connected component (row/column sharing is transitive) can all be reduced to 1 stone. Answer = total stones − number of components.
+> - **WHAT:** DSU where stones sharing a row or column are in the same component. Use coordinate compression: treat row `r` and column `c` as separate nodes with an offset to avoid collision.
+> - **HOW:** Map rows to `[0, 10000]` and cols to `[10001, 20001]`. Union `row_r` with `col_c` for each stone. Count distinct roots among only the stone positions.
+
+> [!note]- Python Solution
+> ```python
+> def removeStones(stones: list[list[int]]) -> int:
+>     parent: dict[int, int] = {}
+> 
+>     def find(x: int) -> int:
+>         if x not in parent:
+>             parent[x] = x
+>         if parent[x] != x:
+>             parent[x] = find(parent[x])
+>         return parent[x]
+> 
+>     def union(x: int, y: int) -> None:
+>         px, py = find(x), find(y)
+>         if px != py:
+>             parent[px] = py
+> 
+>     for r, c in stones:
+>         union(r, c + 10001)   # offset columns to separate namespace
+> 
+>     roots = {find(r) for r, c in stones}
+>     return len(stones) - len(roots)
+> ```
+
+> [!success] Complexity
+> Time O(N·α(N)) ≈ O(N), Space O(N).
+
+> [!tip] Alternatives
+> DFS on adjacency list built from row/col buckets — O(N²) build, O(N) DFS. DSU with coordinate trick is cleaner and O(N).
+
+---
+
+## Weighted / Partial Swap Union-Find
+
+### Minimize Hamming Distance After Swap Operations
+
+> [!example] Problem
+> Arrays `source` and `target`, list of allowed index swap pairs (transitive). Minimize total Hamming distance (positions where `source[i] != target[i]`).
+
+> [!info] Approach
+> - **WHY:** Swap pairs define groups of indices that can be freely rearranged among themselves. Within each group, match `source` values to `target` values optimally (minimize mismatches = maximize matches).
+> - **WHAT:** DSU to find index groups. For each group, build frequency maps of `source` and `target` values; match greedily.
+> - **HOW:** For each DSU component, count how many `source[i]` values can be matched to `target[i]` values in the group. Unmatched positions contribute 1 each to Hamming distance.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter, defaultdict
+> 
+> def minimizeHammingDistance(source: list[int], target: list[int],
+>                              allowedSwaps: list[list[int]]) -> int:
+>     n = len(source)
+>     dsu = DSU(n)
+>     for u, v in allowedSwaps:
+>         dsu.union(u, v)
+> 
+>     root_to_indices: dict[int, list[int]] = defaultdict(list)
+>     for i in range(n):
+>         root_to_indices[dsu.find(i)].append(i)
+> 
+>     hamming = 0
+>     for indices in root_to_indices.values():
+>         src_count = Counter(source[i] for i in indices)
+>         tgt_count = Counter(target[i] for i in indices)
+>         matched = sum((src_count & tgt_count).values())  # intersection
+>         hamming += len(indices) - matched
+> 
+>     return hamming
+> ```
+
+> [!success] Complexity
+> Time O((N + E)·α(N) + N), Space O(N).
+
+> [!tip] Alternatives
+> BFS/DFS to find components, same counting logic. DSU is more concise.
+
+---
+
+## Connectivity With Constraints
+
+### Minimum Cost to Make at Least One Valid Path in a Grid
+
+> [!example] Problem
+> `m×n` grid, each cell has a direction (1=right, 2=left, 3=down, 4=up). Moving in the cell's direction costs 0; changing direction costs 1. Find minimum cost to reach `(m-1, n-1)` from `(0,0)`.
+
+> [!info] Approach
+> - **WHY:** Edge weights are 0 (follow direction) or 1 (change direction). This is a 0-1 BFS problem — but can also be viewed as DSU on "0-cost" groups followed by checking connectivity.
+> - **WHAT:** 0-1 BFS: use deque; free (0-cost) moves go to front, cost-1 moves go to back. Process in Dijkstra-like order.
+> - **HOW:** For cell `(r,c)`, the free neighbor is determined by `grid[r][c]`. All other neighbors cost 1. Track `dist` array initialized to infinity.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> 
+> def minCost(grid: list[list[int]]) -> int:
+>     m, n = len(grid), len(grid[0])
+>     # direction map: 1=right, 2=left, 3=down, 4=up
+>     dir_map = {1: (0,1), 2: (0,-1), 3: (1,0), 4: (-1,0)}
+>     dirs = [(0,1,1),(0,-1,2),(1,0,3),(-1,0,4)]  # (dr, dc, code)
+> 
+>     dist = [[float('inf')] * n for _ in range(m)]
+>     dist[0][0] = 0
+>     dq: deque[tuple[int,int,int]] = deque([(0, 0, 0)])  # (cost, r, c)
+> 
+>     while dq:
+>         cost, r, c = dq.popleft()
+>         if cost > dist[r][c]:
+>             continue
+>         for dr, dc, code in dirs:
+>             nr, nc = r + dr, c + dc
+>             if 0 <= nr < m and 0 <= nc < n:
+>                 new_cost = cost + (0 if grid[r][c] == code else 1)
+>                 if new_cost < dist[nr][nc]:
+>                     dist[nr][nc] = new_cost
+>                     if grid[r][c] == code:
+>                         dq.appendleft((new_cost, nr, nc))
+>                     else:
+>                         dq.append((new_cost, nr, nc))
+> 
+>     return dist[m-1][n-1]
+> ```
+
+> [!success] Complexity
+> Time O(M·N), Space O(M·N).
+
+> [!tip] Alternatives
+> Dijkstra — O(M·N·log(M·N)), overkill for 0/1 weights. DSU grouping: union all 0-cost reachable cells first (like BFS layers), then count layers to destination — less standard. 0-1 BFS is canonical.
+
+---
+
+### Remove Max Number of Edges to Keep Graph Fully Traversable
+
+> [!example] Problem
+> Graph with 3 edge types: type 1 (Alice only), type 2 (Bob only), type 3 (both). Find max edges to remove such that both Alice and Bob can still traverse the full graph.
+
+> [!info] Approach
+> - **WHY:** We want minimal spanning forest for Alice and Bob independently. Shared edges (type 3) are doubly valuable — use them first. Any edge that doesn't reduce components is redundant.
+> - **WHAT:** Run two DSUs (Alice, Bob). Process type-3 edges first (union in both). Then type-1 in Alice's DSU, type-2 in Bob's. Count edges used; answer = total edges − edges used.
+> - **HOW:** An edge is removable if its union returns `False` in both relevant DSUs. Final check: both DSUs must reach 1 component, else return -1.
+
+> [!note]- Python Solution
+> ```python
+> def maxNumEdgesToRemove(n: int, edges: list[list[int]]) -> int:
+>     alice, bob = DSU(n + 1), DSU(n + 1)
+>     used = 0
+> 
+>     # Type 3 first: shared edges are most valuable
+>     for t, u, v in edges:
+>         if t == 3:
+>             a = alice.union(u, v)
+>             b = bob.union(u, v)
+>             if a or b:   # useful to at least one
+>                 used += 1
+> 
+>     for t, u, v in edges:
+>         if t == 1 and alice.union(u, v):
+>             used += 1
+>         elif t == 2 and bob.union(u, v):
+>             used += 1
+> 
+>     if alice.components != 2 or bob.components != 2:
+>         # components starts at n+1; after connecting n nodes → 1 real component = components==2 (node 0 unused)
+>         return -1
+> 
+>     return len(edges) - used
+> ```
+
+> [!success] Complexity
+> Time O(E·α(V)) ≈ O(E), Space O(V).
+
+> [!tip] Alternatives
+> No simpler alternative — DSU with two-graph reasoning is the canonical approach here.
+
+---
+
+### Making a Large Island
+
+> [!example] Problem
+> Binary grid. Flip exactly one 0 to 1. Return the size of the largest island after the flip.
+
+> [!info] Approach
+> - **WHY:** After flipping a 0, the new cell connects up to 4 adjacent islands. Island sizes are needed instantly → DSU component sizes.
+> - **WHAT:** Build DSU over existing 1-cells. For each 0-cell, sum sizes of distinct adjacent components + 1. Track overall max.
+> - **HOW:** Label each cell's DSU root. For each 0-cell, collect unique roots of neighboring 1-cells (avoid double-counting same component), sum their sizes.
+
+> [!note]- Python Solution
+> ```python
+> def largestIsland(grid: list[list[int]]) -> int:
+>     n = len(grid)
+>     dsu = DSU(n * n)
+>     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
+> 
+>     for r in range(n):
+>         for c in range(n):
+>             if grid[r][c] == 1:
+>                 for dr, dc in dirs:
+>                     nr, nc = r + dr, c + dc
+>                     if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 1:
+>                         dsu.union(r*n+c, nr*n+nc)
+> 
+>     best = max((dsu.component_size(r*n+c) for r in range(n)
+>                 for c in range(n) if grid[r][c] == 1), default=0)
+> 
+>     for r in range(n):
+>         for c in range(n):
+>             if grid[r][c] == 0:
+>                 seen_roots: set[int] = set()
+>                 gain = 1
+>                 for dr, dc in dirs:
+>                     nr, nc = r + dr, c + dc
+>                     if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 1:
+>                         root = dsu.find(nr*n+nc)
+>                         if root not in seen_roots:
+>                             gain += dsu.component_size(nr*n+nc)
+>                             seen_roots.add(root)
+>                 best = max(best, gain)
+> 
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(N²·α(N²)) ≈ O(N²), Space O(N²).
+
+> [!tip] Alternatives
+> BFS to label islands and record sizes — O(N²). Same idea, slightly more setup. DSU makes the component-size lookup natural.
+
+---
+
+### Number of Good Paths
+
+> [!example] Problem
+> Tree with `n` nodes and node values. A "good path" starts and ends at nodes of equal value, with all intermediate nodes having value ≤ that value. Count all good paths (including single nodes).
+
+> [!info] Approach
+> - **WHY:** Process nodes in increasing order of value. When adding a node, union it with already-processed neighbors. Two same-value nodes in the same component form `count*(count-1)/2` new paths.
+> - **WHAT:** Sort nodes by value. Process batches of equal value. Union nodes in each batch with lower-valued neighbors. Count pairs within the merged component.
+> - **HOW:** Group nodes by value. For each value group, union all nodes of that value with their neighbors (which have ≤ current value). Count same-value nodes per component root; add `k*(k+1)/2` where `k` = count.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def numberOfGoodPaths(vals: list[int], edges: list[list[int]]) -> int:
+>     n = len(vals)
+>     adj: list[list[int]] = defaultdict(list)
+>     for u, v in edges:
+>         adj[u].append(v)
+>         adj[v].append(u)
+> 
+>     dsu = DSU(n)
+>     # For each root, track count of nodes in component with the max value
+>     val_count = [1] * n  # val_count[root] = # nodes in component equal to vals[root]
+> 
+>     sorted_nodes = sorted(range(n), key=lambda x: vals[x])
+>     result = n   # each node is a good path by itself
+> 
+>     i = 0
+>     while i < n:
+>         j = i
+>         # Process all nodes with same value together
+>         while j < n and vals[sorted_nodes[j]] == vals[sorted_nodes[i]]:
+>             j += 1
+>         batch = sorted_nodes[i:j]
+> 
+>         for node in batch:
+>             for nb in adj[node]:
+>                 if vals[nb] <= vals[node]:
+>                     rn, rnb = dsu.find(node), dsu.find(nb)
+>                     if rn != rnb:
+>                         cn = val_count[rn] if vals[rn] == vals[node] else 0
+>                         cnb = val_count[rnb] if vals[rnb] == vals[node] else 0
+>                         dsu.union(node, nb)
+>                         new_root = dsu.find(node)
+>                         val_count[new_root] = cn + cnb
+>                         result += cn * cnb
+>         i = j
+> 
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O((N + E)·α(N) + N·log N), Space O(N).
+
+> [!tip] Alternatives
+> DFS/BFS per value group — harder to implement correctly. DSU with sorted processing is the standard approach for this problem.
+
+---
+
+### Largest Component Size by Common Factor
+
+> [!example] Problem
+> Array of positive integers. Two numbers belong to the same component if they share a common factor > 1. Return the size of the largest component.
+
+> [!info] Approach
+> - **WHY:** Shared prime factors link numbers together transitively. Union each number with all its prime factors; then prime factors link all numbers sharing them.
+> - **WHAT:** For each number, factorize it, union the number with each of its prime factors. Count max component size.
+> - **HOW:** Nodes are both numbers (index) and prime factors (up to max value). Use dict-based DSU. For each `nums[i]`, find primes, union `nums[i]` with each prime, then count component size for each original number.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def largestComponentSize(nums: list[int]) -> int:
+>     parent: dict[int, int] = {}
+> 
+>     def find(x: int) -> int:
+>         if x not in parent:
+>             parent[x] = x
+>         if parent[x] != x:
+>             parent[x] = find(parent[x])
+>         return parent[x]
+> 
+>     def union(x: int, y: int) -> None:
+>         px, py = find(x), find(y)
+>         if px != py:
+>             parent[px] = py
+> 
+>     def prime_factors(n: int) -> list[int]:
+>         factors: list[int] = []
+>         d = 2
+>         while d * d <= n:
+>             if n % d == 0:
+>                 factors.append(d)
+>                 while n % d == 0:
+>                     n //= d
+>             d += 1
+>         if n > 1:
+>             factors.append(n)
+>         return factors
+> 
+>     for num in nums:
+>         for p in prime_factors(num):
+>             union(num, p)
+> 
+>     comp_size: dict[int, int] = defaultdict(int)
+>     for num in nums:
+>         comp_size[find(num)] += 1
+> 
+>     return max(comp_size.values())
+> ```
+
+> [!success] Complexity
+> Time O(N·√max_val·α(N)), Space O(N + max_val).
+
+> [!tip] Alternatives
+> BFS building adjacency from shared factors — O(N²) for brute-force GCD check. Sieve-based approach: for each prime p, group all multiples in nums. DSU with prime factors is the canonical O(N·√V) solution.
+
+---
+
 ## See Also
 
 [[graph]] | [[graph-algorithms]] | [[sorting]]

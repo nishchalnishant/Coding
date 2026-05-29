@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Searching
 subtopic: 
 status: unread
-tags: [algorithms, upsc, searching]
+tags: [algorithms, searching]
 ---
 ## First-Principles Map
 

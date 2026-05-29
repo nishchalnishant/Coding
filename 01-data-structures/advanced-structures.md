@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Advanced Structures
 subtopic: 
 status: unread
-tags: [data-structures, upsc, advanced-structures]
+tags: [data-structures, advanced-structures]
 ---
 ## First-Principles Map
 

@@ -3,7 +3,7 @@ module: 03-patterns
 topic: Google Quick Sheet
 subtopic: 
 status: unread
-tags: [patterns, upsc, google-quick-sheet]
+tags: [patterns, google-quick-sheet]
 ---
 # First-Principles Map — Google Interview Quick Sheet
 

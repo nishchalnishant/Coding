@@ -740,6 +740,469 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
+## Two Pointers — Reverse / Subsequence
+
+### Valid Palindrome II
+
+> [!example] Problem
+> Given string `s`, return true if the string can become a palindrome by removing **at most one** character.
+
+> [!info] Approach
+> - **WHY:** Standard two-pointer palindrome check, but when a mismatch is found we have exactly one free removal — either remove the left character or the right character. Try both sub-problems and accept if either is a palindrome.
+> - **WHAT:** Two pointers `l, r`. On mismatch, check if `s[l+1..r]` or `s[l..r-1]` is a palindrome (using a helper that allows zero deletions). Return True if either holds.
+> - **HOW:** Define `isPalin(l, r)` — standard two-pointer without deletion. Main function advances `l, r` inward; on first mismatch call `isPalin(l+1, r) or isPalin(l, r-1)`.
+
+> [!note]- Python Solution
+> ```python
+> def validPalindrome(s: str) -> bool:
+>     def is_palin(l: int, r: int) -> bool:
+>         while l < r:
+>             if s[l] != s[r]:
+>                 return False
+>             l += 1
+>             r -= 1
+>         return True
+> 
+>     l, r = 0, len(s) - 1
+>     while l < r:
+>         if s[l] != s[r]:
+>             return is_palin(l + 1, r) or is_palin(l, r - 1)
+>         l += 1
+>         r -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> - DP with at-most-one deletion: `dp[i][j][k]` where k = deletions used — O(n²) time and space, massive overkill.
+> - Brute force: try removing each character and check — O(n²). Only valid for tiny strings.
+
+---
+
+### Reverse Words in a String
+
+> [!example] Problem
+> Given string `s`, reverse the order of the words. Words are separated by spaces; result must have single spaces between words and no leading/trailing spaces.
+
+> [!info] Approach
+> - **WHY:** Split on whitespace handles any number of spaces between words. Python's `split()` (no argument) splits on any whitespace and discards empty tokens — single operation handles all edge cases.
+> - **WHAT:** Split → reverse list → join with single space.
+> - **HOW:** `return " ".join(s.split()[::-1])`. In-place variant (for interviews requiring O(1) extra space on a char array): reverse entire string, then reverse each word in place.
+
+> [!note]- Python Solution
+> ```python
+> def reverseWords(s: str) -> str:
+>     return " ".join(s.split()[::-1])
+> 
+> # O(1) space variant (conceptual — Python strings are immutable; use list)
+> def reverseWords_inplace(s: str) -> str:
+>     chars = list(s.strip())
+>     # helper: reverse chars[l..r] in place
+>     def rev(l: int, r: int) -> None:
+>         while l < r:
+>             chars[l], chars[r] = chars[r], chars[l]
+>             l += 1
+>             r -= 1
+> 
+>     # step 1: reverse entire array
+>     rev(0, len(chars) - 1)
+>     # step 2: reverse each word
+>     l = 0
+>     for r in range(len(chars) + 1):
+>         if r == len(chars) or chars[r] == ' ':
+>             rev(l, r - 1)
+>             l = r + 1
+>     # step 3: collapse multiple spaces
+>     return " ".join("".join(chars).split())
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n) for the split/join; O(1) extra for the in-place variant (ignoring output).
+
+> [!tip] Alternatives
+> - `s.strip().split()` + reverse: equivalent, split() already handles multiple spaces.
+> - Stack: push words onto a stack, pop to build result — O(n) but unnecessary with split/reverse.
+
+---
+
+### Reverse String
+
+> [!example] Problem
+> Reverse an array of characters in place. Do not allocate extra space.
+
+> [!info] Approach
+> - **WHY:** Classic two-pointer swap. No extra allocation needed.
+> - **WHAT:** Left pointer at 0, right pointer at end. Swap and advance inward until they meet.
+> - **HOW:** `while l < r: s[l], s[r] = s[r], s[l]; l += 1; r -= 1`.
+
+> [!note]- Python Solution
+> ```python
+> def reverseString(s: list[str]) -> None:
+>     l, r = 0, len(s) - 1
+>     while l < r:
+>         s[l], s[r] = s[r], s[l]
+>         l += 1
+>         r -= 1
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> - `s.reverse()` or `s[:] = s[::-1]` — one-liner but allocates O(n) for slice.
+> - XOR swap: `s[l] ^= s[r]; s[r] ^= s[l]; s[l] ^= s[r]` — avoids temp variable, but only works for integers/bytes, not characters.
+
+---
+
+### Is Subsequence
+
+> [!example] Problem
+> Given strings `s` and `t`, return true if `s` is a subsequence of `t` — i.e., `s` can be derived from `t` by deleting some characters without changing the relative order.
+
+> [!info] Approach
+> - **WHY:** Greedy two-pointer: advance through `t` trying to match characters of `s` in order. As soon as all of `s` is matched, return True.
+> - **WHAT:** Pointer `i` for `s`, pointer `j` for `t`. Advance `j` always; advance `i` only when `s[i] == t[j]`. Return `i == len(s)`.
+> - **HOW:** Single pass through `t`. If `i` reaches `len(s)`, all characters matched — return True.
+
+> [!note]- Python Solution
+> ```python
+> def isSubsequence(s: str, t: str) -> bool:
+>     i = 0
+>     for ch in t:
+>         if i < len(s) and ch == s[i]:
+>             i += 1
+>     return i == len(s)
+> 
+> # Follow-up: many queries with same t — preprocess t with binary search
+> from collections import defaultdict
+> import bisect
+> 
+> def isSubsequenceBatch(s: str, t_index: dict[str, list[int]]) -> bool:
+>     """t_index: char -> sorted list of positions in t."""
+>     pos = 0
+>     for ch in s:
+>         if ch not in t_index:
+>             return False
+>         idx = bisect.bisect_left(t_index[ch], pos)
+>         if idx == len(t_index[ch]):
+>             return False
+>         pos = t_index[ch][idx] + 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(|t|) single query. O(|t|) preprocessing + O(|s| log |t|) per query for batch variant. Space O(1) / O(|t|).
+
+> [!tip] Alternatives
+> - Recursive with memoization: overkill for O(n) problem.
+> - DP table `dp[i][j]`: `dp[i][j] = True` if `s[:i]` is subseq of `t[:j]` — O(|s| × |t|) space, unnecessary.
+
+---
+
+## Parsing / Simulation (Extended)
+
+### Decode String
+
+> [!example] Problem
+> Given an encoded string like `"3[a2[c]]"`, return the decoded string `"accaccacc"`. The encoding rule is `k[encoded_string]` meaning `encoded_string` is repeated exactly `k` times.
+
+> [!info] Approach
+> - **WHY:** Nested brackets suggest a stack. When we hit `]`, we pop until `[` to find the current segment and its repeat count.
+> - **WHAT:** Stack-based. Push characters as we scan. On `]`: pop characters until `[` to build the inner string, then pop digits to build the multiplier, push the repeated string back.
+> - **HOW:** Two stacks (`count_stack`, `string_stack`) or a single character stack. On digit: accumulate `k`. On `[`: push current string and k onto stacks, reset. On `]`: pop string and k, append `k * current_string` to the popped prefix.
+
+> [!note]- Python Solution
+> ```python
+> def decodeString(s: str) -> str:
+>     count_stack: list[int] = []
+>     string_stack: list[str] = []
+>     current = ""
+>     k = 0
+>     for ch in s:
+>         if ch.isdigit():
+>             k = k * 10 + int(ch)
+>         elif ch == '[':
+>             count_stack.append(k)
+>             string_stack.append(current)
+>             current = ""
+>             k = 0
+>         elif ch == ']':
+>             repeat = count_stack.pop()
+>             prefix = string_stack.pop()
+>             current = prefix + repeat * current
+>         else:
+>             current += ch
+>     return current
+> ```
+
+> [!success] Complexity
+> Time O(output length) — each character of the decoded string is written once. Space O(depth × max_segment_length).
+
+> [!tip] Alternatives
+> - Recursive descent parser: function returns decoded string and next index — elegant, same complexity.
+> - Regex iterative substitution: replace innermost `k[...]` repeatedly with `re.sub` — O(output × depth), slow for deep nesting.
+
+---
+
+### Compare Version Numbers
+
+> [!example] Problem
+> Compare version strings `version1` and `version2` like `"1.01"` vs `"1.001"`. Return -1, 0, or 1.
+
+> [!info] Approach
+> - **WHY:** Split on `.` gives revision tokens. Parse each as an integer (handles leading zeros automatically). Compare pair by pair; missing revisions default to 0.
+> - **WHAT:** Split both strings by `.`. Zip-extend to equal length with 0 padding. Compare integer values of corresponding revisions.
+> - **HOW:** `v1 = list(map(int, version1.split('.')))`. Pad shorter list with zeros. Compare element by element.
+
+> [!note]- Python Solution
+> ```python
+> def compareVersion(version1: str, version2: str) -> int:
+>     v1 = list(map(int, version1.split('.')))
+>     v2 = list(map(int, version2.split('.')))
+>     # pad shorter version with zeros
+>     length = max(len(v1), len(v2))
+>     v1 += [0] * (length - len(v1))
+>     v2 += [0] * (length - len(v2))
+>     for a, b in zip(v1, v2):
+>         if a < b:
+>             return -1
+>         if a > b:
+>             return 1
+>     return 0
+> ```
+
+> [!success] Complexity
+> Time O(max(|v1|, |v2|)). Space O(max(|v1|, |v2|)).
+
+> [!tip] Alternatives
+> - Two-pointer without splitting: parse digits between dots manually — O(1) extra space, more code.
+> - `zip_longest` from itertools: cleaner padding — `from itertools import zip_longest; for a, b in zip_longest(v1, v2, fillvalue=0)`.
+
+---
+
+### Zigzag Conversion
+
+> [!example] Problem
+> Write the string `"PAYPALISHIRING"` in a zigzag pattern on `numRows` rows, then read line by line. Return the resulting string.
+
+> [!info] Approach
+> - **WHY:** Simulate placing characters into rows. The row index goes 0 → numRows-1 → 0 → … (triangle wave). Track current row and direction.
+> - **WHAT:** Array of `numRows` string builders. Iterate through `s`, appending each character to the current row. Flip direction at top (row 0) and bottom (row numRows-1).
+> - **HOW:** `rows = [''] * numRows`, `row = 0`, `direction = 1`. For each char: `rows[row] += char`. If `row == 0`, `direction = 1`; if `row == numRows - 1`, `direction = -1`. `row += direction`.
+
+> [!note]- Python Solution
+> ```python
+> def convert(s: str, numRows: int) -> str:
+>     if numRows == 1 or numRows >= len(s):
+>         return s
+>     rows = [''] * numRows
+>     row, direction = 0, 1
+>     for ch in s:
+>         rows[row] += ch
+>         if row == 0:
+>             direction = 1
+>         elif row == numRows - 1:
+>             direction = -1
+>         row += direction
+>     return ''.join(rows)
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n).
+
+> [!tip] Alternatives
+> - Mathematical index computation: for each row `r`, derive which indices land on it using the period `2*(numRows-1)` — O(1) extra space, more complex index arithmetic.
+
+---
+
+### Integer to English Words
+
+> [!example] Problem
+> Convert a non-negative integer to its English words representation. E.g. `1234567` → `"One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"`.
+
+> [!info] Approach
+> - **WHY:** Numbers follow a recursive pattern: every 3-digit group is described the same way, then suffixed with Billion/Million/Thousand. Handle the hundreds/tens/ones within each group using lookup tables.
+> - **WHAT:** Define lookup tables for ones (1-19) and tens (20, 30, …, 90). `helper(n)` converts a number < 1000 to words. Iterate over billion/million/thousand groups.
+> - **HOW:** Process groups of 3 digits from largest to smallest. For each non-zero group, call `helper(group)` and append the appropriate suffix. Special-case 0.
+
+> [!note]- Python Solution
+> ```python
+> def numberToWords(num: int) -> str:
+>     if num == 0:
+>         return "Zero"
+> 
+>     ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+>             "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+>             "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+>     tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty",
+>             "Sixty", "Seventy", "Eighty", "Ninety"]
+> 
+>     def helper(n: int) -> str:
+>         if n == 0:
+>             return ""
+>         elif n < 20:
+>             return ones[n] + " "
+>         elif n < 100:
+>             return tens[n // 10] + " " + helper(n % 10)
+>         else:
+>             return ones[n // 100] + " Hundred " + helper(n % 100)
+> 
+>     suffixes = [(10**9, "Billion"), (10**6, "Million"), (10**3, "Thousand"), (1, "")]
+>     result = ""
+>     for value, suffix in suffixes:
+>         if num >= value:
+>             result += helper(num // value)
+>             if suffix:
+>                 result += suffix + " "
+>             num %= value
+>     return result.strip()
+> ```
+
+> [!success] Complexity
+> Time O(log n) — at most ~10 groups of 3 digits. Space O(1) ignoring output.
+
+> [!tip] Alternatives
+> - Iterative with a stack: push word segments onto a stack, pop to assemble — same complexity, different code structure.
+> - Library: `num2words` in Python — correct but not allowed in interviews.
+
+---
+
+## Pattern Matching
+
+### Implement strStr (KMP)
+
+> [!example] Problem
+> Return the index of the first occurrence of `needle` in `haystack`. Return -1 if not present. (LC 28 — implement using KMP for O(n+m) worst case.)
+
+> [!info] Approach
+> - **WHY:** Naive search is O(n×m) in the worst case (e.g., `haystack = "aaa…a"`, `needle = "aaa…ab"`). KMP preprocesses `needle` to build a failure function (also called LPS — Longest Proper Prefix which is also Suffix), enabling O(n+m) matching by never re-examining a haystack character.
+> - **WHAT:** Build LPS array `lps[i]` = length of longest proper prefix of `needle[0..i]` that is also a suffix. During search, on mismatch at position `j`, jump `j = lps[j-1]` instead of resetting to 0.
+> - **HOW:** Build LPS: two pointers `len_ = 0, i = 1`. If `needle[i] == needle[len_]`, `lps[i] = len_ + 1; i++; len_++`. Else if `len_ > 0`, `len_ = lps[len_-1]`. Else `lps[i] = 0; i++`. Search: advance `i` (haystack), `j` (needle); on mismatch use `j = lps[j-1]`; when `j == len(needle)` record match.
+
+> [!note]- Python Solution
+> ```python
+> def strStr(haystack: str, needle: str) -> int:
+>     if not needle:
+>         return 0
+>     n, m = len(haystack), len(needle)
+> 
+>     # build LPS (failure function)
+>     lps = [0] * m
+>     len_ = 0
+>     i = 1
+>     while i < m:
+>         if needle[i] == needle[len_]:
+>             len_ += 1
+>             lps[i] = len_
+>             i += 1
+>         elif len_ > 0:
+>             len_ = lps[len_ - 1]
+>         else:
+>             lps[i] = 0
+>             i += 1
+> 
+>     # KMP search
+>     i = j = 0
+>     while i < n:
+>         if haystack[i] == needle[j]:
+>             i += 1
+>             j += 1
+>         if j == m:
+>             return i - j
+>         elif i < n and haystack[i] != needle[j]:
+>             if j > 0:
+>                 j = lps[j - 1]
+>             else:
+>                 i += 1
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(n + m). Space O(m) for the LPS array.
+
+> [!tip] Alternatives
+> - Naive: `for i in range(n-m+1): if haystack[i:i+m] == needle: return i` — O(nm) worst case, fine for interviews unless pushed.
+> - Rabin-Karp rolling hash: O(n+m) average, O(nm) worst case without double hashing.
+> - Boyer-Moore: better practical performance (sub-linear on average) via bad-character and good-suffix heuristics.
+> - Python built-in: `haystack.find(needle)` — uses optimized C; not the point of this problem.
+
+---
+
+### Repeated Substring Pattern
+
+> [!example] Problem
+> Given string `s`, return true if it can be constructed by repeating a substring of it two or more times. E.g., `"abcabc"` → True (repeat `"abc"`).
+
+> [!info] Approach
+> - **WHY:** If `s` is a repetition of some pattern `p`, then `s + s` contains `s` starting at a position other than 0 or `len(s)`. This is because the doubled string `ss` can align `p` blocks to reconstruct `s` shifted by one period.
+> - **WHAT:** Concatenate `s` with itself, check if `s` appears in `s[1:-1]` (exclude the trivial positions at index 0 and `len(s)`).
+> - **HOW:** `return s in (s + s)[1:-1]`. Alternatively, use KMP: build LPS array for `s`; if `lps[-1] > 0` and `len(s) % (len(s) - lps[-1]) == 0`, the pattern length is `len(s) - lps[-1]`.
+
+> [!note]- Python Solution
+> ```python
+> def repeatedSubstringPattern(s: str) -> bool:
+>     # O(n) via rotation trick
+>     return s in (s + s)[1:-1]
+> 
+> # KMP LPS approach — O(n) time, O(n) space
+> def repeatedSubstringPattern_kmp(s: str) -> bool:
+>     n = len(s)
+>     lps = [0] * n
+>     j = 0
+>     for i in range(1, n):
+>         while j > 0 and s[i] != s[j]:
+>             j = lps[j - 1]
+>         if s[i] == s[j]:
+>             j += 1
+>         lps[i] = j
+>     period = n - lps[-1]
+>     return lps[-1] > 0 and n % period == 0
+> ```
+
+> [!success] Complexity
+> Time O(n) — string `in` uses efficient matching (KMP internally in CPython). Space O(n).
+
+> [!tip] Alternatives
+> - Brute force: try every divisor length of `n`, check if repeating the prefix reconstructs `s` — O(n × d(n)) where d(n) is the number of divisors.
+
+---
+
+### Longest Happy Prefix
+
+> [!example] Problem
+> A "happy prefix" is a non-empty prefix of a string that is also a suffix (not equal to the whole string). Return the longest such prefix, or `""` if none.
+
+> [!info] Approach
+> - **WHY:** This is exactly the KMP failure function / LPS (Longest Proper Prefix which is also Suffix) for the entire string. The last value in the LPS array gives the length of the longest happy prefix.
+> - **WHAT:** Build the KMP LPS array for `s`. `lps[-1]` is the answer length.
+> - **HOW:** Standard LPS build (same as in Implement strStr). Return `s[:lps[-1]]`.
+
+> [!note]- Python Solution
+> ```python
+> def longestPrefix(s: str) -> str:
+>     n = len(s)
+>     lps = [0] * n
+>     j = 0
+>     for i in range(1, n):
+>         while j > 0 and s[i] != s[j]:
+>             j = lps[j - 1]
+>         if s[i] == s[j]:
+>             j += 1
+>         lps[i] = j
+>     return s[:lps[-1]]
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(n) for LPS array.
+
+> [!tip] Alternatives
+> - Rolling hash: compute prefix hashes and suffix hashes, find longest matching — O(n) average but requires collision handling.
+> - Z-function: `z[i]` = length of longest substring starting at `i` that matches a prefix of `s`. The answer is `max(z[i] for i if i + z[i] == n)`. O(n) — equivalent power to KMP.
+
+---
+
 ## See Also
 
 [[string-algorithms]] | [[sliding-window]] | [[hashing]] | [[two-pointers]] | [[dynamic-programming]]

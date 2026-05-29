@@ -3,7 +3,7 @@ module: 01-data-structures
 topic: Linked List
 subtopic: 
 status: unread
-tags: [data-structures, upsc, linked-list]
+tags: [data-structures, linked-list]
 ---
 ## First-Principles Map
 

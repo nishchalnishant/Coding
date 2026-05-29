@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Greedy
 subtopic: 
 status: unread
-tags: [algorithms, upsc, greedy]
+tags: [algorithms, greedy]
 ---
 ## First-Principles Map
 

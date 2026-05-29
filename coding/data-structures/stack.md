@@ -883,6 +883,347 @@ difficulty: mixed
 
 ---
 
+## Parentheses — Score and Repair
+
+### Score of Parentheses (LC 856)
+
+> [!example] Problem
+> A balanced parentheses string has a score: `()` = 1, `AB` = score(A) + score(B), `(A)` = 2 × score(A). Given a valid string, return its score.
+
+> [!info] Approach
+> - **WHY:** Depth determines the multiplier — each level of nesting doubles the score of inner `()`. A stack naturally tracks depth.
+> - **WHAT:** Stack of running scores per depth level. `(` pushes a new scope (0). `)` pops: if the popped value is 0 it was a bare `()` so contribute `2^depth` = `max(2*v, 1)` to the parent; otherwise contribute `2*v`.
+> - **HOW:** Start with `[0]`. On `(`: append 0. On `)`: `v = stack.pop()`; `stack[-1] += max(2*v, 1)`. Return `stack[0]`.
+
+> [!note]- Python Solution
+> ```python
+> def score_of_parentheses(s: str) -> int:
+>     stack: list[int] = [0]
+>     for ch in s:
+>         if ch == '(':
+>             stack.append(0)
+>         else:
+>             v = stack.pop()
+>             stack[-1] += max(2 * v, 1)
+>     return stack[0]
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> Bit-shift trick: iterate with depth counter; on `()` at depth `d`, add `1 << d`. O(n) time O(1) space.
+
+---
+
+### Minimum Add to Make Parentheses Valid (LC 921)
+
+> [!example] Problem
+> Given a string of `(` and `)`, return the minimum number of parentheses to insert to make it valid.
+
+> [!info] Approach
+> - **WHY:** An unmatched `)` cannot be fixed by future characters — it needs an immediate `(` inserted to its left. Unmatched `(` at the end each need a `)`.
+> - **WHAT:** Track `open` (unmatched `(`) and `close` (unmatched `)`). On `(`, increment `open`. On `)`, if `open > 0` match it (decrement `open`), else increment `close`.
+> - **HOW:** Final answer = `open + close`.
+
+> [!note]- Python Solution
+> ```python
+> def min_add_to_make_valid(s: str) -> int:
+>     open_count = 0  # unmatched '('
+>     close_needed = 0  # unmatched ')'
+>     for ch in s:
+>         if ch == '(':
+>             open_count += 1
+>         else:
+>             if open_count > 0:
+>                 open_count -= 1
+>             else:
+>                 close_needed += 1
+>     return open_count + close_needed
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(1).
+
+> [!tip] Alternatives
+> Stack of unmatched chars — same logic, O(n) space. Counter approach above is optimal.
+
+---
+
+### Check if Word is Valid After Substitutions (LC 1003)
+
+> [!example] Problem
+> A valid string is either empty, or formed by inserting `"abc"` anywhere in a valid string. Determine if a given string is valid.
+
+> [!info] Approach
+> - **WHY:** Every `c` must be preceded by `ab` immediately below it — a nesting structure. Stack validates this pairing.
+> - **WHAT:** Push each character. When the top three characters are `a`, `b`, `c` (in order), pop all three — they form a complete `abc` unit.
+> - **HOW:** After each push check if `stack[-3:] == ['a','b','c']` and pop three. Valid iff stack is empty at end.
+
+> [!note]- Python Solution
+> ```python
+> def is_valid(s: str) -> bool:
+>     stack: list[str] = []
+>     for ch in s:
+>         stack.append(ch)
+>         if len(stack) >= 3 and stack[-3] == 'a' and stack[-2] == 'b' and stack[-1] == 'c':
+>             stack.pop(); stack.pop(); stack.pop()
+>     return not stack
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> Repeated `str.replace("abc", "")` — O(n²) in worst case. Stack is optimal.
+
+---
+
+## Monotonic Stack — Arrays and Sequences
+
+### 132 Pattern (LC 456)
+
+> [!example] Problem
+> Given an array, determine if there exist indices `i < j < k` such that `nums[i] < nums[k] < nums[j]`.
+
+> [!info] Approach
+> - **WHY:** We need the "3" (nums[j]) to be as large as possible and the "2" (nums[k]) to be just below it — a monotonic stack from the right maintains candidate "2" values.
+> - **WHAT:** Scan right to left. Maintain a decreasing monotonic stack of candidates for nums[j]. Track `third` = the best candidate for nums[k] (largest value popped from the stack so far, meaning it was once a "3" that got beaten by a taller bar).
+> - **HOW:** When `stack[-1] < nums[i]`, pop into `third` (this becomes nums[k]). If `nums[i] < third`, we found nums[i] < nums[k] < nums[j] — return True. Push `nums[i]`.
+
+> [!note]- Python Solution
+> ```python
+> def find132pattern(nums: list[int]) -> bool:
+>     stack: list[int] = []
+>     third = float('-inf')  # best candidate for nums[k] (the "2")
+>     for num in reversed(nums):
+>         if num < third:
+>             return True
+>         while stack and stack[-1] < num:
+>             third = stack.pop()
+>         stack.append(num)
+>     return False
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> O(n²) brute force: for each j, track prefix min as i, scan right for k. Stack approach is the only O(n) solution.
+
+---
+
+### Car Fleet (LC 853)
+
+> [!example] Problem
+> N cars head to the same destination `target`. Each car has a position and speed. A faster car that catches a slower one forms a fleet and travels at the slower car's speed. Return the number of fleets that arrive.
+
+> [!info] Approach
+> - **WHY:** Cars closer to the target are ahead. A car behind can only join the fleet ahead if it arrives no later. A stack of arrival times tracks fleets.
+> - **WHAT:** Sort by position descending (closest to target first). Compute each car's arrival time `(target - pos) / speed`. A car merges into the fleet ahead if its time ≤ the current stack top (it catches up). Otherwise it starts a new fleet.
+> - **HOW:** Iterate sorted arrival times. Push if `> stack[-1]` (or stack empty). Stack size = number of fleets.
+
+> [!note]- Python Solution
+> ```python
+> def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
+>     pairs = sorted(zip(position, speed), reverse=True)
+>     stack: list[float] = []
+>     for pos, spd in pairs:
+>         time = (target - pos) / spd
+>         if not stack or time > stack[-1]:
+>             stack.append(time)
+>         # else: merges into the fleet ahead (smaller or equal time)
+>     return len(stack)
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for sort; Space O(n).
+
+> [!tip] Alternatives
+> After sorting, a single pass with a counter (no explicit stack) works: increment count whenever a car's time exceeds the current fleet's time.
+
+---
+
+### Maximum Width Ramp (LC 962)
+
+> [!example] Problem
+> A ramp is a pair `(i, j)` with `i < j` and `nums[i] <= nums[j]`. Find the maximum width `j - i`.
+
+> [!info] Approach
+> - **WHY:** We want the leftmost possible `i` and rightmost possible `j`. Build a decreasing stack of candidate left endpoints, then scan right to left for `j`.
+> - **WHAT:** Pre-process a monotonically decreasing stack of indices from left to right (only push if strictly smaller than all previous — these are the only viable left anchors). Then scan from right to left: for each `j`, pop stack indices while `nums[stack[-1]] <= nums[j]`, recording max `j - i`.
+> - **HOW:** Build decreasing stack in one pass. Reverse scan: greedily pop all valid left endpoints.
+
+> [!note]- Python Solution
+> ```python
+> def max_width_ramp(nums: list[int]) -> int:
+>     n = len(nums)
+>     # Build decreasing stack of candidate left indices
+>     stack: list[int] = []
+>     for i in range(n):
+>         if not stack or nums[i] < nums[stack[-1]]:
+>             stack.append(i)
+>     best = 0
+>     # Scan right to left, match against stack
+>     for j in range(n - 1, -1, -1):
+>         while stack and nums[stack[-1]] <= nums[j]:
+>             best = max(best, j - stack.pop())
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> Binary search: O(n log n) — build the decreasing stack, then for each j binary search for the leftmost valid i. Harder to implement correctly.
+
+---
+
+### Number of Visible People in a Queue (LC 1944)
+
+> [!example] Problem
+> People stand in a queue. Person `i` can see person `j` (j > i) if all people between them are shorter than both `heights[i]` and `heights[j]`. Return the count of visible people for each person.
+
+> [!info] Approach
+> - **WHY:** A taller person blocks all shorter ones behind them. Scan right to left maintaining a decreasing monotonic stack of heights not yet blocked.
+> - **WHAT:** For person `i`, count how many people they see = number of people popped from the stack (each shorter person directly in front until someone taller) + 1 if the stack is non-empty after popping (the first person taller than `i`).
+> - **HOW:** Process right to left. For each person, pop from the decreasing stack while top < current height, incrementing count. Add 1 if stack non-empty (blocked by a taller person). Push current height.
+
+> [!note]- Python Solution
+> ```python
+> def can_see_persons_count(heights: list[int]) -> list[int]:
+>     n = len(heights)
+>     result = [0] * n
+>     stack: list[int] = []  # decreasing stack of heights
+>     for i in range(n - 1, -1, -1):
+>         count = 0
+>         while stack and stack[-1] < heights[i]:
+>             stack.pop()
+>             count += 1
+>         if stack:
+>             count += 1  # can see the next taller person
+>         result[i] = count
+>         stack.append(heights[i])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> No O(n) approach without a monotonic structure — brute force is O(n²).
+
+---
+
+### Buildings With an Ocean View (LC 1762)
+
+> [!example] Problem
+> Buildings face the ocean to the right. A building has an ocean view if all buildings to its right are shorter. Return indices of buildings with an ocean view, in increasing order.
+
+> [!info] Approach
+> - **WHY:** Scan left to right: a building loses its ocean view if a taller building appears to its right. Maintain a decreasing monotonic stack — only the "visible" candidates remain.
+> - **WHAT:** Monotonic decreasing stack of indices. Pop any building shorter than the current one (it lost its view). Push current.
+> - **HOW:** Iterate left to right. While `stack and heights[stack[-1]] <= heights[i]`: pop. Push `i`. Stack contains all indices with ocean views in order.
+
+> [!note]- Python Solution
+> ```python
+> def find_buildings(heights: list[int]) -> list[int]:
+>     stack: list[int] = []
+>     for i, h in enumerate(heights):
+>         while stack and heights[stack[-1]] <= h:
+>             stack.pop()
+>         stack.append(i)
+>     return stack
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> Scan right to left tracking running max — O(n) time O(1) extra space (excluding output). Simpler but requires reversing the output.
+
+---
+
+## Iterative Tree Traversal
+
+### Flatten Binary Tree to Linked List (LC 114 — iterative)
+
+> [!example] Problem
+> Flatten a binary tree to a linked list in-place (preorder: root → left → right), using the `right` pointer as next. Do it iteratively.
+
+> [!info] Approach
+> - **WHY:** Recursive flatten risks call-stack overflow on skewed trees. Iterative with an explicit stack gives O(h) space.
+> - **WHAT:** Preorder traversal with a stack. Process root, push right child then left child (so left is processed first). After visiting each node, redirect its `right` to the next preorder node, set `left = None`.
+> - **HOW:** Push root. While stack: pop node, if node.right exists push it, if node.left exists push it. Set `node.right = stack[-1] if stack else None`, `node.left = None`.
+
+> [!note]- Python Solution
+> ```python
+> class TreeNode:
+>     def __init__(self, val=0, left=None, right=None):
+>         self.val = val; self.left = left; self.right = right
+>
+> def flatten(root: TreeNode | None) -> None:
+>     if not root:
+>         return
+>     stack = [root]
+>     while stack:
+>         node = stack.pop()
+>         if node.right:
+>             stack.append(node.right)
+>         if node.left:
+>             stack.append(node.left)
+>         node.right = stack[-1] if stack else None
+>         node.left = None
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(h) where h = tree height.
+
+> [!tip] Alternatives
+> Morris traversal — O(n) time O(1) space (no stack), but modifies tree temporarily and is harder to reason about. The "find predecessor" approach in O(n) with constant space is also canonical.
+
+---
+
+### Path Sum II (LC 113 — iterative DFS)
+
+> [!example] Problem
+> Find all root-to-leaf paths in a binary tree where the sum of node values equals `target`. Return all such paths.
+
+> [!info] Approach
+> - **WHY:** Recursive DFS is natural but risks stack overflow. An iterative DFS with an explicit stack carrying path state mirrors the recursion exactly.
+> - **WHAT:** Stack of `(node, remaining_sum, path)` tuples. When a leaf is reached with `remaining == 0`, record the path.
+> - **HOW:** Push `(root, target, [])`. On each pop: if leaf and remaining == 0, add copy of path to results. Push right child, then left child (left processed first) with updated remaining and path.
+
+> [!note]- Python Solution
+> ```python
+> def path_sum(root: TreeNode | None, target_sum: int) -> list[list[int]]:
+>     if not root:
+>         return []
+>     results: list[list[int]] = []
+>     stack = [(root, target_sum, [])]
+>     while stack:
+>         node, remaining, path = stack.pop()
+>         path = path + [node.val]
+>         remaining -= node.val
+>         if not node.left and not node.right:
+>             if remaining == 0:
+>                 results.append(path)
+>         else:
+>             if node.right:
+>                 stack.append((node.right, remaining, path))
+>             if node.left:
+>                 stack.append((node.left, remaining, path))
+>     return results
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n) for stack and path copies (worst case skewed tree).
+
+> [!tip] Alternatives
+> Recursive DFS with backtracking — cleaner code, but O(h) call stack. For a balanced tree that's O(log n); for skewed trees risk overflow.
+
+---
+
 ## See Also
 
 [[queue]] | [[dynamic-programming]] | [[monotonic-techniques]]

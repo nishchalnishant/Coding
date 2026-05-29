@@ -3,7 +3,7 @@ module: books
 topic: Elements Of Programming Interviews In Python
 subtopic: 
 status: unread
-tags: [books, upsc, elements-of-programming-interv]
+tags: [books, elements-of-programming-interv]
 ---
 # Elements of programming interviews in python
 

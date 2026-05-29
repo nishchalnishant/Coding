@@ -3,7 +3,7 @@ module: root
 topic: Questions
 subtopic: 
 status: unread
-tags: [root, upsc, questions]
+tags: [root, questions]
 ---
 # Data Structures and Algorithms Questions
 

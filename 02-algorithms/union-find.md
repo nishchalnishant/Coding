@@ -3,7 +3,7 @@ module: 02-algorithms
 topic: Union Find
 subtopic: 
 status: unread
-tags: [algorithms, upsc, union-find]
+tags: [algorithms, union-find]
 ---
 ## First-Principles Map
 

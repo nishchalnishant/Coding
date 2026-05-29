@@ -3,7 +3,7 @@ module: books
 topic: Dynamic Programming For Coding Interviews
 subtopic: 
 status: unread
-tags: [books, upsc, dynamic-programming-for-coding]
+tags: [books, dynamic-programming-for-coding]
 ---
 # Dynamic programming for coding interviews
 

@@ -741,6 +741,288 @@ difficulty: mixed
 
 ---
 
+## Number Encoding / Conversion
+
+### Integer to Roman
+
+> [!example] Problem
+> Convert integer `num` (1 ≤ num ≤ 3999) to its Roman numeral representation.
+
+> [!info] Approach
+> - **WHY:** Roman numerals are a greedy positional system. Subtractive forms (IV=4, IX=9, XL=40, ...) can be handled by including them as explicit "values" in the table. Greedily subtract the largest fitting value.
+> - **WHAT:** Table of `(value, symbol)` pairs in descending order including all 13 subtractive forms. While `num > 0`: find largest value ≤ num, append symbol, subtract value.
+> - **HOW:** 13 symbols: 1000→M, 900→CM, 500→D, 400→CD, 100→C, 90→XC, 50→L, 40→XL, 10→X, 9→IX, 5→V, 4→IV, 1→I.
+
+> [!note]- Python Solution
+> ```python
+> def intToRoman(num: int) -> str:
+>     vals = [
+>         (1000, "M"), (900, "CM"), (500, "D"), (400, "CD"),
+>         (100, "C"),  (90, "XC"), (50, "L"),  (40, "XL"),
+>         (10, "X"),   (9, "IX"),  (5, "V"),   (4, "IV"),  (1, "I"),
+>     ]
+>     result = []
+>     for value, symbol in vals:
+>         while num >= value:
+>             result.append(symbol)
+>             num -= value
+>     return "".join(result)
+> ```
+
+> [!success] Complexity
+> Time O(1) — num ≤ 3999, loop is bounded. Space O(1).
+
+> [!tip] Alternatives
+> Digit-by-digit lookup table for thousands/hundreds/tens/ones — same complexity, more verbose but no loop.
+
+---
+
+### Roman to Integer
+
+> [!example] Problem
+> Convert Roman numeral string to integer.
+
+> [!info] Approach
+> - **WHY:** Subtractive rule: if a smaller value appears before a larger value, subtract it (e.g., IV = 5-1 = 4). Otherwise add. Scan left to right: if `val[s[i]] < val[s[i+1]]`, subtract; else add.
+> - **WHAT:** Map each symbol to its value; single pass with lookahead.
+> - **HOW:** For each character (except last): if its value is less than the next character's value, subtract; else add. Add the last character unconditionally.
+
+> [!note]- Python Solution
+> ```python
+> def romanToInt(s: str) -> int:
+>     val = {'I': 1, 'V': 5, 'X': 10, 'L': 50,
+>            'C': 100, 'D': 500, 'M': 1000}
+>     result = 0
+>     for i in range(len(s) - 1):
+>         if val[s[i]] < val[s[i + 1]]:
+>             result -= val[s[i]]
+>         else:
+>             result += val[s[i]]
+>     return result + val[s[-1]]
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> Replace subtractive pairs before parsing: `s.replace("IV","IIII")` etc. — simpler logic but mutates string.
+
+---
+
+### Excel Sheet Column Number
+
+> [!example] Problem
+> Given a column title (e.g., "A"→1, "Z"→26, "AA"→27, "AB"→28), return its column number.
+
+> [!info] Approach
+> - **WHY:** This is base-26 to base-10 conversion where 'A'=1, ..., 'Z'=26 (1-indexed, not 0-indexed). Same as positional notation: `result = result * 26 + digit_value`.
+> - **WHAT:** Scan left to right; multiply running total by 26 and add current letter's value.
+> - **HOW:** `result = 0`. For each char `c`: `result = result * 26 + (ord(c) - ord('A') + 1)`.
+
+> [!note]- Python Solution
+> ```python
+> def titleToNumber(columnTitle: str) -> int:
+>     result = 0
+>     for c in columnTitle:
+>         result = result * 26 + (ord(c) - ord('A') + 1)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> Reverse: `columnNumberToTitle` — reverse base-26 with 1-indexed adjustment: `(num - 1) % 26` maps to 'A'–'Z'.
+
+---
+
+### Happy Number
+
+> [!example] Problem
+> A happy number reaches 1 when repeatedly replaced by the sum of squares of its digits. Detect if n is happy (vs. entering an infinite loop).
+
+> [!info] Approach
+> - **WHY:** Unhappy numbers enter a cycle. Classic cycle detection: Floyd's (slow/fast pointer) or a seen-set. For sum-of-squares, any cycle for non-happy numbers passes through 4 (known fact), but seen-set is simpler and general.
+> - **WHAT:** Apply digit-square-sum repeatedly; if we hit 1 → happy; if we see a repeated number → not happy.
+> - **HOW:** Floyd's two-pointer on the implicit sequence — slow moves one step, fast moves two steps. Cycle iff `slow == fast`; happy iff that meeting point is 1.
+
+> [!note]- Python Solution
+> ```python
+> def isHappy(n: int) -> bool:
+>     def digit_sq_sum(x: int) -> int:
+>         total = 0
+>         while x:
+>             x, d = divmod(x, 10)
+>             total += d * d
+>         return total
+> 
+>     slow, fast = n, digit_sq_sum(n)
+>     while fast != 1 and slow != fast:
+>         slow = digit_sq_sum(slow)
+>         fast = digit_sq_sum(digit_sq_sum(fast))
+>     return fast == 1
+> ```
+
+> [!success] Complexity
+> Time O(log n) per step, O(log n) steps until cycle detected. Space O(1) with Floyd's.
+
+> [!tip] Alternatives
+> Seen-set: `while n not in seen: seen.add(n); n = digit_sq_sum(n)`. O(log n) space. Hardcode: all unhappy numbers cycle through 4 — can check `if n == 4: return False` as early exit.
+
+---
+
+### Palindrome Number
+
+> [!example] Problem
+> Determine if an integer is a palindrome without converting to string.
+
+> [!info] Approach
+> - **WHY:** Negative numbers and numbers ending in 0 (except 0 itself) are never palindromes. Reverse only the second half — avoids overflow and is more elegant than reversing the entire number.
+> - **WHAT:** Repeatedly pop the last digit and build a reversed half. When `x ≤ reversed_half`, we've processed at least half the digits.
+> - **HOW:** `while x > reversed_half: reversed_half = reversed_half * 10 + x % 10; x //= 10`. Then `x == reversed_half` (even) or `x == reversed_half // 10` (odd length).
+
+> [!note]- Python Solution
+> ```python
+> def isPalindrome(x: int) -> bool:
+>     if x < 0 or (x % 10 == 0 and x != 0):
+>         return False
+>     reversed_half = 0
+>     while x > reversed_half:
+>         reversed_half = reversed_half * 10 + x % 10
+>         x //= 10
+>     return x == reversed_half or x == reversed_half // 10
+> ```
+
+> [!success] Complexity
+> Time O(log₁₀ n). Space O(1).
+
+> [!tip] Alternatives
+> `str(x) == str(x)[::-1]` — one-liner but uses O(log n) space. Reverse full integer — risks overflow in languages without big integers.
+
+---
+
+### Multiply Strings
+
+> [!example] Problem
+> Multiply two non-negative integers represented as strings; return the product as a string. Do not convert to integer directly.
+
+> [!info] Approach
+> - **WHY:** Grade-school multiplication: digit `num1[i]` × digit `num2[j]` contributes to position `i + j` (units) and `i + j + 1` (carry). Work with a result array of size `len1 + len2`.
+> - **WHAT:** Allocate `pos[len1 + len2]`. For each pair `(i, j)` (right to left): `prod = (num1[i] - '0') × (num2[j] - '0') + pos[i+j+1]`; `pos[i+j+1] = prod % 10`; `pos[i+j] += prod // 10`.
+> - **HOW:** Iterate `i` from end of num1, `j` from end of num2. Final answer: strip leading zeros; `"0"` if all zeros.
+
+> [!note]- Python Solution
+> ```python
+> def multiply(num1: str, num2: str) -> str:
+>     m, n = len(num1), len(num2)
+>     pos = [0] * (m + n)
+>     for i in range(m - 1, -1, -1):
+>         for j in range(n - 1, -1, -1):
+>             mul = (ord(num1[i]) - ord('0')) * (ord(num2[j]) - ord('0'))
+>             p1, p2 = i + j, i + j + 1
+>             total = mul + pos[p2]
+>             pos[p2] = total % 10
+>             pos[p1] += total // 10
+>     result = ''.join(str(d) for d in pos).lstrip('0')
+>     return result or '0'
+> ```
+
+> [!success] Complexity
+> Time O(m × n). Space O(m + n).
+
+> [!tip] Alternatives
+> Python's arbitrary-precision integers make `str(int(num1) * int(num2))` trivial — but the manual approach is what interviews test. FFT-based multiplication: O(n log n) — overkill for string multiply.
+
+---
+
+## Probability / Sampling
+
+### Random Pick with Weight
+
+> [!example] Problem
+> Given weights `w[i]`, implement `pickIndex()` which returns index `i` with probability `w[i] / sum(w)`.
+
+> [!info] Approach
+> - **WHY:** Weighted sampling = prefix-sum + binary search. Build prefix sum array; generate a random float in `[0, total_weight)`. The correct index is the first prefix sum strictly greater than the random value.
+> - **WHAT:** Precompute prefix sums. Each call: `r = random.random() * total`; binary search for first prefix sum > r → that index.
+> - **HOW:** `bisect_left` on prefix sums after multiplying random by total; or `bisect_right` on the raw prefix sum array after scaling.
+
+> [!note]- Python Solution
+> ```python
+> import random
+> import bisect
+> 
+> class Solution:
+>     def __init__(self, w: list[int]):
+>         self.prefix = []
+>         total = 0
+>         for weight in w:
+>             total += weight
+>             self.prefix.append(total)
+>         self.total = total
+> 
+>     def pickIndex(self) -> int:
+>         target = random.random() * self.total
+>         # find first prefix sum strictly greater than target
+>         return bisect.bisect_right(self.prefix, target)
+> ```
+
+> [!success] Complexity
+> `__init__` O(n). `pickIndex` O(log n). Space O(n).
+
+> [!tip] Alternatives
+> Alias method: O(n) setup, O(1) per pick — optimal for high-frequency sampling. Linear scan: O(n) per pick — correct but slow. Note: `bisect_right` handles the case where target equals a prefix boundary correctly (moves to next bucket).
+
+---
+
+### Reservoir Sampling
+
+> [!example] Problem
+> Given a stream of unknown length, return a uniformly random sample of size k. Each element must have equal probability k/n of being selected (where n is the total stream length seen so far).
+
+> [!info] Approach
+> - **WHY:** Can't store the entire stream. Reservoir: keep a reservoir of k items. For item i (1-indexed): with probability `k/i`, replace a random reservoir element. Mathematical induction shows this maintains uniform distribution at every step.
+> - **WHAT:** Fill reservoir with first k items. For each subsequent item i: pick `j = random(0, i)`. If `j < k`, replace `reservoir[j]` with `stream[i]`.
+> - **HOW:** Prove invariant: after seeing i items, each item has probability k/i of being in reservoir. Inductive step: item i+1 chosen with prob k/(i+1); each existing item survives with prob 1 - (k/(i+1)) × (1/k) = i/(i+1); combined probability for old items: k/i × i/(i+1) = k/(i+1). ✓
+
+> [!note]- Python Solution
+> ```python
+> import random
+> 
+> def reservoir_sample(stream, k: int) -> list:
+>     reservoir = []
+>     for i, item in enumerate(stream):
+>         if i < k:
+>             reservoir.append(item)
+>         else:
+>             j = random.randint(0, i)  # inclusive on both ends
+>             if j < k:
+>                 reservoir[j] = item
+>     return reservoir
+> 
+> # LeetCode 382 variant: linked list random node (k=1)
+> class LinkedListRandomNode:
+>     def __init__(self, head):
+>         self.head = head
+> 
+>     def getRandom(self) -> int:
+>         result, node, i = self.head.val, self.head.next, 1
+>         while node:
+>             if random.randint(0, i) == 0:
+>                 result = node.val
+>             node = node.next
+>             i += 1
+>         return result
+> ```
+
+> [!success] Complexity
+> Time O(n) for full stream. Space O(k) for reservoir.
+
+> [!tip] Alternatives
+> Fisher-Yates shuffle on a known array — O(n) but requires knowing n upfront. Reservoir with random sort key (Knuth): assign each item a `random()` key; keep top-k by key — equivalent distribution. For large k relative to n, just shuffle and take first k.
+
+---
+
 ## See Also
 
 [[dynamic-programming]] | [[binary-search]] | [[sorting]]

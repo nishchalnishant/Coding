@@ -1,6 +1,6 @@
-# Google SDE-2 Interview Prep
+# Google SDE-3 Interview Prep
 
-A topic-first, high-signal prep repo targeting Google SDE-2 (L4) in a 4–6 week sprint. Every file is dense and practical — no padding, no 500-problem lists. Navigate by topic, read deep, drill problems.
+A topic-first, high-signal prep repo targeting Google SDE-3 (L5) in a 6-week sprint. Every file is dense and practical — no padding, no 500-problem lists. Navigate by topic, read deep, drill problems.
 
 ---
 
@@ -37,6 +37,8 @@ A topic-first, high-signal prep repo targeting Google SDE-2 (L4) in a 4–6 week
 | **Week 2** | Trees, BST, Graphs, BFS/DFS, Topological Sort |
 | **Week 3** | DP (1D/2D/knapsack), Backtracking, Greedy, Recursion |
 | **Week 4** | Binary Search, Heap, Tries, Behavioral |
+| **Week 5** | SDE-3 Hard Problems — full checklist from `05-revision/coding-rubric.md` |
+| **Week 6** | Mocks (2/week), LLD round prep (`03-patterns/lld.md`), behavioral polish |
 
 ---
 
