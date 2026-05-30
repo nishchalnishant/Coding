@@ -874,7 +874,7 @@ difficulty: mixed
 
 ---
 
-### Rotate List
+### Rotate List (Circular List Trick)
 
 > [!example] Problem
 > Rotate the linked list to the right by `k` places.
@@ -1148,3 +1148,41 @@ difficulty: mixed
 ## See Also
 
 [[two-pointers]] | [[heap]] | [[tree]]
+### Rotate List
+
+> [!example] Problem
+> Rotate a linked list to the right by `k` places.
+
+> [!info] Approach
+> - **WHY:** A rotation just changes where the tail reconnects to the head. Once you know the list length, you can convert the problem into a cut point.
+> - **WHAT:** Make the list circular, compute `k % n`, and cut at the new tail.
+> - **HOW:** Find tail and length, connect tail to head, advance to the new tail `n - k - 1` steps from the head, then break the cycle.
+
+> [!note]- Python Solution
+> ```python
+> def rotate_right(head, k):
+>     if not head or not head.next or k == 0:
+>         return head
+>     tail = head
+>     n = 1
+>     while tail.next:
+>         tail = tail.next
+>         n += 1
+>     k %= n
+>     if k == 0:
+>         return head
+>     tail.next = head
+>     steps = n - k - 1
+>     new_tail = head
+>     for _ in range(steps):
+>         new_tail = new_tail.next
+>     new_head = new_tail.next
+>     new_tail.next = None
+>     return new_head
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space.
+
+> [!tip] Alternatives
+> The same “make circular then break” trick is useful for other rotation-style linked list problems.

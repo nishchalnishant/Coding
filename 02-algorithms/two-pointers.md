@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, two-pointers]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```text
@@ -264,3 +266,52 @@ def sort_colors(nums):
 - **Even vs odd length list:** Middle of linked list — `fast and fast.next` terminates correctly for both.
 - **Cycle at head:** Cycle entry point algorithm handles this; do not special-case.
 - **`while lo < hi` vs `while lo <= hi`:** Use `<` for pair-search (lo == hi is same element). Use `<=` only when you want to process that case.
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Variant | Click moment | Core logic | Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Two Sum II (sorted)** | Converging | Complement from both ends | If sum too small → `lo++`; too big → `hi--` | Input must be **sorted**; 1-indexed return in some problems. |
+| **3Sum** | Converging + skip | Fix i; two-pointer on rest | Skip duplicates at i, lo, hi | Sort first; skip **all** equal values at each level. |
+| **Container With Most Water** | Converging | Move shorter side | `area = min(h[lo], h[hi]) * (hi-lo)` | Moving taller side never increases min height. |
+| **Trapping Rain Water** | Converging | Advance smaller `l_max`/`r_max` side | Water at i from min of max heights | Two-pointer O(n) O(1); differs from stack solution. |
+| **Linked List Cycle** | Fast/slow | Floyd; meet proves cycle | Fast 2 steps, slow 1 | Check `fast` and `fast.next` before advancing. |
+| **Cycle Entry** | Fast/slow | Reset one ptr to head after meet | Both move 1 step until meet | Entry distance equals steps from head to meet. |
+| **Remove Duplicates (sorted)** | Same-direction | `write` only on new value | `if nums[fast] != nums[write]: write++` | Return `write+1` as new length. |
+| **Sort Colors (Dutch flag)** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
+
+Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/linked-list.md).
+
+---
+
+## Quick Revision Triggers
+
+- **Sorted array + pair/triplet sum** → converging two pointers after sort.
+- **Linked list cycle / middle / nth from end** → fast/slow (Floyd).
+- **In-place filter / partition / remove dupes** → same-direction write pointer.
+- **Unsorted two sum** → hash map, not two pointers ([hashing.md](../01-data-structures/hashing.md)).
+
+---
+
+## See also
+
+- [sliding-window.md](./sliding-window.md) — contiguous substring/subarray (often on strings)
+- [binary-search.md](./binary-search.md) — when monotonic predicate replaces scanning
+- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) — fast/slow canonical problems
+- [01-data-structures/array.md](../01-data-structures/array.md) — array two-pointer variants
+- [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — two-pointer triggers
+
+---
+
+## Flashcards
+
+**Sorted array + pair summing to target → converging pointers from both ends after sort.?** #flashcard  
+Sorted array + pair summing to target → converging pointers from both ends after sort.
+
+**Linked list cycle detection → fast/slow pointers; if they meet, cycle exists.?** #flashcard  
+Linked list cycle detection → fast/slow pointers; if they meet, cycle exists.
+
+**In-place remove duplicates in sorted array → write pointer advances only on new value.?** #flashcard  
+In-place remove duplicates in sorted array → write pointer advances only on new value.

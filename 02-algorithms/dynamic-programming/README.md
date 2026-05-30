@@ -1,3 +1,18 @@
+# Dynamic Programming — Hub
+
+← [Algorithms index](../README.md) · [Algorithm decision tree](../algorithm_tree.md)
+
+| File | Use for |
+|------|---------|
+| **This file** | Framework + core patterns (start here) |
+| [tips-and-gotchas.md](./tips-and-gotchas.md) | **Revision** — bugs, fill order |
+| [questions-bank.md](./questions-bank.md) | Leveled drills |
+| [grid-dp.md](./grid-dp.md) · [stock-trading-dp.md](./stock-trading-dp.md) | Topic-specific deep dives |
+| [dp-aditya-verma.md](./dp-aditya-verma.md) | Full pattern catalog |
+| [problem-deep-dives.md](../problem-deep-dives.md) | Full walkthroughs |
+
+---
+
 ## First-Principles Map
 
 ```

@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, tree]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -456,22 +458,22 @@ def deserialize(data: str):
 ## 4. Common Interview Problems
 
 ### Easy
-- [Invert Binary Tree](../algo/problem-deep-dives.md#invert-binary-tree) — Swap children at each node; recursive or BFS.
+- [Invert Binary Tree](../02-algorithms/problem-deep-dives.md#invert-binary-tree) — Swap children at each node; recursive or BFS.
 - **Symmetric Tree** — Mirror check: `left.val == right.val` and recurse cross-ways.
 - **Maximum Depth** — `1 + max(depth(left), depth(right))`.
 
 ### Medium
-- [Validate BST](../algo/problem-deep-dives.md#validate-bst) — Pass `(min, max)` bounds down.
-- [LCA of Binary Tree](../algo/problem-deep-dives.md#lca) — "Both sides non-null" = LCA found.
-- [Kth Smallest in BST](../algo/problem-deep-dives.md#kth-smallest-in-bst) — Iterative inorder; stop at K.
+- [Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst) — Pass `(min, max)` bounds down.
+- [LCA of Binary Tree](../02-algorithms/problem-deep-dives.md#lca) — "Both sides non-null" = LCA found.
+- [Kth Smallest in BST](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst) — Iterative inorder; stop at K.
 - **Binary Tree Level Order** — BFS; separate levels by queue-size snapshot.
 - **Diameter of Binary Tree** — Postorder height; update global `left + right`.
 - **House Robber III** — Tree DP; return `(rob, skip)` pair.
 - **Flatten Binary Tree to Linked List** — Morris-like threading; preorder rewiring.
 
 ### Hard
-- [Serialize and Deserialize](../algo/problem-deep-dives.md#serialize-and-deserialize-binary-tree) — Preorder with `N` markers.
-- [Binary Tree Max Path Sum](../algo/problem-deep-dives.md#binary-tree-maximum-path-sum) — Tree DP; `max(0, child)` to drop negatives.
+- [Serialize and Deserialize](../02-algorithms/problem-deep-dives.md#serialize-and-deserialize-binary-tree) — Preorder with `N` markers.
+- [Binary Tree Max Path Sum](../02-algorithms/problem-deep-dives.md#binary-tree-maximum-path-sum) — Tree DP; `max(0, child)` to drop negatives.
 - **Binary Tree Cameras** — Tree DP; 3 states per node: covered/has-camera/uncovered.
 - **Recover BST** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
 - **Vertical Order Traversal** — BFS with `(col, row, val)`; sort by col then row then val.
@@ -482,10 +484,10 @@ def deserialize(data: str):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Validate BST](../algo/problem-deep-dives.md#validate-bst)** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
-| **[Max Path Sum](../algo/problem-deep-dives.md#binary-tree-maximum-path-sum)** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
-| **[LCA](../algo/problem-deep-dives.md#lca)** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
-| **[Kth Smallest](../algo/problem-deep-dives.md#kth-smallest-in-bst)** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
+| **[Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst)** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
+| **[Max Path Sum](../02-algorithms/problem-deep-dives.md#binary-tree-maximum-path-sum)** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
+| **[LCA](../02-algorithms/problem-deep-dives.md#lca)** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
+| **[Kth Smallest](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst)** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
 | **Diameter** | "Longest path between any two nodes" | `height(left) + height(right)` at each node | Diameter doesn't have to pass through root; track global max. |
 | **House Robber III** | "No adjacent nodes (parent-child), max sum" | Return `(rob_this, skip_this)` per node | Two values per node, not one — the novelty of tree DP. |
 | **Serialize/Deserialize** | "Lossless tree → string → tree" | Preorder + `N` markers; use iterator for deserialize | Why preorder works: root first unambiguously determines left vs right subtrees. |
@@ -520,9 +522,9 @@ def deserialize(data: str):
 
 ## See also
 
-- [Graph](../algo/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
-- [Dynamic Programming](../algo/dynamic-programming/README.md) — Tree DP (postorder state propagation)
-- [Backtracking](../algo/backtracking.md) — path sum with backtracking
+- [Graph](../02-algorithms/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
+- [Dynamic Programming](../02-algorithms/dynamic-programming/README.md) — Tree DP (postorder state propagation)
+- [Backtracking](../02-algorithms/backtracking.md) — path sum with backtracking
 - [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers
 
 ## Flashcards

@@ -5,6 +5,8 @@ subtopic: Questions Bank
 status: unread
 tags: [algorithms, dynamic-programming]
 ---
+
+← [Algorithms index](../README.md) · [DP hub](./README.md)
 ## First-Principles Map
 
 ```text

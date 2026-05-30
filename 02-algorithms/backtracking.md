@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, backtracking]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```text
@@ -596,7 +598,7 @@ def dfs_iterative(start, choices):
 
 ## See also
 
-- [Trie](../ds/trie.md) — Word Search II (pruning via Trie prefix)
+- [Trie](../01-data-structures/trie.md) — Word Search II (pruning via Trie prefix)
 
 ---
 

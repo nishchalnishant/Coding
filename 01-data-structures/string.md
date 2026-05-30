@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, string]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -275,3 +277,59 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 - **Unicode vs ASCII** — `ord(c) - ord('a')` only valid for lowercase a–z; use `Counter` for general case.
 - **Off-by-one in substrings** — `s[l:r]` excludes `r`; `s[l:r+1]` includes it.
 - **Palindrome check skipping non-alphanumeric** — use `isalnum()` and `lower()` together.
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Pattern | Click moment | Core logic | Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Valid Anagram** | Frequency map | Same multiset of chars | `Counter(s) == Counter(t)` or 26-count array | Unicode: use Counter, not fixed 26-array. |
+| **Group Anagrams** | Hash by canonical key | Same letters → same key | Key = `tuple(sorted(w))` or 26-count tuple | Sort key is O(k log k); count tuple is O(k). |
+| **Longest Substring Without Repeat** | Sliding window | Shrink while duplicate | `while c in seen: left++`; update max | Store **last index** of char to jump `left` in O(1). |
+| **Minimum Window Substring** | Window + frequency | Expand until valid; shrink while valid | Track `have` vs `need` per char, not total count | Empty `t` or impossible → return `""`. |
+| **Find All Anagrams** | Fixed window | Window size = len(p) | Compare frequency maps each step | Use 26-array diff count for O(1) compare. |
+| **Longest Palindromic Substring** | Expand around center | Every center → expand | O(n²) expand; Manacher O(n) stretch | Check **odd and even** centers. |
+| **Longest Repeating Char Replacement** | Window + max freq | Valid if `len - max_freq <= k` | Track max frequency **in current window** | max_freq can decrease when shrinking — still correct for max **length**. |
+| **Decode String** | Stack | Push context on `[` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
+| **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
+
+More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.md). String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/string.md) in `02-algorithms/`.
+
+---
+
+## Quick Revision Triggers
+
+- If the problem is **substring / subarray with constraint** → sliding window (variable or fixed size).
+- If the problem is **anagram or same multiset** → frequency map or sorted/canonical key.
+- If the problem is **palindrome** → expand around center (O(n²)) unless asked for O(n) (Manacher).
+- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → trie / Aho-Corasick ([trie.md](./trie.md)).
+- If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./array.md)).
+- If building strings in a loop → **list + join**, never `s += c` in Python.
+
+---
+
+## See also
+
+- [array.md](./array.md) — sliding window and two pointers on numeric arrays
+- [hashing.md](./hashing.md) — frequency maps, group-by-key
+- [trie.md](./trie.md) — prefix dictionary, word search II
+- [stack.md](./stack.md) — decode string, parenthesis parsing
+- [02-algorithms/string.md](../02-algorithms/string.md) — KMP, Rabin-Karp, Z-function
+- [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — string pattern triggers
+
+---
+
+## Flashcards
+
+**If the problem is substring with a frequency or uniqueness constraint → think Sliding Window; expand right, shrink left while invalid.?** #flashcard  
+If the problem is substring with a frequency or uniqueness constraint → think Sliding Window; expand right, shrink left while invalid.
+
+**If the problem groups strings by same letters → think canonical key (sorted word or count tuple) in a hash map.?** #flashcard  
+If the problem groups strings by same letters → think canonical key (sorted word or count tuple) in a hash map.
+
+**If building a string in a loop in Python → use list append + join, not += (O(n²)).?** #flashcard  
+If building a string in a loop in Python → use list append + join, not += (O(n²)).
+
+**If subarray sum with negatives → prefix sum + map, not sliding window.?** #flashcard  
+If subarray sum with negatives → prefix sum + map, not sliding window — see array.md.

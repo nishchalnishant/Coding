@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, advanced-structures]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```

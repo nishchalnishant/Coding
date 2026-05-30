@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, searching]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```
@@ -516,7 +518,7 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
 ## See also
 
-- [Array](../ds/array.md) — sorted array prerequisites; binary search on rotated arrays
+- [Array](../01-data-structures/array.md) — sorted array prerequisites; binary search on rotated arrays
 - [Sorting](sorting.md) — ordering required for binary search on index
 - [Dynamic Programming](dynamic-programming/README.md) — some BS-on-answer problems reduce to DP feasibility checks
 - [Patterns Master](../../03-patterns/patterns-master.md) — binary search pattern triggers

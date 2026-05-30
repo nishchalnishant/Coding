@@ -1164,3 +1164,34 @@ difficulty: mixed
 ## See Also
 
 [[string]] | [[trie]] | [[dynamic-programming]] | [[sliding-window]]
+### Shortest Palindrome
+
+> [!example] Problem
+> Add the minimum number of characters in front of a string to make it a palindrome.
+
+> [!info] Approach
+> - **WHY:** We need the longest palindromic prefix. Once we know that prefix, the remaining suffix must be reversed and prepended.
+> - **WHAT:** Build a KMP prefix table on `s + '#' + reverse(s)` to find the longest prefix of `s` that matches a suffix of the reversed string.
+> - **HOW:** The LPS value at the end gives the longest palindromic prefix length. Prepend the reverse of the remaining suffix.
+
+> [!note]- Python Solution
+> ```python
+> def shortest_palindrome(s: str) -> str:
+>     rev = s[::-1]
+>     t = s + "#" + rev
+>     lps = [0] * len(t)
+>     for i in range(1, len(t)):
+>         j = lps[i - 1]
+>         while j > 0 and t[i] != t[j]:
+>             j = lps[j - 1]
+>         if t[i] == t[j]:
+>             j += 1
+>         lps[i] = j
+>     return rev[: len(s) - lps[-1]] + s
+> ```
+
+> [!success] Complexity
+> O(n) time, O(n) space.
+
+> [!tip] Alternatives
+> Manacher's algorithm can also locate palindromic prefixes, but the KMP trick is the standard interview shortcut.

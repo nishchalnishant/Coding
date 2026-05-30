@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, concurrency]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```

@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, ds-tree]
 ---
+
+← [Data structures index](./README.md)
 ## First-Principles Map
 
 ```text
@@ -86,6 +88,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 ---
 
 ## 1. Arrays & Hashing
+
+→ [array.md](./array.md) · [hashing.md](./hashing.md)
 - **Two Pointers** — Using two indices to scan a sorted or linear structure from different directions or at different speeds.
     - *Patterns:* Opposite direction (Two Sum II), Same direction (Remove Duplicates), Sliding Window (Subarray Sum).
 - **Sliding Window** — Maintaining a sub-segment of an array/string to satisfy specific frequency, sum, or character constraints.
@@ -97,6 +101,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Variants:* Group Anagrams (Sorted key), Longest Consecutive Sequence (Hash Set), Subarray Sums Divisible by K.
 
 ## 2. Linked Lists
+
+→ [linked-list.md](./linked-list.md)
 - **Traversal & Basic Ops** — Standard pointer manipulation for list modification and structural analysis.
     - *Patterns:* Reverse a Linked List, Middle of the Linked List.
 - **Two Pointers (Fast & Slow)** — Using two pointers at different speeds (Tortoise and Hare) for cycle and midpoint detection.
@@ -107,6 +113,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Merge Two Sorted Lists, Merge k Sorted Lists (Priority Queue), Sort List (Merge Sort).
 
 ## 3. Stacks & Queues
+
+→ [stack.md](./stack.md) · [queue.md](./queue.md)
 - **Monotonic Stack** — Maintaining a stack in sorted order to solve "Next Greater/Smaller" problems in O(N).
     - *Patterns:* Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water.
 - **Monotonic Queue** — Maintaining a queue of elements to efficiently track the max/min in a moving window.
@@ -115,6 +123,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Min Stack, Implement Queue using Stacks, LRU Cache (DLL + Hash Map).
 
 ## 4. Trees (Binary, BST, N-ary)
+
+→ [tree.md](./tree.md)
 - **DFS Traversals** — Deep exploration of branches using recursion or an explicit stack.
     - *Patterns:* Inorder, Preorder, Postorder (Recursive vs Iterative with Stack).
 - **BFS (Level Order)** — Layer-by-layer traversal; used for level-based analysis and shortest paths in unweighted trees.
@@ -127,6 +137,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Path Sum I, II, & III, Binary Tree Maximum Path Sum, Serialize and Deserialize Binary Tree.
 
 ## 5. Heaps (Priority Queues)
+
+→ [heap.md](./heap.md)
 - **Top K Elements** — Using a min/max-heap to track the largest/smallest elements in O(N log K).
     - *Patterns:* Kth Largest Element in an Array, Top K Frequent Elements, K Closest Points to Origin.
 - **Merging K-Sorted Data** — Combining multiple sorted streams using a priority queue to maintain global order.
@@ -135,6 +147,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Find Median from Data Stream, IPO (Maximize Capital).
 
 ## 6. Graphs
+
+→ [graphs.md](./graphs.md) · weighted algos: [graph.md](../02-algorithms/graph.md)
 - **Representations** — Choosing between Adjacency Lists (Space-efficient) and Adjacency Matrices (Lookup-efficient).
     - *Patterns:* Adjacency List (Standard), Adjacency Matrix (Dense/Grid).
 - **Basic Traversal** — Foundation for exploring connectivity and node relationships.
@@ -148,6 +162,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Kruskal's MST (DSU), Prim's MST.
 
 ## 7. Matrices & Grids
+
+→ [array.md](./array.md) (spiral / in-place) · [graphs.md](./graphs.md) (islands, flood fill)
 - **Matrix Traversal** — Systematic exploration of 2D grids using specific spatial patterns.
     - *Patterns:* Spiral Matrix, Diagonal Traverse, Transpose Matrix.
 - **In-place Manipulation** — Modifying matrix structure without allocating significant extra space.
@@ -156,6 +172,8 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
     - *Patterns:* Number of Islands (DFS/BFS), Word Search (Backtracking).
 
 ## 8. Advanced Structures
+
+→ [trie.md](./trie.md) · [segment-tree.md](./segment-tree.md) · [advanced-structures.md](./advanced-structures.md) · DSU: [union-find.md](../02-algorithms/union-find.md)
 - **Trie (Prefix Tree)** — Optimized string storage and prefix retrieval; essential for dictionary-based apps.
     - *Patterns:* Implement Trie, Word Search II (Trie + DFS).
 - **Disjoint Set Union (DSU)** — Tracking connected components and dynamic merging with near-O(1) performance.

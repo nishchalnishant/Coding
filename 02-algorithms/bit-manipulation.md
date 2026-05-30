@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, bit-manipulation]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```text
@@ -574,7 +576,7 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP and O(3^N) subset enumeration
 - [Patterns Master](../../03-patterns/patterns-master.md) — bitmask recognition triggers
-- [Trie](../ds/trie.md) — XOR Trie for maximum XOR pair
+- [Trie](../01-data-structures/trie.md) — XOR Trie for maximum XOR pair
 
 ## Flashcards
 

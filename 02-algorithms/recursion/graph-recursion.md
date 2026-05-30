@@ -5,6 +5,8 @@ subtopic: Graph Recursion
 status: unread
 tags: [algorithms, recursion]
 ---
+
+← [Algorithms index](../README.md) · [Recursion hub](./README.md)
 ## First-Principles Map
 
 ```

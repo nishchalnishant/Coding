@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, problem-deep-dives]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md) · [↑ TOC / problem index](#jump-to-section)
 ## First-Principles Map
 
 ```text
@@ -48,16 +50,111 @@ DECISION
 
 # Problem Details (Descriptions + Pseudocode) — Google SDE-2
 
-This file expands every coding question mentioned in this folder into:
-- a short **problem description**
-- **pseudocode** for a standard interview solution
+Curated walkthroughs: **problem → pattern → pseudocode → gotchas**. Use any platform (LeetCode, EPI, etc.) for exact statements.
 
-Notes:
-- Titles are canonical; use any platform (LeetCode/EPI/etc.) to find the exact statement.
-- Pseudocode uses generic helpers like `HashMap`, `Deque`, `Heap`, `DSU`.
+**How to use this file**
+
+1. **Mock prep:** pick 1–2 problems from [L4 must-nail](#l4-must-nail-problems) you have not solved cold recently.
+2. **After a fail:** find the problem below → read pseudocode → redo without looking in 48h.
+3. **Pattern drill:** jump to a [section](#jump-to-section) → skim all entries in that family.
+4. **Theory first?** See topic files in [01-data-structures](../01-data-structures/README.md) and [02-algorithms](./README.md); use this file for **execution detail**.
+
+Notes: pseudocode uses generic `HashMap`, `Deque`, `Heap`, `DSU`. Duplicate headings are **aliases** (same solution) — TOC lists each problem once.
 
 ---
 
+<a id="jump-to-section"></a>
+## Jump to section
+
+| Section | Topic file |
+|---------|------------|
+| [Arrays / prefix / hashing](#section-arrays) | [array.md](../01-data-structures/array.md), [hashing.md](../01-data-structures/hashing.md) |
+| [Design-heavy DS](#section-design-ds) | [advanced-structures.md](../01-data-structures/advanced-structures.md) |
+| [Two pointers](#section-two-pointers) | [two-pointers.md](./two-pointers.md) |
+| [Sliding window](#section-sliding-window) | [sliding-window.md](./sliding-window.md) |
+| [Strings / KMP](#section-strings) | [string.md](./string.md) |
+| [Binary search](#section-binary-search) | [binary-search.md](./binary-search.md), [searching.md](./searching.md) |
+| [Stack / queue](#section-stack-queue) | [stack.md](../01-data-structures/stack.md), [queue.md](../01-data-structures/queue.md) |
+| [Linked list](#section-linked-list) | [linked-list.md](../01-data-structures/linked-list.md) |
+| [Trees / BST](#section-trees) | [tree.md](../01-data-structures/tree.md) |
+| [Graphs BFS/DFS/topo](#section-graphs) | [graphs.md](../01-data-structures/graphs.md), [graph.md](./graph.md) |
+| [Advanced graphs](#section-advanced-graphs) | [advanced-graphs.md](./advanced-graphs.md) |
+| [Heaps](#section-heaps) | [heap.md](../01-data-structures/heap.md) |
+| [Dynamic programming](#section-dp) | [dynamic-programming/README.md](./dynamic-programming/README.md) |
+| [DP hard / classic](#section-dp-hard) | [dynamic-programming/README.md](./dynamic-programming/README.md) |
+| [Backtracking](#section-backtracking) | [backtracking.md](./backtracking.md) |
+| [Union-Find](#section-union-find) | [union-find.md](./union-find.md) |
+| [Bit manipulation](#section-bit) | [bit-manipulation.md](./bit-manipulation.md) |
+| [Greedy](#section-greedy) | [greedy.md](./greedy.md) |
+| [Maths](#section-maths) | [maths.md](./maths.md) |
+| [Sorting / select](#section-sorting) | [sorting.md](./sorting.md) |
+| [Concurrency](#section-concurrency) | [concurrency.md](./concurrency.md) |
+| [Graph path construction](#section-graph-path) | [graph.md](./graph.md) |
+| [SDE-3 supplementary variants](#section-supplementary) | stretch |
+| [Quick reference table](#section-quick-ref) | pattern → variant map |
+
+---
+
+<a id="l4-must-nail-problems"></a>
+## L4 must-nail (quick pick list)
+
+High-frequency Google SDE-2 — start here if time is short:
+
+[Two Sum](#two-sum) · [Subarray Sum = K](#subarray-sum-equals-k) · [3Sum](#3sum) · [Longest Substring Without Repeat](#longest-substring-without-repeating-characters) · [Minimum Window](#minimum-window-substring) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Koko / BS on answer](#koko-eating-bananas) · [Daily Temperatures](#daily-temperatures) · [LRU Cache](#lru-cache) · [Reverse List](#reverse-linked-list) · [LCA](#lowest-common-ancestor-bst-general) · [Validate BST](#validate-bst) · [Number of Islands](#number-of-islands) · [Course Schedule](#course-schedule) · [Word Ladder](#word-ladder) · [Merge K Lists](#merge-k-sorted-lists) · [Top K Frequent](#top-k-frequent-elements) · [House Robber](#house-robber) · [Coin Change](#coin-change) · [Word Break](#word-break) · [Permutations](#permutations) · [Combination Sum](#combination-sum)
+
+---
+
+## Problem index (A–Z by section)
+
+**Arrays / prefix / hashing** — [Two Sum](#two-sum) · [Group Anagrams](#group-anagrams) · [Longest Consecutive](#longest-consecutive-sequence) · [Subarray Sum = K](#subarray-sum-equals-k) · [Product Except Self](#product-of-array-except-self) · [Maximum Subarray](#maximum-subarray-kadane) · [Merge Intervals](#merge-intervals) · [Insert Interval](#insert-interval) · [Next Permutation](#next-permutation) · [Majority Element](#majority-element)
+
+**Design-heavy** — [LRU Cache](#lru-cache) · [LFU Cache](#lfu-cache) · [Rate Limiter](#rate-limiter)
+
+**Two pointers** — [3Sum](#3sum) · [Container With Most Water](#container-with-most-water) · [Trapping Rain Water](#trapping-rain-water) · [Remove Duplicates](#remove-duplicates-from-sorted-array) · [Sort Colors](#sort-colors-dutch-flag)
+
+**Sliding window** — [Longest Substring No Repeat](#longest-substring-without-repeating-characters) · [Longest Repeating Char Replacement](#longest-repeating-character-replacement) · [Minimum Window](#minimum-window-substring) · [Find All Anagrams](#find-all-anagrams-in-a-string) · [Sliding Window Maximum](#sliding-window-maximum)
+
+**Strings** — [KMP / strStr](#implement-strstr-kmp)
+
+**Binary search** — [First/Last Position](#find-first-and-last-position-of-element) · [Lower/Upper Bound](#lower-upper-bound) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Min in Rotated Array](#find-minimum-in-rotated-sorted-array) · [Koko Eating Bananas](#koko-eating-bananas) · [Split Array Largest Sum](#split-array-largest-sum) · [Median Two Sorted Arrays](#median-of-two-sorted-arrays)
+
+**Stack / queue** — [Valid Parentheses](#valid-parentheses) · [Decode String](#decode-string) · [Daily Temperatures](#daily-temperatures) · [Largest Rectangle Histogram](#largest-rectangle-in-histogram) · [Eval RPN](#evaluate-reverse-polish-notation)
+
+**Linked list** — [Reverse List](#reverse-linked-list) · [Cycle II](#linked-list-cycle-ii) · [Copy Random Pointer](#copy-list-with-random-pointer) · [Merge Two Sorted](#merge-two-sorted-lists) · [Remove Nth From End](#remove-nth-from-end)
+
+**Trees / BST** — [Max Depth](#maximum-depth-of-binary-tree) · [Validate BST](#validate-bst) · [LCA](#lowest-common-ancestor-bst-general) · [Level Order](#binary-tree-level-order-traversal) · [Kth Smallest BST](#kth-smallest-in-bst) · [Max Path Sum](#binary-tree-maximum-path-sum) · [Serialize Tree](#serialize-and-deserialize-binary-tree)
+
+**Graphs** — [Number of Islands](#number-of-islands) · [Alien Dictionary](#alien-dictionary) · [Rotting Oranges](#rotting-oranges) · [Course Schedule](#course-schedule) · [Clone Graph](#clone-graph) · [Word Ladder](#word-ladder) · [Cheapest Flights K Stops](#cheapest-flights-within-k-stops) · [Network Delay / Dijkstra](#network-delay-time-dijkstra)
+
+**Advanced graphs** — [Critical Connections / Bridges](#critical-connections-bridges)
+
+**Heaps** — [Top K Frequent](#top-k-frequent-elements) · [Merge K Sorted Lists](#merge-k-sorted-lists) · [Median from Stream](#find-median-from-data-stream)
+
+**DP** — [House Robber](#house-robber) · [Coin Change](#coin-change) · [LIS](#longest-increasing-subsequence) · [LCS](#longest-common-subsequence) · [Edit Distance](#edit-distance) · [Word Break](#word-break)
+
+**DP hard** — [Regex Matching](#regular-expression-matching) · [Skyline Problem](#the-skyline-problem) · [Longest Valid Parentheses](#longest-valid-parentheses) · [Burst Balloons](#burst-balloons)
+
+**Backtracking** — [Permutations](#permutations) · [Subsets](#subsets) · [Subsets II](#subsets-ii) · [Combination Sum](#combination-sum) · [Word Search](#word-search)
+
+**Union-Find** — [Redundant Connection](#redundant-connection)
+
+**Bit manipulation** — [Single Number](#single-number) · [Counting Bits](#counting-bits) · [Total Hamming Distance](#total-hamming-distance) · [Max XOR Pair](#maximum-xor-of-two-numbers)
+
+**Greedy** — [Jump Game II](#jump-game-ii) · [Gas Station](#gas-station) · [Non-overlapping Intervals](#non-overlapping-intervals) · [Task Scheduler](#task-scheduler)
+
+**Maths** — [GCD/LCM](#gcd-lcm) · [Count Primes](#count-primes) · [Trailing Zeroes](#trailing-zeroes-in-factorial)
+
+**Sorting / select** — [Kth Largest](#kth-largest-element)
+
+**Concurrency** — [Print FooBar](#print-foobar-alternately) · [Dining Philosophers](#dining-philosophers-deadlock-free)
+
+**Graph path** — [Reconstruct Itinerary](#reconstruct-itinerary)
+
+**Supplementary (SDE-3)** — [Subarray Sums Divisible by K](#subarray-sums-divisible-by-k) · [Contiguous Array 0/1](#contiguous-array-0-1) · [Subarray Product < K](#subarray-product-less-than-k) · [K Closest Elements](#find-k-closest-elements) · [Ship Packages D Days](#capacity-to-ship-packages) · [Shortest Bridge](#shortest-bridge) · [All Nodes Distance K](#all-nodes-distance-k) · [Word Search II](#word-search-ii) · [Remove Invalid Parentheses](#remove-invalid-parentheses) · [House Robber II](#house-robber-ii) · [Maximal Square](#maximal-square) · [Longest String Chain](#longest-string-chain) · [Min Refueling Stops](#minimum-refueling-stops) · [Furthest Building](#furthest-building-ladders-bricks) · [Smallest Sufficient Team](#smallest-sufficient-team)
+
+---
+
+<a id="section-arrays"></a>
 ## Arrays / Prefix Sums / Hashing
 
 <a id="two-sum"></a>
@@ -258,6 +355,7 @@ return candidate
 
 ---
 
+<a id="section-design-ds"></a>
 ## Design-Heavy / Data Structures (Still Asked in Coding Rounds)
 
 <a id="lru-cache"></a>
@@ -355,6 +453,7 @@ allow():
 
 ---
 
+<a id="section-two-pointers"></a>
 ## Two Pointers
 
 <a id="3sum"></a>
@@ -469,6 +568,7 @@ while mid <= high:
 
 ---
 
+<a id="section-sliding-window"></a>
 ## Sliding Window
 
 <a id="longest-substring-without-repeating-characters"></a>
@@ -589,6 +689,7 @@ return ans
 
 ---
 
+<a id="section-strings"></a>
 ## Strings (Pattern Matching)
 **Important points:**
 - Monotonic deque of indices; values decreasing from front to back.
@@ -629,6 +730,7 @@ kmp(text, pat):
 
 ---
 
+<a id="section-binary-search"></a>
 ## Binary Search
 
 <a id="find-first-and-last-position-of-element"></a>
@@ -782,6 +884,7 @@ while lo<=hi:
 
 ---
 
+<a id="section-stack-queue"></a>
 ## Stack / Queue
 **Important points:**
 - Binary search on partition of the smaller array; enforce `leftMax <= rightMin`.
@@ -900,6 +1003,7 @@ return pop()
 
 ---
 
+<a id="section-linked-list"></a>
 ## Linked List
 
 <a id="reverse-linked-list"></a>
@@ -1006,6 +1110,7 @@ return dummy.next
 
 ---
 
+<a id="section-trees"></a>
 ## Trees / BST
 
 <a id="maximum-depth-of-binary-tree"></a>
@@ -1189,6 +1294,7 @@ deserialize():
 
 ---
 
+<a id="section-graphs"></a>
 ## Graphs (BFS/DFS/Topo)
 
 <a id="number-of-islands"></a>
@@ -1401,6 +1507,7 @@ return dist
 
 ---
 
+<a id="section-advanced-graphs"></a>
 ## Advanced Graphs (Occasionally in Google L4/L5)
 
 <a id="critical-connections-bridges"></a>
@@ -1434,6 +1541,7 @@ return bridges
 
 ---
 
+<a id="section-heaps"></a>
 ## Heaps
 
 <a id="top-k-frequent-elements"></a>
@@ -1492,6 +1600,7 @@ median():
 
 ---
 
+<a id="section-dp"></a>
 ## Dynamic Programming
 **Important points:**
 - Two heaps: max-heap for lower half, min-heap for upper half.
@@ -1630,6 +1739,7 @@ return dp[n]
 
 ---
 
+<a id="section-dp-hard"></a>
 ## DP (Hard / Classic)
 
 <a id="regular-expression-matching"></a>
@@ -1726,6 +1836,7 @@ return dp[0][n-1]
 
 ---
 
+<a id="section-backtracking"></a>
 ## Backtracking
 
 <a id="permutations"></a>
@@ -1838,6 +1949,7 @@ return false
 
 ---
 
+<a id="section-union-find"></a>
 ## Union-Find
 
 <a id="redundant-connection"></a>
@@ -1862,6 +1974,7 @@ return last
 
 ---
 
+<a id="section-bit"></a>
 ## Bit Manipulation
 
 <a id="single-number"></a>
@@ -1936,6 +2049,7 @@ return ans
 
 ---
 
+<a id="section-greedy"></a>
 ## Greedy
 **Important points:**
 - Alias for ‘Maximum XOR of Two Numbers’; same trie/prefix-set approach.
@@ -2020,6 +2134,7 @@ return max(slots, len(tasks))
 
 ---
 
+<a id="section-maths"></a>
 ## Maths
 
 <a id="gcd-lcm"></a>
@@ -2085,6 +2200,7 @@ return ans
 
 ---
 
+<a id="section-sorting"></a>
 ## Sorting
 
 <a id="kth-largest-element"></a>
@@ -2114,6 +2230,7 @@ while true:
 
 ---
 
+<a id="section-concurrency"></a>
 ## Concurrency (Sometimes appears as “coding” round)
 
 <a id="print-foobar-alternately"></a>
@@ -2158,6 +2275,7 @@ putDown(i):
 
 ---
 
+<a id="section-graph-path"></a>
 ## Graph Path Construction
 
 <a id="reconstruct-itinerary"></a>
@@ -2184,6 +2302,7 @@ return route
 
 ---
 
+<a id="section-supplementary"></a>
 ## Supplementary High-Yield Variants (SDE-3 Saturation)
 
 ### 1. Advanced Array & Hashing
@@ -2402,6 +2521,7 @@ return dp[(1 << num_skills) - 1]
 
 ---
 
+<a id="section-quick-ref"></a>
 ## Quick Reference Table — Variant Mapping
 
 | Topic | Base Problem | High-Yield Variant | Twist |

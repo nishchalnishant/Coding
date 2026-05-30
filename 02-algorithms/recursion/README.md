@@ -1,3 +1,18 @@
+# Recursion — Hub
+
+← [Algorithms index](../README.md) · [Algorithm decision tree](../algorithm_tree.md)
+
+| File | Use for |
+|------|---------|
+| **This file** | Types, templates (start here) |
+| [tips-and-gotchas.md](./tips-and-gotchas.md) | **Revision** — stack overflow, base cases |
+| [questions-bank.md](./questions-bank.md) | Leveled drills |
+| [aditya-verma.md](./aditya-verma.md) | Include/exclude, IP/OP patterns |
+| [recursion-to-dp.md](./recursion-to-dp.md) | Convert memo → tabulation |
+| [backtracking.md](../backtracking.md) | Choose / recurse / undo |
+
+---
+
 ## First-Principles Map
 
 ```
@@ -462,6 +477,6 @@ def generate_parentheses(n: int) -> list[str]:
 **Related files:**
 - [Backtracking](../backtracking.md) — recursion with undo; choose / recurse / unchoose template
 - [Dynamic Programming](../dynamic-programming/README.md) — memoized recursion → tabulation conversion
-- [Tree](../../ds/tree.md) — structural recursion on binary trees
+- [Tree](../01-data-structures/tree.md) — structural recursion on binary trees
 - [Divide and Conquer](../divide-and-conquer.md) — independent subproblems; parallel fork-join
 

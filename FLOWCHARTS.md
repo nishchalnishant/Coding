@@ -5,7 +5,7 @@ subtopic:
 status: unread
 tags: [root, flowcharts]
 ---
-# Google SDE-2 Prep — Flowcharts
+f# Google SDE-2 Prep — Flowcharts
 _Last updated: 2026-05-17 (gap audit pass)_
 
 How to use: each block = one file. Follow arrows for key decision points, trigger conditions, complexities, and canonical problems. Use this for quick revision before a session or on interview day.

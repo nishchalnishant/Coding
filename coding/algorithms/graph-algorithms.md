@@ -1246,3 +1246,37 @@ See full Bellman-Ford solution in the next section.
 ## See Also
 
 [[graph]] | [[union-find]] | [[dynamic-programming]] | [[binary-search]]
+### Bellman-Ford (Negative Weights)
+
+> [!example] Problem
+> Given a directed weighted graph that may contain negative edges, find shortest paths from a source and detect negative cycles reachable from it.
+
+> [!info] Approach
+> - **WHY:** Dijkstra does not work with negative edges. Bellman-Ford relaxes every edge `V-1` times, which is enough for shortest paths in a graph with no negative cycles.
+> - **WHAT:** Initialize distances to infinity except the source. Repeatedly relax all edges. One more pass detects a negative cycle.
+> - **HOW:** If `dist[u] + w < dist[v]`, update `dist[v]`. After `V-1` passes, if any edge can still relax, a negative cycle exists.
+
+> [!note]- Python Solution
+> ```python
+> def bellman_ford(n: int, edges: list[tuple[int, int, int]], source: int) -> tuple[list[float], bool]:
+>     dist = [float("inf")] * n
+>     dist[source] = 0
+>     for _ in range(n - 1):
+>         updated = False
+>         for u, v, w in edges:
+>             if dist[u] != float("inf") and dist[u] + w < dist[v]:
+>                 dist[v] = dist[u] + w
+>                 updated = True
+>         if not updated:
+>             break
+>     has_negative_cycle = any(
+>         dist[u] != float("inf") and dist[u] + w < dist[v] for u, v, w in edges
+>     )
+>     return dist, has_negative_cycle
+> ```
+
+> [!success] Complexity
+> O(VE) time, O(V) space.
+
+> [!tip] Alternatives
+> For graphs with only non-negative edges, Dijkstra is faster; for DAGs, topological relaxation is linear.

@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, trie]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -396,7 +398,7 @@ def delete(self, word: str) -> bool:
 
 ### Aho-Corasick (multi-pattern matching in a stream)
 
-Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../algo/string.md) for implementation sketch.
+Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../02-algorithms/string.md) for implementation sketch.
 
 ---
 
@@ -453,7 +455,7 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 
 ## See also
 
-- [backtracking.md](../algo/backtracking.md) — Word Search II uses Trie + backtracking together
-- [bit-manipulation.md](../algo/bit-manipulation.md) — XOR Trie for max XOR pair
-- [string.md](../algo/string.md) — Aho-Corasick for multi-pattern matching
+- [backtracking.md](../02-algorithms/backtracking.md) — Word Search II uses Trie + backtracking together
+- [bit-manipulation.md](../02-algorithms/bit-manipulation.md) — XOR Trie for max XOR pair
+- [string.md](../02-algorithms/string.md) — Aho-Corasick for multi-pattern matching
 - [hashing.md](hashing.md) — alternative for exact word lookups when prefix search not needed

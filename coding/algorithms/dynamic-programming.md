@@ -1882,3 +1882,34 @@ difficulty: mixed
 ## See Also
 
 [[recursion]] | [[greedy]] | [[graph-algorithms]] | [[tree]] | [[string-algorithms]]
+### Longest Common Substring
+
+> [!example] Problem
+> Find the length of the longest common contiguous substring shared by two strings.
+
+> [!info] Approach
+> - **WHY:** Unlike LCS, contiguity matters. A mismatch breaks the chain, so the DP state must reset to zero on mismatch.
+> - **WHAT:** `dp[i][j]` is the length of the longest common substring ending at `s1[i-1]` and `s2[j-1]`.
+> - **HOW:** If characters match, extend the diagonal: `dp[i][j] = dp[i-1][j-1] + 1`; else `dp[i][j] = 0`. Track the global maximum.
+
+> [!note]- Python Solution
+> ```python
+> def longest_common_substring(s1: str, s2: str) -> int:
+>     m, n = len(s1), len(s2)
+>     prev = [0] * (n + 1)
+>     best = 0
+>     for i in range(1, m + 1):
+>         cur = [0] * (n + 1)
+>         for j in range(1, n + 1):
+>             if s1[i - 1] == s2[j - 1]:
+>                 cur[j] = prev[j - 1] + 1
+>                 best = max(best, cur[j])
+>         prev = cur
+>     return best
+> ```
+
+> [!success] Complexity
+> O(mn) time, O(n) space with row compression.
+
+> [!tip] Alternatives
+> Suffix automaton or suffix array can solve richer substring problems faster, but DP is the clean interview answer.

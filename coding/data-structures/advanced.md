@@ -1300,3 +1300,40 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 ## See Also
 
 [[segment-tree]] | [[union-find]] | [[trie]] | [[string-algorithms]]
+### Fenwick Tree Range Update and Point Query
+
+> [!example] Problem
+> Support adding a value to every element in a range and querying a single point efficiently.
+
+> [!info] Approach
+> - **WHY:** Range add can be transformed into point updates on a difference structure, and point query becomes a prefix sum.
+> - **WHAT:** Store a Fenwick tree over the difference array.
+> - **HOW:** To add `delta` on `[l, r]`, update `l` by `+delta` and `r+1` by `-delta`; query prefix sum at `i` to get the actual value.
+
+> [!note]- Python Solution
+> ```python
+> class Fenwick:
+>     def __init__(self, n: int):
+>         self.n = n
+>         self.bit = [0] * (n + 1)
+> 
+>     def add(self, i: int, delta: int) -> None:
+>         i += 1
+>         while i <= self.n:
+>             self.bit[i] += delta
+>             i += i & -i
+> 
+>     def sum(self, i: int) -> int:
+>         i += 1
+>         res = 0
+>         while i > 0:
+>             res += self.bit[i]
+>             i -= i & -i
+>         return res
+> ```
+
+> [!success] Complexity
+> O(log n) per update/query, O(n) space.
+
+> [!tip] Alternatives
+> Segment trees handle more complex range aggregates, but Fenwick trees are cleaner for prefix-based operations.

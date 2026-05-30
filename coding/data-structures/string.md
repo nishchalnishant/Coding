@@ -1206,3 +1206,38 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 ## See Also
 
 [[string-algorithms]] | [[sliding-window]] | [[hashing]] | [[two-pointers]] | [[dynamic-programming]]
+### String Compression
+
+> [!example] Problem
+> Compress a character array in place by replacing repeated runs with the character followed by the count.
+
+> [!info] Approach
+> - **WHY:** We need to write compressed output back into the same array, so one pointer reads runs and another pointer writes results.
+> - **WHAT:** Scan each run of identical characters, write the character once, then write the count digits if the run length is greater than one.
+> - **HOW:** Maintain `read` and `write` pointers. For each run, count length and emit the character plus its decimal digits.
+
+> [!note]- Python Solution
+> ```python
+> def compress(chars: list[str]) -> int:
+>     write = 0
+>     read = 0
+>     while read < len(chars):
+>         ch = chars[read]
+>         start = read
+>         while read < len(chars) and chars[read] == ch:
+>             read += 1
+>         chars[write] = ch
+>         write += 1
+>         count = read - start
+>         if count > 1:
+>             for digit in str(count):
+>                 chars[write] = digit
+>                 write += 1
+>     return write
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) extra space.
+
+> [!tip] Alternatives
+> This same read/write pointer idea is useful for deduplication, filtering, and in-place run-length encoding.

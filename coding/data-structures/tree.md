@@ -1445,3 +1445,57 @@ difficulty: mixed
 ## See Also
 
 [[graph]] | [[dynamic-programming]] | [[recursion]] | [[heap]]
+### Binary Tree Boundary Traversal
+
+> [!example] Problem
+> Return the boundary of a binary tree: root, left boundary, leaves, and right boundary in reverse.
+
+> [!info] Approach
+> - **WHY:** The boundary is not a standard traversal; it is a combination of three ordered pieces with non-overlapping responsibilities.
+> - **WHAT:** Collect the left boundary excluding leaves, then all leaves left-to-right, then the right boundary excluding leaves and reverse it.
+> - **HOW:** Handle edge cases carefully so the root and leaf nodes are not duplicated.
+
+> [!note]- Python Solution
+> ```python
+> def boundaryOfBinaryTree(root):
+>     if not root:
+>         return []
+> 
+>     def is_leaf(node):
+>         return node and not node.left and not node.right
+> 
+>     boundary = [root.val] if not is_leaf(root) else []
+> 
+>     node = root.left
+>     while node:
+>         if not is_leaf(node):
+>             boundary.append(node.val)
+>         node = node.left if node.left else node.right
+> 
+>     def add_leaves(node):
+>         if not node:
+>             return
+>         if is_leaf(node):
+>             boundary.append(node.val)
+>             return
+>         add_leaves(node.left)
+>         add_leaves(node.right)
+> 
+>     add_leaves(root)
+> 
+>     right = []
+>     node = root.right
+>     while node:
+>         if not is_leaf(node):
+>             right.append(node.val)
+>         node = node.right if node.right else node.left
+> 
+>     boundary.extend(reversed(right))
+>     return boundary
+> ```
+
+> [!success] Complexity
+> O(n) time, O(h) recursion/auxiliary stack in the leaf traversal.
+
+> [!tip] Alternatives
+> Standard boundary problems are mostly about careful node inclusion rules, not complex traversal logic.

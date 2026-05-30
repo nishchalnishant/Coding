@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, string]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```text
@@ -624,8 +626,8 @@ class AhoCorasick:
 
 ## See also
 
-- [Array](../ds/array.md) — sliding window on arrays applies identically to strings
-- [Hashing](../ds/hashing.md) — frequency maps for anagram detection; rolling hash
+- [Array](../01-data-structures/array.md) — sliding window on arrays applies identically to strings
+- [Hashing](../01-data-structures/hashing.md) — frequency maps for anagram detection; rolling hash
 - [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance, LPS
 - [Patterns Master](../../03-patterns/patterns-master.md) — string pattern recognition triggers
 

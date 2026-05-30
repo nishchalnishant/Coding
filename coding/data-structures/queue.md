@@ -1377,3 +1377,36 @@ difficulty: mixed
 ## See Also
 
 [[stack]] | [[graph]] | [[sliding-window]] | [[binary-search]]
+### Design Circular Deque
+
+> [!example] Problem
+> Design a fixed-size circular deque supporting insert/delete at both ends and front/rear access.
+
+> [!info] Approach
+> - **WHY:** A circular buffer lets us use O(1) index arithmetic without shifting elements.
+> - **WHAT:** Maintain `front`, `rear`, `size`, and an array of capacity `k`.
+> - **HOW:** Update indices with modulo arithmetic. For example, moving left uses `(idx - 1 + k) % k` and moving right uses `(idx + 1) % k`.
+
+> [!note]- Python Solution
+> ```python
+> class MyCircularDeque:
+>     def __init__(self, k: int):
+>         self.arr = [0] * k
+>         self.k = k
+>         self.front = 0
+>         self.size = 0
+> 
+>     def insertFront(self, value: int) -> bool:
+>         if self.isFull():
+>             return False
+>         self.front = (self.front - 1 + self.k) % self.k
+>         self.arr[self.front] = value
+>         self.size += 1
+>         return True
+> ```
+
+> [!success] Complexity
+> O(1) for every operation, O(k) space.
+
+> [!tip] Alternatives
+> Linked-list deque is easier to generalize but has more pointer overhead than a circular array.

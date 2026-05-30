@@ -1847,3 +1847,35 @@ difficulty: mixed
 ## See Also
 
 [[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]
+### First Missing Positive
+
+> [!example] Problem
+> Given an unsorted array, return the smallest missing positive integer.
+
+> [!info] Approach
+> - **WHY:** Values in `[1..n]` can be placed into their correct indices in-place. Anything outside that range can be ignored.
+> - **WHAT:** Cyclic sort: keep swapping `nums[i]` into position `nums[i] - 1` while it is in range and not already placed.
+> - **HOW:** After placement, scan left to right; the first index `i` where `nums[i] != i + 1` gives the answer.
+
+> [!note]- Python Solution
+> ```python
+> def first_missing_positive(nums: list[int]) -> int:
+>     n = len(nums)
+>     i = 0
+>     while i < n:
+>         x = nums[i]
+>         if 1 <= x <= n and nums[x - 1] != x:
+>             nums[i], nums[x - 1] = nums[x - 1], nums[i]
+>         else:
+>             i += 1
+>     for i, x in enumerate(nums):
+>         if x != i + 1:
+>             return i + 1
+>     return n + 1
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) extra space.
+
+> [!tip] Alternatives
+> A hash set is simpler but uses O(n) extra space; cyclic sort is the canonical follow-up proof question.

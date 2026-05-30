@@ -597,7 +597,7 @@ difficulty: mixed
 
 ---
 
-### Smallest Range Covering Elements from K Lists
+### Smallest Range Covering Elements from K Lists (Heap Variant)
 
 > [!example] Problem
 > Find the smallest range `[a, b]` such that at least one element from each of `k` lists lies in the range.
@@ -938,3 +938,41 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[graph-algorithms]] | [[sliding-window]] | [[two-pointers]]
+### Smallest Range Covering Elements from K Lists
+
+> [!example] Problem
+> Given `k` sorted lists, find the smallest range that includes at least one number from each list.
+
+> [!info] Approach
+> - **WHY:** To keep a valid range, we must always know the current minimum and maximum among the chosen elements from each list.
+> - **WHAT:** Keep one pointer per list and a min-heap of the current heads. Track the current maximum separately.
+> - **HOW:** Pop the smallest value from the heap, update the best range, advance that list, and push the next value. Stop when one list is exhausted.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> 
+> def smallest_range(nums: list[list[int]]) -> list[int]:
+>     heap = []
+>     current_max = float("-inf")
+>     for i, arr in enumerate(nums):
+>         heapq.heappush(heap, (arr[0], i, 0))
+>         current_max = max(current_max, arr[0])
+>     best = [float("-inf"), float("inf")]
+>     while len(heap) == len(nums):
+>         current_min, list_idx, elem_idx = heapq.heappop(heap)
+>         if current_max - current_min < best[1] - best[0]:
+>             best = [current_min, current_max]
+>         if elem_idx + 1 == len(nums[list_idx]):
+>             break
+>         next_val = nums[list_idx][elem_idx + 1]
+>         current_max = max(current_max, next_val)
+>         heapq.heappush(heap, (next_val, list_idx, elem_idx + 1))
+>     return best
+> ```
+
+> [!success] Complexity
+> O(N log k) time where `N` is the total number of pushed elements; O(k) space.
+
+> [!tip] Alternatives
+> Sliding a window over the flattened sorted values is harder; the heap is the canonical solution for k sorted lists.

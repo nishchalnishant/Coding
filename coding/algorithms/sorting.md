@@ -1606,3 +1606,29 @@ difficulty: mixed
 ## See Also
 
 [[divide-and-conquer]] | [[heap]] | [[binary-search]] | [[greedy]]
+### Wiggle Sort II (Median Split)
+
+> [!example] Problem
+> Rearrange an array so that `nums[0] < nums[1] > nums[2] < nums[3]...`.
+
+> [!info] Approach
+> - **WHY:** The median separates smaller and larger elements. Interleaving the two halves around the median avoids adjacent violations.
+> - **WHAT:** Find the median, then place elements using virtual indexing so the larger half fills odd positions and the smaller half fills even positions.
+> - **HOW:** Sort and split around the median; place the larger half into odd slots and the smaller half into even slots in reverse order.
+
+> [!note]- Python Solution
+> ```python
+> def wiggle_sort(nums: list[int]) -> None:
+>     nums.sort()
+>     half = (len(nums) + 1) // 2
+>     small = nums[:half][::-1]
+>     large = nums[half:][::-1]
+>     nums[::2] = small
+>     nums[1::2] = large
+> ```
+
+> [!success] Complexity
+> O(n log n) time for the simple sort-based version, O(n) extra space.
+
+> [!tip] Alternatives
+> An O(n) quickselect + 3-way partition version exists, but the sort-based solution is easier to reason about in interviews.

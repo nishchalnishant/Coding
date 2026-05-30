@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, hashing]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -435,15 +437,15 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 ## 4. Common Interview Problems
 
 ### Easy
-- [Two Sum](../algo/problem-deep-dives.md#two-sum) — Complement map; single pass.
+- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) — Complement map; single pass.
 - **Valid Anagram** — `Counter(s) == Counter(t)`.
 - **First Unique Character** — `Counter`; find first with count 1.
 
 ### Medium
-- [Group Anagrams](../algo/problem-deep-dives.md#group-anagrams) — `sorted(word)` or count-tuple as key.
-- [Subarray Sum Equals K](../algo/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen = {0:1}`.
-- [Longest Consecutive Sequence](../algo/problem-deep-dives.md#longest-consecutive-sequence) — Set lookup; only start chain from `x` if `x-1` not in set.
-- [LRU Cache](../algo/problem-deep-dives.md#lru-cache) — Map + DLL; dummy head/tail.
+- [Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams) — `sorted(word)` or count-tuple as key.
+- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen = {0:1}`.
+- [Longest Consecutive Sequence](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence) — Set lookup; only start chain from `x` if `x-1` not in set.
+- [LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) — Map + DLL; dummy head/tail.
 - **Insert Delete GetRandom O(1)** — Map + array; swap-with-last on delete.
 - **Contiguous Array (equal 0/1)** — Map `0→-1`; prefix sum + first-seen map.
 
@@ -459,12 +461,12 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Group Anagrams](../algo/problem-deep-dives.md#group-anagrams)** | Hash by Canonical Key | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
-| **[Longest Consecutive](../algo/problem-deep-dives.md#longest-consecutive-sequence)** | "Longest streak, unsorted" | Set; only start chain if `x-1` not in set | Without the "start only" guard: O(N²); with it: amortized O(N). |
-| **[LRU Cache](../algo/problem-deep-dives.md#lru-cache)** | "O(1) get/put with eviction" | Map `key→DLL node`; move on access; evict tail | Dummy head/tail eliminate all null-check edge cases in `_remove`. |
-| **[Subarray Sum = K](../algo/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum" | `seen={0:1}`; `count += seen[prefix-K]` | Works with negatives; sliding window doesn't. `seen[0]=1` is critical. |
+| **[Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams)** | Hash by Canonical Key | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
+| **[Longest Consecutive](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence)** | "Longest streak, unsorted" | Set; only start chain if `x-1` not in set | Without the "start only" guard: O(N²); with it: amortized O(N). |
+| **[LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache)** | "O(1) get/put with eviction" | Map `key→DLL node`; move on access; evict tail | Dummy head/tail eliminate all null-check edge cases in `_remove`. |
+| **[Subarray Sum = K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum" | `seen={0:1}`; `count += seen[prefix-K]` | Works with negatives; sliding window doesn't. `seen[0]=1` is critical. |
 | **Contiguous Array** | "Equal 0s and 1s in subarray" | Map `0→-1`; find longest zero-sum subarray | Reduces to "longest subarray with sum 0" — recognize the transformation. |
-| **[Minimum Window](../algo/problem-deep-dives.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right until valid; shrink left while valid | `have == required` condition based on frequency saturation, not total count. |
+| **[Minimum Window](../02-algorithms/problem-deep-dives.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right until valid; shrink left while valid | `have == required` condition based on frequency saturation, not total count. |
 | **Insert Delete GetRandom** | "O(1) all three operations" | Map + array; swap-with-last on delete | Update `_idx_map[last] = idx` before deleting the target's entry. |
 | **Design HashMap** | "Hash map from scratch" | Array of buckets; chaining with linear scan | Prime capacity; handle `equals` by value; tombstone for open addressing delete. |
 | **4Sum Count** | "Count quadruples summing to 0" | Hash sums of `A+B`; count complements in `C+D` | O(N²) space and time — better than O(N⁴) brute force. |
@@ -496,7 +498,7 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 ## See also
 
 - [Array](array.md) — prefix sum + map for subarray problems
-- [String](../algo/string.md) — anagram key design; rolling hash (Rabin-Karp)
+- [String](../02-algorithms/string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](linked-list.md) — LRU cache DLL component
 - [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers
 

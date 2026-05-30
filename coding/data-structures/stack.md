@@ -1227,3 +1227,30 @@ difficulty: mixed
 ## See Also
 
 [[queue]] | [[dynamic-programming]] | [[monotonic-techniques]]
+### Next Greater Element I
+
+> [!example] Problem
+> For each element in `nums1`, find the first greater element to its right in `nums2`.
+
+> [!info] Approach
+> - **WHY:** We need the next greater element for many values, so we preprocess `nums2` with a monotonic stack to avoid repeated scans.
+> - **WHAT:** Scan `nums2` once with a decreasing stack. When a larger value arrives, it resolves all smaller values on the stack.
+> - **HOW:** Store a map `value -> next greater value` and then answer each query from `nums1` in O(1).
+
+> [!note]- Python Solution
+> ```python
+> def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
+>     stack = []
+>     nxt = {}
+>     for x in nums2:
+>         while stack and stack[-1] < x:
+>             nxt[stack.pop()] = x
+>         stack.append(x)
+>     return [nxt.get(x, -1) for x in nums1]
+> ```
+
+> [!success] Complexity
+> O(n) time, O(n) space.
+
+> [!tip] Alternatives
+> The same monotonic stack pattern generalizes to next greater/smaller element variants and stock-span style problems.

@@ -1400,3 +1400,31 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ## See Also
 
 [[string-algorithms]] | [[backtracking]] | [[hashing]]
+### Implement Trie II (Count Prefixes and Equal Words)
+
+> [!example] Problem
+> Extend a trie so you can count how many words equal a string and how many words have a given prefix.
+
+> [!info] Approach
+> - **WHY:** Standard trie nodes need counters, not just child pointers, when queries ask for multiplicity.
+> - **WHAT:** Each node stores `pass` (words passing through) and `end` (words ending here).
+> - **HOW:** Increment `pass` while descending during insertion and increment `end` at the final node. Decrement counters on erase.
+
+> [!note]- Python Solution
+> ```python
+> class TrieNode:
+>     def __init__(self):
+>         self.children = {}
+>         self.pass_count = 0
+>         self.end_count = 0
+> 
+> class Trie:
+>     def __init__(self):
+>         self.root = TrieNode()
+> ```
+
+> [!success] Complexity
+> O(L) per insert/search/erase, where `L` is the word length.
+
+> [!tip] Alternatives
+> A hash map can count whole words, but prefix counts require a trie or another prefix-aware structure.

@@ -1246,3 +1246,31 @@ difficulty: mixed
 ## See Also
 
 [[two-pointers]] | [[hashing]] | [[string]] | [[queue]]
+### Maximum Number of Vowels in a Substring of Given Length
+
+> [!example] Problem
+> Given a string and a fixed window length `k`, return the maximum number of vowels in any substring of length `k`.
+
+> [!info] Approach
+> - **WHY:** The window size is fixed, so every move only removes one character and adds one character. That makes the update O(1) per step.
+> - **WHAT:** Maintain a running vowel count for the current window and slide it across the string.
+> - **HOW:** Initialize the first window, then for each step subtract the left character, add the new right character, and update the best count.
+
+> [!note]- Python Solution
+> ```python
+> def max_vowels(s: str, k: int) -> int:
+>     vowels = set("aeiou")
+>     cur = sum(ch in vowels for ch in s[:k])
+>     best = cur
+>     for i in range(k, len(s)):
+>         cur += s[i] in vowels
+>         cur -= s[i - k] in vowels
+>         best = max(best, cur)
+>     return best
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space.
+
+> [!tip] Alternatives
+> The same fixed-window pattern works for average, distinct counts, and frequency-based substring problems.

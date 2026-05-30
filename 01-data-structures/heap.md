@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, heap]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -381,14 +383,14 @@ For P99 latency from a live request stream:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Merge K Sorted Lists](../algo/problem-deep-dives.md#merge-k-sorted-lists)** | K-Way Merge (Min-Heap) | "Smallest among K heads" | Min-heap `(val, list_id, node)` | Tie-break: include `list_id` as second element to avoid comparing nodes. |
-| **[Kth Largest Element](../algo/problem-deep-dives.md#kth-largest-element)** | "Rank without full sort" | QuickSelect O(N) avg or min-heap-K | QuickSelect mutates array; heap is cleaner for streams. Confirm if K can equal N. |
-| **[Top K Frequent](../algo/problem-deep-dives.md#top-k-frequent-elements)** | "K by frequency" | Count + min-heap-K, or bucket sort | Bucket sort is O(N) — prefer when K not given or K = N. |
-| **[Find Median from Stream](../algo/problem-deep-dives.md#find-median-from-data-stream)** | "Median as data arrives" | Two heaps: max-lo + min-hi | Even count → average of tops; ensure `lo` stays ≥ `hi` in size. |
+| **[Merge K Sorted Lists](../02-algorithms/problem-deep-dives.md#merge-k-sorted-lists)** | K-Way Merge (Min-Heap) | "Smallest among K heads" | Min-heap `(val, list_id, node)` | Tie-break: include `list_id` as second element to avoid comparing nodes. |
+| **[Kth Largest Element](../02-algorithms/problem-deep-dives.md#kth-largest-element)** | "Rank without full sort" | QuickSelect O(N) avg or min-heap-K | QuickSelect mutates array; heap is cleaner for streams. Confirm if K can equal N. |
+| **[Top K Frequent](../02-algorithms/problem-deep-dives.md#top-k-frequent-elements)** | "K by frequency" | Count + min-heap-K, or bucket sort | Bucket sort is O(N) — prefer when K not given or K = N. |
+| **[Find Median from Stream](../02-algorithms/problem-deep-dives.md#find-median-from-data-stream)** | "Median as data arrives" | Two heaps: max-lo + min-hi | Even count → average of tops; ensure `lo` stays ≥ `hi` in size. |
 | **K Closest Points** | "Nearest K in Euclidean" | Max-heap-K on `x²+y²` | Use squared distance — avoids `sqrt` and float precision. |
 | **IPO** | "Max capital after K projects" | Sort by capital; max-heap of profits | Projects unlock incrementally as capital grows — pointer into sorted list. |
 | **Reorganize String** | "No two adjacent same char" | Max-heap by freq; place, then swap back | Impossible if `max_freq > (n+1)//2`. Handle tie when two chars have equal freq. |
-| **[Task Scheduler](../algo/problem-deep-dives.md#task-scheduler)** | "Min time with cooldown n" | `(max_f-1)*(n+1) + count_max_f`, cap at len | The cap: `max(formula, len(tasks))` — when variety fills the idle slots. |
+| **[Task Scheduler](../02-algorithms/problem-deep-dives.md#task-scheduler)** | "Min time with cooldown n" | `(max_f-1)*(n+1) + count_max_f`, cap at len | The cap: `max(formula, len(tasks))` — when variety fills the idle slots. |
 | **Sliding Window Median** | "Median in moving window of size k" | Two heaps + lazy deletion dict | Lazy delete: only remove from top when it surfaces, not immediately. |
 | **Smallest Range (K Lists)** | "Smallest range containing one from each list" | K-way merge + track global max | Advance the list with the current minimum; stop when any list exhausted. |
 | **Last Stone Weight** [E] | "Repeatedly smash two heaviest stones" | Max-heap; pop two, push difference if nonzero | Python has min-heap only — negate values to simulate max-heap. |
@@ -417,9 +419,9 @@ For P99 latency from a live request stream:
 
 ## See also
 
-- [Sorting](../algo/sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
+- [Sorting](../02-algorithms/sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
 - [Queue](queue.md) — priority queue vs FIFO; blocking queue for concurrency
-- [Graph](../algo/graph.md) — Dijkstra's algorithm uses a min-heap
+- [Graph](../02-algorithms/graph.md) — Dijkstra's algorithm uses a min-heap
 - [Patterns Master](../03-patterns/patterns-master.md) — top-K and merge-K pattern triggers
 
 ## Flashcards

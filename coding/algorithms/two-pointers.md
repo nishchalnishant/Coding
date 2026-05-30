@@ -918,3 +918,35 @@ difficulty: mixed
 ## See Also
 
 [[binary-search]] | [[sliding-window]] | [[array]] | [[linked-list]]
+### Reverse Vowels of a String
+
+> [!example] Problem
+> Reverse only the vowels in a string, leaving all other characters in place.
+
+> [!info] Approach
+> - **WHY:** The vowels to swap form a sparse subset, so moving two pointers inward and skipping non-vowels is optimal.
+> - **WHAT:** Two pointers from the ends; advance each pointer until it points to a vowel, then swap.
+> - **HOW:** Maintain a vowel set; while `left < right`, skip non-vowels on both sides and swap the vowel pair.
+
+> [!note]- Python Solution
+> ```python
+> def reverse_vowels(s: str) -> str:
+>     vowels = set("aeiouAEIOU")
+>     chars = list(s)
+>     left, right = 0, len(chars) - 1
+>     while left < right:
+>         while left < right and chars[left] not in vowels:
+>             left += 1
+>         while left < right and chars[right] not in vowels:
+>             right -= 1
+>         chars[left], chars[right] = chars[right], chars[left]
+>         left += 1
+>         right -= 1
+>     return "".join(chars)
+> ```
+
+> [!success] Complexity
+> O(n) time, O(n) space for the mutable character list.
+
+> [!tip] Alternatives
+> The same two-pointer skip pattern works for palindrome checks, partitioning, and sorted-array pair problems.

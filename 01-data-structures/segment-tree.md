@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, segment-tree]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```

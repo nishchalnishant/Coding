@@ -1207,3 +1207,31 @@ difficulty: mixed
 ## See Also
 
 [[array]] | [[sliding-window]] | [[string]] | [[two-pointers]]
+### Ransom Note
+
+> [!example] Problem
+> Determine whether a ransom note can be constructed from the letters in a magazine string.
+
+> [!info] Approach
+> - **WHY:** This is a frequency matching problem; each character in the note must be available at least as many times as needed.
+> - **WHAT:** Count letters in the magazine and decrement as you consume letters from the note.
+> - **HOW:** Use a hash map or `Counter`; if any needed character drops below zero, return false.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+> 
+> def can_construct(ransom_note: str, magazine: str) -> bool:
+>     count = Counter(magazine)
+>     for ch in ransom_note:
+>         if count[ch] == 0:
+>             return False
+>         count[ch] -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> O(m + n) time, O(1) extra space for lowercase letters.
+
+> [!tip] Alternatives
+> Sort + two pointers works too, but frequency counting is the direct interview answer.

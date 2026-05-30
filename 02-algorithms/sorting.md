@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, sorting]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```
@@ -510,7 +512,7 @@ For distributed sort (MapReduce model):
 ## See also
 
 - [Divide and Conquer](divide-and-conquer.md) — merge sort and quicksort derivation
-- [Heap](../ds/heap.md) — heap sort and top-K streaming
+- [Heap](../01-data-structures/heap.md) — heap sort and top-K streaming
 - [Two Pointers](two-pointers.md) — Dutch National Flag, Meeting Rooms II
 - [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers
 

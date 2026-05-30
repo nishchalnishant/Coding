@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, sliding-window]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```text
@@ -331,3 +333,53 @@ def max_sliding_window(nums, k):
 - **Single character string:** Works naturally; verify `left` doesn't go negative.
 - **Unicode / case sensitivity:** Clarify with interviewer. `s.lower()` if case-insensitive.
 - **"Exactly K" problems:** `exactly(k) = at_most(k) - at_most(k-1)` — key trick for "exactly K distinct" variants.
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Variant | Click moment | Core logic | Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **Longest Substring Without Repeat** | Variable | Jump `left` past last index of char | `while s[right] in seen: left = max(left, seen[c]+1)` | Only jump if char is **inside** window. |
+| **Minimum Window Substring** | Variable + freq | Expand until valid; shrink while valid | Track `have` vs `need` per character | Shrink only when window still valid; record on valid shrink. |
+| **Longest Repeating Char Replacement** | Variable | Window valid if `len - max_freq <= k` | Track max frequency in window | Answer uses max freq seen — OK if max_freq drops on shrink. |
+| **Subarray Sum ≥ Target** | Variable | Shrink while sum ≥ target | Greedy shrink minimizes length | Return 0 or -1 if no window; all-positive enables this variant. |
+| **Sliding Window Maximum** | Monotonic deque | Front = max; pop expired indices | Each index in/out deque once | Store **indices** in deque, not values. |
+| **Find All Anagrams** | Fixed | Window size = len(p) | Match frequency or match-count | Fixed window — slide by one char at a time. |
+| **Permutation in String** | Fixed | Same as anagram | `have == need` when all chars satisfied | Clarify if permutation must be contiguous (yes). |
+| **Subarrays with K Distinct** | At-most trick | `exactly(K) = atMost(K) - atMost(K-1)` | Two passes with helper | "Exactly K" is not monotonic — never use one sliding window for exactly. |
+
+Walkthroughs: [problem-deep-dives.md](../problem-deep-dives.md). String windows: [string.md](../01-data-structures/string.md).
+
+---
+
+## Quick Revision Triggers
+
+- **Contiguous + longest/shortest with constraint** → sliding window (variable unless fixed size given).
+- **Fixed size K** → add on enter, subtract on leave; O(n).
+- **Negatives in numeric subarray sum** → prefix sum + map, **not** sliding window ([array.md](../01-data-structures/array.md)).
+- **Max/min in each window** → monotonic deque ([queue.md](../01-data-structures/queue.md)).
+- **Exactly K distinct** → at-most(K) − at-most(K−1).
+
+---
+
+## See also
+
+- [two-pointers.md](./two-pointers.md) — opposite-end scans; often combined with windows on strings
+- [string.md](./string.md) — KMP, Rabin-Karp (pattern matching, not window)
+- [01-data-structures/string.md](../01-data-structures/string.md) — anagram / window canonical problems
+- [01-data-structures/array.md](../01-data-structures/array.md) — prefix sum when window fails
+- [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — sliding window triggers
+
+---
+
+## Flashcards
+
+**Contiguous subarray/substring with constraint → variable sliding window: expand right, shrink left while invalid.?** #flashcard  
+Contiguous subarray/substring with constraint → variable sliding window: expand right, shrink left while invalid.
+
+**Exactly K distinct subarrays → atMost(K) - atMost(K-1); do not use one window for "exactly".?** #flashcard  
+Exactly K distinct subarrays → atMost(K) - atMost(K-1); do not use one window for "exactly".
+
+**Sliding window maximum → monotonic deque of indices; O(n) because each index pushed/popped once.?** #flashcard  
+Sliding window maximum → monotonic deque of indices; O(n) because each index pushed/popped once.

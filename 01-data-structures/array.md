@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, array]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -475,13 +477,13 @@ def reservoir_sample(stream, k: int) -> list:
 ## 4. Common Interview Problems
 
 ### Easy
-- [Two Sum](../algo/problem-deep-dives.md#two-sum) — Hash map for complement; or two pointers if sorted.
+- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) — Hash map for complement; or two pointers if sorted.
 - **Best Time to Buy/Sell Stock** — Track min so far; `profit = max(profit, price - min_price)`.
 - **Move Zeros** — Two-pointer: maintain `write_idx` for non-zeros.
 
 ### Medium
-- [3Sum](../algo/problem-deep-dives.md#3sum) — Sort + fix one + two pointers; skip duplicates at all three sites.
-- [Subarray Sum Equals K](../algo/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen[0] = 1`.
+- [3Sum](../02-algorithms/problem-deep-dives.md#3sum) — Sort + fix one + two pointers; skip duplicates at all three sites.
+- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen[0] = 1`.
 - **Longest Subarray with K Distinct** — Sliding window + frequency map.
 - **Product of Array Except Self** — Prefix product from left × suffix product from right; O(1) extra space.
 - **Container with Most Water** — Two pointers; advance the side with shorter height.
@@ -489,8 +491,8 @@ def reservoir_sample(stream, k: int) -> list:
 - **Jump Game** — Track `farthest` reachable; unreachable if `i > farthest`.
 
 ### Hard
-- [Trapping Rain Water](../algo/problem-deep-dives.md#trapping-rain-water) — Two pointers `l_max, r_max`; advance side with smaller max.
-- [Median of Two Sorted Arrays](../algo/problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition of shorter array.
+- [Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) — Two pointers `l_max, r_max`; advance side with smaller max.
+- [Median of Two Sorted Arrays](../02-algorithms/problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition of shorter array.
 - **Sliding Window Maximum** — Monotonic deque; O(N).
 - **Count of Smaller Numbers After Self** — Merge sort augmentation or BIT.
 
@@ -500,10 +502,10 @@ def reservoir_sample(stream, k: int) -> list:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Two Sum](../algo/problem-deep-dives.md#two-sum)** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
-| **[3Sum](../algo/problem-deep-dives.md#3sum)** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
-| **[Trapping Rain Water](../algo/problem-deep-dives.md#trapping-rain-water)** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
-| **[Subarray Sum = K](../algo/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
+| **[Two Sum](../02-algorithms/problem-deep-dives.md#two-sum)** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
+| **[3Sum](../02-algorithms/problem-deep-dives.md#3sum)** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
+| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water)** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
+| **[Subarray Sum = K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
 | **Product Except Self** | "Product of all but self, no division" | Left-pass product × right-pass product | Division approach fails on zeros; two-pass achieves O(1) extra space. |
 | **Container with Most Water** | "Max area between two lines" | Two pointers; advance shorter side | Area = `min(h[l], h[r]) * (r - l)`; advancing taller side never improves. |
 | **Next Permutation** | "Lexicographic next arrangement" | Find rightmost descent; swap with next larger; reverse suffix | Rightmost **ascending** pair from the right = descent point; edge case: fully descending → reverse all. |
@@ -538,7 +540,7 @@ def reservoir_sample(stream, k: int) -> list:
 ## See also
 
 - [Hashing](hashing.md) — two sum, subarray sum = K complement maps
-- [Searching](../algo/searching.md) — binary search on answer for array problems
+- [Searching](../02-algorithms/searching.md) — binary search on answer for array problems
 - [Stack](stack.md) — monotonic stack/deque for sliding window max and histogram
 - [Patterns Master](../03-patterns/patterns-master.md) — sliding window and two-pointer triggers
 

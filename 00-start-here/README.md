@@ -19,8 +19,8 @@
 | Folder | Purpose |
 |--------|---------|
 | `00-start-here/` | This file. Navigation hub. |
-| `01-data-structures/` | 12 DS deep-dive files (arrays → segment trees) + topic index |
-| `02-algorithms/` | Algorithm deep-dives + standalone technique files |
+| `01-data-structures/` | DS deep-dives + **[README index](01-data-structures/README.md)** (study order, L4 priorities, how to read each file) |
+| `02-algorithms/` | Algorithm deep-dives + **[README index](02-algorithms/README.md)** (technique map, DP/recursion hubs) |
 | `03-patterns/` | Pattern master, cheatsheets, revision guides, LC variants, system design |
 | `04-behavioral/` | Google's 4 attributes + STAR story index |
 | `05-revision/` | Complexity tables, Python gotchas, day-before checklist, coding rubric |

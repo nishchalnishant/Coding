@@ -1115,3 +1115,55 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[recursion]] | [[binary-search]] | [[heap]]
+### Construct Quad Tree
+
+> [!example] Problem
+> Given an `n x n` binary grid, build a quad tree where each node represents a uniform region or has four children if the region is mixed.
+
+> [!info] Approach
+> - **WHY:** If a region is uniform, the tree can stop early; otherwise divide the region into four equal quadrants and recurse.
+> - **WHAT:** Recursively inspect subgrids. A uniform subgrid becomes a leaf node; a mixed one becomes an internal node with four children.
+> - **HOW:** For each region, check whether all values are the same. If yes, return a leaf. If no, split by midpoint and build children in the order top-left, top-right, bottom-left, bottom-right.
+
+> [!note]- Python Solution
+> ```python
+> class Node:
+>     def __init__(self, val, isLeaf, topLeft=None, topRight=None, bottomLeft=None, bottomRight=None):
+>         self.val = val
+>         self.isLeaf = isLeaf
+>         self.topLeft = topLeft
+>         self.topRight = topRight
+>         self.bottomLeft = bottomLeft
+>         self.bottomRight = bottomRight
+> 
+> def construct(grid: list[list[int]]) -> Node:
+>     def build(r1: int, c1: int, size: int) -> Node:
+>         first = grid[r1][c1]
+>         same = True
+>         for r in range(r1, r1 + size):
+>             for c in range(c1, c1 + size):
+>                 if grid[r][c] != first:
+>                     same = False
+>                     break
+>             if not same:
+>                 break
+>         if same:
+>             return Node(bool(first), True)
+>         half = size // 2
+>         return Node(
+>             True,
+>             False,
+>             build(r1, c1, half),
+>             build(r1, c1 + half, half),
+>             build(r1 + half, c1, half),
+>             build(r1 + half, c1 + half, half),
+>         )
+> 
+>     return build(0, 0, len(grid))
+> ```
+
+> [!success] Complexity
+> O(n^2 log n) in the straightforward uniformity check; O(n^2) with prefix sums or early pruning.
+
+> [!tip] Alternatives
+> Prefix sums can answer “all zeros/all ones?” in O(1) per region and avoid repeated scans.

@@ -908,6 +908,35 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!tip] Alternatives
 > Brute force O(k * n): scan all projects each step. Sorting + binary search to find boundary: already implicit in the two-heap approach.
 
+### Activity Selection (Maximum Non-Overlapping Intervals)
+
+> [!example] Problem
+> Given intervals, select the maximum number of non-overlapping intervals you can keep.
+
+> [!info] Approach
+> - **WHY:** Greedy by earliest finishing time leaves the most room for future intervals.
+> - **WHAT:** Sort by end time and always keep the next interval whose start is at least the end of the last kept interval.
+> - **HOW:** Track `last_end`; when `start >= last_end`, keep the interval and update `last_end = end`.
+
+> [!note]- Python Solution
+> ```python
+> def activity_selection(intervals: list[list[int]]) -> int:
+>     intervals.sort(key=lambda x: x[1])
+>     count = 0
+>     last_end = float("-inf")
+>     for start, end in intervals:
+>         if start >= last_end:
+>             count += 1
+>             last_end = end
+>     return count
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(1) extra space.
+
+> [!tip] Alternatives
+> Sorting by start does not maximize the count; earliest end is the greedy key.
+
 ---
 
 ## See Also

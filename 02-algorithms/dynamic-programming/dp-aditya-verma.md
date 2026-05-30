@@ -5,6 +5,8 @@ subtopic: Dp Aditya Verma
 status: unread
 tags: [algorithms, dynamic-programming]
 ---
+
+← [Algorithms index](../README.md) · [DP hub](./README.md)
 ## First-Principles Map
 
 ```text

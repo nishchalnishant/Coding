@@ -821,3 +821,31 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[dynamic-programming]] | [[binary-search]]
+### Range Add Range Sum with Lazy Propagation
+
+> [!example] Problem
+> Support range increment updates and range sum queries on an array efficiently.
+
+> [!info] Approach
+> - **WHY:** Updating every element in a range directly is O(n). Lazy propagation stores a postponed update at internal nodes so repeated range updates stay logarithmic.
+> - **WHAT:** Each node stores the sum of its segment and a lazy tag for pending additions.
+> - **HOW:** On full-cover update, modify the node sum and lazy tag. On partial overlap, push the lazy value to children before recursing.
+
+> [!note]- Python Solution
+> ```python
+> class SegTree:
+>     def __init__(self, nums: list[int]):
+>         self.n = len(nums)
+>         self.tree = [0] * (4 * self.n)
+>         self.lazy = [0] * (4 * self.n)
+> 
+>     def _apply(self, idx: int, left: int, right: int, delta: int) -> None:
+>         self.tree[idx] += (right - left + 1) * delta
+>         self.lazy[idx] += delta
+> ```
+
+> [!success] Complexity
+> O(log n) per update/query, O(n) space.
+
+> [!tip] Alternatives
+> For prefix-sum-friendly updates, a Fenwick tree may be simpler; lazy segment trees handle general range aggregates.

@@ -204,7 +204,7 @@ difficulty: mixed
 
 ## Weighted / Ranked Union-Find
 
-### Accounts Merge
+### Accounts Merge (Email Graph)
 
 > [!example] Problem
 > List of accounts `[name, email1, email2, ...]`. Merge accounts sharing at least one email. Return sorted merged accounts.
@@ -1085,3 +1085,49 @@ difficulty: mixed
 ## See Also
 
 [[graph]] | [[graph-algorithms]] | [[sorting]]
+### Accounts Merge
+
+> [!example] Problem
+> Merge accounts belonging to the same person when they share at least one email address.
+
+> [!info] Approach
+> - **WHY:** Shared emails create connected components. If two accounts share any email, they belong to the same merged group.
+> - **WHAT:** Use DSU to union all emails in the same account. Then group emails by final root.
+> - **HOW:** Map each email to the first owner seen. When a new account contains an already-seen email, union the account’s emails together under that root.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def accounts_merge(accounts: list[list[str]]) -> list[list[str]]:
+>     parent = {}
+> 
+>     def find(x: str) -> str:
+>         parent.setdefault(x, x)
+>         if parent[x] != x:
+>             parent[x] = find(parent[x])
+>         return parent[x]
+> 
+>     def union(a: str, b: str) -> None:
+>         parent[find(a)] = find(b)
+> 
+>     email_to_name = {}
+>     for account in accounts:
+>         name = account[0]
+>         first_email = account[1]
+>         for email in account[1:]:
+>             email_to_name[email] = name
+>             union(first_email, email)
+> 
+>     groups = defaultdict(list)
+>     for email in email_to_name:
+>         groups[find(email)].append(email)
+> 
+>     return [[email_to_name[root]] + sorted(emails) for root, emails in groups.items()]
+> ```
+
+> [!success] Complexity
+> Roughly O(E α(E)) time for union-find plus sorting within each merged account; O(E) space.
+
+> [!tip] Alternatives
+> DFS on the email graph also works; DSU is often simpler to explain for merge-by-connection problems.

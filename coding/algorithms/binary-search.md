@@ -1141,3 +1141,44 @@ difficulty: mixed
 ## See Also
 
 [[two-pointers]] | [[sliding-window]] | [[sorting]] | [[dynamic-programming]]
+### Aggressive Cows / Maximize Minimum Distance
+
+> [!example] Problem
+> Given stall positions and `k` cows, place the cows so the minimum distance between any two cows is as large as possible.
+
+> [!info] Approach
+> - **WHY:** If a distance `d` works, any smaller distance also works. That monotonic predicate makes the answer searchable.
+> - **WHAT:** Sort positions and binary search the answer `d`. The feasibility check greedily places each cow at the earliest valid stall.
+> - **HOW:** Place the first cow at the first stall, then keep placing the next cow at the first position with gap `>= d`.
+
+> [!note]- Python Solution
+> ```python
+> def aggressive_cows(positions: list[int], k: int) -> int:
+>     positions.sort()
+> 
+>     def can_place(distance: int) -> bool:
+>         cows = 1
+>         last = positions[0]
+>         for pos in positions[1:]:
+>             if pos - last >= distance:
+>                 cows += 1
+>                 last = pos
+>                 if cows == k:
+>                     return True
+>         return False
+> 
+>     lo, hi = 1, positions[-1] - positions[0]
+>     while lo < hi:
+>         mid = lo + (hi - lo + 1) // 2
+>         if can_place(mid):
+>             lo = mid
+>         else:
+>             hi = mid - 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> O(n log R) time, where `R = positions[-1] - positions[0]`; O(1) extra space.
+
+> [!tip] Alternatives
+> Reuse this template for router placement, aggressive seating, and maximize-minimum-distance questions.

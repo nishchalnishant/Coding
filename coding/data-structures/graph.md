@@ -1577,3 +1577,47 @@ difficulty: mixed
 ## See Also
 
 [[graph-algorithms]] | [[union-find]] | [[queue]] | [[tree]]
+### Shortest Path in a DAG
+
+> [!example] Problem
+> Given a directed acyclic graph with weighted edges, find shortest paths from a source node.
+
+> [!info] Approach
+> - **WHY:** In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized.
+> - **WHAT:** Topologically sort the graph, then relax outgoing edges in that order.
+> - **HOW:** Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque, defaultdict
+> 
+> def shortest_path_dag(n: int, edges: list[tuple[int, int, int]], source: int) -> list[float]:
+>     graph = defaultdict(list)
+>     indeg = [0] * n
+>     for u, v, w in edges:
+>         graph[u].append((v, w))
+>         indeg[v] += 1
+>     q = deque([i for i in range(n) if indeg[i] == 0])
+>     topo = []
+>     while q:
+>         u = q.popleft()
+>         topo.append(u)
+>         for v, _ in graph[u]:
+>             indeg[v] -= 1
+>             if indeg[v] == 0:
+>                 q.append(v)
+>     dist = [float("inf")] * n
+>     dist[source] = 0
+>     for u in topo:
+>         if dist[u] == float("inf"):
+>             continue
+>         for v, w in graph[u]:
+>             dist[v] = min(dist[v], dist[u] + w)
+>     return dist
+> ```
+
+> [!success] Complexity
+> O(V + E) time, O(V + E) space.
+
+> [!tip] Alternatives
+> If the graph can have cycles, use Dijkstra for non-negative edges or Bellman-Ford when negative edges are allowed.

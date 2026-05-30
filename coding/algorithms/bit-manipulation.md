@@ -869,3 +869,39 @@ difficulty: mixed
 ## See Also
 
 [[dynamic-programming]] | [[graph-algorithms]] | [[trie]]
+### Minimum XOR Sum of Two Arrays
+
+> [!example] Problem
+> Given two arrays of equal length, pair each element from the first array with a unique element from the second array to minimize the total XOR sum.
+
+> [!info] Approach
+> - **WHY:** Bitwise greediness is not enough because pairings interact globally. The state is which elements of the second array are already used.
+> - **WHAT:** Bitmask DP: `dp[mask]` is the minimum cost after assigning the first `popcount(mask)` elements of `nums1`.
+> - **HOW:** For each mask, try assigning the next `nums1[i]` to every unused `nums2[j]` and transition to `mask | (1 << j)`.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+> 
+> def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
+>     n = len(nums1)
+> 
+>     @lru_cache(None)
+>     def dfs(mask: int) -> int:
+>         i = mask.bit_count()
+>         if i == n:
+>             return 0
+>         best = float("inf")
+>         for j in range(n):
+>             if not (mask & (1 << j)):
+>                 best = min(best, (nums1[i] ^ nums2[j]) + dfs(mask | (1 << j)))
+>         return best
+> 
+>     return dfs(0)
+> ```
+
+> [!success] Complexity
+> O(n · 2^n) time, O(2^n) space.
+
+> [!tip] Alternatives
+> Brute-force permutations are factorial and too slow; bitmask DP is the standard interview answer.

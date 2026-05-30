@@ -1772,3 +1772,34 @@ difficulty: mixed
 ## See Also
 
 [[dynamic-programming]] | [[backtracking]] | [[tree]] | [[divide-and-conquer]]
+### Fast Doubling Fibonacci
+
+> [!example] Problem
+> Compute the `n`th Fibonacci number faster than linear recursion or simple DP.
+
+> [!info] Approach
+> - **WHY:** The recurrence can be reduced by halving `n`, which turns linear recursion into logarithmic recursion depth.
+> - **WHAT:** Use the fast-doubling identities: `F(2k) = F(k) * (2*F(k+1) - F(k))` and `F(2k+1) = F(k)^2 + F(k+1)^2`.
+> - **HOW:** A helper returns `(F(n), F(n+1))`, allowing each recursive step to reuse the same subproblem results.
+
+> [!note]- Python Solution
+> ```python
+> def fib(n: int) -> int:
+>     def helper(k: int) -> tuple[int, int]:
+>         if k == 0:
+>             return 0, 1
+>         a, b = helper(k // 2)
+>         c = a * (2 * b - a)
+>         d = a * a + b * b
+>         if k % 2 == 0:
+>             return c, d
+>         return d, c + d
+> 
+>     return helper(n)[0]
+> ```
+
+> [!success] Complexity
+> O(log n) time, O(log n) recursion depth.
+
+> [!tip] Alternatives
+> Memoized recursion and iterative DP are simpler, but fast doubling is the classic optimization question.

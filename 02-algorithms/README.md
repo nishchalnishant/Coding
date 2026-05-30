@@ -1,149 +1,146 @@
-## First-Principles Map
+# Algorithms — Start Here
 
-```text
-WHY algorithm families matter
-├── Problems recur across domains in disguised forms
-│   ├── "Find shortest path in graph" ≡ "Minimum cost to convert word" ≡ BFS/Dijkstra
-│   ├── "Count valid arrangements"    ≡ "Number of ways to tile"        ≡ DP / backtracking
-│   └── "Merge k sorted streams"      ≡ "K-th smallest in matrix"       ≡ Heap / binary search
-├── Recognizing the family → skip brute-force → apply known template
-└── Wrong family → exponential where polynomial exists (backtracking vs DP)
-│
-WHAT the major algorithm families are
-├── Search         — binary search (sorted input), BFS (shortest unweighted), Dijkstra (weighted)
-├── Sort           — comparisons O(n log n); counting/radix O(n+k); sort-then-scan pattern
-├── Two Pointers   — O(n) scan replacing O(n²) nested loops; sorted array or linked list
-├── Sliding Window — O(n) variable/fixed window; substring, subarray problems
-├── Dynamic Prog.  — overlapping subproblems + optimal substructure; memoize or tabulate
-├── Greedy         — locally optimal choice → globally optimal; must prove exchange argument
-├── Backtracking   — all possibilities with pruning; permutations, combinations, Sudoku
-├── Graph          — BFS/DFS/Topo/SCC/MST/Shortest path; any connectivity / dependency problem
-├── Divide&Conquer — split → solve → merge; merge sort, closest pair, matrix multiply
-└── Union-Find     — O(α) connectivity queries; dynamic graph, Kruskal, redundant connections
-│
-HOW to map problem signals to families
-├── "Sorted array / search for value"         → Binary search
-├── "Optimize over choices, overlapping"      → DP (top-down or bottom-up)
-├── "Find all valid combos / arrangements"    → Backtracking (+ pruning)
-├── "Minimum spanning / shortest path"        → Greedy (Kruskal/Prim) / Dijkstra
-├── "Connected components / cycle detection"  → BFS/DFS / Union-Find
-├── "Ordering with dependencies"              → Topological sort (Kahn's / DFS)
-├── "Contiguous subarray / substring"         → Sliding window / prefix sum
-├── "Two elements summing to target"          → Two pointers (sorted) / hash map
-└── "Max/min across window"                   → Monotonic deque / segment tree
-│
-WHEN each family applies
-├── Binary search  — sorted structure, answer-space search (bisect on feasibility)
-├── DP             — counting ways, min cost, longest sequence, boolean reachability
-├── Greedy         — interval scheduling, Huffman, activity selection, gas station
-├── Backtracking   — N-queens, word search, generate parentheses, subsets
-├── Graph BFS      — shortest unweighted path, multi-source spread, 0-1 BFS
-├── Topo sort      — course schedule, build order, alien dictionary
-├── Union-Find     — dynamic connectivity, Kruskal's MST, account merge
-└── Divide&Conquer — merge sort, inversion count, Karatsuba, closest pair
-│
-WHAT CAN GO WRONG
-├── DP when greedy suffices          → O(n²) where O(n log n) works (e.g. activity selection)
-├── Backtracking when DP needed      → exponential where polynomial exists (e.g. edit distance)
-├── BFS for weighted shortest path   → wrong answer; use Dijkstra
-├── Greedy without exchange proof    → fails on counterexample (e.g. coin change with odd coins)
-├── Missing memoization in recursion → O(2^n) instead of O(n²) or O(n)
-└── Wrong family = wrong complexity class; algorithm tricks can't save a fundamentally wrong approach
-│
-DECISION — problem signal → algorithm family
-├── Sorted input + find value          → Binary search
-├── Optimize, overlapping subproblems  → DP
-├── All possibilities needed           → Backtracking
-├── Local choice → global optimum      → Greedy (verify exchange argument)
-├── Connectivity / path / cycle        → Graph (BFS/DFS/Dijkstra/Topo)
-├── Dynamic connectivity               → Union-Find
-├── Contiguous subarray / substring    → Sliding window / two pointers
-└── Divide large into halves           → Divide & Conquer
-```
+Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with data-structure notes in [01-data-structures](../01-data-structures/README.md); use this folder for **how to solve** (patterns, recurrences, graph algos, string matching).
 
-## First-Principles Breakdown
-
-- **Root problem:** Problems across domains share hidden structural similarities; recognizing the family eliminates the need to solve from scratch under pressure.
-- **Core insight:** Each algorithm family exploits one structural property — monotonicity (binary search), optimal substructure (DP), greedy exchange (greedy), adjacency (graph) — and is useless without it.
-- **Invariant:** The dominant constraint in the problem (sorted, overlapping, connected, all-possibilities) uniquely identifies the algorithm family before any code is written.
-- **Why it works:** Templates encode decades of proven solutions; applying the right template guarantees correctness and known complexity, while adaptation handles the problem-specific twist.
-- **Where it breaks:** Forcing the wrong family (backtracking on a DP problem, greedy on a non-exchange problem) produces exponential or incorrect solutions that no micro-optimization can fix.
-
-# Algorithms — Index
-
-All algorithm files live in `02-algorithms/`. This file is the navigation index.
+**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (triggers):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Walkthroughs:** [problem-deep-dives.md](./problem-deep-dives.md) · **Google revision:** [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md)
 
 ---
 
-## Topic Table
+## Pick your path
 
-| Topic | When to Use | Must-Nail L4? | File |
-|-------|------------|---------------|------|
-| **Binary Search** | Sorted input, monotone predicate, "minimize max / maximize min" | YES | [`02-algorithms/binary-search.md`](./binary-search.md) |
-| **Two Pointers** | Sorted array, pair/triplet sum, palindrome, partition | YES | [`02-algorithms/two-pointers.md`](./two-pointers.md) |
-| **Sliding Window** | Contiguous subarray/substring, longest/shortest with constraint | YES | [`02-algorithms/sliding-window.md`](./sliding-window.md) |
-| **Sorting** | Need ordered data; know when to use which sort | YES | [`sorting.md`](./sorting.md) |
-| **Recursion & Backtracking** | Explore all possibilities, permutations, subsets, constraint satisfaction | YES | [`backtracking.md`](./backtracking.md), [`recursion/`](./recursion/) |
-| **Dynamic Programming** | Overlapping subproblems + optimal substructure; memoization/tabulation | YES | [`dynamic-programming/`](./dynamic-programming/) |
-| **Greedy** | Local optimum → global optimum; interval scheduling, activity selection | HIGH | [`greedy.md`](./greedy.md) |
-| **Graph Algorithms** | BFS/DFS, shortest path, topological sort, cycle detection | YES | [`graph.md`](./graph.md), [`advanced-graphs.md`](./advanced-graphs.md) |
-| **Searching** | Binary search variants, search in matrix | YES | [`searching.md`](./searching.md) |
-| **Union-Find** | Dynamic connectivity, MST (Kruskal), cycle detection in undirected graphs | HIGH | [`union-find.md`](./union-find.md) |
-| **Divide & Conquer** | Merge sort, quick select, closest pair | HIGH | [`divide-and-conquer.md`](./divide-and-conquer.md) |
-| **String Algorithms** | Pattern matching (KMP, Rabin-Karp), palindromes, anagrams | HIGH | [`string.md`](./string.md) |
-| **Bit Manipulation** | XOR tricks, power of 2, subset enumeration, single number | MEDIUM | [`bit-manipulation.md`](./bit-manipulation.md) |
-| **Math** | GCD, primes, modular arithmetic, combinatorics | MEDIUM | [`maths.md`](./maths.md) |
-| **System Design Algorithms** | Consistent hashing, HyperLogLog, Bloom filters | GOOD-TO-HAVE | [`system-design-algorithms.md`](./system-design-algorithms.md) |
-| **SQL** | Window functions, JOINs, CTEs, aggregation patterns | HIGH | [`sql.md`](./sql.md) |
+| If you… | Do this |
+|---------|---------|
+| **Have ~2 weeks before Google L4** | Must-nail topics below → **Quick Revision Triggers** per file → 2 timed problems/day → [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
+| **Learning a technique fresh** | Topic file → **Core Algorithms / Click Moments** → 2 problems from **Interview Questions** table |
+| **Are revising before a mock** | **Quick Revision Triggers** + **Interview Questions** only; use [problem-deep-dives.md](./problem-deep-dives.md#l4-must-nail-problems) for one full walkthrough |
+| **Stuck on “which algorithm?”** | [algorithm_tree.md](./algorithm_tree.md) — signal → family → file |
 
 ---
 
-## Must-Nail for L4 vs Good-to-Have
+## Topic index
 
-### Must-Nail (appear in almost every Google loop)
-- **Binary Search** — including BS on answer (not just sorted array)
-- **Two Pointers** — all three variants
-- **Sliding Window** — both fixed and variable
-- **DFS/BFS** — on trees AND graphs, iterative and recursive
-- **Dynamic Programming** — 1D, 2D, interval, knapsack paradigms
-- **Backtracking** — permutations, combinations, subsets, N-Queens pattern
-- **Heap** — `heapq` API, top-K, two-heap median trick
-- **Hash Map** — frequency counting, grouping, O(1) lookup patterns
+### Core coding (must-nail L4)
 
-### High Priority (appear in ~50% of loops)
-- Topological Sort (Kahn's + DFS)
-- Greedy (intervals, scheduling)
-- Union-Find (connectivity)
-- Divide & Conquer (merge sort, quick select)
-- Monotonic Stack/Queue
+| Topic | When to use | File |
+|-------|-------------|------|
+| **Binary search** | Sorted input, BS on answer | [binary-search.md](./binary-search.md) |
+| **Searching** | BS variants, search in matrix | [searching.md](./searching.md) |
+| **Two pointers** | Sorted pairs, fast/slow, partition | [two-pointers.md](./two-pointers.md) |
+| **Sliding window** | Contiguous subarray/substring | [sliding-window.md](./sliding-window.md) |
+| **Sorting** | Which sort, quickselect, dutch flag | [sorting.md](./sorting.md) |
+| **Graph algorithms** | BFS, Dijkstra, topo, shortest path | [graph.md](./graph.md) |
+| **Backtracking** | Permutations, subsets, constraint search | [backtracking.md](./backtracking.md) |
+| **Greedy** | Intervals, scheduling, exchange argument | [greedy.md](./greedy.md) |
+| **Union-Find** | Connectivity, Kruskal, dynamic components | [union-find.md](./union-find.md) |
+| **Divide & conquer** | Merge sort, inversion count, closest pair | [divide-and-conquer.md](./divide-and-conquer.md) |
+| **String algorithms** | KMP, Rabin-Karp, Z-function | [string.md](./string.md) |
+| **Dynamic programming** | Overlapping subproblems, optimal substructure | [dynamic-programming/README.md](./dynamic-programming/README.md) |
+| **Recursion** | Tree DFS, memo, recursion → DP | [recursion/README.md](./recursion/README.md) |
 
-### Good-to-Have (differentiator, not blocker)
-- KMP / Rabin-Karp
-- Bellman-Ford / Floyd-Warshall
-- Segment Tree / Fenwick Tree
-- Bit manipulation tricks
-- Math (modular arithmetic, combinatorics)
-- SQL (window functions, JOINs, CTEs — common in data/analytics rounds)
-- System Design Algorithms (Bloom filter, Consistent Hashing, Raft — SDE-3 signal)
+### Stretch & specialized
+
+| Topic | When to use | File |
+|-------|-------------|------|
+| **Advanced graphs** | Tarjan SCC, bridges, Euler | [advanced-graphs.md](./advanced-graphs.md) |
+| **Bit manipulation** | XOR, subsets, power of 2 | [bit-manipulation.md](./bit-manipulation.md) |
+| **Maths** | GCD, primes, mod arithmetic | [maths.md](./maths.md) |
+| **System design algorithms** | Bloom, consistent hash, rate limit | [system-design-algorithms.md](./system-design-algorithms.md) |
+| **Concurrency** | Producer-consumer, locks (LLD-style) | [concurrency.md](./concurrency.md) |
+| **SQL** | Window functions, JOINs, CTEs | [sql.md](./sql.md) |
+| **Miscellaneous** | Cross-cutting tricks | [miscellaneous.md](./miscellaneous.md) |
+| **Problem bank (all topics)** | Full pseudocode walkthroughs + **[TOC at top](problem-deep-dives.md#jump-to-section)** | [problem-deep-dives.md](./problem-deep-dives.md) |
 
 ---
 
-## Algorithm Selection by Problem Signal
+## Subfolders
+
+### [dynamic-programming/](./dynamic-programming/)
+
+| File | Focus |
+|------|--------|
+| [README.md](./dynamic-programming/README.md) | **Start here** — 4-step framework, core patterns |
+| [dp-aditya-verma.md](./dynamic-programming/dp-aditya-verma.md) | Pattern catalog (knapsack, LCS, …) |
+| [grid-dp.md](./dynamic-programming/grid-dp.md) | Unique paths, min path sum, maximal square |
+| [stock-trading-dp.md](./dynamic-programming/stock-trading-dp.md) | Buy/sell state machine |
+| [string-palindrome-dp.md](./dynamic-programming/string-palindrome-dp.md) | LPS, palindrome partitioning |
+| [digit-dp.md](./dynamic-programming/digit-dp.md) | Count numbers with digit constraints |
+| [probability-combinatorics-dp.md](./dynamic-programming/probability-combinatorics-dp.md) | Expected value, game theory |
+| [advanced-dp-optimizations.md](./dynamic-programming/advanced-dp-optimizations.md) | CHT, SOS DP, Knuth (stretch) |
+| [tips-and-gotchas.md](./dynamic-programming/tips-and-gotchas.md) | **Revision** — bugs, iteration direction |
+| [questions-bank.md](./dynamic-programming/questions-bank.md) | Leveled drill list |
+
+### [recursion/](./recursion/)
+
+| File | Focus |
+|------|--------|
+| [README.md](./recursion/README.md) | **Start here** — types, templates |
+| [aditya-verma.md](./recursion/aditya-verma.md) | Include/exclude, IP/OP patterns |
+| [combination-problems.md](./recursion/combination-problems.md) | Combinations, subset sum |
+| [recursion-to-dp.md](./recursion/recursion-to-dp.md) | Top-down → tabulation |
+| [tree-recursion.md](./recursion/tree-recursion.md) | Path sum, BST, tree DP |
+| [graph-recursion.md](./recursion/graph-recursion.md) | DFS, topo, flood fill |
+| [string-recursion.md](./recursion/string-recursion.md) | Parsing, generation |
+| [tips-and-gotchas.md](./recursion/tips-and-gotchas.md) | **Revision** — common bugs |
+| [questions-bank.md](./recursion/questions-bank.md) | Leveled drill list |
+
+---
+
+## How every topic file is organized
+
+| Section | When to read |
+|---------|----------------|
+| **First-Principles Map** | First visit — why this technique exists |
+| **Core Algorithms / Click Moments** | Learn templates and invariants |
+| **SDE-3 Deep Dives** | Stretch; skip until L4 core is solid |
+| **Interview Questions — Logic & Trickiness** | **High yield** before mocks |
+| **Quick Revision Triggers** | **Day-before** — phrase → technique |
+| **See also** | Links to DS files + patterns |
+| **Flashcards** | Obsidian `#flashcard` tags (where present) |
+
+**Shorter technique files** ([two-pointers.md](./two-pointers.md), [sliding-window.md](./sliding-window.md)) use: When to Use → Variants → Canonical Problems → Interview table → Quick Revision.
+
+---
+
+## Study progression (L4-first)
+
+**Week 1 — Search & arrays techniques**  
+[binary-search.md](./binary-search.md) → [two-pointers.md](./two-pointers.md) → [sliding-window.md](./sliding-window.md) → [sorting.md](./sorting.md)  
+DS side: [array.md](../01-data-structures/array.md), [hashing.md](../01-data-structures/hashing.md)
+
+**Week 2 — Graphs & trees**  
+[graph.md](./graph.md) + [graphs.md](../01-data-structures/graphs.md) → [tree.md](../01-data-structures/tree.md) → [recursion/tree-recursion.md](./recursion/tree-recursion.md)
+
+**Week 3 — DP & backtracking**  
+[dynamic-programming/README.md](./dynamic-programming/README.md) → [backtracking.md](./backtracking.md) → [greedy.md](./greedy.md)
+
+**Week 4 — Polish**  
+[union-find.md](./union-find.md) → [string.md](./string.md) → weak areas from [problem-deep-dives.md](./problem-deep-dives.md)
+
+---
+
+## Algorithm selection cheat sheet
+
+Full tree: [algorithm_tree.md](./algorithm_tree.md).
 
 | Problem signal | Start with |
-|---------------|-----------|
-| "Subarray / substring with condition" | Sliding Window |
-| "Sorted array, find pair/triplet" | Two Pointers |
-| "Find in sorted / minimize-max" | Binary Search |
-| "All combinations / permutations" | Backtracking |
-| "Optimal substructure, overlapping" | DP |
-| "Shortest path in unweighted graph" | BFS |
-| "Shortest path in weighted graph" | Dijkstra |
-| "Detect cycle / connected components" | Union-Find or DFS |
-| "Top K / Kth largest" | Heap (min-heap of size K) |
-| "Dependency ordering" | Topological Sort |
-| "Prefix / range query" | Prefix Sum or Segment Tree |
-| "Top N per group / running total / MoM growth" | SQL window function |
-| "Add/remove servers without data reshuffle" | Consistent Hashing |
-| "Unique count at scale" | HyperLogLog |
-| "Membership check, avoid DB hit" | Bloom Filter |
+|----------------|------------|
+| Subarray / substring with constraint | [sliding-window.md](./sliding-window.md) |
+| Sorted array, pair / triplet / minimize max | [binary-search.md](./binary-search.md) or [two-pointers.md](./two-pointers.md) |
+| All combinations / permutations | [backtracking.md](./backtracking.md) |
+| Optimal substructure + overlapping | [dynamic-programming/README.md](./dynamic-programming/README.md) |
+| Shortest path (unweighted) | BFS — [graph.md](./graph.md), [graphs.md](../01-data-structures/graphs.md) |
+| Shortest path (weighted, non-negative) | Dijkstra — [graph.md](./graph.md) |
+| Dependency ordering | Topological sort — [graph.md](./graph.md) |
+| Dynamic connectivity | [union-find.md](./union-find.md) |
+| Top K / Kth largest | Heap — [heap.md](../01-data-structures/heap.md) |
+| Pattern in text | [string.md](./string.md) |
+
+---
+
+## Must-nail vs good-to-have (L4)
+
+**Must-nail:** binary search (incl. on answer), two pointers, sliding window, BFS/DFS, core DP (1D/2D/knapsack), backtracking template, heap top-K, hash patterns (in [01-data-structures](../01-data-structures/README.md))
+
+**High:** greedy intervals, union-find, topo sort, divide & conquer (quickselect)
+
+**Good-to-have:** KMP/Rabin-Karp, Tarjan/bridges, segment tree, bit tricks, system-design algos, SQL, concurrency

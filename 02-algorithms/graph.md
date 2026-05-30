@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [algorithms, graph]
 ---
+
+← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
 ```
@@ -570,8 +572,8 @@ def prim_mst(n: int, adj: dict) -> int:
 ## See also
 
 - [Union Find](union-find.md) — DSU for Kruskal's MST and connectivity
-- [data-structures/graphs.md](../ds/graphs.md) — BFS/DFS templates and grid problems
-- [Heap](../ds/heap.md) — Dijkstra uses a min-heap
+- [data-structures/graphs.md](../01-data-structures/graphs.md) — BFS/DFS templates and grid problems
+- [Heap](../01-data-structures/heap.md) — Dijkstra uses a min-heap
 - [Patterns Master](../../03-patterns/patterns-master.md) — graph pattern recognition triggers
 
 ## Flashcards

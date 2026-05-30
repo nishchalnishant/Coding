@@ -1026,3 +1026,26 @@ difficulty: mixed
 ## See Also
 
 [[dynamic-programming]] | [[binary-search]] | [[sorting]]
+### Bulb Switcher
+
+> [!example] Problem
+> There are `n` bulbs, all initially off. On round `i`, toggle every `i`th bulb. Return how many bulbs remain on after `n` rounds.
+
+> [!info] Approach
+> - **WHY:** A bulb ends up on only if it is toggled an odd number of times. A bulb at position `k` is toggled once for every divisor of `k`.
+> - **WHAT:** Count numbers with an odd number of divisors. Only perfect squares have an odd divisor count because one divisor pairs with each complementary divisor, except the square root.
+> - **HOW:** Return the integer square root of `n`.
+
+> [!note]- Python Solution
+> ```python
+> import math
+> 
+> def bulb_switch(n: int) -> int:
+>     return math.isqrt(n)
+> ```
+
+> [!success] Complexity
+> O(1) time, O(1) space.
+
+> [!tip] Alternatives
+> The divisor-count argument is the key interview proof. Simulation is O(n log n) and unnecessary.

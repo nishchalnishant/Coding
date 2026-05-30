@@ -5,6 +5,8 @@ subtopic:
 status: unread
 tags: [data-structures, stack]
 ---
+
+← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
 ```
@@ -396,15 +398,15 @@ For very large streams that don't fit in memory: partition the stream into chunk
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Daily Temperatures](../algo/problem-deep-dives.md#daily-temperatures)** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
+| **[Daily Temperatures](../02-algorithms/problem-deep-dives.md#daily-temperatures)** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
 | **Next Greater Element II** | "Next greater in circular array" | Iterate `0..2N-1` with `% N`; same monotonic stack | Never push index `i % N` when `i >= N` — only query, don't double-add. |
-| **[Largest Rectangle](../algo/problem-deep-dives.md#largest-rectangle-in-histogram)** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
+| **[Largest Rectangle](../02-algorithms/problem-deep-dives.md#largest-rectangle-in-histogram)** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
 | **Maximal Rectangle** | "Max rectangle of 1s in matrix" | Build histogram row by row; run LRH each row | Heights reset to 0 on encountering `'0'`; LRH applied to each row. |
-| **[Valid Parentheses](../algo/problem-deep-dives.md#valid-parentheses)** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
+| **[Valid Parentheses](../02-algorithms/problem-deep-dives.md#valid-parentheses)** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
 | **Min Stack** | "O(1) getMin with push/pop" | Parallel min-stack synced with main | Popping from both stacks atomically; duplicates in min-stack are fine. |
-| **[Decode String](../algo/problem-deep-dives.md#decode-string)** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
+| **[Decode String](../02-algorithms/problem-deep-dives.md#decode-string)** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
 | **Exclusive Time of Functions** | "Non-overlapping function runtimes" | Stack of `(id, start)`; on end: `time += end - start + 1` | Nested calls: pause outer by subtracting inner's duration from outer's start time. |
-| **[Trapping Rain Water](../algo/problem-deep-dives.md#trapping-rain-water)** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
+| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water)** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
 | **Maximum Frequency Stack** | "Pop most frequent; ties: most recent" | Map `freq→[elements]`; map `val→freq`; track `max_freq` | On pop, decrement `max_freq` if top bucket becomes empty. |
 | **Balanced Parentheses** [E] | "Check if brackets are balanced" | Push open brackets; on close check top matches; stack empty at end | Map `')': '('` for clean matching; early return if stack empty on close. |
 | **Baseball Game** [E] | "Simulate score with ops `+`, `D`, `C`, int" | Stack; `+` sums top two; `D` doubles top; `C` pops top | Process in order; `+` looks at top two without popping them before pushing sum. |
@@ -432,8 +434,8 @@ For very large streams that don't fit in memory: partition the stream into chunk
 ## See also
 
 - [Queue](queue.md) — monotonic deque for sliding window max/min
-- [Graph](../algo/graph.md) — iterative DFS uses an explicit stack
-- [Greedy](../algo/greedy.md) — some monotonic stack problems have greedy structure
+- [Graph](../02-algorithms/graph.md) — iterative DFS uses an explicit stack
+- [Greedy](../02-algorithms/greedy.md) — some monotonic stack problems have greedy structure
 - [Patterns Master](../03-patterns/patterns-master.md) — monotonic stack pattern triggers
 
 ## Flashcards
