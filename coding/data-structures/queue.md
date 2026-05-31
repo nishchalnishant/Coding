@@ -1410,3 +1410,106 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Linked-list deque is easier to generalize but has more pointer overhead than a circular array.
+
+---
+
+## Sliding Window with Queue
+
+### Sliding Window Median (LC 480)
+
+> [!example] Problem
+> Given an array and a window size `k`, return an array of medians for each window of size `k` as it slides across the array.
+
+> [!info] Approach
+> - **WHY:** Recalculating the median from scratch for each window is O(k log k) per step — too slow. Maintaining two heaps (like the "Find Median from Data Stream" problem) allows O(log k) updates, but removal of the outgoing element requires lazy deletion.
+> - **WHAT:** Use a max-heap `lo` (lower half) and min-heap `hi` (upper half). On each step, add the incoming element and lazy-delete the outgoing element. Rebalance heaps after each operation.
+> - **HOW:** Lazy deletion: track counts of "dead" elements in each heap. When computing the median, first pop any dead elements from the heap tops. Balance rule: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import defaultdict
+>
+> def median_sliding_window(nums: list[int], k: int) -> list[float]:
+>     lo = []   # max-heap (negated), lower half
+>     hi = []   # min-heap, upper half
+>     dead = defaultdict(int)
+>     result = []
+>
+>     def push(x: int) -> None:
+>         heapq.heappush(lo, -x)
+>         heapq.heappush(hi, -heapq.heappop(lo))
+>         if len(hi) > len(lo):
+>             heapq.heappush(lo, -heapq.heappop(hi))
+>
+>     def prune(heap: list, is_max: bool) -> None:
+>         while heap and dead[(-heap[0] if is_max else heap[0])] > 0:
+>             val = -heapq.heappop(heap) if is_max else heapq.heappop(heap)
+>             dead[val] -= 1
+>
+>     for i, num in enumerate(nums):
+>         push(num)
+>         if i >= k:
+>             out = nums[i - k]
+>             dead[out] += 1
+>             prune(lo, is_max=True)
+>             prune(hi, is_max=False)
+>             if len(lo) - len(hi) > 1:
+>                 heapq.heappush(hi, -heapq.heappop(lo))
+>             elif len(hi) > len(lo):
+>                 heapq.heappush(lo, -heapq.heappop(hi))
+>         if i >= k - 1:
+>             prune(lo, is_max=True)
+>             if k % 2 == 1:
+>                 result.append(float(-lo[0]))
+>             else:
+>                 result.append((-lo[0] + hi[0]) / 2.0)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n log k), Space O(n).
+
+> [!tip] Alternatives
+> - `SortedList` from `sortedcontainers`: O(log k) insert and delete, O(1) median access — cleaner code but not standard library.
+> - Segment tree on compressed values: O(n log n) with precise deletion, no lazy bookkeeping.
+> - Key insight: lazy deletion works because dead elements only affect the heap top when computing the median; they stay valid otherwise.
+
+---
+
+## Scheduling
+
+### Task Scheduler with Cooldown (LC 621)
+
+> [!example] Problem
+> Given a list of CPU tasks and a cooldown `n`, find the minimum number of intervals the CPU needs to finish all tasks. Between two identical tasks there must be at least `n` intervals.
+
+> [!info] Approach
+> - **WHY:** The bottleneck is the most frequent task — it dictates the minimum frame length. Tasks can be arranged in cycles of length `n+1`; less frequent tasks or idle slots fill the gaps.
+> - **WHAT:** Count task frequencies. The answer is `max(total_tasks, (max_freq - 1) * (n + 1) + count_of_tasks_with_max_freq)`.
+> - **HOW:** Count frequencies with a Counter. `max_freq` = highest frequency. `max_count` = number of tasks that share that frequency. Formula accounts for `max_freq - 1` complete cycles, each of length `n+1`, plus the final partial cycle of `max_count` tasks.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+>
+> def least_interval(tasks: list[str], n: int) -> int:
+>     freq = Counter(tasks)
+>     max_freq = max(freq.values())
+>     max_count = sum(1 for f in freq.values() if f == max_freq)
+>     slots_needed = (max_freq - 1) * (n + 1) + max_count
+>     return max(len(tasks), slots_needed)
+> ```
+
+> [!success] Complexity
+> Time O(n) where n = number of tasks, Space O(1) (26 letters max).
+
+> [!tip] Alternatives
+> - Greedy simulation with a max-heap and cooldown queue: at each step, pick the most frequent available task. Enqueue tasks back after their cooldown expires. O(n * cycles) but demonstrates the scheduling more concretely.
+> - The formula is the cleanest O(n) solution; the heap simulation is useful to explain the intuition.
+
+---
+
+## See Also
+
+[[stack]] | [[graph]] | [[sliding-window]] | [[binary-search]]

@@ -1337,3 +1337,145 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!tip] Alternatives
 > Segment trees handle more complex range aggregates, but Fenwick trees are cleaner for prefix-based operations.
+
+---
+
+## Skip List
+
+### Skip List Insert / Search / Delete (Concept + Implementation)
+
+> [!example] Problem
+> Implement a skip list — a probabilistic data structure that supports O(log n) average search, insert, and delete in a sorted sequence, without requiring rotations like balanced BSTs.
+
+> [!info] Approach
+> - **WHY:** A sorted linked list has O(n) search. A skip list adds "express lanes" — extra levels of linked lists that skip over multiple elements, allowing binary-search-like traversal.
+> - **WHAT:** Each node has a value and a list of `next` pointers — one per level. The number of levels a new node gets is determined randomly (each level added with probability 0.5).
+> - **HOW:** Search: start at the top level, go right while `next[level].val < target`, then drop down a level. Insert: search to find insertion points at each level, create a new node with random height, link it in. Delete: same traversal, unlink at each level.
+
+> [!note]- Python Solution
+> ```python
+> import random
+>
+> class SkipNode:
+>     def __init__(self, val: int, level: int):
+>         self.val = val
+>         self.next = [None] * (level + 1)
+>
+> class SkipList:
+>     MAX_LEVEL = 16
+>     P = 0.5
+>
+>     def __init__(self):
+>         self.head = SkipNode(float('-inf'), self.MAX_LEVEL)
+>         self.level = 0
+>
+>     def _random_level(self) -> int:
+>         lvl = 0
+>         while random.random() < self.P and lvl < self.MAX_LEVEL:
+>             lvl += 1
+>         return lvl
+>
+>     def search(self, target: int) -> bool:
+>         curr = self.head
+>         for i in range(self.level, -1, -1):
+>             while curr.next[i] and curr.next[i].val < target:
+>                 curr = curr.next[i]
+>         curr = curr.next[0]
+>         return curr is not None and curr.val == target
+>
+>     def add(self, num: int) -> None:
+>         update = [self.head] * (self.MAX_LEVEL + 1)
+>         curr = self.head
+>         for i in range(self.level, -1, -1):
+>             while curr.next[i] and curr.next[i].val < num:
+>                 curr = curr.next[i]
+>             update[i] = curr
+>         new_level = self._random_level()
+>         if new_level > self.level:
+>             for i in range(self.level + 1, new_level + 1):
+>                 update[i] = self.head
+>             self.level = new_level
+>         new_node = SkipNode(num, new_level)
+>         for i in range(new_level + 1):
+>             new_node.next[i] = update[i].next[i]
+>             update[i].next[i] = new_node
+>
+>     def erase(self, num: int) -> bool:
+>         update = [None] * (self.MAX_LEVEL + 1)
+>         curr = self.head
+>         for i in range(self.level, -1, -1):
+>             while curr.next[i] and curr.next[i].val < num:
+>                 curr = curr.next[i]
+>             update[i] = curr
+>         target = curr.next[0]
+>         if target is None or target.val != num:
+>             return False
+>         for i in range(self.level + 1):
+>             if update[i].next[i] != target:
+>                 break
+>             update[i].next[i] = target.next[i]
+>         while self.level > 0 and self.head.next[self.level] is None:
+>             self.level -= 1
+>         return True
+> ```
+
+> [!success] Complexity
+> Time O(log n) average for all operations, O(n) worst case. Space O(n log n) average.
+
+> [!tip] Alternatives
+> - Balanced BST (AVL, Red-Black): O(log n) guaranteed, but requires rotations. Skip lists are simpler to implement correctly.
+> - Key insight: randomness ensures balance probabilistically — no adversarial input sequence can degrade it (unlike unbalanced BSTs).
+
+---
+
+## Sparse Table
+
+### Sparse Table for Range Minimum Query (Static Array)
+
+> [!example] Problem
+> Given a static (immutable) array, answer multiple range minimum queries (RMQ) in O(1) after O(n log n) preprocessing.
+
+> [!info] Approach
+> - **WHY:** Segment trees give O(log n) per query. For static arrays, sparse tables precompute overlapping intervals so any range `[l, r]` can be answered by combining two precomputed intervals in O(1).
+> - **WHAT:** `sparse[i][j]` = minimum of the subarray starting at index `i` of length `2^j`. For a query `[l, r]`, find the largest `k` such that `2^k <= r - l + 1`, then answer is `min(sparse[l][k], sparse[r - 2^k + 1][k])`.
+> - **HOW:** Build: `sparse[i][0] = arr[i]`. For `j >= 1`: `sparse[i][j] = min(sparse[i][j-1], sparse[i + 2^(j-1)][j-1])`. Query: `k = floor(log2(r - l + 1))`.
+
+> [!note]- Python Solution
+> ```python
+> import math
+>
+> class SparseTable:
+>     def __init__(self, arr: list[int]):
+>         n = len(arr)
+>         k = int(math.log2(n)) + 1 if n > 0 else 1
+>         self.sparse = [[float('inf')] * k for _ in range(n)]
+>         self.log2 = [0] * (n + 1)
+>         for i in range(2, n + 1):
+>             self.log2[i] = self.log2[i // 2] + 1
+>         for i in range(n):
+>             self.sparse[i][0] = arr[i]
+>         for j in range(1, k):
+>             for i in range(n - (1 << j) + 1):
+>                 left_min = self.sparse[i][j - 1]
+>                 right_min = self.sparse[i + (1 << (j - 1))][j - 1]
+>                 self.sparse[i][j] = min(left_min, right_min)
+>
+>     def query(self, left: int, right: int) -> int:
+>         k = self.log2[right - left + 1]
+>         left_min = self.sparse[left][k]
+>         right_min = self.sparse[right - (1 << k) + 1][k]
+>         return min(left_min, right_min)
+> ```
+
+> [!success] Complexity
+> Build: O(n log n) time and space. Query: O(1).
+
+> [!tip] Alternatives
+> - Segment tree: O(n) build, O(log n) query — better when the array is mutable.
+> - Sparse table is the go-to for static RMQ; also used as the backbone of O(1) LCA algorithms.
+
+---
+
+## See Also
+
+[[segment-tree]] | [[union-find]] | [[trie]] | [[string-algorithms]]

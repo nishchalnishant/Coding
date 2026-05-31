@@ -1369,3 +1369,113 @@ Key pruning sources: (1) constraint violation (invalid partial state), (2) struc
 ## See Also
 
 [[recursion]] | [[dynamic-programming]] | [[trie]] | [[graph]]
+
+---
+
+## Backtracking — Hard Problems
+
+### Remove Invalid Parentheses (LC 301)
+
+> [!example] Problem
+> Remove the minimum number of invalid parentheses to make a string valid. Return all possible results.
+
+> [!info] Approach
+> - **WHY:** We need the minimum removal and all unique results. BFS layer by layer ensures we find minimum removal first: when any valid string is found at a BFS level, all strings at that level are candidates and we stop expanding.
+> - **WHAT:** BFS from the input string. Generate all strings with one character removed. Dedup with a visited set. For each string check if it's valid. Once a valid string is found, collect all valid strings from that BFS level and return.
+> - **HOW:** `is_valid(s)`: count open brackets, decrement on `)`, return false if count < 0, return `count == 0` at end.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+>
+> def remove_invalid_parentheses(s: str) -> list[str]:
+>     def is_valid(string: str) -> bool:
+>         count = 0
+>         for ch in string:
+>             if ch == '(':
+>                 count += 1
+>             elif ch == ')':
+>                 count -= 1
+>                 if count < 0:
+>                     return False
+>         return count == 0
+>
+>     visited = {s}
+>     queue = deque([s])
+>     result = []
+>     found = False
+>     while queue:
+>         level_size = len(queue)
+>         for _ in range(level_size):
+>             curr = queue.popleft()
+>             if is_valid(curr):
+>                 result.append(curr)
+>                 found = True
+>             if not found:
+>                 for i in range(len(curr)):
+>                     if curr[i] in '()':
+>                         next_s = curr[:i] + curr[i+1:]
+>                         if next_s not in visited:
+>                             visited.add(next_s)
+>                             queue.append(next_s)
+>         if found:
+>             break
+>     return result if result else ['']
+> ```
+
+> [!success] Complexity
+> Time O(2^n * n) worst case (every subset of brackets tried, each validated in O(n)). Space O(2^n).
+
+> [!tip] Alternatives
+> - DFS with pruning: count the number of mismatched `(` and `)` first, then use DFS tracking how many of each have been removed so far. Prune when removals exceed the allowed count. More complex but avoids BFS's memory cost.
+
+---
+
+### Expression Add Operators (LC 282)
+
+> [!example] Problem
+> Given a string of digits and a target, add binary operators `+`, `-`, `*` between digits to form expressions that evaluate to the target. Return all such expressions.
+
+> [!info] Approach
+> - **WHY:** We must try all ways to split the digit string and insert operators. Backtracking over all splits is O(4^n) but with careful pruning and tracking of the running evaluation (including the "last operand" for `*` precedence), this is manageable.
+> - **WHAT:** Backtrack with `(index, expression_string, running_total, last_operand)`. For each position, try all prefixes as the next number. For each operator, update total: `+` adds, `-` subtracts, `*` undoes last op and re-applies with multiplication.
+> - **HOW:** Start at `index=0`, `total=0`, `last=0`. No leading zeros: skip if `num_str` starts with '0' and length > 1.
+
+> [!note]- Python Solution
+> ```python
+> def add_operators(num: str, target: int) -> list[str]:
+>     result = []
+>
+>     def backtrack(index: int, path: str, total: int, last: int) -> None:
+>         if index == len(num):
+>             if total == target:
+>                 result.append(path)
+>             return
+>         for end in range(index + 1, len(num) + 1):
+>             s = num[index:end]
+>             if len(s) > 1 and s[0] == '0':
+>                 break
+>             n = int(s)
+>             if index == 0:
+>                 backtrack(end, s, n, n)
+>             else:
+>                 backtrack(end, path + '+' + s, total + n, n)
+>                 backtrack(end, path + '-' + s, total - n, -n)
+>                 backtrack(end, path + '*' + s, total - last + last * n, last * n)
+>
+>     backtrack(0, '', 0, 0)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(4^n * n) — at each of n positions, 4 choices (3 operators + continue). String building adds O(n) per leaf. Space O(n) recursion depth.
+
+> [!tip] Alternatives
+> - Can't use `eval()` in production/interview — it doesn't handle operator precedence tracking correctly mid-backtrack anyway.
+> - Key insight: the `last` parameter is what makes `*` correct. When we multiply, we must undo the previous `+last` and apply `last * n` instead.
+
+---
+
+## See Also (Extended)
+
+[[recursion]] | [[dynamic-programming]] | [[trie]] | [[graph]] | [[string-algorithms]]

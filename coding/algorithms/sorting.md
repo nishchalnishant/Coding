@@ -1632,3 +1632,87 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > An O(n) quickselect + 3-way partition version exists, but the sort-based solution is easier to reason about in interviews.
+
+---
+
+## Sorting Applications
+
+### Maximum Gap (LC 164)
+
+> [!example] Problem
+> Given an unsorted array, find the maximum difference between successive elements in its sorted form. Must run in O(n) time and space.
+
+> [!info] Approach
+> - **WHY:** Sorting is O(n log n). For O(n), use bucket sort (pigeonhole principle). If `n` numbers span range `[min, max]`, with `n-1` gaps, the maximum gap is at least `(max - min) / (n - 1)`. Place each number in a bucket of that size — the maximum gap must span at least two buckets, so we only compare adjacent bucket boundaries.
+> - **WHAT:** Create `n-1` buckets. For each number, assign it to bucket `(num - min_val) * (n - 1) // (max_val - min_val)`. Track min and max within each bucket. The answer is the maximum `bucket[i+1].min - bucket[i].max` across adjacent non-empty buckets.
+> - **HOW:** Edge cases: if all elements are equal, return 0. If n < 2, return 0.
+
+> [!note]- Python Solution
+> ```python
+> def maximum_gap(nums: list[int]) -> int:
+>     n = len(nums)
+>     if n < 2:
+>         return 0
+>     min_val = min(nums)
+>     max_val = max(nums)
+>     if min_val == max_val:
+>         return 0
+>     bucket_size = max(1, (max_val - min_val) // (n - 1))
+>     num_buckets = (max_val - min_val) // bucket_size + 1
+>     buckets = [[float('inf'), float('-inf')] for _ in range(num_buckets)]
+>     for num in nums:
+>         idx = (num - min_val) // bucket_size
+>         buckets[idx][0] = min(buckets[idx][0], num)
+>         buckets[idx][1] = max(buckets[idx][1], num)
+>     max_gap = 0
+>     prev_max = min_val
+>     for bucket_min, bucket_max in buckets:
+>         if bucket_min == float('inf'):
+>             continue
+>         max_gap = max(max_gap, bucket_min - prev_max)
+>         prev_max = bucket_max
+>     return max_gap
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Radix sort: also O(n) time and space, achieves the same goal but harder to implement correctly in an interview.
+> - Key insight: elements within the same bucket can never be the maximum gap pair (bucket size ≤ max gap), so we only compare across bucket boundaries.
+
+---
+
+### Relative Sort Array (LC 1122)
+
+> [!example] Problem
+> Given two arrays `arr1` and `arr2`, sort `arr1` such that elements appearing in `arr2` come first in the order of `arr2`, followed by remaining elements in ascending order.
+
+> [!info] Approach
+> - **WHY:** Standard sorting can't directly encode a custom ordering defined by another array. We need a custom comparator key that maps `arr2` elements to their positions, and sends missing elements to the back.
+> - **WHAT:** Build a rank map from `arr2`. Sort `arr1` using key: elements in `arr2` get rank `0..len(arr2)-1`, elements not in `arr2` get rank `len(arr2) + value` (ensuring ascending order after all arr2 elements).
+> - **HOW:** `rank = {v: i for i, v in enumerate(arr2)}`. Sort with `key = lambda x: rank[x] if x in rank else len(arr2) + x`.
+
+> [!note]- Python Solution
+> ```python
+> def relative_sort_array(arr1: list[int], arr2: list[int]) -> list[int]:
+>     rank = {v: i for i, v in enumerate(arr2)}
+>     def sort_key(x: int) -> tuple:
+>         if x in rank:
+>             return (0, rank[x])
+>         return (1, x)
+>     arr1.sort(key=sort_key)
+>     return arr1
+> ```
+
+> [!success] Complexity
+> Time O(n log n + m) where n = len(arr1), m = len(arr2). Space O(m).
+
+> [!tip] Alternatives
+> - Counting sort: count frequencies in arr1, emit arr2 elements first (using their counts), then remaining elements in sorted order. O(n + m + max_value) — O(n) but requires bounded values.
+
+---
+
+## See Also
+
+[[array]] | [[binary-search]] | [[greedy]] | [[two-pointers]]

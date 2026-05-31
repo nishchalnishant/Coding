@@ -1913,3 +1913,113 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Suffix automaton or suffix array can solve richer substring problems faster, but DP is the clean interview answer.
+
+---
+
+## Dynamic Programming — Hard Problems
+
+### Matrix Chain Multiplication
+
+> [!example] Problem
+> Given a sequence of matrices with dimensions `dims[i-1] × dims[i]`, find the minimum number of scalar multiplications to compute their product.
+
+> [!info] Approach
+> - **WHY:** The order of multiplication matters. Interval DP: `dp[i][j]` = minimum cost to multiply matrices `i` through `j`. Split at every `k` from `i` to `j-1`.
+> - **WHAT:** `dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]`.
+> - **HOW:** Fill by increasing interval length (length 1 has cost 0). Outer loop: `length` from 2 to n. Inner loops: `i`, then `k`.
+
+> [!note]- Python Solution
+> ```python
+> def matrix_chain_order(dims: list[int]) -> int:
+>     n = len(dims) - 1
+>     dp = [[0] * n for _ in range(n)]
+>     for length in range(2, n + 1):
+>         for i in range(n - length + 1):
+>             j = i + length - 1
+>             dp[i][j] = float('inf')
+>             for k in range(i, j):
+>                 cost = dp[i][k] + dp[k+1][j] + dims[i] * dims[k+1] * dims[j+1]
+>                 dp[i][j] = min(dp[i][j], cost)
+>     return dp[0][n-1]
+> ```
+
+> [!success] Complexity
+> Time O(n³), Space O(n²).
+
+> [!tip] Alternatives
+> - Memoized recursion with `@lru_cache`: `solve(i, j)` — same asymptotic, easier to code correctly under pressure.
+> - Pattern: this is the canonical "interval DP" template. Also appears in: burst balloons, remove boxes, strange printer.
+
+---
+
+### Super Egg Drop (LC 887)
+
+> [!example] Problem
+> Given `k` eggs and `n` floors, find the minimum number of moves needed to determine the critical floor in the worst case.
+
+> [!info] Approach
+> - **WHY:** Standard DP `dp[k][n]` = minimum tries for k eggs and n floors is O(kn²) which TLEs. The key reformulation: `dp2[m][k]` = maximum floors we can check with `m` moves and `k` eggs. Answer is the minimum `m` such that `dp2[m][k] >= n`.
+> - **WHAT:** `dp2[m][k] = dp2[m-1][k-1] + dp2[m-1][k] + 1`. If the egg breaks, we can check `dp2[m-1][k-1]` floors below. If it doesn't, we can check `dp2[m-1][k]` floors above.
+> - **HOW:** Increment `m` until `dp2[m][k] >= n`. Since `m <= n` and `k <= n`, the loops terminate.
+
+> [!note]- Python Solution
+> ```python
+> def super_egg_drop(k: int, n: int) -> int:
+>     m = 0
+>     dp = [0] * (k + 1)
+>     while dp[k] < n:
+>         m += 1
+>         new_dp = [0] * (k + 1)
+>         for j in range(1, k + 1):
+>             new_dp[j] = dp[j-1] + dp[j] + 1
+>         dp = new_dp
+>     return m
+> ```
+
+> [!success] Complexity
+> Time O(k log n) — `m` grows as O(log n) for k ≥ 2. Space O(k).
+
+> [!tip] Alternatives
+> - Binary search on the standard DP: for each `(k, n)` state, binary search for the optimal floor to drop from. O(kn log n). Better than O(kn²) but worse than the reformulation.
+> - Key insight: the reformulation inverts the question from "min moves for n floors" to "max floors for m moves" — this removes the O(n) inner loop.
+
+---
+
+### Russian Doll Envelopes (LC 354)
+
+> [!example] Problem
+> Given a list of `(width, height)` envelopes, find the maximum number that can be nested inside each other (both width and height must be strictly larger).
+
+> [!info] Approach
+> - **WHY:** If we sort by width, this becomes LIS on heights. But with equal widths, we can't include two envelopes (a wider envelope can't fit inside one of the same width). Fix: sort by `(width asc, height desc)` — the descending height ensures equal-width envelopes can never form an increasing subsequence.
+> - **WHAT:** Sort by `(w asc, h desc)`. Extract heights. Run patience sort (O(n log n) LIS) on heights.
+> - **HOW:** `bisect_left` on the `tails` array — same as LC 300 LIS.
+
+> [!note]- Python Solution
+> ```python
+> import bisect
+>
+> def max_envelopes(envelopes: list[list[int]]) -> int:
+>     envelopes.sort(key=lambda x: (x[0], -x[1]))
+>     tails = []
+>     for _, h in envelopes:
+>         pos = bisect.bisect_left(tails, h)
+>         if pos == len(tails):
+>             tails.append(h)
+>         else:
+>             tails[pos] = h
+>     return len(tails)
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> - O(n²) DP: for each envelope, check all previous ones and extend. Too slow for large inputs (n up to 10^5).
+> - Key trick: the `(w asc, h desc)` sort is the entire insight — without it, equal-width envelopes would incorrectly contribute to the LIS.
+
+---
+
+## See Also
+
+[[recursion]] | [[sorting]] | [[binary-search]] | [[graph-algorithms]]

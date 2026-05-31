@@ -1621,3 +1621,155 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > If the graph can have cycles, use Dijkstra for non-negative edges or Bellman-Ford when negative edges are allowed.
+
+---
+
+## Advanced Graph Algorithms
+
+### Strongly Connected Components — Kosaraju's Algorithm
+
+> [!example] Problem
+> Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.
+
+> [!info] Approach
+> - **WHY:** Kosaraju's runs two DFS passes. The first pass computes finish-order (equivalent to reverse topological order). The second pass on the reversed graph extracts SCCs in that finish order.
+> - **WHAT:** Pass 1 — DFS on original graph, push nodes to a stack in finish order. Pass 2 — pop from the stack, DFS on the transposed graph; each DFS tree in pass 2 is one SCC.
+> - **HOW:** Build adjacency list and its transpose. DFS on original, recording finish order in a stack. Then repeatedly pop from the stack and DFS on the transposed graph — all reachable unvisited nodes form one SCC.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def kosaraju(n: int, edges: list[tuple[int, int]]) -> list[list[int]]:
+>     graph = defaultdict(list)
+>     rev_graph = defaultdict(list)
+>     for u, v in edges:
+>         graph[u].append(v)
+>         rev_graph[v].append(u)
+>
+>     visited = [False] * n
+>     finish_order = []
+>
+>     def dfs1(node: int) -> None:
+>         visited[node] = True
+>         for neighbour in graph[node]:
+>             if not visited[neighbour]:
+>                 dfs1(neighbour)
+>         finish_order.append(node)
+>
+>     for i in range(n):
+>         if not visited[i]:
+>             dfs1(i)
+>
+>     visited = [False] * n
+>     sccs = []
+>
+>     def dfs2(node: int, component: list) -> None:
+>         visited[node] = True
+>         component.append(node)
+>         for neighbour in rev_graph[node]:
+>             if not visited[neighbour]:
+>                 dfs2(neighbour, component)
+>
+>     while finish_order:
+>         node = finish_order.pop()
+>         if not visited[node]:
+>             component = []
+>             dfs2(node, component)
+>             sccs.append(component)
+>     return sccs
+> ```
+
+> [!success] Complexity
+> Time O(V + E), Space O(V + E).
+
+> [!tip] Alternatives
+> - Tarjan's algorithm: single DFS pass using low-link values and a stack. Also O(V + E) but more complex to implement. Preferred when low-link values are needed for other purposes (bridges, articulation points).
+> - Key insight: reversing the graph "flips" the SCC connectivity — nodes reachable in the reverse graph from a root belong to the same SCC.
+
+---
+
+### Minimum Spanning Tree — Prim's Algorithm
+
+> [!example] Problem
+> Given a weighted undirected connected graph, find the minimum spanning tree (MST) — the subset of edges that connects all vertices with minimum total weight.
+
+> [!info] Approach
+> - **WHY:** Prim's grows the MST greedily from any starting node, always adding the cheapest edge that connects the current MST to an unvisited node. A min-heap makes this O(E log V).
+> - **WHAT:** Use a min-heap of `(weight, node)`. Start with node 0. Greedily pick the smallest weight edge to an unvisited node, add it to the MST, and push all its edges into the heap.
+> - **HOW:** `visited` set tracks MST nodes. Pop from heap; if already visited, skip. Otherwise mark visited, add weight to MST cost, push all unvisited neighbours into the heap.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import defaultdict
+>
+> def prim_mst(n: int, edges: list[tuple[int, int, int]]) -> int:
+>     graph = defaultdict(list)
+>     for u, v, w in edges:
+>         graph[u].append((w, v))
+>         graph[v].append((w, u))
+>     visited = set()
+>     heap = [(0, 0)]   # (weight, node)
+>     total_weight = 0
+>     while heap and len(visited) < n:
+>         weight, node = heapq.heappop(heap)
+>         if node in visited:
+>             continue
+>         visited.add(node)
+>         total_weight += weight
+>         for edge_weight, neighbour in graph[node]:
+>             if neighbour not in visited:
+>                 heapq.heappush(heap, (edge_weight, neighbour))
+>     return total_weight if len(visited) == n else -1
+> ```
+
+> [!success] Complexity
+> Time O(E log V), Space O(V + E).
+
+> [!tip] Alternatives
+> - Kruskal's: sort all edges, use Union-Find to pick the smallest edge that doesn't create a cycle. O(E log E). Better for sparse graphs; Prim's is better for dense graphs.
+> - Key difference: Prim's grows from a single root; Kruskal's builds components that merge.
+
+---
+
+### All-Pairs Shortest Path — Floyd-Warshall
+
+> [!example] Problem
+> Given a weighted directed graph with `n` nodes (possibly with negative edges, but no negative cycles), find the shortest path between every pair of nodes.
+
+> [!info] Approach
+> - **WHY:** Dijkstra's is per-source (O(V * E log V) total for all-pairs). Floyd-Warshall's DP is simpler to implement and handles negative edges. For dense graphs it's competitive.
+> - **WHAT:** `dist[i][j]` = shortest path from `i` to `j`. For each intermediate node `k`, check if routing through `k` shortens `dist[i][j]`.
+> - **HOW:** Initialize `dist[i][j]` to edge weight if edge exists, 0 if `i == j`, infinity otherwise. Triple loop: for each `k`, for each `i`, for each `j`: `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`.
+
+> [!note]- Python Solution
+> ```python
+> def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float]]:
+>     INF = float('inf')
+>     dist = [[INF] * n for _ in range(n)]
+>     for i in range(n):
+>         dist[i][i] = 0
+>     for u, v, w in edges:
+>         dist[u][v] = w
+>     for k in range(n):
+>         for i in range(n):
+>             for j in range(n):
+>                 if dist[i][k] + dist[k][j] < dist[i][j]:
+>                     dist[i][j] = dist[i][k] + dist[k][j]
+>     return dist
+> ```
+
+> [!success] Complexity
+> Time O(V³), Space O(V²).
+
+> [!tip] Alternatives
+> - Run Dijkstra from every source: O(V * E log V) — better for sparse graphs with non-negative edges.
+> - Bellman-Ford from every source: O(V² * E) — handles negative edges but much slower.
+> - Floyd-Warshall is the go-to when the graph is dense or the input is given as an adjacency matrix.
+
+---
+
+## See Also
+
+[[union-find]] | [[binary-search]] | [[dynamic-programming]] | [[sorting]]

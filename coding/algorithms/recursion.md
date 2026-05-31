@@ -1803,3 +1803,95 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Memoized recursion and iterative DP are simpler, but fast doubling is the classic optimization question.
+
+---
+
+## Recursion — More Problems
+
+### Predict the Winner (LC 486)
+
+> [!example] Problem
+> Two players take turns picking from either end of an array. Each picks optimally to maximize their own score. Return true if player 1 can win (score ≥ player 2's score).
+
+> [!info] Approach
+> - **WHY:** This is a minimax recursion. From any subarray `[i, j]`, the current player picks the end that maximises their net advantage (their score minus the opponent's future score). If the first player's net advantage from the full array is ≥ 0, they win.
+> - **WHAT:** `dp(i, j)` = maximum score advantage the current player can achieve over the opponent from subarray `[i, j]`. Base: `dp(i, i) = nums[i]`. Recurrence: `max(nums[i] - dp(i+1, j), nums[j] - dp(i, j-1))`.
+> - **HOW:** Memoize with `@lru_cache`. Return `dp(0, n-1) >= 0`.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+>
+> def predict_the_winner(nums: list[int]) -> bool:
+>     n = len(nums)
+>
+>     @lru_cache(maxsize=None)
+>     def dp(i: int, j: int) -> int:
+>         if i == j:
+>             return nums[i]
+>         pick_left = nums[i] - dp(i + 1, j)
+>         pick_right = nums[j] - dp(i, j - 1)
+>         return max(pick_left, pick_right)
+>
+>     return dp(0, n - 1) >= 0
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n²).
+
+> [!tip] Alternatives
+> - Bottom-up DP: fill a 2D table by diagonal (subarray length). Same asymptotic complexity, avoids recursion stack.
+> - Key insight: `dp(i, j)` represents the *net advantage* (current player's gain minus opponent's gain) — not the absolute score. This collapses the two-player tracking into one value.
+
+---
+
+### Flatten Nested List Iterator (LC 341)
+
+> [!example] Problem
+> Implement an iterator to flatten a nested list (each element is either an integer or a list of nested integers). Must support `hasNext()` and `next()`.
+
+> [!info] Approach
+> - **WHY:** Lazy flattening with a stack: push the full list onto the stack. When `hasNext()` is called, peel the top until an integer is at the top. `next()` then pops and returns it.
+> - **WHAT:** Stack holds iterators (via index pointers or list iterators). When the top element is a list, push the new list's iterator. When it's an integer, it's ready to be returned.
+> - **HOW:** Use a stack of `(nested_list, index)` pairs. `_advance()` is called by `hasNext()` to ensure the top is an integer.
+
+> [!note]- Python Solution
+> ```python
+> class NestedIterator:
+>     def __init__(self, nestedList):
+>         self.stack = [(nestedList, 0)]
+>
+>     def _advance(self):
+>         while self.stack:
+>             lst, idx = self.stack[-1]
+>             if idx == len(lst):
+>                 self.stack.pop()
+>             elif lst[idx].isInteger():
+>                 return
+>             else:
+>                 self.stack[-1] = (lst, idx + 1)
+>                 self.stack.append((lst[idx].getList(), 0))
+>
+>     def next(self) -> int:
+>         self._advance()
+>         lst, idx = self.stack[-1]
+>         self.stack[-1] = (lst, idx + 1)
+>         return lst[idx].getInteger()
+>
+>     def hasNext(self) -> bool:
+>         self._advance()
+>         return bool(self.stack)
+> ```
+
+> [!success] Complexity
+> Time O(1) amortized per `next()` / `hasNext()`. Space O(d) where d = nesting depth.
+
+> [!tip] Alternatives
+> - Pre-flatten in `__init__`: collect all integers into a deque. Simplest to code but not lazy — could be slow if only a few values are ever consumed.
+> - Recursive generator with `yield from`: elegant but interviewers often want the explicit stack version.
+
+---
+
+## See Also
+
+[[dynamic-programming]] | [[backtracking]] | [[tree]] | [[stack]]

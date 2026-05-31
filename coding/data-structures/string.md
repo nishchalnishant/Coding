@@ -1241,3 +1241,112 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 > [!tip] Alternatives
 > This same read/write pointer idea is useful for deduplication, filtering, and in-place run-length encoding.
+
+---
+
+## String Manipulation
+
+### Zigzag Conversion (LC 6)
+
+> [!example] Problem
+> Write the string in a zigzag pattern across `numRows` rows, then read off each row left-to-right to produce the output string.
+
+> [!info] Approach
+> - **WHY:** Rather than simulating the 2D grid (wastes space), we can directly assign each character to its row number by tracking which row we're currently on and the direction we're moving.
+> - **WHAT:** Maintain `numRows` string builders (one per row). Walk the characters, appending each to the current row's builder, while toggling direction at the top and bottom rows.
+> - **HOW:** Track `current_row` (starts at 0) and `direction` (+1 going down, -1 going up). Flip direction when `current_row == 0` or `current_row == numRows - 1`. Final answer = concatenation of all row strings.
+
+> [!note]- Python Solution
+> ```python
+> def convert(s: str, num_rows: int) -> str:
+>     if num_rows == 1 or num_rows >= len(s):
+>         return s
+>     rows = [''] * num_rows
+>     current_row = 0
+>     direction = -1
+>     for ch in s:
+>         rows[current_row] += ch
+>         if current_row == 0 or current_row == num_rows - 1:
+>             direction *= -1
+>         current_row += direction
+>     return ''.join(rows)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Mathematical index formula: for each row `r`, characters fall at periodic positions. Row 0 and `numRows-1` have period `2*(numRows-1)`; middle rows have two characters per period. Direct but trickier to get indices right.
+
+---
+
+### Valid Palindrome II (LC 680)
+
+> [!example] Problem
+> Given a string, return `True` if it can become a palindrome after removing at most one character.
+
+> [!info] Approach
+> - **WHY:** A standard two-pointer palindrome check stops at the first mismatch. At that point, removing either the left or right character might fix things — we just need to check both possibilities.
+> - **WHAT:** Two pointers `left` and `right`. If characters match, move both inward. On mismatch, try removing `left` or removing `right` and check if the remainder is a palindrome.
+> - **HOW:** Helper `is_palindrome(l, r)` checks `s[l..r]`. Main: walk until mismatch, then return `is_palindrome(left+1, right) or is_palindrome(left, right-1)`.
+
+> [!note]- Python Solution
+> ```python
+> def valid_palindrome(s: str) -> bool:
+>     def is_palindrome(left: int, right: int) -> bool:
+>         while left < right:
+>             if s[left] != s[right]:
+>                 return False
+>             left += 1
+>             right -= 1
+>         return True
+>
+>     left = 0
+>     right = len(s) - 1
+>     while left < right:
+>         if s[left] != s[right]:
+>             return is_palindrome(left + 1, right) or is_palindrome(left, right - 1)
+>         left += 1
+>         right -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Check all single-character deletions: O(n²) — correct but too slow.
+> - Key insight: once we find a mismatch, we only try removing one of the two mismatching characters — no need to try every position.
+
+---
+
+### Reverse Words in a String (LC 151)
+
+> [!example] Problem
+> Given a string with words separated by spaces (possibly multiple leading/trailing spaces), return the words reversed in order with single spaces between them.
+
+> [!info] Approach
+> - **WHY:** Python's `split()` without arguments handles multiple spaces and strips leading/trailing whitespace. Reverse the resulting list and rejoin.
+> - **WHAT:** Split on whitespace, reverse the list, join with single space.
+> - **HOW:** `words = s.split()` → `words.reverse()` → `return ' '.join(words)`.
+
+> [!note]- Python Solution
+> ```python
+> def reverse_words(s: str) -> str:
+>     words = s.split()
+>     words.reverse()
+>     return ' '.join(words)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - In-place (for C/C++): (1) reverse the entire string, (2) reverse each individual word, (3) remove extra spaces. O(n) time, O(1) space.
+> - Key distinction: LC 151 asks for reversed *word order*, not reversed characters within words.
+
+---
+
+## See Also
+
+[[two-pointers]] | [[sliding-window]] | [[hashing]] | [[string-algorithms]]

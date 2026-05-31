@@ -950,3 +950,88 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > The same two-pointer skip pattern works for palindrome checks, partitioning, and sorted-array pair problems.
+
+---
+
+## Two Pointers — More Problems
+
+### Minimum Operations to Reduce X to Zero (LC 1658)
+
+> [!example] Problem
+> Given an array of positive integers and an integer `x`, find the minimum number of elements to remove from the left or right ends so that their sum equals `x`. Return -1 if impossible.
+
+> [!info] Approach
+> - **WHY:** Removing from both ends to sum to `x` is equivalent to finding the longest subarray in the middle with sum = `total - x`. This is a sliding window on the middle subarray.
+> - **WHAT:** Find the maximum-length subarray with sum = `total - x`. The answer is `n - max_length`.
+> - **HOW:** Two-pointer (sliding window): expand right to grow the window, shrink left when the window sum exceeds `target`. Track the maximum window length where sum equals `target`.
+
+> [!note]- Python Solution
+> ```python
+> def min_operations(nums: list[int], x: int) -> int:
+>     target = sum(nums) - x
+>     if target < 0:
+>         return -1
+>     if target == 0:
+>         return len(nums)
+>     n = len(nums)
+>     left = 0
+>     current_sum = 0
+>     max_len = -1
+>     for right in range(n):
+>         current_sum += nums[right]
+>         while current_sum > target and left <= right:
+>             current_sum -= nums[left]
+>             left += 1
+>         if current_sum == target:
+>             max_len = max(max_len, right - left + 1)
+>     if max_len == -1:
+>         return -1
+>     return n - max_len
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Prefix sum + hash map: store prefix sums, search for `prefix[i] == total - x - suffix_sum`. O(n) time but O(n) space.
+> - Key insight: the "remove from both ends" framing is a classic redirect — always ask if the complement (middle subarray) is easier.
+
+---
+
+### Boats to Save People (LC 881)
+
+> [!example] Problem
+> Each boat can carry at most 2 people and has a weight limit. Given a sorted array of people weights, return the minimum number of boats needed.
+
+> [!info] Approach
+> - **WHY:** Greedy: pair the heaviest person with the lightest person if their combined weight fits. Otherwise, the heaviest person gets a boat alone. Two pointers on a sorted array implements this efficiently.
+> - **WHAT:** Sort people. Use `left` and `right` pointers. If `people[left] + people[right] <= limit`, both fit — move both pointers. Otherwise, only `right` fits — move only `right`.
+> - **HOW:** Each iteration uses one boat. Count iterations until `left > right`.
+
+> [!note]- Python Solution
+> ```python
+> def num_rescue_boats(people: list[int], limit: int) -> int:
+>     people.sort()
+>     left = 0
+>     right = len(people) - 1
+>     boats = 0
+>     while left <= right:
+>         if people[left] + people[right] <= limit:
+>             left += 1
+>         right -= 1
+>         boats += 1
+>     return boats
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for sorting, O(n) for the scan. Space O(1).
+
+> [!tip] Alternatives
+> - Greedy with priority queue: overkill — the two-pointer on sorted array is optimal.
+> - Key insight: always try to pair the heaviest with the lightest. If they don't fit, the heaviest must go alone.
+
+---
+
+## See Also
+
+[[binary-search]] | [[sorting]] | [[sliding-window]] | [[array]]

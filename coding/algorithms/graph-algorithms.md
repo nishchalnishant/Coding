@@ -1280,3 +1280,157 @@ See full Bellman-Ford solution in the next section.
 
 > [!tip] Alternatives
 > For graphs with only non-negative edges, Dijkstra is faster; for DAGs, topological relaxation is linear.
+
+---
+
+## Graph Algorithms — More Problems
+
+### Shortest Path Visiting All Nodes (LC 847)
+
+> [!example] Problem
+> Given an undirected graph with `n` nodes, find the shortest path that visits every node (can revisit nodes and edges). Return the length of this shortest path.
+
+> [!info] Approach
+> - **WHY:** This is TSP-like. With n ≤ 12, use BFS with bitmask state: `(node, visited_mask)`. BFS gives the shortest path. There are `n * 2^n` states — manageable for small n.
+> - **WHAT:** Initialize queue with all `(node, 1 << node)` for every node (start from any node). BFS until `mask == (1 << n) - 1` (all visited).
+> - **HOW:** Visited set: `{(node, mask)}`. Dequeue state, try all neighbours. Update mask with `mask | (1 << neighbour)`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+>
+> def shortest_path_length(graph: list[list[int]]) -> int:
+>     n = len(graph)
+>     full_mask = (1 << n) - 1
+>     if n == 1:
+>         return 0
+>     queue = deque()
+>     visited = set()
+>     for i in range(n):
+>         mask = 1 << i
+>         queue.append((i, mask, 0))
+>         visited.add((i, mask))
+>     while queue:
+>         node, mask, dist = queue.popleft()
+>         for neighbor in graph[node]:
+>             new_mask = mask | (1 << neighbor)
+>             if new_mask == full_mask:
+>                 return dist + 1
+>             if (neighbor, new_mask) not in visited:
+>                 visited.add((neighbor, new_mask))
+>                 queue.append((neighbor, new_mask, dist + 1))
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(n * 2^n), Space O(n * 2^n).
+
+> [!tip] Alternatives
+> - DP with bitmask (like TSP): `dp[mask][node]` = shortest path visiting exactly the nodes in mask and ending at `node`. Fills in O(n² * 2^n). BFS is simpler for unweighted graphs.
+
+---
+
+### Word Ladder II (LC 126)
+
+> [!example] Problem
+> Given `beginWord`, `endWord`, and a `wordList`, find all shortest transformation sequences from `beginWord` to `endWord`, changing one letter at a time (each intermediate word must be in the word list).
+
+> [!info] Approach
+> - **WHY:** BFS finds shortest path length. To reconstruct all paths, store the parent map during BFS (which words at the previous level can reach each word at the current level), then DFS backwards from `endWord` to `beginWord`.
+> - **WHAT:** BFS layer by layer. For each word at the current layer, generate all one-letter mutations. If mutation is in the word set and not visited, add it to the next layer and record the parent. After BFS, DFS from endWord using the parent map to reconstruct paths.
+> - **HOW:** Remove words from `word_set` only after the full layer is processed — prevents cutting off valid same-layer paths.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict, deque
+>
+> def find_ladders(beginWord: str, endWord: str, wordList: list[str]) -> list[list[str]]:
+>     word_set = set(wordList)
+>     if endWord not in word_set:
+>         return []
+>     parents = defaultdict(set)
+>     layer = {beginWord}
+>     found = False
+>     while layer and not found:
+>         word_set -= layer
+>         next_layer = set()
+>         for word in layer:
+>             for i in range(len(word)):
+>                 for c in 'abcdefghijklmnopqrstuvwxyz':
+>                     new_word = word[:i] + c + word[i+1:]
+>                     if new_word in word_set:
+>                         next_layer.add(new_word)
+>                         parents[new_word].add(word)
+>                         if new_word == endWord:
+>                             found = True
+>         layer = next_layer
+>     if not found:
+>         return []
+>     result = []
+>     def dfs(word, path):
+>         if word == beginWord:
+>             result.append(list(reversed(path)))
+>             return
+>         for parent in parents[word]:
+>             path.append(parent)
+>             dfs(parent, path)
+>             path.pop()
+>     dfs(endWord, [endWord])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(M² * N) where M = word length, N = wordList size. Space O(M * N).
+
+> [!tip] Alternatives
+> - Bidirectional BFS: expand from both ends, meet in the middle. Halves the search depth — significant speedup in practice.
+> - Key pitfall: removing words from the set only after the entire layer is processed — otherwise words reachable from multiple same-layer words get cut prematurely.
+
+---
+
+### Travelling Salesman Problem — Bitmask DP
+
+> [!example] Problem
+> Given `n` cities and a distance matrix, find the shortest route that visits every city exactly once and returns to the starting city. Classic TSP.
+
+> [!info] Approach
+> - **WHY:** Brute force is O(n!). Bitmask DP reduces to O(n² * 2^n) — tractable for n ≤ 20.
+> - **WHAT:** `dp[mask][i]` = minimum cost to reach city `i` having visited exactly the cities in `mask`. Transition: for each unvisited city `j`, `dp[mask | (1<<j)][j] = min(..., dp[mask][i] + dist[i][j])`.
+> - **HOW:** Start with `dp[1][0] = 0` (started at city 0). Answer: `min(dp[full_mask][i] + dist[i][0])` for all `i`.
+
+> [!note]- Python Solution
+> ```python
+> def tsp(dist: list[list[int]]) -> int:
+>     n = len(dist)
+>     full_mask = (1 << n) - 1
+>     INF = float('inf')
+>     dp = [[INF] * n for _ in range(1 << n)]
+>     dp[1][0] = 0
+>     for mask in range(1 << n):
+>         for i in range(n):
+>             if dp[mask][i] == INF:
+>                 continue
+>             if not (mask >> i & 1):
+>                 continue
+>             for j in range(n):
+>                 if mask >> j & 1:
+>                     continue
+>                 new_mask = mask | (1 << j)
+>                 if dp[new_mask][j] > dp[mask][i] + dist[i][j]:
+>                     dp[new_mask][j] = dp[mask][i] + dist[i][j]
+>     return min(dp[full_mask][i] + dist[i][0] for i in range(n))
+> ```
+
+> [!success] Complexity
+> Time O(n² * 2^n), Space O(n * 2^n).
+
+> [!tip] Alternatives
+> - Held-Karp algorithm: same DP, just the classic name. O(n² * 2^n) is optimal for exact TSP.
+> - For approximate TSP: Christofides' algorithm (1.5x approximation), or 2-opt local search for large instances.
+> - Pattern shared with: Shortest Path Visiting All Nodes (LC 847), painting fence with k colors.
+
+---
+
+## See Also
+
+[[graph]] | [[dynamic-programming]] | [[union-find]] | [[binary-search]]

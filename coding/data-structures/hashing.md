@@ -1235,3 +1235,110 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Sort + two pointers works too, but frequency counting is the direct interview answer.
+
+---
+
+## Prefix Sum + Hashing
+
+### Subarray Sums Divisible by K (LC 974)
+
+> [!example] Problem
+> Given an integer array and an integer `k`, return the number of non-empty subarrays whose sum is divisible by `k`.
+
+> [!info] Approach
+> - **WHY:** `sum(i..j) % k == 0` iff `prefix[j] % k == prefix[i-1] % k`. So we count pairs of equal remainders among prefix sums.
+> - **WHAT:** Track `remainder -> count` in a hash map. For each prefix sum, look up how many prior prefix sums had the same remainder mod `k`.
+> - **HOW:** Initialize `{0: 1}`. For each element, compute `remainder = running_sum % k`. In Python, `%` always returns non-negative values, so no adjustment needed. Add `count_map[remainder]` to the answer, then increment `count_map[remainder]`.
+
+> [!note]- Python Solution
+> ```python
+> def subarrays_div_by_k(nums: list[int], k: int) -> int:
+>     count_map = {0: 1}
+>     running_sum = 0
+>     total = 0
+>     for num in nums:
+>         running_sum += num
+>         remainder = running_sum % k
+>         total += count_map.get(remainder, 0)
+>         count_map[remainder] = count_map.get(remainder, 0) + 1
+>     return total
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(k).
+
+> [!tip] Alternatives
+> - O(n²) brute force: enumerate all subarray sums and check divisibility.
+> - Key difference from "Subarray Sum Equals K": here we group by remainder, not by exact prefix sum value — the count map has at most `k` keys.
+
+---
+
+### Contiguous Array (LC 525)
+
+> [!example] Problem
+> Given a binary array, find the maximum length subarray with equal numbers of 0s and 1s.
+
+> [!info] Approach
+> - **WHY:** Map 0 → -1. Now "equal 0s and 1s" means "subarray sum = 0". A subarray `[i+1..j]` sums to zero iff `prefix[j] == prefix[i]`. We want the maximum `j - i` among equal prefix sums.
+> - **WHAT:** Hash map of `prefix_sum -> first_index`. When a prefix sum repeats, the distance gives a candidate max length.
+> - **HOW:** Initialize `{0: -1}`. For each index `i`, update `prefix`. If `prefix` is in the map, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise record `first_seen[prefix] = i`.
+
+> [!note]- Python Solution
+> ```python
+> def find_max_length(nums: list[int]) -> int:
+>     first_seen = {0: -1}
+>     prefix = 0
+>     max_len = 0
+>     for i, num in enumerate(nums):
+>         prefix += 1 if num == 1 else -1
+>         if prefix in first_seen:
+>             max_len = max(max_len, i - first_seen[prefix])
+>         else:
+>             first_seen[prefix] = i
+>     return max_len
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Brute force O(n²): enumerate all subarrays, count 0s and 1s.
+> - Key insight: store only the *first* occurrence of each prefix sum to maximise the gap.
+
+---
+
+### 4Sum II (LC 454)
+
+> [!example] Problem
+> Given four integer arrays A, B, C, D of the same length n, count tuples `(i, j, k, l)` such that `A[i] + B[j] + C[k] + D[l] == 0`.
+
+> [!info] Approach
+> - **WHY:** O(n⁴) brute force is too slow. Split the four arrays into two pairs. All pairwise sums from (A, B) can be stored in a hash map; then for each pairwise sum from (C, D), look up its negative.
+> - **WHAT:** Build a frequency map of `a + b` for all pairs from A and B. Then for each pair `(c, d)`, query the map for `-(c + d)`.
+> - **HOW:** `ab_count = Counter(a + b for a in A for b in B)`. Then `total = sum(ab_count[-(c + d)] for c in C for d in D)`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+>
+> def four_sum_count(nums1: list[int], nums2: list[int], nums3: list[int], nums4: list[int]) -> int:
+>     ab_count = Counter(a + b for a in nums1 for b in nums2)
+>     total = 0
+>     for c in nums3:
+>         for d in nums4:
+>             total += ab_count.get(-(c + d), 0)
+>     return total
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n²).
+
+> [!tip] Alternatives
+> - No fundamentally better approach for the general case — O(n²) is optimal here.
+> - Contrast with 4Sum (LC 18): there, the array is fixed, so sorting + two pointers avoids O(n²) space. Here, four separate arrays make that approach impractical.
+
+---
+
+## See Also
+
+[[array]] | [[two-pointers]] | [[sliding-window]] | [[sorting]]

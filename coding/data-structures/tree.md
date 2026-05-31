@@ -1499,3 +1499,136 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Standard boundary problems are mostly about careful node inclusion rules, not complex traversal logic.
+
+---
+
+## Special Tree Problems
+
+### Count Complete Tree Nodes (LC 222)
+
+> [!example] Problem
+> Given a complete binary tree, count the total number of nodes. A complete binary tree has all levels fully filled except possibly the last, which is filled left to right. Aim for better than O(n).
+
+> [!info] Approach
+> - **WHY:** A full binary tree of height `h` has `2^h - 1` nodes. In a complete tree, at least one of the left or right subtrees is a perfect binary tree — we can use this to skip entire subtrees in O(log²n).
+> - **WHAT:** Compute the height of the leftmost path and the rightmost path of any subtree. If equal, the subtree is perfect: return `2^height - 1`. Otherwise, recurse on both children.
+> - **HOW:** `left_height` = length of left spine. `right_height` = length of right spine. If equal, return `(1 << left_height) - 1`. Else return `1 + count(root.left) + count(root.right)`.
+
+> [!note]- Python Solution
+> ```python
+> def count_nodes(root: TreeNode | None) -> int:
+>     if not root:
+>         return 0
+>     left_height = 0
+>     node = root
+>     while node:
+>         left_height += 1
+>         node = node.left
+>     right_height = 0
+>     node = root
+>     while node:
+>         right_height += 1
+>         node = node.right
+>     if left_height == right_height:
+>         return (1 << left_height) - 1
+>     return 1 + count_nodes(root.left) + count_nodes(root.right)
+> ```
+
+> [!success] Complexity
+> Time O(log²n) — each recursion level does O(log n) work and there are O(log n) levels. Space O(log n) call stack.
+
+> [!tip] Alternatives
+> - O(n) full traversal — correct but ignores the complete tree property.
+> - Binary search on node indices with path existence check: also O(log²n), more complex.
+
+---
+
+### Binary Tree Cameras (LC 968)
+
+> [!example] Problem
+> Place the minimum number of cameras on tree nodes such that every node is either covered by a camera or adjacent to a node with a camera. Return the minimum number of cameras needed.
+
+> [!info] Approach
+> - **WHY:** Greedy: leaf nodes should never have cameras — it's always better to place a camera on the parent, which then covers both the leaf and the grandparent.
+> - **WHAT:** Post-order DFS. Each node returns one of three states: 0 = not covered, 1 = has a camera, 2 = covered (no camera). A parent places a camera if either child is uncovered (state 0).
+> - **HOW:** For each node: if either child is uncovered (state 0), place a camera here (state 1, increment count). If either child has a camera (state 1), this node is covered (state 2). Otherwise (both children covered without cameras), return state 0 — let the parent handle coverage. After DFS, if root returns state 0, place one more camera.
+
+> [!note]- Python Solution
+> ```python
+> def min_camera_cover(root: TreeNode | None) -> int:
+>     cameras = 0
+>
+>     def dfs(node: TreeNode | None) -> int:
+>         # returns: 0 = uncovered, 1 = has camera, 2 = covered
+>         if node is None:
+>             return 2   # null nodes are considered covered
+>         left = dfs(node.left)
+>         right = dfs(node.right)
+>         if left == 0 or right == 0:
+>             nonlocal cameras
+>             cameras += 1
+>             return 1
+>         if left == 1 or right == 1:
+>             return 2
+>         return 0
+>
+>     if dfs(root) == 0:
+>         cameras += 1
+>     return cameras
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(h) for the call stack.
+
+> [!tip] Alternatives
+> - DP with states: `dp[node][0/1/2]` = min cameras for subtree where node is uncovered/has camera/covered. Equivalent but more verbose.
+> - Key insight: null nodes return "covered" (2) so that leaves default to "uncovered" (0) naturally, triggering the parent to place a camera.
+
+---
+
+### Recover Binary Search Tree (LC 99)
+
+> [!example] Problem
+> Two nodes of a BST have been swapped by mistake. Recover the tree without changing its structure.
+
+> [!info] Approach
+> - **WHY:** In an inorder traversal of a valid BST, values are strictly increasing. A swap creates at most two "inversions" (places where `prev > current`). The first node of the first inversion and the second node of the last inversion are the swapped pair.
+> - **WHAT:** Inorder traversal (iterative or recursive). Track `prev`, `first_bad`, and `second_bad`. At each inversion (`prev.val > curr.val`): if `first_bad` is not set, set it to `prev`; always update `second_bad` to `curr`.
+> - **HOW:** After traversal, swap `first_bad.val` and `second_bad.val`.
+
+> [!note]- Python Solution
+> ```python
+> def recover_tree(root: TreeNode | None) -> None:
+>     first_bad = None
+>     second_bad = None
+>     prev = None
+>
+>     def inorder(node: TreeNode | None) -> None:
+>         nonlocal first_bad, second_bad, prev
+>         if not node:
+>             return
+>         inorder(node.left)
+>         if prev and prev.val > node.val:
+>             if first_bad is None:
+>                 first_bad = prev
+>             second_bad = node
+>         prev = node
+>         inorder(node.right)
+>
+>     inorder(root)
+>     if first_bad and second_bad:
+>         first_bad.val, second_bad.val = second_bad.val, first_bad.val
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(h) for the call stack. Can be done in O(1) space with Morris traversal.
+
+> [!tip] Alternatives
+> - Morris inorder traversal: O(1) space, no stack, temporarily threads pointers — harder to code under pressure.
+> - Key edge case: if the two swapped nodes are adjacent in inorder, there is only one inversion, so `second_bad` is set from the first (and only) inversion's `curr`.
+
+---
+
+## See Also
+
+[[queue]] | [[dynamic-programming]] | [[graph]] | [[hashing]]

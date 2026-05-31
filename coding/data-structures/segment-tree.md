@@ -849,3 +849,197 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > For prefix-sum-friendly updates, a Fenwick tree may be simpler; lazy segment trees handle general range aggregates.
+
+---
+
+## Segment Tree Applications
+
+### Falling Squares (LC 699)
+
+> [!example] Problem
+> Squares of given size fall at given positions. After each square lands, return the height of the tallest stack. Each square rests on the ground or on top of a previous overlapping square.
+
+> [!info] Approach
+> - **WHY:** After each square falls at `[left, left+size)`, its height = size + max existing height in `[left, left+size)`. We need range-max-query and range-update, which a segment tree with lazy propagation handles in O(log n) per operation.
+> - **WHAT:** Coordinate-compress all left and right endpoints (since positions can be large). Use a segment tree supporting range max query and range assignment update.
+> - **HOW:** For each square: query max height in its interval, compute new height = query result + size, update the interval to that new height, record the global max.
+
+> [!note]- Python Solution
+> ```python
+> def falling_squares(positions: list[list[int]]) -> list[int]:
+>     coords = set()
+>     for left, size in positions:
+>         coords.add(left)
+>         coords.add(left + size)
+>     sorted_coords = sorted(coords)
+>     compress = {v: i for i, v in enumerate(sorted_coords)}
+>     m = len(sorted_coords)
+>
+>     tree = [0] * (4 * m)
+>     lazy = [0] * (4 * m)
+>
+>     def push_down(node: int) -> None:
+>         if lazy[node] > 0:
+>             for child in [2 * node, 2 * node + 1]:
+>                 tree[child] = max(tree[child], lazy[node])
+>                 lazy[child] = max(lazy[child], lazy[node])
+>             lazy[node] = 0
+>
+>     def update(node: int, lo: int, hi: int, left: int, right: int, val: int) -> None:
+>         if right <= lo or hi <= left:
+>             return
+>         if left <= lo and hi <= right:
+>             tree[node] = max(tree[node], val)
+>             lazy[node] = max(lazy[node], val)
+>             return
+>         push_down(node)
+>         mid = (lo + hi) // 2
+>         update(2 * node, lo, mid, left, right, val)
+>         update(2 * node + 1, mid, hi, left, right, val)
+>         tree[node] = max(tree[2 * node], tree[2 * node + 1])
+>
+>     def query(node: int, lo: int, hi: int, left: int, right: int) -> int:
+>         if right <= lo or hi <= left:
+>             return 0
+>         if left <= lo and hi <= right:
+>             return tree[node]
+>         push_down(node)
+>         mid = (lo + hi) // 2
+>         left_max = query(2 * node, lo, mid, left, right)
+>         right_max = query(2 * node + 1, mid, hi, left, right)
+>         return max(left_max, right_max)
+>
+>     result = []
+>     global_max = 0
+>     for left, size in positions:
+>         l = compress[left]
+>         r = compress[left + size]
+>         current_height = query(1, 0, m, l, r)
+>         new_height = current_height + size
+>         update(1, 0, m, l, r, new_height)
+>         global_max = max(global_max, new_height)
+>         result.append(global_max)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n log n) with coordinate compression. Space O(n).
+
+> [!tip] Alternatives
+> - Brute force: for each square, scan all previous squares for overlap — O(n²). Fine for small inputs.
+> - Sorted intervals + ordered dict: can work but segment tree with coordinate compression is the clean solution.
+
+---
+
+### Count of Smaller Numbers After Self (LC 315) — BIT Approach
+
+> [!example] Problem
+> Given an integer array, return a count array where `count[i]` is the number of elements to the right of `nums[i]` that are smaller than `nums[i]`.
+
+> [!info] Approach
+> - **WHY:** Scanning right to left, for each element we need "how many elements seen so far are smaller than the current element." A BIT on coordinate-compressed values answers this as a prefix-sum query.
+> - **WHAT:** Coordinate-compress all values. Scan right to left. For each `nums[i]`: query BIT for prefix sum up to `rank[nums[i]] - 1` (count of smaller values already processed), then update BIT at `rank[nums[i]]`.
+> - **HOW:** Sort unique values to build rank map. Scan right to left: `count[i] = bit.query(rank[nums[i]] - 1)`. Then `bit.update(rank[nums[i]], 1)`.
+
+> [!note]- Python Solution
+> ```python
+> def count_smaller(nums: list[int]) -> list[int]:
+>     sorted_unique = sorted(set(nums))
+>     rank = {v: i + 1 for i, v in enumerate(sorted_unique)}
+>     m = len(sorted_unique)
+>     bit = [0] * (m + 1)
+>
+>     def update(i: int) -> None:
+>         while i <= m:
+>             bit[i] += 1
+>             i += i & -i
+>
+>     def query(i: int) -> int:
+>         total = 0
+>         while i > 0:
+>             total += bit[i]
+>             i -= i & -i
+>         return total
+>
+>     result = []
+>     for num in reversed(nums):
+>         r = rank[num]
+>         result.append(query(r - 1))
+>         update(r)
+>     result.reverse()
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> - Merge sort (divide and conquer): count inversions during merge — also O(n log n). More complex but avoids coordinate compression.
+> - Segment tree: equivalent to BIT for this problem; BIT is simpler to code.
+
+---
+
+### Range Sum Query 2D — Mutable (LC 308)
+
+> [!example] Problem
+> Design a data structure for a 2D matrix that supports point updates and rectangular range sum queries.
+
+> [!info] Approach
+> - **WHY:** A 2D Fenwick tree (BIT) extends the 1D BIT to two dimensions. Point update and range sum both run in O(log m * log n).
+> - **WHAT:** Maintain a 2D BIT where `bit[i][j]` stores the sum for a "responsible region." Update propagates along both row and column axes simultaneously.
+> - **HOW:** Update `(r, c)` by delta: iterate `i = r+1` by `i += i & -i`, and for each `i` iterate `j = c+1` by `j += j & -j`, adding delta to `bit[i][j]`. Query prefix sum up to `(r, c)`: sum over all `i` and `j` indices descending by clearing the lowest bit.
+
+> [!note]- Python Solution
+> ```python
+> class NumMatrix:
+>     def __init__(self, matrix: list[list[int]]):
+>         self.m = len(matrix)
+>         self.n = len(matrix[0])
+>         self.matrix = [[0] * self.n for _ in range(self.m)]
+>         self.bit = [[0] * (self.n + 1) for _ in range(self.m + 1)]
+>         for r in range(self.m):
+>             for c in range(self.n):
+>                 self.update(r, c, matrix[r][c])
+>
+>     def update(self, row: int, col: int, val: int) -> None:
+>         delta = val - self.matrix[row][col]
+>         self.matrix[row][col] = val
+>         i = row + 1
+>         while i <= self.m:
+>             j = col + 1
+>             while j <= self.n:
+>                 self.bit[i][j] += delta
+>                 j += j & -j
+>             i += i & -i
+>
+>     def _prefix_sum(self, row: int, col: int) -> int:
+>         total = 0
+>         i = row + 1
+>         while i > 0:
+>             j = col + 1
+>             while j > 0:
+>                 total += self.bit[i][j]
+>                 j -= j & -j
+>             i -= i & -i
+>         return total
+>
+>     def sum_region(self, row1: int, col1: int, row2: int, col2: int) -> int:
+>         total = self._prefix_sum(row2, col2)
+>         total -= self._prefix_sum(row1 - 1, col2)
+>         total -= self._prefix_sum(row2, col1 - 1)
+>         total += self._prefix_sum(row1 - 1, col1 - 1)
+>         return total
+> ```
+
+> [!success] Complexity
+> Time O(log m * log n) per update/query, Space O(m * n).
+
+> [!tip] Alternatives
+> - 2D segment tree: more general (supports range updates) but much more complex to implement.
+> - Recompute prefix sums on each query: O(mn) per query — fine for read-heavy workloads without updates.
+
+---
+
+## See Also
+
+[[array]] | [[binary-search]] | [[sorting]] | [[dynamic-programming]]

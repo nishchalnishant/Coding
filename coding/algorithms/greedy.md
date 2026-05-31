@@ -942,3 +942,92 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 ## See Also
 
 [[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]]
+
+---
+
+## Greedy — Interval and Coverage Problems
+
+### Video Stitching (LC 1024)
+
+> [!example] Problem
+> Given a list of video clips `[start, end]` and a target duration `T`, find the minimum number of clips needed to cover the range `[0, T]`. Return -1 if it's not possible.
+
+> [!info] Approach
+> - **WHY:** This is the classic "minimum jumps to cover a range" greedy problem. Sort clips by start time. At each step, among all clips that start at or before the current position, pick the one that extends the furthest.
+> - **WHAT:** Sort by start. Maintain `cur_end` (current covered end) and `farthest` (furthest reach among clips starting ≤ `cur_end`). When we've processed all clips starting ≤ `cur_end`, we must extend using the farthest clip found, incrementing the count.
+> - **HOW:** Iterate through sorted clips. If `clip_start > cur_end`, return -1 (gap). Update `farthest`. When we've exhausted clips for this jump, set `cur_end = farthest`, increment count.
+
+> [!note]- Python Solution
+> ```python
+> def video_stitching(clips: list[list[int]], time: int) -> int:
+>     clips.sort()
+>     count = 0
+>     cur_end = 0
+>     farthest = 0
+>     i = 0
+>     n = len(clips)
+>     while cur_end < time:
+>         while i < n and clips[i][0] <= cur_end:
+>             farthest = max(farthest, clips[i][1])
+>             i += 1
+>         if farthest == cur_end:
+>             return -1
+>         cur_end = farthest
+>         count += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for sort, O(n) for scan. Space O(1).
+
+> [!tip] Alternatives
+> - DP: `dp[i]` = minimum clips to reach time `i`. Fill left to right from clip endpoints. O(n * T) — correct but slower.
+> - Key insight: greedy "jump to maximum reach" from each coverage window mirrors the Jump Game II pattern exactly.
+
+---
+
+### Minimum Taps to Water a Garden (LC 1326)
+
+> [!example] Problem
+> Given a garden of length `n` and taps at positions `0..n`, each tap `i` with range `ranges[i]` waters `[i - ranges[i], i + ranges[i]]`. Find the minimum number of taps to water the entire garden `[0, n]`. Return -1 if impossible.
+
+> [!info] Approach
+> - **WHY:** This reduces directly to the Jump Game II / interval cover problem. Each tap covers an interval. We want to cover `[0, n]` with the fewest intervals.
+> - **WHAT:** Convert each tap to its interval. Then apply the same greedy: sort by left endpoint, for each coverage window pick the interval that extends farthest right.
+> - **HOW:** Build intervals `(max(0, i - ranges[i]), min(n, i + ranges[i]))` for each tap. Sort. Apply the Video Stitching greedy.
+
+> [!note]- Python Solution
+> ```python
+> def min_taps(n: int, ranges: list[int]) -> int:
+>     intervals = []
+>     for i in range(n + 1):
+>         left = max(0, i - ranges[i])
+>         right = min(n, i + ranges[i])
+>         intervals.append((left, right))
+>     intervals.sort()
+>     count = 0
+>     cur_end = 0
+>     farthest = 0
+>     i = 0
+>     while cur_end < n:
+>         while i < len(intervals) and intervals[i][0] <= cur_end:
+>             farthest = max(farthest, intervals[i][1])
+>             i += 1
+>         if farthest == cur_end:
+>             return -1
+>         cur_end = farthest
+>         count += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> - A cleaner O(n) approach: use an array `max_reach[i]` = farthest right endpoint of any interval starting at `i`. Then one pass with the Jump Game II logic. O(n) after the O(n) preprocessing — no sort needed.
+
+---
+
+## See Also (Extended)
+
+[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]] | [[sliding-window]]

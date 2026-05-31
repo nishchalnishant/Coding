@@ -1049,3 +1049,86 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > The divisor-count argument is the key interview proof. Simulation is O(n log n) and unnecessary.
+
+---
+
+## Mathematics — More Problems
+
+### Water Jug Problem (LC 365)
+
+> [!example] Problem
+> Given two jugs of capacity `x` and `y` liters and infinite water, determine whether it's possible to measure exactly `z` liters using the two jugs.
+
+> [!info] Approach
+> - **WHY:** This is Bézout's identity. You can measure any amount that is a multiple of `gcd(x, y)`, up to `x + y`. So the condition is: `z <= x + y` AND `z % gcd(x, y) == 0`.
+> - **WHAT:** Compute `g = gcd(x, y)`. Return `z <= x + y and z % g == 0`.
+> - **HOW:** `math.gcd(x, y)` — Python standard library.
+
+> [!note]- Python Solution
+> ```python
+> import math
+>
+> def can_measure_water(x: int, y: int, z: int) -> bool:
+>     if z == 0:
+>         return True
+>     if x + y < z:
+>         return False
+>     return z % math.gcd(x, y) == 0
+> ```
+
+> [!success] Complexity
+> Time O(log(min(x, y))) for gcd, Space O(1).
+
+> [!tip] Alternatives
+> - BFS simulation: states are `(amount_in_jug1, amount_in_jug2)`. Valid operations: fill, empty, pour between. O(x * y) states. Correct but slow — only use if you forget the number theory.
+> - Bézout's: ax + by = z has an integer solution iff gcd(x, y) | z.
+
+---
+
+### Matrix Exponentiation — Fibonacci in O(log n)
+
+> [!example] Problem
+> Compute the n-th Fibonacci number in O(log n) time using matrix exponentiation.
+
+> [!info] Approach
+> - **WHY:** Fibonacci satisfies `[F(n+1), F(n)] = [[1,1],[1,0]]^n * [F(1), F(0)]`. Matrix exponentiation computes `M^n` in O(log n) matrix multiplications. Each multiplication is O(1) for 2×2 matrices.
+> - **WHAT:** Define `mat_pow(M, n)` using repeated squaring: `M^n = (M^(n//2))^2` if n even, else `M * M^(n-1)`.
+> - **HOW:** Base matrix `M = [[1,1],[1,0]]`. Multiply using 2×2 matrix multiply. Return `result[0][1]` which is `F(n)`.
+
+> [!note]- Python Solution
+> ```python
+> def fib(n: int) -> int:
+>     if n <= 1:
+>         return n
+>
+>     def mat_mul(A, B):
+>         return [
+>             [A[0][0]*B[0][0] + A[0][1]*B[1][0], A[0][0]*B[0][1] + A[0][1]*B[1][1]],
+>             [A[1][0]*B[0][0] + A[1][1]*B[1][0], A[1][0]*B[0][1] + A[1][1]*B[1][1]],
+>         ]
+>
+>     def mat_pow(M, p):
+>         if p == 1:
+>             return M
+>         if p % 2 == 0:
+>             half = mat_pow(M, p // 2)
+>             return mat_mul(half, half)
+>         return mat_mul(M, mat_pow(M, p - 1))
+>
+>     result = mat_pow([[1, 1], [1, 0]], n)
+>     return result[0][1]
+> ```
+
+> [!success] Complexity
+> Time O(log n), Space O(log n) recursion depth.
+
+> [!tip] Alternatives
+> - Closed-form (Binet's formula): O(1) but involves floating point — precision fails for large n.
+> - DP: O(n) time — fine for small n but the matrix method is the interview show-stopper for "can you do better than O(n)?"
+> - Also applies to: linear recurrences (tribonacci, counting paths in graphs), `dp[n] = a*dp[n-1] + b*dp[n-2]`.
+
+---
+
+## See Also
+
+[[dynamic-programming]] | [[binary-search]] | [[bit-manipulation]]

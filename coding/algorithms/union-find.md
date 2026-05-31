@@ -1131,3 +1131,119 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > DFS on the email graph also works; DSU is often simpler to explain for merge-by-connection problems.
+
+---
+
+## Union-Find — More Problems
+
+### Redundant Connection II (LC 685, Directed Graph)
+
+> [!example] Problem
+> Given a directed graph that started as a rooted tree and had one extra edge added, find and return the redundant edge. If multiple answers exist, return the last one in the input.
+
+> [!info] Approach
+> - **WHY:** In a directed rooted tree, every node except the root has exactly one parent. Adding an edge creates either: (a) a node with two parents, or (b) a cycle, or both. We must identify which case applies and choose the correct redundant edge.
+> - **WHAT:** First pass: find any node with two incoming edges (`cand1`, `cand2`). If found, one of them is the answer. Second pass: use Union-Find ignoring one candidate. If a cycle forms, the other candidate (or the cycle-forming edge) is the answer.
+> - **HOW:**
+>   1. Scan edges; track `parent` for each node. If a node already has a parent, record `cand1 = prev_edge`, `cand2 = current_edge` and skip `cand2`.
+>   2. Run Union-Find on remaining edges. If a cycle forms and `cand1` exists, return `cand1`; else return the cycle edge. If no cycle and `cand2` exists, return `cand2`.
+
+> [!note]- Python Solution
+> ```python
+> def find_redundant_directed_connection(edges: list[list[int]]) -> list[int]:
+>     n = len(edges)
+>     parent = list(range(n + 1))
+>     cand1 = cand2 = None
+>     node_parent = {}
+>     filtered = []
+>     for u, v in edges:
+>         if v in node_parent:
+>             cand1 = [node_parent[v], v]
+>             cand2 = [u, v]
+>         else:
+>             node_parent[v] = u
+>             filtered.append([u, v])
+>
+>     def find(x: int) -> int:
+>         while parent[x] != x:
+>             parent[x] = parent[parent[x]]
+>             x = parent[x]
+>         return x
+>
+>     def union(u: int, v: int) -> bool:
+>         pu = find(u)
+>         pv = find(v)
+>         if pu == pv:
+>             return False
+>         parent[pu] = pv
+>         return True
+>
+>     for u, v in filtered:
+>         if not union(u, v):
+>             return cand1 if cand1 else [u, v]
+>     return cand2
+> ```
+
+> [!success] Complexity
+> Time O(E α(E)), Space O(E).
+
+> [!tip] Alternatives
+> - Pure DFS cycle detection: works but harder to correctly handle the "two parents" case.
+> - Key insight: the two cases (double-parent vs pure cycle) require different edge choices; the filtering step separates them cleanly.
+
+---
+
+### Smallest String With Swaps (LC 1202)
+
+> [!example] Problem
+> Given a string `s` and a list of pairs of indices, you can swap characters at paired indices any number of times. Return the lexicographically smallest string achievable.
+
+> [!info] Approach
+> - **WHY:** Indices connected by swap pairs (directly or transitively) can be rearranged freely. Use Union-Find to group connected indices, then sort each group's characters and reassign them in sorted order to the smallest positions.
+> - **WHAT:** Union all paired indices. Group indices by root. For each group, collect the characters at those indices, sort them, and reassign the sorted characters to the sorted indices.
+> - **HOW:** `collections.defaultdict(list)` — `groups[find(i)].append(i)` for all `i`. For each group, sort both the indices and the characters, then assign characters back.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def smallest_string_with_swaps(s: str, pairs: list[list[int]]) -> str:
+>     n = len(s)
+>     parent = list(range(n))
+>
+>     def find(x: int) -> int:
+>         while parent[x] != x:
+>             parent[x] = parent[parent[x]]
+>             x = parent[x]
+>         return x
+>
+>     def union(x: int, y: int) -> None:
+>         parent[find(x)] = find(y)
+>
+>     for u, v in pairs:
+>         union(u, v)
+>
+>     groups = defaultdict(list)
+>     for i in range(n):
+>         groups[find(i)].append(i)
+>
+>     result = list(s)
+>     for indices in groups.values():
+>         chars = sorted(result[i] for i in indices)
+>         for i, ch in zip(sorted(indices), chars):
+>             result[i] = ch
+>     return ''.join(result)
+> ```
+
+> [!success] Complexity
+> Time O((N + E) α(N) + N log N), Space O(N).
+
+> [!tip] Alternatives
+> - DFS/BFS to find connected components: same idea, same complexity, slightly more code.
+> - Key insight: any permutation of characters within a connected component is achievable via adjacent swaps through the union edges.
+
+---
+
+## See Also (Extended)
+
+[[graph]] | [[sorting]] | [[backtracking]] | [[dynamic-programming]]

@@ -23,6 +23,16 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
+> def twosum_optimized(a, target): 
+> 	seen = {} # Dictionary to store numbers we have passed
+> 	for num in a: 
+> 		complement = target - num 
+> 		if complement in seen: 
+> 		return complement, num 
+> 	seen[num] = True 
+> 	return 0, 0
+> 	
+> 	
 > def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
 >     l, r = 0, len(numbers) - 1
 >     while l < r:
@@ -34,6 +44,9 @@ difficulty: mixed
 >         else:
 >             r -= 1
 >     return []
+>     
+> 
+> 
 > ```
 
 > [!success] Complexity
@@ -216,7 +229,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water
+### ==Trapping Rain Water
 
 > [!example] Problem
 > Given an elevation map, compute how much water can be trapped after raining.
@@ -1879,3 +1892,114 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > A hash set is simpler but uses O(n) extra space; cyclic sort is the canonical follow-up proof question.
+
+---
+
+## Prefix Sum
+
+### Subarray Sum Equals K (with negative numbers)
+
+> [!example] Problem
+> Given an integer array (may contain negatives) and an integer `k`, return the total number of subarrays whose elements sum to `k` (LC 560).
+
+> [!info] Approach
+> - **WHY:** Two-pointer/sliding-window breaks with negatives. Prefix sums let us reframe: subarray `[i+1..j]` sums to `k` iff `prefix[j] - prefix[i] == k`, i.e., `prefix[i] == prefix[j] - k`.
+> - **WHAT:** Track prefix sum frequency in a hash map. For each new prefix sum, check how many prior prefix sums equal `current - k`.
+> - **HOW:** Initialize map with `{0: 1}` (empty prefix). Walk the array accumulating `running_sum`; add `count_map[running_sum - k]` to the answer; then increment `count_map[running_sum]`.
+
+> [!note]- Python Solution
+> ```python
+> def subarray_sum(nums: list[int], k: int) -> int:
+>     count_map = {0: 1}
+>     running_sum = 0
+>     total = 0
+>     for num in nums:
+>         running_sum += num
+>         needed = running_sum - k
+>         total += count_map.get(needed, 0)
+>         count_map[running_sum] = count_map.get(running_sum, 0) + 1
+>     return total
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Brute force O(n²) with nested loops checking all subarrays — works but too slow.
+> - Prefix sum array without hash map: still O(n²) for lookup.
+> - Key insight: the `{0: 1}` initialization handles the case where a prefix starting from index 0 already sums to `k`.
+
+---
+
+### Contiguous Array (Equal 0s and 1s)
+
+> [!example] Problem
+> Given a binary array, find the maximum length subarray with equal numbers of 0s and 1s (LC 525).
+
+> [!info] Approach
+> - **WHY:** Replace 0 with -1. Now "equal 0s and 1s" becomes "subarray sum = 0", which is exactly the prefix sum problem.
+> - **WHAT:** Track the first index at which each prefix sum occurs. When a prefix sum repeats, the subarray between the two occurrences has sum 0.
+> - **HOW:** Initialize `{0: -1}`. For each index, compute prefix sum (treating 0 as -1). If seen before, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise, store `first_seen[prefix] = i`.
+
+> [!note]- Python Solution
+> ```python
+> def find_max_length(nums: list[int]) -> int:
+>     first_seen = {0: -1}
+>     prefix = 0
+>     max_len = 0
+>     for i, num in enumerate(nums):
+>         prefix += 1 if num == 1 else -1
+>         if prefix in first_seen:
+>             max_len = max(max_len, i - first_seen[prefix])
+>         else:
+>             first_seen[prefix] = i
+>     return max_len
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Brute force O(n²) — enumerate all subarrays and count 0s/1s.
+> - Key insight: storing only the *first* occurrence of each prefix sum maximises the subarray length.
+
+---
+
+### Product of Array Except Self (no division)
+
+> [!example] Problem
+> Return an array `output` where `output[i]` is the product of all elements except `nums[i]`. Must run in O(n) without using division (LC 238).
+
+> [!info] Approach
+> - **WHY:** Division breaks on zeros. Without it, for each position we need the product of everything to the left and to the right.
+> - **WHAT:** Two passes. First pass (left to right) builds the running left-product into the output array. Second pass (right to left) multiplies in the running right-product in-place.
+> - **HOW:** `output[i]` after left pass = product of `nums[0..i-1]`. Then walk right to left with a `right_product` variable, multiply `output[i] *= right_product`, then `right_product *= nums[i]`.
+
+> [!note]- Python Solution
+> ```python
+> def product_except_self(nums: list[int]) -> list[int]:
+>     n = len(nums)
+>     output = [1] * n
+>     left_product = 1
+>     for i in range(n):
+>         output[i] = left_product
+>         left_product *= nums[i]
+>     right_product = 1
+>     for i in range(n - 1, -1, -1):
+>         output[i] *= right_product
+>         right_product *= nums[i]
+>     return output
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1) extra (output array doesn't count).
+
+> [!tip] Alternatives
+> - With division: count zeros separately, handle zero/two-zeros edge cases. More complex logic.
+> - Three arrays (left products, right products, output): O(n) space but same idea, just less elegant.
+
+---
+
+## See Also
+
+[[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]

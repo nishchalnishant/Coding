@@ -17,7 +17,7 @@ difficulty: mixed
 
 ## In-Place Reversal
 
-### Reverse Linked List
+### ==Reverse Linked List
 
 > [!example] Problem
 > Given the head of a singly linked list, reverse it in place and return the new head.
@@ -135,7 +135,7 @@ difficulty: mixed
 
 ---
 
-### Reorder List
+### ==Reorder List
 
 > [!example] Problem
 > Reorder list in-place: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → ...`
@@ -1080,7 +1080,7 @@ difficulty: mixed
 
 ---
 
-### LFU Cache
+### ==LFU Cache
 
 > [!example] Problem
 > Implement a Least Frequently Used cache with O(1) `get` and `put`. On a tie in frequency, evict the least recently used among tied entries.
@@ -1186,3 +1186,126 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > The same “make circular then break” trick is useful for other rotation-style linked list problems.
+
+---
+
+## Design
+
+### ==LRU Cache (Doubly Linked List + Hash Map)
+
+> [!example] Problem
+> Design a data structure that supports `get(key)` and `put(key, value)` in O(1). When capacity is exceeded on `put`, evict the least recently used key (LC 146).
+
+> [!info] Approach
+> - **WHY:** A hash map gives O(1) lookup but can't track recency. A doubly linked list lets us move any node to the head (most recently used) in O(1) using pointers. Together they solve both requirements.
+> - **WHAT:** Maintain a dict `key -> node`. The DLL has a sentinel head (most recent) and tail (least recent). On every access, unlink the node and re-insert it just after the head.
+> - **HOW:** `get`: if key missing return -1, else move node to front and return value. `put`: if key exists update value and move to front; if new key and at capacity, remove the node just before the tail (LRU), then insert new node at front.
+
+> [!note]- Python Solution
+> ```python
+> class Node:
+>     def __init__(self, key: int = 0, val: int = 0):
+>         self.key = key
+>         self.val = val
+>         self.prev = None
+>         self.next = None
+>
+> class LRUCache:
+>     def __init__(self, capacity: int):
+>         self.cap = capacity
+>         self.cache = {}
+>         self.head = Node()   # most recent sentinel
+>         self.tail = Node()   # least recent sentinel
+>         self.head.next = self.tail
+>         self.tail.prev = self.head
+>
+>     def _remove(self, node: Node) -> None:
+>         node.prev.next = node.next
+>         node.next.prev = node.prev
+>
+>     def _insert_front(self, node: Node) -> None:
+>         node.next = self.head.next
+>         node.prev = self.head
+>         self.head.next.prev = node
+>         self.head.next = node
+>
+>     def get(self, key: int) -> int:
+>         if key not in self.cache:
+>             return -1
+>         node = self.cache[key]
+>         self._remove(node)
+>         self._insert_front(node)
+>         return node.val
+>
+>     def put(self, key: int, value: int) -> None:
+>         if key in self.cache:
+>             self._remove(self.cache[key])
+>         node = Node(key, value)
+>         self.cache[key] = node
+>         self._insert_front(node)
+>         if len(self.cache) > self.cap:
+>             lru = self.tail.prev
+>             self._remove(lru)
+>             del self.cache[lru.key]
+> ```
+
+> [!success] Complexity
+> Time O(1) per get/put, Space O(capacity).
+
+> [!tip] Alternatives
+> - Python `OrderedDict`: `move_to_end` + `popitem(last=False)` gives the same O(1) behavior in 10 lines, but interviewers expect you to implement the DLL.
+> - Array-based approaches: O(n) per operation — too slow.
+
+---
+
+### Flatten a Multilevel Doubly Linked List
+
+> [!example] Problem
+> A doubly linked list node may have a `child` pointer to another doubly linked list. Flatten the list so all child lists are inserted inline after their parent node (LC 430).
+
+> [!info] Approach
+> - **WHY:** The structure is like a tree where `child` is a subtree. DFS naturally processes each child list before continuing the main list.
+> - **WHAT:** Use a stack. When a node has a child, push `node.next` onto the stack (to return to later), then walk into `child` as the new `next`. After the child chain ends (next is None), pop from the stack.
+> - **HOW:** Walk the list. At each node with a `child`: push `node.next` to stack, set `node.next = node.child`, fix prev pointers, clear `node.child`. When `node.next` is None and stack is non-empty, pop and link.
+
+> [!note]- Python Solution
+> ```python
+> class Node:
+>     def __init__(self, val=0, prev=None, next=None, child=None):
+>         self.val = val
+>         self.prev = prev
+>         self.next = next
+>         self.child = child
+>
+> def flatten(head: Node | None) -> Node | None:
+>     if not head:
+>         return None
+>     stack = []
+>     curr = head
+>     while curr:
+>         if curr.child:
+>             if curr.next:
+>                 stack.append(curr.next)
+>             curr.next = curr.child
+>             curr.next.prev = curr
+>             curr.child = None
+>         if not curr.next and stack:
+>             nxt = stack.pop()
+>             curr.next = nxt
+>             nxt.prev = curr
+>         curr = curr.next
+>     return head
+> ```
+
+> [!success] Complexity
+> Time O(n) where n = total nodes, Space O(d) where d = maximum nesting depth.
+
+> [!tip] Alternatives
+> - Recursive DFS: recurse into child, get the tail of the flattened child list, then reconnect — elegant but O(d) call stack.
+> - Both approaches are O(n) time; iterative stack is preferred when depth could be large.
+
+---
+
+## See Also
+
+[[two-pointers]] | [[heap]] | [[tree]]

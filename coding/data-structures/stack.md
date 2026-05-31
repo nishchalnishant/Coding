@@ -1254,3 +1254,112 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > The same monotonic stack pattern generalizes to next greater/smaller element variants and stock-span style problems.
+
+---
+
+## Monotonic Stack — Advanced
+
+### Sum of Subarray Minimums (LC 907)
+
+> [!example] Problem
+> Given an array, find the sum of `min(subarray)` for every contiguous subarray. Return the answer modulo 10^9 + 7.
+
+> [!info] Approach
+> - **WHY:** Brute force is O(n²). For each element, we need to know how many subarrays it is the minimum of. That equals `(elements to the left before a smaller value + 1) * (elements to the right before a smaller or equal value + 1)`.
+> - **WHAT:** Use a monotonic increasing stack to find, for each index, its "previous less element" (PLE) and "next less or equal element" (NLE). The contribution of `nums[i]` is `nums[i] * left_count * right_count`.
+> - **HOW:** In one pass, use the stack to track unresolved indices. When `nums[i]` is smaller than the stack top, pop and compute the contribution of the popped element with `i` as its right boundary. Left boundary comes from the new stack top (or -1 if empty).
+
+> [!note]- Python Solution
+> ```python
+> def sum_subarray_mins(arr: list[int]) -> int:
+>     MOD = 10 ** 9 + 7
+>     total = 0
+>     stack = []   # indices, increasing by arr value
+>     for i in range(len(arr) + 1):
+>         while stack and (i == len(arr) or arr[stack[-1]] >= arr[i]):
+>             mid = stack.pop()
+>             left = stack[-1] if stack else -1
+>             right = i
+>             count = (mid - left) * (right - mid)
+>             total += arr[mid] * count
+>         stack.append(i)
+>     return total % MOD
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - O(n²) DP: `dp[i]` = sum of mins of subarrays ending at `i`. `dp[i] = arr[i] + (dp[i-1] if arr[i] >= arr[i-1] else arr[i] * k)` where `k` is the count of subarrays where `arr[i]` is still the min.
+> - Key insight: use `>=` when popping for the left side and `>` for the right to avoid double-counting equal elements.
+
+---
+
+### 132 Pattern (LC 456)
+
+> [!example] Problem
+> Given an array, return `True` if there exist indices `i < j < k` such that `nums[i] < nums[k] < nums[j]` (a "132 pattern").
+
+> [!info] Approach
+> - **WHY:** Brute force is O(n³). The key observation: if we scan right to left, we can track the best candidate for the "3" (the middle-largest value) using a stack, and maintain the current maximum "2" (the `k` value) seen so far.
+> - **WHAT:** Scan right to left. Maintain a decreasing stack. Whenever we pop a value from the stack (because the current element is larger), that popped value becomes our best candidate for `nums[k]` (the "2" in 132). If the current element is less than this candidate, we found the pattern.
+> - **HOW:** `third = -inf`. For each element right to left: if `num < third`, return True. While stack and `stack[-1] < num`, set `third = stack.pop()`. Push `num`.
+
+> [!note]- Python Solution
+> ```python
+> def find132pattern(nums: list[int]) -> bool:
+>     stack = []
+>     third = float('-inf')   # best candidate for the "2" in 132
+>     for num in reversed(nums):
+>         if num < third:
+>             return True
+>         while stack and stack[-1] < num:
+>             third = stack.pop()
+>         stack.append(num)
+>     return False
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - O(n²) with prefix minimum: for each `j`, `nums[i]` = prefix min up to `j-1`. Scan `k > j` for `nums[i] < nums[k] < nums[j]`. Still O(n²).
+> - O(n³) brute force — enumerate all triples.
+
+---
+
+### Buildings With an Ocean View (LC 1762)
+
+> [!example] Problem
+> Given an array where `heights[i]` is the height of building `i`, a building has an ocean view if all buildings to its right are shorter. Return the indices (in increasing order) of buildings with an ocean view.
+
+> [!info] Approach
+> - **WHY:** A building has an ocean view iff it is taller than all buildings to its right. Scanning right to left with a running maximum tells us this in one pass.
+> - **WHAT:** Scan from right to left, tracking the maximum height seen so far. If the current building is strictly taller than the running max, it has an ocean view.
+> - **HOW:** Walk right to left. If `heights[i] > max_right`, append `i` to results and update `max_right`. Reverse the results before returning (indices must be in ascending order).
+
+> [!note]- Python Solution
+> ```python
+> def find_buildings(heights: list[int]) -> list[int]:
+>     max_right = 0
+>     result = []
+>     for i in range(len(heights) - 1, -1, -1):
+>         if heights[i] > max_right:
+>             result.append(i)
+>             max_right = heights[i]
+>     result.reverse()
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1) extra.
+
+> [!tip] Alternatives
+> - Monotonic stack (decreasing): push each building; pop all buildings shorter than the current one. Whatever remains at the end has ocean views. Same O(n) but slightly more overhead.
+> - The right-to-left scan is cleaner for this specific problem since the answer is just "greater than all to the right."
+
+---
+
+## See Also
+
+[[queue]] | [[dynamic-programming]] | [[monotonic-techniques]]

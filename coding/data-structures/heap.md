@@ -976,3 +976,132 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Sliding a window over the flattened sorted values is harder; the heap is the canonical solution for k sorted lists.
+
+---
+
+## Heap Applications
+
+### Reorganize String (LC 767)
+
+> [!example] Problem
+> Given a string, rearrange its characters so no two adjacent characters are the same. Return any valid rearrangement, or empty string if impossible.
+
+> [!info] Approach
+> - **WHY:** Greedy: always place the most frequent remaining character, as long as it is not the same as the last placed character. A max-heap efficiently gives us the most frequent character at each step.
+> - **WHAT:** Use a max-heap of `(-count, char)`. At each step, pop the most frequent character. If it matches the last placed character, pop the second most frequent instead (or return "" if no second exists), then push the first back.
+> - **HOW:** Alternate approach (cleaner): pop the top character, append it, push the previous character back (if count > 0). This naturally avoids placing the same character twice in a row.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> from collections import Counter
+>
+> def reorganize_string(s: str) -> str:
+>     counts = Counter(s)
+>     heap = [(-cnt, ch) for ch, cnt in counts.items()]
+>     heapq.heapify(heap)
+>     result = []
+>     prev_cnt = 0
+>     prev_ch = ''
+>     while heap:
+>         cnt, ch = heapq.heappop(heap)
+>         result.append(ch)
+>         if prev_cnt < 0:
+>             heapq.heappush(heap, (prev_cnt, prev_ch))
+>         prev_cnt = cnt + 1   # increment because cnt is negative
+>         prev_ch = ch
+>     output = ''.join(result)
+>     if len(output) != len(s):
+>         return ''
+>     return output
+> ```
+
+> [!success] Complexity
+> Time O(n log k) where k = number of distinct characters, Space O(k).
+
+> [!tip] Alternatives
+> - Interleave by frequency: sort characters by count, fill even indices first then odd indices. O(n log n) but simpler to reason about.
+> - Key insight: if `max_freq > (len(s) + 1) // 2`, it is impossible — the most frequent character would have to be adjacent to itself.
+
+---
+
+### IPO — Maximize Capital (LC 502)
+
+> [!example] Problem
+> You have `w` initial capital. You can complete at most `k` projects. Each project has a profit and requires a minimum capital. Maximize your final capital.
+
+> [!info] Approach
+> - **WHY:** Greedy: at each step, among all projects you can currently afford, pick the one with the highest profit. A max-heap of available profits makes this O(log n) per step.
+> - **WHAT:** Sort projects by required capital. Use a pointer to "unlock" projects as capital grows. At each of the `k` steps, push all newly affordable projects into a max-heap, then pop the highest profit.
+> - **HOW:** Sort `(capital, profit)` pairs. Pointer `i` advances while `capital[i] <= w`. After unlocking, pop from the max-heap and add profit to `w`. Repeat `k` times.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int]) -> int:
+>     projects = sorted(zip(capital, profits))
+>     available = []   # max-heap (negated profits)
+>     i = 0
+>     for _ in range(k):
+>         while i < len(projects) and projects[i][0] <= w:
+>             heapq.heappush(available, -projects[i][1])
+>             i += 1
+>         if not available:
+>             break
+>         w += -heapq.heappop(available)
+>     return w
+> ```
+
+> [!success] Complexity
+> Time O(n log n + k log n), Space O(n).
+
+> [!tip] Alternatives
+> - No better asymptotic complexity — sorting and heap are both necessary.
+> - Key insight: we never need to re-evaluate already rejected projects; once a project is unaffordable at some capital level it won't become more expensive later (projects are sorted by cost, not by time).
+
+---
+
+### Minimum Refueling Stops (LC 871)
+
+> [!example] Problem
+> A car starts at position 0 with `start_fuel`. Gas stations are at given positions with given amounts of fuel. Return the minimum number of refueling stops to reach the `target`, or -1 if impossible.
+
+> [!info] Approach
+> - **WHY:** Greedy: only refuel when you must (you've run out of fuel). When you do refuel, pick the largest available fuel among all stations you've already passed — that minimizes the number of stops.
+> - **WHAT:** Drive as far as possible. As you pass each station, push its fuel into a max-heap. When you run out of fuel, greedily pop the largest available fuel and use it. Each pop is one stop.
+> - **HOW:** Walk through stations in order. While `fuel < station.position - current_position` and heap is non-empty, pop the largest fuel and add it to `fuel` (increment stops). If still can't reach the next station, return -1.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+>
+> def min_refuel_stops(target: int, start_fuel: int, stations: list[list[int]]) -> int:
+>     heap = []   # max-heap (negated fuel amounts)
+>     fuel = start_fuel
+>     stops = 0
+>     prev = 0
+>     for position, amount in stations + [[target, 0]]:
+>         fuel -= position - prev
+>         while fuel < 0 and heap:
+>             fuel += -heapq.heappop(heap)
+>             stops += 1
+>         if fuel < 0:
+>             return -1
+>         heapq.heappush(heap, -amount)
+>         prev = position
+>     return stops
+> ```
+
+> [!success] Complexity
+> Time O(n log n), Space O(n).
+
+> [!tip] Alternatives
+> - DP: `dp[i]` = max distance reachable with exactly `i` stops. O(n²) — too slow for large inputs.
+> - Key insight: appending `[target, 0]` to stations unifies the "can we reach the target" check into the same loop, avoiding a separate post-loop check.
+
+---
+
+## See Also
+
+[[sorting]] | [[greedy]] | [[sliding-window]] | [[two-pointers]]

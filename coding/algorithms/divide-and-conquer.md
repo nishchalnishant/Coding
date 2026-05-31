@@ -1167,3 +1167,113 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Prefix sums can answer “all zeros/all ones?” in O(1) per region and avoid repeated scans.
+
+---
+
+## Divide and Conquer — More Problems
+
+### Different Ways to Add Parentheses (LC 241)
+
+> [!example] Problem
+> Given an expression string with numbers and operators `+`, `-`, `*`, return all possible results from computing all different ways to split the expression using parentheses.
+
+> [!info] Approach
+> - **WHY:** Each operator can be the “last operation applied” — split the expression at that operator, recursively compute all values for the left and right sub-expressions, and combine them. This is divide and conquer where each operator is the split point.
+> - **WHAT:** For each operator in the expression, recurse on the left and right substrings. Collect all results by combining every pair from left and right with the operator. Base case: no operator found → the string is a single number.
+> - **HOW:** Memoize with a dict keyed on the expression string to avoid recomputing the same subexpression.
+
+> [!note]- Python Solution
+> ```python
+> from functools import lru_cache
+>
+> def diff_ways_to_compute(expression: str) -> list[int]:
+>     @lru_cache(maxsize=None)
+>     def solve(expr: str) -> list[int]:
+>         results = []
+>         for i, ch in enumerate(expr):
+>             if ch in '+-*':
+>                 left = solve(expr[:i])
+>                 right = solve(expr[i+1:])
+>                 for l in left:
+>                     for r in right:
+>                         if ch == '+':
+>                             results.append(l + r)
+>                         elif ch == '-':
+>                             results.append(l - r)
+>                         else:
+>                             results.append(l * r)
+>         if not results:
+>             results.append(int(expr))
+>         return results
+>     return solve(expression)
+> ```
+
+> [!success] Complexity
+> Time O(C(n) * n) where C(n) is the Catalan number — roughly O(4^n / n^1.5). Space O(same) for memoization.
+
+> [!tip] Alternatives
+> - Bottom-up DP with interval DP: `dp[i][j]` = list of values for substring `i..j`. Fill by increasing interval length. Equivalent asymptotically.
+> - Key insight: this is exactly matrix chain multiplication shape — every operator is a potential last operation.
+
+---
+
+### Closest Pair of Points
+
+> [!example] Problem
+> Given `n` points in 2D space, find the pair of points with the smallest Euclidean distance. Must run in O(n log n).
+
+> [!info] Approach
+> - **WHY:** Brute force is O(n²). Divide and conquer achieves O(n log n) by splitting the point set, solving each half, and checking only the “strip” of points within `d` of the dividing line where the cross-half closest pair could exist.
+> - **WHAT:**
+>   1. Sort points by x. Recursively find `d = min(closest in left half, closest in right half)`.
+>   2. Collect all points within `d` of the midpoint's x coordinate.
+>   3. Sort the strip by y. For each strip point, check at most 7 following points (geometric argument). Return the minimum distance found.
+> - **HOW:** Base case: n ≤ 3, use brute force.
+
+> [!note]- Python Solution
+> ```python
+> import math
+>
+> def closest_pair(points: list[tuple[int, int]]) -> float:
+>     def dist(p1, p2):
+>         return math.sqrt((p1[0] - p2[0])**2 + (p1[1] - p2[1])**2)
+>
+>     def brute(pts):
+>         min_d = float('inf')
+>         for i in range(len(pts)):
+>             for j in range(i + 1, len(pts)):
+>                 min_d = min(min_d, dist(pts[i], pts[j]))
+>         return min_d
+>
+>     def rec(pts):
+>         n = len(pts)
+>         if n <= 3:
+>             return brute(pts)
+>         mid = n // 2
+>         mid_x = pts[mid][0]
+>         d = min(rec(pts[:mid]), rec(pts[mid:]))
+>         strip = [p for p in pts if abs(p[0] - mid_x) < d]
+>         strip.sort(key=lambda p: p[1])
+>         for i in range(len(strip)):
+>             j = i + 1
+>             while j < len(strip) and strip[j][1] - strip[i][1] < d:
+>                 d = min(d, dist(strip[i], strip[j]))
+>                 j += 1
+>         return d
+>
+>     points.sort()
+>     return rec(points)
+> ```
+
+> [!success] Complexity
+> Time O(n log² n) for the naive version (re-sorting strip each time), O(n log n) if y-sorted lists are passed alongside. Space O(n).
+
+> [!tip] Alternatives
+> - Randomized algorithm: shuffle then sweep, O(n) expected. Much harder to implement correctly.
+> - Key insight: the “at most 7 points to check in the strip” bound comes from packing argument — within a `d × 2d` rectangle, at most 8 points can be `d` apart.
+
+---
+
+## See Also
+
+[[sorting]] | [[dynamic-programming]] | [[recursion]] | [[binary-search]]

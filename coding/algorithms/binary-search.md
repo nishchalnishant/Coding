@@ -1182,3 +1182,97 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Reuse this template for router placement, aggressive seating, and maximize-minimum-distance questions.
+
+---
+
+## Binary Search on Answer — More Problems
+
+### Find K-th Smallest Pair Distance (LC 719)
+
+> [!example] Problem
+> Given an integer array, find the k-th smallest distance among all pairs `(nums[i], nums[j])` where `i < j`.
+
+> [!info] Approach
+> - **WHY:** The distance range is `[0, max(nums) - min(nums)]`. Binary search on the answer: for a candidate distance `mid`, count how many pairs have distance ≤ `mid` using a two-pointer scan on the sorted array.
+> - **WHAT:** Sort the array. Binary search on `mid`. For each index `i`, find the leftmost `j` such that `nums[i] - nums[j] <= mid` using two pointers. The count of such pairs is `i - j`.
+> - **HOW:** `lo = 0`, `hi = nums[-1] - nums[0]`. Count pairs with distance ≤ `mid`: two-pointer `left` tracking the start of the window for each `right`. Return the smallest `mid` where `count >= k`.
+
+> [!note]- Python Solution
+> ```python
+> def smallest_distance_pair(nums: list[int], k: int) -> int:
+>     nums.sort()
+>     n = len(nums)
+>
+>     def count_pairs(max_dist: int) -> int:
+>         count = 0
+>         left = 0
+>         for right in range(n):
+>             while nums[right] - nums[left] > max_dist:
+>                 left += 1
+>             count += right - left
+>         return count
+>
+>     lo = 0
+>     hi = nums[-1] - nums[0]
+>     while lo < hi:
+>         mid = (lo + hi) // 2
+>         if count_pairs(mid) >= k:
+>             hi = mid
+>         else:
+>             lo = mid + 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> Time O(n log n + n log W) where W = max distance. Space O(1).
+
+> [!tip] Alternatives
+> - Heap with all pairs: O(k log n²) — extremely slow.
+> - Counting sort on distances: O(n² + W) — too slow for large inputs.
+> - Key insight: "count pairs with distance ≤ mid" is the standard feasibility function for this binary search.
+
+---
+
+### Sqrt(x) — Integer Square Root (LC 69)
+
+> [!example] Problem
+> Given a non-negative integer `x`, return the integer square root of `x` (floor of the actual square root, without using `math.sqrt`).
+
+> [!info] Approach
+> - **WHY:** Binary search on the answer: the answer lies in `[0, x]`. Find the largest integer `mid` such that `mid * mid <= x`.
+> - **WHAT:** Classic binary search for the last True position in a boolean predicate `mid * mid <= x`.
+> - **HOW:** `lo = 0`, `hi = x`. While `lo <= hi`: `mid = (lo + hi) // 2`. If `mid * mid <= x` set `result = mid` and `lo = mid + 1`. Else `hi = mid - 1`.
+
+> [!note]- Python Solution
+> ```python
+> def my_sqrt(x: int) -> int:
+>     if x < 2:
+>         return x
+>     lo = 1
+>     hi = x // 2
+>     result = 1
+>     while lo <= hi:
+>         mid = lo + (hi - lo) // 2
+>         squared = mid * mid
+>         if squared == x:
+>             return mid
+>         if squared < x:
+>             result = mid
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(log x), Space O(1).
+
+> [!tip] Alternatives
+> - Newton's method: `x = x - (x*x - n) / (2*x)`. Converges in O(log log n) iterations — faster in practice.
+> - Bit manipulation: set bits from high to low, keep if result doesn't exceed target. O(log n) but less readable.
+
+---
+
+## See Also
+
+[[two-pointers]] | [[array]] | [[sorting]] | [[greedy]]

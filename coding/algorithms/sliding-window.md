@@ -1274,3 +1274,97 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > The same fixed-window pattern works for average, distinct counts, and frequency-based substring problems.
+
+---
+
+## Sliding Window — More Problems
+
+### Grumpy Bookstore Owner (LC 1052)
+
+> [!example] Problem
+> A bookstore owner is grumpy for some minutes (marked 1 in a binary array). When using a "secret technique" for `minutes` consecutive minutes, the owner is not grumpy during that window. Find the maximum total satisfied customers.
+
+> [!info] Approach
+> - **WHY:** Customers at non-grumpy minutes are always satisfied. Customers at grumpy minutes are only satisfied during the technique window. We want to choose the `minutes`-long window that maximises the extra customers gained.
+> - **WHAT:** Base count = sum of `customers[i]` where `grumpy[i] == 0`. Extra count for a window = sum of `customers[i]` where `grumpy[i] == 1` within the window. Slide a fixed window of size `minutes` to find the maximum extra.
+> - **HOW:** Compute base. Slide window: at each step, add `customers[right] * grumpy[right]` and subtract `customers[right - minutes] * grumpy[right - minutes]`. Track max window extra.
+
+> [!note]- Python Solution
+> ```python
+> def max_satisfied(customers: list[int], grumpy: list[int], minutes: int) -> int:
+>     n = len(customers)
+>     base = sum(customers[i] for i in range(n) if grumpy[i] == 0)
+>     window_extra = sum(customers[i] * grumpy[i] for i in range(minutes))
+>     max_extra = window_extra
+>     for i in range(minutes, n):
+>         window_extra += customers[i] * grumpy[i]
+>         window_extra -= customers[i - minutes] * grumpy[i - minutes]
+>         max_extra = max(max_extra, window_extra)
+>     return base + max_extra
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Brute force O(n * minutes): slide and recompute the window sum from scratch each step.
+> - Key insight: separate "always satisfied" from "sometimes satisfied" — only the grumpy minutes within the window contribute to the extra gain.
+
+---
+
+### Minimum Number of Flips to Make Binary String Alternating (LC 1888)
+
+> [!example] Problem
+> Given a binary string, you can do cyclic shifts (moving the first character to the end). Find the minimum number of character flips to make the string alternating after any number of shifts.
+
+> [!info] Approach
+> - **WHY:** There are only two valid alternating patterns: "0101..." and "1010...". Simulate all cyclic shifts by doubling the string and using a sliding window of length `n`.
+> - **WHAT:** Double the string (`s + s`). For each window of length `n`, count the differences from both target patterns. Take the minimum differences seen across all windows.
+> - **HOW:** Use a sliding window on `s + s`. Maintain the count of mismatches with pattern "010101..." and "101010...". Slide: subtract the outgoing character's mismatch contribution, add the incoming character's. Track the minimum.
+
+> [!note]- Python Solution
+> ```python
+> def min_flips(s: str) -> int:
+>     n = len(s)
+>     doubled = s + s
+>     diff0 = 0   # mismatches vs "010101..."
+>     diff1 = 0   # mismatches vs "101010..."
+>     for i in range(n):
+>         expected0 = '0' if i % 2 == 0 else '1'
+>         expected1 = '1' if i % 2 == 0 else '0'
+>         if doubled[i] != expected0:
+>             diff0 += 1
+>         if doubled[i] != expected1:
+>             diff1 += 1
+>     result = min(diff0, diff1)
+>     for i in range(n, 2 * n):
+>         incoming_pos = i % n
+>         expected0_in = '0' if i % 2 == 0 else '1'
+>         expected1_in = '1' if i % 2 == 0 else '0'
+>         if doubled[i] != expected0_in:
+>             diff0 += 1
+>         if doubled[i] != expected1_in:
+>             diff1 += 1
+>         outgoing_pos = i - n
+>         expected0_out = '0' if outgoing_pos % 2 == 0 else '1'
+>         expected1_out = '1' if outgoing_pos % 2 == 0 else '0'
+>         if doubled[outgoing_pos] != expected0_out:
+>             diff0 -= 1
+>         if doubled[outgoing_pos] != expected1_out:
+>             diff1 -= 1
+>         result = min(result, diff0, diff1)
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n) for the doubled string.
+
+> [!tip] Alternatives
+> - O(n²) brute force: try every cyclic shift, count flips each time.
+> - Key insight: doubling the string converts cyclic shifts into a standard sliding window on a linear string.
+
+---
+
+## See Also
+
+[[two-pointers]] | [[array]] | [[hashing]] | [[string-algorithms]]

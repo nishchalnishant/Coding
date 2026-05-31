@@ -1195,3 +1195,94 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Manacher's algorithm can also locate palindromic prefixes, but the KMP trick is the standard interview shortcut.
+
+---
+
+## String Algorithms — More Problems
+
+### Add Minimum Characters to Make a String Palindrome
+
+> [!example] Problem
+> Given string `s`, find the minimum number of characters to insert (anywhere) to make it a palindrome.
+
+> [!info] Approach
+> - **WHY:** Minimum insertions = `n - LPS(s)`, where LPS is the Longest Palindromic Subsequence. Alternatively: min insertions = n - LCS(s, reverse(s)), since the LCS of s with its reverse is the longest palindromic subsequence.
+> - **WHAT:** Compute LCS of `s` and `reverse(s)` using DP. `lcs[i][j]` = LCS length of `s[:i]` and `rev[:j]`. Answer is `n - lcs[n][n]`.
+> - **HOW:** Standard O(n²) DP. Can space-optimise to O(n) using two rows.
+
+> [!note]- Python Solution
+> ```python
+> def min_insertions_palindrome(s: str) -> int:
+>     n = len(s)
+>     rev = s[::-1]
+>     prev = [0] * (n + 1)
+>     for i in range(1, n + 1):
+>         curr = [0] * (n + 1)
+>         for j in range(1, n + 1):
+>             if s[i-1] == rev[j-1]:
+>                 curr[j] = prev[j-1] + 1
+>             else:
+>                 curr[j] = max(prev[j], curr[j-1])
+>         prev = curr
+>     lps = prev[n]
+>     return n - lps
+> ```
+
+> [!success] Complexity
+> Time O(n²), Space O(n).
+
+> [!tip] Alternatives
+> - Direct DP: `dp[i][j]` = min insertions to make `s[i..j]` a palindrome. If `s[i] == s[j]`: `dp[i][j] = dp[i+1][j-1]`. Else: `1 + min(dp[i+1][j], dp[i][j-1])`. Same O(n²) time/space.
+> - Key equivalence: min insertions = n - LPS = n - LCS(s, reverse(s)).
+
+---
+
+### Palindrome Pairs (LC 336)
+
+> [!example] Problem
+> Given a list of unique strings, find all pairs `(i, j)` such that `words[i] + words[j]` is a palindrome.
+
+> [!info] Approach
+> - **WHY:** Brute force O(n² * k) is too slow. For each word, consider all ways to split it: if the prefix is a palindrome and the reverse of the suffix exists in the word list, we have a valid pair (and vice versa).
+> - **WHAT:** Build `word_map = {word: index}`. For each word `w` at index `i`, for every split point `k` in `0..len(w)`:
+>   - If `w[:k]` is palindrome and `reverse(w[k:])` is in map: pair `(map[rev(w[k:])], i)`.
+>   - If `w[k:]` is palindrome and `reverse(w[:k])` is in map (and `k > 0` to avoid double-counting): pair `(i, map[rev(w[:k])])`.
+> - **HOW:** Avoid self-pairing by checking `j != i`.
+
+> [!note]- Python Solution
+> ```python
+> def palindrome_pairs(words: list[str]) -> list[list[int]]:
+>     word_map = {word: i for i, word in enumerate(words)}
+>     result = []
+>
+>     def is_palindrome(s: str) -> bool:
+>         return s == s[::-1]
+>
+>     for i, word in enumerate(words):
+>         n = len(word)
+>         for k in range(n + 1):
+>             prefix = word[:k]
+>             suffix = word[k:]
+>             if is_palindrome(prefix):
+>                 rev_suffix = suffix[::-1]
+>                 if rev_suffix in word_map and word_map[rev_suffix] != i:
+>                     result.append([word_map[rev_suffix], i])
+>             if k > 0 and is_palindrome(suffix):
+>                 rev_prefix = prefix[::-1]
+>                 if rev_prefix in word_map and word_map[rev_prefix] != i:
+>                     result.append([i, word_map[rev_prefix]])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n * k²) where k = average word length (each split checks palindrome in O(k) and hash lookup in O(k)). Space O(n * k).
+
+> [!tip] Alternatives
+> - Trie-based approach: insert reversed words into a trie, walk each word through the trie checking palindrome conditions. Same asymptotic, higher constant.
+> - Key insight: every valid pair falls into one of two split cases — don't try to think of other cases.
+
+---
+
+## See Also
+
+[[trie]] | [[dynamic-programming]] | [[hashing]] | [[sliding-window]]

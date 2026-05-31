@@ -1428,3 +1428,152 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 > [!tip] Alternatives
 > A hash map can count whole words, but prefix counts require a trie or another prefix-aware structure.
+
+---
+
+## Trie Applications
+
+### Replace Words (LC 648)
+
+> [!example] Problem
+> Given a dictionary of root words and a sentence, replace every word in the sentence with its shortest matching root. If no root matches, keep the original word.
+
+> [!info] Approach
+> - **WHY:** For each word in the sentence we need to find if any dictionary root is a prefix of it, and we want the shortest such root. A trie makes prefix lookup O(L) and naturally returns the shortest match first.
+> - **WHAT:** Build a trie from the dictionary roots. For each word in the sentence, walk down the trie character by character. The moment you hit a terminal node (end of a root), that is the shortest matching root.
+> - **HOW:** Insert all roots. For each sentence word, traverse the trie; if a node has `is_end = True`, return the prefix built so far. If traversal ends without a match, keep the original word.
+
+> [!note]- Python Solution
+> ```python
+> class TrieNode:
+>     def __init__(self):
+>         self.children = {}
+>         self.is_end = False
+>
+> def replace_words(dictionary: list[str], sentence: str) -> str:
+>     root = TrieNode()
+>     for word in dictionary:
+>         node = root
+>         for ch in word:
+>             if ch not in node.children:
+>                 node.children[ch] = TrieNode()
+>             node = node.children[ch]
+>         node.is_end = True
+>
+>     def replace(word: str) -> str:
+>         node = root
+>         prefix = []
+>         for ch in word:
+>             if ch not in node.children:
+>                 break
+>             node = node.children[ch]
+>             prefix.append(ch)
+>             if node.is_end:
+>                 return ''.join(prefix)
+>         return word
+>
+>     return ' '.join(replace(word) for word in sentence.split())
+> ```
+
+> [!success] Complexity
+> Time O(D + S) where D = total characters in dictionary, S = total characters in sentence. Space O(D).
+
+> [!tip] Alternatives
+> - Sort dictionary by word length, check each word for prefix match: O(D * S) — too slow.
+> - Key insight: stopping at the first `is_end` node guarantees the *shortest* root is returned, since shorter roots are encountered before longer ones when traversing from the root.
+
+---
+
+### Palindrome Pairs (LC 336)
+
+> [!example] Problem
+> Given a list of unique words, find all pairs `(i, j)` such that `words[i] + words[j]` forms a palindrome.
+
+> [!info] Approach
+> - **WHY:** For `words[i] + words[j]` to be a palindrome, either: (a) one is the reverse of the other, (b) one word has a palindromic suffix/prefix and its prefix/suffix reverse exists in the list.
+> - **WHAT:** Build a hash map of `word -> index`. For each word, consider all splits into `(prefix, suffix)`. If `prefix` is a palindrome and `reverse(suffix)` is in the map, that's a valid pair. Similarly for palindromic suffixes.
+> - **HOW:** For each word at index `i`, split at every position `k` (0 to len): if `word[:k]` is a palindrome and `reverse(word[k:])` is in the map (and not `i`), add `(map[reverse], i)`. If `word[k:]` is a palindrome and `reverse(word[:k])` is in the map, add `(i, map[reverse])`. Avoid duplicates by only doing suffix-palindrome check for `k > 0`.
+
+> [!note]- Python Solution
+> ```python
+> def palindrome_pairs(words: list[str]) -> list[list[int]]:
+>     word_map = {word: i for i, word in enumerate(words)}
+>     result = []
+>
+>     def is_palindrome(s: str) -> bool:
+>         return s == s[::-1]
+>
+>     for i, word in enumerate(words):
+>         for k in range(len(word) + 1):
+>             prefix = word[:k]
+>             suffix = word[k:]
+>             if is_palindrome(prefix):
+>                 rev_suffix = suffix[::-1]
+>                 if rev_suffix in word_map and word_map[rev_suffix] != i:
+>                     result.append([word_map[rev_suffix], i])
+>             if k > 0 and is_palindrome(suffix):
+>                 rev_prefix = prefix[::-1]
+>                 if rev_prefix in word_map and word_map[rev_prefix] != i:
+>                     result.append([i, word_map[rev_prefix]])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n * L²) where n = number of words, L = average word length. Space O(n * L).
+
+> [!tip] Alternatives
+> - Trie-based: insert reversed words into a trie; for each word walk the trie and check for palindromic remainders. Same asymptotic complexity but avoids hashing.
+> - Key edge case: empty string `""` — it forms a palindrome with any word that is itself a palindrome.
+
+---
+
+### Word Squares (LC 425)
+
+> [!example] Problem
+> Given a list of words of equal length, find all sets of words that form a word square — a sequence where the k-th row and k-th column spell the same word.
+
+> [!info] Approach
+> - **WHY:** When building the square row by row, the prefix of each new row is already determined by the column values filled in so far. A trie with prefix-to-words index lets us quickly find all words matching a required prefix.
+> - **WHAT:** Build a trie where each node stores all words that pass through it (i.e., all words with that prefix). Backtrack: at row `k`, the required prefix is `square[0][k] + square[1][k] + ... + square[k-1][k]`. Fetch all matching words from the trie and try each.
+> - **HOW:** Insert all words into the trie, at each node also storing the list of words with that prefix. Backtrack with `build(step, square)`: if `step == n`, save the square. Otherwise extract prefix from the current partial square, look up matching words in the trie, and recurse.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+>
+> def word_squares(words: list[str]) -> list[list[str]]:
+>     n = len(words[0])
+>     prefix_map = defaultdict(list)
+>     for word in words:
+>         for i in range(n + 1):
+>             prefix_map[word[:i]].append(word)
+>
+>     result = []
+>
+>     def backtrack(step: int, square: list[str]) -> None:
+>         if step == n:
+>             result.append(square[:])
+>             return
+>         prefix = ''.join(square[i][step] for i in range(step))
+>         for candidate in prefix_map[prefix]:
+>             square.append(candidate)
+>             backtrack(step + 1, square)
+>             square.pop()
+>
+>     for word in words:
+>         backtrack(1, [word])
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n * 26^n) worst case (bounded by trie pruning in practice), Space O(n² + total prefix entries).
+
+> [!tip] Alternatives
+> - Without a trie: binary search or set lookups for prefix matching — same logic, slightly less efficient.
+> - Key insight: the trie's word lists at each prefix node are the core lookup structure; this is essentially a hash map of prefix → word list but structured as a trie for clarity.
+
+---
+
+## See Also
+
+[[string-algorithms]] | [[backtracking]] | [[hashing]] | [[dynamic-programming]]
