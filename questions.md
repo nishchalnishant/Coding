@@ -13,558 +13,611 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Array
 
-- [ ] Two Sum
-- [ ] 3Sum
-- [ ] Trapping Rain Water
-- [ ] Subarray Sum = K
-- [ ] Product Except Self
-- [ ] Container with Most Water
-- [ ] Next Permutation
-- [ ] Jump Game II
-- [ ] Sliding Window Maximum
-- [ ] Median of Two Arrays
-- [ ] Best Time to Buy and Sell Stock [E]
-- [ ] Remove Duplicates from Sorted Array [E]
-- [ ] Find All Disappearing Numbers [E]
-- [ ] Maximum Subarray [M]
-- [ ] Rotate Array [M]
-- [ ] Find the Duplicate Number [M]
-- [ ] Spiral Matrix [M]
-- [ ] Set Matrix Zeroes [M]
-- [ ] Longest Consecutive Sequence [H]
-- [ ] Minimum Window Substring [H]
-- [ ] Subarray Sums Divisible by K [M]
-- [ ] Subarrays with K Different Integers [H]
+- [x] [Two Sum](coding/data-structures/hashing.md#two-sum) [E]
+- [x] [3Sum](coding/data-structures/array.md#3sum) [M]
+- [ ] [Trapping Rain Water](coding/algorithms/two-pointers.md#trapping-rain-water-lc-42) [H]
+- [ ] [Subarray Sum = K](coding/data-structures/array.md#subarray-sum-equals-k) [M]
+- [ ] [Product Except Self](01-data-structures/array.md#product-except-self) [M]
+- [ ] [Container with Most Water](coding/data-structures/array.md#container-with-most-water) [M]
+- [ ] [Next Permutation](coding/data-structures/array.md#next-permutation) [M]
+- [ ] [Jump Game II](coding/data-structures/array.md#jump-game-ii) [M]
+- [ ] [Sliding Window Maximum](coding/data-structures/queue.md#sliding-window-maximum) [H]
+- [ ] [Median of Two Arrays](coding/data-structures/array.md#median-of-two-sorted-arrays) [H]
+- [ ] [Move Zeros](01-data-structures/array.md#move-zeros) [E]
+- [ ] [Longest Subarray with K Distinct](01-data-structures/array.md#longest-subarray-with-k-distinct) [M]
+- [ ] [Jump Game](coding/data-structures/array.md#jump-game-lc-55) [M]
+- [ ] [Best Time to Buy and Sell Stock](coding/data-structures/array.md#best-time-to-buy-and-sell-stock) [E]
+- [ ] [Remove Duplicates from Sorted Array](coding/data-structures/array.md#remove-duplicates-from-sorted-array) [E]
+- [ ] [Find All Disappearing Numbers](01-data-structures/array.md#find-all-disappearing-numbers) [E]
+- [ ] [Maximum Subarray](coding/data-structures/array.md#maximum-subarray) [M]
+- [ ] [Rotate Array](coding/data-structures/array.md#rotate-array) [M]
+- [ ] [Find the Duplicate Number](coding/data-structures/array.md#find-the-duplicate-number) [M]
+- [ ] [Spiral Matrix](coding/data-structures/array.md#spiral-matrix) [M]
+- [ ] [Set Matrix Zeroes](coding/data-structures/array.md#set-matrix-zeroes) [M]
+- [ ] [Longest Consecutive Sequence](coding/data-structures/array.md#longest-consecutive-sequence) [H]
+- [ ] [Minimum Window Substring](coding/data-structures/array.md#minimum-window-substring) [H]
+- [ ] [Subarray Sums Divisible by K](coding/data-structures/array.md#subarray-sums-divisible-by-k) [M]
+- [ ] [Subarrays with K Different Integers](coding/data-structures/array.md#subarrays-with-k-different-integers) [H]
+- [ ] [Two Sum II (sorted)](coding/data-structures/hashing.md#two-sum) [M]
+- [ ] [Minimum Size Subarray Sum](coding/algorithms/sliding-window.md#minimum-size-subarray-sum-lc-209) [M]
+- [ ] [Permutation in String](coding/algorithms/sliding-window.md#permutation-in-string-lc-567) [M]
 
 ### Graphs
 
-- [ ] Number of Islands
-- [ ] Flood Fill
-- [ ] Rotting Oranges
-- [ ] Course Schedule
-- [ ] Clone Graph
-- [ ] Surrounded Regions
-- [ ] Word Ladder
-- [ ] Alien Dictionary
-- [ ] Pacific Atlantic Flow
-- [ ] Find if Path Exists [E]
-- [ ] Find Center of Star Graph [E]
-- [ ] Employee Importance [E]
-- [ ] All Paths From Source to Target [M]
-- [ ] Is Graph Bipartite? [M]
-- [ ] Minimum Number of Vertices to Reach All Nodes [M]
-- [ ] Network Delay Time [M]
-- [ ] Find Eventual Safe States [M]
-- [ ] Redundant Connection [M]
-- [ ] Minimum Spanning Tree (Kruskal's) [M]
-- [ ] Longest Path in DAG [H]
-- [ ] Swim in Rising Water [H]
+- [ ] [Number of Islands](coding/data-structures/graph.md#number-of-islands) [M]
+- [ ] [Flood Fill](coding/data-structures/graph.md#flood-fill) [E]
+- [ ] [Rotting Oranges](coding/data-structures/graph.md#rotting-oranges) [M]
+- [ ] [Course Schedule](coding/data-structures/graph.md#course-schedule) [M]
+- [ ] [Clone Graph](coding/data-structures/graph.md#clone-graph) [M]
+- [ ] [Surrounded Regions](coding/data-structures/graph.md#surrounded-regions) [M]
+- [ ] [Word Ladder](coding/data-structures/graph.md#word-ladder) [H]
+- [ ] [Alien Dictionary](coding/data-structures/graph.md#alien-dictionary) [H]
+- [ ] [Pacific Atlantic Flow](01-data-structures/graphs.md#pacific-atlantic-flow) [M]
+- [ ] [Max Area of Island](coding/data-structures/graph.md#max-area-of-island) [M]
+- [ ] [Find if Path Exists](coding/data-structures/graph.md#find-if-path-exists-in-a-graph) [E]
+- [ ] [Find Center of Star Graph](coding/data-structures/graph.md#find-center-of-star-graph) [E]
+- [ ] [Employee Importance](coding/data-structures/graph.md#employee-importance) [E]
+- [ ] [All Paths From Source to Target](coding/data-structures/graph.md#all-paths-from-source-to-target) [M]
+- [ ] [Is Graph Bipartite?](coding/data-structures/graph.md#is-graph-bipartite) [M]
+- [ ] [Minimum Number of Vertices to Reach All Nodes](coding/data-structures/graph.md#minimum-number-of-vertices-to-reach-all-nodes) [M]
+- [ ] [Network Delay Time](coding/data-structures/heap.md#network-delay-time) [M]
+- [ ] [Find Eventual Safe States](coding/data-structures/graph.md#find-eventual-safe-states) [M]
+- [ ] [Redundant Connection](coding/data-structures/graph.md#redundant-connection) [M]
+- [ ] [Minimum Spanning Tree (Kruskal's)](coding/data-structures/graph.md#minimum-spanning-tree-kruskals) [M]
+- [ ] [Longest Path in DAG](01-data-structures/graphs.md#longest-path-in-dag) [H]
+- [ ] [Swim in Rising Water](coding/data-structures/graph.md#swim-in-rising-water) [H]
 
 ### Hashing
 
-- [ ] Group Anagrams
-- [ ] Longest Consecutive
-- [ ] LRU Cache
-- [ ] Subarray Sum = K
-- [ ] Contiguous Array
-- [ ] Minimum Window
-- [ ] Insert Delete GetRandom
-- [ ] Design HashMap
-- [ ] 4Sum Count
-- [ ] Max Points on a Line
-- [ ] Two Sum [E]
-- [ ] Valid Anagram [E]
-- [ ] Word Pattern [E]
-- [ ] Longest Subarray with At Most K Distinct [M]
-- [ ] Top K Frequent Words [M]
-- [ ] Ransom Note [E]
-- [ ] Find Duplicate File in System [M]
-- [ ] Longest Palindrome [M]
-- [ ] Isomorphic Strings [E]
-- [ ] Subarray Sum Equals K [M]
-- [ ] Longest Increasing Subsequence (via hash) [M]
+- [ ] [Group Anagrams](coding/data-structures/string.md#group-anagrams) [M]
+- [ ] [Longest Consecutive](coding/data-structures/array.md#longest-consecutive-sequence) [H]
+- [ ] [LRU Cache](coding/data-structures/linked-list.md#lru-cache) [M]
+- [ ] [Subarray Sum = K](coding/data-structures/array.md#subarray-sum-equals-k) [M]
+- [ ] [Contiguous Array](coding/data-structures/array.md#contiguous-array-lc-525) [M]
+- [ ] [Minimum Window](coding/data-structures/array.md#minimum-window-substring) [H]
+- [ ] [Insert Delete GetRandom](coding/data-structures/hashing.md#insert-delete-getrandom-o1) [M]
+- [ ] [Design HashMap](coding/data-structures/hashing.md#design-hashmap) [E]
+- [ ] [4Sum Count](coding/data-structures/array.md#4sum) [M]
+- [ ] [Max Points on a Line](coding/data-structures/hashing.md#max-points-on-a-line) [H]
+- [ ] [Two Sum](coding/data-structures/hashing.md#two-sum) [E]
+- [ ] [Valid Anagram](coding/data-structures/string.md#valid-anagram) [E]
+- [ ] [Word Pattern](01-data-structures/hashing.md#word-pattern) [E]
+- [ ] [Longest Subarray with At Most K Distinct](01-data-structures/hashing.md#longest-subarray-with-at-most-k-distinct) [M]
+- [ ] [Top K Frequent Words](coding/data-structures/heap.md#top-k-frequent-words) [M]
+- [ ] [Ransom Note](coding/data-structures/hashing.md#ransom-note) [E]
+- [ ] [Find Duplicate File in System](coding/data-structures/hashing.md#find-duplicate-file-in-system) [M]
+- [ ] [Longest Palindrome](01-data-structures/hashing.md#longest-palindrome) [M]
+- [ ] [Isomorphic Strings](01-data-structures/hashing.md#isomorphic-strings) [E]
+- [ ] [Subarray Sum Equals K](coding/data-structures/array.md#subarray-sum-equals-k) [M]
+- [ ] [Longest Increasing Subsequence (via hash)](coding/algorithms/dynamic-programming.md#longest-increasing-subsequence) [M]
 
 ### Heap
 
-- [ ] Merge K Sorted Lists
-- [ ] Kth Largest Element
-- [ ] Top K Frequent
-- [ ] Find Median from Stream
-- [ ] K Closest Points
-- [ ] IPO
-- [ ] Reorganize String
-- [ ] Task Scheduler
-- [ ] Sliding Window Median
-- [ ] Smallest Range (K Lists)
-- [ ] Last Stone Weight [E]
-- [ ] Kth Largest in Stream [E]
-- [ ] Find Median from Stream [M]
-- [ ] Furthest Building You Can Reach [M]
-- [ ] Single-Threaded CPU [M]
-- [ ] Maximum Performance of a Team [M]
-- [ ] K Closest Points to Origin [M]
-- [ ] Meeting Rooms II [M]
-- [ ] Ugly Number II [M]
-- [ ] Find K Pairs with Smallest Sums [M]
-- [ ] Trapping Rain Water II [H]
+- [ ] [Merge K Sorted Lists](coding/data-structures/linked-list.md#merge-k-sorted-lists) [H]
+- [ ] [Kth Largest Element](02-algorithms/problem-deep-dives.md#kth-largest-element) [M]
+- [ ] [Top K Frequent](coding/data-structures/heap.md#top-k-frequent-elements) [M]
+- [ ] [Find Median from Stream](02-algorithms/sql.md#median) [H]
+- [ ] [K Closest Points](coding/data-structures/heap.md#k-closest-points-to-origin) [M]
+- [ ] [IPO](01-data-structures/heap.md#ipo-pick-up-to-k-projects-to-maximize-capital-can-only-start-if-current-capital-required) [H]
+- [ ] [Reorganize String](coding/data-structures/heap.md#reorganize-string-lc-767) [M]
+- [ ] [Task Scheduler](coding/data-structures/queue.md#task-scheduler) [M]
+- [ ] [Sliding Window Median](coding/data-structures/queue.md#sliding-window-median-lc-480) [H]
+- [ ] [Smallest Range (K Lists)](02-algorithms/problem-deep-dives.md#lis) [H]
+- [ ] [Last Stone Weight](coding/data-structures/heap.md#last-stone-weight) [E]
+- [ ] [Kth Largest in Stream](02-algorithms/problem-deep-dives.md#kth-largest) [E]
+- [ ] [Find Median from Stream](02-algorithms/sql.md#median) [H]
+- [ ] [Furthest Building You Can Reach](coding/data-structures/heap.md#furthest-building-you-can-reach) [M]
+- [ ] [Single-Threaded CPU](01-data-structures/heap.md#single-threaded-cpu) [M]
+- [ ] [Maximum Performance of a Team](01-data-structures/heap.md#maximum-performance-of-a-team) [M]
+- [ ] [K Closest Points to Origin](coding/data-structures/heap.md#k-closest-points-to-origin) [M]
+- [ ] [Meeting Rooms II](coding/algorithms/greedy.md#meeting-rooms-ii) [M]
+- [ ] [Ugly Number II](coding/data-structures/heap.md#ugly-number-ii) [M]
+- [ ] [Find K Pairs with Smallest Sums](coding/data-structures/heap.md#find-k-pairs-with-smallest-sums) [M]
+- [ ] [Trapping Rain Water II](coding/algorithms/two-pointers.md#trapping-rain-water-lc-42) [H]
 
 ### Linked List
 
-- [ ] Reverse List
-- [ ] Remove Nth From End
-- [ ] Merge K Lists
-- [ ] LRU Cache
-- [ ] Detect Cycle Entry
-- [ ] Palindrome LL
-- [ ] Reverse K-Group
-- [ ] Copy List with Random Pointer
-- [ ] Sort List
-- [ ] Add Two Numbers
-- [ ] Middle of Linked List [E]
-- [ ] Linked List Cycle [E]
-- [ ] Merge Two Sorted Lists [E]
-- [ ] Intersection of Two Linked Lists [M]
-- [ ] Reorder List [M]
-- [ ] Swap Nodes in Pairs [M]
-- [ ] Rotate Linked List [M]
-- [ ] Remove Duplicates from Sorted List II [M]
-- [ ] Flatten Multilevel Doubly Linked List [M]
-- [ ] Merge K Sorted Lists [H]
+- [ ] [Reverse List](02-algorithms/problem-deep-dives.md#lis) [E]
+- [ ] [Remove Nth From End](02-algorithms/problem-deep-dives.md#remove-nth-from-end) [M]
+- [ ] [Merge K Lists](02-algorithms/problem-deep-dives.md#lis) [H]
+- [ ] [LRU Cache](coding/data-structures/linked-list.md#lru-cache) [M]
+- [ ] [Detect Cycle Entry](01-data-structures/linked-list.md#detect-cycle-entry) [M]
+- [ ] [Palindrome LL](01-data-structures/linked-list.md#palindrome-ll) [E]
+- [ ] [Reverse K-Group](01-data-structures/linked-list.md#reverse-k-group) [H]
+- [ ] [Copy List with Random Pointer](coding/data-structures/linked-list.md#copy-list-with-random-pointer) [M]
+- [ ] [Sort List](coding/data-structures/linked-list.md#sort-list) [M]
+- [ ] [Add Two Numbers](coding/data-structures/linked-list.md#add-two-numbers) [M]
+- [ ] [Middle of Linked List](02-algorithms/two-pointers.md#middle-of-linked-list) [E]
+- [ ] [Linked List Cycle](coding/data-structures/linked-list.md#linked-list-cycle) [E]
+- [ ] [Merge Two Sorted Lists](coding/data-structures/linked-list.md#merge-two-sorted-lists) [E]
+- [ ] [Intersection of Two Linked Lists](coding/data-structures/linked-list.md#intersection-of-two-linked-lists) [M]
+- [ ] [Reorder List](02-algorithms/problem-deep-dives.md#lis) [M]
+- [ ] [Swap Nodes in Pairs](coding/data-structures/linked-list.md#swap-nodes-in-pairs) [M]
+- [ ] [Rotate Linked List](02-algorithms/problem-deep-dives.md#linked-list) [M]
+- [ ] [Remove Duplicates from Sorted List II](coding/data-structures/linked-list.md#remove-duplicates-from-sorted-list-ii) [M]
+- [ ] [Flatten Multilevel Doubly Linked List](02-algorithms/problem-deep-dives.md#linked-list) [M]
+- [ ] [Merge K Sorted Lists](coding/data-structures/linked-list.md#merge-k-sorted-lists) [H]
 
 ### Queue
 
-- [ ] Rotten Oranges
-- [ ] Word Ladder
-- [ ] Sliding Window Maximum
-- [ ] Shortest Path in Binary Matrix
-- [ ] 01 Matrix
-- [ ] Design Circular Queue
-- [ ] Moving Average from Data Stream
-- [ ] Cheapest Flights K Stops
-- [ ] Number of Recent Calls [E]
-- [ ] Implement Queue Using Stacks [E]
-- [ ] Implement Stack Using Queues [E]
-- [ ] Jump Game III [M]
-- [ ] Bus Routes [M]
-- [ ] Open the Lock [M]
-- [ ] Walls and Gates [M]
-- [ ] Minimum Knight Moves [M]
-- [ ] Shortest Path in Grid with Obstacles Elimination [H]
-- [ ] Find Shortest Path in Directed Weighted Graph [H]
+- [ ] [Rotten Oranges](01-data-structures/queue.md#rotten-oranges) [M]
+- [ ] [Word Ladder](coding/data-structures/graph.md#word-ladder) [H]
+- [ ] [Sliding Window Maximum](coding/data-structures/queue.md#sliding-window-maximum) [H]
+- [ ] [Shortest Path in Binary Matrix](coding/data-structures/graph.md#shortest-path-in-binary-matrix) [M]
+- [ ] [01 Matrix](coding/data-structures/graph.md#01-matrix-lc-542) [M]
+- [ ] [Design Circular Queue](coding/data-structures/queue.md#design-circular-queue) [M]
+- [ ] [Moving Average from Data Stream](coding/data-structures/queue.md#moving-average-from-data-stream) [E]
+- [ ] [Cheapest Flights K Stops](01-data-structures/queue.md#cheapest-flights-k-stops) [M]
+- [ ] [As Far from Land as Possible](coding/data-structures/queue.md#farthest-building-from-land-as-far-from-land-as-possible) [M]
+- [ ] [Number of Recent Calls](coding/data-structures/queue.md#number-of-recent-calls) [E]
+- [ ] [Implement Queue Using Stacks](coding/data-structures/queue.md#implement-queue-using-stacks) [E]
+- [ ] [Implement Stack Using Queues](coding/data-structures/queue.md#implement-stack-using-queues) [E]
+- [ ] [Jump Game III](coding/data-structures/queue.md#jump-game-iii) [M]
+- [ ] [Bus Routes](coding/data-structures/queue.md#bus-routes) [M]
+- [ ] [Open the Lock](coding/data-structures/queue.md#open-the-lock) [M]
+- [ ] [Walls and Gates](coding/data-structures/graph.md#walls-and-gates-lc-286) [M]
+- [ ] [Minimum Knight Moves](coding/data-structures/graph.md#minimum-knight-moves) [M]
+- [ ] [Shortest Path in Grid with Obstacles Elimination](coding/data-structures/queue.md#shortest-path-in-grid-with-obstacles-elimination) [H]
+- [ ] [Find Shortest Path in Directed Weighted Graph](01-data-structures/queue.md#find-shortest-path-in-directed-weighted-graph) [H]
 
 ### Segment Tree
 
-- [ ] Range Sum Query - Mutable [M]
-- [ ] Range Minimum Query [M]
-- [ ] Falling Squares [H]
-- [ ] Count of Smaller Numbers After Self [H]
-- [ ] The Skyline Problem [H]
-- [ ] My Calendar I [M]
-- [ ] My Calendar II [M]
-- [ ] My Calendar III [H]
-- [ ] Count of Range Sum [H]
-- [ ] Rectangle Area II [H]
-- [ ] Maximum Sum of Subarray No Larger Than K [H]
-- [ ] Number of Longest Increasing Subsequences [M]
-- [ ] Interval Sum with Range Add [M]
-- [ ] Coordinate Compression Pattern
-- [ ] Segment Tree Beats (Ji Driver) [H]
+- [ ] [Range Sum Query - Mutable](01-data-structures/segment-tree.md#range-sum-query-mutable) [M]
+- [ ] [Range Minimum Query](02-algorithms/miscellaneous.md#sparse-table-o1-range-minimum-query-static-arrays) [M]
+- [ ] [Falling Squares](coding/data-structures/segment-tree.md#falling-squares-lc-699) [H]
+- [ ] [Count of Smaller Numbers After Self](coding/data-structures/advanced.md#count-of-smaller-numbers-after-self-lc-315) [H]
+- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) [H]
+- [ ] [My Calendar I](coding/data-structures/segment-tree.md#my-calendar-i-lc-729) [M]
+- [ ] [My Calendar II](coding/data-structures/segment-tree.md#my-calendar-ii-lc-731) [M]
+- [ ] [My Calendar III](coding/data-structures/segment-tree.md#my-calendar-iii-lc-732) [H]
+- [ ] [Count of Range Sum](coding/data-structures/segment-tree.md#count-of-range-sum) [H]
+- [ ] [Rectangle Area II](01-data-structures/segment-tree.md#rectangle-area-ii) [H]
+- [ ] [Maximum Sum of Subarray No Larger Than K](01-data-structures/segment-tree.md#maximum-sum-of-subarray-no-larger-than-k) [H]
+- [ ] [Number of Longest Increasing Subsequences](coding/data-structures/advanced.md#number-of-longest-increasing-subsequences-lc-673) [M]
+- [ ] [Interval Sum with Range Add](01-data-structures/segment-tree.md#interval-sum-with-range-add) [M]
+- [ ] [Coordinate Compression Pattern](01-data-structures/segment-tree.md#coordinate-compression-pattern) [M]
+- [ ] [Segment Tree Beats (Ji Driver)](coding/data-structures/advanced.md#segment-tree) [H]
 
 ### Stack
 
-- [ ] Daily Temperatures
-- [ ] Next Greater Element II
-- [ ] Largest Rectangle
-- [ ] Maximal Rectangle
-- [ ] Valid Parentheses
-- [ ] Min Stack
-- [ ] Decode String
-- [ ] Exclusive Time of Functions
-- [ ] Trapping Rain Water
-- [ ] Maximum Frequency Stack
-- [ ] Balanced Parentheses [E]
-- [ ] Baseball Game [E]
-- [ ] Remove All Adjacent Duplicates [E]
-- [ ] Asteroid Collision [M]
-- [ ] Online Stock Span [M]
-- [ ] Remove K Digits [M]
-- [ ] Sum of Subarray Minimums [M]
-- [ ] Largest Rectangle in Histogram [H]
-- [ ] Basic Calculator II [M]
-- [ ] Validate Stack Sequences [M]
+- [ ] [Daily Temperatures](coding/data-structures/stack.md#daily-temperatures) [M]
+- [ ] [Next Greater Element II](coding/data-structures/stack.md#next-greater-element-ii) [M]
+- [ ] [Largest Rectangle](coding/data-structures/stack.md#largest-rectangle-in-histogram) [H]
+- [ ] [Maximal Rectangle](coding/data-structures/stack.md#maximal-rectangle) [H]
+- [ ] [Valid Parentheses](coding/data-structures/stack.md#valid-parentheses) [E]
+- [ ] [Min Stack](coding/data-structures/stack.md#min-stack) [M]
+- [ ] [Decode String](coding/data-structures/string.md#decode-string) [M]
+- [ ] [Exclusive Time of Functions](coding/data-structures/stack.md#exclusive-time-of-functions) [M]
+- [ ] [Trapping Rain Water](coding/algorithms/two-pointers.md#trapping-rain-water-lc-42) [H]
+- [ ] [Maximum Frequency Stack](coding/data-structures/stack.md#maximum-frequency-stack) [H]
+- [ ] [Balanced Parentheses](01-data-structures/stack.md#balanced-parentheses) [E]
+- [ ] [Baseball Game](coding/data-structures/stack.md#baseball-game) [E]
+- [ ] [Remove All Adjacent Duplicates](coding/data-structures/stack.md#remove-all-adjacent-duplicates-in-string) [E]
+- [ ] [Asteroid Collision](coding/data-structures/stack.md#asteroid-collision) [M]
+- [ ] [Online Stock Span](coding/data-structures/stack.md#online-stock-span) [M]
+- [ ] [Remove K Digits](coding/data-structures/stack.md#remove-k-digits) [M]
+- [ ] [Sum of Subarray Minimums](coding/data-structures/stack.md#sum-of-subarray-minimums-lc-907) [M]
+- [ ] [Largest Rectangle in Histogram](coding/data-structures/stack.md#largest-rectangle-in-histogram) [H]
+- [ ] [Basic Calculator II](coding/data-structures/stack.md#basic-calculator-ii) [M]
+- [ ] [Validate Stack Sequences](coding/data-structures/stack.md#validate-stack-sequences) [M]
 
 ### Tree
 
-- [ ] Validate BST
-- [ ] Max Path Sum
-- [ ] LCA
-- [ ] Kth Smallest
-- [ ] Diameter
-- [ ] House Robber III
-- [ ] Serialize/Deserialize
-- [ ] Morris Inorder
-- [ ] Recover BST
-- [ ] Binary Tree Cameras
-- [ ] Invert Binary Tree [E]
-- [ ] Symmetric Tree [E]
-- [ ] Path Sum [E]
-- [ ] Count Good Nodes [M]
-- [ ] Binary Tree Level Order Traversal [M]
-- [ ] Construct Binary Tree from Preorder and Inorder [M]
-- [ ] Populating Next Right Pointers [M]
-- [ ] Flatten Binary Tree to Linked List [M]
-- [ ] All Nodes Distance K in Binary Tree [M]
-- [ ] Vertical Order Traversal [H]
-- [ ] Binary Tree Maximum Path Sum [H]
-- [ ] Step-By-Step Directions [M]
-- [ ] Path Sum III [M]
+- [ ] [Validate BST](02-algorithms/problem-deep-dives.md#validate-bst) [M]
+- [ ] [Max Path Sum](02-algorithms/problem-deep-dives.md#max-path-sum) [H]
+- [ ] [LCA](coding/data-structures/tree.md#lowest-common-ancestor) [M]
+- [ ] [Kth Smallest](01-data-structures/tree.md#bst-operations-validate-kth-smallest-range-sum) [M]
+- [ ] [Diameter](02-algorithms/recursion/aditya-verma.md#diameter-of-binary-tree-pass-height-up-update-diameter-via-closure) [E]
+- [ ] [House Robber III](coding/data-structures/tree.md#house-robber-iii) [M]
+- [ ] [Serialize/Deserialize](02-algorithms/problem-deep-dives.md#serialize-deserialize) [H]
+- [ ] [Morris Inorder](01-data-structures/tree.md#morris-inorder-traversal-o1-space) [M]
+- [ ] [Morris Preorder](01-data-structures/tree.md#morris-preorder-traversal-o1-space) [M]
+- [ ] [Recover BST](01-data-structures/tree.md#recover-bst) [H]
+- [ ] [Binary Tree Cameras](coding/data-structures/tree.md#binary-tree-cameras-lc-968) [H]
+- [ ] [Invert Binary Tree](coding/data-structures/tree.md#invert-binary-tree) [E]
+- [ ] [Symmetric Tree](coding/data-structures/tree.md#symmetric-tree) [E]
+- [ ] [Path Sum](coding/data-structures/tree.md#path-sum) [E]
+- [ ] [Count Good Nodes](coding/data-structures/tree.md#count-good-nodes-in-binary-tree) [M]
+- [ ] [Binary Tree Level Order Traversal](coding/data-structures/tree.md#binary-tree-level-order-traversal) [M]
+- [ ] [Construct Binary Tree from Preorder and Inorder](coding/algorithms/divide-and-conquer.md#construct-binary-tree-from-preorder-and-inorder) [M]
+- [ ] [Populating Next Right Pointers](coding/data-structures/tree.md#populating-next-right-pointers-in-each-node) [M]
+- [ ] [Flatten Binary Tree to Linked List](coding/data-structures/tree.md#flatten-binary-tree-to-linked-list) [M]
+- [ ] [All Nodes Distance K in Binary Tree](coding/data-structures/tree.md#all-nodes-distance-k-in-binary-tree) [M]
+- [ ] [Vertical Order Traversal](coding/data-structures/tree.md#vertical-order-traversal-of-a-binary-tree) [H]
+- [ ] [Binary Tree Maximum Path Sum](coding/data-structures/tree.md#binary-tree-maximum-path-sum) [H]
+- [ ] [Step-By-Step Directions](coding/data-structures/tree.md#step-by-step-directions-from-a-binary-tree-node-to-another) [M]
+- [ ] [Path Sum III](coding/data-structures/tree.md#path-sum-iii) [M]
+- [ ] [Count Complete Tree Nodes](coding/data-structures/tree.md#count-complete-tree-nodes-lc-222) [M]
+- [ ] [LCA BST](01-data-structures/tree.md#lca-bst) [M]
+- [ ] [BST Insert](02-algorithms/recursion/tree-recursion.md#22-bst-insert-lc-701) [M]
+- [ ] [BST Delete](02-algorithms/recursion/tree-recursion.md#23-bst-delete-lc-450) [M]
 
 ### Trie
 
 - [ ] ----------
-- [ ] Implement Trie [E]
-- [ ] Word Search II [H]
-- [ ] Maximum XOR of Two Numbers [M]
-- [ ] Replace Words [M]
-- [ ] Design Search Autocomplete [M]
-- [ ] Longest Word in Dictionary [M]
-- [ ] Map Sum Pairs [M]
-- [ ] Word Squares [H]
-- [ ] Number of Distinct Substrings [H]
+- [ ] [Implement Trie](coding/data-structures/trie.md#implement-trie-prefix-tree) [E]
+- [ ] [Word Search II](coding/data-structures/trie.md#word-search-ii) [H]
+- [ ] [Maximum XOR of Two Numbers](02-algorithms/problem-deep-dives.md#maximum-xor-of-two-numbers) [M]
+- [ ] [Replace Words](coding/data-structures/trie.md#replace-words-lc-648) [M]
+- [ ] [Design Search Autocomplete](coding/data-structures/queue.md#design) [M]
+- [ ] [Longest Word in Dictionary](coding/data-structures/trie.md#longest-word-in-dictionary) [M]
+- [ ] [Map Sum Pairs](coding/data-structures/trie.md#map-sum-pairs) [M]
+- [ ] [Word Squares](coding/data-structures/trie.md#word-squares-lc-425) [H]
+- [ ] [Number of Distinct Substrings](coding/data-structures/advanced.md#number-of-distinct-substrings) [H]
 
 ## Algorithms
 
 ### Advanced Graphs
 
-- [ ] Critical Connections [H]
-- [ ] Reconstruct Itinerary [H]
-- [ ] Alien Dictionary [H]
-- [ ] Cheapest Flights Within K Stops [M]
-- [ ] Network Delay Time [M]
-- [ ] Path With Minimum Effort [M]
-- [ ] Swim in Rising Water [H]
-- [ ] Find the City With Smallest Reachable Count [M]
-- [ ] Minimum Cost to Reach Destination (Floyd-Warshall) [M]
-- [ ] Course Schedule II [M]
-- [ ] Minimum Spanning Tree — Kruskal's [M]
-- [ ] Minimum Spanning Tree — Prim's [M]
-- [ ] Evaluate Division [M]
-- [ ] Strongly Connected Components — Kosaraju's [H]
-- [ ] Word Ladder II [H]
-- [ ] Detect Negative Cycle (Bellman-Ford) [M]
+- [ ] [Critical Connections](02-algorithms/problem-deep-dives.md#critical-connections-bridges) [H]
+- [ ] [Reconstruct Itinerary](coding/data-structures/graph.md#reconstruct-itinerary-lc-332) [H]
+- [ ] [Alien Dictionary](coding/data-structures/graph.md#alien-dictionary) [H]
+- [ ] [Cheapest Flights Within K Stops](coding/data-structures/graph.md#cheapest-flights-within-k-stops) [M]
+- [ ] [Network Delay Time](coding/data-structures/heap.md#network-delay-time) [M]
+- [ ] [Path With Minimum Effort](coding/data-structures/graph.md#path-with-minimum-effort-lc-1631) [M]
+- [ ] [Swim in Rising Water](coding/data-structures/graph.md#swim-in-rising-water) [H]
+- [ ] [Find the City With Smallest Reachable Count](02-algorithms/advanced-graphs.md#find-the-city-with-smallest-reachable-count) [M]
+- [ ] [Minimum Cost to Reach Destination (Floyd-Warshall)](02-algorithms/advanced-graphs.md#minimum-cost-to-reach-destination-floyd-warshall) [M]
+- [ ] [Course Schedule II](coding/data-structures/graph.md#course-schedule-ii) [M]
+- [ ] [Minimum Spanning Tree — Kruskal's](02-algorithms/graph.md#minimum-spanning-tree-kruskals-and-prims) [M]
+- [ ] [Minimum Spanning Tree — Prim's](coding/data-structures/graph.md#minimum-spanning-tree-prims-algorithm) [M]
+- [ ] [Evaluate Division](coding/algorithms/graph-algorithms.md#evaluate-division-lc-399) [M]
+- [ ] [Strongly Connected Components — Kosaraju's](coding/data-structures/graph.md#strongly-connected-components-kosarajus-algorithm) [H]
+- [ ] [Word Ladder II](coding/algorithms/graph-algorithms.md#word-ladder-ii-lc-126) [H]
+- [ ] [Detect Negative Cycle (Bellman-Ford)](coding/algorithms/graph-algorithms.md#bellman-ford) [M]
 
 ### Backtracking
 
-- [ ] Subsets
-- [ ] Permutations
-- [ ] Combination Sum
-- [ ] N-Queens
-- [ ] Word Search
-- [ ] Sudoku Solver
-- [ ] Palindrome Partitioning
-- [ ] Generate Parentheses
-- [ ] Remove Invalid Parentheses
-- [ ] Letter Combinations
-- [ ] Expression Add Operators
-- [ ] Binary Watch [E]
-- [ ] Find All Anagrams in a String [E]
-- [ ] Restore IP Addresses [M]
-- [ ] Combinations [M]
-- [ ] Target Sum [M]
-- [ ] Partition to K Equal Subsets [M]
-- [ ] Word Break II [M]
-- [ ] Unique Paths III [H]
-- [ ] Zuma Game [H]
-- [ ] Stickers to Spell Word [H]
+- [ ] [Subsets](02-algorithms/problem-deep-dives.md#subsets) [M]
+- [ ] [Permutations](coding/algorithms/recursion.md#permutations) [M]
+- [ ] [Combination Sum](02-algorithms/problem-deep-dives.md#combination-sum) [M]
+- [ ] [N-Queens](coding/algorithms/recursion.md#n-queens) [H]
+- [ ] [Word Search](coding/algorithms/backtracking.md#word-search) [M]
+- [ ] [Sudoku Solver](coding/algorithms/recursion.md#sudoku-solver) [H]
+- [ ] [Palindrome Partitioning](coding/algorithms/recursion.md#palindrome-partitioning) [M]
+- [ ] [Generate Parentheses](coding/algorithms/recursion.md#generate-parentheses) [M]
+- [ ] [Remove Invalid Parentheses](coding/algorithms/backtracking.md#remove-invalid-parentheses-lc-301) [H]
+- [ ] [Letter Combinations](02-algorithms/recursion/tips-and-gotchas.md#letter-combinations-phone-wrong) [M]
+- [ ] [Expression Add Operators](coding/algorithms/divide-and-conquer.md#expression-add-operators) [H]
+- [ ] [Binary Watch](02-algorithms/backtracking.md#binary-watch) [E]
+- [ ] [Find All Anagrams in a String](coding/data-structures/string.md#find-all-anagrams-in-a-string) [E]
+- [ ] [Restore IP Addresses](coding/algorithms/backtracking.md#restore-ip-addresses) [M]
+- [ ] [Combinations](coding/algorithms/recursion.md#combinations-lc-77) [M]
+- [ ] [Target Sum](coding/algorithms/dynamic-programming.md#target-sum) [M]
+- [ ] [Partition to K Equal Subsets](02-algorithms/problem-deep-dives.md#subsets) [M]
+- [ ] [Word Break II](coding/algorithms/backtracking.md#word-break-ii) [M]
+- [ ] [Unique Paths III](coding/algorithms/backtracking.md#unique-paths-iii) [H]
+- [ ] [Zuma Game](02-algorithms/backtracking.md#zuma-game) [H]
+- [ ] [Stickers to Spell Word](02-algorithms/backtracking.md#stickers-to-spell-word) [H]
+- [ ] [Combination Sum III](coding/algorithms/backtracking.md#combination-sum-iii) [M]
+- [ ] [Robot Room Cleaner](coding/algorithms/recursion.md#robot-room-cleaner) [H]
 
 ### Bit Manipulation
 
-- [ ] Single Number
-- [ ] Single Number II
-- [ ] Power of Two
-- [ ] Reverse Bits
-- [ ] Hamming Distance
-- [ ] Counting Bits
-- [ ] Find Missing Number
-- [ ] Sum Without `+`
-- [ ] Smallest Sufficient Team
-- [ ] Number of 1 Bits [E]
-- [ ] Reverse Bits [E]
-- [ ] Missing Number [E]
-- [ ] Number Complement [E]
-- [ ] Bitwise AND of Numbers Range [M]
-- [ ] Decode XORed Array [M]
-- [ ] Divide Two Integers [M]
-- [ ] UTF-8 Validation [M]
-- [ ] Maximum XOR of Two Numbers [M]
-- [ ] Find Two Non-Repeating Numbers [H]
-- [ ] Shortest Path Visiting All Nodes [H]
+- [ ] [Single Number](coding/algorithms/bit-manipulation.md#single-number) [E]
+- [ ] [Single Number II](coding/algorithms/bit-manipulation.md#single-number) [M]
+- [ ] [Power of Two](coding/algorithms/bit-manipulation.md#power-of-two) [E]
+- [ ] [Reverse Bits](coding/algorithms/bit-manipulation.md#reverse-bits) [E]
+- [ ] [Hamming Distance](coding/algorithms/bit-manipulation.md#hamming-distance) [E]
+- [ ] [Counting Bits](02-algorithms/problem-deep-dives.md#counting-bits) [E]
+- [ ] [Find Missing Number](coding/algorithms/bit-manipulation.md#missing-number) [E]
+- [ ] [Sum Without `+`](02-algorithms/bit-manipulation.md#sum-without) [M]
+- [ ] [Smallest Sufficient Team](02-algorithms/problem-deep-dives.md#smallest-sufficient-team) [H]
+- [ ] [Number of 1 Bits](coding/algorithms/bit-manipulation.md#number-of-1-bits-hamming-weight) [E]
+- [ ] [Reverse Bits](coding/algorithms/bit-manipulation.md#reverse-bits) [E]
+- [ ] [Missing Number](coding/algorithms/bit-manipulation.md#missing-number) [E]
+- [ ] [Number Complement](02-algorithms/bit-manipulation.md#number-complement) [E]
+- [ ] [Bitwise AND of Numbers Range](coding/algorithms/bit-manipulation.md#bitwise-and-of-numbers-range) [M]
+- [ ] [Decode XORed Array](coding/algorithms/bit-manipulation.md#decode-xored-array) [M]
+- [ ] [Divide Two Integers](02-algorithms/bit-manipulation.md#divide-two-integers) [M]
+- [ ] [UTF-8 Validation](coding/algorithms/bit-manipulation.md#utf-8-validation) [M]
+- [ ] [Maximum XOR of Two Numbers](02-algorithms/problem-deep-dives.md#maximum-xor-of-two-numbers) [M]
+- [ ] [Find Two Non-Repeating Numbers](02-algorithms/bit-manipulation.md#find-two-non-repeating-numbers) [H]
+- [ ] [Shortest Path Visiting All Nodes](coding/algorithms/graph-algorithms.md#shortest-path-visiting-all-nodes-lc-847) [H]
 
 ### Concurrency
 
 - [ ] ----------
-- [ ] Implement a thread-safe LRU cache
-- [ ] Design a rate limiter shared across threads
-- [ ] Implement a countdown latch
-- [ ] Fix this deadlocked code [given snippet]
-- [ ] How does a read-write lock differ from a mutex?
-- [ ] What is the ABA problem?
+- [ ] [Implement a thread-safe LRU cache](coding/data-structures/linked-list.md#lru-cache) [H]
+- [ ] [Design a rate limiter shared across threads](02-algorithms/problem-deep-dives.md#rate-limiter) [H]
+- [ ] [Implement a countdown latch](02-algorithms/concurrency.md#implement-a-countdown-latch) [M]
+- [ ] [Fix this deadlocked code (given snippet)](02-algorithms/concurrency.md#fix-this-deadlocked-code-given-snippet) [M]
+- [ ] [How does a read-write lock differ from a mutex?](02-algorithms/concurrency.md#how-does-a-read-write-lock-differ-from-a-mutex) [E]
+- [ ] [What is the ABA problem?](02-algorithms/concurrency.md#the-aba-problem) [M]
+- [ ] [Dining Philosophers](02-algorithms/problem-deep-dives.md#dining-philosophers-deadlock-free) [M]
+- [ ] [Building H2O](02-algorithms/concurrency.md#building-h2o) [H]
+- [ ] [Web Crawler](02-algorithms/concurrency.md#web-crawler) [M]
+- [ ] [Traffic Light](02-algorithms/concurrency.md#traffic-light) [M]
+- [ ] [Zero Even Odd](02-algorithms/concurrency.md#zero-even-odd) [M]
 
 ### Divide And Conquer
 
-- [ ] Merge Sort
-- [ ] Count Inversions
-- [ ] QuickSelect
-- [ ] Pow(x,n)
-- [ ] Maximum Subarray (D&C)
-- [ ] Majority Element
-- [ ] Merge K Sorted Lists
-- [ ] Reverse Pairs
-- [ ] Closest Pair of Points
-- [ ] Majority Element [E]
-- [ ] Sort List [M]
-- [ ] Beautiful Array [M]
-- [ ] Different Ways to Add Parentheses [M]
-- [ ] Count of Range Sum [H]
-- [ ] Reverse Pairs [H]
+- [ ] [Merge Sort](coding/algorithms/recursion.md#merge-sort) [M]
+- [ ] [Count Inversions](coding/algorithms/sorting.md#count-inversions-merge-sort) [H]
+- [ ] [QuickSelect](coding/algorithms/divide-and-conquer.md#quickselect) [M]
+- [ ] [Pow(x,n)](02-algorithms/divide-and-conquer.md#powxn) [M]
+- [ ] [Maximum Subarray (D&C)](coding/data-structures/array.md#maximum-subarray) [M]
+- [ ] [Majority Element](coding/data-structures/array.md#majority-element) [E]
+- [ ] [Merge K Sorted Lists](coding/data-structures/linked-list.md#merge-k-sorted-lists) [H]
+- [ ] [Reverse Pairs](coding/data-structures/advanced.md#reverse-pairs-lc-493) [H]
+- [ ] [Closest Pair of Points](coding/algorithms/divide-and-conquer.md#closest-pair-of-points) [H]
+- [ ] [Majority Element](coding/data-structures/array.md#majority-element) [E]
+- [ ] [Sort List](coding/data-structures/linked-list.md#sort-list) [M]
+- [ ] [Beautiful Array](02-algorithms/divide-and-conquer.md#beautiful-array) [M]
+- [ ] [Different Ways to Add Parentheses](coding/algorithms/divide-and-conquer.md#different-ways-to-add-parentheses-lc-241) [M]
+- [ ] [Count of Range Sum](coding/data-structures/segment-tree.md#count-of-range-sum) [H]
+- [ ] [Reverse Pairs](coding/data-structures/advanced.md#reverse-pairs-lc-493) [H]
 
 ### Graph
 
-- [ ] Course Schedule
-- [ ] Network Delay Time
-- [ ] Word Ladder
-- [ ] Alien Dictionary
-- [ ] Cheapest Flights K Stops
-- [ ] Number of Islands
-- [ ] Evaluate Division
-- [ ] Reconstruct Itinerary
-- [ ] Critical Connections
-- [ ] Find if Path Exists in Graph [E]
-- [ ] Find Center of Star Graph [E]
-- [ ] Clone Graph [M]
-- [ ] Pacific Atlantic Water Flow [M]
-- [ ] All Paths From Source to Target [M]
-- [ ] Is Graph Bipartite [M]
-- [ ] Course Schedule II [M]
-- [ ] Find Eventual Safe States [M]
-- [ ] Minimum Height Trees [M]
-- [ ] Dijkstra's Shortest Path [M]
-- [ ] Bus Routes [H]
-- [ ] Shortest Path Visiting All Nodes [H]
+- [ ] [Course Schedule](coding/data-structures/graph.md#course-schedule) [M]
+- [ ] [Network Delay Time](coding/data-structures/heap.md#network-delay-time) [M]
+- [ ] [Word Ladder](coding/data-structures/graph.md#word-ladder) [H]
+- [ ] [Alien Dictionary](coding/data-structures/graph.md#alien-dictionary) [H]
+- [ ] [Cheapest Flights K Stops](02-algorithms/graph.md#cheapest-flights-k-stops) [M]
+- [ ] [Number of Islands](coding/data-structures/graph.md#number-of-islands) [M]
+- [ ] [Evaluate Division](coding/algorithms/graph-algorithms.md#evaluate-division-lc-399) [M]
+- [ ] [Reconstruct Itinerary](coding/data-structures/graph.md#reconstruct-itinerary-lc-332) [H]
+- [ ] [Critical Connections](02-algorithms/problem-deep-dives.md#critical-connections-bridges) [H]
+- [ ] [Find if Path Exists in Graph](02-algorithms/graph.md#find-if-path-exists-in-graph) [E]
+- [ ] [Find Center of Star Graph](coding/data-structures/graph.md#find-center-of-star-graph) [E]
+- [ ] [Clone Graph](coding/data-structures/graph.md#clone-graph) [M]
+- [ ] [Pacific Atlantic Water Flow](coding/data-structures/graph.md#pacific-atlantic-water-flow) [M]
+- [ ] [All Paths From Source to Target](coding/data-structures/graph.md#all-paths-from-source-to-target) [M]
+- [ ] [Is Graph Bipartite](coding/algorithms/graph-algorithms.md#bipartite) [M]
+- [ ] [Course Schedule II](coding/data-structures/graph.md#course-schedule-ii) [M]
+- [ ] [Find Eventual Safe States](coding/data-structures/graph.md#find-eventual-safe-states) [M]
+- [ ] [Minimum Height Trees](coding/data-structures/graph.md#minimum-height-trees-lc-310) [M]
+- [ ] [Dijkstra's Shortest Path](02-algorithms/problem-deep-dives.md#dijkstra) [M]
+- [ ] [Bus Routes](coding/data-structures/queue.md#bus-routes) [H]
+- [ ] [Shortest Path Visiting All Nodes](coding/algorithms/graph-algorithms.md#shortest-path-visiting-all-nodes-lc-847) [H]
 
 ### Greedy
 
-- [ ] Jump Game I
-- [ ] Jump Game II
-- [ ] Non-overlapping Intervals
-- [ ] Min Arrows to Burst Balloons
-- [ ] Gas Station
-- [ ] Task Scheduler
-- [ ] Assign Cookies
-- [ ] Candy
-- [ ] Fractional Knapsack
-- [ ] Minimum Refueling Stops
-- [ ] Partition Labels
-- [ ] Lemonade Change [E]
-- [ ] Score After Flipping Matrix [M]
-- [ ] Two City Scheduling [M]
-- [ ] Boats to Save People [M]
-- [ ] Minimum Number of Arrows [M]
-- [ ] Queue Reconstruction by Height [M]
-- [ ] Car Pooling [M]
-- [ ] Wiggle Subsequence [M]
-- [ ] Maximum Units on a Truck [E]
-- [ ] Minimum Cost to Connect Sticks [M]
-- [ ] IPO (Maximize Capital) [H]
+- [ ] [Jump Game I](coding/data-structures/array.md#jump-game-ii) [M]
+- [ ] [Jump Game II](coding/data-structures/array.md#jump-game-ii) [M]
+- [ ] [Non-overlapping Intervals](coding/data-structures/array.md#non-overlapping-intervals-lc-435) [M]
+- [ ] [Min Arrows to Burst Balloons](coding/algorithms/dynamic-programming.md#burst-balloons) [M]
+- [ ] [Gas Station](coding/data-structures/array.md#gas-station-lc-134) [M]
+- [ ] [Task Scheduler](coding/data-structures/queue.md#task-scheduler) [M]
+- [ ] [Assign Cookies](coding/algorithms/greedy.md#assign-cookies-lc-455) [E]
+- [ ] [Candy](coding/data-structures/array.md#candy-lc-135) [H]
+- [ ] [Fractional Knapsack](02-algorithms/greedy.md#fractional-knapsack) [M]
+- [ ] [Minimum Refueling Stops](coding/data-structures/heap.md#minimum-refueling-stops-lc-871) [H]
+- [ ] [Partition Labels](coding/algorithms/greedy.md#partition-labels-lc-763) [M]
+- [ ] [Lemonade Change](02-algorithms/greedy.md#lemonade-change) [E]
+- [ ] [Score After Flipping Matrix](coding/data-structures/array.md#matrix) [M]
+- [ ] [Two City Scheduling](coding/data-structures/queue.md#scheduling) [M]
+- [ ] [Boats to Save People](coding/algorithms/two-pointers.md#boats-to-save-people-lc-881) [M]
+- [ ] [Minimum Number of Arrows](coding/algorithms/greedy.md#minimum-number-of-arrows-to-burst-balloons) [M]
+- [ ] [Queue Reconstruction by Height](coding/data-structures/segment-tree.md#queue-reconstruction-by-height) [M]
+- [ ] [Car Pooling](coding/data-structures/array.md#car-pooling) [M]
+- [ ] [Wiggle Subsequence](02-algorithms/greedy.md#wiggle-subsequence) [M]
+- [ ] [Maximum Units on a Truck](02-algorithms/greedy.md#maximum-units-on-a-truck) [E]
+- [ ] [Minimum Cost to Connect Sticks](02-algorithms/greedy.md#minimum-cost-to-connect-sticks) [M]
+- [ ] [IPO (Maximize Capital)](coding/data-structures/heap.md#ipo-maximize-capital) [H]
 
 ### Maths
 
-- [ ] Pow(x, n)
-- [ ] Sqrt(x)
-- [ ] Count Primes
-- [ ] Factorial Trailing Zeros
-- [ ] Max Points on a Line
-- [ ] Random Pick with Weight
-- [ ] Integer Break
-- [ ] Bulb Switcher
-- [ ] GCD of Array
-- [ ] Add Digits [E]
-- [ ] Excel Sheet Column Number [E]
-- [ ] Happy Number [E]
-- [ ] Ugly Number II [M]
-- [ ] Perfect Squares [M]
-- [ ] Fraction to Recurring Decimal [M]
-- [ ] Nth Digit [M]
-- [ ] Count Different Palindromic Subsequences [H]
-- [ ] Super Pow [H]
+- [ ] [Pow(x, n)](coding/algorithms/maths.md#powx-n-fast-exponentiation-with-mod) [M]
+- [ ] [Sqrt(x)](coding/algorithms/binary-search.md#sqrtx-integer-square-root-lc-69) [E]
+- [ ] [Count Primes](02-algorithms/problem-deep-dives.md#count-primes) [M]
+- [ ] [Factorial Trailing Zeros](02-algorithms/maths.md#factorial-trailing-zeros) [E]
+- [ ] [Max Points on a Line](coding/data-structures/hashing.md#max-points-on-a-line) [H]
+- [ ] [Random Pick with Weight](coding/algorithms/maths.md#random-pick-with-weight) [M]
+- [ ] [Integer Break](02-algorithms/maths.md#integer-break) [M]
+- [ ] [Bulb Switcher](coding/algorithms/maths.md#bulb-switcher) [M]
+- [ ] [GCD of Array](02-algorithms/maths.md#gcd-of-array) [E]
+- [ ] [Add Digits](02-algorithms/maths.md#add-digits) [E]
+- [ ] [Excel Sheet Column Number](coding/algorithms/maths.md#excel-sheet-column-number) [E]
+- [ ] [Happy Number](coding/data-structures/linked-list.md#happy-number) [E]
+- [ ] [Ugly Number II](coding/data-structures/heap.md#ugly-number-ii) [M]
+- [ ] [Perfect Squares](coding/algorithms/dynamic-programming.md#perfect-squares) [M]
+- [ ] [Fraction to Recurring Decimal](02-algorithms/maths.md#fraction-to-recurring-decimal) [M]
+- [ ] [Nth Digit](coding/algorithms/maths.md#nth-digit) [M]
+- [ ] [Count Different Palindromic Subsequences](02-algorithms/maths.md#count-different-palindromic-subsequences) [H]
+- [ ] [Super Pow](coding/algorithms/maths.md#super-pow-modular-exponentiation-non-prime-mod) [H]
 
 ### Miscellaneous
 
-- [ ] Merge Intervals
-- [ ] Meeting Rooms II
-- [ ] Range Sum Query Mutable
-- [ ] Count Smaller After Self
-- [ ] The Skyline Problem
-- [ ] Design LFU Cache
-- [ ] Non-Overlapping Intervals
-- [ ] Data Stream Intervals
-- [ ] Design HashSet [E]
-- [ ] Design Hit Counter [E]
-- [ ] LRU Cache [M]
-- [ ] Design Twitter [M]
-- [ ] Range Sum Query — Immutable [E]
-- [ ] Snapshot Array [M]
-- [ ] Find Median from Data Stream [H]
-- [ ] The Skyline Problem [H]
-- [ ] Minimum Interval to Include Each Query [H]
+- [ ] [Merge Intervals](coding/data-structures/array.md#merge-intervals-lc-56) [M]
+- [ ] [Meeting Rooms II](coding/algorithms/greedy.md#meeting-rooms-ii) [M]
+- [ ] [Range Sum Query Mutable](02-algorithms/miscellaneous.md#range-sum-query-mutable) [M]
+- [ ] [Count Smaller After Self](02-algorithms/miscellaneous.md#count-smaller-after-self) [H]
+- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) [H]
+- [ ] [Design LFU Cache](coding/data-structures/advanced.md#lfu-cache) [H]
+- [ ] [Non-Overlapping Intervals](coding/data-structures/array.md#non-overlapping-intervals-lc-435) [M]
+- [ ] [Data Stream Intervals](coding/data-structures/array.md#intervals) [H]
+- [ ] [Design HashSet](coding/data-structures/queue.md#design) [E]
+- [ ] [Design Hit Counter](coding/data-structures/queue.md#design-hit-counter) [E]
+- [ ] [LRU Cache](coding/data-structures/linked-list.md#lru-cache) [M]
+- [ ] [Design Twitter](coding/data-structures/heap.md#design-twitter) [M]
+- [ ] [Range Sum Query — Immutable](coding/data-structures/array.md#range-sum-query-immutable-lc-303) [E]
+- [ ] [Snapshot Array](02-algorithms/miscellaneous.md#snapshot-array) [M]
+- [ ] [Find Median from Data Stream](coding/data-structures/queue.md#find-median-from-data-stream) [H]
+- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) [H]
+- [ ] [Minimum Interval to Include Each Query](02-algorithms/miscellaneous.md#minimum-interval-to-include-each-query) [H]
+- [ ] [Data Stream as Disjoint Intervals](coding/data-structures/array.md#intervals) [H]
 
 ### Searching
 
-- [ ] Classic Binary Search
-- [ ] First / Last Position
-- [ ] Search Rotated Array
-- [ ] Find Min Rotated
-- [ ] Koko Eating Bananas
-- [ ] Split Array Largest Sum
-- [ ] Median of Two Arrays
-- [ ] Find Peak Element
-- [ ] Random Pick by Weight
-- [ ] Aggressive Cows
-- [ ] Guess Number Higher or Lower [E]
-- [ ] Sqrt(x) [E]
-- [ ] Count of Negative Numbers in Sorted Matrix [E]
-- [ ] First Bad Version [E]
-- [ ] Search in Rotated Sorted Array II [M]
-- [ ] Find Minimum in Rotated Sorted Array II [M]
-- [ ] Time Based Key-Value Store [M]
-- [ ] Find Kth Missing Positive Number [M]
-- [ ] Minimize Max Distance to Gas Station [H]
-- [ ] Count of Smaller Numbers After Self [H]
-- [ ] Koko Eating Bananas [M]
+- [ ] [Classic Binary Search](02-algorithms/problem-deep-dives.md#binary-search) [E]
+- [ ] [First / Last Position](02-algorithms/searching.md#first-last-position) [M]
+- [ ] [Search Rotated Array](02-algorithms/searching.md#search-rotated-array) [M]
+- [ ] [Find Min Rotated](02-algorithms/searching.md#find-min-rotated) [M]
+- [ ] [Koko Eating Bananas](coding/algorithms/binary-search.md#koko-eating-bananas-lc-875) [M]
+- [ ] [Split Array Largest Sum](coding/algorithms/binary-search.md#split-array-largest-sum-lc-410) [H]
+- [ ] [Median of Two Arrays](coding/data-structures/array.md#median-of-two-sorted-arrays) [H]
+- [ ] [Find Peak Element](coding/algorithms/binary-search.md#find-peak-element-lc-162) [M]
+- [ ] [Random Pick by Weight](02-algorithms/searching.md#random-pick-by-weight) [M]
+- [ ] [Aggressive Cows](coding/algorithms/binary-search.md#aggressive-cows-maximize-minimum-distance) [M]
+- [ ] [Guess Number Higher or Lower](coding/algorithms/binary-search.md#guess-number-higher-or-lower-lc-374) [E]
+- [ ] [Sqrt(x)](coding/algorithms/binary-search.md#sqrtx-integer-square-root-lc-69) [E]
+- [ ] [Count of Negative Numbers in Sorted Matrix](coding/data-structures/array.md#matrix) [E]
+- [ ] [First Bad Version](coding/algorithms/binary-search.md#first-bad-version-lc-278) [E]
+- [ ] [Search in Rotated Sorted Array II](coding/algorithms/binary-search.md#search-in-rotated-sorted-array-ii-lc-81) [M]
+- [ ] [Find Minimum in Rotated Sorted Array II](coding/algorithms/binary-search.md#find-minimum-in-rotated-sorted-array-ii-lc-154) [M]
+- [ ] [Time Based Key-Value Store](02-algorithms/searching.md#time-based-key-value-store) [M]
+- [ ] [Find Kth Missing Positive Number](02-algorithms/searching.md#find-kth-missing-positive-number) [M]
+- [ ] [Minimize Max Distance to Gas Station](coding/algorithms/binary-search.md#minimize-max-distance-to-gas-station-lc-774) [H]
+- [ ] [Count of Smaller Numbers After Self](coding/data-structures/advanced.md#count-of-smaller-numbers-after-self-lc-315) [H]
+- [ ] [Koko Eating Bananas](coding/algorithms/binary-search.md#koko-eating-bananas-lc-875) [M]
+- [ ] [Capacity to Ship Packages Within D Days](coding/algorithms/binary-search.md#capacity-to-ship-packages-within-d-days-lc-1011) [M]
+- [ ] [Search a 2D Matrix](coding/data-structures/array.md#search-a-2d-matrix-lc-74) [M]
 
 ### Sorting
 
-- [ ] Merge Intervals
-- [ ] Meeting Rooms II
-- [ ] Largest Number
-- [ ] H-Index
-- [ ] Kth Largest
-- [ ] Count Inversions
-- [ ] Russian Doll Envelopes
-- [ ] Maximum Gap
-- [ ] Sort Colors (Dutch National Flag) [M]
-- [ ] Sort Characters by Frequency [M]
-- [ ] Wiggle Sort II [M]
-- [ ] Find K-th Smallest Pair Distance [H]
-- [ ] Minimum Number of Moves to Seat Everyone [E]
-- [ ] Largest Perimeter Triangle [M]
-- [ ] Minimum Time Difference [M]
-- [ ] Maximum Ice Cream Bars [M]
-- [ ] 3Sum Closest [M]
-- [ ] 4Sum [M]
+- [ ] [Merge Intervals](coding/data-structures/array.md#merge-intervals-lc-56) [M]
+- [ ] [Meeting Rooms II](coding/algorithms/greedy.md#meeting-rooms-ii) [M]
+- [ ] [Largest Number](02-algorithms/sorting.md#largest-number-concatenation-order-comparison) [M]
+- [ ] [H-Index](coding/algorithms/sorting.md#h-index-lc-274) [M]
+- [ ] [Kth Largest](02-algorithms/problem-deep-dives.md#kth-largest) [M]
+- [ ] [Count Inversions](coding/algorithms/sorting.md#count-inversions-merge-sort) [H]
+- [ ] [Russian Doll Envelopes](coding/algorithms/sorting.md#russian-doll-envelopes-lc-354) [H]
+- [ ] [Maximum Gap](coding/algorithms/sorting.md#maximum-gap-lc-164) [H]
+- [ ] [Sort Colors (Dutch National Flag)](coding/data-structures/array.md#sort-colors) [M]
+- [ ] [Sort Characters by Frequency](coding/data-structures/hashing.md#sort-characters-by-frequency) [M]
+- [ ] [Wiggle Sort II](coding/algorithms/sorting.md#wiggle-sort-ii-lc-324) [M]
+- [ ] [Find K-th Smallest Pair Distance](coding/algorithms/binary-search.md#find-k-th-smallest-pair-distance-lc-719) [H]
+- [ ] [Minimum Number of Moves to Seat Everyone](02-algorithms/sorting.md#minimum-number-of-moves-to-seat-everyone) [E]
+- [ ] [Largest Perimeter Triangle](coding/algorithms/greedy.md#largest-perimeter-triangle-lc-976) [M]
+- [ ] [Minimum Time Difference](02-algorithms/sorting.md#minimum-time-difference) [M]
+- [ ] [Maximum Ice Cream Bars](02-algorithms/sorting.md#maximum-ice-cream-bars) [M]
+- [ ] [3Sum Closest](coding/data-structures/array.md#3sum-closest) [M]
+- [ ] [4Sum](coding/data-structures/array.md#4sum) [M]
 
 ### String
 
-- [ ] Longest Palindromic Substring
-- [ ] Longest Palindromic Subsequence
-- [ ] Min Window Substring
-- [ ] Substring with Concatenation
-- [ ] Group Anagrams
-- [ ] Valid Parenthesis String
-- [ ] KMP strStr
-- [ ] Repeated String Match
-- [ ] Edit Distance
-- [ ] Distinct Subsequences
-- [ ] Valid Palindrome [E]
-- [ ] Reverse Words in a String [E]
-- [ ] Longest Common Prefix [E]
-- [ ] String to Integer (atoi) [M]
-- [ ] Count and Say [M]
-- [ ] Longest Repeating Character Replacement [M]
-- [ ] Minimum Remove to Make Valid Parentheses [M]
-- [ ] Longest Substring Without Repeating Characters [M]
-- [ ] Find All Anagrams in a String [M]
-- [ ] Palindromic Substrings [M]
-- [ ] Word Search [M]
-- [ ] Wildcard Matching [H]
-- [ ] Regular Expression Matching [H]
+- [ ] [Longest Palindromic Substring](coding/data-structures/string.md#longest-palindromic-substring) [M]
+- [ ] [Longest Palindromic Subsequence](coding/algorithms/dynamic-programming.md#longest-palindromic-subsequence) [M]
+- [ ] [Min Window Substring](02-algorithms/string.md#min-window-substring) [H]
+- [ ] [Substring with Concatenation](coding/data-structures/hashing.md#substring-with-concatenation-of-all-words) [H]
+- [ ] [Group Anagrams](coding/data-structures/string.md#group-anagrams) [M]
+- [ ] [Valid Parenthesis String](02-algorithms/string.md#valid-parenthesis-string) [M]
+- [ ] [KMP strStr](02-algorithms/string.md#kmp-strstr) [M]
+- [ ] [Repeated String Match](coding/algorithms/string-algorithms.md#repeated-string-match) [M]
+- [ ] [Edit Distance](coding/algorithms/dynamic-programming.md#edit-distance) [H]
+- [ ] [Distinct Subsequences](coding/algorithms/dynamic-programming.md#distinct-subsequences) [H]
+- [ ] [Valid Palindrome](coding/data-structures/string.md#valid-palindrome) [E]
+- [ ] [Reverse Words in a String](coding/data-structures/string.md#reverse-words-in-a-string-lc-151) [E]
+- [ ] [Longest Common Prefix](coding/data-structures/string.md#longest-common-prefix) [E]
+- [ ] [String to Integer (atoi)](coding/data-structures/string.md#string-to-integer-atoi) [M]
+- [ ] [Count and Say](02-algorithms/string.md#count-and-say) [M]
+- [ ] [Longest Repeating Character Replacement](coding/data-structures/array.md#longest-repeating-character-replacement) [M]
+- [ ] [Minimum Remove to Make Valid Parentheses](coding/data-structures/stack.md#valid-parentheses) [M]
+- [ ] [Longest Substring Without Repeating Characters](coding/data-structures/string.md#longest-substring-without-repeating-characters) [M]
+- [ ] [Find All Anagrams in a String](coding/data-structures/string.md#find-all-anagrams-in-a-string) [M]
+- [ ] [Palindromic Substrings](02-algorithms/dynamic-programming/string-palindrome-dp.md#14-count-palindromic-substrings-leetcode-647) [M]
+- [ ] [Word Search](coding/algorithms/backtracking.md#word-search) [M]
+- [ ] [Wildcard Matching](coding/algorithms/recursion.md#wildcard-matching-lc-44) [H]
+- [ ] [Regular Expression Matching](coding/algorithms/dynamic-programming.md#regular-expression-matching) [H]
+- [ ] [Valid Palindrome II](coding/data-structures/string.md#valid-palindrome-ii-lc-680) [E]
+- [ ] [Encode and Decode Strings](coding/data-structures/string.md#encode-and-decode-strings) [M]
+- [ ] [Permutation in String](coding/algorithms/sliding-window.md#permutation-in-string-lc-567) [M]
 
 ### Union Find
 
-- [ ] Redundant Connection
-- [ ] Number of Islands II
-- [ ] Accounts Merge
-- [ ] Kruskal MST
-- [ ] Satisfiability of Equations
-- [ ] Largest Component by Common Factor
-- [ ] Smallest String With Swaps
-- [ ] Graph Valid Tree
-- [ ] Find if Path Exists [E]
-- [ ] Number of Provinces [E]
-- [ ] Largest Component Size by Common Factor [M]
-- [ ] Regions Cut by Slashes [M]
-- [ ] Number of Operations to Make Network Connected [M]
-- [ ] Minimize Malware Spread [H]
-- [ ] Swim in Rising Water [H]
+- [ ] [Redundant Connection](coding/data-structures/graph.md#redundant-connection) [M]
+- [ ] [Number of Islands II](coding/algorithms/union-find.md#number-of-islands-ii) [H]
+- [ ] [Accounts Merge](coding/algorithms/union-find.md#accounts-merge) [M]
+- [ ] [Kruskal MST](coding/data-structures/graph.md#minimum-spanning-tree-kruskals) [M]
+- [ ] [Satisfiability of Equations](02-algorithms/union-find.md#satisfiability-of-equations) [M]
+- [ ] [Largest Component by Common Factor](02-algorithms/union-find.md#largest-component-by-common-factor) [H]
+- [ ] [Smallest String With Swaps](coding/algorithms/union-find.md#smallest-string-with-swaps-lc-1202) [M]
+- [ ] [Graph Valid Tree](coding/algorithms/union-find.md#graph-valid-tree) [M]
+- [ ] [Find if Path Exists](coding/data-structures/graph.md#find-if-path-exists-in-a-graph) [E]
+- [ ] [Number of Provinces](coding/data-structures/graph.md#number-of-provinces-lc-547) [E]
+- [ ] [Largest Component Size by Common Factor](coding/algorithms/union-find.md#largest-component-size-by-common-factor) [M]
+- [ ] [Regions Cut by Slashes](02-algorithms/union-find.md#regions-cut-by-slashes) [M]
+- [ ] [Number of Operations to Make Network Connected](02-algorithms/union-find.md#number-of-operations-to-make-network-connected) [M]
+- [ ] [Minimize Malware Spread](coding/algorithms/union-find.md#minimize-malware-spread) [H]
+- [ ] [Swim in Rising Water](coding/data-structures/graph.md#swim-in-rising-water) [H]
 
 ### Aditya Verma
 
 - [ ] ----------
-- [ ] Subsets [E]
-- [ ] Subsets II [M]
-- [ ] Permutations [M]
-- [ ] Permutations II [M]
-- [ ] Combinations [M]
-- [ ] Combination Sum [M]
-- [ ] Combination Sum II [M]
-- [ ] Generate Parentheses [M]
-- [ ] Letter Case Permutation [M]
-- [ ] Palindrome Partitioning [M]
-- [ ] Phone Number Letter Combinations [M]
-- [ ] Word Search [M]
-- [ ] N-Queens [H]
-- [ ] Sudoku Solver [H]
-- [ ] Different Ways to Add Parentheses [M]
-- [ ] Unique Binary Search Trees II [M]
-- [ ] Tower of Hanoi [E]
-- [ ] Josephus Problem [M]
-- [ ] Pow(x, n) [M]
-- [ ] Expression Evaluation / Basic Calculator [H]
-- [ ] Decode Ways [M]
-- [ ] Word Break [M]
-- [ ] Binary Tree Paths [E]
-- [ ] Path Sum II [M]
-- [ ] Diameter of Binary Tree [M]
-- [ ] Maximum Path Sum [H]
-- [ ] Flatten Binary Tree [M]
-- [ ] Lowest Common Ancestor [M]
+- [ ] [Subsets](02-algorithms/problem-deep-dives.md#subsets) [E]
+- [ ] [Subsets II](coding/algorithms/recursion.md#subsets-ii-lc-90) [M]
+- [ ] [Permutations](coding/algorithms/recursion.md#permutations) [M]
+- [ ] [Permutations II](coding/algorithms/recursion.md#permutations-ii-lc-47) [M]
+- [ ] [Combinations](coding/algorithms/recursion.md#combinations-lc-77) [M]
+- [ ] [Combination Sum](02-algorithms/problem-deep-dives.md#combination-sum) [M]
+- [ ] [Combination Sum II](02-algorithms/problem-deep-dives.md#combination-sum) [M]
+- [ ] [Generate Parentheses](coding/algorithms/recursion.md#generate-parentheses) [M]
+- [ ] [Letter Case Permutation](coding/algorithms/recursion.md#letter-case-permutation) [M]
+- [ ] [Palindrome Partitioning](coding/algorithms/recursion.md#palindrome-partitioning) [M]
+- [ ] [Phone Number Letter Combinations](coding/algorithms/recursion.md#combinations-lc-77) [M]
+- [ ] [Word Search](coding/algorithms/backtracking.md#word-search) [M]
+- [ ] [N-Queens](coding/algorithms/recursion.md#n-queens) [H]
+- [ ] [Sudoku Solver](coding/algorithms/recursion.md#sudoku-solver) [H]
+- [ ] [Different Ways to Add Parentheses](coding/algorithms/divide-and-conquer.md#different-ways-to-add-parentheses-lc-241) [M]
+- [ ] [Unique Binary Search Trees II](coding/algorithms/recursion.md#unique-binary-search-trees-ii) [M]
+- [ ] [Tower of Hanoi](coding/algorithms/recursion.md#tower-of-hanoi) [E]
+- [ ] [Josephus Problem](coding/algorithms/recursion.md#josephus-problem) [M]
+- [ ] [Pow(x, n)](coding/algorithms/maths.md#powx-n-fast-exponentiation-with-mod) [M]
+- [ ] [Expression Evaluation / Basic Calculator](coding/data-structures/stack.md#expression-evaluation) [H]
+- [ ] [Decode Ways](coding/algorithms/dynamic-programming.md#decode-ways) [M]
+- [ ] [Word Break](coding/algorithms/dynamic-programming.md#word-break) [M]
+- [ ] [Binary Tree Paths](coding/algorithms/recursion.md#binary-tree-paths) [E]
+- [ ] [Path Sum II](coding/data-structures/tree.md#path-sum-ii) [M]
+- [ ] [Diameter of Binary Tree](coding/data-structures/tree.md#diameter-of-binary-tree) [M]
+- [ ] [Maximum Path Sum](coding/data-structures/tree.md#binary-tree-maximum-path-sum) [H]
+- [ ] [Flatten Binary Tree](02-algorithms/recursion/tree-recursion.md#32-flatten-binary-tree-to-linked-list-lc-114) [M]
+- [ ] [Lowest Common Ancestor](coding/data-structures/tree.md#lowest-common-ancestor) [M]
 
 ### Dp Aditya Verma
 
-- [ ] 0/1 Knapsack
-- [ ] Subset Sum
-- [ ] Partition Equal Subset Sum
-- [ ] Target Sum (±)
-- [ ] Coin Change I
-- [ ] Coin Change II
-- [ ] Climbing Stairs
-- [ ] House Robber
-- [ ] House Robber II
-- [ ] Decode Ways
-- [ ] LCS
-- [ ] Edit Distance
-- [ ] LPS (Longest Palindromic Subsequence)
-- [ ] LIS O(N²)
-- [ ] LIS O(N log N)
-- [ ] Russian Doll Envelopes
-- [ ] Max Subarray (Kadane)
-- [ ] Max Product Subarray
-- [ ] Circular Subarray Max
-- [ ] Burst Balloons
-- [ ] Matrix Chain Multiplication
-- [ ] Palindrome Partitioning II
-- [ ] House Robber III
-- [ ] Max Path Sum
-- [ ] Binary Tree Cameras
-- [ ] TSP / Shortest Path All Nodes
-- [ ] Smallest Sufficient Team
+- [ ] [0/1 Knapsack](coding/algorithms/dynamic-programming.md#0-1-knapsack) [M]
+- [ ] [Subset Sum](02-algorithms/dynamic-programming/dp-aditya-verma.md#knapsack-subset-sum-reductions) [M]
+- [ ] [Partition Equal Subset Sum](coding/algorithms/dynamic-programming.md#partition-equal-subset-sum) [M]
+- [ ] [Target Sum (±)](coding/algorithms/dynamic-programming.md#target-sum) [M]
+- [ ] [Coin Change I](02-algorithms/problem-deep-dives.md#coin-change) [M]
+- [ ] [Coin Change II](02-algorithms/problem-deep-dives.md#coin-change) [M]
+- [ ] [Climbing Stairs](coding/algorithms/dynamic-programming.md#climbing-stairs) [E]
+- [ ] [House Robber](coding/algorithms/dynamic-programming.md#house-robber) [M]
+- [ ] [House Robber II](coding/algorithms/dynamic-programming.md#house-robber) [M]
+- [ ] [Decode Ways](coding/algorithms/dynamic-programming.md#decode-ways) [M]
+- [ ] [LCS](02-algorithms/problem-deep-dives.md#lcs-edit-distance) [M]
+- [ ] [Edit Distance](coding/algorithms/dynamic-programming.md#edit-distance) [H]
+- [ ] [LPS (Longest Palindromic Subsequence)](coding/algorithms/dynamic-programming.md#longest-palindromic-subsequence) [M]
+- [ ] [LIS O(N²)](02-algorithms/problem-deep-dives.md#lis) [M]
+- [ ] [LIS O(N log N)](02-algorithms/problem-deep-dives.md#lis) [H]
+- [ ] [Russian Doll Envelopes](coding/algorithms/sorting.md#russian-doll-envelopes-lc-354) [H]
+- [ ] [Max Subarray (Kadane)](02-algorithms/dynamic-programming/dp-aditya-verma.md#max-subarray-kadane) [M]
+- [ ] [Max Product Subarray](02-algorithms/dynamic-programming/dp-aditya-verma.md#max-product-subarray) [M]
+- [ ] [Circular Subarray Max](02-algorithms/dynamic-programming/dp-aditya-verma.md#circular-subarray-max) [H]
+- [ ] [Burst Balloons](coding/algorithms/dynamic-programming.md#burst-balloons) [H]
+- [ ] [Matrix Chain Multiplication](coding/algorithms/dynamic-programming.md#matrix-chain-multiplication) [H]
+- [ ] [Palindrome Partitioning II](coding/algorithms/recursion.md#palindrome-partitioning) [H]
+- [ ] [House Robber III](coding/data-structures/tree.md#house-robber-iii) [M]
+- [ ] [Max Path Sum](02-algorithms/problem-deep-dives.md#max-path-sum) [H]
+- [ ] [Binary Tree Cameras](coding/data-structures/tree.md#binary-tree-cameras-lc-968) [H]
+- [ ] [TSP / Shortest Path All Nodes](02-algorithms/dynamic-programming/dp-aditya-verma.md#tsp-shortest-path-all-nodes) [H]
+- [ ] [Smallest Sufficient Team](02-algorithms/problem-deep-dives.md#smallest-sufficient-team) [H]
+- [ ] [Unique Paths](coding/algorithms/dynamic-programming.md#unique-paths) [M]
+- [ ] [Unique Paths II](02-algorithms/dynamic-programming/grid-dp.md#unique-paths-ii-with-obstacles-leetcode-63) [M]
+- [ ] [Dungeon Game](02-algorithms/dynamic-programming/grid-dp.md#dungeon-game-leetcode-174) [H]
+- [ ] [Cherry Pickup I](02-algorithms/dynamic-programming/grid-dp.md#cherry-pickup-i-leetcode-741) [H]
+- [ ] [Cherry Pickup II](02-algorithms/dynamic-programming/grid-dp.md#cherry-pickup-ii-leetcode-1463) [H]
+- [ ] [Out of Boundary Paths](02-algorithms/dynamic-programming/grid-dp.md#out-of-boundary-paths-leetcode-576) [M]
+- [ ] [Delete and Earn](02-algorithms/dynamic-programming/dp-aditya-verma.md#delete-and-earn) [M]
+- [ ] [Super Egg Drop](coding/algorithms/dynamic-programming.md#super-egg-drop-lc-887) [H]
+- [ ] [Ones and Zeroes](02-algorithms/dynamic-programming/dp-aditya-verma.md#ones-and-zeroes) [M]
+- [ ] [Last Stone Weight II](coding/algorithms/dynamic-programming.md#last-stone-weight-ii) [M]
+- [ ] [Rod Cutting](02-algorithms/dynamic-programming/dp-aditya-verma.md#rod-cutting) [M]
+- [ ] [Longest Common Substring](coding/algorithms/dynamic-programming.md#longest-common-substring) [M]
+- [ ] [Interleaving String](coding/algorithms/dynamic-programming.md#interleaving-string) [M]
+- [ ] [Min Cost Climbing Stairs](coding/algorithms/dynamic-programming.md#min-cost-climbing-stairs) [E]
+- [ ] [Knight Probability](02-algorithms/dynamic-programming/probability-combinatorics-dp.md#1-knight-probability-in-chessboard-leetcode-688) [M]
+- [ ] [New 21 Game](coding/algorithms/dynamic-programming.md#new-21-game) [M]
+- [ ] [Dice Roll Simulation](02-algorithms/dynamic-programming/probability-combinatorics-dp.md#4-dice-roll-simulation-leetcode-1223) [H]
+- [ ] [Soup Servings](02-algorithms/dynamic-programming/probability-combinatorics-dp.md#2-soup-servings-leetcode-808) [M]
+- [ ] [Stone Game I](02-algorithms/dynamic-programming/probability-combinatorics-dp.md#stone-game-i-leetcode-877) [M]
+- [ ] [Stone Game III](02-algorithms/dynamic-programming/probability-combinatorics-dp.md#stone-game-iii-leetcode-1406) [H]
+- [ ] [Unique Binary Search Trees](02-algorithms/problem-deep-dives.md#binary-search) [M]
+- [ ] [Best Time to Buy and Sell Stock II](02-algorithms/dynamic-programming/README.md#best-time-to-buy-and-sell-stock-ii-unlimited-transactions) [M]
+- [ ] [Best Time to Buy and Sell Stock III](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-3-best-time-to-buy-and-sell-stock-iii-leetcode-123) [H]
+- [ ] [Best Time to Buy and Sell Stock IV](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-4-best-time-to-buy-and-sell-stock-iv-leetcode-188) [H]
+- [ ] [Best Time to Buy and Sell Stock with Cooldown](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-5-best-time-to-buy-and-sell-stock-with-cooldown-leetcode-309) [M]
+- [ ] [Best Time to Buy and Sell Stock with Transaction Fee](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-6-best-time-to-buy-and-sell-stock-with-transaction-fee-leetcode-714) [M]
+- [ ] [Scramble String](02-algorithms/recursion/string-recursion.md#34-scramble-string-lc-87) [H]

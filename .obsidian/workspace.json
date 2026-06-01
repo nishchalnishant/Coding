@@ -13,26 +13,40 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "coding/data-structures/linked-list.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "linked-list"
-            }
-          },
-          {
-            "id": "fd13138dcec0f745",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
                 "file": "questions.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
               "title": "questions"
+            }
+          },
+          {
+            "id": "79517f002ff5d45f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02-algorithms/recursion.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "recursion"
+            }
+          },
+          {
+            "id": "4d6418fbcc35461b",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "coding/data-structures/advanced.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "advanced"
             }
           }
         ],
@@ -68,7 +82,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "",
+                "query": "Maximum Ice Cream Bars",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -195,8 +209,17 @@
       "bases:Create new base": false
     }
   },
-  "active": "fd13138dcec0f745",
+  "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "02-algorithms/recursion.md",
+    "02-algorithms/dynamic-programming.md",
+    "02-algorithms/recursion/aditya-verma.md",
+    "coding/data-structures/graph.md",
+    "questions.md",
+    "coding/data-structures/advanced.md",
+    "02-algorithms/problem-deep-dives.md",
+    "03-patterns/leetcode-variants.md",
+    "01-data-structures/array.md",
     "coding/data-structures/linked-list.md",
     "coding/data-structures/heap.md",
     "coding/data-structures/queue.md",
@@ -207,8 +230,6 @@
     "01-data-structures/string.md",
     "01-data-structures/queue.md",
     "01-data-structures/stack.md",
-    "02-algorithms/problem-deep-dives.md",
-    "01-data-structures/array.md",
     "coding/algorithms/binary-search.md",
     "coding/algorithms/backtracking.md",
     "FLOWCHARTS.md",
@@ -216,14 +237,7 @@
     "02-algorithms/dynamic-programming/digit-dp.md",
     "02-algorithms/dynamic-programming/advanced-dp-optimizations.md",
     "02-algorithms/backtracking.md",
-    "03-patterns/lld.md",
-    "05-revision/mock-log.md",
     "coding/algorithms/recursion.md.tmp.52333.ad8b436f2cef",
-    "coding/algorithms/divide-and-conquer.md",
-    "coding/algorithms/bit-manipulation.md",
-    "coding/data-structures/advanced.md",
-    "coding/algorithms/recursion.md",
-    "coding/data-structures/segment-tree.md",
     "coding/data-structures",
     "coding/algorithms",
     "coding"
