@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "02-algorithms/recursion.md",
+                "file": "MINDMAP.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "recursion"
+              "title": "MINDMAP"
             }
           },
           {
@@ -211,16 +211,25 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "04-behavioral/googliness-round.md",
+    "FLOWCHARTS.md",
+    "02-algorithms/problem-deep-dives.md",
+    "02-algorithms/recursion-to-dp.md",
+    "coding/data-structures/stack.md",
+    "coding/data-structures/linked-list.md",
     "02-algorithms/recursion.md",
+    "02-algorithms/divide-and-conquer.md",
+    "02-algorithms/backtracking.md",
+    "tools/add_problem_statements_to_trackers.py",
+    "tools",
+    "02-algorithms/string.md",
     "02-algorithms/dynamic-programming.md",
     "02-algorithms/recursion/aditya-verma.md",
     "coding/data-structures/graph.md",
     "questions.md",
     "coding/data-structures/advanced.md",
-    "02-algorithms/problem-deep-dives.md",
     "03-patterns/leetcode-variants.md",
     "01-data-structures/array.md",
-    "coding/data-structures/linked-list.md",
     "coding/data-structures/heap.md",
     "coding/data-structures/queue.md",
     "01-data-structures/linked-list.md",
@@ -230,13 +239,6 @@
     "01-data-structures/string.md",
     "01-data-structures/queue.md",
     "01-data-structures/stack.md",
-    "coding/algorithms/binary-search.md",
-    "coding/algorithms/backtracking.md",
-    "FLOWCHARTS.md",
-    "MINDMAP.md",
-    "02-algorithms/dynamic-programming/digit-dp.md",
-    "02-algorithms/dynamic-programming/advanced-dp-optimizations.md",
-    "02-algorithms/backtracking.md",
     "coding/algorithms/recursion.md.tmp.52333.ad8b436f2cef",
     "coding/data-structures",
     "coding/algorithms",

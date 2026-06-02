@@ -61,6 +61,7 @@ DECISION — question type → story mapping
 # Behavioral — Google L4 Guide
 
 Full STAR stories and templates: [`behavioral.md`](./behavioral.md)
+Googliness round deep dive: [`googliness-round.md`](./googliness-round.md)
 
 ---
 

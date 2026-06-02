@@ -6,6 +6,14 @@ difficulty: mixed
 
 # Heap Problems
 
+## Heap Interview Checklist
+
+- `heapq` in Python is a **min-heap**; negate keys when you need max-heap behavior.
+- Use a single heap for repeated min-or-max extraction, and two heaps for median-style partitioning.
+- Add **lazy deletion** when items can leave a heap before they reach the top.
+- For k-way merge problems, seed the heap with one candidate from each sorted source.
+- Tie-break rules matter; many heap bugs come from the secondary key, not the heap itself.
+
 ---
 
 ## Top-K Pattern
@@ -222,9 +230,9 @@ difficulty: mixed
 > Given a list of words, return the `k` most frequent words sorted by frequency (descending), with ties broken lexicographically.
 
 > [!info] Approach
-> - **WHY:** Two sort keys — frequency (desc) and lexicographic (asc) — make a plain max-heap awkward. A min-heap with negated frequency and regular string comparison handles both.
-> - **WHAT:** Min-heap of `(-freq, word)`. Python compares tuples element-by-element: ties on frequency fall through to lexicographic comparison, keeping the lexicographically larger word at the top (to be evicted first).
-> - **HOW:** Count with `Counter`. Push `(-freq, word)` for each unique word. When heap exceeds `k`, pop. Collect remaining `k` entries and reverse-sort for output order.
+> - **WHY:** We need two ordering rules: higher frequency first, then lexicographically smaller word first on ties.
+> - **WHAT:** Use `heapq.nsmallest(...)` with key `(-freq, word)`. This still uses a heap internally but keeps the tie-break rule correct.
+> - **HOW:** Count with `Counter`, then ask for the `k` best items under that custom key. This is safer than hand-rolling a size-`k` heap because naive tuple ordering is easy to get wrong for ties.
 
 > [!note]- Python Solution
 > ```python
@@ -233,21 +241,19 @@ difficulty: mixed
 >
 > def top_k_frequent_words(words: list[str], k: int) -> list[str]:
 >     count = Counter(words)
->     heap: list[tuple[int, str]] = []
->     for word, freq in count.items():
->         heapq.heappush(heap, (-freq, word))
->         if len(heap) > k:
->             heapq.heappop(heap)
->     # heap has k entries; sort for correct output order
->     result = sorted(heap, key=lambda x: (x[0], x[1]))
->     return [word for _, word in result]
+>     return [
+>         word
+>         for word, _ in heapq.nsmallest(
+>             k, count.items(), key=lambda item: (-item[1], item[0])
+>         )
+>     ]
 > ```
 
 > [!success] Complexity
 > Time O(n + m log k) where m = unique words; Space O(m).
 
 > [!tip] Alternatives
-> `Counter.most_common()` then sort by `(-freq, word)` — O(m log m), clean for interviews. The heap version is O(m log k) which matters when k << m.
+> `Counter.most_common()` then sort by `(-freq, word)` — O(m log m), clean for interviews. If you want a fully explicit heap, you need a custom tie-break strategy; naive `(-freq, word)` overflow handling is easy to get wrong in Python.
 
 ---
 
@@ -720,7 +726,7 @@ difficulty: mixed
 > A directed weighted graph of `n` nodes; given signal source `k`, find the time for all nodes to receive the signal. Return `-1` if unreachable.
 
 > [!info] Approach
-> - **WHY:** Shortest path from a single source to all nodes — Dijkstra's algorithm.
+> - **WHY:** Shortest path from a single source to all nodes — Dijkstra's algorithm. It applies here because edge weights are non-negative.
 > - **WHAT:** Min-heap of `(dist, node)`. Relax edges greedily. Once all nodes popped from heap, the maximum dist is the answer.
 > - **HOW:** Build adjacency list. Push `(0, k)`. Pop min dist node; skip if already visited. Relax neighbors. Track visited set. Answer = `max(dist.values())` if `len(dist) == n` else `-1`.
 

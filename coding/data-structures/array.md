@@ -19,20 +19,10 @@ difficulty: mixed
 > **Two Pointers on sorted array.**
 > WHY: The array is sorted — we can exploit this. A pair either has too-small a sum (advance left) or too-large a sum (advance right). No pair is missed because every skip is provably invalid.
 > WHAT: Two pointers at opposite ends converging inward based on sum comparison.
-> HOW: `l=0, r=n-1`. If `nums[l]+nums[r] == target`, done. If sum < target, `l++` (we need larger). If sum > target, `r--` (we need smaller). The sorted invariant guarantees we never skip valid pairs.
+> HOW: `l=0, r=n-1`. If `numbers[l] + numbers[r] == target`, done. If sum < target, `l++` (we need larger). If sum > target, `r--` (we need smaller). The sorted invariant guarantees we never skip valid pairs.
 
 > [!note]- Python Solution
 > ```python
-> def twosum_optimized(a, target): 
-> 	seen = {} # Dictionary to store numbers we have passed
-> 	for num in a: 
-> 		complement = target - num 
-> 		if complement in seen: 
-> 		return complement, num 
-> 	seen[num] = True 
-> 	return 0, 0
-> 	
-> 	
 > def two_sum_sorted(numbers: list[int], target: int) -> list[int]:
 >     l, r = 0, len(numbers) - 1
 >     while l < r:
@@ -44,13 +34,14 @@ difficulty: mixed
 >         else:
 >             r -= 1
 >     return []
->     
-> 
-> 
 > ```
 
 > [!success] Complexity
 > Time O(n), Space O(1).
+
+> [!tip] Edge cases
+> - The prompt is already sorted and 1-indexed, so the returned indices must be shifted by `+1`.
+> - The original LeetCode-style prompt guarantees exactly one solution; in a no-solution variant, follow the interviewer’s output convention explicitly.
 
 > [!tip] Alternatives
 > - Hash map complement lookup: O(n) time, O(n) space. Works on unsorted arrays; doesn't exploit sorted order.
@@ -68,6 +59,7 @@ difficulty: mixed
 > WHY: Brute force O(n³) is too slow. Fixing one element reduces it to a 2Sum on the remaining sorted suffix.
 > WHAT: Sort once, fix `nums[i]`, run two pointers on `i+1..n-1`.
 > HOW: Sort. For each `i`, if `nums[i] > 0` break (sorted — no triplet can sum to 0). Skip duplicate `i`. Run two-pointer on the suffix. On match, skip duplicate `left` and `right` before advancing both. Three deduplication sites: `i`, `left`, `right`.
+> Interview note: sorting is what makes the duplicate skipping and early break safe, so this pattern is usually the cleanest solution in interviews.
 
 > [!note]- Python Solution
 > ```python
@@ -99,6 +91,10 @@ difficulty: mixed
 
 > [!success] Complexity
 > Time O(n²), Space O(1) extra (output excluded).
+
+> [!tip] Edge cases
+> - If the array has fewer than 3 elements, return `[]`.
+> - After sorting, all-positive arrays can exit immediately once the first fixed element becomes positive.
 
 > [!tip] Alternatives
 > - Hash set for third element: O(n²) time, O(n) space. Harder deduplication logic.
@@ -140,6 +136,10 @@ difficulty: mixed
 > [!success] Complexity
 > Time O(n²), Space O(1).
 
+> [!tip] Edge cases
+> - Initialize `closest` from the first three numbers so negative targets and large magnitudes work naturally.
+> - If you find an exact match, return immediately — it is already optimal.
+
 > [!tip] Alternatives
 > - Brute force O(n³): always infeasible. No O(n log n) solution known for the general case.
 
@@ -154,7 +154,7 @@ difficulty: mixed
 > **Two nested loops + Two Pointers.**
 > WHY: Generalizes 3Sum by adding one more fixed element. Fix two elements (i, j) and run two pointers on the rest.
 > WHAT: Two nested loops fix first two elements; two pointers find the last two. Deduplicate at all four levels.
-> HOW: Sort. Outer loop `i`, inner loop `j = i+1`. Skip duplicate `i` and `j`. Two pointers `l=j+1, r=n-1`. Same pointer logic as 3Sum. Early termination: if `nums[i]+nums[i+1]+nums[i+2]+nums[i+3] > target`, break outer.
+> HOW: Sort. Outer loop `i`, inner loop `j = i+1`. Skip duplicate `i` and `j`. Two pointers `l=j+1, r=n-1`. Same pointer logic as 3Sum. Early termination: if the smallest possible sum for the current `i` is already too large, break; if the largest possible sum is still too small, continue.
 
 > [!note]- Python Solution
 > ```python
@@ -188,6 +188,10 @@ difficulty: mixed
 
 > [!success] Complexity
 > Time O(n³), Space O(1) extra.
+
+> [!tip] Edge cases
+> - Four numbers can overflow 32-bit arithmetic in some languages; use a wider type if needed.
+> - Deduplicate at each level in the order `i`, `j`, `l`, `r` to avoid repeated quadruplets.
 
 > [!tip] Alternatives
 > - Hash map approach: O(n²) average using pair-sum hash map. Complex deduplication; O(n²) space. Rarely worth it over the clean O(n³) two-pointer.
@@ -229,7 +233,7 @@ difficulty: mixed
 
 ---
 
-### ==Trapping Rain Water
+### Trapping Rain Water
 
 > [!example] Problem
 > Given an elevation map, compute how much water can be trapped after raining.
@@ -238,7 +242,7 @@ difficulty: mixed
 > **Two Pointers — binding constraint side.**
 > WHY: Water at index `i` is bounded by `min(max_left, max_right) - height[i]`. We need left-max and right-max for every position.
 > WHAT: Two pointers eliminating the need for prefix/suffix arrays. The side with the smaller max is the binding constraint.
-> HOW: `l=0, r=n-1`, `l_max=r_max=0`. If `l_max <= r_max`: the left side is the constraint. Water at `l` = `l_max - height[l]` (guaranteed non-negative since `l_max` is the max seen on left). Advance `l`. Symmetric for right.
+> HOW: `l=0, r=n-1`, `l_max=r_max=0`. If `l_max <= r_max`, the left side is the constraint, so water at `l` is `l_max - height[l]` and we advance `l`. Otherwise, the right side is the constraint, so water at `r` is `r_max - height[r]` and we decrement `r`.
 
 > [!note]- Python Solution
 > ```python
@@ -247,7 +251,7 @@ difficulty: mixed
 >     l_max = r_max = 0
 >     water = 0
 >     while l < r:
->         if height[l] <= height[r]:
+>         if l_max <= r_max:
 >             l_max = max(l_max, height[l])
 >             water += l_max - height[l]
 >             l += 1
@@ -260,6 +264,10 @@ difficulty: mixed
 
 > [!success] Complexity
 > Time O(n), Space O(1).
+
+> [!tip] Edge cases
+> - Empty arrays or arrays with fewer than 3 bars trap no water.
+> - Flat or monotonic terrain also returns 0; the algorithm naturally handles both.
 
 > [!tip] Alternatives
 > - Prefix/suffix max arrays: O(n) time, O(n) space. More intuitive, same time.

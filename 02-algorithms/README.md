@@ -76,7 +76,7 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 | [README.md](./recursion/README.md) | **Start here** — types, templates |
 | [aditya-verma.md](./recursion/aditya-verma.md) | Include/exclude, IP/OP patterns |
 | [combination-problems.md](./recursion/combination-problems.md) | Combinations, subset sum |
-| [recursion-to-dp.md](./recursion/recursion-to-dp.md) | Top-down → tabulation |
+| [recursion-to-dp.md](./recursion-to-dp.md) | Top-down → tabulation |
 | [tree-recursion.md](./recursion/tree-recursion.md) | Path sum, BST, tree DP |
 | [graph-recursion.md](./recursion/graph-recursion.md) | DFS, topo, flood fill |
 | [string-recursion.md](./recursion/string-recursion.md) | Parsing, generation |

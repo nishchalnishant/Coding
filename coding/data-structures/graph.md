@@ -8,6 +8,10 @@ difficulty: mixed
 
 **Pattern map**: Graph problems collapse into five patterns — BFS (shortest path, multi-source spread), DFS (connectivity, flood fill, cycle detection), Topological Sort (dependency ordering on DAGs), Shortest Path / Weighted (Dijkstra, modified BFS), Bipartite coloring, and Advanced (Union-Find / MST / DAG DP). Pick BFS when you need minimum steps; DFS when you need reachability or ordering; Union-Find when you need dynamic connectivity with no full traversal needed.
 
+**Interview checklist**: First classify the graph — directed or undirected, weighted or unweighted, connected or disconnected, and whether you need a path, ordering, component count, or just a yes/no query. Then look for the standard lever: multi-source BFS for simultaneous spread, DFS for flood-fill and cycle detection, Kahn's for DAG ordering, Dijkstra for non-negative weights, Bellman-Ford for hop-limited or negative-weight cases, Union-Find for connectivity, and two-coloring for bipartite checks.
+
+**Edge cases worth checking**: empty graph, single node, disconnected components, duplicate edges, self-loops, cycles in a "tree" input, and recursion depth on large grids/graphs. For grid problems, confirm whether diagonals count, whether borders are included, and whether you can mutate the input to mark visited.
+
 ---
 
 ## BFS on Graphs
@@ -105,7 +109,7 @@ difficulty: mixed
 > ```
 
 > [!success] Complexity
-> Time O(M×N), Space O(min(M,N)) queue width worst case.
+> Time O(M×N), Space O(M×N) worst case for the queue/visited cells.
 
 > [!tip] Alternatives
 > - DFS sinking: same logic recursively; simpler code but risks recursion depth on large grids.
@@ -204,8 +208,8 @@ difficulty: mixed
 > [!info] Approach
 > **BFS on implicit word graph — L×26 mutation enumeration.**
 > WHY: Shortest path in an implicit unweighted graph → BFS. Don't build the graph explicitly (O(N²) pairs); generate all L×26 single-character mutations of the current word and check against the word set — O(L×26) per word instead of O(N×L) pairwise comparison.
-> WHAT: BFS from `beginWord`; remove words from the set as visited to prevent revisits.
-> HOW: For each word dequeued, try all single-char mutations; if mutation == endWord, return. Otherwise enqueue if in word set and unvisited.
+> WHAT: BFS from `beginWord`; remove words from the set as soon as they are enqueued to prevent revisits.
+> HOW: For each word dequeued, try all single-char mutations; if mutation == endWord, return. Otherwise enqueue if the word is still in the set and then delete it.
 
 > [!note]- Python Solution
 > ```python
@@ -217,7 +221,6 @@ difficulty: mixed
 >         return 0
 > 
 >     queue = deque([(beginWord, 1)])
->     visited = {beginWord}
 > 
 >     while queue:
 >         word, length = queue.popleft()
@@ -226,15 +229,15 @@ difficulty: mixed
 >                 next_word = word[:i] + c + word[i+1:]
 >                 if next_word == endWord:
 >                     return length + 1
->                 if next_word in word_set and next_word not in visited:
->                     visited.add(next_word)
+>                 if next_word in word_set:
+>                     word_set.remove(next_word)
 >                     queue.append((next_word, length + 1))
 > 
 >     return 0
 > ```
 
 > [!success] Complexity
-> Time O(M²×N) where M = word length, N = wordList size. Space O(M²×N).
+> Time O(N × M² × 26) ≈ O(N × M²), where M = word length and N = wordList size. Space O(N × M) for the word set and queue.
 
 > [!tip] Alternatives
 > - Bidirectional BFS: expand from both `beginWord` and `endWord` simultaneously; reduces explored nodes from O(b^d) to O(b^(d/2)). Follow-up standard.
@@ -382,6 +385,7 @@ difficulty: mixed
 > ```python
 > def validPath(n, edges, source, destination):
 >     parent = list(range(n))
+>     rank = [0] * n
 > 
 >     def find(x):
 >         while parent[x] != x:
@@ -390,7 +394,14 @@ difficulty: mixed
 >         return x
 > 
 >     def union(a, b):
->         parent[find(a)] = find(b)
+>         ra, rb = find(a), find(b)
+>         if ra == rb:
+>             return
+>         if rank[ra] < rank[rb]:
+>             ra, rb = rb, ra
+>         parent[rb] = ra
+>         if rank[ra] == rank[rb]:
+>             rank[ra] += 1
 > 
 >     for a, b in edges:
 >         union(a, b)
@@ -1187,6 +1198,51 @@ difficulty: mixed
 > - Binary search on effort + BFS feasibility: O(M×N log(max_height)). Binary search on answer ∈ [0, 10^6]; BFS checks if path exists using only edges with diff ≤ mid.
 > - Union-Find with sorted edges: sort all edges by absolute diff; union endpoints one by one; stop when (0,0) and (M-1,N-1) are connected. O(M×N log(M×N)).
 
+### Shortest Path in a DAG
+
+> [!example] Problem
+> Given a directed acyclic graph with weighted edges, find shortest paths from a source node.
+
+> [!info] Approach
+> - **WHY:** In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized.
+> - **WHAT:** Topologically sort the graph, then relax outgoing edges in that order.
+> - **HOW:** Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque, defaultdict
+>
+> def shortest_path_dag(n: int, edges: list[tuple[int, int, int]], source: int) -> list[float]:
+>     graph = defaultdict(list)
+>     indeg = [0] * n
+>     for u, v, w in edges:
+>         graph[u].append((v, w))
+>         indeg[v] += 1
+>     q = deque([i for i in range(n) if indeg[i] == 0])
+>     topo = []
+>     while q:
+>         u = q.popleft()
+>         topo.append(u)
+>         for v, _ in graph[u]:
+>             indeg[v] -= 1
+>             if indeg[v] == 0:
+>                 q.append(v)
+>     dist = [float("inf")] * n
+>     dist[source] = 0
+>     for u in topo:
+>         if dist[u] == float("inf"):
+>             continue
+>         for v, w in graph[u]:
+>             dist[v] = min(dist[v], dist[u] + w)
+>     return dist
+> ```
+
+> [!success] Complexity
+> O(V + E) time, O(V + E) space.
+
+> [!tip] Alternatives
+> If the graph can have cycles, use Dijkstra for non-negative edges or Bellman-Ford when negative edges are allowed.
+
 ---
 
 ## Bipartite / Coloring
@@ -1513,7 +1569,9 @@ difficulty: mixed
 >             else:
 >                 low[node] = min(low[node], disc[nei])
 > 
->     dfs(0, -1)
+>     for node in range(n):
+>         if disc[node] == -1:
+>             dfs(node, -1)
 >     return result
 > ```
 
@@ -1571,56 +1629,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Two BFS to find diameter endpoints: find the farthest node from any node (BFS 1), then farthest from that node (BFS 2) — diameter endpoints found. Center of diameter path = answer. O(V) but more complex to implement.
 > - DFS with height computation: O(V) per root × O(V) roots = O(V²) — far too slow.
-
----
-
-## See Also
-
-[[graph-algorithms]] | [[union-find]] | [[queue]] | [[tree]]
-### Shortest Path in a DAG
-
-> [!example] Problem
-> Given a directed acyclic graph with weighted edges, find shortest paths from a source node.
-
-> [!info] Approach
-> - **WHY:** In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized.
-> - **WHAT:** Topologically sort the graph, then relax outgoing edges in that order.
-> - **HOW:** Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque, defaultdict
-> 
-> def shortest_path_dag(n: int, edges: list[tuple[int, int, int]], source: int) -> list[float]:
->     graph = defaultdict(list)
->     indeg = [0] * n
->     for u, v, w in edges:
->         graph[u].append((v, w))
->         indeg[v] += 1
->     q = deque([i for i in range(n) if indeg[i] == 0])
->     topo = []
->     while q:
->         u = q.popleft()
->         topo.append(u)
->         for v, _ in graph[u]:
->             indeg[v] -= 1
->             if indeg[v] == 0:
->                 q.append(v)
->     dist = [float("inf")] * n
->     dist[source] = 0
->     for u in topo:
->         if dist[u] == float("inf"):
->             continue
->         for v, w in graph[u]:
->             dist[v] = min(dist[v], dist[u] + w)
->     return dist
-> ```
-
-> [!success] Complexity
-> O(V + E) time, O(V + E) space.
-
-> [!tip] Alternatives
-> If the graph can have cycles, use Dijkstra for non-negative edges or Bellman-Ford when negative edges are allowed.
 
 ---
 

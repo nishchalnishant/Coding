@@ -55,6 +55,7 @@ difficulty: mixed
 > def three_sum(nums: list[int]) -> list[list[int]]:
 >     nums.sort()
 >     result: list[list[int]] = []
+>     seen_triplets: set[tuple[int, int, int]] = set()
 >     for i in range(len(nums) - 2):
 >         if i > 0 and nums[i] == nums[i - 1]:
 >             continue
@@ -64,7 +65,10 @@ difficulty: mixed
 >         while j < len(nums):
 >             complement = target - nums[j]
 >             if complement in seen:
->                 result.append([nums[i], complement, nums[j]])
+>                 triplet = (nums[i], complement, nums[j])
+>                 if triplet not in seen_triplets:
+>                     seen_triplets.add(triplet)
+>                     result.append(list(triplet))
 >                 while j + 1 < len(nums) and nums[j] == nums[j + 1]:
 >                     j += 1
 >             seen.add(nums[j])
@@ -95,6 +99,7 @@ difficulty: mixed
 > def four_sum(nums: list[int], target: int) -> list[list[int]]:
 >     nums.sort()
 >     result: list[list[int]] = []
+>     seen_quads: set[tuple[int, int, int, int]] = set()
 >     n = len(nums)
 >     for i in range(n - 3):
 >         if i > 0 and nums[i] == nums[i - 1]:
@@ -107,8 +112,10 @@ difficulty: mixed
 >             k = j + 1
 >             while k < n:
 >                 if need - nums[k] in seen:
->                     quad = [nums[i], nums[j], need - nums[k], nums[k]]
->                     result.append(quad)
+>                     quad = (nums[i], nums[j], need - nums[k], nums[k])
+>                     if quad not in seen_quads:
+>                         seen_quads.add(quad)
+>                         result.append(list(quad))
 >                     while k + 1 < n and nums[k] == nums[k + 1]:
 >                         k += 1
 >                 seen.add(nums[k])
@@ -217,6 +224,39 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > OrderedDict to track first occurrence — same complexity, more verbose.
+
+---
+
+### Ransom Note
+
+> [!example] Problem
+> Determine whether a ransom note can be constructed from the letters in a magazine string.
+
+> [!info] Approach
+> - **WHY:** This is a frequency matching problem; each character in the note must be available at least as many times as needed.
+> - **WHAT:** Count letters in the magazine and decrement as you consume letters from the note.
+> - **HOW:** Use a hash map or `Counter`; if any needed character drops below zero, return `false`. A quick length check can short-circuit impossible cases.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+>
+> def can_construct(ransom_note: str, magazine: str) -> bool:
+>     if len(ransom_note) > len(magazine):
+>         return False
+>     count = Counter(magazine)
+>     for ch in ransom_note:
+>         if count[ch] == 0:
+>             return False
+>         count[ch] -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(m + n); Space O(1) extra for lowercase letters.
+
+> [!tip] Alternatives
+> Sort + two pointers works too, but frequency counting is the direct interview answer.
 
 ---
 

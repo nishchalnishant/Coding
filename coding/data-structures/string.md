@@ -742,91 +742,6 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Two Pointers — Reverse / Subsequence
 
-### Valid Palindrome II
-
-> [!example] Problem
-> Given string `s`, return true if the string can become a palindrome by removing **at most one** character.
-
-> [!info] Approach
-> - **WHY:** Standard two-pointer palindrome check, but when a mismatch is found we have exactly one free removal — either remove the left character or the right character. Try both sub-problems and accept if either is a palindrome.
-> - **WHAT:** Two pointers `l, r`. On mismatch, check if `s[l+1..r]` or `s[l..r-1]` is a palindrome (using a helper that allows zero deletions). Return True if either holds.
-> - **HOW:** Define `isPalin(l, r)` — standard two-pointer without deletion. Main function advances `l, r` inward; on first mismatch call `isPalin(l+1, r) or isPalin(l, r-1)`.
-
-> [!note]- Python Solution
-> ```python
-> def validPalindrome(s: str) -> bool:
->     def is_palin(l: int, r: int) -> bool:
->         while l < r:
->             if s[l] != s[r]:
->                 return False
->             l += 1
->             r -= 1
->         return True
-> 
->     l, r = 0, len(s) - 1
->     while l < r:
->         if s[l] != s[r]:
->             return is_palin(l + 1, r) or is_palin(l, r - 1)
->         l += 1
->         r -= 1
->     return True
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(1).
-
-> [!tip] Alternatives
-> - DP with at-most-one deletion: `dp[i][j][k]` where k = deletions used — O(n²) time and space, massive overkill.
-> - Brute force: try removing each character and check — O(n²). Only valid for tiny strings.
-
----
-
-### Reverse Words in a String
-
-> [!example] Problem
-> Given string `s`, reverse the order of the words. Words are separated by spaces; result must have single spaces between words and no leading/trailing spaces.
-
-> [!info] Approach
-> - **WHY:** Split on whitespace handles any number of spaces between words. Python's `split()` (no argument) splits on any whitespace and discards empty tokens — single operation handles all edge cases.
-> - **WHAT:** Split → reverse list → join with single space.
-> - **HOW:** `return " ".join(s.split()[::-1])`. In-place variant (for interviews requiring O(1) extra space on a char array): reverse entire string, then reverse each word in place.
-
-> [!note]- Python Solution
-> ```python
-> def reverseWords(s: str) -> str:
->     return " ".join(s.split()[::-1])
-> 
-> # O(1) space variant (conceptual — Python strings are immutable; use list)
-> def reverseWords_inplace(s: str) -> str:
->     chars = list(s.strip())
->     # helper: reverse chars[l..r] in place
->     def rev(l: int, r: int) -> None:
->         while l < r:
->             chars[l], chars[r] = chars[r], chars[l]
->             l += 1
->             r -= 1
-> 
->     # step 1: reverse entire array
->     rev(0, len(chars) - 1)
->     # step 2: reverse each word
->     l = 0
->     for r in range(len(chars) + 1):
->         if r == len(chars) or chars[r] == ' ':
->             rev(l, r - 1)
->             l = r + 1
->     # step 3: collapse multiple spaces
->     return " ".join("".join(chars).split())
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(n) for the split/join; O(1) extra for the in-place variant (ignoring output).
-
-> [!tip] Alternatives
-> - `s.strip().split()` + reverse: equivalent, split() already handles multiple spaces.
-> - Stack: push words onto a stack, pop to build result — O(n) but unnecessary with split/reverse.
-
----
-
 ### Reverse String
 
 > [!example] Problem
@@ -982,41 +897,6 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Zigzag Conversion
-
-> [!example] Problem
-> Write the string `"PAYPALISHIRING"` in a zigzag pattern on `numRows` rows, then read line by line. Return the resulting string.
-
-> [!info] Approach
-> - **WHY:** Simulate placing characters into rows. The row index goes 0 → numRows-1 → 0 → … (triangle wave). Track current row and direction.
-> - **WHAT:** Array of `numRows` string builders. Iterate through `s`, appending each character to the current row. Flip direction at top (row 0) and bottom (row numRows-1).
-> - **HOW:** `rows = [''] * numRows`, `row = 0`, `direction = 1`. For each char: `rows[row] += char`. If `row == 0`, `direction = 1`; if `row == numRows - 1`, `direction = -1`. `row += direction`.
-
-> [!note]- Python Solution
-> ```python
-> def convert(s: str, numRows: int) -> str:
->     if numRows == 1 or numRows >= len(s):
->         return s
->     rows = [''] * numRows
->     row, direction = 0, 1
->     for ch in s:
->         rows[row] += ch
->         if row == 0:
->             direction = 1
->         elif row == numRows - 1:
->             direction = -1
->         row += direction
->     return ''.join(rows)
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(n).
-
-> [!tip] Alternatives
-> - Mathematical index computation: for each row `r`, derive which indices land on it using the period `2*(numRows-1)` — O(1) extra space, more complex index arithmetic.
-
----
-
 ### Integer to English Words
 
 > [!example] Problem
@@ -1148,6 +1028,8 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 > 
 > # KMP LPS approach — O(n) time, O(n) space
 > def repeatedSubstringPattern_kmp(s: str) -> bool:
+>     if not s:
+>         return False
 >     n = len(s)
 >     lps = [0] * n
 >     j = 0
@@ -1162,7 +1044,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 > ```
 
 > [!success] Complexity
-> Time O(n) — string `in` uses efficient matching (KMP internally in CPython). Space O(n).
+> Time O(n) — the rotation trick relies on optimized substring search. Space O(n).
 
 > [!tip] Alternatives
 > - Brute force: try every divisor length of `n`, check if repeating the prefix reconstructs `s` — O(n × d(n)) where d(n) is the number of divisors.
@@ -1182,6 +1064,8 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 > [!note]- Python Solution
 > ```python
 > def longestPrefix(s: str) -> str:
+>     if not s:
+>         return ""
 >     n = len(s)
 >     lps = [0] * n
 >     j = 0
@@ -1203,9 +1087,8 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-## See Also
+## String Manipulation
 
-[[string-algorithms]] | [[sliding-window]] | [[hashing]] | [[two-pointers]] | [[dynamic-programming]]
 ### String Compression
 
 > [!example] Problem
@@ -1243,8 +1126,6 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 > This same read/write pointer idea is useful for deduplication, filtering, and in-place run-length encoding.
 
 ---
-
-## String Manipulation
 
 ### Zigzag Conversion (LC 6)
 

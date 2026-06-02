@@ -6,6 +6,15 @@ difficulty: mixed
 
 # Queue Problems
 
+## Queue Patterns to Recognize
+
+- **FIFO BFS:** Use when every move has equal cost and you want the shortest path or minimum number of steps.
+- **Monotonic deque:** Use when the queue must maintain a running minimum or maximum over a sliding window.
+- **Multi-source BFS:** Use when many starting points spread simultaneously, like infection, distance-to-nearest, or nearest gate.
+- **State-augmented BFS:** Use when position alone is not enough and you must track extra state such as remaining `k`, stops used, or visited mask.
+- **Kahn's BFS:** Use when the queue stores zero in-degree nodes for topological ordering or cycle detection.
+- **Common pitfalls:** Mark visited when enqueuing, snapshot the queue size for level order, and always handle stale deque entries before using the front element.
+
 ---
 
 ## Monotonic Deque
@@ -18,7 +27,8 @@ difficulty: mixed
 > [!info] Approach
 > - **WHY:** Naive O(nk) rescans the window on every step; we need O(n).
 > - **WHAT:** A deque that is always sorted descending by value. The front is always the max of the current window.
-> - **HOW:** For each index `i` — (1) evict from the back any index whose value ≤ `nums[i]` (they are dominated and can never be future maxima); (2) evict from the front if it has fallen outside the window; (3) append `i`; (4) once `i >= k-1`, the front of the deque is the answer. Each index is enqueued and dequeued at most once → O(n) total.
+> - **HOW:** For each index `i` — (1) evict from the back any index whose value ≤ `nums[i]` (they are dominated and can never be future maxima; using `<=` also drops older duplicates); (2) evict from the front if it has fallen outside the window; (3) append `i`; (4) once `i >= k-1`, the front of the deque is the answer. Each index is enqueued and dequeued at most once → O(n) total.
+> - **EDGE CASES:** `k = 1` returns the original array; `k = len(nums)` returns a single maximum.
 
 > [!note]- Python Solution
 > ```python
@@ -57,7 +67,8 @@ difficulty: mixed
 > [!info] Approach
 > - **WHY:** Same argument — need O(n), not O(nk).
 > - **WHAT:** Monotonic increasing deque (front = minimum).
-> - **HOW:** Identical to the maximum variant; flip one comparison — evict from the back when `nums[back] >= x` instead of `<=`. The front always holds the index of the current window minimum.
+> - **HOW:** Identical to the maximum variant; flip one comparison — evict from the back when `nums[back] >= x` instead of `<=`. The front always holds the index of the current window minimum. Using `>=` keeps the deque short by discarding older duplicates.
+> - **EDGE CASES:** `k = 1` returns the original array; duplicate values are safe because the deque stores indices, not values.
 
 > [!note]- Python Solution
 > ```python
@@ -94,6 +105,7 @@ difficulty: mixed
 > - **WHY:** Negative values break the simple two-pointer sliding window — shrinking from the left doesn't always decrease the sum. We need a different invariant.
 > - **WHAT:** Prefix sums + a monotonic increasing deque of prefix-sum indices. `prefix[j] - prefix[i] >= k` with `j > i` means subarray `i..j-1` has sum ≥ k. We want to minimize `j - i`.
 > - **HOW:** Compute prefix sums. Maintain a deque of indices with strictly increasing prefix-sum values. For each `j`: while the front of the deque satisfies `prefix[j] - prefix[front] >= k`, update the answer with `j - front` and pop the front (we want the smallest valid `j - i`, so once a shorter subarray is found the front is no longer useful). Then maintain the increasing invariant by popping from the back while `prefix[back] >= prefix[j]`, and append `j`.
+> - **EDGE CASES:** Keep `prefix[0] = 0` so subarrays starting at index `0` are handled naturally; if no qualifying subarray exists, return `-1`.
 
 > [!note]- Python Solution
 > ```python
@@ -342,8 +354,9 @@ difficulty: mixed
 >     result: list[int] = []
 >     queue: deque[TreeNode] = deque([root])
 >     while queue:
->         rightmost = 0
->         for _ in range(len(queue)):
+>         level_size = len(queue)
+>         rightmost = queue[0].val
+>         for _ in range(level_size):
 >             node = queue.popleft()
 >             rightmost = node.val
 >             if node.left:
@@ -593,7 +606,7 @@ difficulty: mixed
 > [!info] Approach
 > - **WHY:** All moves have cost 1; BFS gives the minimum number of moves.
 > - **WHAT:** BFS from `(0,0)` with 8 knight-move directions. Exploit symmetry to search in the first quadrant only, reducing state space by 4×.
-> - **HOW:** Reflect `(x, y)` to `(|x|, |y|)` — knight distances are symmetric. BFS from `(0,0)`. A small boundary expansion (`abs(x) + 2`, `abs(y) + 2`) handles the initial wriggle room needed for corner cases near the origin.
+> - **HOW:** Reflect `(x, y)` to `(|x|, |y|)` — knight distances are symmetric. BFS from `(0,0)` inside a bounded box `[-2..x+2] × [-2..y+2]`; the `+2` buffer handles the small detours needed near the origin.
 
 > [!note]- Python Solution
 > ```python
@@ -611,14 +624,14 @@ difficulty: mixed
 >         for dr, dc in MOVES:
 >             nr, nc = r + dr, c + dc
 >             # search in expanded first-quadrant region
->             if (nr, nc) not in visited and nr >= -2 and nc >= -2:
+>             if (nr, nc) not in visited and -2 <= nr <= x + 2 and -2 <= nc <= y + 2:
 >                 visited.add((nr, nc))
 >                 queue.append((nr, nc, steps + 1))
 >     return -1
 > ```
 
 > [!success] Complexity
-> Time O(|x| × |y|). Space O(|x| × |y|).
+> Time O((|x| + |y|)^2). Space O((|x| + |y|)^2).
 
 > [!tip] Alternatives
 > - Bidirectional BFS: meets in the middle, ~4× fewer states explored — recommended for large `(x, y)`.
@@ -1038,7 +1051,7 @@ difficulty: mixed
 > [!info] Approach
 > - **WHY:** Hits older than 300 seconds are never useful again. A queue naturally evicts stale hits from the front.
 > - **WHAT:** Deque of timestamps. At each operation, evict timestamps older than `timestamp - 300`.
-> - **HOW:** `hit`: append timestamp. `getHits`: evict front while `front <= timestamp - 300`, then return `len(deque)`. Works even with out-of-order calls as long as timestamps are non-decreasing.
+> - **HOW:** `hit`: append timestamp. `getHits`: evict front while `front <= timestamp - 300`, then return `len(deque)`. This assumes calls arrive with non-decreasing timestamps, which is the usual interview contract.
 
 > [!note]- Python Solution
 > ```python

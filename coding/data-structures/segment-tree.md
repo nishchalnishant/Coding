@@ -6,7 +6,16 @@ difficulty: mixed
 
 # Segment Tree & Binary Indexed Tree
 
+Use a segment tree when you need fast range queries and fast updates on the same array, and the operation is associative (`sum`, `min`, `max`, `gcd`, etc.). For many prefix-sum-style problems, a BIT/Fenwick tree is simpler; for static queries, sparse table or prefix sums can be better.
+
 ---
+
+## Interview Checklist
+
+- Define the merge function first: `sum`, `min`, `max`, or another associative op.
+- Choose the correct identity element for out-of-range nodes: `0`, `+inf`, `-inf`, etc.
+- Keep the tree 0-indexed in code and remember to guard the empty-array case.
+- For range updates, decide whether you need lazy propagation before writing code.
 
 ## Core Segment Tree
 
@@ -22,6 +31,7 @@ difficulty: mixed
 >   - Build: recursively split `[l, r]` into `[l, mid]` and `[mid+1, r]`; leaf stores `nums[l]`; internal node stores left.sum + right.sum. O(n).
 >   - Update: traverse root to leaf updating sums on the path back up. O(log n).
 >   - Query: decompose `[ql, qr]` into O(log n) nodes that collectively cover the range without overlap. O(log n).
+> - **EDGE CASES:** Empty arrays, single-element arrays, and query/update boundaries should be handled explicitly.
 
 > [!note]- Python Solution
 > ```python
@@ -29,7 +39,7 @@ difficulty: mixed
 >     def __init__(self, nums: list[int]) -> None:
 >         self.n = len(nums)
 >         self.tree = [0] * (4 * self.n)
->         if nums:
+>         if self.n:
 >             self._build(nums, 0, 0, self.n - 1)
 > 
 >     def _build(self, nums: list[int], node: int, start: int, end: int) -> None:
@@ -42,6 +52,8 @@ difficulty: mixed
 >         self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]
 > 
 >     def update(self, idx: int, val: int) -> None:
+>         if not self.n:
+>             return
 >         self._update(0, 0, self.n - 1, idx, val)
 > 
 >     def _update(self, node: int, start: int, end: int, idx: int, val: int) -> None:
@@ -56,6 +68,8 @@ difficulty: mixed
 >         self.tree[node] = self.tree[2 * node + 1] + self.tree[2 * node + 2]
 > 
 >     def query(self, ql: int, qr: int) -> int:
+>         if not self.n:
+>             return 0
 >         return self._query(0, 0, self.n - 1, ql, qr)
 > 
 >     def _query(self, node: int, start: int, end: int, ql: int, qr: int) -> int:
@@ -76,6 +90,23 @@ difficulty: mixed
 
 ---
 
+## Common Interview Patterns
+
+### Point Update + Range Query
+
+- Use a segment tree when the array changes often and queries are over arbitrary ranges.
+- Typical examples: range sum, range min/max, range gcd, and frequency counts.
+
+### Range Update + Range Query
+
+- Add lazy propagation when updates affect a whole interval and you still need fast queries.
+- Typical examples: range add + range min/max/sum, interval coloring, and delayed assignment.
+
+### Static Query Only
+
+- Prefer prefix sums, sparse table, or monotonic deque when there are no updates.
+- This is often a better interview answer if the problem is static and the query type is specialized.
+
 ### Range Minimum Query with Lazy Propagation
 
 > [!example] Problem
@@ -88,6 +119,7 @@ difficulty: mixed
 >   - Range update `[ul, ur]` with delta: if node's interval is fully covered, add delta to `node.min_val` and `node.lazy`; otherwise `push_down` first, recurse on children, pull up.
 >   - Push down: apply `parent.lazy` to both children (add to their `min_val` and `lazy`), then clear parent's `lazy`.
 >   - Range min query: standard decomposition, same as sum query but return min of left/right.
+> - **EDGE CASES:** Never push past a leaf; handle the empty-array case up front.
 
 > [!note]- Python Solution
 > ```python
@@ -96,7 +128,8 @@ difficulty: mixed
 >         self.n = len(nums)
 >         self.tree = [float('inf')] * (4 * self.n)
 >         self.lazy = [0] * (4 * self.n)
->         self._build(nums, 0, 0, self.n - 1)
+>         if self.n:
+>             self._build(nums, 0, 0, self.n - 1)
 > 
 >     def _build(self, nums: list[int], node: int, start: int, end: int) -> None:
 >         if start == end:
@@ -107,14 +140,16 @@ difficulty: mixed
 >         self._build(nums, 2*node+2, mid+1, end)
 >         self.tree[node] = min(self.tree[2*node+1], self.tree[2*node+2])
 > 
->     def _push_down(self, node: int) -> None:
->         if self.lazy[node]:
+>     def _push_down(self, node: int, start: int, end: int) -> None:
+>         if self.lazy[node] and start != end:
 >             for child in (2*node+1, 2*node+2):
 >                 self.tree[child] += self.lazy[node]
 >                 self.lazy[child] += self.lazy[node]
 >             self.lazy[node] = 0
 > 
 >     def range_add(self, ql: int, qr: int, delta: int) -> None:
+>         if not self.n:
+>             return
 >         self._update(0, 0, self.n-1, ql, qr, delta)
 > 
 >     def _update(self, node: int, start: int, end: int, ql: int, qr: int, delta: int) -> None:
@@ -124,13 +159,15 @@ difficulty: mixed
 >             self.tree[node] += delta
 >             self.lazy[node] += delta
 >             return
->         self._push_down(node)
+>         self._push_down(node, start, end)
 >         mid = (start + end) // 2
 >         self._update(2*node+1, start, mid, ql, qr, delta)
 >         self._update(2*node+2, mid+1, end, ql, qr, delta)
 >         self.tree[node] = min(self.tree[2*node+1], self.tree[2*node+2])
 > 
->     def range_min(self, ql: int, qr: int) -> int:
+>     def range_min(self, ql: int, qr: int) -> int | float:
+>         if not self.n:
+>             return float('inf')
 >         return self._query(0, 0, self.n-1, ql, qr)
 > 
 >     def _query(self, node: int, start: int, end: int, ql: int, qr: int) -> int | float:
@@ -138,7 +175,7 @@ difficulty: mixed
 >             return float('inf')
 >         if ql <= start and end <= qr:
 >             return self.tree[node]
->         self._push_down(node)
+>         self._push_down(node, start, end)
 >         mid = (start + end) // 2
 >         return min(self._query(2*node+1, start, mid, ql, qr),
 >                    self._query(2*node+2, mid+1, end, ql, qr))
@@ -161,6 +198,7 @@ difficulty: mixed
 > - **WHY:** Same motivation as range sum but with max aggregation (non-invertible, so BIT doesn't work directly).
 > - **WHAT:** Segment tree where internal nodes store the maximum of their interval. Point update propagates new max up the path.
 > - **HOW:** Identity for max is `-inf` (out-of-range nodes return this). Merge: `max(left_child, right_child)`.
+> - **EDGE CASES:** Empty arrays should return `-inf` for queries or be guarded explicitly, depending on the API.
 
 > [!note]- Python Solution
 > ```python
@@ -168,7 +206,8 @@ difficulty: mixed
 >     def __init__(self, nums: list[int]) -> None:
 >         self.n = len(nums)
 >         self.tree = [-float('inf')] * (4 * self.n)
->         self._build(nums, 0, 0, self.n - 1)
+>         if self.n:
+>             self._build(nums, 0, 0, self.n - 1)
 > 
 >     def _build(self, nums: list[int], node: int, start: int, end: int) -> None:
 >         if start == end:
@@ -180,6 +219,8 @@ difficulty: mixed
 >         self.tree[node] = max(self.tree[2*node+1], self.tree[2*node+2])
 > 
 >     def update(self, idx: int, val: int) -> None:
+>         if not self.n:
+>             return
 >         self._update(0, 0, self.n-1, idx, val)
 > 
 >     def _update(self, node: int, start: int, end: int, idx: int, val: int) -> None:
@@ -194,6 +235,8 @@ difficulty: mixed
 >         self.tree[node] = max(self.tree[2*node+1], self.tree[2*node+2])
 > 
 >     def query(self, ql: int, qr: int) -> int | float:
+>         if not self.n:
+>             return -float('inf')
 >         return self._query(0, 0, self.n-1, ql, qr)
 > 
 >     def _query(self, node: int, start: int, end: int, ql: int, qr: int) -> int | float:
@@ -225,6 +268,7 @@ difficulty: mixed
 > - **WHY:** Brute force O(n²) prefix sum checks are too slow. We need to count pairs efficiently.
 > - **WHAT:** Let `prefix[i] = sum(nums[0..i-1])`. `S(i,j) = prefix[j] - prefix[i]`. We need to count pairs `(i, j)` with `i < j` and `lower <= prefix[j] - prefix[i] <= upper` → `prefix[j] - upper <= prefix[i] <= prefix[j] - lower`.
 > - **HOW:** Merge sort approach — during merge, for each right-half element `prefix[j]`, count how many left-half elements fall in `[prefix[j] - upper, prefix[j] - lower]` using two pointers. O(n log n).
+> - **ALTERNATIVE:** Coordinate compression + BIT works too, especially if you already have a Fenwick template in an interview.
 
 > [!note]- Python Solution
 > ```python
@@ -233,6 +277,7 @@ difficulty: mixed
 >     for i, x in enumerate(nums):
 >         prefix[i + 1] = prefix[i] + x
 >     count = 0
+>     temp = [0] * len(prefix)
 > 
 >     def merge_sort(lo: int, hi: int) -> None:
 >         nonlocal count
@@ -249,8 +294,25 @@ difficulty: mixed
 >             while j < hi and prefix[j] - prefix[i] <= upper:
 >                 j += 1
 >             count += j - k
->         # Standard merge
->         prefix[lo:hi] = sorted(prefix[lo:hi])   # simplification; use in-place for O(n log n)
+>         # Standard merge, in-place over prefix[lo:hi]
+>         left, right, idx = lo, mid, lo
+>         while left < mid and right < hi:
+>             if prefix[left] <= prefix[right]:
+>                 temp[idx] = prefix[left]
+>                 left += 1
+>             else:
+>                 temp[idx] = prefix[right]
+>                 right += 1
+>             idx += 1
+>         while left < mid:
+>             temp[idx] = prefix[left]
+>             left += 1
+>             idx += 1
+>         while right < hi:
+>             temp[idx] = prefix[right]
+>             right += 1
+>             idx += 1
+>         prefix[lo:hi] = temp[lo:hi]
 > 
 >     merge_sort(0, len(prefix))
 >     return count

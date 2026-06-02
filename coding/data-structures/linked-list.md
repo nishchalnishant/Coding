@@ -13,6 +13,20 @@ difficulty: mixed
 - Two-pointer (slow/fast) detects cycles and finds midpoints in O(n) / O(1) space.
 - Floyd's algorithm: if fast meets slow inside cycle, resetting one pointer to head and stepping both at speed 1 lands them at the cycle entry.
 
+**Interview patterns to recognize quickly:**
+- Dummy node + pointer relinks for head-safe insertion/deletion.
+- Slow/fast pointers for cycle detection, middle finding, and end-relative deletes.
+- Reverse-then-merge for palindrome, reorder, and k-group style problems.
+- Hash map + list node pairs for random pointers and LRU caches.
+- Heap for merging multiple sorted lists.
+
+**Edge cases to sanity-check:**
+- Empty list, one node, and two nodes.
+- Head changes after deletion/reversal.
+- Odd vs even length when finding the middle.
+- `k = 1`, `k > length`, or `left == right`.
+- Cycles absent vs present; duplicate values vs duplicate nodes.
+
 ---
 
 ## In-Place Reversal
@@ -26,7 +40,7 @@ difficulty: mixed
 > **Three-pointer iterative reversal.**
 > WHY: We cannot reverse without visiting every node. The question is whether we need O(n) space (recursion stack) or O(1). Iteratively reversing edges is O(1) space.
 > WHAT: Three-pointer technique maintaining invariant: `prev` is the fully-reversed prefix, `curr` is the unprocessed suffix head.
-> HOW: Save `nxt = curr.next` before overwriting. Set `curr.next = prev`. Advance `prev = curr`, `curr = nxt`. When `curr` is None, `prev` is the new head.
+> HOW: Save `nxt = curr.next` before overwriting. Set `curr.next = prev`. Advance `prev = curr`, `curr = nxt`. When `curr` is None, `prev` is the new head. Watch the order carefully: save `next` before rewiring or you lose the rest of the list.
 
 > [!note]- Python Solution
 > ```python
@@ -63,7 +77,7 @@ difficulty: mixed
 > **Find pre-node + in-place splice-reversal.**
 > WHY: We need to splice a reversed sublist back into the outer list. A dummy node handles the case where `left == 1` (head changes).
 > WHAT: Find `pre` (node before position `left`). Then run `right - left` iterations of in-place splice-reversal.
-> HOW: Each iteration: save `nxt = curr.next`, detach `nxt` from its position, reattach it after `pre`. This inserts nodes one by one at the front of the reversed section. After `right - left` iterations, the segment is reversed.
+> HOW: Each iteration: save `nxt = curr.next`, detach `nxt` from its position, reattach it after `pre`. This inserts nodes one by one at the front of the reversed section. After `right - left` iterations, the segment is reversed. If `left == right`, the loop runs zero times and the list stays unchanged.
 
 > [!note]- Python Solution
 > ```python
@@ -98,8 +112,8 @@ difficulty: mixed
 > [!info] Approach
 > **Find middle + reverse second half + compare.**
 > WHY: Arrays allow index-based palindrome check in O(1) space. Linked lists don't. The trick: reverse the second half in-place and compare.
-> WHAT: Three-step: find middle (slow/fast pointers), reverse second half, compare both halves node-by-node.
-> HOW: Slow/fast to find middle. Reverse from `mid` onward. Walk two pointers — one from `head`, one from reversed head — checking values. Restore (optional): reverse second half back.
+> WHAT: Three-step: find middle (slow/fast pointers), skip the exact middle on odd-length lists, reverse second half, compare both halves node-by-node.
+> HOW: Slow/fast to find middle. If the list has odd length, advance `slow` one more step to skip the middle node. Reverse from that point onward. Walk two pointers — one from `head`, one from reversed head — checking values. Restore (optional): reverse second half back.
 
 > [!note]- Python Solution
 > ```python
@@ -109,6 +123,8 @@ difficulty: mixed
 >     while fast and fast.next:
 >         slow = slow.next
 >         fast = fast.next.next
+>     if fast:  # odd length: skip the center node
+>         slow = slow.next
 >     # Reverse second half
 >     prev, curr = None, slow
 >     while curr:
@@ -132,6 +148,7 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Push first half onto a stack, compare with second half: O(n) time, O(n/2) space.
 > - Recursion: O(n) call stack. Use a nonlocal `left` pointer advancing from head while recursion unwinds from tail.
+> - If you need to preserve the original list, reverse the second half back after comparison.
 
 ---
 
@@ -232,7 +249,7 @@ difficulty: mixed
 > **Floyd's fast/slow pointer cycle detection.**
 > WHY: Without Floyd's, you'd need to store all visited nodes in a hash set — O(n) space. Floyd's uses two pointers that must meet inside a cycle.
 > WHAT: Fast moves 2 steps, slow moves 1. If they ever point to the same node, a cycle exists. If fast reaches null, no cycle.
-> HOW: Start both at `head`. Loop: `slow = slow.next`, `fast = fast.next.next`. Check `slow is fast` (identity, not equality). If `fast` or `fast.next` is None, exit — no cycle.
+> HOW: Start both at `head`. Loop: `slow = slow.next`, `fast = fast.next.next`. Check `slow is fast` (identity, not equality). If `fast` or `fast.next` is None, exit — no cycle. The identity check matters whenever node values can repeat.
 
 > [!note]- Python Solution
 > ```python
@@ -380,7 +397,7 @@ difficulty: mixed
 > ```
 
 > [!success] Complexity
-> Time O(log n) per step, converges in O(log n) steps, Space O(1).
+> Time O(d) where d is the number of digits processed per iteration; in practice this is tiny and the sequence quickly enters a small cycle, Space O(1).
 
 > [!tip] Alternatives
 > - Hash set of seen values: simpler, O(k) space where k is cycle length (bounded by ~3 digits → small constant in practice).
@@ -554,7 +571,7 @@ difficulty: mixed
 > **Bottom-up merge sort on linked list.**
 > WHY: Quicksort on linked lists has O(n²) worst case (no random access for pivot selection). Merge sort is naturally suited to linked lists — splitting is O(n) with slow/fast, merging is O(n).
 > WHAT: Bottom-up merge sort to achieve O(1) space (avoids O(log n) recursion stack).
-> HOW: For each sublist size `size = 1, 2, 4, 8, ...`: split list into pairs of `size`-length sublists, merge each pair, connect results. One full pass per doubling of `size`, log n passes total.
+> HOW: For each sublist size `size = 1, 2, 4, 8, ...`: split list into pairs of `size`-length sublists, merge each pair, connect results. One full pass per doubling of `size`, log n passes total. This is the version interviewers like when they explicitly ask for O(1) extra space.
 
 > [!note]- Python Solution
 > ```python
@@ -628,7 +645,7 @@ difficulty: mixed
 > **Dummy head + find-insertion-point per node.**
 > - **WHY:** Insertion sort builds a sorted prefix. On a linked list we can't binary search, so finding the insertion point is O(n) per element, giving O(n²) total — acceptable when asked specifically for insertion sort.
 > - **WHAT:** Maintain a sorted prefix after a dummy head. For each new node from the original list, find where it fits in the sorted prefix and splice it in.
-> - **HOW:** Detach each node from the original list. Walk the sorted prefix from `dummy` until `prev.next.val > node.val` or `prev.next` is None. Insert `node` between `prev` and `prev.next`.
+> - **HOW:** Detach each node from the original list. Walk the sorted prefix from `dummy` until `prev.next.val > node.val` or `prev.next` is None. Insert `node` between `prev` and `prev.next`. If the input is nearly sorted, this often behaves closer to linear time.
 
 > [!note]- Python Solution
 > ```python
@@ -666,7 +683,7 @@ difficulty: mixed
 > **Hash map original→clone, two-pass wiring.**
 > WHY: Copying `next` is easy. `random` points to arbitrary nodes — we need to map original nodes to their clones to set `random` correctly.
 > WHAT: Hash map `original → clone`. Two passes: first create all clones, second assign `next` and `random` using the map.
-> HOW: Pass 1: iterate and create `{node: ListNode(node.val)}` for all nodes. Pass 2: for each original node, set `clone.next = map[node.next]`, `clone.random = map[node.random]`.
+> HOW: Pass 1: iterate and create `{node: ListNode(node.val)}` for all nodes. Pass 2: for each original node, set `clone.next = map[node.next]`, `clone.random = map[node.random]`. Mapping `None → None` keeps the wiring concise.
 
 > [!note]- Python Solution
 > ```python
@@ -760,11 +777,11 @@ difficulty: mixed
 > ```
 
 > [!success] Complexity
-> Time O(1) per get/put, Space O(capacity).
+> Time O(1) average for `get` and `put`, Space O(capacity).
 
 > [!tip] Alternatives
-> - Python `OrderedDict`: `move_to_end` and `popitem(last=False)` give LRU in fewer lines. But you're expected to implement from scratch in interviews.
-> - Array-based circular buffer: complex eviction logic. DLL is canonical.
+> - `collections.OrderedDict`: great in Python interviews if allowed, but explain the underlying DLL + hash map idea first.
+> - The key invariant is consistency: every cache key must have exactly one live node in the list and one entry in the map.
 
 ---
 

@@ -24,6 +24,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 >   - `insert`: walk the tree character by character, creating nodes as needed, set `is_end = True` at the last character.
 >   - `search`: walk the tree; return False if any character is missing; return `node.is_end` at the end — this distinguishes "apple" (exact) from "app" (only prefix).
 >   - `startsWith`: same walk as search but return True after the walk completes regardless of `is_end`.
+> - **EDGE CASES:** The empty string is valid only if you explicitly mark the root as terminal; duplicate inserts are idempotent with a boolean trie; deletes must prune only dead branches so shared prefixes stay intact.
 
 > [!note]- Python Solution
 > ```python
@@ -61,25 +62,25 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 > 
 >     def delete(self, word: str) -> bool:
 >         """Remove word; prune dead branches. Returns True if word existed."""
->         def _del(node: TrieNode, depth: int) -> bool:
+>         def _del(node: TrieNode, depth: int) -> tuple[bool, bool]:
 >             if depth == len(word):
 >                 if not node.is_end:
->                     return False
+>                     return False, False
 >                 node.is_end = False
->                 return len(node.children) == 0   # safe to prune if leaf
+>                 return True, len(node.children) == 0   # safe to prune if leaf
 >             c = word[depth]
 >             if c not in node.children:
->                 return False
->             should_prune = _del(node.children[c], depth + 1)
->             if should_prune:
+>                 return False, False
+>             existed, should_prune_child = _del(node.children[c], depth + 1)
+>             if should_prune_child:
 >                 del node.children[c]
->                 return not node.is_end and len(node.children) == 0
->             return False
->         return _del(self.root, 0)
+>             return existed, not node.is_end and len(node.children) == 0
+>         existed, _ = _del(self.root, 0)
+>         return existed
 > ```
 
 > [!success] Complexity
-> Time O(L) per operation where L = word/prefix length. Space O(N × L × Σ) total where N = words, Σ = alphabet size (26 for lowercase, use `dict` for arbitrary).
+> Time O(L) per operation where L = word/prefix length. Space O(total stored characters) with `dict` children, or O(nodes × Σ) with a fixed child array. If the alphabet is sparse or unknown, `dict` is usually the right tradeoff.
 
 > [!tip] Alternatives
 > - Hash set: O(L) exact search, O(N × L) prefix scan — no true prefix query support.
@@ -97,8 +98,8 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 > [!info] Approach
 > - **WHY:** Running a full DFS from the prefix node on every keystroke is O(output) per character — acceptable, but storing top-k cached at each node avoids DFS entirely at query time.
-> - **WHAT:** Trie where each node stores a `counts` dict mapping `sentence → frequency` for all sentences whose prefix passes through this node. Query is O(1) + sort of the matched candidates at the node.
-> - **HOW:** On `insert(sentence, freq)`: walk each character; at each node update `node.counts[sentence] += freq`. On `input(c)`: if `'#'`, save current input with frequency 1 (update all ancestor nodes on insertion path), reset state. Otherwise, advance `curr_node` by one character and return `sorted(curr_node.counts, key=lambda s: (-counts[s], s))[:3]`.
+> - **WHAT:** Trie where each node stores a `counts` dict mapping `sentence → frequency` for all sentences whose prefix passes through this node. Query stays local to the matched prefix node; this simpler version sorts only that node's candidate bucket.
+> - **HOW:** On `insert(sentence, freq)`: walk each character; at each node update `node.counts[sentence] += freq`. On `input(c)`: if `'#'`, save the current input with frequency 1 (updating all ancestor nodes), reset state. Otherwise, advance `curr_node` by one character and return the top 3 sentences from `curr_node.counts`, ordered by `(-frequency, sentence)`.
 
 > [!note]- Python Solution
 > ```python
@@ -760,24 +761,38 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 > Design a class `WordFilter` with `f(pref, suff)` returning the index of the word with the given prefix AND suffix (highest index if multiple). Given a list of words at construction.
 
 > [!info] Approach
-> - **WHY:** Checking all words for every query is O(N × L). We need O(1) or O(L) query. The trick: for a word `w`, it has suffix `s` iff the string `s + '#' + w` is a prefix we can look up. Build a trie of all `suff#word` combinations and store the word index at each terminal.
-> - **WHAT:** For each word `words[i]`, for every suffix `suff` of that word, insert `suff + '#' + words[i]` into the trie with value `i`. Query `f(pref, suff)` looks up `suff + '#' + pref` in the trie.
-> - **HOW:** At each trie end-node store the maximum index seen (later words overwrite with higher index). `f(pref, suff)` walks `suff + '#' + pref` and returns the stored index, or -1 if not found.
+> - **WHY:** Checking all words for every query is O(N × L). We need O(L) query time. The trick: a word `w` matches `f(pref, suff)` iff the combined string `suff + '#' + pref` is a prefix of some inserted `suff + '#' + w`.
+> - **WHAT:** Build a trie of all `suff + '#' + word` combinations. At every visited node, store the maximum word index seen so far so later words win ties automatically.
+> - **HOW:** For each word `words[i]`, insert every suffix of that word followed by `'#'` and the full word. Query `f(pref, suff)` walks `suff + '#' + pref` in the trie and returns the stored max index, or -1 if the path is missing.
 
 > [!note]- Python Solution
 > ```python
 > class WordFilter:
 >     def __init__(self, words: list[str]) -> None:
->         self.lookup: dict[str, int] = {}
+>         self.root = WFNode()
 >         for idx, word in enumerate(words):
 >             n = len(word)
 >             for k in range(n + 1):
->                 # all suffix+#prefix combinations for this word
->                 key = word[k:] + '#' + word
->                 self.lookup[key] = idx   # later index overwrites — higher index wins
+>                 node = self.root
+>                 node.idx = idx
+>                 for c in word[k:] + '#' + word:
+>                     if c not in node.children:
+>                         node.children[c] = WFNode()
+>                     node = node.children[c]
+>                     node.idx = idx   # later word index wins ties automatically
 > 
 >     def f(self, pref: str, suff: str) -> int:
->         return self.lookup.get(suff + '#' + pref, -1)
+>         node = self.root
+>         for c in suff + '#' + pref:
+>             if c not in node.children:
+>                 return -1
+>             node = node.children[c]
+>         return node.idx
+> 
+> class WFNode:
+>     def __init__(self) -> None:
+>         self.children: dict[str, WFNode] = {}
+>         self.idx: int = -1
 > ```
 
 > [!success] Complexity

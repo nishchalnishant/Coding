@@ -8,6 +8,21 @@ difficulty: mixed
 
 ---
 
+## Stack Interview Checklist
+
+> [!info] When to reach for a stack
+> - The problem asks for the next/previous greater or smaller item.
+> - The input has nested structure: parentheses, scopes, encoded strings, call logs.
+> - You need to undo the most recent unresolved action: duplicates cancel, collisions, path backtracking.
+> - You want to keep a monotonic property while scanning once from left to right.
+> - A brute-force solution repeatedly rescans past elements and feels quadratic.
+
+> [!tip] Edge cases to sanity-check
+> - Empty input, single element, and all-equal values.
+> - Strict vs non-strict comparisons (`<` vs `<=`) when duplicates exist.
+> - Sentinel values or end-of-array flushing.
+> - Whether the answer is an index, a value, or a distance.
+
 ## Monotonic Stack — Next Greater/Smaller
 
 ### Daily Temperatures
@@ -772,7 +787,7 @@ difficulty: mixed
 > ```
 
 > [!success] Complexity
-> Time O(n logs); Space O(n) stack depth.
+> Time O(m) where `m = len(logs)`; Space O(n) stack depth.
 
 > [!tip] Alternatives
 > No fundamentally different approach — call stack simulation is inherent to the problem structure.

@@ -274,30 +274,31 @@ difficulty: mixed
 > Count the number of nodes in a complete binary tree. Must be better than O(n). LC 222.
 
 > [!info] Approach
-> - **WHY:** A naive O(n) traversal ignores the complete tree property. In a complete binary tree, every level except possibly the last is fully filled and the last level fills left to right. We can determine whether the left or right subtree is a perfect binary tree in O(log n) by comparing heights, then apply the formula `2^h - 1` for the perfect half and recurse on the other.
-> - **WHAT:** At each node compare left height vs right height. If equal, left subtree is perfect → `left_count = 2^left_h - 1 + 1 (root)`, recurse only on right. If not equal, right subtree is a perfect tree of height (right_h): `right_count = 2^right_h - 1 + 1`, recurse only on left.
-> - **HOW:** Height = keep going left (or right) until None. `left_h == right_h` means left subtree is perfect; otherwise right subtree is perfect (one level shorter).
+> - **WHY:** A naive O(n) traversal ignores the complete tree property. In a complete tree, every level except possibly the last is full, and the last level fills left to right. That lets us detect when one subtree is perfect and count it with `2^h - 1` instead of visiting every node.
+> - **WHAT:** Compare the leftmost height of `root.left` and `root.right`. If they are equal, the left subtree is perfect, so count it in O(1) and recurse only on the right. Otherwise, the right subtree is perfect, so count it in O(1) and recurse only on the left.
+> - **HOW:** `height(node)` follows `.left` pointers only. If `left_h == right_h`, return `2^left_h + countNodes(root.right)`; else return `2^right_h + countNodes(root.left)`.
 
 > [!note]- Python Solution
 > ```python
 > def countNodes(root):
 >     if not root:
 >         return 0
->     left_h = right_h = 0
->     left = right = root
->     while left:
->         left_h += 1
->         left = left.left
->     while right:
->         right_h += 1
->         right = right.right
+>     def height(node):
+>         h = 0
+>         while node:
+>             h += 1
+>             node = node.left
+>         return h
+>
+>     left_h = height(root.left)
+>     right_h = height(root.right)
 >     if left_h == right_h:
->         return (1 << left_h) - 1  # perfect tree: 2^h - 1
->     return 1 + countNodes(root.left) + countNodes(root.right)
+>         return (1 << left_h) + countNodes(root.right)
+>     return (1 << right_h) + countNodes(root.left)
 > ```
 
 > [!success] Complexity
-> Time O(log²n) — O(log n) recursive calls, each doing O(log n) height computation. Space O(log n).
+> Time O(log²n) — each recursive step computes a height in O(log n), and recursion follows only one subtree. Space O(log n).
 
 > [!tip] Alternatives
 > - O(n) linear traversal: correct but misses the point of the problem.
