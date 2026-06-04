@@ -40,7 +40,8 @@ difficulty: mixed
 >             lps[i] = length
 >             i += 1
 >         elif length:
->             length = lps[length - 1]   # fall back; do NOT increment i
+>             length = lps[length - 1]   # fall back
+>             do NOT increment i
 >         else:
 >             lps[i] = 0
 >             i += 1
@@ -55,7 +56,8 @@ difficulty: mixed
 >     i = j = 0
 >     while i < n:
 >         if text[i] == pattern[j]:
->             i += 1; j += 1
+>             i += 1
+>             j += 1
 >         if j == m:
 >             matches.append(i - j)
 >             j = lps[j - 1]
@@ -96,7 +98,8 @@ difficulty: mixed
 >     i = j = 0
 >     while i < n:
 >         if text[i] == pattern[j]:
->             i += 1; j += 1
+>             i += 1
+>             j += 1
 >         if j == m:
 >             matches.append(i - j)
 >             j = lps[j - 1]    # allow overlap by not resetting j to 0
@@ -444,7 +447,8 @@ difficulty: mixed
 >     for i in range(len(s)):
 >         for l, r in [(i, i), (i, i + 1)]:   # odd and even centers
 >             while l >= 0 and r < len(s) and s[l] == s[r]:
->                 l -= 1; r += 1
+>                 l -= 1
+>                 r += 1
 >             # palindrome is s[l+1 : r]
 >             if r - l - 1 > best_r - best_l:
 >                 best_l, best_r = l + 1, r
@@ -496,7 +500,8 @@ difficulty: mixed
 >         for l, r in [(i, i), (i, i + 1)]:
 >             while l >= 0 and r < len(s) and s[l] == s[r]:
 >                 count += 1
->                 l -= 1; r += 1
+>                 l -= 1
+>                 r += 1
 >     return count
 > ```
 
@@ -534,7 +539,8 @@ difficulty: mixed
 >         left, right = i - P[i] - 1, i + P[i] + 1
 >         while left >= 0 and right < n and t[left] == t[right]:
 >             P[i] += 1
->             left -= 1; right += 1
+>             left -= 1
+>             right += 1
 >         # Update rightmost palindrome
 >         if i + P[i] > r:
 >             c, r = i, i + P[i]
@@ -619,7 +625,8 @@ difficulty: mixed
 > ```python
 > def build_suffix_array_and_lcp(s):
 >     n = len(s)
->     sa = sorted(range(n), key=lambda i: s[i:])   # simple O(n^2 log n); replace with DC3 for O(n)
+>     sa = sorted(range(n), key=lambda i: s[i:])   # simple O(n^2 log n)
+>     replace with DC3 for O(n)
 > 
 >     rank = [0] * n
 >     for i, v in enumerate(sa):

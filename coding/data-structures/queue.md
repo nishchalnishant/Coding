@@ -67,7 +67,8 @@ difficulty: mixed
 > from collections import deque
 > >
 > def max_sliding_window(nums, k):
->     dq: deque[int] = deque()   # stores indices; values are monotonically decreasing
+>     dq: deque[int] = deque()   # stores indices
+>     values are monotonically decreasing
 >     result = []
 >     for i, x in enumerate(nums):
 >         # remove dominated indices from back
@@ -106,7 +107,8 @@ difficulty: mixed
 > from collections import deque
 > >
 > def min_sliding_window(nums, k):
->     dq: deque[int] = deque()   # indices; values monotonically increasing
+>     dq: deque[int] = deque()   # indices
+>     values monotonically increasing
 >     result = []
 >     for i, x in enumerate(nums):
 >         while dq and nums[dq[-1]] >= x:
@@ -171,7 +173,8 @@ difficulty: mixed
 >     for i in range(n):
 >         prefix[i + 1] = prefix[i] + nums[i]
 > >
->     dq: deque[int] = deque()   # indices of prefix; monotonically increasing prefix values
+>     dq: deque[int] = deque()   # indices of prefix
+>     monotonically increasing prefix values
 >     ans = float('inf')
 >     for j in range(n + 1):
 >         # try to satisfy sum >= k using front as left boundary
@@ -236,7 +239,8 @@ difficulty: mixed
 >     n = len(nums)
 >     dp = [0] * n
 >     dp[0] = nums[0]
->     dq: deque[int] = deque([0])   # indices; dp values decreasing
+>     dq: deque[int] = deque([0])   # indices
+>     dp values decreasing
 > >
 >     for i in range(1, n):
 >         # evict out-of-window front
@@ -352,7 +356,9 @@ difficulty: mixed
 > >
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
->         self.val = val; self.left = left; self.right = right
+>         self.val = val
+>         self.left = left
+>         self.right = right
 > >
 > def level_order(root):
 >     if not root:

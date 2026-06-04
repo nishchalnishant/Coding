@@ -964,10 +964,13 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 >         i = k = 0
 >         while i < len(left) and k < len(right):
 >             if left[i] <= right[k]:
->                 merged.append(left[i]); i += 1
+>                 merged.append(left[i])
+>                 i += 1
 >             else:
->                 merged.append(right[k]); k += 1
->         merged.extend(left[i:]); merged.extend(right[k:])
+>                 merged.append(right[k])
+>                 k += 1
+>         merged.extend(left[i:])
+>         merged.extend(right[k:])
 >         return merged, count
 > >
 >     _, ans = merge_count(nums)
@@ -1130,7 +1133,8 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 >     def __init__(self, n, edges, int]], root=0):
 >         adj = defaultdict(list)
 >         for u, v in edges:
->             adj[u].append(v); adj[v].append(u)
+>             adj[u].append(v)
+>             adj[v].append(u)
 > >
 >         self.euler: list[int] = []
 >         self.depth_arr: list[int] = []

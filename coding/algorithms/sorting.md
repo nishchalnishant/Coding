@@ -41,12 +41,15 @@ difficulty: mixed
 >         i = j = 0
 >         while i < len(left) and j < len(right):
 >             if left[i] <= right[j]:
->                 merged.append(left[i]); i += 1
+>                 merged.append(left[i])
+>                 i += 1
 >             else:
 >                 # all remaining left elements > right[j]
 >                 count += len(left) - i
->                 merged.append(right[j]); j += 1
->         merged.extend(left[i:]); merged.extend(right[j:])
+>                 merged.append(right[j])
+>                 j += 1
+>         merged.extend(left[i:])
+>         merged.extend(right[j:])
 >         return merged, count
 > 
 >     _, total = merge_sort(arr)
@@ -334,7 +337,8 @@ difficulty: mixed
 >     while mid <= hi:
 >         if nums[idx(mid)] > median:
 >             nums[idx(lo)], nums[idx(mid)] = nums[idx(mid)], nums[idx(lo)]
->             lo += 1; mid += 1
+>             lo += 1
+>             mid += 1
 >         elif nums[idx(mid)] < median:
 >             nums[idx(mid)], nums[idx(hi)] = nums[idx(hi)], nums[idx(mid)]
 >             hi -= 1
@@ -640,7 +644,8 @@ difficulty: mixed
 >         )
 >         j = 0
 >         for i in range(parity, len(digits), 2):
->             digits[i] = pool[j]; j += 1
+>             digits[i] = pool[j]
+>             j += 1
 >     return int("".join(digits))
 > ```
 
@@ -753,7 +758,8 @@ difficulty: mixed
 >         while lo < hi and nums[hi] % 2 == 1:
 >             hi -= 1
 >         nums[lo], nums[hi] = nums[hi], nums[lo]
->         lo += 1; hi -= 1
+>         lo += 1
+>         hi -= 1
 >     return nums
 > ```
 

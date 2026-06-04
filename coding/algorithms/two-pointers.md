@@ -137,7 +137,8 @@ difficulty: mixed
 >                 result.append([nums[i], nums[lo], nums[hi]])
 >                 while lo < hi and nums[lo] == nums[lo + 1]: lo += 1
 >                 while lo < hi and nums[hi] == nums[hi - 1]: hi -= 1
->                 lo += 1; hi -= 1
+>                 lo += 1
+>                 hi -= 1
 >             elif s < 0:
 >                 lo += 1
 >             else:
@@ -198,7 +199,8 @@ difficulty: mixed
 >                     result.append([nums[i], nums[j], nums[lo], nums[hi]])
 >                     while lo < hi and nums[lo] == nums[lo + 1]: lo += 1
 >                     while lo < hi and nums[hi] == nums[hi - 1]: hi -= 1
->                     lo += 1; hi -= 1
+>                     lo += 1
+>                     hi -= 1
 >                 elif s < target:
 >                     lo += 1
 >                 else:
@@ -252,7 +254,8 @@ difficulty: mixed
 >         area = min(height[lo], height[hi]) * (hi - lo)
 >         best = max(best, area)
 >         if height[lo] <= height[hi]:
->             lo += 1   # move shorter bar; taller side moving can't improve
+>             lo += 1   # move shorter bar
+>             taller side moving can't improve
 >         else:
 >             hi -= 1
 >     return best

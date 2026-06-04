@@ -1308,7 +1308,8 @@ difficulty: mixed
 >                 duplicates += 1
 >                 continue
 >             g = gcd(abs(dx), abs(dy))
->             dx //= g; dy //= g
+>             dx //= g
+>             dy //= g
 >             # Normalize sign: keep dx positive (or dy positive if dx == 0)
 >             if dx < 0 or (dx == 0 and dy < 0):
 >                 dx, dy = -dx, -dy

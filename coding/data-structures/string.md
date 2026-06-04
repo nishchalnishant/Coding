@@ -61,7 +61,10 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 >         freq[ord(c) - ord('a')] += 1
 >     for c in t:
 >         freq[ord(c) - ord('a')] -= 1
->     return all(f == 0 for f in freq)
+>     for f in freq:
+>         if not (f == 0):
+>             return False
+>     return True
 > ```
 
 > [!success] Complexity
@@ -1128,7 +1131,10 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 > def longest_common_prefix_binary_search(strs):
 >     def all_match(length):
 >         prefix = strs[0][:length]
->         return all(s[:length] == prefix for s in strs[1:])
+>         for s in strs[1:]:
+>             if s[:length] != prefix:
+>                 return False
+>         return True
 > 
 >     lo, hi = 0, min(len(s) for s in strs)
 >     while lo < hi:

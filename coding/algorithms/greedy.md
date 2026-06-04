@@ -740,7 +740,8 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 >         result.append(char)
 >         if prev_cnt < 0:
 >             heapq.heappush(heap, (prev_cnt, prev_char))
->         prev_cnt, prev_char = cnt + 1, char  # cnt is negative; +1 decrements count
+>         prev_cnt, prev_char = cnt + 1, char  # cnt is negative
+>         +1 decrements count
 >     return "".join(result)
 > ```
 

@@ -112,7 +112,8 @@ difficulty: mixed
 >     while lo < hi:
 >         mid = lo + (hi - lo) // 2
 >         if isBadVersion(mid):
->             hi = mid        # mid could be first bad; don't discard
+>             hi = mid        # mid could be first bad
+>             don't discard
 >         else:
 >             lo = mid + 1
 >     return lo
@@ -760,7 +761,8 @@ difficulty: mixed
 >         if nums[mid] == target:
 >             return True
 >         if nums[lo] == nums[mid] == nums[hi]:
->             lo += 1; hi -= 1   # can't determine sorted half; shrink both
+>             lo += 1
+>             hi -= 1   # can't determine sorted half; shrink both
 >         elif nums[lo] <= nums[mid]:            # left half sorted
 >             if nums[lo] <= target < nums[mid]:
 >                 hi = mid - 1

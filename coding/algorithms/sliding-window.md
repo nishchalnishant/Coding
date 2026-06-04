@@ -314,7 +314,8 @@ difficulty: mixed
 >         # Window invalid: replacements needed exceed k
 >         if (right - left + 1) - max_count > k:
 >             freq[s[left]] -= 1
->             left += 1   # shrink by 1; don't update max_count (intentional)
+>             left += 1   # shrink by 1
+>             don't update max_count (intentional)
 >         best = max(best, right - left + 1)
 > 
 >     return best
@@ -774,7 +775,8 @@ difficulty: mixed
 > from collections import deque
 > 
 > def max_sliding_window(nums, k):
->     dq: deque[int] = deque()  # stores indices; front = max of current window
+>     dq: deque[int] = deque()  # stores indices
+>     front = max of current window
 >     result = []
 > 
 >     for i, val in enumerate(nums):
@@ -812,7 +814,8 @@ difficulty: mixed
 > from collections import deque
 > 
 > def min_sliding_window(nums, k):
->     dq: deque[int] = deque()  # stores indices; front = min of current window
+>     dq: deque[int] = deque()  # stores indices
+>     front = min of current window
 >     result = []
 > 
 >     for i, val in enumerate(nums):

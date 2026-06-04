@@ -1596,7 +1596,9 @@ difficulty: mixed
 >     for ch in s:
 >         stack.append(ch)
 >         if len(stack) >= 3 and stack[-3] == 'a' and stack[-2] == 'b' and stack[-1] == 'c':
->             stack.pop(); stack.pop(); stack.pop()
+>             stack.pop()
+>             stack.pop()
+>             stack.pop()
 >     return not stack
 > ```
 
@@ -1820,7 +1822,9 @@ difficulty: mixed
 > ```python
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
->         self.val = val; self.left = left; self.right = right
+>         self.val = val
+>         self.left = left
+>         self.right = right
 > >
 > def flatten(root):
 >     if not root:

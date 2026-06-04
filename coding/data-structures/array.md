@@ -1506,8 +1506,16 @@ difficulty: mixed
 > ```python
 > def set_zeroes(matrix):
 >     m, n = len(matrix), len(matrix[0])
->     first_row_zero = any(matrix[0][j] == 0 for j in range(n))
->     first_col_zero = any(matrix[i][0] == 0 for i in range(m))
+>     first_row_zero = False
+>     for j in range(n):
+>         if matrix[0][j] == 0:
+>             first_row_zero = True
+>             break
+>     first_col_zero = False
+>     for i in range(m):
+>         if matrix[i][0] == 0:
+>             first_col_zero = True
+>             break
 >     # Use first row/col as markers for other rows/cols
 >     for i in range(1, m):
 >         for j in range(1, n):

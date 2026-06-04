@@ -727,7 +727,11 @@ See full Bellman-Ford solution in the next section.
 >         color[u] = BLACK
 >         return False
 > 
->     return any(dfs(node) for node in range(n) if color[node] == WHITE)
+>     for node in range(n):
+>         if color[node] == WHITE:
+>             if dfs(node):
+>                 return True
+>     return False
 > ```
 
 > [!success] Complexity
@@ -1197,7 +1201,10 @@ See full Bellman-Ford solution in the next section.
 >     color = [0] * n   # 0 = uncolored
 > 
 >     def is_safe(node, c):
->         return all(color[nb] != c for nb in graph[node])
+>         for nb in graph[node]:
+>             if color[nb] == c:
+>                 return False
+>         return True
 > 
 >     def backtrack(node):
 >         if node == n:
@@ -1219,7 +1226,10 @@ See full Bellman-Ford solution in the next section.
 >     color = [0] * n
 > 
 >     def is_safe(node, c):
->         return all(color[nb] != c for nb in graph[node])
+>         for nb in graph[node]:
+>             if color[nb] == c:
+>                 return False
+>         return True
 > 
 >     def backtrack(node):
 >         if node == n:
@@ -1267,9 +1277,11 @@ See full Bellman-Ford solution in the next section.
 >                 updated = True
 >         if not updated:
 >             break
->     has_negative_cycle = any(
->         dist[u] != float("inf") and dist[u] + w < dist[v] for u, v, w in edges
->     )
+>     has_negative_cycle = False
+>     for u, v, w in edges:
+>         if dist[u] != float("inf") and dist[u] + w < dist[v]:
+>             has_negative_cycle = True
+>             break
 >     return dist, has_negative_cycle
 > ```
 

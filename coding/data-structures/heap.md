@@ -409,10 +409,12 @@ difficulty: mixed
 >         # Ensure lo has ceil(k/2) and hi has floor(k/2)
 >         while size_lo > (k + 1) // 2:
 >             heapq.heappush(hi, -heapq.heappop(lo))
->             size_lo -= 1; size_hi += 1
+>             size_lo -= 1
+>             size_hi += 1
 >         while size_hi > k // 2:
 >             heapq.heappush(lo, -heapq.heappop(hi))
->             size_hi -= 1; size_lo += 1
+>             size_hi -= 1
+>             size_lo += 1
 >         return size_lo, size_hi
 > >
 >     def clean_top(heap, negate):
@@ -431,7 +433,8 @@ difficulty: mixed
 >         heapq.heappush(hi, -heapq.heappop(lo))
 > >
 >     def get_median():
->         clean_top(lo, True); clean_top(hi, False)
+>         clean_top(lo, True)
+>         clean_top(hi, False)
 >         if k % 2 == 1:
 >             return float(-lo[0])
 >         return (-lo[0] + hi[0]) / 2.0
@@ -445,15 +448,18 @@ difficulty: mixed
 >         invalid[out_val] += 1
 >         # Adjust sizes
 >         if in_val <= -lo[0]:
->             heapq.heappush(lo, -in_val); size_lo += 1
+>             heapq.heappush(lo, -in_val)
+>             size_lo += 1
 >         else:
->             heapq.heappush(hi, in_val); size_hi += 1
+>             heapq.heappush(hi, in_val)
+>             size_hi += 1
 >         if out_val <= -lo[0]:
 >             size_lo -= 1
 >         else:
 >             size_hi -= 1
 >         size_lo, size_hi = balance(size_lo, size_hi)
->         clean_top(lo, True); clean_top(hi, False)
+>         clean_top(lo, True)
+>         clean_top(hi, False)
 >         result.append(get_median())
 >     return result
 > ```

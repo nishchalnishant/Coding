@@ -33,7 +33,8 @@ difficulty: mixed
 >     def union(self, x, y):
 >         rx, ry = self.find(x), self.find(y)
 >         if rx == ry:
->             return False          # already connected; cycle in undirected graph
+>             return False          # already connected
+>             cycle in undirected graph
 >         if self.rank[rx] < self.rank[ry]:
 >             rx, ry = ry, rx
 >         self.parent[ry] = rx
@@ -512,9 +513,11 @@ difficulty: mixed
 > 
 >     def union(x, y, ratio):
 >         if x not in parent:
->             parent[x] = x; weight[x] = 1.0
+>             parent[x] = x
+>             weight[x] = 1.0
 >         if y not in parent:
->             parent[y] = y; weight[y] = 1.0
+>             parent[y] = y
+>             weight[y] = 1.0
 >         rx, wx = find(x)
 >         ry, wy = find(y)
 >         if rx != ry:
@@ -719,7 +722,8 @@ difficulty: mixed
 >             nr, nc = r + dr, c + dc
 >             nidx = nr * n + nc
 >             if 0 <= nr < m and 0 <= nc < n and nidx in land:
->                 dsu.union(idx, nidx)  # merges components; decrements count
+>                 dsu.union(idx, nidx)  # merges components
+>                 decrements count
 >         result.append(dsu.components)
 > 
 >     return result

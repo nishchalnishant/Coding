@@ -585,7 +585,10 @@ difficulty: mixed
 >         if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
 >             return
 >         grid[r][c] = '0'
->         dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+>         dfs(r+1, c)
+>         dfs(r-1, c)
+>         dfs(r, c+1)
+>         dfs(r, c-1)
 > 
 >     count = 0
 >     for r in range(rows):
@@ -654,7 +657,10 @@ difficulty: mixed
 >         if r < 0 or r >= rows or c < 0 or c >= cols or image[r][c] != original:
 >             return
 >         image[r][c] = color
->         dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+>         dfs(r+1, c)
+>         dfs(r-1, c)
+>         dfs(r, c+1)
+>         dfs(r, c-1)
 > 
 >     dfs(sr, sc)
 >     return image
@@ -761,12 +767,17 @@ difficulty: mixed
 >         if r < 0 or r >= rows or c < 0 or c >= cols or board[r][c] != 'O':
 >             return
 >         board[r][c] = 'S'
->         dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+>         dfs(r+1, c)
+>         dfs(r-1, c)
+>         dfs(r, c+1)
+>         dfs(r, c-1)
 > 
 >     for r in range(rows):
->         dfs(r, 0); dfs(r, cols-1)
+>         dfs(r, 0)
+>         dfs(r, cols-1)
 >     for c in range(cols):
->         dfs(0, c); dfs(rows-1, c)
+>         dfs(0, c)
+>         dfs(rows-1, c)
 > 
 >     for r in range(rows):
 >         for c in range(cols):
@@ -1023,12 +1034,17 @@ difficulty: mixed
 >         if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != 1:
 >             return
 >         grid[r][c] = 0
->         dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)
+>         dfs(r+1, c)
+>         dfs(r-1, c)
+>         dfs(r, c+1)
+>         dfs(r, c-1)
 > 
 >     for r in range(rows):
->         dfs(r, 0); dfs(r, cols-1)
+>         dfs(r, 0)
+>         dfs(r, cols-1)
 >     for c in range(cols):
->         dfs(0, c); dfs(rows-1, c)
+>         dfs(0, c)
+>         dfs(rows-1, c)
 > 
 >     return sum(grid[r][c] for r in range(rows) for c in range(cols))
 > ```

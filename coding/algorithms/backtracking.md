@@ -848,21 +848,30 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > ```python
 > def exist(board, word):
 >     m, n = len(board), len(board[0])
-> 
+>     directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
+>
 >     def dfs(r, c, i):
 >         if i == len(word):
 >             return True
->         if not (0 <= r < m and 0 <= c < n) or board[r][c] != word[i]:
+>         if not (0 <= r < m and 0 <= c < n):
 >             return False
->         tmp, board[r][c] = board[r][c], '#'  # mark visited
->         found = any(
->             dfs(r + dr, c + dc, i + 1)
->             for dr, dc in ((0, 1), (0, -1), (1, 0), (-1, 0))
->         )
->         board[r][c] = tmp  # restore
+>         if board[r][c] != word[i]:
+>             return False
+>         tmp = board[r][c]
+>         board[r][c] = '#'
+>         found = False
+>         for dr, dc in directions:
+>             if dfs(r + dr, c + dc, i + 1):
+>                 found = True
+>                 break
+>         board[r][c] = tmp
 >         return found
-> 
->     return any(dfs(r, c, 0) for r in range(m) for c in range(n))
+>
+>     for r in range(m):
+>         for c in range(n):
+>             if dfs(r, c, 0):
+>                 return True
+>     return False
 > ```
 
 > [!success] Complexity
@@ -1003,11 +1012,15 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 >             d, ad = row - col, row + col
 >             if col in cols or d in diags or ad in anti_diags:
 >                 continue
->             cols.add(col); diags.add(d); anti_diags.add(ad)
+>             cols.add(col)
+>             diags.add(d)
+>             anti_diags.add(ad)
 >             board[row][col] = 'Q'
 >             backtrack(row + 1)
 >             board[row][col] = '.'
->             cols.remove(col); diags.remove(d); anti_diags.remove(ad)
+>             cols.remove(col)
+>             diags.remove(d)
+>             anti_diags.remove(ad)
 > 
 >     backtrack(0)
 >     return result
@@ -1679,20 +1692,25 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > def find_word_occurrences(board, word):
 >     m, n = len(board), len(board[0])
 >     results = []
-> 
+>     directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
+>
 >     def dfs(r, c, i):
 >         if i == len(word):
 >             return True
->         if not (0 <= r < m and 0 <= c < n) or board[r][c] != word[i]:
+>         if not (0 <= r < m and 0 <= c < n):
 >             return False
->         tmp, board[r][c] = board[r][c], '#'
->         found = any(
->             dfs(r + dr, c + dc, i + 1)
->             for dr, dc in ((0, 1), (0, -1), (1, 0), (-1, 0))
->         )
+>         if board[r][c] != word[i]:
+>             return False
+>         tmp = board[r][c]
+>         board[r][c] = '#'
+>         found = False
+>         for dr, dc in directions:
+>             if dfs(r + dr, c + dc, i + 1):
+>                 found = True
+>                 break
 >         board[r][c] = tmp
 >         return found
-> 
+>
 >     for r in range(m):
 >         for c in range(n):
 >             if dfs(r, c, 0):

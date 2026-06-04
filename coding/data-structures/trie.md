@@ -968,7 +968,10 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 >             return node.is_end
 >         c = word[i]
 >         if c == '.':
->             return any(self._dfs(child, word, i + 1) for child in node.children.values())
+>             for child in node.children.values():
+>                 if self._dfs(child, word, i + 1):
+>                     return True
+>             return False
 >         if c not in node.children:
 >             return False
 >         return self._dfs(node.children[c], word, i + 1)
@@ -1636,7 +1639,10 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 >             if letter in node.children:
 >                 new_active.append(node.children[letter])
 >         self.active = new_active
->         return any(n.is_end for n in self.active)
+>         for n in self.active:
+>             if n.is_end:
+>                 return True
+>         return False
 > ```
 
 > [!success] Complexity
@@ -1991,8 +1997,12 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 >         mask |= (1 << bit)
 >         prefixes = {num & mask for num in nums}
 >         candidate = max_xor | (1 << bit)
->         # Check if any two prefixes XOR to candidate
->         if any((candidate ^ p) in prefixes for p in prefixes):
+>         pair_found = False
+>         for p in prefixes:
+>             if (candidate ^ p) in prefixes:
+>                 pair_found = True
+>                 break
+>         if pair_found:
 >             max_xor = candidate
 >     return max_xor
 > ```

@@ -211,6 +211,7 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "scripts/expand_python_readability.py",
     "scripts/humanize_coding.py",
     "leetcode-problems/problems/3640-trionic-array-ii.json",
     "leetcode-problems/problems/3639-minimum-time-to-activate-string.json",
@@ -221,7 +222,6 @@
     "leetcode-problems/problems/3634-minimum-removals-to-balance-array.json",
     "leetcode-problems/problems/3633-earliest-finish-time-for-land-and-water-rides-i.json",
     "leetcode-problems/problems/3630-partition-array-for-maximum-xor-and-and.json",
-    "leetcode-problems/problems/3629-minimum-jumps-to-reach-end-via-prime-teleportation.json",
     "leetcode-problems/README.md",
     "MINDMAP.md",
     "04-behavioral/googliness-round.md",

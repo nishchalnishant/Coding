@@ -96,9 +96,11 @@ difficulty: mixed
 >     i = j = 0
 >     while i < len(left) and j < len(right):
 >         if left[i] <= right[j]:
->             result.append(left[i]); i += 1
+>             result.append(left[i])
+>             i += 1
 >         else:
->             result.append(right[j]); j += 1
+>             result.append(right[j])
+>             j += 1
 >     result.extend(left[i:])
 >     result.extend(right[j:])
 >     return result
@@ -262,18 +264,30 @@ difficulty: mixed
 > ```python
 > def exist(board, word):
 >     rows, cols = len(board), len(board[0])
-> 
+>     directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+>
 >     def dfs(r, c, idx):
 >         if idx == len(word):
 >             return True
->         if not (0 <= r < rows and 0 <= c < cols) or board[r][c] != word[idx]:
+>         if not (0 <= r < rows and 0 <= c < cols):
 >             return False
->         tmp, board[r][c] = board[r][c], '#'
->         found = any(dfs(r+dr, c+dc, idx+1) for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)])
+>         if board[r][c] != word[idx]:
+>             return False
+>         tmp = board[r][c]
+>         board[r][c] = '#'
+>         found = False
+>         for dr, dc in directions:
+>             if dfs(r + dr, c + dc, idx + 1):
+>                 found = True
+>                 break
 >         board[r][c] = tmp
 >         return found
-> 
->     return any(dfs(r, c, 0) for r in range(rows) for c in range(cols))
+>
+>     for r in range(rows):
+>         for c in range(cols):
+>             if dfs(r, c, 0):
+>                 return True
+>     return False
 > ```
 
 > [!success] Complexity
@@ -388,7 +402,9 @@ difficulty: mixed
 > ```python
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
->         self.val = val; self.left = left; self.right = right
+>         self.val = val
+>         self.left = left
+>         self.right = right
 > 
 > def generate_trees(n):
 >     memo = {}
@@ -586,9 +602,11 @@ difficulty: mixed
 >     visited = set()
 > 
 >     def go_back():
->         robot.turnRight(); robot.turnRight()
+>         robot.turnRight()
+>         robot.turnRight()
 >         robot.move()
->         robot.turnRight(); robot.turnRight()
+>         robot.turnRight()
+>         robot.turnRight()
 > 
 >     def dfs(r, c, direction):
 >         robot.clean()
@@ -1479,11 +1497,14 @@ difficulty: mixed
 >         i = j = 0
 >         while i < len(left) and j < len(right):
 >             if left[i] <= right[j]:
->                 merged.append(left[i]); i += 1
+>                 merged.append(left[i])
+>                 i += 1
 >             else:
->                 merged.append(right[j]); j += 1
+>                 merged.append(right[j])
+>                 j += 1
 >                 mc += len(left) - i  # inversions with all remaining left elements
->         merged.extend(left[i:]); merged.extend(right[j:])
+>         merged.extend(left[i:])
+>         merged.extend(right[j:])
 >         return merged, lc + rc + mc
 >     _, count = merge_sort(nums)
 >     return count
@@ -1629,8 +1650,10 @@ difficulty: mixed
 >         if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] != '1':
 >             return
 >         grid[r][c] = '0'
->         dfs(r + 1, c); dfs(r - 1, c)
->         dfs(r, c + 1); dfs(r, c - 1)
+>         dfs(r + 1, c)
+>         dfs(r - 1, c)
+>         dfs(r, c + 1)
+>         dfs(r, c - 1)
 > 
 >     for r in range(rows):
 >         for c in range(cols):
@@ -1701,7 +1724,8 @@ difficulty: mixed
 >     def parse_term():
 >         val = parse_number()
 >         while idx[0] < len(s) and s[idx[0]] in '*/':
->             op = s[idx[0]]; idx[0] += 1
+>             op = s[idx[0]]
+>             idx[0] += 1
 >             right = parse_number()
 >             val = val * right if op == '*' else int(val / right)
 >         return val
@@ -1709,7 +1733,8 @@ difficulty: mixed
 >     def parse_expr():
 >         val = parse_term()
 >         while idx[0] < len(s) and s[idx[0]] in '+-':
->             op = s[idx[0]]; idx[0] += 1
+>             op = s[idx[0]]
+>             idx[0] += 1
 >             right = parse_term()
 >             val = val + right if op == '+' else val - right
 >         return val

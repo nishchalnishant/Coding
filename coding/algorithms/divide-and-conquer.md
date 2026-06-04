@@ -42,9 +42,11 @@ difficulty: mixed
 >     i = j = 0
 >     while i < len(left) and j < len(right):
 >         if left[i] <= right[j]:
->             result.append(left[i]); i += 1
+>             result.append(left[i])
+>             i += 1
 >         else:
->             result.append(right[j]); j += 1
+>             result.append(right[j])
+>             j += 1
 >     result.extend(left[i:])
 >     result.extend(right[j:])
 >     return result
@@ -222,7 +224,8 @@ difficulty: mixed
 >         elif cnt2 == 0:
 >             cand2, cnt2 = n, 1
 >         else:
->             cnt1 -= 1; cnt2 -= 1
+>             cnt1 -= 1
+>             cnt2 -= 1
 > 
 >     threshold = len(nums) // 3
 >     return [c for c in (cand1, cand2) if c is not None and nums.count(c) > threshold]
@@ -553,7 +556,9 @@ difficulty: mixed
 > 
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
->         self.val = val; self.left = left; self.right = right
+>         self.val = val
+>         self.left = left
+>         self.right = right
 > 
 > def build_tree(preorder, inorder):
 >     idx_map = {v: i for i, v in enumerate(inorder)}
