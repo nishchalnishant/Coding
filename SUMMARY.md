@@ -1,10 +1,3 @@
----
-module: root
-topic: Summary
-subtopic: 
-status: unread
-tags: [root, summary]
----
 # Summary
 
 ## Getting Started
@@ -58,27 +51,47 @@ tags: [root, summary]
 * [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
 
 ### Dynamic Programming
-* [Overview](02-algorithms/dynamic-programming/README.md)
-* [Grid DP](02-algorithms/dynamic-programming/grid-dp.md)
-* [Stock Trading DP](02-algorithms/dynamic-programming/stock-trading-dp.md)
-* [String & Palindrome DP](02-algorithms/dynamic-programming/string-palindrome-dp.md)
-* [Digit DP](02-algorithms/dynamic-programming/digit-dp.md)
-* [Probability & Combinatorics DP](02-algorithms/dynamic-programming/probability-combinatorics-dp.md)
-* [Advanced DP Optimizations](02-algorithms/dynamic-programming/advanced-dp-optimizations.md)
-* [DP — Aditya Verma](02-algorithms/dynamic-programming/dp-aditya-verma.md)
-* [Questions Bank](02-algorithms/dynamic-programming/questions-bank.md)
-* [Tips & Gotchas](02-algorithms/dynamic-programming/tips-and-gotchas.md)
+* [Complete Guide](02-algorithms/dynamic-programming.md)
 
 ### Recursion
-* [Overview](02-algorithms/recursion/README.md)
-* [Tree Recursion](02-algorithms/recursion/tree-recursion.md)
-* [Graph Recursion](02-algorithms/recursion/graph-recursion.md)
-* [String Recursion](02-algorithms/recursion/string-recursion.md)
-* [Combination Problems](02-algorithms/recursion/combination-problems.md)
-* [Recursion to DP](02-algorithms/recursion/recursion-to-dp.md)
-* [Aditya Verma](02-algorithms/recursion/aditya-verma.md)
-* [Questions Bank](02-algorithms/recursion/questions-bank.md)
-* [Tips & Gotchas](02-algorithms/recursion/tips-and-gotchas.md)
+* [Complete Reference](02-algorithms/recursion.md)
+* [Recursion → DP Bridge](02-algorithms/recursion-to-dp.md)
+
+---
+
+## Practice Problem Bank (`coding/`)
+
+Problem lists with approaches — companion to [Mind Map](MINDMAP.md).
+
+### Data Structures
+* [Advanced](coding/data-structures/advanced.md)
+* [Array](coding/data-structures/array.md)
+* [Graph](coding/data-structures/graph.md)
+* [Hashing](coding/data-structures/hashing.md)
+* [Heap](coding/data-structures/heap.md)
+* [Linked List](coding/data-structures/linked-list.md)
+* [Queue](coding/data-structures/queue.md)
+* [Segment Tree](coding/data-structures/segment-tree.md)
+* [Stack](coding/data-structures/stack.md)
+* [String](coding/data-structures/string.md)
+* [Tree](coding/data-structures/tree.md)
+* [Trie](coding/data-structures/trie.md)
+
+### Algorithms
+* [Backtracking](coding/algorithms/backtracking.md)
+* [Binary Search](coding/algorithms/binary-search.md)
+* [Bit Manipulation](coding/algorithms/bit-manipulation.md)
+* [Divide and Conquer](coding/algorithms/divide-and-conquer.md)
+* [Dynamic Programming](coding/algorithms/dynamic-programming.md)
+* [Graph Algorithms](coding/algorithms/graph-algorithms.md)
+* [Greedy](coding/algorithms/greedy.md)
+* [Maths](coding/algorithms/maths.md)
+* [Recursion](coding/algorithms/recursion.md)
+* [Sliding Window](coding/algorithms/sliding-window.md)
+* [Sorting](coding/algorithms/sorting.md)
+* [String Algorithms](coding/algorithms/string-algorithms.md)
+* [Two Pointers](coding/algorithms/two-pointers.md)
+* [Union Find](coding/algorithms/union-find.md)
 
 ---
 

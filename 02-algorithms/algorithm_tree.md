@@ -155,7 +155,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 5. Dynamic Programming
 
-→ [dynamic-programming/README.md](./dynamic-programming/README.md) · [recursion/recursion-to-dp.md](./recursion/recursion-to-dp.md)
+→ [dynamic-programming.md](./dynamic-programming.md) · [recursion-to-dp.md](./recursion-to-dp.md)
 - **Linear DP (1D)** — Optimization over a sequence where the current state depends on a fixed number of previous states.
     - *Variants:* Fibonacci, House Robber, Decode Ways, Min Cost For Tickets.
 - **Knapsack Family** — Optimization problems involving item selection under capacity or budget constraints.
@@ -177,7 +177,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 6. Recursion & Backtracking
 
-→ [recursion/README.md](./recursion/README.md) · [backtracking.md](./backtracking.md)
+→ [recursion.md](./recursion.md) · [backtracking.md](./backtracking.md)
 - **Structural Recursion** — Processing data structures by delegating work to their self-similar sub-parts (trees, lists).
     - *Variants:* Lowest Common Ancestor (LCA), Flatten Binary Tree to Linked List.
 - **Memoized Recursion (Top-Down)** — Recursion with a cache to solve overlapping subproblems efficiently.

@@ -34,8 +34,8 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 | **Union-Find** | Connectivity, Kruskal, dynamic components | [union-find.md](./union-find.md) |
 | **Divide & conquer** | Merge sort, inversion count, closest pair | [divide-and-conquer.md](./divide-and-conquer.md) |
 | **String algorithms** | KMP, Rabin-Karp, Z-function | [string.md](./string.md) |
-| **Dynamic programming** | Overlapping subproblems, optimal substructure | [dynamic-programming/README.md](./dynamic-programming/README.md) |
-| **Recursion** | Tree DFS, memo, recursion → DP | [recursion/README.md](./recursion/README.md) |
+| **Dynamic programming** | Overlapping subproblems, optimal substructure | [dynamic-programming.md](./dynamic-programming.md) |
+| **Recursion** | Tree DFS, memo, recursion → DP | [recursion.md](./recursion.md) · [recursion-to-dp.md](./recursion-to-dp.md) |
 
 ### Stretch & specialized
 
@@ -52,36 +52,15 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 
 ---
 
-## Subfolders
-
-### [dynamic-programming/](./dynamic-programming/)
+## DP & recursion (companion files)
 
 | File | Focus |
 |------|--------|
-| [README.md](./dynamic-programming/README.md) | **Start here** — 4-step framework, core patterns |
-| [dp-aditya-verma.md](./dynamic-programming/dp-aditya-verma.md) | Pattern catalog (knapsack, LCS, …) |
-| [grid-dp.md](./dynamic-programming/grid-dp.md) | Unique paths, min path sum, maximal square |
-| [stock-trading-dp.md](./dynamic-programming/stock-trading-dp.md) | Buy/sell state machine |
-| [string-palindrome-dp.md](./dynamic-programming/string-palindrome-dp.md) | LPS, palindrome partitioning |
-| [digit-dp.md](./dynamic-programming/digit-dp.md) | Count numbers with digit constraints |
-| [probability-combinatorics-dp.md](./dynamic-programming/probability-combinatorics-dp.md) | Expected value, game theory |
-| [advanced-dp-optimizations.md](./dynamic-programming/advanced-dp-optimizations.md) | CHT, SOS DP, Knuth (stretch) |
-| [tips-and-gotchas.md](./dynamic-programming/tips-and-gotchas.md) | **Revision** — bugs, iteration direction |
-| [questions-bank.md](./dynamic-programming/questions-bank.md) | Leveled drill list |
+| [dynamic-programming.md](./dynamic-programming.md) | **Complete DP guide** — patterns, templates, interview bank |
+| [recursion.md](./recursion.md) | **Complete recursion reference** — types, templates, tree/graph |
+| [recursion-to-dp.md](./recursion-to-dp.md) | **Recursion → memo → bottom-up** — conversion bridge with worked examples |
 
-### [recursion/](./recursion/)
-
-| File | Focus |
-|------|--------|
-| [README.md](./recursion/README.md) | **Start here** — types, templates |
-| [aditya-verma.md](./recursion/aditya-verma.md) | Include/exclude, IP/OP patterns |
-| [combination-problems.md](./recursion/combination-problems.md) | Combinations, subset sum |
-| [recursion-to-dp.md](./recursion-to-dp.md) | Top-down → tabulation |
-| [tree-recursion.md](./recursion/tree-recursion.md) | Path sum, BST, tree DP |
-| [graph-recursion.md](./recursion/graph-recursion.md) | DFS, topo, flood fill |
-| [string-recursion.md](./recursion/string-recursion.md) | Parsing, generation |
-| [tips-and-gotchas.md](./recursion/tips-and-gotchas.md) | **Revision** — common bugs |
-| [questions-bank.md](./recursion/questions-bank.md) | Leveled drill list |
+**Problem lists with hints:** [coding/algorithms/](../coding/algorithms/) · ASCII overview: [MINDMAP.md](../MINDMAP.md) · Pattern triggers: [FLOWCHARTS.md](../FLOWCHARTS.md)
 
 ---
 
@@ -108,10 +87,10 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 DS side: [array.md](../01-data-structures/array.md), [hashing.md](../01-data-structures/hashing.md)
 
 **Week 2 — Graphs & trees**  
-[graph.md](./graph.md) + [graphs.md](../01-data-structures/graphs.md) → [tree.md](../01-data-structures/tree.md) → [recursion/tree-recursion.md](./recursion/tree-recursion.md)
+[graph.md](./graph.md) + [graphs.md](../01-data-structures/graphs.md) → [tree.md](../01-data-structures/tree.md) → [recursion.md](./recursion.md)
 
 **Week 3 — DP & backtracking**  
-[dynamic-programming/README.md](./dynamic-programming/README.md) → [backtracking.md](./backtracking.md) → [greedy.md](./greedy.md)
+[dynamic-programming.md](./dynamic-programming.md) → [recursion-to-dp.md](./recursion-to-dp.md) → [backtracking.md](./backtracking.md) → [greedy.md](./greedy.md)
 
 **Week 4 — Polish**  
 [union-find.md](./union-find.md) → [string.md](./string.md) → weak areas from [problem-deep-dives.md](./problem-deep-dives.md)
@@ -127,7 +106,7 @@ Full tree: [algorithm_tree.md](./algorithm_tree.md).
 | Subarray / substring with constraint | [sliding-window.md](./sliding-window.md) |
 | Sorted array, pair / triplet / minimize max | [binary-search.md](./binary-search.md) or [two-pointers.md](./two-pointers.md) |
 | All combinations / permutations | [backtracking.md](./backtracking.md) |
-| Optimal substructure + overlapping | [dynamic-programming/README.md](./dynamic-programming/README.md) |
+| Optimal substructure + overlapping | [dynamic-programming.md](./dynamic-programming.md) · [recursion-to-dp.md](./recursion-to-dp.md) |
 | Shortest path (unweighted) | BFS — [graph.md](./graph.md), [graphs.md](../01-data-structures/graphs.md) |
 | Shortest path (weighted, non-negative) | Dijkstra — [graph.md](./graph.md) |
 | Dependency ordering | Topological sort — [graph.md](./graph.md) |

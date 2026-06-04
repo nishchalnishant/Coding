@@ -34,7 +34,7 @@
 |------|--------|-------|
 | **Week 1** | Arrays, Strings, Hashing, Linked Lists | `01-data-structures/array.md`, `01-data-structures/hashing.md`, `01-data-structures/linked-list.md` + `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md` |
 | **Week 2** | Trees, BST, Graphs, BFS/DFS | `01-data-structures/tree.md`, `01-data-structures/graphs.md`, `02-algorithms/graph.md`, `02-algorithms/advanced-graphs.md` |
-| **Week 3** | DP, Backtracking, Greedy, Recursion | `02-algorithms/dynamic-programming/`, `02-algorithms/backtracking.md`, `02-algorithms/greedy.md`, `02-algorithms/recursion/` |
+| **Week 3** | DP, Backtracking, Greedy, Recursion | `02-algorithms/dynamic-programming.md`, `02-algorithms/recursion-to-dp.md`, `02-algorithms/backtracking.md`, `02-algorithms/greedy.md`, `02-algorithms/recursion.md` |
 | **Week 4** | Binary Search, Heap, Tries, Segment Tree, Union-Find, Bit Manipulation | `02-algorithms/binary-search.md`, `01-data-structures/heap.md`, `01-data-structures/trie.md`, `01-data-structures/segment-tree.md`, `02-algorithms/union-find.md` |
 | **Week 5** | SDE-3 Hard Problems — full checklist | `05-revision/coding-rubric.md` §SDE-3 Hard Problem Checklist; log every attempt in `05-revision/mock-log.md` |
 | **Week 6** | Mock interviews (2/week minimum), LLD round prep, behavioral polish | `03-patterns/lld.md`, `04-behavioral/behavioral.md`, `03-patterns/system-design.md` |
@@ -48,7 +48,8 @@
 | What | Link |
 |------|------|
 | **Repo flowcharts (visual map)** | `FLOWCHARTS.md` |
-| **Mind map (30-min DS/algo revision)** | `MINDMAP.md` |
+| **Mind map (30-min DS/algo revision)** | [`MINDMAP.md`](../MINDMAP.md) |
+| **Practice problem bank** | [`coding/`](../coding/) — see GitBook sidebar **Practice Problem Bank** |
 | Pattern recognition master | `03-patterns/patterns-master.md` |
 | Interview cheatsheet | `03-patterns/interview-cheatsheet.md` |
 | Google revision guide | `03-patterns/GOOGLE_INTERVIEW_REVISION.md` |
