@@ -28,18 +28,39 @@ difficulty: mixed
 ### Daily Temperatures
 
 > [!example] Problem
-> Given a list of daily temperatures, return an array where `result[i]` is the number of days until a warmer temperature. If no warmer day exists, `result[i] = 0`.
+> Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.
+> 
+> **Example 1:**
+> ```
+> Input: temperatures = [73,74,75,71,69,72,76,73]
+> Output: [1,1,4,2,1,1,0,0]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: temperatures = [30,40,50,60]
+> Output: [1,1,1,0]
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: temperatures = [30,60,90]
+> Output: [1,1,0]
+> ```
+> 
+> **Constraints:**
+> - 1 <= temperatures.length <= 10^5
+> - 30 <= temperatures[i] <= 100
 
 > [!info] Approach
-> - **WHY:** Brute force checks every future day for each index — O(n²). We need to resolve each index exactly once.
-> - **WHAT:** Monotonic decreasing stack of indices. When a warmer temperature arrives, all cooler pending indices on the stack have found their answer.
-> - **HOW:** Push index `i` onto the stack. When `temps[i] > temps[stack[-1]]`, pop and record `result[popped] = i - popped`. Stack holds indices of temperatures that haven't yet seen a warmer day.
+> Brute force checks every future day for each index — O(n²). We need to resolve each index exactly once. Monotonic decreasing stack of indices. When a warmer temperature arrives, all cooler pending indices on the stack have found their answer. Push index `i` onto the stack. When `temps[i] > temps[stack[-1]]`, pop and record `result[popped] = i - popped`. Stack holds indices of temperatures that haven't yet seen a warmer day.
+
 
 > [!note]- Python Solution
 > ```python
-> def daily_temperatures(temperatures: list[int]) -> list[int]:
+> def daily_temperatures(temperatures):
 >     result = [0] * len(temperatures)
->     stack: list[int] = []  # indices, decreasing temperature order
+>     stack = []  # indices, decreasing temperature order
 >     for i, t in enumerate(temperatures):
 >         while stack and temperatures[stack[-1]] < t:
 >             j = stack.pop()
@@ -59,19 +80,38 @@ difficulty: mixed
 ### Next Greater Element II
 
 > [!example] Problem
-> Given a circular array, find the next greater element for each element. Search wraps around.
+> Given a circular integer array nums (i.e., the next element of nums[nums.length - 1] is nums[0]), return the next greater number for every element in nums.
+> The next greater number of a number x is the first greater number to its traversing-order next in the array, which means you could search circularly to find its next greater number. If it doesn't exist, return -1 for this number.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,2,1]
+> Output: [2,-1,2]
+> Explanation: The first 1's next greater number is 2; 
+> The number 2 can't find next greater number. 
+> The second 1's next greater number needs to search circularly, which is also 2.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,3,4,3]
+> Output: [2,3,4,-1,4]
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^4
+> - -10^9 <= nums[i] <= 10^9
 
 > [!info] Approach
-> - **WHY:** Circular array means element `0` might be the next greater for element `n-1`. Simulate by doubling the array conceptually.
-> - **WHAT:** Same decreasing monotonic stack. Iterate `0..2n-1` with `i % n` for index. Only push on the first pass (`i < n`) to avoid duplicate results.
-> - **HOW:** Initialize `result = [-1] * n`. Iterate `2n` times. Use `i % n` to access elements. Only push `i % n` when `i < n`.
+> Circular array means element `0` might be the next greater for element `n-1`. Simulate by doubling the array conceptually. Same decreasing monotonic stack. Iterate `0..2n-1` with `i % n` for index. Only push on the first pass (`i < n`) to avoid duplicate results. Initialize `result = [-1] * n`. Iterate `2n` times. Use `i % n` to access elements. Only push `i % n` when `i < n`.
+
 
 > [!note]- Python Solution
 > ```python
-> def next_greater_elements(nums: list[int]) -> list[int]:
+> def next_greater_elements(nums):
 >     n = len(nums)
 >     result = [-1] * n
->     stack: list[int] = []
+>     stack = []
 >     for i in range(2 * n):
 >         while stack and nums[stack[-1]] < nums[i % n]:
 >             result[stack.pop()] = nums[i % n]
@@ -91,20 +131,44 @@ difficulty: mixed
 ### Online Stock Span
 
 > [!example] Problem
-> For each new day's price, compute the stock span — the maximum number of consecutive days (including today) with price ≤ today's price.
+> Design an algorithm that collects daily price quotes for some stock and returns the span of that stock's price for the current day.
+> The span of the stock's price in one day is the maximum number of consecutive days (starting from that day and going backward) for which the stock price was less than or equal to the price of that day.
+> Implement the StockSpanner class
+> 
+> **Example 1:**
+> ```
+> Input
+> ["StockSpanner", "next", "next", "next", "next", "next", "next", "next"]
+> [[], [100], [80], [60], [70], [60], [75], [85]]
+> Output
+> [null, 1, 1, 1, 2, 1, 4, 6]
+> 
+> Explanation
+> StockSpanner stockSpanner = new StockSpanner();
+> stockSpanner.next(100); // return 1
+> stockSpanner.next(80);  // return 1
+> stockSpanner.next(60);  // return 1
+> stockSpanner.next(70);  // return 2
+> stockSpanner.next(60);  // return 1
+> stockSpanner.next(75);  // return 4, because the last 4 prices (including today's price of 75) were less than or equal to today's price.
+> stockSpanner.next(85);  // return 6
+> ```
+> 
+> **Constraints:**
+> - 1 <= price <= 10^5
+> - At most 10^4 calls will be made to next.
 
 > [!info] Approach
-> - **WHY:** Naively scan backwards each day — O(n) per call, O(n²) total. We need O(1) amortized.
-> - **WHAT:** Monotonic decreasing stack of `(price, span)` tuples. When a new price arrives that's >= stack top, we absorb the top's span (it was already contiguous and all ≤ current).
-> - **HOW:** Pop all `(p, s)` where `p <= current_price`, accumulating their spans. Push `(current_price, accumulated_span + 1)`.
+> Naively scan backwards each day — O(n) per call, O(n²) total. We need O(1) amortized. Monotonic decreasing stack of `(price, span)` tuples. When a new price arrives that's >= stack top, we absorb the top's span (it was already contiguous and all ≤ current). Pop all `(p, s)` where `p <= current_price`, accumulating their spans. Push `(current_price, accumulated_span + 1)`.
+
 
 > [!note]- Python Solution
 > ```python
 > class StockSpanner:
->     def __init__(self) -> None:
+>     def __init__(self):
 >         self._stack: list[tuple[int, int]] = []  # (price, span)
->
->     def next(self, price: int) -> int:
+> >
+>     def next(self, price):
 >         span = 1
 >         while self._stack and self._stack[-1][0] <= price:
 >             span += self._stack.pop()[1]
@@ -123,29 +187,48 @@ difficulty: mixed
 ### Sum of Subarray Minimums
 
 > [!example] Problem
-> Find the sum of `min(subarray)` for all contiguous subarrays of `arr`. Answer modulo 1e9+7.
+> Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+> 
+> **Example 1:**
+> ```
+> Input: arr = [3,1,2,4]
+> Output: 17
+> Explanation: 
+> Subarrays are [3], [1], [2], [4], [3,1], [1,2], [2,4], [3,1,2], [1,2,4], [3,1,2,4]. 
+> Minimums are 3, 1, 2, 4, 1, 1, 2, 1, 1, 1.
+> Sum is 17.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: arr = [11,81,94,43,3]
+> Output: 444
+> ```
+> 
+> **Constraints:**
+> - 1 <= arr.length <= 3 * 10^4
+> - 1 <= arr[i] <= 3 * 10^4
 
 > [!info] Approach
-> - **WHY:** Enumerate all subarrays — O(n²) or O(n³). Instead, find for each element how many subarrays it is the minimum of.
-> - **WHAT:** For element `arr[i]`, find `left[i]` = number of elements to the left where `arr[i]` is the minimum (stopping at the previous smaller), and `right[i]` = same for right. Contribution = `arr[i] * left[i] * right[i]`.
-> - **HOW:** Use monotonic increasing stack twice (or once with careful boundary tracking). Left boundary: strict `<` comparison; right boundary: `<=` to avoid double-counting equal elements.
+> Enumerate all subarrays — O(n²) or O(n³). Instead, find for each element how many subarrays it is the minimum of. For element `arr[i]`, find `left[i]` = number of elements to the left where `arr[i]` is the minimum (stopping at the previous smaller), and `right[i]` = same for right. Contribution = `arr[i] * left[i] * right[i]`. Use monotonic increasing stack twice (or once with careful boundary tracking). Left boundary: strict `<` comparison; right boundary: `<=` to avoid double-counting equal elements.
+
 
 > [!note]- Python Solution
 > ```python
-> def sum_subarray_mins(arr: list[int]) -> int:
+> def sum_subarray_mins(arr):
 >     MOD = 10**9 + 7
 >     n = len(arr)
 >     left = [0] * n   # distance to previous smaller element
 >     right = [0] * n  # distance to next smaller or equal element
->     stack: list[int] = []
->
+>     stack = []
+> >
 >     # Left: how far left can arr[i] be the minimum (strict <)
 >     for i in range(n):
 >         while stack and arr[stack[-1]] >= arr[i]:
 >             stack.pop()
 >         left[i] = i - stack[-1] if stack else i + 1
 >         stack.append(i)
->
+> >
 >     stack.clear()
 >     # Right: how far right can arr[i] be the minimum (<=, strict to avoid double count)
 >     for i in range(n - 1, -1, -1):
@@ -153,7 +236,7 @@ difficulty: mixed
 >             stack.pop()
 >         right[i] = stack[-1] - i if stack else n - i
 >         stack.append(i)
->
+> >
 >     return sum(arr[i] * left[i] * right[i] for i in range(n)) % MOD
 > ```
 
@@ -170,17 +253,34 @@ difficulty: mixed
 ### Largest Rectangle in Histogram
 
 > [!example] Problem
-> Given heights of bars in a histogram, find the area of the largest rectangle that fits within the histogram.
+> Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+> 
+> **Example 1:**
+> ```
+> Input: heights = [2,1,5,6,2,3]
+> Output: 10
+> Explanation: The above is a histogram where width of each bar is 1.
+> The largest rectangle is shown in the red area, which has an area = 10 units.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: heights = [2,4]
+> Output: 4
+> ```
+> 
+> **Constraints:**
+> - 1 <= heights.length <= 10^5
+> - 0 <= heights[i] <= 10^4
 
 > [!info] Approach
-> - **WHY:** For each bar as the height of the rectangle, the width extends left and right until a shorter bar is hit. Finding those boundaries naively is O(n) each.
-> - **WHAT:** Monotonic increasing stack of indices. When a bar shorter than the stack top arrives, the top bar's right boundary has been found — compute area.
-> - **HOW:** Append sentinel `0` to flush the stack. On pop, `height = heights[popped]`. Width = `i - stack[-1] - 1` if stack is non-empty, else `i` (the bar is the global minimum so far).
+> For each bar as the height of the rectangle, the width extends left and right until a shorter bar is hit. Finding those boundaries naively is O(n) each. Monotonic increasing stack of indices. When a bar shorter than the stack top arrives, the top bar's right boundary has been found — compute area. Append sentinel `0` to flush the stack. On pop, `height = heights[popped]`. Width = `i - stack[-1] - 1` if stack is non-empty, else `i` (the bar is the global minimum so far).
+
 
 > [!note]- Python Solution
 > ```python
-> def largest_rectangle_area(heights: list[int]) -> int:
->     stack: list[int] = []  # increasing stack of indices
+> def largest_rectangle_area(heights):
+>     stack = []  # increasing stack of indices
 >     best = 0
 >     for i, h in enumerate(heights + [0]):  # sentinel 0 flushes stack
 >         while stack and heights[stack[-1]] > h:
@@ -202,16 +302,40 @@ difficulty: mixed
 ### Maximal Rectangle
 
 > [!example] Problem
-> Given a binary matrix of '0's and '1's, find the largest rectangle containing only '1's.
+> Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
+> 
+> **Example 1:**
+> ```
+> Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+> Output: 6
+> Explanation: The maximal rectangle is shown in the above picture.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: matrix = [["0"]]
+> Output: 0
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: matrix = [["1"]]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - rows == matrix.length
+> - cols == matrix[i].length
+> - 1 <= row, cols <= 200
+> - matrix[i][j] is '0' or '1'.
 
 > [!info] Approach
-> - **WHY:** Reduce to Largest Rectangle in Histogram. Each row defines a histogram where `heights[j]` = consecutive '1's above and including `matrix[row][j]`.
-> - **WHAT:** Maintain a `heights` array. For each row, update heights (reset to 0 on '0', increment on '1'). Apply the histogram algorithm per row.
-> - **HOW:** `heights[j] = heights[j] + 1 if matrix[row][j] == '1' else 0`. Run `largest_rectangle_area(heights)` for each row.
+> Reduce to Largest Rectangle in Histogram. Each row defines a histogram where `heights[j]` = consecutive '1's above and including `matrix[row][j]`. Maintain a `heights` array. For each row, update heights (reset to 0 on '0', increment on '1'). Apply the histogram algorithm per row. `heights[j] = heights[j] + 1 if matrix[row][j] == '1' else 0`. Run `largest_rectangle_area(heights)` for each row.
+
 
 > [!note]- Python Solution
 > ```python
-> def maximal_rectangle(matrix: list[list[str]]) -> int:
+> def maximal_rectangle(matrix):
 >     if not matrix or not matrix[0]:
 >         return 0
 >     cols = len(matrix[0])
@@ -222,9 +346,9 @@ difficulty: mixed
 >             heights[j] = heights[j] + 1 if row[j] == '1' else 0
 >         best = max(best, largest_rectangle_area(heights))
 >     return best
->
-> def largest_rectangle_area(heights: list[int]) -> int:
->     stack: list[int] = []
+> >
+> def largest_rectangle_area(heights):
+>     stack = []
 >     best = 0
 >     for i, h in enumerate(heights + [0]):
 >         while stack and heights[stack[-1]] > h:
@@ -246,17 +370,34 @@ difficulty: mixed
 ### Trapping Rain Water (stack approach)
 
 > [!example] Problem
-> Given an elevation map, compute how much water it can trap after raining.
+> Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+> 
+> **Example 1:**
+> ```
+> Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+> Output: 6
+> Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: height = [4,2,0,3,2,5]
+> Output: 9
+> ```
+> 
+> **Constraints:**
+> - n == height.length
+> - 1 <= n <= 2 * 10^4
+> - 0 <= height[i] <= 10^5
 
 > [!info] Approach
-> - **WHY:** Water fills valleys. Each valley is bounded by taller bars on both sides. The stack lets us process valleys as they form.
-> - **WHAT:** Monotonic decreasing stack. When a taller bar arrives, the top of the stack is a valley bottom. Water height = `min(left_bar, current_bar) - valley_bottom_height`. Width = distance between left and current bar minus 1.
-> - **HOW:** Push indices onto a decreasing stack. On pop (taller bar arrived), compute bounded water above the popped bar.
+> Water fills valleys. Each valley is bounded by taller bars on both sides. The stack lets us process valleys as they form. Monotonic decreasing stack. When a taller bar arrives, the top of the stack is a valley bottom. Water height = `min(left_bar, current_bar) - valley_bottom_height`. Width = distance between left and current bar minus 1. Push indices onto a decreasing stack. On pop (taller bar arrived), compute bounded water above the popped bar.
+
 
 > [!note]- Python Solution
 > ```python
-> def trap(height: list[int]) -> int:
->     stack: list[int] = []
+> def trap(height):
+>     stack = []
 >     water = 0
 >     for i, h in enumerate(height):
 >         while stack and height[stack[-1]] < h:
@@ -283,17 +424,51 @@ difficulty: mixed
 ### Valid Parentheses
 
 > [!example] Problem
-> Given a string of `()[]{}`, determine if the brackets are valid (properly nested and matched).
+> Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
+> An input string is valid if
+> 
+> **Example 1:**
+> ```
+> Input: s = "()"
+> Output: true
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "()[]{}"
+> Output: true
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "(]"
+> Output: false
+> ```
+> 
+> **Example 4:**
+> ```
+> Input: s = "([])"
+> Output: true
+> ```
+> 
+> **Example 5:**
+> ```
+> Input: s = "([)]"
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^4
+> - s consists of parentheses only '()[]{}'.
 
 > [!info] Approach
-> - **WHY:** LIFO — the most recently opened bracket must be the next closed.
-> - **WHAT:** Push opening brackets. On each closing bracket, pop the stack and verify it matches.
-> - **HOW:** Map `')' → '('`, etc. If stack is empty when closing bracket arrives, or top doesn't match, return `False`. Valid iff stack is empty at end.
+> LIFO — the most recently opened bracket must be the next closed. Push opening brackets. On each closing bracket, pop the stack and verify it matches. Map `')' → '('`, etc. If stack is empty when closing bracket arrives, or top doesn't match, return `False`. Valid iff stack is empty at end.
+
 
 > [!note]- Python Solution
 > ```python
-> def is_valid(s: str) -> bool:
->     stack: list[str] = []
+> def is_valid(s):
+>     stack = []
 >     pairs = {')': '(', ']': '[', '}': '{'}
 >     for ch in s:
 >         if ch in '([{':
@@ -316,17 +491,43 @@ difficulty: mixed
 ### Decode String
 
 > [!example] Problem
-> Decode a string encoded as `k[encoded_string]`. E.g., `3[a2[c]]` → `accaccacc`.
+> Given an encoded string, return its decoded string.
+> The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+> You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+> The test cases are generated so that the length of the output will never exceed 105.
+> 
+> **Example 1:**
+> ```
+> Input: s = "3[a]2[bc]"
+> Output: "aaabcbc"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "3[a2[c]]"
+> Output: "accaccacc"
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "2[abc]3[cd]ef"
+> Output: "abcabccdcdcdef"
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 30
+> - s consists of lowercase English letters, digits, and square brackets '[]'.
+> - s is guaranteed to be a valid input.
+> - All the integers in s are in the range [1, 300].
 
 > [!info] Approach
-> - **WHY:** Nesting requires tracking context at each `[`. LIFO matches nested structure.
-> - **WHAT:** Stack stores `(built_string, repeat_count)` pairs. On `[`, push current context and reset. On `]`, pop and expand.
-> - **HOW:** Parse digits to get `k`. On `[`: push `(current_string, k)`, reset both. On `]`: pop `(prev_str, k)`, set `current = prev_str + current * k`. Characters append to `current`.
+> Nesting requires tracking context at each `[`. LIFO matches nested structure. Stack stores `(built_string, repeat_count)` pairs. On `[`, push current context and reset. On `]`, pop and expand. Parse digits to get `k`. On `[`: push `(current_string, k)`, reset both. On `]`: pop `(prev_str, k)`, set `current = prev_str + current * k`. Characters append to `current`.
+
 
 > [!note]- Python Solution
 > ```python
-> def decode_string(s: str) -> str:
->     stack: list[tuple[str, int]] = []
+> def decode_string(s):
+>     stack = []
 >     current = ''
 >     k = 0
 >     for ch in s:
@@ -355,17 +556,36 @@ difficulty: mixed
 ### Remove All Adjacent Duplicates in String
 
 > [!example] Problem
-> Repeatedly remove adjacent duplicate characters until no adjacent duplicates remain.
+> You are given a string s consisting of lowercase English letters. A duplicate removal consists of choosing two adjacent and equal letters and removing them.
+> We repeatedly make duplicate removals on s until we no longer can.
+> Return the final string after all such duplicate removals have been made. It can be proven that the answer is unique.
+> 
+> **Example 1:**
+> ```
+> Input: s = "abbaca"
+> Output: "ca"
+> Explanation: 
+> For example, in "abbaca" we could remove "bb" since the letters are adjacent and equal, and this is the only possible move.  The result of this move is that the string is "aaca", of which only "aa" is possible, so the final string is "ca".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "azxxzy"
+> Output: "ay"
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s consists of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** Removing one pair can create new adjacent duplicates — process must cascade. Stack handles this naturally.
-> - **WHAT:** Push characters. If the new character equals the stack top, pop (they cancel). Otherwise push. Result is remaining stack joined.
-> - **HOW:** Linear scan. Maintain stack. At each character, cancel with top if equal. Analogous to bracket matching.
+> Removing one pair can create new adjacent duplicates — process must cascade. Stack handles this naturally. Push characters. If the new character equals the stack top, pop (they cancel). Otherwise push. Result is remaining stack joined. Linear scan. Maintain stack. At each character, cancel with top if equal. Analogous to bracket matching.
+
 
 > [!note]- Python Solution
 > ```python
-> def remove_duplicates(s: str) -> str:
->     stack: list[str] = []
+> def remove_duplicates(s):
+>     stack = []
 >     for ch in s:
 >         if stack and stack[-1] == ch:
 >             stack.pop()
@@ -385,17 +605,42 @@ difficulty: mixed
 ### Remove K Digits
 
 > [!example] Problem
-> Remove `k` digits from `num` (string) to make the smallest possible number. No leading zeros.
+> Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
+> 
+> **Example 1:**
+> ```
+> Input: num = "1432219", k = 3
+> Output: "1219"
+> Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219 which is the smallest.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: num = "10200", k = 1
+> Output: "200"
+> Explanation: Remove the leading 1 and the number is 200. Note that the output must not contain leading zeroes.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: num = "10", k = 2
+> Output: "0"
+> Explanation: Remove all the digits from the number and it is left with nothing which is 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= k <= num.length <= 10^5
+> - num consists of only digits.
+> - num does not have any leading zeros except for the zero itself.
 
 > [!info] Approach
-> - **WHY:** Greedy — to minimize, remove a digit when the next digit is smaller (it would be more beneficial at that position).
-> - **WHAT:** Monotonic increasing stack. Pop the top when it's larger than the current digit and `k > 0`.
-> - **HOW:** Build the stack left to right. Pop larger elements while `k > 0`. If `k` still > 0 after the loop, trim last `k` digits from the stack (which is already sorted ascending). Strip leading zeros.
+> Greedy — to minimize, remove a digit when the next digit is smaller (it would be more beneficial at that position). Monotonic increasing stack. Pop the top when it's larger than the current digit and `k > 0`. Build the stack left to right. Pop larger elements while `k > 0`. If `k` still > 0 after the loop, trim last `k` digits from the stack (which is already sorted ascending). Strip leading zeros.
+
 
 > [!note]- Python Solution
 > ```python
-> def remove_k_digits(num: str, k: int) -> str:
->     stack: list[str] = []
+> def remove_k_digits(num, k):
+>     stack = []
 >     for d in num:
 >         while k > 0 and stack and stack[-1] > d:
 >             stack.pop()
@@ -420,33 +665,59 @@ difficulty: mixed
 ### Min Stack
 
 > [!example] Problem
-> Design a stack with O(1) `push`, `pop`, `top`, and `get_min`.
+> Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+> Implement the MinStack class:
+> You must implement a solution with O(1) time complexity for each function.
+> 
+> **Example 1:**
+> ```
+> Input
+> ["MinStack","push","push","push","getMin","pop","top","getMin"]
+> [[],[-2],[0],[-3],[],[],[],[]]
+> 
+> Output
+> [null,null,null,null,-3,null,0,-2]
+> 
+> Explanation
+> MinStack minStack = new MinStack();
+> minStack.push(-2);
+> minStack.push(0);
+> minStack.push(-3);
+> minStack.getMin(); // return -3
+> minStack.pop();
+> minStack.top();    // return 0
+> minStack.getMin(); // return -2
+> ```
+> 
+> **Constraints:**
+> - -2^{31} <= val <= 2^{31} - 1
+> - Methods pop, top and getMin operations will always be called on non-empty stacks.
+> - At most 3 * 10^4 calls will be made to push, pop, top, and getMin.
 
 > [!info] Approach
-> - **WHY:** A regular stack loses track of the minimum after pops. We need the minimum at every stack depth.
-> - **WHAT:** Parallel `min_stack` where `min_stack[i]` = minimum of all elements in `stack[0..i]`. Both stacks stay synchronized.
-> - **HOW:** On push, `min_stack` pushes `min(val, min_stack[-1])`. On pop, both stacks pop. `get_min` returns `min_stack[-1]`.
+> A regular stack loses track of the minimum after pops. We need the minimum at every stack depth. Parallel `min_stack` where `min_stack[i]` = minimum of all elements in `stack[0..i]`. Both stacks stay synchronized. On push, `min_stack` pushes `min(val, min_stack[-1])`. On pop, both stacks pop. `get_min` returns `min_stack[-1]`.
+
 
 > [!note]- Python Solution
 > ```python
 > class MinStack:
->     def __init__(self) -> None:
+>     def __init__(self):
 >         self._stack: list[int] = []
 >         self._min_stack: list[int] = []
->
->     def push(self, val: int) -> None:
+> >
+>     def push(self, val):
 >         self._stack.append(val)
 >         current_min = val if not self._min_stack else min(val, self._min_stack[-1])
 >         self._min_stack.append(current_min)
->
->     def pop(self) -> None:
+> >
+>     def pop(self):
 >         self._stack.pop()
 >         self._min_stack.pop()
->
->     def top(self) -> int:
+> >
+>     def top(self):
 >         return self._stack[-1]
->
->     def get_min(self) -> int:
+> >
+>     def get_min(self):
 >         return self._min_stack[-1]
 > ```
 
@@ -461,30 +732,57 @@ difficulty: mixed
 ### Maximum Frequency Stack
 
 > [!example] Problem
-> Design a stack where `pop` returns the most frequently pushed element (ties broken by most recently pushed).
+> Design a stack-like data structure to push elements to the stack and pop the most frequent element from the stack.
+> Implement the FreqStack class
+> 
+> **Example 1:**
+> ```
+> Input
+> ["FreqStack", "push", "push", "push", "push", "push", "push", "pop", "pop", "pop", "pop"]
+> [[], [5], [7], [5], [7], [4], [5], [], [], [], []]
+> Output
+> [null, null, null, null, null, null, null, 5, 7, 5, 4]
+> 
+> Explanation
+> FreqStack freqStack = new FreqStack();
+> freqStack.push(5); // The stack is [5]
+> freqStack.push(7); // The stack is [5,7]
+> freqStack.push(5); // The stack is [5,7,5]
+> freqStack.push(7); // The stack is [5,7,5,7]
+> freqStack.push(4); // The stack is [5,7,5,7,4]
+> freqStack.push(5); // The stack is [5,7,5,7,4,5]
+> freqStack.pop();   // return 5, as 5 is the most frequent. The stack becomes [5,7,5,7,4].
+> freqStack.pop();   // return 7, as 5 and 7 is the most frequent, but 7 is closest to the top. The stack becomes [5,7,5,4].
+> freqStack.pop();   // return 5, as 5 is the most frequent. The stack becomes [5,7,4].
+> freqStack.pop();   // return 4, as 4, 5 and 7 is the most frequent, but 4 is closest to the top. The stack becomes [5,7].
+> ```
+> 
+> **Constraints:**
+> - 0 <= val <= 10^9
+> - At most 2 * 10^4 calls will be made to push and pop.
+> - It is guaranteed that there will be at least one element in the stack before calling pop.
 
 > [!info] Approach
-> - **WHY:** Standard stack gives LIFO; we want frequency-priority with LIFO for ties.
-> - **WHAT:** Two maps: `val → frequency` and `freq → [stack of vals at that frequency]`. Track `max_freq`.
-> - **HOW:** Push: increment `freq[val]`, append `val` to `group[freq[val]]`, update `max_freq`. Pop: take from `group[max_freq]`, decrement `freq[val]`, decrement `max_freq` if the bucket is now empty.
+> Standard stack gives LIFO; we want frequency-priority with LIFO for ties. Two maps: `val → frequency` and `freq → [stack of vals at that frequency]`. Track `max_freq`. Push: increment `freq[val]`, append `val` to `group[freq[val]]`, update `max_freq`. Pop: take from `group[max_freq]`, decrement `freq[val]`, decrement `max_freq` if the bucket is now empty.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
->
+> >
 > class FreqStack:
->     def __init__(self) -> None:
+>     def __init__(self):
 >         self._freq: dict[int, int] = defaultdict(int)
 >         self._group: dict[int, list[int]] = defaultdict(list)
 >         self._max_freq = 0
->
->     def push(self, val: int) -> None:
+> >
+>     def push(self, val):
 >         self._freq[val] += 1
 >         f = self._freq[val]
 >         self._max_freq = max(self._max_freq, f)
 >         self._group[f].append(val)
->
->     def pop(self) -> int:
+> >
+>     def pop(self):
 >         val = self._group[self._max_freq].pop()
 >         self._freq[val] -= 1
 >         if not self._group[self._max_freq]:
@@ -505,37 +803,60 @@ difficulty: mixed
 ### Implement Queue using Stacks
 
 > [!example] Problem
-> Implement a FIFO queue using only two stacks.
+> Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
+> Implement the MyQueue class:
+> Notes
+> 
+> **Example 1:**
+> ```
+> Input
+> ["MyQueue", "push", "push", "peek", "pop", "empty"]
+> [[], [1], [2], [], [], []]
+> Output
+> [null, null, null, 1, 1, false]
+> 
+> Explanation
+> MyQueue myQueue = new MyQueue();
+> myQueue.push(1); // queue is: [1]
+> myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
+> myQueue.peek(); // return 1
+> myQueue.pop(); // return 1, queue is [2]
+> myQueue.empty(); // return false
+> ```
+> 
+> **Constraints:**
+> - 1 <= x <= 9
+> - At most 100 calls will be made to push, pop, peek, and empty.
+> - All the calls to pop and peek are valid.
 
 > [!info] Approach
-> - **WHY:** Stack is LIFO; reversing the stack gives FIFO order. One stack for input, one for output.
-> - **WHAT:** `in_stack` receives all pushes. `out_stack` is lazily populated from `in_stack` when needed. Reversing `in_stack` into `out_stack` makes the oldest element accessible at the top.
-> - **HOW:** `push` appends to `in_stack`. `pop`/`peek`: if `out_stack` is empty, move all of `in_stack` to `out_stack` (reversal). Then operate on `out_stack`. Amortized O(1).
+> Stack is LIFO; reversing the stack gives FIFO order. One stack for input, one for output. `in_stack` receives all pushes. `out_stack` is lazily populated from `in_stack` when needed. Reversing `in_stack` into `out_stack` makes the oldest element accessible at the top. `push` appends to `in_stack`. `pop`/`peek`: if `out_stack` is empty, move all of `in_stack` to `out_stack` (reversal). Then operate on `out_stack`. Amortized O(1).
+
 
 > [!note]- Python Solution
 > ```python
 > class MyQueue:
->     def __init__(self) -> None:
+>     def __init__(self):
 >         self._in: list[int] = []
 >         self._out: list[int] = []
->
->     def push(self, x: int) -> None:
+> >
+>     def push(self, x):
 >         self._in.append(x)
->
->     def _transfer(self) -> None:
+> >
+>     def _transfer(self):
 >         if not self._out:
 >             while self._in:
 >                 self._out.append(self._in.pop())
->
->     def pop(self) -> int:
+> >
+>     def pop(self):
 >         self._transfer()
 >         return self._out.pop()
->
->     def peek(self) -> int:
+> >
+>     def peek(self):
 >         self._transfer()
 >         return self._out[-1]
->
->     def empty(self) -> bool:
+> >
+>     def empty(self):
 >         return not self._in and not self._out
 > ```
 
@@ -550,17 +871,41 @@ difficulty: mixed
 ### Validate Stack Sequences
 
 > [!example] Problem
-> Given `pushed` and `popped` sequences, determine if they could be the result of a valid push/pop sequence on an empty stack.
+> Given two integer arrays pushed and popped each with distinct values, return true if this could have been the result of a sequence of push and pop operations on an initially empty stack, or false otherwise.
+> 
+> **Example 1:**
+> ```
+> Input: pushed = [1,2,3,4,5], popped = [4,5,3,2,1]
+> Output: true
+> Explanation: We might do the following sequence:
+> push(1), push(2), push(3), push(4),
+> pop() -> 4,
+> push(5),
+> pop() -> 5, pop() -> 3, pop() -> 2, pop() -> 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: pushed = [1,2,3,4,5], popped = [4,3,5,1,2]
+> Output: false
+> Explanation: 1 cannot be popped before 2.
+> ```
+> 
+> **Constraints:**
+> - 1 <= pushed.length <= 1000
+> - 0 <= pushed[i] <= 1000
+> - All the elements of pushed are unique.
+> - popped.length == pushed.length
+> - popped is a permutation of pushed.
 
 > [!info] Approach
-> - **WHY:** Simulate the push sequence and greedily pop when the top matches the next expected pop.
-> - **WHAT:** Simulate with an explicit stack. Push elements from `pushed`. After each push, greedily pop while top matches `popped[j]`.
-> - **HOW:** Maintain pointer `j` into `popped`. After pushing `pushed[i]`, pop while `stack and stack[-1] == popped[j]`, incrementing `j`. Valid iff stack is empty at end.
+> Simulate the push sequence and greedily pop when the top matches the next expected pop. Simulate with an explicit stack. Push elements from `pushed`. After each push, greedily pop while top matches `popped[j]`. Maintain pointer `j` into `popped`. After pushing `pushed[i]`, pop while `stack and stack[-1] == popped[j]`, incrementing `j`. Valid iff stack is empty at end.
+
 
 > [!note]- Python Solution
 > ```python
-> def validate_stack_sequences(pushed: list[int], popped: list[int]) -> bool:
->     stack: list[int] = []
+> def validate_stack_sequences(pushed, popped):
+>     stack = []
 >     j = 0
 >     for val in pushed:
 >         stack.append(val)
@@ -583,17 +928,49 @@ difficulty: mixed
 ### Evaluate Reverse Polish Notation
 
 > [!example] Problem
-> Evaluate an expression in Reverse Polish Notation (postfix). Tokens are integers or `+`, `-`, `*`, `/` (truncates toward zero).
+> You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.
+> Evaluate the expression. Return an integer that represents the value of the expression.
+> Note that
+> 
+> **Example 1:**
+> ```
+> Input: tokens = ["2","1","+","3","*"]
+> Output: 9
+> Explanation: ((2 + 1) * 3) = 9
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: tokens = ["4","13","5","/","+"]
+> Output: 6
+> Explanation: (4 + (13 / 5)) = 6
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+> Output: 22
+> Explanation: ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+> = ((10 * (6 / (12 * -11))) + 17) + 5
+> = ((10 * (6 / -132)) + 17) + 5
+> = ((10 * 0) + 17) + 5
+> = (0 + 17) + 5
+> = 17 + 5
+> = 22
+> ```
+> 
+> **Constraints:**
+> - 1 <= tokens.length <= 10^4
+> - tokens[i] is either an operator: "+", "-", "*", or "/", or an integer in the range [-200, 200].
 
 > [!info] Approach
-> - **WHY:** RPN eliminates parentheses — operators apply to the two most recently seen operands. LIFO matches this.
-> - **WHAT:** Operand stack. Push numbers. On operator, pop two operands, apply, push result.
-> - **HOW:** Pop `b` then `a` (order matters for `-` and `/`). Apply operator. Push result. Division truncates toward zero: `int(a / b)` not `a // b` (handles negatives).
+> RPN eliminates parentheses — operators apply to the two most recently seen operands. LIFO matches this. Operand stack. Push numbers. On operator, pop two operands, apply, push result. Pop `b` then `a` (order matters for `-` and `/`). Apply operator. Push result. Division truncates toward zero: `int(a / b)` not `a // b` (handles negatives).
+
 
 > [!note]- Python Solution
 > ```python
-> def eval_rpn(tokens: list[str]) -> int:
->     stack: list[int] = []
+> def eval_rpn(tokens):
+>     stack = []
 >     ops = {'+', '-', '*', '/'}
 >     for token in tokens:
 >         if token in ops:
@@ -618,17 +995,44 @@ difficulty: mixed
 ### Basic Calculator I
 
 > [!example] Problem
-> Evaluate a string expression with `+`, `-`, spaces, and parentheses. No `*` or `/`.
+> Given a string s representing a valid expression, implement a basic calculator to evaluate it, and return the result of the evaluation.
+> Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+> 
+> **Example 1:**
+> ```
+> Input: s = "1 + 1"
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = " 2-1 + 2 "
+> Output: 3
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "(1+(4+5+2)-3)+(6+8)"
+> Output: 23
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 3 * 10^5
+> - s consists of digits, '+', '-', '(', ')', and ' '.
+> - s represents a valid expression.
+> - '+' is not used as a unary operation (i.e., "+1" and "+(2 + 3)" is invalid).
+> - '-' could be used as a unary operation (i.e., "-1" and "-(2 + 3)" is valid).
+> - There will be no two consecutive operators in the input.
+> - Every number and running calculation will fit in a signed 32-bit integer.
 
 > [!info] Approach
-> - **WHY:** Parentheses introduce nested scope. Stack saves the running result and sign when entering a new scope.
-> - **WHAT:** Track `result` and `sign` (+1 or -1). On `(`: push `(result, sign)` and reset. On `)`: pop and combine `sign_before * inner_result + outer_result`.
-> - **HOW:** Parse multi-digit numbers. Accumulate into `result` using current `sign`. Handle `(` and `)` for scope management.
+> Parentheses introduce nested scope. Stack saves the running result and sign when entering a new scope. Track `result` and `sign` (+1 or -1). On `(`: push `(result, sign)` and reset. On `)`: pop and combine `sign_before * inner_result + outer_result`. Parse multi-digit numbers. Accumulate into `result` using current `sign`. Handle `(` and `)` for scope management.
+
 
 > [!note]- Python Solution
 > ```python
-> def calculate_i(s: str) -> int:
->     stack: list[int] = []
+> def calculate_i(s):
+>     stack = []
 >     result = 0
 >     sign = 1
 >     i = 0
@@ -667,17 +1071,44 @@ difficulty: mixed
 ### Basic Calculator II
 
 > [!example] Problem
-> Evaluate a string with `+`, `-`, `*`, `/` and spaces. No parentheses. Division truncates toward zero.
+> Given a string s which represents an expression, evaluate this expression and return its value.
+> The integer division should truncate toward zero.
+> You may assume that the given expression is always valid. All intermediate results will be in the range of [-231, 231 - 1].
+> Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+> 
+> **Example 1:**
+> ```
+> Input: s = "3+2*2"
+> Output: 7
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = " 3/2 "
+> Output: 1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = " 3+5 / 2 "
+> Output: 5
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 3 * 10^5
+> - s consists of integers and operators ('+', '-', '*', '/') separated by some number of spaces.
+> - s represents a valid expression.
+> - All the integers in the expression are non-negative integers in the range [0, 2^{31} - 1].
+> - The answer is guaranteed to fit in a 32-bit integer.
 
 > [!info] Approach
-> - **WHY:** `*` and `/` have higher precedence than `+` and `-`. Process high-precedence operators immediately; defer low-precedence to a final sum.
-> - **WHAT:** Stack of terms to be summed. Track `prev_op`. On `+`/`-`, push `sign * num`. On `*`/`/`, pop top, apply, push result back.
-> - **HOW:** Parse number, apply `prev_op` with stack. Default `prev_op = '+'`. Final answer = sum of stack.
+> `*` and `/` have higher precedence than `+` and `-`. Process high-precedence operators immediately; defer low-precedence to a final sum. Stack of terms to be summed. Track `prev_op`. On `+`/`-`, push `sign * num`. On `*`/`/`, pop top, apply, push result back. Parse number, apply `prev_op` with stack. Default `prev_op = '+'`. Final answer = sum of stack.
+
 
 > [!note]- Python Solution
 > ```python
-> def calculate_ii(s: str) -> int:
->     stack: list[int] = []
+> def calculate_ii(s):
+>     stack = []
 >     prev_op = '+'
 >     num = 0
 >     for i, ch in enumerate(s):
@@ -708,21 +1139,48 @@ difficulty: mixed
 ### Basic Calculator III
 
 > [!example] Problem
-> Evaluate a full expression with `+`, `-`, `*`, `/`, and nested parentheses.
+> Given a string s representing a valid expression, implement a basic calculator to evaluate it, and return the result of the evaluation.
+> Note: You are not allowed to use any built-in function which evaluates strings as mathematical expressions, such as eval().
+> 
+> **Example 1:**
+> ```
+> Input: s = "1 + 1"
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = " 2-1 + 2 "
+> Output: 3
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "(1+(4+5+2)-3)+(6+8)"
+> Output: 23
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 3 * 10^5
+> - s consists of digits, '+', '-', '(', ')', and ' '.
+> - s represents a valid expression.
+> - '+' is not used as a unary operation (i.e., "+1" and "+(2 + 3)" is invalid).
+> - '-' could be used as a unary operation (i.e., "-1" and "-(2 + 3)" is valid).
+> - There will be no two consecutive operators in the input.
+> - Every number and running calculation will fit in a signed 32-bit integer.
 
 > [!info] Approach
-> - **WHY:** Combination of I (parentheses) and II (precedence). Parentheses require scope management; precedence requires deferred addition.
-> - **WHAT:** Recursive approach: when `(` is encountered, recursively evaluate the sub-expression inside until `)`, then continue with the result.
-> - **HOW:** Implement a helper that processes until end or `)`. Inside, use the stack-based approach from Calculator II. On `(`, recurse for the inner expression.
+> Combination of I (parentheses) and II (precedence). Parentheses require scope management; precedence requires deferred addition. Recursive approach: when `(` is encountered, recursively evaluate the sub-expression inside until `)`, then continue with the result. Implement a helper that processes until end or `)`. Inside, use the stack-based approach from Calculator II. On `(`, recurse for the inner expression.
+
 
 > [!note]- Python Solution
 > ```python
-> def calculate_iii(s: str) -> int:
+> def calculate_iii(s):
 >     idx = 0
->
->     def helper() -> int:
+> >
+>     def helper():
 >         nonlocal idx
->         stack: list[int] = []
+>         stack = []
 >         prev_op = '+'
 >         num = 0
 >         while idx < len(s):
@@ -742,7 +1200,7 @@ difficulty: mixed
 >             if ch == ')':
 >                 break
 >         return sum(stack)
->
+> >
 >     return helper()
 > ```
 
@@ -759,18 +1217,67 @@ difficulty: mixed
 ### Exclusive Time of Functions
 
 > [!example] Problem
-> Given logs of function start/end events on a single thread, return the exclusive execution time of each function.
+> On a single-threaded CPU, we execute a program containing n functions. Each function has a unique ID between 0 and n-1.
+> Function calls are stored in a call stack: when a function call starts, its ID is pushed onto the stack, and when a function call ends, its ID is popped off the stack. The function whose ID is at the top of the stack is the current function being executed. Each time a function starts or ends, we write a log with the ID, whether it started or ended, and the timestamp.
+> You are given a list logs, where logs[i] represents the ith log message formatted as a string "{function_id}:{"start" | "end"}:{timestamp}". For example, "0:start:3" means a function call with function ID 0 started at the beginning of timestamp 3, and "1:end:2" means a function call with function ID 1 ended at the end of timestamp 2. Note that a function can be called multiple times, possibly recursively.
+> A function's exclusive time is the sum of execution times for all function calls in the program. For example, if a function is called twice, one call executing for 2 time units and another call executing for 1 time unit, the exclusive time is 2 + 1 = 3.
+> Return the exclusive time of each function in an array, where the value at the ith index represents the exclusive time for the function with ID i.
+> 
+> **Example 1:**
+> ```
+> Input: n = 2, logs = ["0:start:0","1:start:2","1:end:5","0:end:6"]
+> Output: [3,4]
+> Explanation:
+> Function 0 starts at the beginning of time 0, then it executes 2 for units of time and reaches the end of time 1.
+> Function 1 starts at the beginning of time 2, executes for 4 units of time, and ends at the end of time 5.
+> Function 0 resumes execution at the beginning of time 6 and executes for 1 unit of time.
+> So function 0 spends 2 + 1 = 3 units of total time executing, and function 1 spends 4 units of total time executing.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 1, logs = ["0:start:0","0:start:2","0:end:5","0:start:6","0:end:6","0:end:7"]
+> Output: [8]
+> Explanation:
+> Function 0 starts at the beginning of time 0, executes for 2 units of time, and recursively calls itself.
+> Function 0 (recursive call) starts at the beginning of time 2 and executes for 4 units of time.
+> Function 0 (initial call) resumes execution then immediately calls itself again.
+> Function 0 (2nd recursive call) starts at the beginning of time 6 and executes for 1 unit of time.
+> Function 0 (initial call) resumes execution at the beginning of time 7 and executes for 1 unit of time.
+> So function 0 spends 2 + 4 + 1 + 1 = 8 units of total time executing.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: n = 2, logs = ["0:start:0","0:start:2","0:end:5","1:start:6","1:end:6","0:end:7"]
+> Output: [7,1]
+> Explanation:
+> Function 0 starts at the beginning of time 0, executes for 2 units of time, and recursively calls itself.
+> Function 0 (recursive call) starts at the beginning of time 2 and executes for 4 units of time.
+> Function 0 (initial call) resumes execution then immediately calls function 1.
+> Function 1 starts at the beginning of time 6, executes 1 unit of time, and ends at the end of time 6.
+> Function 0 resumes execution at the beginning of time 6 and executes for 2 units of time.
+> So function 0 spends 2 + 4 + 1 = 7 units of total time executing, and function 1 spends 1 unit of total time executing.
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 100
+> - 2 <= logs.length <= 500
+> - 0 <= function_id < n
+> - 0 <= timestamp <= 10^9
+> - No two start events will happen at the same timestamp.
+> - No two end events will happen at the same timestamp.
+> - Each function has an "end" log for each "start" log.
 
 > [!info] Approach
-> - **WHY:** Functions nest (call stack semantics). When a nested function starts, the outer function pauses. When it ends, the outer resumes.
-> - **WHAT:** Explicit stack of `(func_id, start_time)`. On start: push. On end: pop, compute duration. Subtract this duration from the new top (the caller) to avoid double-counting.
-> - **HOW:** Parse each log. On `"start"`: if stack non-empty, add elapsed time to top's exclusive time. Push current. On `"end"`: pop, compute time, add to result. Update `prev_time = end + 1`.
+> Functions nest (call stack semantics). When a nested function starts, the outer function pauses. When it ends, the outer resumes. Explicit stack of `(func_id, start_time)`. On start: push. On end: pop, compute duration. Subtract this duration from the new top (the caller) to avoid double-counting. Parse each log. On `"start"`: if stack non-empty, add elapsed time to top's exclusive time. Push current. On `"end"`: pop, compute time, add to result. Update `prev_time = end + 1`.
+
 
 > [!note]- Python Solution
 > ```python
-> def exclusive_time(n: int, logs: list[str]) -> list[int]:
+> def exclusive_time(n, logs):
 >     result = [0] * n
->     stack: list[int] = []  # stack of function ids
+>     stack = []  # stack of function ids
 >     prev_time = 0
 >     for log in logs:
 >         fid_str, typ, time_str = log.split(':')
@@ -797,17 +1304,64 @@ difficulty: mixed
 ### Simplify Path
 
 > [!example] Problem
-> Simplify an absolute Unix file path (handles `.`, `..`, and multiple slashes).
+> You are given an absolute path for a Unix-style file system, which always begins with a slash '/'. Your task is to transform this absolute path into its simplified canonical path.
+> The rules of a Unix-style file system are as follows:
+> The simplified canonical path should follow these rules:
+> Return the simplified canonical path.
+> 
+> **Example 1:**
+> ```
+> Input: path = "/home/"
+> Output: "/home"
+> Explanation:
+> The trailing slash should be removed.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: path = "/home//foo/"
+> Output: "/home/foo"
+> Explanation:
+> Multiple consecutive slashes are replaced by a single one.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: path = "/home/user/Documents/../Pictures"
+> Output: "/home/user/Pictures"
+> Explanation:
+> A double period ".." refers to the directory up a level (the parent directory).
+> ```
+> 
+> **Example 4:**
+> ```
+> Input: path = "/../"
+> Output: "/"
+> Explanation:
+> Going one level up from the root directory is not possible.
+> ```
+> 
+> **Example 5:**
+> ```
+> Input: path = "/.../a/../b/c/../d/./"
+> Output: "/.../b/d"
+> Explanation:
+> "..." is a valid name for a directory in this problem.
+> ```
+> 
+> **Constraints:**
+> - 1 <= path.length <= 3000
+> - path consists of English letters, digits, period '.', slash '/' or '_'.
+> - path is a valid absolute Unix path.
 
 > [!info] Approach
-> - **WHY:** `..` means go up one directory — pop from the path. `.` and empty tokens are no-ops.
-> - **WHAT:** Stack of directory names. Push valid names. Pop on `..`. Ignore `.` and empty strings.
-> - **HOW:** Split on `/`. For each part: skip empty strings and `.`; pop on `..` (if stack non-empty); push otherwise. Join with `/` and prepend `/`.
+> `..` means go up one directory — pop from the path. `.` and empty tokens are no-ops. Stack of directory names. Push valid names. Pop on `..`. Ignore `.` and empty strings. Split on `/`. For each part: skip empty strings and `.`; pop on `..` (if stack non-empty); push otherwise. Join with `/` and prepend `/`.
+
 
 > [!note]- Python Solution
 > ```python
-> def simplify_path(path: str) -> str:
->     stack: list[str] = []
+> def simplify_path(path):
+>     stack = []
 >     for part in path.split('/'):
 >         if part == '..':
 >             if stack:
@@ -828,17 +1382,64 @@ difficulty: mixed
 ### Baseball Game
 
 > [!example] Problem
-> Given a list of operations, simulate a baseball game scoring: integer = new score, `+` = sum of last two, `D` = double last, `C` = remove last. Return the total score.
+> You are keeping the scores for a baseball game with strange rules. At the beginning of the game, you start with an empty record.
+> You are given a list of strings operations, where operations[i] is the ith operation you must apply to the record and is one of the following:
+> Return the sum of all the scores on the record after applying all the operations.
+> The test cases are generated such that the answer and all intermediate calculations fit in a 32-bit integer and that all operations are valid.
+> 
+> **Example 1:**
+> ```
+> Input: ops = ["5","2","C","D","+"]
+> Output: 30
+> Explanation:
+> "5" - Add 5 to the record, record is now [5].
+> "2" - Add 2 to the record, record is now [5, 2].
+> "C" - Invalidate and remove the previous score, record is now [5].
+> "D" - Add 2 * 5 = 10 to the record, record is now [5, 10].
+> "+" - Add 5 + 10 = 15 to the record, record is now [5, 10, 15].
+> The total sum is 5 + 10 + 15 = 30.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: ops = ["5","-2","4","C","D","9","+","+"]
+> Output: 27
+> Explanation:
+> "5" - Add 5 to the record, record is now [5].
+> "-2" - Add -2 to the record, record is now [5, -2].
+> "4" - Add 4 to the record, record is now [5, -2, 4].
+> "C" - Invalidate and remove the previous score, record is now [5, -2].
+> "D" - Add 2 * -2 = -4 to the record, record is now [5, -2, -4].
+> "9" - Add 9 to the record, record is now [5, -2, -4, 9].
+> "+" - Add -4 + 9 = 5 to the record, record is now [5, -2, -4, 9, 5].
+> "+" - Add 9 + 5 = 14 to the record, record is now [5, -2, -4, 9, 5, 14].
+> The total sum is 5 + -2 + -4 + 9 + 5 + 14 = 27.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: ops = ["1","C"]
+> Output: 0
+> Explanation:
+> "1" - Add 1 to the record, record is now [1].
+> "C" - Invalidate and remove the previous score, record is now [].
+> Since the record is empty, the total sum is 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= operations.length <= 1000
+> - operations[i] is "C", "D", "+", or a string representing an integer in the range [-3 * 10^4, 3 * 10^4].
+> - For operation "+", there will always be at least two previous scores on the record.
+> - For operations "C" and "D", there will always be at least one previous score on the record.
 
 > [!info] Approach
-> - **WHY:** All operations reference the top of the score history — LIFO structure.
-> - **WHAT:** Stack of valid scores. Each operation modifies the stack top.
-> - **HOW:** Parse each op. Integer: push. `+`: push `stack[-1] + stack[-2]`. `D`: push `stack[-1] * 2`. `C`: pop. Sum the stack at the end.
+> All operations reference the top of the score history — LIFO structure. Stack of valid scores. Each operation modifies the stack top. Parse each op. Integer: push. `+`: push `stack[-1] + stack[-2]`. `D`: push `stack[-1] * 2`. `C`: pop. Sum the stack at the end.
+
 
 > [!note]- Python Solution
 > ```python
-> def cal_points(operations: list[str]) -> int:
->     stack: list[int] = []
+> def cal_points(operations):
+>     stack = []
 >     for op in operations:
 >         if op == '+':
 >             stack.append(stack[-1] + stack[-2])
@@ -862,17 +1463,44 @@ difficulty: mixed
 ### Asteroid Collision
 
 > [!example] Problem
-> Asteroids move right (positive) or left (negative). When a right-moving and left-moving asteroid collide, the smaller one explodes; equal-size both explode. Return the final state.
+> We are given an array asteroids of integers representing asteroids in a row. The indices of the asteriod in the array represent their relative position in space.
+> For each asteroid, the absolute value represents its size, and the sign represents its direction (positive meaning right, negative meaning left). Each asteroid moves at the same speed.
+> Find out the state of the asteroids after all collisions. If two asteroids meet, the smaller one will explode. If both are the same size, both will explode. Two asteroids moving in the same direction will never meet.
+> 
+> **Example 1:**
+> ```
+> Input: asteroids = [5,10,-5]
+> Output: [5,10]
+> Explanation: The 10 and -5 collide resulting in 10. The 5 and 10 never collide.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: asteroids = [8,-8]
+> Output: []
+> Explanation: The 8 and -8 collide exploding each other.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: asteroids = [10,2,-5]
+> Output: [10]
+> Explanation: The 2 and -5 collide resulting in -5. The 10 and -5 collide resulting in 10.
+> ```
+> 
+> **Constraints:**
+> - 2 <= asteroids.length <= 10^4
+> - -1000 <= asteroids[i] <= 1000
+> - asteroids[i] != 0
 
 > [!info] Approach
-> - **WHY:** Collisions only happen between a positive (right-moving) on the stack and a new negative (left-moving). Stack of survivors.
-> - **WHAT:** Maintain a stack of surviving asteroids. A collision only occurs when `stack[-1] > 0 and asteroid < 0`.
-> - **HOW:** While collision conditions hold: if top is smaller, pop (top destroyed, current continues); if equal, pop and break (both destroyed); if top is larger, break (current destroyed, don't append). Use `while...else` to append only if current survived.
+> Collisions only happen between a positive (right-moving) on the stack and a new negative (left-moving). Stack of survivors. Maintain a stack of surviving asteroids. A collision only occurs when `stack[-1] > 0 and asteroid < 0`. While collision conditions hold: if top is smaller, pop (top destroyed, current continues); if equal, pop and break (both destroyed); if top is larger, break (current destroyed, don't append). Use `while...else` to append only if current survived.
+
 
 > [!note]- Python Solution
 > ```python
-> def asteroid_collision(asteroids: list[int]) -> list[int]:
->     stack: list[int] = []
+> def asteroid_collision(asteroids):
+>     stack = []
 >     for ast in asteroids:
 >         survived = True
 >         while stack and stack[-1] > 0 and ast < 0:
@@ -903,17 +1531,40 @@ difficulty: mixed
 ### Score of Parentheses (LC 856)
 
 > [!example] Problem
-> A balanced parentheses string has a score: `()` = 1, `AB` = score(A) + score(B), `(A)` = 2 × score(A). Given a valid string, return its score.
+> Given a balanced parentheses string s, return the score of the string.
+> The score of a balanced parentheses string is based on the following rule
+> 
+> **Example 1:**
+> ```
+> Input: s = "()"
+> Output: 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "(())"
+> Output: 2
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "()()"
+> Output: 2
+> ```
+> 
+> **Constraints:**
+> - 2 <= s.length <= 50
+> - s consists of only '(' and ')'.
+> - s is a balanced parentheses string.
 
 > [!info] Approach
-> - **WHY:** Depth determines the multiplier — each level of nesting doubles the score of inner `()`. A stack naturally tracks depth.
-> - **WHAT:** Stack of running scores per depth level. `(` pushes a new scope (0). `)` pops: if the popped value is 0 it was a bare `()` so contribute `2^depth` = `max(2*v, 1)` to the parent; otherwise contribute `2*v`.
-> - **HOW:** Start with `[0]`. On `(`: append 0. On `)`: `v = stack.pop()`; `stack[-1] += max(2*v, 1)`. Return `stack[0]`.
+> Depth determines the multiplier — each level of nesting doubles the score of inner `()`. A stack naturally tracks depth. Stack of running scores per depth level. `(` pushes a new scope (0). `)` pops: if the popped value is 0 it was a bare `()` so contribute `2^depth` = `max(2*v, 1)` to the parent; otherwise contribute `2*v`. Start with `[0]`. On `(`: append 0. On `)`: `v = stack.pop()`; `stack[-1] += max(2*v, 1)`. Return `stack[0]`.
+
 
 > [!note]- Python Solution
 > ```python
-> def score_of_parentheses(s: str) -> int:
->     stack: list[int] = [0]
+> def score_of_parentheses(s):
+>     stack = [0]
 >     for ch in s:
 >         if ch == '(':
 >             stack.append(0)
@@ -934,16 +1585,33 @@ difficulty: mixed
 ### Minimum Add to Make Parentheses Valid (LC 921)
 
 > [!example] Problem
-> Given a string of `(` and `)`, return the minimum number of parentheses to insert to make it valid.
+> A parentheses string is valid if and only if:
+> You are given a parentheses string s. In one move, you can insert a parenthesis at any position of the string.
+> Return the minimum number of moves required to make s valid.
+> 
+> **Example 1:**
+> ```
+> Input: s = "())"
+> Output: 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "((("
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 1000
+> - s[i] is either '(' or ')'.
 
 > [!info] Approach
-> - **WHY:** An unmatched `)` cannot be fixed by future characters — it needs an immediate `(` inserted to its left. Unmatched `(` at the end each need a `)`.
-> - **WHAT:** Track `open` (unmatched `(`) and `close` (unmatched `)`). On `(`, increment `open`. On `)`, if `open > 0` match it (decrement `open`), else increment `close`.
-> - **HOW:** Final answer = `open + close`.
+> An unmatched `)` cannot be fixed by future characters — it needs an immediate `(` inserted to its left. Unmatched `(` at the end each need a `)`. Track `open` (unmatched `(`) and `close` (unmatched `)`). On `(`, increment `open`. On `)`, if `open > 0` match it (decrement `open`), else increment `close`. Final answer = `open + close`.
+
 
 > [!note]- Python Solution
 > ```python
-> def min_add_to_make_valid(s: str) -> int:
+> def min_add_to_make_valid(s):
 >     open_count = 0  # unmatched '('
 >     close_needed = 0  # unmatched ')'
 >     for ch in s:
@@ -968,17 +1636,47 @@ difficulty: mixed
 ### Check if Word is Valid After Substitutions (LC 1003)
 
 > [!example] Problem
-> A valid string is either empty, or formed by inserting `"abc"` anywhere in a valid string. Determine if a given string is valid.
+> Given a string s, determine if it is valid.
+> A string s is valid if, starting with an empty string t = "", you can transform t into s after performing the following operation any number of times:
+> Return true if s is a valid string, otherwise, return false.
+> 
+> **Example 1:**
+> ```
+> Input: s = "aabcbc"
+> Output: true
+> Explanation:
+> "" -> "abc" -> "aabcbc"
+> Thus, "aabcbc" is valid.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "abcabcababcc"
+> Output: true
+> Explanation:
+> "" -> "abc" -> "abcabc" -> "abcabcabc" -> "abcabcababcc"
+> Thus, "abcabcababcc" is valid.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "abccba"
+> Output: false
+> Explanation: It is impossible to get "abccba" using the operation.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 2 * 10^4
+> - s consists of letters 'a', 'b', and 'c'
 
 > [!info] Approach
-> - **WHY:** Every `c` must be preceded by `ab` immediately below it — a nesting structure. Stack validates this pairing.
-> - **WHAT:** Push each character. When the top three characters are `a`, `b`, `c` (in order), pop all three — they form a complete `abc` unit.
-> - **HOW:** After each push check if `stack[-3:] == ['a','b','c']` and pop three. Valid iff stack is empty at end.
+> Every `c` must be preceded by `ab` immediately below it — a nesting structure. Stack validates this pairing. Push each character. When the top three characters are `a`, `b`, `c` (in order), pop all three — they form a complete `abc` unit. After each push check if `stack[-3:] == ['a','b','c']` and pop three. Valid iff stack is empty at end.
+
 
 > [!note]- Python Solution
 > ```python
-> def is_valid(s: str) -> bool:
->     stack: list[str] = []
+> def is_valid(s):
+>     stack = []
 >     for ch in s:
 >         stack.append(ch)
 >         if len(stack) >= 3 and stack[-3] == 'a' and stack[-2] == 'b' and stack[-1] == 'c':
@@ -999,17 +1697,43 @@ difficulty: mixed
 ### 132 Pattern (LC 456)
 
 > [!example] Problem
-> Given an array, determine if there exist indices `i < j < k` such that `nums[i] < nums[k] < nums[j]`.
+> Given an array of n integers nums, a 132 pattern is a subsequence of three integers nums[i], nums[j] and nums[k] such that i < j < k and nums[i] < nums[k] < nums[j].
+> Return true if there is a 132 pattern in nums, otherwise, return false.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,2,3,4]
+> Output: false
+> Explanation: There is no 132 pattern in the sequence.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [3,1,4,2]
+> Output: true
+> Explanation: There is a 132 pattern in the sequence: [1, 4, 2].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [-1,3,2,0]
+> Output: true
+> Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].
+> ```
+> 
+> **Constraints:**
+> - n == nums.length
+> - 1 <= n <= 2 * 10^5
+> - -10^9 <= nums[i] <= 10^9
 
 > [!info] Approach
-> - **WHY:** We need the "3" (nums[j]) to be as large as possible and the "2" (nums[k]) to be just below it — a monotonic stack from the right maintains candidate "2" values.
-> - **WHAT:** Scan right to left. Maintain a decreasing monotonic stack of candidates for nums[j]. Track `third` = the best candidate for nums[k] (largest value popped from the stack so far, meaning it was once a "3" that got beaten by a taller bar).
-> - **HOW:** When `stack[-1] < nums[i]`, pop into `third` (this becomes nums[k]). If `nums[i] < third`, we found nums[i] < nums[k] < nums[j] — return True. Push `nums[i]`.
+> We need the "3" (nums[j]) to be as large as possible and the "2" (nums[k]) to be just below it — a monotonic stack from the right maintains candidate "2" values. Scan right to left. Maintain a decreasing monotonic stack of candidates for nums[j]. Track `third` = the best candidate for nums[k] (largest value popped from the stack so far, meaning it was once a "3" that got beaten by a taller bar). When `stack[-1] < nums[i]`, pop into `third` (this becomes nums[k]). If `nums[i] < third`, we found nums[i] < nums[k] < nums[j] — return True. Push `nums[i]`.
+
 
 > [!note]- Python Solution
 > ```python
-> def find132pattern(nums: list[int]) -> bool:
->     stack: list[int] = []
+> def find132pattern(nums):
+>     stack = []
 >     third = float('-inf')  # best candidate for nums[k] (the "2")
 >     for num in reversed(nums):
 >         if num < third:
@@ -1031,18 +1755,51 @@ difficulty: mixed
 ### Car Fleet (LC 853)
 
 > [!example] Problem
-> N cars head to the same destination `target`. Each car has a position and speed. A faster car that catches a slower one forms a fleet and travels at the slower car's speed. Return the number of fleets that arrive.
+> There are n cars at given miles away from the starting mile 0, traveling to reach the mile target.
+> You are given two integer arrays position and speed, both of length n, where position[i] is the starting mile of the ith car and speed[i] is the speed of the ith car in miles per hour.
+> A car cannot pass another car, but it can catch up and then travel next to it at the speed of the slower car.
+> A car fleet is a car or cars driving next to each other. The speed of the car fleet is the minimum speed of any car in the fleet.
+> If a car catches up to a car fleet at the mile target, it will still be considered as part of the car fleet.
+> Return the number of car fleets that will arrive at the destination.
+> 
+> **Example 1:**
+> ```
+> Input: target = 12, position = [10,8,0,5,3], speed = [2,4,1,1,3]
+> Output: 3
+> Explanation:
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: target = 10, position = [3], speed = [3]
+> Output: 1
+> Explanation:
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: target = 100, position = [0,2,4], speed = [4,2,1]
+> Output: 1
+> Explanation:
+> ```
+> 
+> **Constraints:**
+> - n == position.length == speed.length
+> - 1 <= n <= 10^5
+> - 0 < target <= 10^6
+> - 0 <= position[i] < target
+> - All the values of position are unique.
+> - 0 < speed[i] <= 10^6
 
 > [!info] Approach
-> - **WHY:** Cars closer to the target are ahead. A car behind can only join the fleet ahead if it arrives no later. A stack of arrival times tracks fleets.
-> - **WHAT:** Sort by position descending (closest to target first). Compute each car's arrival time `(target - pos) / speed`. A car merges into the fleet ahead if its time ≤ the current stack top (it catches up). Otherwise it starts a new fleet.
-> - **HOW:** Iterate sorted arrival times. Push if `> stack[-1]` (or stack empty). Stack size = number of fleets.
+> Cars closer to the target are ahead. A car behind can only join the fleet ahead if it arrives no later. A stack of arrival times tracks fleets. Sort by position descending (closest to target first). Compute each car's arrival time `(target - pos) / speed`. A car merges into the fleet ahead if its time ≤ the current stack top (it catches up). Otherwise it starts a new fleet. Iterate sorted arrival times. Push if `> stack[-1]` (or stack empty). Stack size = number of fleets.
+
 
 > [!note]- Python Solution
 > ```python
-> def car_fleet(target: int, position: list[int], speed: list[int]) -> int:
+> def car_fleet(target, position, speed):
 >     pairs = sorted(zip(position, speed), reverse=True)
->     stack: list[float] = []
+>     stack = []
 >     for pos, spd in pairs:
 >         time = (target - pos) / spd
 >         if not stack or time > stack[-1]:
@@ -1062,19 +1819,37 @@ difficulty: mixed
 ### Maximum Width Ramp (LC 962)
 
 > [!example] Problem
-> A ramp is a pair `(i, j)` with `i < j` and `nums[i] <= nums[j]`. Find the maximum width `j - i`.
+> A ramp in an integer array nums is a pair (i, j) for which i < j and nums[i] <= nums[j]. The width of such a ramp is j - i.
+> Given an integer array nums, return the maximum width of a ramp in nums. If there is no ramp in nums, return 0.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [6,0,8,2,1,5]
+> Output: 4
+> Explanation: The maximum width ramp is achieved at (i, j) = (1, 5): nums[1] = 0 and nums[5] = 5.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [9,8,1,0,1,9,4,0,4,1]
+> Output: 7
+> Explanation: The maximum width ramp is achieved at (i, j) = (2, 9): nums[2] = 1 and nums[9] = 1.
+> ```
+> 
+> **Constraints:**
+> - 2 <= nums.length <= 5 * 10^4
+> - 0 <= nums[i] <= 5 * 10^4
 
 > [!info] Approach
-> - **WHY:** We want the leftmost possible `i` and rightmost possible `j`. Build a decreasing stack of candidate left endpoints, then scan right to left for `j`.
-> - **WHAT:** Pre-process a monotonically decreasing stack of indices from left to right (only push if strictly smaller than all previous — these are the only viable left anchors). Then scan from right to left: for each `j`, pop stack indices while `nums[stack[-1]] <= nums[j]`, recording max `j - i`.
-> - **HOW:** Build decreasing stack in one pass. Reverse scan: greedily pop all valid left endpoints.
+> We want the leftmost possible `i` and rightmost possible `j`. Build a decreasing stack of candidate left endpoints, then scan right to left for `j`. Pre-process a monotonically decreasing stack of indices from left to right (only push if strictly smaller than all previous — these are the only viable left anchors). Then scan from right to left: for each `j`, pop stack indices while `nums[stack[-1]] <= nums[j]`, recording max `j - i`. Build decreasing stack in one pass. Reverse scan: greedily pop all valid left endpoints.
+
 
 > [!note]- Python Solution
 > ```python
-> def max_width_ramp(nums: list[int]) -> int:
+> def max_width_ramp(nums):
 >     n = len(nums)
 >     # Build decreasing stack of candidate left indices
->     stack: list[int] = []
+>     stack = []
 >     for i in range(n):
 >         if not stack or nums[i] < nums[stack[-1]]:
 >             stack.append(i)
@@ -1097,19 +1872,45 @@ difficulty: mixed
 ### Number of Visible People in a Queue (LC 1944)
 
 > [!example] Problem
-> People stand in a queue. Person `i` can see person `j` (j > i) if all people between them are shorter than both `heights[i]` and `heights[j]`. Return the count of visible people for each person.
+> There are n people standing in a queue, and they numbered from 0 to n - 1 in left to right order. You are given an array heights of distinct integers where heights[i] represents the height of the ith person.
+> A person can see another person to their right in the queue if everybody in between is shorter than both of them. More formally, the ith person can see the jth person if i  max(heights[i+1], heights[i+2], ..., heights[j-1]).
+> Return an array answer of length n where answer[i] is the number of people the ith person can see to their right in the queue.
+> 
+> **Example 1:**
+> ```
+> Input: heights = [10,6,8,5,11,9]
+> Output: [3,1,2,1,1,0]
+> Explanation:
+> Person 0 can see person 1, 2, and 4.
+> Person 1 can see person 2.
+> Person 2 can see person 3 and 4.
+> Person 3 can see person 4.
+> Person 4 can see person 5.
+> Person 5 can see no one since nobody is to the right of them.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: heights = [5,1,2,3,10]
+> Output: [4,1,1,1,0]
+> ```
+> 
+> **Constraints:**
+> - n == heights.length
+> - 1 <= n <= 10^5
+> - 1 <= heights[i] <= 10^5
+> - All the values of heights are unique.
 
 > [!info] Approach
-> - **WHY:** A taller person blocks all shorter ones behind them. Scan right to left maintaining a decreasing monotonic stack of heights not yet blocked.
-> - **WHAT:** For person `i`, count how many people they see = number of people popped from the stack (each shorter person directly in front until someone taller) + 1 if the stack is non-empty after popping (the first person taller than `i`).
-> - **HOW:** Process right to left. For each person, pop from the decreasing stack while top < current height, incrementing count. Add 1 if stack non-empty (blocked by a taller person). Push current height.
+> A taller person blocks all shorter ones behind them. Scan right to left maintaining a decreasing monotonic stack of heights not yet blocked. For person `i`, count how many people they see = number of people popped from the stack (each shorter person directly in front until someone taller) + 1 if the stack is non-empty after popping (the first person taller than `i`). Process right to left. For each person, pop from the decreasing stack while top < current height, incrementing count. Add 1 if stack non-empty (blocked by a taller person). Push current height.
+
 
 > [!note]- Python Solution
 > ```python
-> def can_see_persons_count(heights: list[int]) -> list[int]:
+> def can_see_persons_count(heights):
 >     n = len(heights)
 >     result = [0] * n
->     stack: list[int] = []  # decreasing stack of heights
+>     stack = []  # decreasing stack of heights
 >     for i in range(n - 1, -1, -1):
 >         count = 0
 >         while stack and stack[-1] < heights[i]:
@@ -1133,17 +1934,61 @@ difficulty: mixed
 ### Buildings With an Ocean View (LC 1762)
 
 > [!example] Problem
-> Buildings face the ocean to the right. A building has an ocean view if all buildings to its right are shorter. Return indices of buildings with an ocean view, in increasing order.
+> There are `n` buildings in a line. You are given an integer array `heights` of size `n` that represents the heights of the buildings in the line.
+> 
+> The ocean is to the right of the buildings. A building has an ocean view if the building can see the ocean without obstructions. Formally, a building has an ocean view if all the buildings to its right have a **smaller** height.
+> 
+> Return a list of indices **(0-indexed)** of buildings that have an ocean view, sorted in increasing order.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** heights = [4,2,3,1]
+> **Output:** [0,2,3]
+> **Explanation:** Building 1 (0-indexed) does not have an ocean view because building 2 is taller.
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** heights = [4,3,2,1]
+> **Output:** [0,1,2,3]
+> **Explanation:** All the buildings have an ocean view.
+> 
+> ```
+> 
+> Example 3:
+> 
+> ```
+> 
+> **Input:** heights = [1,3,2,4]
+> **Output:** [3]
+> **Explanation:** Only building 3 has an ocean view.
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= heights.length <= 10^5`
+> 	
+> - `1 <= heights[i] <= 10^9`
 
 > [!info] Approach
-> - **WHY:** Scan left to right: a building loses its ocean view if a taller building appears to its right. Maintain a decreasing monotonic stack — only the "visible" candidates remain.
-> - **WHAT:** Monotonic decreasing stack of indices. Pop any building shorter than the current one (it lost its view). Push current.
-> - **HOW:** Iterate left to right. While `stack and heights[stack[-1]] <= heights[i]`: pop. Push `i`. Stack contains all indices with ocean views in order.
+> Scan left to right: a building loses its ocean view if a taller building appears to its right. Maintain a decreasing monotonic stack — only the "visible" candidates remain. Monotonic decreasing stack of indices. Pop any building shorter than the current one (it lost its view). Push current. Iterate left to right. While `stack and heights[stack[-1]] <= heights[i]`: pop. Push `i`. Stack contains all indices with ocean views in order.
+
 
 > [!note]- Python Solution
 > ```python
-> def find_buildings(heights: list[int]) -> list[int]:
->     stack: list[int] = []
+> def find_buildings(heights):
+>     stack = []
 >     for i, h in enumerate(heights):
 >         while stack and heights[stack[-1]] <= h:
 >             stack.pop()
@@ -1164,20 +2009,41 @@ difficulty: mixed
 ### Flatten Binary Tree to Linked List (LC 114 — iterative)
 
 > [!example] Problem
-> Flatten a binary tree to a linked list in-place (preorder: root → left → right), using the `right` pointer as next. Do it iteratively.
+> Given the root of a binary tree, flatten the tree into a "linked list"
+> 
+> **Example 1:**
+> ```
+> Input: root = [1,2,5,3,4,null,6]
+> Output: [1,null,2,null,3,null,4,null,5,null,6]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: root = []
+> Output: []
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: root = [0]
+> Output: [0]
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the tree is in the range [0, 2000].
+> - -100 <= Node.val <= 100
 
 > [!info] Approach
-> - **WHY:** Recursive flatten risks call-stack overflow on skewed trees. Iterative with an explicit stack gives O(h) space.
-> - **WHAT:** Preorder traversal with a stack. Process root, push right child then left child (so left is processed first). After visiting each node, redirect its `right` to the next preorder node, set `left = None`.
-> - **HOW:** Push root. While stack: pop node, if node.right exists push it, if node.left exists push it. Set `node.right = stack[-1] if stack else None`, `node.left = None`.
+> Recursive flatten risks call-stack overflow on skewed trees. Iterative with an explicit stack gives O(h) space. Preorder traversal with a stack. Process root, push right child then left child (so left is processed first). After visiting each node, redirect its `right` to the next preorder node, set `left = None`. Push root. While stack: pop node, if node.right exists push it, if node.left exists push it. Set `node.right = stack[-1] if stack else None`, `node.left = None`.
+
 
 > [!note]- Python Solution
 > ```python
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
 >         self.val = val; self.left = left; self.right = right
->
-> def flatten(root: TreeNode | None) -> None:
+> >
+> def flatten(root):
 >     if not root:
 >         return
 >     stack = [root]
@@ -1202,19 +2068,45 @@ difficulty: mixed
 ### Path Sum II (LC 113 — iterative DFS)
 
 > [!example] Problem
-> Find all root-to-leaf paths in a binary tree where the sum of node values equals `target`. Return all such paths.
+> Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. Each path should be returned as a list of the node values, not node references.
+> A root-to-leaf path is a path starting from the root and ending at any leaf node. A leaf is a node with no children.
+> 
+> **Example 1:**
+> ```
+> Input: root = [5,4,8,11,null,13,4,7,2,null,null,5,1], targetSum = 22
+> Output: [[5,4,11,2],[5,8,4,5]]
+> Explanation: There are two paths whose sum equals targetSum:
+> 5 + 4 + 11 + 2 = 22
+> 5 + 8 + 4 + 5 = 22
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: root = [1,2,3], targetSum = 5
+> Output: []
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: root = [1,2], targetSum = 0
+> Output: []
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the tree is in the range [0, 5000].
+> - -1000 <= Node.val <= 1000
+> - -1000 <= targetSum <= 1000
 
 > [!info] Approach
-> - **WHY:** Recursive DFS is natural but risks stack overflow. An iterative DFS with an explicit stack carrying path state mirrors the recursion exactly.
-> - **WHAT:** Stack of `(node, remaining_sum, path)` tuples. When a leaf is reached with `remaining == 0`, record the path.
-> - **HOW:** Push `(root, target, [])`. On each pop: if leaf and remaining == 0, add copy of path to results. Push right child, then left child (left processed first) with updated remaining and path.
+> Recursive DFS is natural but risks stack overflow. An iterative DFS with an explicit stack carrying path state mirrors the recursion exactly. Stack of `(node, remaining_sum, path)` tuples. When a leaf is reached with `remaining == 0`, record the path. Push `(root, target, [])`. On each pop: if leaf and remaining == 0, add copy of path to results. Push right child, then left child (left processed first) with updated remaining and path.
+
 
 > [!note]- Python Solution
 > ```python
-> def path_sum(root: TreeNode | None, target_sum: int) -> list[list[int]]:
+> def path_sum(root, target_sum):
 >     if not root:
 >         return []
->     results: list[list[int]] = []
+>     results = []
 >     stack = [(root, target_sum, [])]
 >     while stack:
 >         node, remaining, path = stack.pop()
@@ -1245,16 +2137,43 @@ difficulty: mixed
 ### Next Greater Element I
 
 > [!example] Problem
-> For each element in `nums1`, find the first greater element to its right in `nums2`.
+> The next greater element of some element x in an array is the first greater element that is to the right of x in the same array.
+> You are given two distinct 0-indexed integer arrays nums1 and nums2, where nums1 is a subset of nums2.
+> For each 0 <= i < nums1.length, find the index j such that nums1[i] == nums2[j] and determine the next greater element of nums2[j] in nums2. If there is no next greater element, then the answer for this query is -1.
+> Return an array ans of length nums1.length such that ans[i] is the next greater element as described above.
+> 
+> **Example 1:**
+> ```
+> Input: nums1 = [4,1,2], nums2 = [1,3,4,2]
+> Output: [-1,3,-1]
+> Explanation: The next greater element for each value of nums1 is as follows:
+> - 4 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+> - 1 is underlined in nums2 = [1,3,4,2]. The next greater element is 3.
+> - 2 is underlined in nums2 = [1,3,4,2]. There is no next greater element, so the answer is -1.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums1 = [2,4], nums2 = [1,2,3,4]
+> Output: [3,-1]
+> Explanation: The next greater element for each value of nums1 is as follows:
+> - 2 is underlined in nums2 = [1,2,3,4]. The next greater element is 3.
+> - 4 is underlined in nums2 = [1,2,3,4]. There is no next greater element, so the answer is -1.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums1.length <= nums2.length <= 1000
+> - 0 <= nums1[i], nums2[i] <= 10^4
+> - All integers in nums1 and nums2 are unique.
+> - All the integers of nums1 also appear in nums2.
 
 > [!info] Approach
-> - **WHY:** We need the next greater element for many values, so we preprocess `nums2` with a monotonic stack to avoid repeated scans.
-> - **WHAT:** Scan `nums2` once with a decreasing stack. When a larger value arrives, it resolves all smaller values on the stack.
-> - **HOW:** Store a map `value -> next greater value` and then answer each query from `nums1` in O(1).
+> We need the next greater element for many values, so we preprocess `nums2` with a monotonic stack to avoid repeated scans. Scan `nums2` once with a decreasing stack. When a larger value arrives, it resolves all smaller values on the stack. Store a map `value -> next greater value` and then answer each query from `nums1` in O(1).
+
 
 > [!note]- Python Solution
 > ```python
-> def next_greater_element(nums1: list[int], nums2: list[int]) -> list[int]:
+> def next_greater_element(nums1, nums2):
 >     stack = []
 >     nxt = {}
 >     for x in nums2:
@@ -1277,16 +2196,35 @@ difficulty: mixed
 ### Sum of Subarray Minimums (LC 907)
 
 > [!example] Problem
-> Given an array, find the sum of `min(subarray)` for every contiguous subarray. Return the answer modulo 10^9 + 7.
+> Given an array of integers arr, find the sum of min(b), where b ranges over every (contiguous) subarray of arr. Since the answer may be large, return the answer modulo 109 + 7.
+> 
+> **Example 1:**
+> ```
+> Input: arr = [3,1,2,4]
+> Output: 17
+> Explanation: 
+> Subarrays are [3], [1], [2], [4], [3,1], [1,2], [2,4], [3,1,2], [1,2,4], [3,1,2,4]. 
+> Minimums are 3, 1, 2, 4, 1, 1, 2, 1, 1, 1.
+> Sum is 17.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: arr = [11,81,94,43,3]
+> Output: 444
+> ```
+> 
+> **Constraints:**
+> - 1 <= arr.length <= 3 * 10^4
+> - 1 <= arr[i] <= 3 * 10^4
 
 > [!info] Approach
-> - **WHY:** Brute force is O(n²). For each element, we need to know how many subarrays it is the minimum of. That equals `(elements to the left before a smaller value + 1) * (elements to the right before a smaller or equal value + 1)`.
-> - **WHAT:** Use a monotonic increasing stack to find, for each index, its "previous less element" (PLE) and "next less or equal element" (NLE). The contribution of `nums[i]` is `nums[i] * left_count * right_count`.
-> - **HOW:** In one pass, use the stack to track unresolved indices. When `nums[i]` is smaller than the stack top, pop and compute the contribution of the popped element with `i` as its right boundary. Left boundary comes from the new stack top (or -1 if empty).
+> Brute force is O(n²). For each element, we need to know how many subarrays it is the minimum of. That equals `(elements to the left before a smaller value + 1) * (elements to the right before a smaller or equal value + 1)`. Use a monotonic increasing stack to find, for each index, its "previous less element" (PLE) and "next less or equal element" (NLE). The contribution of `nums[i]` is `nums[i] * left_count * right_count`. In one pass, use the stack to track unresolved indices. When `nums[i]` is smaller than the stack top, pop and compute the contribution of the popped element with `i` as its right boundary. Left boundary comes from the new stack top (or -1 if empty).
+
 
 > [!note]- Python Solution
 > ```python
-> def sum_subarray_mins(arr: list[int]) -> int:
+> def sum_subarray_mins(arr):
 >     MOD = 10 ** 9 + 7
 >     total = 0
 >     stack = []   # indices, increasing by arr value
@@ -1313,16 +2251,42 @@ difficulty: mixed
 ### 132 Pattern (LC 456)
 
 > [!example] Problem
-> Given an array, return `True` if there exist indices `i < j < k` such that `nums[i] < nums[k] < nums[j]` (a "132 pattern").
+> Given an array of n integers nums, a 132 pattern is a subsequence of three integers nums[i], nums[j] and nums[k] such that i < j < k and nums[i] < nums[k] < nums[j].
+> Return true if there is a 132 pattern in nums, otherwise, return false.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,2,3,4]
+> Output: false
+> Explanation: There is no 132 pattern in the sequence.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [3,1,4,2]
+> Output: true
+> Explanation: There is a 132 pattern in the sequence: [1, 4, 2].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [-1,3,2,0]
+> Output: true
+> Explanation: There are three 132 patterns in the sequence: [-1, 3, 2], [-1, 3, 0] and [-1, 2, 0].
+> ```
+> 
+> **Constraints:**
+> - n == nums.length
+> - 1 <= n <= 2 * 10^5
+> - -10^9 <= nums[i] <= 10^9
 
 > [!info] Approach
-> - **WHY:** Brute force is O(n³). The key observation: if we scan right to left, we can track the best candidate for the "3" (the middle-largest value) using a stack, and maintain the current maximum "2" (the `k` value) seen so far.
-> - **WHAT:** Scan right to left. Maintain a decreasing stack. Whenever we pop a value from the stack (because the current element is larger), that popped value becomes our best candidate for `nums[k]` (the "2" in 132). If the current element is less than this candidate, we found the pattern.
-> - **HOW:** `third = -inf`. For each element right to left: if `num < third`, return True. While stack and `stack[-1] < num`, set `third = stack.pop()`. Push `num`.
+> Brute force is O(n³). The key observation: if we scan right to left, we can track the best candidate for the "3" (the middle-largest value) using a stack, and maintain the current maximum "2" (the `k` value) seen so far. Scan right to left. Maintain a decreasing stack. Whenever we pop a value from the stack (because the current element is larger), that popped value becomes our best candidate for `nums[k]` (the "2" in 132). If the current element is less than this candidate, we found the pattern. `third = -inf`. For each element right to left: if `num < third`, return True. While stack and `stack[-1] < num`, set `third = stack.pop()`. Push `num`.
+
 
 > [!note]- Python Solution
 > ```python
-> def find132pattern(nums: list[int]) -> bool:
+> def find132pattern(nums):
 >     stack = []
 >     third = float('-inf')   # best candidate for the "2" in 132
 >     for num in reversed(nums):
@@ -1346,16 +2310,60 @@ difficulty: mixed
 ### Buildings With an Ocean View (LC 1762)
 
 > [!example] Problem
-> Given an array where `heights[i]` is the height of building `i`, a building has an ocean view if all buildings to its right are shorter. Return the indices (in increasing order) of buildings with an ocean view.
+> There are `n` buildings in a line. You are given an integer array `heights` of size `n` that represents the heights of the buildings in the line.
+> 
+> The ocean is to the right of the buildings. A building has an ocean view if the building can see the ocean without obstructions. Formally, a building has an ocean view if all the buildings to its right have a **smaller** height.
+> 
+> Return a list of indices **(0-indexed)** of buildings that have an ocean view, sorted in increasing order.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** heights = [4,2,3,1]
+> **Output:** [0,2,3]
+> **Explanation:** Building 1 (0-indexed) does not have an ocean view because building 2 is taller.
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** heights = [4,3,2,1]
+> **Output:** [0,1,2,3]
+> **Explanation:** All the buildings have an ocean view.
+> 
+> ```
+> 
+> Example 3:
+> 
+> ```
+> 
+> **Input:** heights = [1,3,2,4]
+> **Output:** [3]
+> **Explanation:** Only building 3 has an ocean view.
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= heights.length <= 10^5`
+> 	
+> - `1 <= heights[i] <= 10^9`
 
 > [!info] Approach
-> - **WHY:** A building has an ocean view iff it is taller than all buildings to its right. Scanning right to left with a running maximum tells us this in one pass.
-> - **WHAT:** Scan from right to left, tracking the maximum height seen so far. If the current building is strictly taller than the running max, it has an ocean view.
-> - **HOW:** Walk right to left. If `heights[i] > max_right`, append `i` to results and update `max_right`. Reverse the results before returning (indices must be in ascending order).
+> A building has an ocean view iff it is taller than all buildings to its right. Scanning right to left with a running maximum tells us this in one pass. Scan from right to left, tracking the maximum height seen so far. If the current building is strictly taller than the running max, it has an ocean view. Walk right to left. If `heights[i] > max_right`, append `i` to results and update `max_right`. Reverse the results before returning (indices must be in ascending order).
+
 
 > [!note]- Python Solution
 > ```python
-> def find_buildings(heights: list[int]) -> list[int]:
+> def find_buildings(heights):
 >     max_right = 0
 >     result = []
 >     for i in range(len(heights) - 1, -1, -1):

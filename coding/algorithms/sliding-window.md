@@ -18,20 +18,42 @@ difficulty: mixed
 ### Find All Anagrams in a String (LC 438)
 
 > [!example] Problem
-> Given string `s` and pattern `p`, find all start indices in `s` where an anagram of `p` begins.
+> Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
+> 
+> **Example 1:**
+> ```
+> Input: s = "cbaebabacd", p = "abc"
+> Output: [0,6]
+> Explanation:
+> The substring with start index = 0 is "cba", which is an anagram of "abc".
+> The substring with start index = 6 is "bac", which is an anagram of "abc".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "abab", p = "ab"
+> Output: [0,1,2]
+> Explanation:
+> The substring with start index = 0 is "ab", which is an anagram of "ab".
+> The substring with start index = 1 is "ba", which is an anagram of "ab".
+> The substring with start index = 2 is "ab", which is an anagram of "ab".
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length, p.length <= 3 * 10^4
+> - s and p consist of lowercase English letters.
 
 > [!info] Approach
-> - WHY: An anagram is a permutation — same character frequencies, different order. Fixed window of size `len(p)`.
-> - WHAT: Maintain a frequency diff between window and `need`. Track how many characters are "satisfied" with a `matches` counter — avoids O(26) dict comparison each step.
-> - HOW: On adding `s[right]`: if freq reaches exactly `need[c]` → `matches += 1`. On removing `s[left]`: if freq drops below `need[c]` → `matches -= 1`. When `matches == len(need)` → anagram found.
+> An anagram is a permutation — same character frequencies, different order. Fixed window of size `len(p)`. Maintain a frequency diff between window and `need`. Track how many characters are "satisfied" with a `matches` counter — avoids O(26) dict comparison each step. On adding `s[right]`: if freq reaches exactly `need[c]` → `matches += 1`. On removing `s[left]`: if freq drops below `need[c]` → `matches -= 1`. When `matches == len(need)` → anagram found.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
 > 
-> def find_anagrams(s: str, p: str) -> list[int]:
+> def find_anagrams(s, p):
 >     need = Counter(p)
->     window: dict[str, int] = {}
+>     window = {}
 >     matches = 0
 >     required = len(need)
 >     result = []
@@ -68,16 +90,34 @@ difficulty: mixed
 ### Maximum Average Subarray I (LC 643)
 
 > [!example] Problem
-> Find a contiguous subarray of length exactly `k` with the maximum average. Return the average.
+> You are given an integer array nums consisting of n elements, and an integer k.
+> Find a contiguous subarray whose length is equal to k that has the maximum average value and return this value. Any answer with a calculation error less than 10-5 will be accepted.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,12,-5,-6,50,3], k = 4
+> Output: 12.75000
+> Explanation: Maximum average is (12 - 5 - 6 + 50) / 4 = 51 / 4 = 12.75
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5], k = 1
+> Output: 5.00000
+> ```
+> 
+> **Constraints:**
+> - n == nums.length
+> - 1 <= k <= n <= 10^5
+> - -10^4 <= nums[i] <= 10^4
 
 > [!info] Approach
-> - WHY: Maximizing average is equivalent to maximizing sum (k is fixed). Fixed-size sliding window on sum.
-> - WHAT: Build initial window sum for first `k` elements. Slide: add `nums[i]`, remove `nums[i-k]`, update max.
-> - HOW: Trivial incremental sum — no auxiliary data structure needed.
+> Maximizing average is equivalent to maximizing sum (k is fixed). Fixed-size sliding window on sum. Build initial window sum for first `k` elements. Slide: add `nums[i]`, remove `nums[i-k]`, update max. Trivial incremental sum — no auxiliary data structure needed.
+
 
 > [!note]- Python Solution
 > ```python
-> def find_max_average(nums: list[int], k: int) -> float:
+> def find_max_average(nums, k):
 >     window_sum = sum(nums[:k])
 >     best = window_sum
 >     for i in range(k, len(nums)):
@@ -97,22 +137,39 @@ difficulty: mixed
 ### Permutation in String (LC 567)
 
 > [!example] Problem
-> Return True if any permutation of `s1` appears as a contiguous substring of `s2`.
+> Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
+> In other words, return true if one of s1's permutations is the substring of s2.
+> 
+> **Example 1:**
+> ```
+> Input: s1 = "ab", s2 = "eidbaooo"
+> Output: true
+> Explanation: s2 contains one permutation of s1 ("ba").
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s1 = "ab", s2 = "eidboaoo"
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 1 <= s1.length, s2.length <= 10^4
+> - s1 and s2 consist of lowercase English letters.
 
 > [!info] Approach
-> - WHY: A permutation has the same character frequencies. Fixed window of size `len(s1)` with frequency matching.
-> - WHAT: Same match-counter technique as Find All Anagrams — identical logic, just return True/False.
-> - HOW: When `matches == required` at any valid window position → return True.
+> A permutation has the same character frequencies. Fixed window of size `len(s1)` with frequency matching. Same match-counter technique as Find All Anagrams — identical logic, just return True/False. When `matches == required` at any valid window position → return True.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
 > 
-> def check_inclusion(s1: str, s2: str) -> bool:
+> def check_inclusion(s1, s2):
 >     if len(s1) > len(s2):
 >         return False
 >     need = Counter(s1)
->     window: dict[str, int] = {}
+>     window = {}
 >     matches = 0
 >     required = len(need)
 >     k = len(s1)
@@ -155,17 +212,42 @@ difficulty: mixed
 ### Longest Substring Without Repeating Characters (LC 3)
 
 > [!example] Problem
-> Find the length of the longest substring with all unique characters.
+> Given a string s, find the length of the longest substring without duplicate characters.
+> 
+> **Example 1:**
+> ```
+> Input: s = "abcabcbb"
+> Output: 3
+> Explanation: The answer is "abc", with the length of 3.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "bbbbb"
+> Output: 1
+> Explanation: The answer is "b", with the length of 1.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "pwwkew"
+> Output: 3
+> Explanation: The answer is "wke", with the length of 3.
+> Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+> ```
+> 
+> **Constraints:**
+> - 0 <= s.length <= 5 * 10^4
+> - s consists of English letters, digits, symbols and spaces.
 
 > [!info] Approach
-> - WHY: At most 0 duplicate characters per window. Expanding right adds a character; if it duplicates, shrink left past the previous occurrence.
-> - WHAT: Track last-seen index of each character. On duplicate: `left = last_seen[c] + 1` (jump, not step-by-step).
-> - HOW: Only jump `left` if `last_seen[c] >= left` (character might be outside current window — stale).
+> At most 0 duplicate characters per window. Expanding right adds a character; if it duplicates, shrink left past the previous occurrence. Track last-seen index of each character. On duplicate: `left = last_seen[c] + 1` (jump, not step-by-step). Only jump `left` if `last_seen[c] >= left` (character might be outside current window — stale).
+
 
 > [!note]- Python Solution
 > ```python
-> def length_of_longest_substring(s: str) -> int:
->     last_seen: dict[str, int] = {}
+> def length_of_longest_substring(s):
+>     last_seen = {}
 >     left = 0
 >     best = 0
 >     for right, c in enumerate(s):
@@ -187,19 +269,40 @@ difficulty: mixed
 ### Longest Repeating Character Replacement (LC 424)
 
 > [!example] Problem
-> String of uppercase letters. Replace at most `k` characters. Find the longest substring with all same characters after replacements.
+> You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
+> Return the length of the longest substring containing the same letter you can get after performing the above operations.
+> 
+> **Example 1:**
+> ```
+> Input: s = "ABAB", k = 2
+> Output: 4
+> Explanation: Replace the two 'A's with two 'B's or vice versa.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "AABABBA", k = 1
+> Output: 4
+> Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
+> The substring "BBBB" has the longest repeating letters, which is 4.
+> There may exists other ways to achieve this answer too.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s consists of only uppercase English letters.
+> - 0 <= k <= s.length
 
 > [!info] Approach
-> - WHY: In a window of length `L`, we need `L - max_count <= k` (replace all non-max-frequency characters). Expand while valid; shrink otherwise.
-> - WHAT: Track `max_count` — the frequency of the most common character in the window. When `(window_size - max_count) > k` → shrink.
-> - HOW: Key insight: `max_count` never needs to decrease (we only care about the *best* window seen so far). When we shrink, `max_count` stays the same, and the window stays the same size or shrinks — we're looking for a *longer* window.
+> In a window of length `L`, we need `L - max_count <= k` (replace all non-max-frequency characters). Expand while valid; shrink otherwise. Track `max_count` — the frequency of the most common character in the window. When `(window_size - max_count) > k` → shrink. Key insight: `max_count` never needs to decrease (we only care about the *best* window seen so far). When we shrink, `max_count` stays the same, and the window stays the same size or shrinks — we're looking for a *longer* window.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def character_replacement(s: str, k: int) -> int:
->     freq: dict[str, int] = defaultdict(int)
+> def character_replacement(s, k):
+>     freq = defaultdict(int)
 >     max_count = 0
 >     left = 0
 >     best = 0
@@ -227,19 +330,47 @@ difficulty: mixed
 ### Fruits Into Baskets (At Most 2 Distinct) (LC 904)
 
 > [!example] Problem
-> Array of fruit types. Two baskets, each holds one type. Pick from a contiguous subarray (one basket per type). Maximize fruits picked.
+> You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces.
+> You want to collect as much fruit as possible. However, the owner has some strict rules that you must follow:
+> Given the integer array fruits, return the maximum number of fruits you can pick.
+> 
+> **Example 1:**
+> ```
+> Input: fruits = [1,2,1]
+> Output: 3
+> Explanation: We can pick from all 3 trees.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: fruits = [0,1,2,2]
+> Output: 3
+> Explanation: We can pick from trees [1,2,2].
+> If we had started at the first tree, we would only pick from trees [0,1].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: fruits = [1,2,3,2,2]
+> Output: 4
+> Explanation: We can pick from trees [2,3,2,2].
+> If we had started at the first tree, we would only pick from trees [1,2].
+> ```
+> 
+> **Constraints:**
+> - 1 <= fruits.length <= 10^5
+> - 0 <= fruits[i] < fruits.length
 
 > [!info] Approach
-> - WHY: Longest subarray with at most 2 distinct values. Direct application of at-most-K window.
-> - WHAT: Frequency map. While `len(freq) > 2` → shrink left: decrement `freq[s[left]]`; delete key if 0.
-> - HOW: Window length `right - left + 1` after shrinking is the candidate answer.
+> Longest subarray with at most 2 distinct values. Direct application of at-most-K window. Frequency map. While `len(freq) > 2` → shrink left: decrement `freq[s[left]]`; delete key if 0. Window length `right - left + 1` after shrinking is the candidate answer.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def total_fruit(fruits: list[int]) -> int:
->     freq: dict[int, int] = defaultdict(int)
+> def total_fruit(fruits):
+>     freq = defaultdict(int)
 >     left = 0
 >     best = 0
 > 
@@ -266,19 +397,48 @@ difficulty: mixed
 ### Longest Substring with At Most K Distinct Characters (LC 340)
 
 > [!example] Problem
-> Find the longest substring with at most `k` distinct characters.
+> Given a string `s` and an integer `k`, return *the length of the longest **substring** of* `s` *that contains at most* `k` ***distinct** characters*.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** s = "eceba", k = 2
+> **Output:** 3
+> **Explanation:** The substring is "ece" with length 3.
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** s = "aa", k = 1
+> **Output:** 2
+> **Explanation:** The substring is "aa" with length 2.
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= s.length <= 5 * 10^4`
+> 	
+> - `0 <= k <= 50`
 
 > [!info] Approach
-> - WHY: General form of the "at most K distinct" pattern. Shrink window when distinct count exceeds k.
-> - WHAT: Frequency map. While `len(freq) > k` → shrink left. Window length is candidate answer.
-> - HOW: Remove key from freq map when its count reaches 0 to keep `len(freq)` accurate.
+> General form of the "at most K distinct" pattern. Shrink window when distinct count exceeds k. Frequency map. While `len(freq) > k` → shrink left. Window length is candidate answer. Remove key from freq map when its count reaches 0 to keep `len(freq)` accurate.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def length_of_longest_substring_k_distinct(s: str, k: int) -> int:
->     freq: dict[str, int] = defaultdict(int)
+> def length_of_longest_substring_k_distinct(s, k):
+>     freq = defaultdict(int)
 >     left = 0
 >     best = 0
 > 
@@ -312,20 +472,39 @@ difficulty: mixed
 ### Subarrays with K Different Integers (LC 992)
 
 > [!example] Problem
-> Count subarrays containing exactly `k` different integers.
+> Given an integer array nums and an integer k, return the number of good subarrays of nums.
+> A good array is an array where the number of different integers in that array is exactly k.
+> A subarray is a contiguous part of an array.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,2,1,2,3], k = 2
+> Output: 7
+> Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,1,3,4], k = 3
+> Output: 3
+> Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 2 * 10^4
+> - 1 <= nums[i], k <= nums.length
 
 > [!info] Approach
-> - WHY: The "exactly k" constraint is not monotone for a window — adding elements can go over or under. Reframe as difference of two at-most problems.
-> - WHAT: `at_most(k)` counts subarrays with ≤ k distinct values. Use a window where every valid `[left, right]` contributes `right - left + 1` subarrays (all subarrays ending at `right`).
-> - HOW: `count(exactly k) = at_most(k) - at_most(k-1)`.
+> The "exactly k" constraint is not monotone for a window — adding elements can go over or under. Reframe as difference of two at-most problems. `at_most(k)` counts subarrays with ≤ k distinct values. Use a window where every valid `[left, right]` contributes `right - left + 1` subarrays (all subarrays ending at `right`). `count(exactly k) = at_most(k) - at_most(k-1)`.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def subarrays_with_k_distinct(nums: list[int], k: int) -> int:
->     def at_most(k: int) -> int:
->         freq: dict[int, int] = defaultdict(int)
+> def subarrays_with_k_distinct(nums, k):
+>     def at_most(k):
+>         freq = defaultdict(int)
 >         left = count = 0
 >         for right, n in enumerate(nums):
 >             freq[n] += 1
@@ -351,17 +530,42 @@ difficulty: mixed
 ### Count Number of Nice Subarrays (LC 1248)
 
 > [!example] Problem
-> Array of integers. A subarray is "nice" if it contains exactly `k` odd numbers. Count nice subarrays.
+> Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
+> Return the number of nice sub-arrays.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,2,1,1], k = 3
+> Output: 2
+> Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [2,4,6], k = 1
+> Output: 0
+> Explanation: There are no odd numbers in the array.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+> Output: 16
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 50000
+> - 1 <= nums[i] <= 10^5
+> - 1 <= k <= nums.length
 
 > [!info] Approach
-> - WHY: Remap: odd → 1, even → 0. Problem becomes: count subarrays with sum exactly k. Same `at_most(k) - at_most(k-1)` trick applies.
-> - WHAT: `at_most(k)` counts subarrays with at most k odd numbers. Sum of `right - left + 1` across valid windows.
-> - HOW: Window is valid when count of odds ≤ k. Shrink when count > k.
+> Remap: odd → 1, even → 0. Problem becomes: count subarrays with sum exactly k. Same `at_most(k) - at_most(k-1)` trick applies. `at_most(k)` counts subarrays with at most k odd numbers. Sum of `right - left + 1` across valid windows. Window is valid when count of odds ≤ k. Shrink when count > k.
+
 
 > [!note]- Python Solution
 > ```python
-> def number_of_subarrays(nums: list[int], k: int) -> int:
->     def at_most(k: int) -> int:
+> def number_of_subarrays(nums, k):
+>     def at_most(k):
 >         left = count = odds = 0
 >         for right in range(len(nums)):
 >             if nums[right] % 2 == 1:
@@ -394,16 +598,39 @@ difficulty: mixed
 ### Minimum Size Subarray Sum (LC 209)
 
 > [!example] Problem
-> Array of positive integers. Find the minimal length of a contiguous subarray with sum ≥ `target`. Return 0 if none.
+> Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
+> 
+> **Example 1:**
+> ```
+> Input: target = 7, nums = [2,3,1,2,4,3]
+> Output: 2
+> Explanation: The subarray [4,3] has the minimal length under the problem constraint.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: target = 4, nums = [1,4,4]
+> Output: 1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: target = 11, nums = [1,1,1,1,1,1,1,1]
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - 1 <= target <= 10^9
+> - 1 <= nums.length <= 10^5
+> - 1 <= nums[i] <= 10^4
 
 > [!info] Approach
-> - WHY: Positive integers mean adding elements always increases sum, removing always decreases. Window constraint is monotone → shrink while valid.
-> - WHAT: Expand right; once sum ≥ target, shrink left while still valid. Record minimum length at each valid state.
-> - HOW: Inner while loop shrinks and records — the answer is updated at the tightest valid window for each right.
+> Positive integers mean adding elements always increases sum, removing always decreases. Window constraint is monotone → shrink while valid. Expand right; once sum ≥ target, shrink left while still valid. Record minimum length at each valid state. Inner while loop shrinks and records — the answer is updated at the tightest valid window for each right.
+
 
 > [!note]- Python Solution
 > ```python
-> def min_subarray_len(target: int, nums: list[int]) -> int:
+> def min_subarray_len(target, nums):
 >     left = 0
 >     window_sum = 0
 >     best = float('inf')
@@ -429,18 +656,46 @@ difficulty: mixed
 ### Minimum Window Substring (LC 76)
 
 > [!example] Problem
-> Given strings `s` and `t`, find the minimum window in `s` that contains all characters of `t` (including duplicates). Return "" if none.
+> Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
+> The testcases will be generated such that the answer is unique.
+> 
+> **Example 1:**
+> ```
+> Input: s = "ADOBECODEBANC", t = "ABC"
+> Output: "BANC"
+> Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "a", t = "a"
+> Output: "a"
+> Explanation: The entire string s is the minimum window.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "a", t = "aa"
+> Output: ""
+> Explanation: Both 'a's from t must be included in the window.
+> Since the largest window of s only has one 'a', return empty string.
+> ```
+> 
+> **Constraints:**
+> - m == s.length
+> - n == t.length
+> - 1 <= m, n <= 10^5
+> - s and t consist of uppercase and lowercase English letters.
 
 > [!info] Approach
-> - WHY: Need to cover all characters of `t`. Use a `missing` counter — total characters still needed. Once 0 → window is valid → shrink.
-> - WHAT: Expand right: if `need[c] > 0` before decrement, `missing -= 1`. Shrink while `missing == 0`: advance left past non-required characters (those with `need[s[left]] < 0`), record window, then remove `s[left]` from window.
-> - HOW: `need` can go negative (excess characters) — only decrement `missing` when `need[c]` was positive (character was still required).
+> Need to cover all characters of `t`. Use a `missing` counter — total characters still needed. Once 0 → window is valid → shrink. Expand right: if `need[c] > 0` before decrement, `missing -= 1`. Shrink while `missing == 0`: advance left past non-required characters (those with `need[s[left]] < 0`), record window, then remove `s[left]` from window. `need` can go negative (excess characters) — only decrement `missing` when `need[c]` was positive (character was still required).
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
 > 
-> def min_window(s: str, t: str) -> str:
+> def min_window(s, t):
 >     need = Counter(t)
 >     missing = len(t)    # total characters still needed
 >     best_start = best_len = 0
@@ -487,18 +742,44 @@ difficulty: mixed
 ### Sliding Window Maximum (LC 239)
 
 > [!example] Problem
-> Array of integers, window size `k`. Return max of each window as it slides.
+> You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
+> Return the max sliding window.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
+> Output: [3,3,5,5,6,7]
+> Explanation: 
+> Window position                Max
+> ---------------               -----
+> [1  3  -1] -3  5  3  6  7       3
+>  1 [3  -1  -3] 5  3  6  7       3
+>  1  3 [-1  -3  5] 3  6  7       5
+>  1  3  -1 [-3  5  3] 6  7       5
+>  1  3  -1  -3 [5  3  6] 7       6
+>  1  3  -1  -3  5 [3  6  7]      7
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1], k = 1
+> Output: [1]
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - -10^4 <= nums[i] <= 10^4
+> - 1 <= k <= nums.length
 
 > [!info] Approach
-> - WHY: Recomputing max per window is O(nk). A deque maintaining a decreasing sequence of indices gives O(1) max lookup.
-> - WHAT: Deque stores indices in decreasing order of their values. Front = index of max for current window.
-> - HOW: Before adding `i`: (1) pop front if it's outside window `[i-k+1, i]`; (2) pop back while `nums[deque[-1]] <= nums[i]` (smaller elements can never be max while `i` is in window). Append `i`. Record `nums[deque[0]]` once `i >= k-1`.
+> Recomputing max per window is O(nk). A deque maintaining a decreasing sequence of indices gives O(1) max lookup. Deque stores indices in decreasing order of their values. Front = index of max for current window. Before adding `i`: (1) pop front if it's outside window `[i-k+1, i]`; (2) pop back while `nums[deque[-1]] <= nums[i]` (smaller elements can never be max while `i` is in window). Append `i`. Record `nums[deque[0]]` once `i >= k-1`.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def max_sliding_window(nums: list[int], k: int) -> list[int]:
+> def max_sliding_window(nums, k):
 >     dq: deque[int] = deque()  # stores indices; front = max of current window
 >     result = []
 > 
@@ -530,15 +811,14 @@ difficulty: mixed
 > Array of integers, window size `k`. Return min of each window as it slides.
 
 > [!info] Approach
-> - WHY: Symmetric to sliding window maximum. Monotonic increasing deque where front = current min.
-> - WHAT: Deque stores indices in increasing order of their values. Pop back while `nums[deque[-1]] >= val` (larger elements evicted — they can never be min while `val` is in window).
-> - HOW: Only change from max version: reverse comparison `nums[dq[-1]] > val` (use `>=` to maintain strictly increasing, or `>` for non-strictly).
+> Symmetric to sliding window maximum. Monotonic increasing deque where front = current min. Deque stores indices in increasing order of their values. Pop back while `nums[deque[-1]] >= val` (larger elements evicted — they can never be min while `val` is in window). Only change from max version: reverse comparison `nums[dq[-1]] > val` (use `>=` to maintain strictly increasing, or `>` for non-strictly).
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def min_sliding_window(nums: list[int], k: int) -> list[int]:
+> def min_sliding_window(nums, k):
 >     dq: deque[int] = deque()  # stores indices; front = min of current window
 >     result = []
 > 
@@ -572,16 +852,35 @@ difficulty: mixed
 ### Number of Sub-arrays of Size K and Average ≥ Threshold (LC 1343)
 
 > [!example] Problem
-> Given integer array `arr` and integers `k` and `threshold`, return the count of subarrays of size exactly `k` whose average is ≥ `threshold`.
+> Given an array of integers arr and two integers k and threshold, return the number of sub-arrays of size k and average greater than or equal to threshold.
+> 
+> **Example 1:**
+> ```
+> Input: arr = [2,2,2,2,5,5,5,8], k = 3, threshold = 4
+> Output: 3
+> Explanation: Sub-arrays [2,5,5],[5,5,5] and [5,5,8] have averages 4, 5 and 6 respectively. All other sub-arrays of size 3 have averages less than 4 (the threshold).
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: arr = [11,13,17,23,29,31,7,5,2,3], k = 3, threshold = 5
+> Output: 6
+> Explanation: The first 6 sub-arrays of size 3 have averages greater than 5. Note that averages are not integers.
+> ```
+> 
+> **Constraints:**
+> - 1 <= arr.length <= 10^5
+> - 1 <= arr[i] <= 10^4
+> - 1 <= k <= arr.length
+> - 0 <= threshold <= 10^4
 
 > [!info] Approach
-> - WHY: Fixed window of size `k`; average ≥ threshold ↔ sum ≥ k * threshold. Avoids float division per window.
-> - WHAT: Maintain a sliding sum over every window of length `k`. Count windows where sum ≥ `k * threshold`.
-> - HOW: Seed with sum of first `k` elements. Slide: add `arr[i]`, subtract `arr[i-k]`, check threshold.
+> Fixed window of size `k`; average ≥ threshold ↔ sum ≥ k * threshold. Avoids float division per window. Maintain a sliding sum over every window of length `k`. Count windows where sum ≥ `k * threshold`. Seed with sum of first `k` elements. Slide: add `arr[i]`, subtract `arr[i-k]`, check threshold.
+
 
 > [!note]- Python Solution
 > ```python
-> def num_of_subarrays(arr: list[int], k: int, threshold: int) -> int:
+> def num_of_subarrays(arr, k, threshold):
 >     target = k * threshold
 >     window_sum = sum(arr[:k])
 >     count = 1 if window_sum >= target else 0
@@ -603,19 +902,47 @@ difficulty: mixed
 ### Maximum Sum of Almost Unique Subarray (LC 2841)
 
 > [!example] Problem
-> Array `nums`, integers `m` and `k`. Find the maximum sum of a subarray of length exactly `k` that contains at least `m` distinct elements.
+> You are given an integer array nums and two positive integers m and k.
+> Return the maximum sum out of all almost unique subarrays of length k of nums. If no such subarray exists, return 0.
+> A subarray of nums is almost unique if it contains at least m distinct elements.
+> A subarray is a contiguous non-empty sequence of elements within an array.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [2,6,7,3,1,7], m = 3, k = 4
+> Output: 18
+> Explanation: There are 3 almost unique subarrays of size k = 4. These subarrays are [2, 6, 7, 3], [6, 7, 3, 1], and [7, 3, 1, 7]. Among these subarrays, the one with the maximum sum is [2, 6, 7, 3] which has a sum of 18.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5,9,9,2,4,5,4], m = 1, k = 3
+> Output: 23
+> Explanation: There are 5 almost unique subarrays of size k. These subarrays are [5, 9, 9], [9, 9, 2], [9, 2, 4], [2, 4, 5], and [4, 5, 4]. Among these subarrays, the one with the maximum sum is [5, 9, 9] which has a sum of 23.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [1,2,1,2,1,2,1], m = 3, k = 3
+> Output: 0
+> Explanation: There are no subarrays of size k = 3 that contain at least m = 3 distinct elements in the given array [1,2,1,2,1,2,1]. Therefore, no almost unique subarrays exist, and the maximum sum is 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 2 * 10^4
+> - 1 <= m <= k <= nums.length
+> - 1 <= nums[i] <= 10^9
 
 > [!info] Approach
-> - WHY: Fixed window of size `k`; track distinct count in the window alongside the running sum.
-> - WHAT: Maintain a frequency map and window sum. A window qualifies when `len(freq) >= m`.
-> - HOW: Slide in O(1): add right element to freq/sum, remove left element from freq/sum (delete key at 0). Check qualification after each full window.
+> Fixed window of size `k`; track distinct count in the window alongside the running sum. Maintain a frequency map and window sum. A window qualifies when `len(freq) >= m`. Slide in O(1): add right element to freq/sum, remove left element from freq/sum (delete key at 0). Check qualification after each full window.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def max_sum(nums: list[int], m: int, k: int) -> int:
->     freq: dict[int, int] = defaultdict(int)
+> def max_sum(nums, m, k):
+>     freq = defaultdict(int)
 >     window_sum = 0
 >     best = 0
 > 
@@ -644,24 +971,62 @@ difficulty: mixed
 ### Sliding Window Average from Data Stream (LC 346)
 
 > [!example] Problem
-> Design a class that accepts a stream of integers and, on each `next(val)` call, returns the moving average of the last `k` values.
+> Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
+> 
+> Implement the `MovingAverage` class:
+> 
+> 	
+> - `MovingAverage(int size)` Initializes the object with the size of the window `size`.
+> 	
+> - `double next(int val)` Returns the moving average of the last `size` values of the stream.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input**
+> ["MovingAverage", "next", "next", "next", "next"]
+> [[3], [1], [10], [3], [5]]
+> **Output**
+> [null, 1.0, 5.5, 4.66667, 6.0]
+> 
+> **Explanation**
+> MovingAverage movingAverage = new MovingAverage(3);
+> movingAverage.next(1); // return 1.0 = 1 / 1
+> movingAverage.next(10); // return 5.5 = (1 + 10) / 2
+> movingAverage.next(3); // return 4.66667 = (1 + 10 + 3) / 3
+> movingAverage.next(5); // return 6.0 = (10 + 3 + 5) / 3
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= size <= 1000`
+> 	
+> - `-10^5 <= val <= 10^5`
+> 	
+> - At most `10^4` calls will be made to `next`.
 
 > [!info] Approach
-> - WHY: Classic FIFO fixed window over a stream. Use a circular buffer (deque) of size `k`.
-> - WHAT: Maintain a running sum. When deque reaches size `k`, subtract the oldest element before appending new one.
-> - HOW: `deque.popleft()` evicts oldest; `deque.append(val)` adds newest. No need to resum — O(1) update.
+> Classic FIFO fixed window over a stream. Use a circular buffer (deque) of size `k`. Maintain a running sum. When deque reaches size `k`, subtract the oldest element before appending new one. `deque.popleft()` evicts oldest; `deque.append(val)` adds newest. No need to resum — O(1) update.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
 > class MovingAverage:
->     def __init__(self, size: int) -> None:
+>     def __init__(self, size):
 >         self.k = size
 >         self.window: deque[int] = deque()
 >         self.total = 0
 > 
->     def next(self, val: int) -> float:
+>     def next(self, val):
 >         if len(self.window) == self.k:
 >             self.total -= self.window.popleft()
 >         self.window.append(val)
@@ -687,16 +1052,36 @@ difficulty: mixed
 ### Max Consecutive Ones III (LC 1004)
 
 > [!example] Problem
-> Binary array `nums`. You may flip at most `k` zeros to ones. Return the maximum number of consecutive ones.
+> Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
+> Output: 6
+> Explanation: [1,1,1,0,0,1,1,1,1,1,1]
+> Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
+> Output: 10
+> Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
+> Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - nums[i] is either 0 or 1.
+> - 0 <= k <= nums.length
 
 > [!info] Approach
-> - WHY: Window contains at most `k` zeros. Expanding right adds ones (free) or zeros (costs 1 from budget). When zeros in window exceed `k`, shrink left.
-> - WHAT: Track `zeros` count in the window. While `zeros > k` → if `nums[left] == 0`, decrement zeros; advance left.
-> - HOW: Answer is `right - left + 1` after each valid step — window never shrinks below the best size seen (LC 424 trick not needed here since we do want exact max).
+> Window contains at most `k` zeros. Expanding right adds ones (free) or zeros (costs 1 from budget). When zeros in window exceed `k`, shrink left. Track `zeros` count in the window. While `zeros > k` → if `nums[left] == 0`, decrement zeros; advance left. Answer is `right - left + 1` after each valid step — window never shrinks below the best size seen (LC 424 trick not needed here since we do want exact max).
+
 
 > [!note]- Python Solution
 > ```python
-> def longest_ones(nums: list[int], k: int) -> int:
+> def longest_ones(nums, k):
 >     left = zeros = best = 0
 >     for right in range(len(nums)):
 >         if nums[right] == 0:
@@ -720,16 +1105,41 @@ difficulty: mixed
 ### Longest Subarray of 1s After Deleting One Element (LC 1493)
 
 > [!example] Problem
-> Binary array. Delete exactly one element. Return the length of the longest subarray of 1s in the result.
+> Given a binary array nums, you should delete one element from it.
+> Return the size of the longest non-empty subarray containing only 1's in the resulting array. Return 0 if there is no such subarray.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,0,1]
+> Output: 3
+> Explanation: After deleting the number in position 2, [1,1,1] contains 3 numbers with value of 1's.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [0,1,1,1,0,1,1,0,1]
+> Output: 5
+> Explanation: After deleting the number in position 4, [0,1,1,1,1,1,0,1] longest subarray with value of 1's is [1,1,1,1,1].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [1,1,1]
+> Output: 2
+> Explanation: You must delete one element.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - nums[i] is either 0 or 1.
 
 > [!info] Approach
-> - WHY: Deleting one element = flipping one 0 to nothing, or dropping one 1. Equivalent to: longest window with at most one 0, minus 1 (for the deleted element).
-> - WHAT: Slide window keeping `zeros <= 1`. The answer is `window_size - 1` at maximum valid window.
-> - HOW: Exact same code as LC 1004 with `k=1`, subtract 1 from result. Edge: if whole array is ones, deleting one element gives `n-1`.
+> Deleting one element = flipping one 0 to nothing, or dropping one 1. Equivalent to: longest window with at most one 0, minus 1 (for the deleted element). Slide window keeping `zeros <= 1`. The answer is `window_size - 1` at maximum valid window. Exact same code as LC 1004 with `k=1`, subtract 1 from result. Edge: if whole array is ones, deleting one element gives `n-1`.
+
 
 > [!note]- Python Solution
 > ```python
-> def longest_subarray(nums: list[int]) -> int:
+> def longest_subarray(nums):
 >     left = zeros = best = 0
 >     for right in range(len(nums)):
 >         if nums[right] == 0:
@@ -753,16 +1163,41 @@ difficulty: mixed
 ### Minimum Operations to Reduce X to Zero (LC 1658)
 
 > [!example] Problem
-> Array `nums`, integer `x`. Each operation removes either the leftmost or rightmost element and subtracts it from `x`. Find the minimum number of operations to reach exactly 0, or -1.
+> You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or the rightmost element from the array nums and subtract its value from x. Note that this modifies the array for future operations.
+> Return the minimum number of operations to reduce x to exactly 0 if it is possible, otherwise, return -1.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,4,2,3], x = 5
+> Output: 2
+> Explanation: The optimal solution is to remove the last two elements to reduce x to zero.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5,6,7,8,9], x = 4
+> Output: -1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [3,2,20,1,1,3], x = 10
+> Output: 5
+> Explanation: The optimal solution is to remove the last three elements and the first two elements (5 operations in total) to reduce x to zero.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - 1 <= nums[i] <= 10^4
+> - 1 <= x <= 10^9
 
 > [!info] Approach
-> - WHY: Removing from both ends with minimum total elements ↔ keeping a maximum-length middle subarray with sum `total - x`. Reframe as max-window problem.
-> - WHAT: Find the longest subarray with sum exactly `total - x`. Minimum operations = `n - len(longest subarray)`.
-> - HOW: Use a variable window (shrink when sum exceeds target, track max length when sum == target). Requires all non-negative integers for monotone shrink property — guaranteed by constraints.
+> Removing from both ends with minimum total elements ↔ keeping a maximum-length middle subarray with sum `total - x`. Reframe as max-window problem. Find the longest subarray with sum exactly `total - x`. Minimum operations = `n - len(longest subarray)`. Use a variable window (shrink when sum exceeds target, track max length when sum == target). Requires all non-negative integers for monotone shrink property — guaranteed by constraints.
+
 
 > [!note]- Python Solution
 > ```python
-> def min_operations(nums: list[int], x: int) -> int:
+> def min_operations(nums, x):
 >     target = sum(nums) - x
 >     if target < 0:
 >         return -1
@@ -791,17 +1226,39 @@ difficulty: mixed
 ### Binary Subarrays with Sum (LC 930)
 
 > [!example] Problem
-> Binary array `nums`. Count subarrays with sum exactly `goal`.
+> Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
+> A subarray is a contiguous part of the array.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,0,1,0,1], goal = 2
+> Output: 4
+> Explanation: The 4 subarrays are bolded and underlined below:
+> [1,0,1,0,1]
+> [1,0,1,0,1]
+> [1,0,1,0,1]
+> [1,0,1,0,1]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [0,0,0,0,0], goal = 0
+> Output: 15
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 3 * 10^4
+> - nums[i] is either 0 or 1.
+> - 0 <= goal <= nums.length
 
 > [!info] Approach
-> - WHY: Exactly-k trick: binary values make at_most well-defined. `exactly(goal) = at_most(goal) - at_most(goal-1)`.
-> - WHAT: `at_most(k)` counts subarrays with sum ≤ k. Each right position contributes `right - left + 1` valid subarrays when window is valid.
-> - HOW: Shrink while sum > k. Handle `k < 0` edge case (return 0) to avoid infinite loop when goal=0.
+> Exactly-k trick: binary values make at_most well-defined. `exactly(goal) = at_most(goal) - at_most(goal-1)`. `at_most(k)` counts subarrays with sum ≤ k. Each right position contributes `right - left + 1` valid subarrays when window is valid. Shrink while sum > k. Handle `k < 0` edge case (return 0) to avoid infinite loop when goal=0.
+
 
 > [!note]- Python Solution
 > ```python
-> def num_subarrays_with_sum(nums: list[int], goal: int) -> int:
->     def at_most(k: int) -> int:
+> def num_subarrays_with_sum(nums, goal):
+>     def at_most(k):
 >         if k < 0:
 >             return 0
 >         left = total = count = 0
@@ -834,15 +1291,14 @@ difficulty: mixed
 > Generalisation of LC 76: given `s` and `t` (with duplicate characters in `t`), find the shortest window in `s` containing all characters of `t` with correct multiplicities.
 
 > [!info] Approach
-> - WHY: This IS LC 76 — the standard minimum window already handles duplicates via `missing` counter.
-> - WHAT: `need[c]` tracks remaining required copies. `missing` = total characters still needed. Shrink while `missing == 0`.
-> - HOW: On add: decrement `need[c]`; if it was positive, decrement `missing`. On remove: increment `need[s[left]]`; if it becomes positive, increment `missing`. This correctly handles excess copies.
+> This IS LC 76 — the standard minimum window already handles duplicates via `missing` counter. `need[c]` tracks remaining required copies. `missing` = total characters still needed. Shrink while `missing == 0`. On add: decrement `need[c]`; if it was positive, decrement `missing`. On remove: increment `need[s[left]]`; if it becomes positive, increment `missing`. This correctly handles excess copies.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
 > 
-> def min_window_with_duplicates(s: str, t: str) -> str:
+> def min_window_with_duplicates(s, t):
 >     need = Counter(t)
 >     missing = len(t)
 >     left = best_start = 0
@@ -883,16 +1339,15 @@ difficulty: mixed
 > Given array `nums` and integer `k`, find the length of the shortest contiguous subarray that contains exactly `k` distinct elements.
 
 > [!info] Approach
-> - WHY: Minimum-length window with an exact distinct count. Expand until we have ≥ k distinct, then shrink while we still have ≥ k distinct, recording the minimum.
-> - WHAT: Frequency map tracks distinct count. Once `len(freq) >= k` → window is valid → shrink left while still valid.
-> - HOW: Shrink: remove `nums[left]` from freq (delete at 0); stop when `len(freq) < k`. Record window size before overshoot.
+> Minimum-length window with an exact distinct count. Expand until we have ≥ k distinct, then shrink while we still have ≥ k distinct, recording the minimum. Frequency map tracks distinct count. Once `len(freq) >= k` → window is valid → shrink left while still valid. Shrink: remove `nums[left]` from freq (delete at 0); stop when `len(freq) < k`. Record window size before overshoot.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def smallest_subarray_k_distinct(nums: list[int], k: int) -> int:
->     freq: dict[int, int] = defaultdict(int)
+> def smallest_subarray_k_distinct(nums, k):
+>     freq = defaultdict(int)
 >     left = 0
 >     best = float('inf')
 > 
@@ -923,18 +1378,50 @@ difficulty: mixed
 ### Longest Continuous Subarray with Absolute Diff ≤ Limit (LC 1438)
 
 > [!example] Problem
-> Array `nums` and integer `limit`. Return the size of the longest subarray where the absolute difference between any two elements is ≤ `limit`.
+> Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that the absolute difference between any two elements of this subarray is less than or equal to limit.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [8,2,4,7], limit = 4
+> Output: 2 
+> Explanation: All subarrays are: 
+> [8] with maximum absolute diff |8-8| = 0  4. 
+> [8,2,4] with maximum absolute diff |8-2| = 6 > 4.
+> [8,2,4,7] with maximum absolute diff |8-2| = 6 > 4.
+> [2] with maximum absolute diff |2-2| = 0  4.
+> [4] with maximum absolute diff |4-4| = 0 <= 4.
+> [4,7] with maximum absolute diff |4-7| = 3 <= 4.
+> [7] with maximum absolute diff |7-7| = 0 <= 4. 
+> Therefore, the size of the longest subarray is 2.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [10,1,2,4,7,2], limit = 5
+> Output: 4 
+> Explanation: The subarray [2,4,7,2] is the longest since the maximum absolute diff is |2-7| = 5 <= 5.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [4,2,2,2,4,4,2,2], limit = 0
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - 1 <= nums[i] <= 10^9
+> - 0 <= limit <= 10^9
 
 > [!info] Approach
-> - WHY: `max(window) - min(window) <= limit`. Need O(1) running max and min under variable window. Two deques: one decreasing (max), one increasing (min).
-> - WHAT: Maintain `max_dq` (decreasing) and `min_dq` (increasing). Both store indices. When `max_dq[0] - min_dq[0] > limit` → shrink left, evicting stale front indices from both deques.
-> - HOW: Shrink by advancing `left`; pop deque fronts when they equal `left` (no longer in window). Record `right - left + 1` after each valid state.
+> `max(window) - min(window) <= limit`. Need O(1) running max and min under variable window. Two deques: one decreasing (max), one increasing (min). Maintain `max_dq` (decreasing) and `min_dq` (increasing). Both store indices. When `max_dq[0] - min_dq[0] > limit` → shrink left, evicting stale front indices from both deques. Shrink by advancing `left`; pop deque fronts when they equal `left` (no longer in window). Record `right - left + 1` after each valid state.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def longest_subarray(nums: list[int], limit: int) -> int:
+> def longest_subarray(nums, limit):
 >     max_dq: deque[int] = deque()  # decreasing → front is max
 >     min_dq: deque[int] = deque()  # increasing → front is min
 >     left = best = 0
@@ -970,18 +1457,44 @@ difficulty: mixed
 ### Jump Game VI (LC 1696)
 
 > [!example] Problem
-> Array `nums`. Start at index 0. From index `i` you can jump to `i+1` through `i+k`. Score = sum of `nums` values at each visited index. Maximize score to reach last index.
+> You are given a 0-indexed integer array nums and an integer k.
+> You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
+> You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
+> Return the maximum score you can get.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,-1,-2,4,-7,3], k = 2
+> Output: 7
+> Explanation: You can choose your jumps forming the subsequence [1,-1,4,3] (underlined above). The sum is 7.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [10,-5,-2,4,0,3], k = 3
+> Output: 17
+> Explanation: You can choose your jumps forming the subsequence [10,4,3] (underlined above). The sum is 17.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [1,-5,-20,4,-1,3,-6,-3], k = 2
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length, k <= 10^5
+> - -10^4 <= nums[i] <= 10^4
 
 > [!info] Approach
-> - WHY: DP recurrence: `dp[i] = nums[i] + max(dp[i-k], ..., dp[i-1])`. Naive O(nk). Optimize with a decreasing deque of the last `k` dp values — front = max in range.
-> - WHAT: `dp[i] = nums[i] + dp[deque_front]`. Maintain deque in decreasing dp-value order. Evict front when it's outside the `k`-window.
-> - HOW: Before computing `dp[i]`: evict stale front (`dq[0] < i - k`). After computing `dp[i]`: evict back while `dp[dq[-1]] <= dp[i]`; append `i`. Space-optimise by storing dp in original array.
+> DP recurrence: `dp[i] = nums[i] + max(dp[i-k], ..., dp[i-1])`. Naive O(nk). Optimize with a decreasing deque of the last `k` dp values — front = max in range. `dp[i] = nums[i] + dp[deque_front]`. Maintain deque in decreasing dp-value order. Evict front when it's outside the `k`-window. Before computing `dp[i]`: evict stale front (`dq[0] < i - k`). After computing `dp[i]`: evict back while `dp[dq[-1]] <= dp[i]`; append `i`. Space-optimise by storing dp in original array.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def max_result(nums: list[int], k: int) -> int:
+> def max_result(nums, k):
 >     n = len(nums)
 >     dp = [0] * n
 >     dp[0] = nums[0]
@@ -1016,16 +1529,35 @@ difficulty: mixed
 ### Subarray Product Less Than K (LC 713)
 
 > [!example] Problem
-> Array of positive integers `nums` and integer `k`. Count contiguous subarrays where the product of all elements is strictly less than `k`.
+> Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [10,5,2,6], k = 100
+> Output: 8
+> Explanation: The 8 subarrays that have product less than 100 are:
+> [10], [5], [2], [6], [10, 5], [5, 2], [2, 6], [5, 2, 6]
+> Note that [10, 5, 2] is not included as the product of 100 is not strictly less than k.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,3], k = 0
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 3 * 10^4
+> - 1 <= nums[i] <= 1000
+> - 0 <= k <= 10^6
 
 > [!info] Approach
-> - WHY: All elements are positive → product is monotonically non-decreasing as window expands. Shrink when product ≥ k.
-> - WHAT: Maintain running product. Each valid window `[left, right]` contributes `right - left + 1` subarrays ending at `right` (all subarrays `[left..right], [left+1..right], ..., [right..right]` are valid).
-> - HOW: Shrink by dividing out `nums[left]` and advancing left. Handle edge `k <= 1` upfront (product of positives is always ≥ 1).
+> All elements are positive → product is monotonically non-decreasing as window expands. Shrink when product ≥ k. Maintain running product. Each valid window `[left, right]` contributes `right - left + 1` subarrays ending at `right` (all subarrays `[left..right], [left+1..right], ..., [right..right]` are valid). Shrink by dividing out `nums[left]` and advancing left. Handle edge `k <= 1` upfront (product of positives is always ≥ 1).
+
 
 > [!note]- Python Solution
 > ```python
-> def num_subarray_product_less_than_k(nums: list[int], k: int) -> int:
+> def num_subarray_product_less_than_k(nums, k):
 >     if k <= 1:
 >         return 0
 >     left = count = 0
@@ -1053,13 +1585,12 @@ difficulty: mixed
 > Array of non-negative integers `nums` and integer `k`. Find the length of the longest subarray with sum ≤ `k`.
 
 > [!info] Approach
-> - WHY: Non-negative elements ensure monotone sum — expanding can only increase sum, so shrink-when-violated is valid.
-> - WHAT: Expand right; when sum > k, shrink left. Track max window length after each step.
-> - HOW: The while-loop shrink guarantees the window is valid at every right before recording length.
+> Non-negative elements ensure monotone sum — expanding can only increase sum, so shrink-when-violated is valid. Expand right; when sum > k, shrink left. Track max window length after each step. The while-loop shrink guarantees the window is valid at every right before recording length.
+
 
 > [!note]- Python Solution
 > ```python
-> def longest_subarray_sum_leq_k(nums: list[int], k: int) -> int:
+> def longest_subarray_sum_leq_k(nums, k):
 >     left = window_sum = best = 0
 >     for right in range(len(nums)):
 >         window_sum += nums[right]
@@ -1081,16 +1612,43 @@ difficulty: mixed
 ### Minimum Number of Flips to Make Binary String Alternating (LC 1888)
 
 > [!example] Problem
-> Binary string `s`. In one operation you can move the leftmost character to the rightmost end. Find the minimum number of character flips to make the resulting string alternating.
+> You are given a binary string s. You are allowed to perform two types of operations on the string in any sequence:
+> Return the minimum number of type-2 operations you need to perform such that s becomes alternating.
+> The string is called alternating if no two adjacent characters are equal.
+> 
+> **Example 1:**
+> ```
+> Input: s = "111000"
+> Output: 2
+> Explanation: Use the first operation two times to make s = "100011".
+> Then, use the second operation on the third and sixth elements to make s = "101010".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "010"
+> Output: 0
+> Explanation: The string is already alternating.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "1110"
+> Output: 1
+> Explanation: Use the second operation on the second element to make s = "1010".
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s[i] is either '0' or '1'.
 
 > [!info] Approach
-> - WHY: Rotating is equivalent to considering the string doubled (`s + s`) with a fixed window of size `n`. For each window, count mismatches with both possible alternating patterns ("0101..." and "1010..."). Answer is `min(mismatches)` over all windows.
-> - WHAT: Use fixed sliding window of size `n` on `s + s`. Track mismatches with pattern-0 (`"01"` repeating) and pattern-1 (`"10"` repeating). Slide in O(1).
-> - HOW: On slide out: if removed char matched pattern-0 at that position, decrement mismatch-0 count. On slide in: if new char mismatches pattern at new position, increment. Track min of both mismatch counts.
+> Rotating is equivalent to considering the string doubled (`s + s`) with a fixed window of size `n`. For each window, count mismatches with both possible alternating patterns ("0101..." and "1010..."). Answer is `min(mismatches)` over all windows. Use fixed sliding window of size `n` on `s + s`. Track mismatches with pattern-0 (`"01"` repeating) and pattern-1 (`"10"` repeating). Slide in O(1). On slide out: if removed char matched pattern-0 at that position, decrement mismatch-0 count. On slide in: if new char mismatches pattern at new position, increment. Track min of both mismatch counts.
+
 
 > [!note]- Python Solution
 > ```python
-> def min_flips(s: str) -> int:
+> def min_flips(s):
 >     n = len(s)
 >     t = s + s
 >     # mismatch counts with "010101..." and "101010..."
@@ -1134,16 +1692,40 @@ difficulty: mixed
 ### Grumpy Bookstore Owner (LC 1052)
 
 > [!example] Problem
-> Arrays `customers` and `grumpy` (binary), integer `minutes`. Owner can suppress grumpiness for `minutes` consecutive minutes once. Customers in grumpy minutes are normally lost; find the maximum total satisfied customers.
+> There is a bookstore owner that has a store open for n minutes. You are given an integer array customers of length n where customers[i] is the number of the customers that enter the store at the start of the ith minute and all those customers leave after the end of that minute.
+> During certain minutes, the bookstore owner is grumpy. You are given a binary array grumpy where grumpy[i] is 1 if the bookstore owner is grumpy during the ith minute, and is 0 otherwise.
+> When the bookstore owner is grumpy, the customers entering during that minute are not satisfied. Otherwise, they are satisfied.
+> The bookstore owner knows a secret technique to remain not grumpy for minutes consecutive minutes, but this technique can only be used once.
+> Return the maximum number of customers that can be satisfied throughout the day.
+> 
+> **Example 1:**
+> ```
+> Input: customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
+> Output: 16
+> Explanation:
+> The bookstore owner keeps themselves not grumpy for the last 3 minutes.
+> The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: customers = [1], grumpy = [0], minutes = 1
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - n == customers.length == grumpy.length
+> - 1 <= minutes <= n <= 2 * 10^4
+> - 0 <= customers[i] <= 1000
+> - grumpy[i] is either 0 or 1.
 
 > [!info] Approach
-> - WHY: Base satisfied = customers where `grumpy[i] == 0`. Extra bonus = customers recovered in a window of size `minutes` where `grumpy[i] == 1`. Maximize base + max bonus window.
-> - WHAT: Fixed window of size `minutes` tracking sum of `customers[i]` where `grumpy[i] == 1`. Find the window with maximum such sum.
-> - HOW: Seed base with all non-grumpy customers. Slide window of size `minutes` summing only grumpy-window customers. Max bonus = best grumpy-window sum.
+> Base satisfied = customers where `grumpy[i] == 0`. Extra bonus = customers recovered in a window of size `minutes` where `grumpy[i] == 1`. Maximize base + max bonus window. Fixed window of size `minutes` tracking sum of `customers[i]` where `grumpy[i] == 1`. Find the window with maximum such sum. Seed base with all non-grumpy customers. Slide window of size `minutes` summing only grumpy-window customers. Max bonus = best grumpy-window sum.
+
 
 > [!note]- Python Solution
 > ```python
-> def max_satisfied(customers: list[int], grumpy: list[int], minutes: int) -> int:
+> def max_satisfied(customers, grumpy, minutes):
 >     base = sum(c for c, g in zip(customers, grumpy) if g == 0)
 >     # Extra customers we can recover in a window of size `minutes`
 >     extra = sum(customers[i] * grumpy[i] for i in range(minutes))
@@ -1166,16 +1748,77 @@ difficulty: mixed
 ### Diet Plan Performance (LC 1176)
 
 > [!example] Problem
-> Array `calories`, integers `k`, `lower`, `upper`. For every contiguous subarray of length `k`: score +1 if sum > upper, -1 if sum < lower, else 0. Return total score.
+> A dieter consumes `calories[i]` calories on the `i`-th day. 
+> 
+> Given an integer `k`, for **every** consecutive sequence of `k` days (`calories[i], calories[i+1], ..., calories[i+k-1]` for all `0 <= i <= n-k`), they look at *T*, the total calories consumed during that sequence of `k` days (`calories[i] + calories[i+1] + ... + calories[i+k-1]`):
+> 
+> 	
+> - If `T < lower`, they performed poorly on their diet and lose 1 point; 
+> 	
+> - If `T > upper`, they performed well on their diet and gain 1 point;
+> 	
+> - Otherwise, they performed normally and there is no change in points.
+> 
+> Initially, the dieter has zero points. Return the total number of points the dieter has after dieting for `calories.length` days.
+> 
+> Note that the total points can be negative.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** calories = [1,2,3,4,5], k = 1, lower = 3, upper = 3
+> **Output:** 0
+> **Explanation**: Since k = 1, we consider each element of the array separately and compare it to lower and upper.
+> calories[0] and calories[1] are less than lower so 2 points are lost.
+> calories[3] and calories[4] are greater than upper so 2 points are gained.
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** calories = [3,2], k = 2, lower = 0, upper = 1
+> **Output:** 1
+> **Explanation**: Since k = 2, we consider subarrays of length 2.
+> calories[0] + calories[1] > upper so 1 point is gained.
+> 
+> ```
+> 
+> Example 3:
+> 
+> ```
+> 
+> **Input:** calories = [6,5,0,0], k = 2, lower = 1, upper = 5
+> **Output:** 0
+> **Explanation**:
+> calories[0] + calories[1] > upper so 1 point is gained.
+> lower <= calories[1] + calories[2] <= upper so no change in points.
+> calories[2] + calories[3] < lower so 1 point is lost.
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= k <= calories.length <= 10^5`
+> 	
+> - `0 <= calories[i] <= 20000`
+> 	
+> - `0 <= lower <= upper`
 
 > [!info] Approach
-> - WHY: Straightforward fixed window of size `k`. No state needed beyond running sum.
-> - WHAT: Maintain sliding sum of exactly `k` elements. Compare to `lower` and `upper` each step.
-> - HOW: Seed with first `k` elements. Slide: add right, remove left-k, evaluate.
+> Straightforward fixed window of size `k`. No state needed beyond running sum. Maintain sliding sum of exactly `k` elements. Compare to `lower` and `upper` each step. Seed with first `k` elements. Slide: add right, remove left-k, evaluate.
+
 
 > [!note]- Python Solution
 > ```python
-> def diet_plan_performance(calories: list[int], k: int, lower: int, upper: int) -> int:
+> def diet_plan_performance(calories, k, lower, upper):
 >     window_sum = sum(calories[:k])
 >     score = 0
 >     if window_sum < lower:
@@ -1202,20 +1845,55 @@ difficulty: mixed
 ### Count Vowel Substrings of a Word (LC 2062)
 
 > [!example] Problem
-> String `word` of lowercase letters. Count substrings that contain only vowels and include all 5 vowels at least once.
+> A substring is a contiguous (non-empty) sequence of characters within a string.
+> A vowel substring is a substring that only consists of vowels ('a', 'e', 'i', 'o', and 'u') and has all five vowels present in it.
+> Given a string word, return the number of vowel substrings in word.
+> 
+> **Example 1:**
+> ```
+> Input: word = "aeiouu"
+> Output: 2
+> Explanation: The vowel substrings of word are as follows (underlined):
+> - "aeiouu"
+> - "aeiouu"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: word = "unicornarihan"
+> Output: 0
+> Explanation: Not all 5 vowels are present, so there are no vowel substrings.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: word = "cuaieuouac"
+> Output: 7
+> Explanation: The vowel substrings of word are as follows (underlined):
+> - "cuaieuouac"
+> - "cuaieuouac"
+> - "cuaieuouac"
+> - "cuaieuouac"
+> - "cuaieuouac"
+> - "cuaieuouac"
+> - "cuaieuouac"
+> ```
+> 
+> **Constraints:**
+> - 1 <= word.length <= 100
+> - word consists of lowercase English letters only.
 
 > [!info] Approach
-> - WHY: Exactly-5-distinct-vowels, all characters must be vowels. Use the at_most trick restricted to vowel-only substrings.
-> - WHAT: `at_most(k)` counts substrings (all vowels) with ≤ k distinct vowels. Filter non-vowels by resetting window.
-> - HOW: On encountering a consonant, reset `left = right + 1` and clear freq. `exactly(5) = at_most(5) - at_most(4)`.
+> Exactly-5-distinct-vowels, all characters must be vowels. Use the at_most trick restricted to vowel-only substrings. `at_most(k)` counts substrings (all vowels) with ≤ k distinct vowels. Filter non-vowels by resetting window. On encountering a consonant, reset `left = right + 1` and clear freq. `exactly(5) = at_most(5) - at_most(4)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def count_vowel_substrings(word: str) -> int:
+> def count_vowel_substrings(word):
 >     vowels = set("aeiou")
 > 
->     def at_most(k: int) -> int:
->         freq: dict[str, int] = {}
+>     def at_most(k):
+>         freq = {}
 >         left = count = 0
 >         for right, c in enumerate(word):
 >             if c not in vowels:
@@ -1249,16 +1927,42 @@ difficulty: mixed
 ### Maximum Number of Vowels in a Substring of Given Length
 
 > [!example] Problem
-> Given a string and a fixed window length `k`, return the maximum number of vowels in any substring of length `k`.
+> Given a string s and an integer k, return the maximum number of vowel letters in any substring of s with length k.
+> Vowel letters in English are 'a', 'e', 'i', 'o', and 'u'.
+> 
+> **Example 1:**
+> ```
+> Input: s = "abciiidef", k = 3
+> Output: 3
+> Explanation: The substring "iii" contains 3 vowel letters.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "aeiou", k = 2
+> Output: 2
+> Explanation: Any substring of length 2 contains 2 vowels.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "leetcode", k = 3
+> Output: 2
+> Explanation: "lee", "eet" and "ode" contain 2 vowels.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s consists of lowercase English letters.
+> - 1 <= k <= s.length
 
 > [!info] Approach
-> - **WHY:** The window size is fixed, so every move only removes one character and adds one character. That makes the update O(1) per step.
-> - **WHAT:** Maintain a running vowel count for the current window and slide it across the string.
-> - **HOW:** Initialize the first window, then for each step subtract the left character, add the new right character, and update the best count.
+> The window size is fixed, so every move only removes one character and adds one character. That makes the update O(1) per step. Maintain a running vowel count for the current window and slide it across the string. Initialize the first window, then for each step subtract the left character, add the new right character, and update the best count.
+
 
 > [!note]- Python Solution
 > ```python
-> def max_vowels(s: str, k: int) -> int:
+> def max_vowels(s, k):
 >     vowels = set("aeiou")
 >     cur = sum(ch in vowels for ch in s[:k])
 >     best = cur
@@ -1282,16 +1986,40 @@ difficulty: mixed
 ### Grumpy Bookstore Owner (LC 1052)
 
 > [!example] Problem
-> A bookstore owner is grumpy for some minutes (marked 1 in a binary array). When using a "secret technique" for `minutes` consecutive minutes, the owner is not grumpy during that window. Find the maximum total satisfied customers.
+> There is a bookstore owner that has a store open for n minutes. You are given an integer array customers of length n where customers[i] is the number of the customers that enter the store at the start of the ith minute and all those customers leave after the end of that minute.
+> During certain minutes, the bookstore owner is grumpy. You are given a binary array grumpy where grumpy[i] is 1 if the bookstore owner is grumpy during the ith minute, and is 0 otherwise.
+> When the bookstore owner is grumpy, the customers entering during that minute are not satisfied. Otherwise, they are satisfied.
+> The bookstore owner knows a secret technique to remain not grumpy for minutes consecutive minutes, but this technique can only be used once.
+> Return the maximum number of customers that can be satisfied throughout the day.
+> 
+> **Example 1:**
+> ```
+> Input: customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
+> Output: 16
+> Explanation:
+> The bookstore owner keeps themselves not grumpy for the last 3 minutes.
+> The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: customers = [1], grumpy = [0], minutes = 1
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - n == customers.length == grumpy.length
+> - 1 <= minutes <= n <= 2 * 10^4
+> - 0 <= customers[i] <= 1000
+> - grumpy[i] is either 0 or 1.
 
 > [!info] Approach
-> - **WHY:** Customers at non-grumpy minutes are always satisfied. Customers at grumpy minutes are only satisfied during the technique window. We want to choose the `minutes`-long window that maximises the extra customers gained.
-> - **WHAT:** Base count = sum of `customers[i]` where `grumpy[i] == 0`. Extra count for a window = sum of `customers[i]` where `grumpy[i] == 1` within the window. Slide a fixed window of size `minutes` to find the maximum extra.
-> - **HOW:** Compute base. Slide window: at each step, add `customers[right] * grumpy[right]` and subtract `customers[right - minutes] * grumpy[right - minutes]`. Track max window extra.
+> Customers at non-grumpy minutes are always satisfied. Customers at grumpy minutes are only satisfied during the technique window. We want to choose the `minutes`-long window that maximises the extra customers gained. Base count = sum of `customers[i]` where `grumpy[i] == 0`. Extra count for a window = sum of `customers[i]` where `grumpy[i] == 1` within the window. Slide a fixed window of size `minutes` to find the maximum extra. Compute base. Slide window: at each step, add `customers[right] * grumpy[right]` and subtract `customers[right - minutes] * grumpy[right - minutes]`. Track max window extra.
+
 
 > [!note]- Python Solution
 > ```python
-> def max_satisfied(customers: list[int], grumpy: list[int], minutes: int) -> int:
+> def max_satisfied(customers, grumpy, minutes):
 >     n = len(customers)
 >     base = sum(customers[i] for i in range(n) if grumpy[i] == 0)
 >     window_extra = sum(customers[i] * grumpy[i] for i in range(minutes))
@@ -1315,16 +2043,43 @@ difficulty: mixed
 ### Minimum Number of Flips to Make Binary String Alternating (LC 1888)
 
 > [!example] Problem
-> Given a binary string, you can do cyclic shifts (moving the first character to the end). Find the minimum number of character flips to make the string alternating after any number of shifts.
+> You are given a binary string s. You are allowed to perform two types of operations on the string in any sequence:
+> Return the minimum number of type-2 operations you need to perform such that s becomes alternating.
+> The string is called alternating if no two adjacent characters are equal.
+> 
+> **Example 1:**
+> ```
+> Input: s = "111000"
+> Output: 2
+> Explanation: Use the first operation two times to make s = "100011".
+> Then, use the second operation on the third and sixth elements to make s = "101010".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "010"
+> Output: 0
+> Explanation: The string is already alternating.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "1110"
+> Output: 1
+> Explanation: Use the second operation on the second element to make s = "1010".
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s[i] is either '0' or '1'.
 
 > [!info] Approach
-> - **WHY:** There are only two valid alternating patterns: "0101..." and "1010...". Simulate all cyclic shifts by doubling the string and using a sliding window of length `n`.
-> - **WHAT:** Double the string (`s + s`). For each window of length `n`, count the differences from both target patterns. Take the minimum differences seen across all windows.
-> - **HOW:** Use a sliding window on `s + s`. Maintain the count of mismatches with pattern "010101..." and "101010...". Slide: subtract the outgoing character's mismatch contribution, add the incoming character's. Track the minimum.
+> There are only two valid alternating patterns: "0101..." and "1010...". Simulate all cyclic shifts by doubling the string and using a sliding window of length `n`. Double the string (`s + s`). For each window of length `n`, count the differences from both target patterns. Take the minimum differences seen across all windows. Use a sliding window on `s + s`. Maintain the count of mismatches with pattern "010101..." and "101010...". Slide: subtract the outgoing character's mismatch contribution, add the incoming character's. Track the minimum.
+
 
 > [!note]- Python Solution
 > ```python
-> def min_flips(s: str) -> int:
+> def min_flips(s):
 >     n = len(s)
 >     doubled = s + s
 >     diff0 = 0   # mismatches vs "010101..."

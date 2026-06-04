@@ -19,19 +19,47 @@ difficulty: mixed
 ### Rotting Oranges
 
 > [!example] Problem
-> A grid contains 0 (empty), 1 (fresh), 2 (rotten). Each minute, fresh oranges 4-adjacent to rotten become rotten. Return minimum minutes to rot all oranges, -1 if impossible.
+> You are given an m x n grid where each cell can have one of three values:
+> Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
+> Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+> Output: 4
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+> Output: -1
+> Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: grid = [[0,2]]
+> Output: 0
+> Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 10
+> - grid[i][j] is 0, 1, or 2.
 
 > [!info] Approach
-> **Multi-source BFS — simultaneous spread from all rotten sources.**
-> WHY: Rotting spreads simultaneously from all rotten sources. BFS levels naturally correspond to time steps; the first time a fresh orange is reached gives the minimum time to rot it.
-> WHAT: Seed queue with all initially rotten oranges at time 0, count fresh oranges. BFS level-by-level; each time a fresh orange is rotted, decrement fresh counter; track max time seen.
-> HOW: Multi-source start avoids O(R × M×N) repeated BFS. Return max_time if fresh == 0, else -1.
+> **Multi-source BFS — simultaneous spread from all rotten sources.** Rotting spreads simultaneously from all rotten sources. BFS levels naturally correspond to time steps; the first time a fresh orange is reached gives the minimum time to rot it. Seed queue with all initially rotten oranges at time 0, count fresh oranges. BFS level-by-level; each time a fresh orange is rotted, decrement fresh counter; track max time seen. Multi-source start avoids O(R × M×N) repeated BFS. Return max_time if fresh == 0, else -1.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def orangesRotting(grid):
+> def oranges_rotting(grid):
 >     rows, cols = len(grid), len(grid[0])
 >     queue = deque()
 >     fresh = 0
@@ -74,18 +102,46 @@ difficulty: mixed
 ### Number of Islands (BFS)
 
 > [!example] Problem
-> Given a 2D grid of '1' (land) and '0' (water), count the number of islands (connected components of land, 4-directional).
+> Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+> An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [
+>   ["1","1","1","1","0"],
+>   ["1","1","0","1","0"],
+>   ["1","1","0","0","0"],
+>   ["0","0","0","0","0"]
+> ]
+> Output: 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [
+>   ["1","1","0","0","0"],
+>   ["1","1","0","0","0"],
+>   ["0","0","1","0","0"],
+>   ["0","0","0","1","1"]
+> ]
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 300
+> - grid[i][j] is '0' or '1'.
 
 > [!info] Approach
-> - **WHY:** Each island is a connected component. BFS naturally fans out level-by-level from a source cell, marking all reachable land as visited.
-> - **WHAT:** Iterate every cell; when '1' found, BFS to mark all connected land as visited ('0'), increment count.
-> - **HOW:** Seed the queue with the trigger cell; mark visited on enqueue (not dequeue) to prevent duplicate entries. Mutating the grid avoids an extra visited array.
+> Each island is a connected component. BFS naturally fans out level-by-level from a source cell, marking all reachable land as visited. Iterate every cell; when '1' found, BFS to mark all connected land as visited ('0'), increment count. Seed the queue with the trigger cell; mark visited on enqueue (not dequeue) to prevent duplicate entries. Mutating the grid avoids an extra visited array.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def numIslands(grid):
+> def num_islands(grid):
 >     if not grid:
 >         return 0
 >     rows, cols = len(grid), len(grid[0])
@@ -120,18 +176,59 @@ difficulty: mixed
 ### Walls and Gates (LC 286)
 
 > [!example] Problem
-> Given a grid of INF (empty room), -1 (wall), 0 (gate), fill each empty room with the distance to its nearest gate. If unreachable, leave as INF.
+> You are given an `m x n` grid `rooms` initialized with these three possible values.
+> 
+> 	
+> - `-1` A wall or an obstacle.
+> 	
+> - `0` A gate.
+> 	
+> - `INF` Infinity means an empty room. We use the value `2^31 - 1 = 2147483647` to represent `INF` as you may assume that the distance to a gate is less than `2147483647`.
+> 
+> Fill each empty room with the distance to *its nearest gate*. If it is impossible to reach a gate, it should be filled with `INF`.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** rooms = [[2147483647,-1,0,2147483647],[2147483647,2147483647,2147483647,-1],[2147483647,-1,2147483647,-1],[0,-1,2147483647,2147483647]]
+> **Output:** [[3,-1,0,1],[2,2,1,-1],[1,-1,2,-1],[0,-1,3,4]]
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** rooms = [[-1]]
+> **Output:** [[-1]]
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `m == rooms.length`
+> 	
+> - `n == rooms[i].length`
+> 	
+> - `1 <= m, n <= 250`
+> 	
+> - `rooms[i][j]` is `-1`, `0`, or `2^31 - 1`.
 
 > [!info] Approach
-> - **WHY:** Multi-source BFS from all gates simultaneously guarantees every room is reached via the shortest path to any gate in O(M×N) rather than O(M×N × gates) from separate BFS per room.
-> - **WHAT:** Seed queue with all gates (value 0); BFS outward; assign `dist[gate] + 1` to unvisited INF neighbors.
-> - **HOW:** Only enqueue cells that are INF — this acts as the visited guard. The first time a room is reached is always via its nearest gate.
+> Multi-source BFS from all gates simultaneously guarantees every room is reached via the shortest path to any gate in O(M×N) rather than O(M×N × gates) from separate BFS per room. Seed queue with all gates (value 0); BFS outward; assign `dist[gate] + 1` to unvisited INF neighbors. Only enqueue cells that are INF — this acts as the visited guard. The first time a room is reached is always via its nearest gate.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def wallsAndGates(rooms):
+> def walls_and_gates(rooms):
 >     if not rooms:
 >         return
 >     rows, cols = len(rooms), len(rooms[0])
@@ -164,18 +261,38 @@ difficulty: mixed
 ### 01 Matrix (LC 542)
 
 > [!example] Problem
-> Given a binary matrix, return a matrix where each cell contains the distance to the nearest 0.
+> Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+> The distance between two cells sharing a common edge is 1.
+> 
+> **Example 1:**
+> ```
+> Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
+> Output: [[0,0,0],[0,1,0],[0,0,0]]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+> Output: [[0,0,0],[0,1,0],[1,2,1]]
+> ```
+> 
+> **Constraints:**
+> - m == mat.length
+> - n == mat[i].length
+> - 1 <= m, n <= 10^4
+> - 1 <= m * n <= 10^4
+> - mat[i][j] is either 0 or 1.
+> - There is at least one 0 in mat.
 
 > [!info] Approach
-> - **WHY:** Multi-source BFS from all 0-cells simultaneously propagates shortest distances outward in O(M×N). The alternative (BFS from each 1-cell) is O(M²×N²).
-> - **WHAT:** Seed queue with all 0-positions (distance 0); mark 1-cells as unvisited (distance INF); BFS expanding to unvisited neighbors with distance + 1.
-> - **HOW:** Initialize dist matrix with 0 for zeroes, INF for ones. Enqueue all zeroes at start. Only update a cell if current dist > neighbor dist + 1.
+> Multi-source BFS from all 0-cells simultaneously propagates shortest distances outward in O(M×N). The alternative (BFS from each 1-cell) is O(M²×N²). Seed queue with all 0-positions (distance 0); mark 1-cells as unvisited (distance INF); BFS expanding to unvisited neighbors with distance + 1. Initialize dist matrix with 0 for zeroes, INF for ones. Enqueue all zeroes at start. Only update a cell if current dist > neighbor dist + 1.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def updateMatrix(mat):
+> def update_matrix(mat):
 >     rows, cols = len(mat), len(mat[0])
 >     dist = [[0 if mat[r][c] == 0 else float('inf') for c in range(cols)] for r in range(rows)]
 >     queue = deque((r, c) for r in range(rows) for c in range(cols) if mat[r][c] == 0)
@@ -203,19 +320,43 @@ difficulty: mixed
 ### Word Ladder
 
 > [!example] Problem
-> Find the length of the shortest transformation sequence from `beginWord` to `endWord`, changing one letter at a time; each intermediate word must be in `wordList`. Return 0 if no path.
+> A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
+> Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.
+> 
+> **Example 1:**
+> ```
+> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+> Output: 5
+> Explanation: One shortest transformation sequence is "hit" -> "hot" -> "dot" -> "dog" -> cog", which is 5 words long.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+> Output: 0
+> Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
+> ```
+> 
+> **Constraints:**
+> - 1 <= beginWord.length <= 10
+> - endWord.length == beginWord.length
+> - 1 <= wordList.length <= 5000
+> - wordList[i].length == beginWord.length
+> - beginWord, endWord, and wordList[i] consist of lowercase English letters.
+> - beginWord != endWord
+> - All the words in wordList are unique.
 
 > [!info] Approach
-> **BFS on implicit word graph — L×26 mutation enumeration.**
-> WHY: Shortest path in an implicit unweighted graph → BFS. Don't build the graph explicitly (O(N²) pairs); generate all L×26 single-character mutations of the current word and check against the word set — O(L×26) per word instead of O(N×L) pairwise comparison.
-> WHAT: BFS from `beginWord`; remove words from the set as soon as they are enqueued to prevent revisits.
-> HOW: For each word dequeued, try all single-char mutations; if mutation == endWord, return. Otherwise enqueue if the word is still in the set and then delete it.
+> **BFS on implicit word graph — L×26 mutation enumeration.** Shortest path in an implicit unweighted graph → BFS. Don't build the graph explicitly (O(N²) pairs); generate all L×26 single-character mutations of the current word and check against the word set — O(L×26) per word instead of O(N×L) pairwise comparison. BFS from `beginWord`; remove words from the set as soon as they are enqueued to prevent revisits. For each word dequeued, try all single-char mutations; if mutation == endWord, return. Otherwise enqueue if the word is still in the set and then delete it.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def ladderLength(beginWord, endWord, wordList):
+> def ladder_length(beginWord, endWord, wordList):
 >     word_set = set(wordList)
 >     if endWord not in word_set:
 >         return 0
@@ -248,19 +389,45 @@ difficulty: mixed
 ### Shortest Path in Binary Matrix
 
 > [!example] Problem
-> Given an n×n binary matrix, find the shortest clear path from top-left (0,0) to bottom-right (n-1,n-1). A clear path uses only 0-cells, 8-directionally. Return -1 if no path. Path length = number of cells visited.
+> Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1.
+> A clear path in a binary matrix is a path from the top-left cell (i.e., (0, 0)) to the bottom-right cell (i.e., (n - 1, n - 1)) such that:
+> The length of a clear path is the number of visited cells of this path.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[0,1],[1,0]]
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[0,0,0],[1,1,0],[1,1,0]]
+> Output: 4
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: grid = [[1,0,0],[1,1,0],[1,1,0]]
+> Output: -1
+> ```
+> 
+> **Constraints:**
+> - n == grid.length
+> - n == grid[i].length
+> - 1 <= n <= 100
+> - grid[i][j] is 0 or 1
 
 > [!info] Approach
-> **BFS from (0,0) — 8-directional, mark on enqueue.**
-> WHY: Shortest path in unweighted grid → BFS. 8-directional: diagonals allowed.
-> WHAT: BFS from (0,0) if grid[0][0] == 0; track distance.
-> HOW: Mark cells visited by setting to 1 as you enqueue (not after dequeue) to prevent duplicate enqueueing; return distance when (n-1, n-1) is dequeued.
+> **BFS from (0,0) — 8-directional, mark on enqueue.** Shortest path in unweighted grid → BFS. 8-directional: diagonals allowed. BFS from (0,0) if grid[0][0] == 0; track distance. Mark cells visited by setting to 1 as you enqueue (not after dequeue) to prevent duplicate enqueueing; return distance when (n-1, n-1) is dequeued.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def shortestPathBinaryMatrix(grid):
+> def shortest_path_binary_matrix(grid):
 >     n = len(grid)
 >     if grid[0][0] == 1 or grid[n-1][n-1] == 1:
 >         return -1
@@ -294,19 +461,54 @@ difficulty: mixed
 ### Minimum Knight Moves
 
 > [!example] Problem
-> Find the minimum number of knight moves to reach (x, y) from (0, 0) on an infinite chessboard.
+> In an **infinite** chess board with coordinates from `-infinity` to `+infinity`, you have a **knight** at square `[0, 0]`.
+> 
+> A knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
+> 
+> Return *the minimum number of steps needed to move the knight to the square* `[x, y]`. It is guaranteed the answer exists.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** x = 2, y = 1
+> **Output:** 1
+> **Explanation: **[0, 0] → [2, 1]
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** x = 5, y = 5
+> **Output:** 4
+> **Explanation: **[0, 0] → [2, 1] → [4, 2] → [3, 4] → [5, 5]
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `-300 <= x, y <= 300`
+> 	
+> - `0 <= |x| + |y| <= 300`
 
 > [!info] Approach
-> **BFS with symmetry reduction to first quadrant.**
-> WHY: Shortest path in an implicit unweighted graph → BFS. Knight moves are symmetric across axes, so work in the first quadrant `(|x|, |y|)`, reducing the search space.
-> WHAT: BFS from (0, 0); 8 knight move offsets.
-> HOW: Use a `visited` set; use abs values to exploit symmetry; allow coordinates down to -2 (buffer for (0,0)/(1,1) edge cases).
+> **BFS with symmetry reduction to first quadrant.** Shortest path in an implicit unweighted graph → BFS. Knight moves are symmetric across axes, so work in the first quadrant `(|x|, |y|)`, reducing the search space. BFS from (0, 0); 8 knight move offsets. Use a `visited` set; use abs values to exploit symmetry; allow coordinates down to -2 (buffer for (0,0)/(1,1) edge cases).
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def minKnightMoves(x, y):
+> def min_knight_moves(x, y):
 >     x, y = abs(x), abs(y)  # symmetry
 >     MOVES = [(2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2)]
 >     queue = deque([(0, 0, 0)])
@@ -337,19 +539,46 @@ difficulty: mixed
 ### Employee Importance
 
 > [!example] Problem
-> Given employees (id, importance, subordinates list) and a target id, return total importance of that employee and all their subordinates recursively.
+> You have a data structure of employee information, including the employee's unique ID, importance value, and direct subordinates' IDs.
+> You are given an array of employees employees where:
+> Given an integer id that represents an employee's ID, return the total importance value of this employee and all their direct and indirect subordinates.
+> 
+> **Example 1:**
+> ```
+> Input: employees = [[1,5,[2,3]],[2,3,[]],[3,3,[]]], id = 1
+> Output: 11
+> Explanation: Employee 1 has an importance value of 5 and has two direct subordinates: employee 2 and employee 3.
+> They both have an importance value of 3.
+> Thus, the total importance value of employee 1 is 5 + 3 + 3 = 11.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: employees = [[1,2,[5]],[5,-3,[]]], id = 5
+> Output: -3
+> Explanation: Employee 5 has an importance value of -3 and has no direct subordinates.
+> Thus, the total importance value of employee 5 is -3.
+> ```
+> 
+> **Constraints:**
+> - 1 <= employees.length <= 2000
+> - 1 <= employees[i].id <= 2000
+> - All employees[i].id are unique.
+> - -100 <= employees[i].importance <= 100
+> - One employee has at most one direct leader and may have several subordinates.
+> - The IDs in employees[i].subordinates are valid IDs.
 
 > [!info] Approach
-> **Hash map + BFS over subordinate ids.**
-> WHY: Tree/DAG reachability with value aggregation. Hash map first: direct subordinate ids require O(N) linear scan per lookup without a map; O(1) with a map.
-> WHAT: BFS/DFS from target employee id, sum importance values.
-> HOW: Build `{id: employee}` map; BFS — dequeue id, add importance, enqueue all subordinate ids.
+> **Hash map + BFS over subordinate ids.** Tree/DAG reachability with value aggregation. Hash map first: direct subordinate ids require O(N) linear scan per lookup without a map; O(1) with a map. BFS/DFS from target employee id, sum importance values. Build `{id: employee}` map; BFS — dequeue id, add importance, enqueue all subordinate ids.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def getImportance(employees, id):
+> def get_importance(employees, id):
 >     emp_map = {e.id: e for e in employees}
 >     total = 0
 >     queue = deque([id])
@@ -376,14 +605,14 @@ difficulty: mixed
 > Given n nodes, a list of bidirectional edges, source and destination, determine if a valid path exists.
 
 > [!info] Approach
-> **Union-Find — reachability in O(E α(N)).**
-> WHY: Union-Find answers "are they connected?" in near O(1) per query after O(E) union operations — no traversal needed.
-> WHAT: Union all edges; check if `find(source) == find(destination)`.
-> HOW: Path compression + union by rank for optimal performance.
+> **Union-Find — reachability in O(E α(N)).** Union-Find answers "are they connected?" in near O(1) per query after O(E) union operations — no traversal needed. Union all edges; check if `find(source) == find(destination)`. Path compression + union by rank for optimal performance.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def validPath(n, edges, source, destination):
+> def valid_path(n, edges, source, destination):
 >     parent = list(range(n))
 >     rank = [0] * n
 > 
@@ -421,17 +650,39 @@ difficulty: mixed
 ### Find Center of Star Graph
 
 > [!example] Problem
-> A star graph has one center connected to all other nodes. Given the edge list, find the center.
+> There is an undirected star graph consisting of n nodes labeled from 1 to n. A star graph is a graph where there is one center node and exactly n - 1 edges that connect the center node with every other node.
+> You are given a 2D integer array edges where each edges[i] = [ui, vi] indicates that there is an edge between the nodes ui and vi. Return the center of the given star graph.
+> 
+> **Example 1:**
+> ```
+> Input: edges = [[1,2],[2,3],[4,2]]
+> Output: 2
+> Explanation: As shown in the figure above, node 2 is connected to every other node, so 2 is the center.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: edges = [[1,2],[5,1],[1,3],[1,4]]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 3 <= n <= 10^5
+> - edges.length == n - 1
+> - edges[i].length == 2
+> - 1 <= ui, vi <= n
+> - ui != vi
+> - The given edges represent a valid star graph.
 
 > [!info] Approach
-> **O(1) — center appears in both the first and second edges.**
-> WHY: The center appears in every edge. The center is the only node common to both the first and second edges — no traversal needed.
-> WHAT: Find the intersection of `edges[0]` and `edges[1]`.
-> HOW: Check if `edges[0][0]` is in `edges[1]`; if so, it's the center; otherwise `edges[0][1]` is the center.
+> **O(1) — center appears in both the first and second edges.** The center appears in every edge. The center is the only node common to both the first and second edges — no traversal needed. Find the intersection of `edges[0]` and `edges[1]`. Check if `edges[0][0]` is in `edges[1]`; if so, it's the center; otherwise `edges[0][1]` is the center.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def findCenter(edges):
+> def find_center(edges):
 >     a, b = edges[0]
 >     c, d = edges[1]
 >     return a if a == c or a == d else b
@@ -451,17 +702,46 @@ difficulty: mixed
 ### Number of Islands
 
 > [!example] Problem
-> Given a 2D grid of '1' (land) and '0' (water), count the number of islands (connected components of land, 4-directional).
+> Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
+> An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [
+>   ["1","1","1","1","0"],
+>   ["1","1","0","1","0"],
+>   ["1","1","0","0","0"],
+>   ["0","0","0","0","0"]
+> ]
+> Output: 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [
+>   ["1","1","0","0","0"],
+>   ["1","1","0","0","0"],
+>   ["0","0","1","0","0"],
+>   ["0","0","0","1","1"]
+> ]
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 300
+> - grid[i][j] is '0' or '1'.
 
 > [!info] Approach
-> **DFS sinking — flood-fill each component, count triggers.**
-> WHY: Each island is a connected component of '1' cells. DFS marks all cells in a component as visited in one pass.
-> WHAT: Iterate every cell; when a '1' is found, DFS to sink all connected land (set to '0'), increment count.
-> HOW: Sinking avoids a separate visited array — the mutation is the visit mark. Increment count only on the initial call, not within DFS.
+> **DFS sinking — flood-fill each component, count triggers.** Each island is a connected component of '1' cells. DFS marks all cells in a component as visited in one pass. Iterate every cell; when a '1' is found, DFS to sink all connected land (set to '0'), increment count. Sinking avoids a separate visited array — the mutation is the visit mark. Increment count only on the initial call, not within DFS.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def numIslands(grid):
+> def num_islands(grid):
 >     if not grid:
 >         return 0
 >     rows, cols = len(grid), len(grid[0])
@@ -494,17 +774,45 @@ difficulty: mixed
 ### Flood Fill
 
 > [!example] Problem
-> Given an image, starting pixel (sr, sc), and new color, recolor the starting pixel and all 4-directionally connected pixels of the same original color.
+> You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
+> To perform a flood fill:
+> Return the modified image after performing the flood fill.
+> 
+> **Example 1:**
+> ```
+> Input: image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+> Output: [[2,2,2],[2,2,0],[2,0,1]]
+> Explanation:
+> 
+> From the center of the image with position (sr, sc) = (1, 1) (i.e., the red pixel), all pixels connected by a path of the same color as the starting pixel (i.e., the blue pixels) are colored with the new color.
+> Note the bottom corner is not colored 2, because it is not horizontally or vertically connected to the starting pixel.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0
+> Output: [[0,0,0],[0,0,0]]
+> Explanation:
+> The starting pixel is already colored with 0, which is the same as the target color. Therefore, no changes are made to the image.
+> ```
+> 
+> **Constraints:**
+> - m == image.length
+> - n == image[i].length
+> - 1 <= m, n <= 50
+> - 0 <= image[i][j], color < 216
+> - 0 <= sr < m
+> - 0 <= sc < n
 
 > [!info] Approach
-> **DFS recolor — guard against same-color infinite loop.**
-> WHY: Connected-component traversal. Early return if original == new color: recursion would infinitely revisit cells (no termination condition).
-> WHAT: DFS from (sr, sc); recolor cells matching the original color.
-> HOW: Guard with `if original == color: return image` before DFS.
+> **DFS recolor — guard against same-color infinite loop.** Connected-component traversal. Early return if original == new color: recursion would infinitely revisit cells (no termination condition). DFS from (sr, sc); recolor cells matching the original color. Guard with `if original == color: return image` before DFS.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def floodFill(image, sr, sc, color):
+> def flood_fill(image, sr, sc, color):
 >     original = image[sr][sc]
 >     if original == color:
 >         return image
@@ -532,17 +840,38 @@ difficulty: mixed
 ### Max Area of Island
 
 > [!example] Problem
-> Given a binary 2D grid (0=water, 1=land), return the maximum area of any island (connected 1s, 4-directional). Return 0 if no island.
+> You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+> The area of an island is the number of cells with a value 1 in the island.
+> Return the maximum area of an island in grid. If there is no island, return 0.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[0,0,1,0,0,0,0,1,0,0,0,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,1,1,0,1,0,0,0,0,0,0,0,0],[0,1,0,0,1,1,0,0,1,0,1,0,0],[0,1,0,0,1,1,0,0,1,1,1,0,0],[0,0,0,0,0,0,0,0,0,0,1,0,0],[0,0,0,0,0,0,0,1,1,1,0,0,0],[0,0,0,0,0,0,0,1,1,0,0,0,0]]
+> Output: 6
+> Explanation: The answer is not 11, because the island must be connected 4-directionally.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[0,0,0,0,0,0,0,0]]
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 50
+> - grid[i][j] is either 0 or 1.
 
 > [!info] Approach
-> **DFS returning component size — sink inline.**
-> WHY: Variation on Number of Islands where we need the maximum component size. DFS function returns the count of cells in the component instead of just marking.
-> WHAT: `1 + sum of returns from 4 neighbors`. Sink cells inline; DFS returns 0 for non-land or out-of-bounds.
-> HOW: `max(dfs(r,c) for all r,c)` — zero-cost for water cells.
+> **DFS returning component size — sink inline.** Variation on Number of Islands where we need the maximum component size. DFS function returns the count of cells in the component instead of just marking. `1 + sum of returns from 4 neighbors`. Sink cells inline; DFS returns 0 for non-land or out-of-bounds. `max(dfs(r,c) for all r,c)` — zero-cost for water cells.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def maxAreaOfIsland(grid):
+> def max_area_of_island(grid):
 >     rows, cols = len(grid), len(grid[0])
 > 
 >     def dfs(r, c):
@@ -566,13 +895,34 @@ difficulty: mixed
 ### Surrounded Regions
 
 > [!example] Problem
-> Given an m×n board of 'X' and 'O', flip all 'O' regions completely surrounded by 'X' to 'X'. 'O's connected to the border are never flipped.
+> You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded:
+> To capture a surrounded region, replace all 'O's with 'X's in-place within the original board. You do not need to return anything.
+> 
+> **Example 1:**
+> ```
+> Input: board = [["X","X","X","X"],["X","O","O","X"],["X","X","O","X"],["X","O","X","X"]]
+> Output: [["X","X","X","X"],["X","X","X","X"],["X","X","X","X"],["X","O","X","X"]]
+> Explanation:
+> In the above diagram, the bottom region is not captured because it is on the edge of the board and cannot be surrounded.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: board = [["X"]]
+> Output: [["X"]]
+> ```
+> 
+> **Constraints:**
+> - m == board.length
+> - n == board[i].length
+> - 1 <= m, n <= 200
+> - board[i][j] is 'X' or 'O'.
 
 > [!info] Approach
-> **Reverse DFS — mark border-safe 'O's, then flip interior.**
-> WHY: Directly checking if an 'O' region is surrounded requires backtracking to undo if DFS touches a border. Instead: find all border-connected 'O's first (safe cells), then flip everything else.
-> WHAT: DFS from every border 'O', mark safe cells with sentinel 'S'. Then: interior 'O' → 'X', 'S' → 'O'.
-> HOW: Walk all 4 borders, DFS from each 'O' found there.
+> **Reverse DFS — mark border-safe 'O's, then flip interior.** Directly checking if an 'O' region is surrounded requires backtracking to undo if DFS touches a border. Instead: find all border-connected 'O's first (safe cells), then flip everything else. DFS from every border 'O', mark safe cells with sentinel 'S'. Then: interior 'O' → 'X', 'S' → 'O'. Walk all 4 borders, DFS from each 'O' found there.
+
+
+
 
 > [!note]- Python Solution
 > ```python
@@ -610,19 +960,57 @@ difficulty: mixed
 ### Pacific Atlantic Water Flow
 
 > [!example] Problem
-> Given an m×n height matrix, water flows to 4-adjacent cells of equal or lesser height. Find all cells from which water can reach both the Pacific (top/left border) and Atlantic (bottom/right border) oceans.
+> There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
+> The island is partitioned into a grid of square cells. You are given an m x n integer matrix heights where heights[r][c] represents the height above sea level of the cell at coordinate (r, c).
+> The island receives a lot of rain, and the rain water can flow to neighboring cells directly north, south, east, and west if the neighboring cell's height is less than or equal to the current cell's height. Water can flow from any cell adjacent to an ocean into the ocean.
+> Return a 2D list of grid coordinates result where result[i] = [ri, ci] denotes that rain water can flow from cell (ri, ci) to both the Pacific and Atlantic oceans.
+> 
+> **Example 1:**
+> ```
+> Input: heights = [[1,2,2,3,5],[3,2,3,4,4],[2,4,5,3,1],[6,7,1,4,5],[5,1,1,2,4]]
+> Output: [[0,4],[1,3],[1,4],[2,2],[3,0],[3,1],[4,0]]
+> Explanation: The following cells can flow to the Pacific and Atlantic oceans, as shown below:
+> [0,4]: [0,4] -> Pacific Ocean 
+>        [0,4] -> Atlantic Ocean
+> [1,3]: [1,3] -> [0,3] -> Pacific Ocean 
+>        [1,3] -> [1,4] -> Atlantic Ocean
+> [1,4]: [1,4] -> [1,3] -> [0,3] -> Pacific Ocean 
+>        [1,4] -> Atlantic Ocean
+> [2,2]: [2,2] -> [1,2] -> [0,2] -> Pacific Ocean 
+>        [2,2] -> [2,3] -> [2,4] -> Atlantic Ocean
+> [3,0]: [3,0] -> Pacific Ocean 
+>        [3,0] -> [4,0] -> Atlantic Ocean
+> [3,1]: [3,1] -> [3,0] -> Pacific Ocean 
+>        [3,1] -> [4,1] -> Atlantic Ocean
+> [4,0]: [4,0] -> Pacific Ocean 
+>        [4,0] -> Atlantic Ocean
+> Note that there are other possible paths for these cells to flow to the Pacific and Atlantic oceans.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: heights = [[1]]
+> Output: [[0,0]]
+> Explanation: The water can flow from the only cell to the Pacific and Atlantic oceans.
+> ```
+> 
+> **Constraints:**
+> - m == heights.length
+> - n == heights[r].length
+> - 1 <= m, n <= 200
+> - 0 <= heights[r][c] <= 10^5
 
 > [!info] Approach
-> **Reverse BFS from both ocean borders — intersect reachable sets.**
-> WHY: Checking forward from each cell whether it reaches both oceans requires O(M²N²) DFS calls. Reverse: "which cells can be reached from the ocean borders?" — water flows uphill in reverse.
-> WHAT: BFS from all Pacific border cells (mark reachable); BFS from all Atlantic border cells; intersect.
-> HOW: Reverse BFS condition — expand to neighbors with height >= current height (uphill in the reverse direction).
+> **Reverse BFS from both ocean borders — intersect reachable sets.** Checking forward from each cell whether it reaches both oceans requires O(M²N²) DFS calls. Reverse: "which cells can be reached from the ocean borders?" — water flows uphill in reverse. BFS from all Pacific border cells (mark reachable); BFS from all Atlantic border cells; intersect. Reverse BFS condition — expand to neighbors with height >= current height (uphill in the reverse direction).
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def pacificAtlantic(heights):
+> def pacific_atlantic(heights):
 >     rows, cols = len(heights), len(heights[0])
 >     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
 > 
@@ -657,17 +1045,39 @@ difficulty: mixed
 ### All Paths From Source to Target
 
 > [!example] Problem
-> Given a DAG (0 to n-1), find and return all paths from node 0 to node n-1.
+> Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
+> The graph is given as follows: graph[i] is a list of all nodes you can visit from node i (i.e., there is a directed edge from node i to node graph[i][j]).
+> 
+> **Example 1:**
+> ```
+> Input: graph = [[1,2],[3],[3],[]]
+> Output: [[0,1,3],[0,2,3]]
+> Explanation: There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: graph = [[4,3,1],[3,2,4],[3],[4],[]]
+> Output: [[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]
+> ```
+> 
+> **Constraints:**
+> - n == graph.length
+> - 2 <= n <= 15
+> - 0 <= graph[i][j] < n
+> - graph[i][j] != i (i.e., there will be no self-loops).
+> - All the elements of graph[i] are unique.
+> - The input graph is guaranteed to be a DAG.
 
 > [!info] Approach
-> **DFS backtracking on DAG — no visited set needed.**
-> WHY: It's a DAG — no cycles, so DFS can never revisit a node on the current path. No visited set needed.
-> WHAT: DFS with backtracking — enumerate all paths. When node n-1 is reached, record a copy of the current path.
-> HOW: `path.append(nei)`, recurse, `path.pop()`.
+> **DFS backtracking on DAG — no visited set needed.** It's a DAG — no cycles, so DFS can never revisit a node on the current path. No visited set needed. DFS with backtracking — enumerate all paths. When node n-1 is reached, record a copy of the current path. `path.append(nei)`, recurse, `path.pop()`.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def allPathsSourceTarget(graph):
+> def all_paths_source_target(graph):
 >     target = len(graph) - 1
 >     result = []
 > 
@@ -696,16 +1106,38 @@ difficulty: mixed
 ### Number of Provinces (LC 547)
 
 > [!example] Problem
-> Given an n×n adjacency matrix `isConnected`, return the number of provinces (connected components of cities).
+> There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
+> A province is a group of directly or indirectly connected cities and no other cities outside of the group.
+> You are given an n x n matrix isConnected where isConnected[i][j] = 1 if the ith city and the jth city are directly connected, and isConnected[i][j] = 0 otherwise.
+> Return the total number of provinces.
+> 
+> **Example 1:**
+> ```
+> Input: isConnected = [[1,1,0],[1,1,0],[0,0,1]]
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: isConnected = [[1,0,0],[0,1,0],[0,0,1]]
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 200
+> - n == isConnected.length
+> - n == isConnected[i].length
+> - isConnected[i][j] is 1 or 0.
+> - isConnected[i][i] == 1
+> - isConnected[i][j] == isConnected[j][i]
 
 > [!info] Approach
-> - **WHY:** Each province is a connected component of an undirected graph. DFS marks all cities in a component as visited in one pass.
-> - **WHAT:** Iterate each city; if unvisited, DFS to mark all reachable cities, increment province count.
-> - **HOW:** Use a visited array instead of mutating the matrix. The matrix is symmetric but you only need to follow one direction per city.
+> Each province is a connected component of an undirected graph. DFS marks all cities in a component as visited in one pass. Iterate each city; if unvisited, DFS to mark all reachable cities, increment province count. Use a visited array instead of mutating the matrix. The matrix is symmetric but you only need to follow one direction per city.
+
 
 > [!note]- Python Solution
 > ```python
-> def findCircleNum(isConnected):
+> def find_circle_num(isConnected):
 >     n = len(isConnected)
 >     visited = [False] * n
 > 
@@ -736,16 +1168,37 @@ difficulty: mixed
 ### Number of Enclaves (LC 1020)
 
 > [!example] Problem
-> Given a binary grid (0=sea, 1=land), return the number of land cells that cannot "walk off" the boundary in any number of moves (4-directional).
+> You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
+> A move consists of walking from one land cell to another adjacent (4-directionally) land cell or walking off the boundary of the grid.
+> Return the number of land cells in grid for which we cannot walk off the boundary of the grid in any number of moves.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[0,0,0,0],[1,0,1,0],[0,1,1,0],[0,0,0,0]]
+> Output: 3
+> Explanation: There are three 1s that are enclosed by 0s, and one 1 that is not enclosed because its on the boundary.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[0,1,1,0],[0,0,1,0],[0,0,1,0],[0,0,0,0]]
+> Output: 0
+> Explanation: All 1s are either on the boundary or can reach the boundary.
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 500
+> - grid[i][j] is either 0 or 1.
 
 > [!info] Approach
-> - **WHY:** Any land cell connected to the border can reach the sea — it is NOT an enclave. Mirror of Surrounded Regions: mark all border-reachable land, then count remaining interior land.
-> - **WHAT:** DFS/BFS from every border land cell, mark visited. Count unvisited land cells in the interior.
-> - **HOW:** Walk all 4 borders; DFS from each '1' encountered, sinking to 0. After traversal, sum remaining 1-cells.
+> Any land cell connected to the border can reach the sea — it is NOT an enclave. Mirror of Surrounded Regions: mark all border-reachable land, then count remaining interior land. DFS/BFS from every border land cell, mark visited. Count unvisited land cells in the interior. Walk all 4 borders; DFS from each '1' encountered, sinking to 0. After traversal, sum remaining 1-cells.
+
 
 > [!note]- Python Solution
 > ```python
-> def numEnclaves(grid):
+> def num_enclaves(grid):
 >     rows, cols = len(grid), len(grid[0])
 > 
 >     def dfs(r, c):
@@ -774,17 +1227,63 @@ difficulty: mixed
 ### Clone Graph
 
 > [!example] Problem
-> Given a reference to a node in an undirected connected graph, return a deep copy.
+> Given a reference of a node in a connected undirected graph.
+> Return a deep copy (clone) of the graph.
+> Each node in the graph contains a value (int) and a list (List[Node]) of its neighbors.
+> Test case format:
+> For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with val == 1, the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list.
+> An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of neighbors of a node in the graph.
+> The given node will always be the first node with val = 1. You must return the copy of the given node as a reference to the cloned graph.
+> 
+> **Example 1:**
+> ```
+> class Node {
+>     public int val;
+>     public List neighbors;
+> }
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+> Output: [[2,4],[1,3],[2,4],[1,3]]
+> Explanation: There are 4 nodes in the graph.
+> 1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+> 2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+> 3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+> 4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: adjList = [[]]
+> Output: [[]]
+> Explanation: Note that the input contains one empty list. The graph consists of only one node with val = 1 and it does not have any neighbors.
+> ```
+> 
+> **Example 4:**
+> ```
+> Input: adjList = []
+> Output: []
+> Explanation: This an empty graph, it does not have any nodes.
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the graph is in the range [0, 100].
+> - 1 <= Node.val <= 100
+> - Node.val is unique for each node.
+> - There are no repeated edges and no self-loops in the graph.
+> - The Graph is connected and all nodes can be visited starting from the given node.
 
 > [!info] Approach
-> **DFS with original→clone map — register before recursing.**
-> WHY: Without pre-registration, revisiting a node (via a cycle) creates a new clone instead of returning the existing one — producing duplicates and infinite loops.
-> WHAT: `{original: clone}` map as memo; DFS from start. Create clone, register in map, then recurse to clone neighbors.
-> HOW: Guard `if n in visited: return visited[n]` handles cycles. Register BEFORE recursing into neighbors.
+> **DFS with original→clone map — register before recursing.** Without pre-registration, revisiting a node (via a cycle) creates a new clone instead of returning the existing one — producing duplicates and infinite loops. `{original: clone}` map as memo; DFS from start. Create clone, register in map, then recurse to clone neighbors. Guard `if n in visited: return visited[n]` handles cycles. Register BEFORE recursing into neighbors.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def cloneGraph(node):
+> def clone_graph(node):
 >     if not node:
 >         return None
 >     visited = {}
@@ -813,17 +1312,45 @@ difficulty: mixed
 ### Find Eventual Safe States
 
 > [!example] Problem
-> In a directed graph, a node is "safe" if every path from it eventually terminates (no cycle reachable). Return all safe nodes sorted.
+> There is a directed graph of n nodes with each node labeled from 0 to n - 1. The graph is represented by a 0-indexed 2D integer array graph where graph[i] is an integer array of nodes adjacent to node i, meaning there is an edge from node i to each node in graph[i].
+> A node is a terminal node if there are no outgoing edges. A node is a safe node if every possible path starting from that node leads to a terminal node (or another safe node).
+> Return an array containing all the safe nodes of the graph. The answer should be sorted in ascending order.
+> 
+> **Example 1:**
+> ```
+> Input: graph = [[1,2],[2,3],[5],[0],[5],[],[]]
+> Output: [2,4,5,6]
+> Explanation: The given graph is shown above.
+> Nodes 5 and 6 are terminal nodes as there are no outgoing edges from either of them.
+> Every path starting at nodes 2, 4, 5, and 6 all lead to either node 5 or 6.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: graph = [[1,2,3,4],[1,2],[3,4],[0,4],[]]
+> Output: [4]
+> Explanation:
+> Only node 4 is a terminal node, and every path starting at node 4 leads to node 4.
+> ```
+> 
+> **Constraints:**
+> - n == graph.length
+> - 1 <= n <= 10^4
+> - 0 <= graph[i].length <= n
+> - 0 <= graph[i][j] <= n - 1
+> - graph[i] is sorted in a strictly increasing order.
+> - The graph may contain self-loops.
+> - The number of edges in the graph will be in the range [1, 4 * 10^4].
 
 > [!info] Approach
-> **Three-color DFS — 0=unvisited, 1=in-progress, 2=safe.**
-> WHY: Need to distinguish "currently being explored" (on the DFS path, could be on a cycle) from "confirmed safe" (all paths from it terminate).
-> WHAT: 0 = unvisited, 1 = in-progress (gray), 2 = confirmed safe (black). DFS reaching a gray node → cycle → current path is unsafe.
-> HOW: Mark gray before recursing neighbors; mark black after all neighbors are confirmed safe.
+> **Three-color DFS — 0=unvisited, 1=in-progress, 2=safe.** Need to distinguish "currently being explored" (on the DFS path, could be on a cycle) from "confirmed safe" (all paths from it terminate). 0 = unvisited, 1 = in-progress (gray), 2 = confirmed safe (black). DFS reaching a gray node → cycle → current path is unsafe. Mark gray before recursing neighbors; mark black after all neighbors are confirmed safe.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def eventualSafeNodes(graph):
+> def eventual_safe_nodes(graph):
 >     n = len(graph)
 >     state = [0] * n  # 0=unvisited, 1=visiting, 2=safe
 > 
@@ -854,19 +1381,43 @@ difficulty: mixed
 ### Course Schedule
 
 > [!example] Problem
-> Given `numCourses` and prerequisites `[a, b]` (must take b before a), determine if all courses can be finished (i.e., no circular dependency).
+> There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+> Return true if you can finish all courses. Otherwise, return false.
+> 
+> **Example 1:**
+> ```
+> Input: numCourses = 2, prerequisites = [[1,0]]
+> Output: true
+> Explanation: There are a total of 2 courses to take. 
+> To take course 1 you should have finished course 0. So it is possible.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+> Output: false
+> Explanation: There are a total of 2 courses to take. 
+> To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
+> ```
+> 
+> **Constraints:**
+> - 1 <= numCourses <= 2000
+> - 0 <= prerequisites.length <= 5000
+> - prerequisites[i].length == 2
+> - 0 <= ai, bi < numCourses
+> - All the pairs prerequisites[i] are unique.
 
 > [!info] Approach
-> **Kahn's BFS topo sort — cycle detection via leftover nodes.**
-> WHY: A valid course ordering exists iff the dependency graph is a DAG (no directed cycles). Kahn's naturally detects cycles — if all nodes are processed, no cycle; if some remain with nonzero in-degree, they're in a cycle.
-> WHAT: Build adjacency list and in-degree array; seed queue with all in-degree-0 nodes; process, decrement neighbors' in-degrees; if neighbor reaches 0, enqueue it.
-> HOW: If `completed == numCourses`, no cycle.
+> **Kahn's BFS topo sort — cycle detection via leftover nodes.** A valid course ordering exists iff the dependency graph is a DAG (no directed cycles). Kahn's naturally detects cycles — if all nodes are processed, no cycle; if some remain with nonzero in-degree, they're in a cycle. Build adjacency list and in-degree array; seed queue with all in-degree-0 nodes; process, decrement neighbors' in-degrees; if neighbor reaches 0, enqueue it. If `completed == numCourses`, no cycle.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def canFinish(numCourses, prerequisites):
+> def can_finish(numCourses, prerequisites):
 >     graph = [[] for _ in range(numCourses)]
 >     indegree = [0] * numCourses
 >     for a, b in prerequisites:
@@ -898,19 +1449,49 @@ difficulty: mixed
 ### Course Schedule II
 
 > [!example] Problem
-> Same as Course Schedule but return one valid ordering, or [] if impossible.
+> There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
+> Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.
+> 
+> **Example 1:**
+> ```
+> Input: numCourses = 2, prerequisites = [[1,0]]
+> Output: [0,1]
+> Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
+> Output: [0,2,1,3]
+> Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
+> So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: numCourses = 1, prerequisites = []
+> Output: [0]
+> ```
+> 
+> **Constraints:**
+> - 1 <= numCourses <= 2000
+> - 0 <= prerequisites.length <= numCourses * (numCourses - 1)
+> - prerequisites[i].length == 2
+> - 0 <= ai, bi < numCourses
+> - ai != bi
+> - All the pairs [ai, bi] are distinct.
 
 > [!info] Approach
-> **Kahn's topo sort — collect removal order.**
-> WHY: Kahn's algorithm naturally produces a topological order — the BFS order of removal. Same algorithm as Course Schedule; collect nodes as they're removed.
-> WHAT: If `len(order) == numCourses`, it's valid; otherwise a cycle was detected.
-> HOW: Append node to `order` as it's dequeued; return order or [].
+> **Kahn's topo sort — collect removal order.** Kahn's algorithm naturally produces a topological order — the BFS order of removal. Same algorithm as Course Schedule; collect nodes as they're removed. If `len(order) == numCourses`, it's valid; otherwise a cycle was detected. Append node to `order` as it's dequeued; return order or [].
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def findOrder(numCourses, prerequisites):
+> def find_order(numCourses, prerequisites):
 >     graph = [[] for _ in range(numCourses)]
 >     indegree = [0] * numCourses
 >     for a, b in prerequisites:
@@ -942,19 +1523,66 @@ difficulty: mixed
 ### Alien Dictionary
 
 > [!example] Problem
-> Given a sorted list of words in an alien language, derive a valid character ordering or return "" if contradictory.
+> There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
+> 
+> You are given a list of strings `words` from the alien language's dictionary. Now it is claimed that the strings in `words` are **sorted lexicographically** by the rules of this new language.
+> 
+> If this claim is incorrect, and the given arrangement of string in `words` cannot correspond to any order of letters, return `"".`
+> 
+> Otherwise, return *a string of the unique letters in the new alien language sorted in **lexicographically increasing order** by the new language's rules**. *If there are multiple solutions, return* **any of them***.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** words = ["wrt","wrf","er","ett","rftt"]
+> **Output:** "wertf"
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** words = ["z","x"]
+> **Output:** "zx"
+> 
+> ```
+> 
+> Example 3:
+> 
+> ```
+> 
+> **Input:** words = ["z","x","z"]
+> **Output:** ""
+> **Explanation:** The order is invalid, so return `""`.
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= words.length <= 100`
+> 	
+> - `1 <= words[i].length <= 100`
+> 	
+> - `words[i]` consists of only lowercase English letters.
 
 > [!info] Approach
-> **Edge extraction from adjacent word pairs + Kahn's topo sort.**
-> WHY: The sorted order gives exactly the first differing character between adjacent words — that encodes a directed edge (char_a → char_b). Kahn's topo sort produces the character order; a cycle means the ordering is contradictory.
-> WHAT: Compare each adjacent word pair, find first differing char, add directed edge. Then Kahn's BFS.
-> HOW: Invalid input detection — if word A is a prefix of word B but A appears after B (e.g., "abc" before "ab"), return "" immediately.
+> **Edge extraction from adjacent word pairs + Kahn's topo sort.** The sorted order gives exactly the first differing character between adjacent words — that encodes a directed edge (char_a → char_b). Kahn's topo sort produces the character order; a cycle means the ordering is contradictory. Compare each adjacent word pair, find first differing char, add directed edge. Then Kahn's BFS. Invalid input detection — if word A is a prefix of word B but A appears after B (e.g., "abc" before "ab"), return "" immediately.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
 > 
-> def alienOrder(words):
+> def alien_order(words):
 >     graph = {c: [] for w in words for c in w}
 >     indegree = {c: 0 for c in graph}
 > 
@@ -994,17 +1622,40 @@ difficulty: mixed
 ### Minimum Number of Vertices to Reach All Nodes
 
 > [!example] Problem
-> Given a DAG with n nodes, find the minimum set of vertices from which all nodes are reachable.
+> Given a directed acyclic graph, with n vertices numbered from 0 to n-1, and an array edges where edges[i] = [fromi, toi] represents a directed edge from node fromi to node toi.
+> Find the smallest set of vertices from which all nodes in the graph are reachable. It's guaranteed that a unique solution exists.
+> Notice that you can return the vertices in any order.
+> 
+> **Example 1:**
+> ```
+> Input: n = 6, edges = [[0,1],[0,2],[2,5],[3,4],[4,2]]
+> Output: [0,3]
+> Explanation: It's not possible to reach all the nodes from a single vertex. From 0 we can reach [0,1,2,5]. From 3 we can reach [3,4,2,5]. So we output [0,3].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 5, edges = [[0,1],[2,1],[3,1],[1,4],[2,4]]
+> Output: [0,2,3]
+> Explanation: Notice that vertices 0, 3 and 2 are not reachable from any other node, so we must include them. Also any of these vertices can reach nodes 1 and 4.
+> ```
+> 
+> **Constraints:**
+> - 2 <= n <= 10^5
+> - 1 <= edges.length <= min(10^5, n * (n - 1) / 2)
+> - edges[i].length == 2
+> - 0 <= fromi, toi < n
+> - All pairs (fromi, toi) are distinct.
 
 > [!info] Approach
-> **Nodes with in-degree 0 — the only possible starting set.**
-> WHY: Any node with an incoming edge is reachable from its predecessor — it doesn't need to be in the starting set. A node with in-degree 0 cannot be reached from any other node, so it must be in the starting set.
-> WHAT: The answer is exactly the set of nodes with in-degree 0.
-> HOW: Collect all destination nodes from edges — these have in-degree ≥ 1; return all nodes not in this set.
+> **Nodes with in-degree 0 — the only possible starting set.** Any node with an incoming edge is reachable from its predecessor — it doesn't need to be in the starting set. A node with in-degree 0 cannot be reached from any other node, so it must be in the starting set. The answer is exactly the set of nodes with in-degree 0. Collect all destination nodes from edges — these have in-degree ≥ 1; return all nodes not in this set.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def findSmallestSetOfVertices(n, edges):
+> def find_smallest_set_of_vertices(n, edges):
 >     has_incoming = set(v for _, v in edges)
 >     return [i for i in range(n) if i not in has_incoming]
 > ```
@@ -1023,20 +1674,48 @@ difficulty: mixed
 ### Network Delay Time (Dijkstra's)
 
 > [!example] Problem
-> Given n nodes, directed weighted edges `[u, v, w]`, and source `k`, find the time for all nodes to receive a signal from k. Return -1 if any node is unreachable.
+> You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
+> We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
+> 
+> **Example 1:**
+> ```
+> Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: times = [[1,2,1]], n = 2, k = 1
+> Output: 1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: times = [[1,2,1]], n = 2, k = 2
+> Output: -1
+> ```
+> 
+> **Constraints:**
+> - 1 <= k <= n <= 100
+> - 1 <= times.length <= 6000
+> - times[i].length == 3
+> - 1 <= ui, vi <= n
+> - ui != vi
+> - 0 <= wi <= 100
+> - All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
 
 > [!info] Approach
-> **Dijkstra's — min-heap SSSP with stale-entry skip.**
-> WHY: Single-source shortest path on a weighted directed graph. Non-negative weights → Dijkstra: greedily processes nodes in order of increasing tentative distance; first time a node is popped = its shortest distance.
-> WHAT: Min-heap of `(cost, node)`; dist dict; skip stale entries (`cost > dist[node]`).
-> HOW: After Dijkstra, answer = max of all shortest distances; -1 if any node unreached.
+> **Dijkstra's — min-heap SSSP with stale-entry skip.** Single-source shortest path on a weighted directed graph. Non-negative weights → Dijkstra: greedily processes nodes in order of increasing tentative distance; first time a node is popped = its shortest distance. Min-heap of `(cost, node)`; dist dict; skip stale entries (`cost > dist[node]`). After Dijkstra, answer = max of all shortest distances; -1 if any node unreached.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > import heapq
 > from collections import defaultdict
 > 
-> def networkDelayTime(times, n, k):
+> def network_delay_time(times, n, k):
 >     graph = defaultdict(list)
 >     for u, v, w in times:
 >         graph[u].append((w, v))
@@ -1072,19 +1751,48 @@ difficulty: mixed
 ### Swim in Rising Water
 
 > [!example] Problem
-> Given an n×n grid where `grid[i][j]` is the elevation, find the minimum time T such that there exists a path from (0,0) to (n-1,n-1) where all cells on the path have elevation ≤ T.
+> You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).
+> It starts raining, and water gradually rises over time. At time t, the water level is t, meaning any cell with elevation less than equal to t is submerged or reachable.
+> You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim.
+> Return the minimum time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[0,2],[1,3]]
+> Output: 3
+> Explanation:
+> At time 0, you are in grid location (0, 0).
+> You cannot go anywhere else because 4-directionally adjacent neighbors have a higher elevation than t = 0.
+> You cannot reach point (1, 1) until time 3.
+> When the depth of water is 3, we can swim anywhere inside the grid.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]
+> Output: 16
+> Explanation: The final route is shown.
+> We need to wait until time 16 so that (0, 0) and (4, 4) are connected.
+> ```
+> 
+> **Constraints:**
+> - n == grid.length
+> - n == grid[i].length
+> - 1 <= n <= 50
+> - 0 <= grid[i][j] < n2
+> - Each value grid[i][j] is unique.
 
 > [!info] Approach
-> **Modified Dijkstra — minimize maximum edge weight (bottleneck path).**
-> WHY: Minimize the maximum edge weight on any path → modified Dijkstra. `dist[r][c]` = minimum possible max-elevation to reach (r,c).
-> WHAT: Min-heap of `(max_elevation_so_far, r, c)`. Cost to reach neighbor = `max(dist[curr], grid[nr][nc])`.
-> HOW: The first time we reach (n-1,n-1), we have the answer.
+> **Modified Dijkstra — minimize maximum edge weight (bottleneck path).** Minimize the maximum edge weight on any path → modified Dijkstra. `dist[r][c]` = minimum possible max-elevation to reach (r,c). Min-heap of `(max_elevation_so_far, r, c)`. Cost to reach neighbor = `max(dist[curr], grid[nr][nc])`. The first time we reach (n-1,n-1), we have the answer.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > import heapq
 > 
-> def swimInWater(grid):
+> def swim_in_water(grid):
 >     n = len(grid)
 >     dist = [[float('inf')] * n for _ in range(n)]
 >     dist[0][0] = grid[0][0]
@@ -1120,17 +1828,57 @@ difficulty: mixed
 ### Cheapest Flights Within K Stops
 
 > [!example] Problem
-> Given n cities, directed weighted flights, source `src`, destination `dst`, and max `k` stops, find the cheapest price. Return -1 if impossible.
+> There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from city fromi to city toi with cost pricei.
+> You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.
+> 
+> **Example 1:**
+> ```
+> Input: n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
+> Output: 700
+> Explanation:
+> The graph is shown above.
+> The optimal path with at most 1 stop from city 0 to 3 is marked in red and has cost 100 + 600 = 700.
+> Note that the path through cities [0,1,2,3] is cheaper but is invalid because it uses 2 stops.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
+> Output: 200
+> Explanation:
+> The graph is shown above.
+> The optimal path with at most 1 stop from city 0 to 2 is marked in red and has cost 100 + 100 = 200.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0
+> Output: 500
+> Explanation:
+> The graph is shown above.
+> The optimal path with no stops from city 0 to 2 is marked in red and has cost 500.
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 100
+> - 0 <= flights.length <= (n * (n - 1) / 2)
+> - flights[i].length == 3
+> - 0 <= fromi, toi < n
+> - fromi != toi
+> - 1 <= pricei <= 10^4
+> - There will not be any multiple flights between two cities.
+> - 0 <= src, dst, k < n
+> - src != dst
 
 > [!info] Approach
-> **Bellman-Ford with k+1 rounds — copy dist array each round.**
-> WHY: Shortest path with a constraint on the number of hops → Bellman-Ford with k+1 relaxation rounds. Standard Dijkstra can't bound hops.
-> WHAT: After i rounds of relaxation, `dist[v]` = cheapest path using at most i edges. Need at most k stops = k+1 edges.
-> HOW: Copy dist array each round to prevent using edges discovered in the same round (would allow more than 1 edge per round effectively).
+> **Bellman-Ford with k+1 rounds — copy dist array each round.** Shortest path with a constraint on the number of hops → Bellman-Ford with k+1 relaxation rounds. Standard Dijkstra can't bound hops. After i rounds of relaxation, `dist[v]` = cheapest path using at most i edges. Need at most k stops = k+1 edges. Copy dist array each round to prevent using edges discovered in the same round (would allow more than 1 edge per round effectively).
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def findCheapestPrice(n, flights, src, dst, k):
+> def find_cheapest_price(n, flights, src, dst, k):
 >     dist = [float('inf')] * n
 >     dist[src] = 0
 > 
@@ -1156,18 +1904,47 @@ difficulty: mixed
 ### Path with Minimum Effort (LC 1631)
 
 > [!example] Problem
-> Given a 2D grid of heights, find a path from top-left to bottom-right that minimizes the maximum absolute difference between adjacent cells. Return that minimum effort.
+> You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
+> A route's effort is the maximum absolute difference in heights between two consecutive cells of the route.
+> Return the minimum effort required to travel from the top-left cell to the bottom-right cell.
+> 
+> **Example 1:**
+> ```
+> Input: heights = [[1,2,2],[3,8,2],[5,3,5]]
+> Output: 2
+> Explanation: The route of [1,3,5,3,5] has a maximum absolute difference of 2 in consecutive cells.
+> This is better than the route of [1,2,2,2,5], where the maximum absolute difference is 3.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: heights = [[1,2,3],[3,8,4],[5,3,5]]
+> Output: 1
+> Explanation: The route of [1,2,3,4,5] has a maximum absolute difference of 1 in consecutive cells, which is better than route [1,3,5,3,5].
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: heights = [[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]]
+> Output: 0
+> Explanation: This route does not require any effort.
+> ```
+> 
+> **Constraints:**
+> - rows == heights.length
+> - columns == heights[i].length
+> - 1 <= rows, columns <= 100
+> - 1 <= heights[i][j] <= 10^6
 
 > [!info] Approach
-> - **WHY:** Minimize the maximum edge weight on a path = bottleneck shortest path. Modified Dijkstra: `dist[r][c]` = minimum possible max-absolute-diff to reach (r,c); greedily process cells in order of current effort.
-> - **WHAT:** Min-heap of `(effort, r, c)`. Transition: `new_effort = max(current_effort, abs(heights[nr][nc] - heights[r][c]))`.
-> - **HOW:** First pop of (rows-1, cols-1) from the heap is the answer. Mark visited on pop to avoid reprocessing.
+> Minimize the maximum edge weight on a path = bottleneck shortest path. Modified Dijkstra: `dist[r][c]` = minimum possible max-absolute-diff to reach (r,c); greedily process cells in order of current effort. Min-heap of `(effort, r, c)`. Transition: `new_effort = max(current_effort, abs(heights[nr][nc] - heights[r][c]))`. First pop of (rows-1, cols-1) from the heap is the answer. Mark visited on pop to avoid reprocessing.
+
 
 > [!note]- Python Solution
 > ```python
 > import heapq
 > 
-> def minimumEffortPath(heights):
+> def minimum_effort_path(heights):
 >     rows, cols = len(heights), len(heights[0])
 >     dist = [[float('inf')] * cols for _ in range(rows)]
 >     dist[0][0] = 0
@@ -1204,15 +1981,14 @@ difficulty: mixed
 > Given a directed acyclic graph with weighted edges, find shortest paths from a source node.
 
 > [!info] Approach
-> - **WHY:** In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized.
-> - **WHAT:** Topologically sort the graph, then relax outgoing edges in that order.
-> - **HOW:** Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
+> In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized. Topologically sort the graph, then relax outgoing edges in that order. Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
->
-> def shortest_path_dag(n: int, edges: list[tuple[int, int, int]], source: int) -> list[float]:
+> >
+> def shortest_path_dag(n, edges, int, int]], source):
 >     graph = defaultdict(list)
 >     indeg = [0] * n
 >     for u, v, w in edges:
@@ -1250,19 +2026,44 @@ difficulty: mixed
 ### Is Graph Bipartite?
 
 > [!example] Problem
-> Given an undirected graph, determine if it can be split into two sets such that every edge connects nodes from different sets (2-colorable).
+> There is an undirected graph with n nodes, where each node is numbered between 0 and n - 1. You are given a 2D array graph, where graph[u] is an array of nodes that node u is adjacent to. More formally, for each v in graph[u], there is an undirected edge between node u and node v. The graph has the following properties:
+> A graph is bipartite if the nodes can be partitioned into two independent sets A and B such that every edge in the graph connects a node in set A and a node in set B.
+> Return true if and only if it is bipartite.
+> 
+> **Example 1:**
+> ```
+> Input: graph = [[1,2,3],[0,2],[0,1,3],[0,2]]
+> Output: false
+> Explanation: There is no way to partition the nodes into two independent sets such that every edge connects a node in one and a node in the other.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: graph = [[1,3],[0,2],[1,3],[0,2]]
+> Output: true
+> Explanation: We can partition the nodes into two sets: {0, 2} and {1, 3}.
+> ```
+> 
+> **Constraints:**
+> - graph.length == n
+> - 1 <= n <= 100
+> - 0 <= graph[u].length < n
+> - 0 <= graph[u][i] <= n - 1
+> - graph[u] does not contain u.
+> - All the values of graph[u] are unique.
+> - If graph[u] contains v, then graph[v] contains u.
 
 > [!info] Approach
-> **BFS 2-coloring — alternating colors, fail on same-color neighbor.**
-> WHY: A graph is bipartite iff it contains no odd-length cycle — equivalent to being 2-colorable. BFS/DFS assigning alternating colors (0/1); if any neighbor has the same color as the current node, not bipartite.
-> WHAT: Must handle disconnected components — run BFS/DFS from every unvisited node.
-> HOW: Initialize all colors to -1 (uncolored). For each unvisited node, BFS assigning color 0; assign `1 - color[node]` to unvisited neighbors; return False if neighbor has same color.
+> **BFS 2-coloring — alternating colors, fail on same-color neighbor.** A graph is bipartite iff it contains no odd-length cycle — equivalent to being 2-colorable. BFS/DFS assigning alternating colors (0/1); if any neighbor has the same color as the current node, not bipartite. Must handle disconnected components — run BFS/DFS from every unvisited node. Initialize all colors to -1 (uncolored). For each unvisited node, BFS assigning color 0; assign `1 - color[node]` to unvisited neighbors; return False if neighbor has same color.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def isBipartite(graph):
+> def is_bipartite(graph):
 >     n = len(graph)
 >     color = [-1] * n
 > 
@@ -1295,18 +2096,39 @@ difficulty: mixed
 ### Possible Bipartition (LC 886)
 
 > [!example] Problem
-> Given n people and a list of dislikes pairs, determine if it's possible to split everyone into two groups such that no two people who dislike each other are in the same group.
+> We want to split a group of n people (labeled from 1 to n) into two groups of any size. Each person may dislike some other people, and they should not go into the same group.
+> Given the integer n and the array dislikes where dislikes[i] = [ai, bi] indicates that the person labeled ai does not like the person labeled bi, return true if it is possible to split everyone into two groups in this way.
+> 
+> **Example 1:**
+> ```
+> Input: n = 4, dislikes = [[1,2],[1,3],[2,4]]
+> Output: true
+> Explanation: The first group has [1,4], and the second group has [2,3].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 3, dislikes = [[1,2],[1,3],[2,3]]
+> Output: false
+> Explanation: We need at least 3 groups to divide them. We cannot put them in two groups.
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 2000
+> - 0 <= dislikes.length <= 10^4
+> - dislikes[i].length == 2
+> - 1 <= ai < bi <= n
+> - All the pairs of dislikes are unique.
 
 > [!info] Approach
-> - **WHY:** Equivalent to bipartite checking on an undirected graph where edges represent dislikes. 2-colorable iff no odd cycle.
-> - **WHAT:** Build adjacency list from dislikes; BFS 2-coloring over all components (graph may be disconnected).
-> - **HOW:** People labeled 1..n — initialize color array of size n+1. For each uncolored node, BFS alternating colors; return False if same-color conflict found.
+> Equivalent to bipartite checking on an undirected graph where edges represent dislikes. 2-colorable iff no odd cycle. Build adjacency list from dislikes; BFS 2-coloring over all components (graph may be disconnected). People labeled 1..n — initialize color array of size n+1. For each uncolored node, BFS alternating colors; return False if same-color conflict found.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
 > 
-> def possibleBipartition(n, dislikes):
+> def possible_bipartition(n, dislikes):
 >     graph = defaultdict(list)
 >     for a, b in dislikes:
 >         graph[a].append(b)
@@ -1343,17 +2165,40 @@ difficulty: mixed
 ### Redundant Connection
 
 > [!example] Problem
-> Given a tree of n nodes with one extra edge added (creating exactly one cycle), find the redundant edge. If multiple valid answers, return the last one in the input.
+> In this problem, a tree is an undirected graph that is connected and has no cycles.
+> You are given a graph that started as a tree with n nodes labeled from 1 to n, with one additional edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed. The graph is represented as an array edges of length n where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the graph.
+> Return an edge that can be removed so that the resulting graph is a tree of n nodes. If there are multiple answers, return the answer that occurs last in the input.
+> 
+> **Example 1:**
+> ```
+> Input: edges = [[1,2],[1,3],[2,3]]
+> Output: [2,3]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]
+> Output: [1,4]
+> ```
+> 
+> **Constraints:**
+> - n == edges.length
+> - 3 <= n <= 1000
+> - edges[i].length == 2
+> - 1 <= ai < bi <= edges.length
+> - ai != bi
+> - There are no repeated edges.
+> - The given graph is connected.
 
 > [!info] Approach
-> **Union-Find — first edge connecting already-connected nodes is redundant.**
-> WHY: Adding one edge to a tree creates exactly one cycle. Process edges in order; if both endpoints share the same root (`find(u) == find(v)`), they're already connected — this edge creates a cycle and is redundant.
-> WHAT: Union by rank + path compression; return immediately on first cycle-forming edge.
-> HOW: For each edge (a, b): if `union(a, b)` returns False (same component), return [a, b].
+> **Union-Find — first edge connecting already-connected nodes is redundant.** Adding one edge to a tree creates exactly one cycle. Process edges in order; if both endpoints share the same root (`find(u) == find(v)`), they're already connected — this edge creates a cycle and is redundant. Union by rank + path compression; return immediately on first cycle-forming edge. For each edge (a, b): if `union(a, b)` returns False (same component), return [a, b].
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def findRedundantConnection(edges):
+> def find_redundant_connection(edges):
 >     parent = list(range(len(edges) + 1))
 >     rank   = [0] * (len(edges) + 1)
 > 
@@ -1395,10 +2240,10 @@ difficulty: mixed
 > Given a connected undirected weighted graph, find the minimum spanning tree — a subset of edges that connects all nodes with minimum total weight and no cycles.
 
 > [!info] Approach
-> **Kruskal's — sort edges by weight, greedily add if no cycle.**
-> WHY: The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle.
-> WHAT: Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check).
-> HOW: Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
+> **Kruskal's — sort edges by weight, greedily add if no cycle.** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
+
+
+
 
 > [!note]- Python Solution
 > ```python
@@ -1452,16 +2297,16 @@ difficulty: mixed
 > Find the length of the longest path in a directed acyclic graph (in terms of number of edges).
 
 > [!info] Approach
-> **Kahn's topo sort + DP — relax dp[v] = max(dp[u] + 1).**
-> WHY: Only works on DAGs — cycles make the longest path undefined (infinite). Topological sort + DP: process nodes in topological order; `dp[node] = max(dp[predecessor] + 1)` for all incoming edges — no subproblem is accessed before it's solved.
-> WHAT: Kahn's to get topo order, then one DP pass.
-> HOW: `dp[node] = max(dp[node], dp[prev] + 1)` as edges are relaxed during Kahn's.
+> **Kahn's topo sort + DP — relax dp[v] = max(dp[u] + 1).** Only works on DAGs — cycles make the longest path undefined (infinite). Topological sort + DP: process nodes in topological order; `dp[node] = max(dp[predecessor] + 1)` for all incoming edges — no subproblem is accessed before it's solved. Kahn's to get topo order, then one DP pass. `dp[node] = max(dp[node], dp[prev] + 1)` as edges are relaxed during Kahn's.
+
+
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def longestPathDAG(n, edges):
+> def longest_path_dag(n, edges):
 >     # edges: list of (u, v), directed u → v
 >     graph   = [[] for _ in range(n)]
 >     indegree = [0] * n
@@ -1495,18 +2340,40 @@ difficulty: mixed
 ### Reconstruct Itinerary (LC 332)
 
 > [!example] Problem
-> Given a list of airline tickets `[from, to]`, reconstruct the itinerary starting from "JFK" using all tickets exactly once. If multiple valid itineraries exist, return the lexicographically smallest one.
+> You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
+> All of the tickets belong to a man who departs from "JFK", thus, the itinerary must begin with "JFK". If there are multiple valid itineraries, you should return the itinerary that has the smallest lexical order when read as a single string.
+> You may assume all tickets form at least one valid itinerary. You must use all the tickets once and only once.
+> 
+> **Example 1:**
+> ```
+> Input: tickets = [["MUC","LHR"],["JFK","MUC"],["SFO","SJC"],["LHR","SFO"]]
+> Output: ["JFK","MUC","LHR","SFO","SJC"]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: tickets = [["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]
+> Output: ["JFK","ATL","JFK","SFO","ATL","SFO"]
+> Explanation: Another possible reconstruction is ["JFK","SFO","ATL","JFK","ATL","SFO"] but it is larger in lexical order.
+> ```
+> 
+> **Constraints:**
+> - 1 <= tickets.length <= 300
+> - tickets[i].length == 2
+> - fromi.length == 3
+> - toi.length == 3
+> - fromi and toi consist of uppercase English letters.
+> - fromi != toi
 
 > [!info] Approach
-> - **WHY:** Eulerian path problem on a directed multigraph — visit every edge exactly once. Hierholzer's algorithm finds an Eulerian path in O(E log E): greedily follow edges; when stuck (no outgoing edges left), backtrack and prepend the current node.
-> - **WHAT:** Build adjacency list with sorted neighbors (for lexicographic order) using a min-heap or sorted list. DFS: always pick the smallest neighbor; when a node has no more outgoing edges, prepend to result.
-> - **HOW:** Use a stack-based iterative post-order DFS: push node to result when its adjacency list is exhausted; reverse at the end.
+> Eulerian path problem on a directed multigraph — visit every edge exactly once. Hierholzer's algorithm finds an Eulerian path in O(E log E): greedily follow edges; when stuck (no outgoing edges left), backtrack and prepend the current node. Build adjacency list with sorted neighbors (for lexicographic order) using a min-heap or sorted list. DFS: always pick the smallest neighbor; when a node has no more outgoing edges, prepend to result. Use a stack-based iterative post-order DFS: push node to result when its adjacency list is exhausted; reverse at the end.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def findItinerary(tickets):
+> def find_itinerary(tickets):
 >     graph = defaultdict(list)
 >     for src, dst in sorted(tickets, reverse=True):
 >         graph[src].append(dst)
@@ -1533,18 +2400,39 @@ difficulty: mixed
 ### Critical Connections / Bridges (LC 1192)
 
 > [!example] Problem
-> Given a network of n servers and connections, find all critical connections — edges whose removal makes some server unreachable (bridges in the graph).
+> There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
+> A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
+> Return all critical connections in the network in any order.
+> 
+> **Example 1:**
+> ```
+> Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
+> Output: [[1,3]]
+> Explanation: [[3,1]] is also accepted.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 2, connections = [[0,1]]
+> Output: [[0,1]]
+> ```
+> 
+> **Constraints:**
+> - 2 <= n <= 10^5
+> - n - 1 <= connections.length <= 10^5
+> - 0 <= ai, bi <= n - 1
+> - ai != bi
+> - There are no repeated connections.
 
 > [!info] Approach
-> - **WHY:** Bridge detection requires Tarjan's algorithm. A bridge is an edge (u, v) where no back-edge from v's subtree reaches u or any ancestor of u — detected via `low[v] > disc[u]`.
-> - **WHAT:** DFS with two arrays: `disc[u]` = discovery time, `low[u]` = lowest discovery time reachable from u's subtree (via back edges). If `low[v] > disc[u]`, edge (u,v) is a bridge.
-> - **HOW:** Track parent to avoid treating the tree edge back to parent as a back-edge. Update `low[u] = min(low[u], low[v])` after recursing into v; `low[u] = min(low[u], disc[v])` for back-edges.
+> Bridge detection requires Tarjan's algorithm. A bridge is an edge (u, v) where no back-edge from v's subtree reaches u or any ancestor of u — detected via `low[v] > disc[u]`. DFS with two arrays: `disc[u]` = discovery time, `low[u]` = lowest discovery time reachable from u's subtree (via back edges). If `low[v] > disc[u]`, edge (u,v) is a bridge. Track parent to avoid treating the tree edge back to parent as a back-edge. Update `low[u] = min(low[u], low[v])` after recursing into v; `low[u] = min(low[u], disc[v])` for back-edges.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
 > 
-> def criticalConnections(n, connections):
+> def critical_connections(n, connections):
 >     graph = defaultdict(list)
 >     for u, v in connections:
 >         graph[u].append(v)
@@ -1588,18 +2476,41 @@ difficulty: mixed
 ### Minimum Height Trees (LC 310)
 
 > [!example] Problem
-> Given a tree of n nodes, find all roots that produce minimum height trees. Return the list of such root values.
+> A tree is an undirected graph in which any two vertices are connected by exactly one path. In other words, any connected graph without simple cycles is a tree.
+> Given a tree of n nodes labelled from 0 to n - 1, and an array of n - 1 edges where edges[i] = [ai, bi] indicates that there is an undirected edge between the two nodes ai and bi in the tree, you can choose any node of the tree as the root. When you select a node x as the root, the result tree has height h. Among all possible rooted trees, those with minimum height (i.e. min(h))  are called minimum height trees (MHTs).
+> Return a list of all MHTs' root labels. You can return the answer in any order.
+> The height of a rooted tree is the number of edges on the longest downward path between the root and a leaf.
+> 
+> **Example 1:**
+> ```
+> Input: n = 4, edges = [[1,0],[1,2],[1,3]]
+> Output: [1]
+> Explanation: As shown, the height of the tree is 1 when the root is the node with label 1 which is the only MHT.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]
+> Output: [3,4]
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 2 * 10^4
+> - edges.length == n - 1
+> - 0 <= ai, bi < n
+> - ai != bi
+> - All the pairs (ai, bi) are distinct.
+> - The given input is guaranteed to be a tree and there will be no repeated edges.
 
 > [!info] Approach
-> - **WHY:** The roots of minimum height trees are the "center" nodes of the tree — at most 2 nodes lying on the longest path (diameter). Topological leaf-trimming: iteratively remove all current leaves; the last 1–2 remaining nodes are the answer.
-> - **WHAT:** Build adjacency list and degree array. Seed a queue with all leaves (degree == 1). BFS layer-by-layer: remove current leaves, expose new leaves (nodes whose degree drops to 1). Stop when ≤ 2 nodes remain.
-> - **HOW:** Decrement `n` by the number of leaves removed each round; stop when `n <= 2` — remaining nodes are the answer.
+> The roots of minimum height trees are the "center" nodes of the tree — at most 2 nodes lying on the longest path (diameter). Topological leaf-trimming: iteratively remove all current leaves; the last 1–2 remaining nodes are the answer. Build adjacency list and degree array. Seed a queue with all leaves (degree == 1). BFS layer-by-layer: remove current leaves, expose new leaves (nodes whose degree drops to 1). Stop when ≤ 2 nodes remain. Decrement `n` by the number of leaves removed each round; stop when `n <= 2` — remaining nodes are the answer.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def findMinHeightTrees(n, edges):
+> def find_min_height_trees(n, edges):
 >     if n == 1:
 >         return [0]
 >     graph = [set() for _ in range(n)]
@@ -1640,45 +2551,44 @@ difficulty: mixed
 > Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.
 
 > [!info] Approach
-> - **WHY:** Kosaraju's runs two DFS passes. The first pass computes finish-order (equivalent to reverse topological order). The second pass on the reversed graph extracts SCCs in that finish order.
-> - **WHAT:** Pass 1 — DFS on original graph, push nodes to a stack in finish order. Pass 2 — pop from the stack, DFS on the transposed graph; each DFS tree in pass 2 is one SCC.
-> - **HOW:** Build adjacency list and its transpose. DFS on original, recording finish order in a stack. Then repeatedly pop from the stack and DFS on the transposed graph — all reachable unvisited nodes form one SCC.
+> Kosaraju's runs two DFS passes. The first pass computes finish-order (equivalent to reverse topological order). The second pass on the reversed graph extracts SCCs in that finish order. Pass 1 — DFS on original graph, push nodes to a stack in finish order. Pass 2 — pop from the stack, DFS on the transposed graph; each DFS tree in pass 2 is one SCC. Build adjacency list and its transpose. DFS on original, recording finish order in a stack. Then repeatedly pop from the stack and DFS on the transposed graph — all reachable unvisited nodes form one SCC.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
->
-> def kosaraju(n: int, edges: list[tuple[int, int]]) -> list[list[int]]:
+> >
+> def kosaraju(n, edges, int]]):
 >     graph = defaultdict(list)
 >     rev_graph = defaultdict(list)
 >     for u, v in edges:
 >         graph[u].append(v)
 >         rev_graph[v].append(u)
->
+> >
 >     visited = [False] * n
 >     finish_order = []
->
->     def dfs1(node: int) -> None:
+> >
+>     def dfs1(node):
 >         visited[node] = True
 >         for neighbour in graph[node]:
 >             if not visited[neighbour]:
 >                 dfs1(neighbour)
 >         finish_order.append(node)
->
+> >
 >     for i in range(n):
 >         if not visited[i]:
 >             dfs1(i)
->
+> >
 >     visited = [False] * n
 >     sccs = []
->
->     def dfs2(node: int, component: list) -> None:
+> >
+>     def dfs2(node, component):
 >         visited[node] = True
 >         component.append(node)
 >         for neighbour in rev_graph[node]:
 >             if not visited[neighbour]:
 >                 dfs2(neighbour, component)
->
+> >
 >     while finish_order:
 >         node = finish_order.pop()
 >         if not visited[node]:
@@ -1703,16 +2613,15 @@ difficulty: mixed
 > Given a weighted undirected connected graph, find the minimum spanning tree (MST) — the subset of edges that connects all vertices with minimum total weight.
 
 > [!info] Approach
-> - **WHY:** Prim's grows the MST greedily from any starting node, always adding the cheapest edge that connects the current MST to an unvisited node. A min-heap makes this O(E log V).
-> - **WHAT:** Use a min-heap of `(weight, node)`. Start with node 0. Greedily pick the smallest weight edge to an unvisited node, add it to the MST, and push all its edges into the heap.
-> - **HOW:** `visited` set tracks MST nodes. Pop from heap; if already visited, skip. Otherwise mark visited, add weight to MST cost, push all unvisited neighbours into the heap.
+> Prim's grows the MST greedily from any starting node, always adding the cheapest edge that connects the current MST to an unvisited node. A min-heap makes this O(E log V). Use a min-heap of `(weight, node)`. Start with node 0. Greedily pick the smallest weight edge to an unvisited node, add it to the MST, and push all its edges into the heap. `visited` set tracks MST nodes. Pop from heap; if already visited, skip. Otherwise mark visited, add weight to MST cost, push all unvisited neighbours into the heap.
+
 
 > [!note]- Python Solution
 > ```python
 > import heapq
 > from collections import defaultdict
->
-> def prim_mst(n: int, edges: list[tuple[int, int, int]]) -> int:
+> >
+> def prim_mst(n, edges, int, int]]):
 >     graph = defaultdict(list)
 >     for u, v, w in edges:
 >         graph[u].append((w, v))
@@ -1747,13 +2656,12 @@ difficulty: mixed
 > Given a weighted directed graph with `n` nodes (possibly with negative edges, but no negative cycles), find the shortest path between every pair of nodes.
 
 > [!info] Approach
-> - **WHY:** Dijkstra's is per-source (O(V * E log V) total for all-pairs). Floyd-Warshall's DP is simpler to implement and handles negative edges. For dense graphs it's competitive.
-> - **WHAT:** `dist[i][j]` = shortest path from `i` to `j`. For each intermediate node `k`, check if routing through `k` shortens `dist[i][j]`.
-> - **HOW:** Initialize `dist[i][j]` to edge weight if edge exists, 0 if `i == j`, infinity otherwise. Triple loop: for each `k`, for each `i`, for each `j`: `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`.
+> Dijkstra's is per-source (O(V * E log V) total for all-pairs). Floyd-Warshall's DP is simpler to implement and handles negative edges. For dense graphs it's competitive. `dist[i][j]` = shortest path from `i` to `j`. For each intermediate node `k`, check if routing through `k` shortens `dist[i][j]`. Initialize `dist[i][j]` to edge weight if edge exists, 0 if `i == j`, infinity otherwise. Triple loop: for each `k`, for each `i`, for each `j`: `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`.
+
 
 > [!note]- Python Solution
 > ```python
-> def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float]]:
+> def floyd_warshall(n, edges, int, int]]):
 >     INF = float('inf')
 >     dist = [[INF] * n for _ in range(n)]
 >     for i in range(n):

@@ -27,12 +27,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "MINDMAP.md",
+                "file": "coding/algorithms/backtracking.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "MINDMAP"
+              "title": "backtracking"
             }
           },
           {
@@ -211,13 +211,19 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
-    "MINDMAP-ALGO.pdf",
-    "MINDMAP-DS.pdf",
-    "MINDMAP.pdf",
-    "FLOWCHARTS.pdf",
-    "scripts/md-to-print-pdf.py",
-    "scripts",
-    "_mindmap_generated.txt",
+    "scripts/humanize_coding.py",
+    "leetcode-problems/problems/3640-trionic-array-ii.json",
+    "leetcode-problems/problems/3639-minimum-time-to-activate-string.json",
+    "leetcode-problems/problems/3638-maximum-balanced-shipments.json",
+    "leetcode-problems/problems/3637-trionic-array-i.json",
+    "leetcode-problems/problems/3636-threshold-majority-queries.json",
+    "leetcode-problems/problems/3635-earliest-finish-time-for-land-and-water-rides-ii.json",
+    "leetcode-problems/problems/3634-minimum-removals-to-balance-array.json",
+    "leetcode-problems/problems/3633-earliest-finish-time-for-land-and-water-rides-i.json",
+    "leetcode-problems/problems/3630-partition-array-for-maximum-xor-and-and.json",
+    "leetcode-problems/problems/3629-minimum-jumps-to-reach-end-via-prime-teleportation.json",
+    "leetcode-problems/README.md",
+    "MINDMAP.md",
     "04-behavioral/googliness-round.md",
     "FLOWCHARTS.md",
     "02-algorithms/problem-deep-dives.md",
@@ -227,8 +233,6 @@
     "02-algorithms/recursion.md",
     "02-algorithms/divide-and-conquer.md",
     "02-algorithms/backtracking.md",
-    "tools/add_problem_statements_to_trackers.py",
-    "tools",
     "02-algorithms/string.md",
     "02-algorithms/dynamic-programming.md",
     "02-algorithms/recursion/aditya-verma.md",
@@ -242,10 +246,6 @@
     "01-data-structures/linked-list.md",
     "01-data-structures/advanced-structures.md",
     "coding/data-structures/array.md",
-    "coding/data-structures/string.md",
-    "01-data-structures/string.md",
-    "01-data-structures/queue.md",
-    "coding/algorithms/recursion.md.tmp.52333.ad8b436f2cef",
-    "coding/data-structures"
+    "coding/data-structures/string.md"
   ]
 }

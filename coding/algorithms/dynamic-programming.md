@@ -7,7 +7,7 @@ difficulty: mixed
 # Dynamic Programming — Problem Reference by Pattern
 
 > [!info] First Principles
-> DP applies when a problem has *overlapping subproblems* (same sub-call arises from multiple paths) and *optimal substructure* (optimal whole = f(optimal parts)). The recipe: (1) name the state in one sentence, (2) write the recurrence, (3) identify base cases, (4) choose fill order so dependencies precede use, (5) optimize space if `dp[i]` only looks back a fixed window.
+> Use DP when the same subproblem shows up again and the best overall answer is built from best sub-answers. Write the recurrence first, set base cases, fill the table in an order where dependencies are ready, then shrink space if you only need the last row or two.
 
 ---
 
@@ -16,22 +16,44 @@ difficulty: mixed
 ### Climbing Stairs
 
 > [!example] Problem
-> Count distinct ways to reach step `n` starting from 0; each move is +1 or +2 steps.
+> You are climbing a staircase. It takes n steps to reach the top.
+> Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+> 
+> **Example 1:**
+> ```
+> Input: n = 2
+> Output: 2
+> Explanation: There are two ways to climb to the top.
+> 1. 1 step + 1 step
+> 2. 2 steps
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 3
+> Output: 3
+> Explanation: There are three ways to climb to the top.
+> 1. 1 step + 1 step + 1 step
+> 2. 1 step + 2 steps
+> 3. 2 steps + 1 step
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 45
 
 > [!info] Approach
-> - **WHY:** reaching step `i` from step `i-1` or `i-2` creates overlapping recursive calls.
-> - **WHAT:** `dp[i]` = number of ways to reach step `i`.
-> - **HOW:** `dp[i] = dp[i-1] + dp[i-2]`; base `dp[0]=1, dp[1]=1`. This is Fibonacci. Space collapses to two variables.
+> reaching step `i` from step `i-1` or `i-2` creates overlapping recursive calls. `dp[i]` = number of ways to reach step `i`. `dp[i] = dp[i-1] + dp[i-2]`; base `dp[0]=1, dp[1]=1`. This is Fibonacci. Space collapses to two variables.
+
 
 > [!note]- Python Solution
 > ```python
-> def climbStairs(n: int) -> int:
+> def climb_stairs(n):
 >     if n <= 2:
 >         return n
->     prev2, prev1 = 1, 2
+>     two_back, one_back = 1, 2
 >     for _ in range(3, n + 1):
->         prev2, prev1 = prev1, prev2 + prev1
->     return prev1
+>         two_back, one_back = one_back, two_back + one_back
+>     return one_back
 > ```
 
 > [!success] Complexity
@@ -45,21 +67,49 @@ difficulty: mixed
 ### Min Cost Climbing Stairs
 
 > [!example] Problem
-> Each step has a cost. You can start from step 0 or 1. Pay cost to leave a step (+1 or +2). Minimize total cost to reach beyond the last step.
+> You are given an integer array cost where cost[i] is the cost of ith step on a staircase. Once you pay the cost, you can either climb one or two steps.
+> You can either start from the step with index 0, or the step with index 1.
+> Return the minimum cost to reach the top of the floor.
+> 
+> **Example 1:**
+> ```
+> Input: cost = [10,15,20]
+> Output: 15
+> Explanation: You will start at index 1.
+> - Pay 15 and climb two steps to reach the top.
+> The total cost is 15.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: cost = [1,100,1,1,1,100,1,1,100,1]
+> Output: 6
+> Explanation: You will start at index 0.
+> - Pay 1 and climb two steps to reach index 2.
+> - Pay 1 and climb two steps to reach index 4.
+> - Pay 1 and climb two steps to reach index 6.
+> - Pay 1 and climb one step to reach index 7.
+> - Pay 1 and climb two steps to reach index 9.
+> - Pay 1 and climb one step to reach the top.
+> The total cost is 6.
+> ```
+> 
+> **Constraints:**
+> - 2 <= cost.length <= 1000
+> - 0 <= cost[i] <= 999
 
 > [!info] Approach
-> - **WHY:** cost to reach step `i` depends on minimum of two prior steps.
-> - **WHAT:** `dp[i]` = min cost to reach step `i`.
-> - **HOW:** `dp[i] = cost[i] + min(dp[i-1], dp[i-2])`; answer = `min(dp[n-1], dp[n-2])`.
+> cost to reach step `i` depends on minimum of two prior steps. `dp[i]` = min cost to reach step `i`. `dp[i] = cost[i] + min(dp[i-1], dp[i-2])`; answer = `min(dp[n-1], dp[n-2])`.
+
 
 > [!note]- Python Solution
 > ```python
-> def minCostClimbingStairs(cost: list[int]) -> int:
+> def min_cost_climbing_stairs(cost):
 >     n = len(cost)
->     prev2, prev1 = cost[0], cost[1]
+>     two_back, one_back = cost[0], cost[1]
 >     for i in range(2, n):
->         prev2, prev1 = prev1, cost[i] + min(prev1, prev2)
->     return min(prev1, prev2)
+>         two_back, one_back = one_back, cost[i] + min(one_back, two_back)
+>     return min(one_back, two_back)
 > ```
 
 > [!success] Complexity
@@ -73,20 +123,40 @@ difficulty: mixed
 ### House Robber
 
 > [!example] Problem
-> Rob houses along a street; no two adjacent houses. Maximize money.
+> You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
+> Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,2,3,1]
+> Output: 4
+> Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+> Total amount you can rob = 1 + 3 = 4.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [2,7,9,3,1]
+> Output: 12
+> Explanation: Rob house 1 (money = 2), rob house 3 (money = 9) and rob house 5 (money = 1).
+> Total amount you can rob = 2 + 9 + 1 = 12.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 100
+> - 0 <= nums[i] <= 400
 
 > [!info] Approach
-> - **WHY:** robbing house `i` forbids `i-1`; the optimal decision at each house depends on the optimal result two positions back.
-> - **WHAT:** `dp[i]` = max money from houses `0..i`.
-> - **HOW:** `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`; base `dp[0]=nums[0]`, `dp[1]=max(nums[0],nums[1])`.
+> robbing house `i` forbids `i-1`; the optimal decision at each house depends on the optimal result two positions back. `dp[i]` = max money from houses `0..i`. `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`; base `dp[0]=nums[0]`, `dp[1]=max(nums[0],nums[1])`.
+
 
 > [!note]- Python Solution
 > ```python
-> def rob(nums: list[int]) -> int:
->     prev2, prev1 = 0, 0
+> def rob(nums):
+>     two_back, one_back = 0, 0
 >     for n in nums:
->         prev2, prev1 = prev1, max(prev1, prev2 + n)
->     return prev1
+>         two_back, one_back = one_back, max(one_back, two_back + n)
+>     return one_back
 > ```
 
 > [!success] Complexity
@@ -100,21 +170,46 @@ difficulty: mixed
 ### House Robber II (Circular)
 
 > [!example] Problem
-> Houses in a circle — first and last are adjacent.
+> You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
+> Given an integer array nums representing the amount of money of each house, return the maximum amount of money you can rob tonight without alerting the police.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [2,3,2]
+> Output: 3
+> Explanation: You cannot rob house 1 (money = 2) and then rob house 3 (money = 2), because they are adjacent houses.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,3,1]
+> Output: 4
+> Explanation: Rob house 1 (money = 1) and then rob house 3 (money = 3).
+> Total amount you can rob = 1 + 3 = 4.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [1,2,3]
+> Output: 3
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 100
+> - 0 <= nums[i] <= 1000
 
 > [!info] Approach
-> - **WHY:** Circular constraint means house 0 and house n-1 can't both be robbed.
-> - **WHAT:** Reduce to two linear subproblems that are mutually exclusive.
-> - **HOW:** `max(rob(0..n-2), rob(1..n-1))` — run linear House Robber twice.
+> Circular constraint means house 0 and house n-1 can't both be robbed. Reduce to two linear subproblems that are mutually exclusive. `max(rob(0..n-2), rob(1..n-1))` — run linear House Robber twice.
+
 
 > [!note]- Python Solution
 > ```python
-> def rob(nums: list[int]) -> int:
->     def rob_linear(houses: list[int]) -> int:
->         p2, p1 = 0, 0
+> def rob(nums):
+>     def rob_linear(houses):
+>         two_back, one_back = 0, 0
 >         for h in houses:
->             p2, p1 = p1, max(p1, p2 + h)
->         return p1
+>             two_back, one_back = one_back, max(one_back, two_back + h)
+>         return one_back
 > 
 >     if len(nums) == 1:
 >         return nums[0]
@@ -132,16 +227,40 @@ difficulty: mixed
 ### Maximum Subarray (Kadane's — DP view)
 
 > [!example] Problem
-> Find the contiguous subarray with the largest sum.
+> Given an integer array nums, find the subarray with the largest sum, and return its sum.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+> Output: 6
+> Explanation: The subarray [4,-1,2,1] has the largest sum 6.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1]
+> Output: 1
+> Explanation: The subarray [1] has the largest sum 1.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [5,4,-1,7,8]
+> Output: 23
+> Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - -10^4 <= nums[i] <= 10^4
 
 > [!info] Approach
-> - **WHY:** max subarray ending at `i` depends on whether extending the previous subarray or restarting gives a larger value.
-> - **WHAT:** `dp[i]` = max subarray sum ending at index `i`.
-> - **HOW:** `dp[i] = max(nums[i], dp[i-1] + nums[i])`; answer = `max(dp)`. Collapses to one variable.
+> max subarray ending at `i` depends on whether extending the previous subarray or restarting gives a larger value. `dp[i]` = max subarray sum ending at index `i`. `dp[i] = max(nums[i], dp[i-1] + nums[i])`; answer = `max(dp)`. Collapses to one variable.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxSubArray(nums: list[int]) -> int:
+> def max_sub_array(nums):
 >     best = curr = nums[0]
 >     for x in nums[1:]:
 >         curr = max(x, curr + x)
@@ -160,16 +279,44 @@ difficulty: mixed
 ### Word Break
 
 > [!example] Problem
-> Can string `s` be segmented into words from a dictionary?
+> Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
+> Note that the same word in the dictionary may be reused multiple times in the segmentation.
+> 
+> **Example 1:**
+> ```
+> Input: s = "leetcode", wordDict = ["leet","code"]
+> Output: true
+> Explanation: Return true because "leetcode" can be segmented as "leet code".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "applepenapple", wordDict = ["apple","pen"]
+> Output: true
+> Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+> Note that you are allowed to reuse a dictionary word.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 300
+> - 1 <= wordDict.length <= 1000
+> - 1 <= wordDict[i].length <= 20
+> - s and wordDict[i] consist of only lowercase English letters.
+> - All the strings of wordDict are unique.
 
 > [!info] Approach
-> - **WHY:** `s[0..i]` is breakable if any split `s[0..j]` is breakable and `s[j+1..i]` is in the dictionary. Subproblems overlap at shared prefixes.
-> - **WHAT:** `dp[i]` = True if `s[0..i-1]` is breakable.
-> - **HOW:** `dp[i] = any(dp[j] and s[j:i] in word_set)` for `j` in `[i-max_len, i)`. Base: `dp[0]=True`.
+> `s[0..i]` is breakable if any split `s[0..j]` is breakable and `s[j+1..i]` is in the dictionary. Subproblems overlap at shared prefixes. `dp[i]` = True if `s[0..i-1]` is breakable. `dp[i] = any(dp[j] and s[j:i] in word_set)` for `j` in `[i-max_len, i)`. Base: `dp[0]=True`.
+
 
 > [!note]- Python Solution
 > ```python
-> def wordBreak(s: str, wordDict: list[str]) -> bool:
+> def word_break(s, wordDict):
 >     word_set = set(wordDict)
 >     max_len = max(len(w) for w in wordDict)
 >     n = len(s)
@@ -194,25 +341,63 @@ difficulty: mixed
 ### Decode Ways
 
 > [!example] Problem
-> String of digits where A=1..Z=26. Count distinct decodings.
+> You have intercepted a secret message encoded as a string of numbers. The message is decoded via the following mapping:
+> "1" -> 'A'
+> "2" -> 'B'
+> ...
+> "25" -> 'Y'
+> "26" -> 'Z'
+> However, while decoding the message, you realize that there are many different ways you can decode the message because some codes are contained in other codes ("2" and "5" vs "25").
+> For example, "11106" can be decoded into:
+> Note: there may be strings that are impossible to decode.
+> 
+> Given a string s containing only digits, return the number of ways to decode it. If the entire string cannot be decoded in any valid way, return 0.
+> The test cases are generated so that the answer fits in a 32-bit integer.
+> 
+> **Example 1:**
+> ```
+> Input: s = "12"
+> Output: 2
+> Explanation:
+> "12" could be decoded as "AB" (1 2) or "L" (12).
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "226"
+> Output: 3
+> Explanation:
+> "226" could be decoded as "BZ" (2 26), "VF" (22 6), or "BBF" (2 2 6).
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "06"
+> Output: 0
+> Explanation:
+> "06" cannot be mapped to "F" because of the leading zero ("6" is different from "06"). In this case, the string is not a valid encoding, so return 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 100
+> - s contains only digits and may contain leading zero(s).
 
 > [!info] Approach
-> - **WHY:** each position can be decoded as 1 or 2 digits; choices overlap across prefixes.
-> - **WHAT:** `dp[i]` = number of decodings of `s[0..i-1]`.
-> - **HOW:** add `dp[i-1]` if `s[i-1] != '0'`; add `dp[i-2]` if `10 ≤ s[i-2:i] ≤ 26`. Base: `dp[0]=1`.
+> each position can be decoded as 1 or 2 digits; choices overlap across prefixes. `dp[i]` = number of decodings of `s[0..i-1]`. add `dp[i-1]` if `s[i-1] != '0'`; add `dp[i-2]` if `10 ≤ s[i-2:i] ≤ 26`. Base: `dp[0]=1`.
+
 
 > [!note]- Python Solution
 > ```python
-> def numDecodings(s: str) -> int:
->     prev2, prev1 = 1, 0 if s[0] == '0' else 1
+> def num_decodings(s):
+>     two_back, one_back = 1, 0 if s[0] == '0' else 1
 >     for i in range(2, len(s) + 1):
 >         curr = 0
 >         if s[i-1] != '0':
->             curr += prev1
+>             curr += one_back
 >         if 10 <= int(s[i-2:i]) <= 26:
->             curr += prev2
->         prev2, prev1 = prev1, curr
->     return prev1
+>             curr += two_back
+>         two_back, one_back = one_back, curr
+>     return one_back
 > ```
 
 > [!success] Complexity
@@ -231,13 +416,12 @@ difficulty: mixed
 > Given integers and target `T`, can any subset sum to `T`?
 
 > [!info] Approach
-> - **WHY:** each item has two choices (include/exclude); overlap arises because the same remaining capacity is reachable via multiple item sequences.
-> - **WHAT:** `dp[j]` = True if sum `j` is achievable using a subset of items seen so far.
-> - **HOW:** iterate items; for each item `x`, sweep `j` from `T` down to `x`: `dp[j] |= dp[j - x]`. Reverse sweep prevents reuse of same item (0/1 knapsack). Base: `dp[0]=True`.
+> each item has two choices (include/exclude); overlap arises because the same remaining capacity is reachable via multiple item sequences. `dp[j]` = True if sum `j` is achievable using a subset of items seen so far. iterate items; for each item `x`, sweep `j` from `T` down to `x`: `dp[j] |= dp[j - x]`. Reverse sweep prevents reuse of same item (0/1 knapsack). Base: `dp[0]=True`.
+
 
 > [!note]- Python Solution
 > ```python
-> def canPartition(nums: list[int], target: int) -> bool:
+> def can_partition(nums, target):
 >     dp = [False] * (target + 1)
 >     dp[0] = True
 >     for x in nums:
@@ -257,16 +441,33 @@ difficulty: mixed
 ### Partition Equal Subset Sum
 
 > [!example] Problem
-> Can `nums` be split into two subsets with equal sum?
+> Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,5,11,5]
+> Output: true
+> Explanation: The array can be partitioned as [1, 5, 5] and [11].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,3,5]
+> Output: false
+> Explanation: The array cannot be partitioned into equal sum subsets.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 200
+> - 1 <= nums[i] <= 100
 
 > [!info] Approach
-> - **WHY:** Equal partition iff one subset sums to `total/2`. Reduces to subset-sum with `T = total // 2`.
-> - **WHAT:** Same as Subset Sum with `target = sum(nums) // 2`.
-> - **HOW:** Odd total → return False immediately. Then run 0/1 knapsack DP.
+> Equal partition iff one subset sums to `total/2`. Reduces to subset-sum with `T = total // 2`. Same as Subset Sum with `target = sum(nums) // 2`. Odd total → return False immediately. Then run 0/1 knapsack DP.
+
 
 > [!note]- Python Solution
 > ```python
-> def canPartition(nums: list[int]) -> bool:
+> def can_partition(nums):
 >     total = sum(nums)
 >     if total % 2:
 >         return False
@@ -290,16 +491,41 @@ difficulty: mixed
 ### Target Sum
 
 > [!example] Problem
-> Assign `+` or `-` to each number; count assignments achieving a target sum.
+> You are given an integer array nums and an integer target.
+> You want to build an expression out of nums by adding one of the symbols '+' and '-' before each integer in nums and then concatenate all the integers.
+> Return the number of different expressions that you can build, which evaluates to target.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,1,1,1], target = 3
+> Output: 5
+> Explanation: There are 5 ways to assign symbols to make the sum of nums be target 3.
+> -1 + 1 + 1 + 1 + 1 = 3
+> +1 - 1 + 1 + 1 + 1 = 3
+> +1 + 1 - 1 + 1 + 1 = 3
+> +1 + 1 + 1 - 1 + 1 = 3
+> +1 + 1 + 1 + 1 - 1 = 3
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1], target = 1
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 20
+> - 0 <= nums[i] <= 1000
+> - 0 <= sum(nums[i]) <= 1000
+> - -1000 <= target <= 1000
 
 > [!info] Approach
-> - **WHY:** Math insight: if `P` = sum of positives and `N` = sum of negatives, `P - N = target` and `P + N = total`. So `P = (target + total) / 2`. Count subsets summing to `P` — overlapping subproblems.
-> - **WHAT:** `dp[j]` = number of subsets summing to `j`.
-> - **HOW:** `dp[j] += dp[j - x]` in reverse order (0/1 knapsack). Base: `dp[0]=1`.
+> Math insight: if `P` = sum of positives and `N` = sum of negatives, `P - N = target` and `P + N = total`. So `P = (target + total) / 2`. Count subsets summing to `P` — overlapping subproblems. `dp[j]` = number of subsets summing to `j`. `dp[j] += dp[j - x]` in reverse order (0/1 knapsack). Base: `dp[0]=1`.
+
 
 > [!note]- Python Solution
 > ```python
-> def findTargetSumWays(nums: list[int], target: int) -> int:
+> def find_target_sum_ways(nums, target):
 >     total = sum(nums)
 >     if (total + target) % 2 or abs(target) > total:
 >         return 0
@@ -323,16 +549,39 @@ difficulty: mixed
 ### Last Stone Weight II
 
 > [!example] Problem
-> Smash pairs of stones (losing the difference); minimize the last remaining stone weight.
+> You are given an array of integers stones where stones[i] is the weight of the ith stone.
+> We are playing a game with the stones. On each turn, we choose any two stones and smash them together. Suppose the stones have weights x and y with x <= y. The result of this smash is:
+> At the end of the game, there is at most one stone left.
+> Return the smallest possible weight of the left stone. If there are no stones left, return 0.
+> 
+> **Example 1:**
+> ```
+> Input: stones = [2,7,4,1,8,1]
+> Output: 1
+> Explanation:
+> We can combine 2 and 4 to get 2, so the array converts to [2,7,1,8,1] then,
+> we can combine 7 and 8 to get 1, so the array converts to [2,1,1,1] then,
+> we can combine 2 and 1 to get 1, so the array converts to [1,1,1] then,
+> we can combine 1 and 1 to get 0, so the array converts to [1], then that's the optimal value.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: stones = [31,26,33,21,40]
+> Output: 5
+> ```
+> 
+> **Constraints:**
+> - 1 <= stones.length <= 30
+> - 1 <= stones[i] <= 100
 
 > [!info] Approach
-> - **WHY:** Each stone ultimately gets a sign `+1` or `-1`; minimize `|P - N| = |total - 2N|`. Maximize `N ≤ total/2`. Same as subset sum to target.
-> - **WHAT:** `dp[j]` = True if subset sum `j` is reachable, for `j ≤ total // 2`.
-> - **HOW:** Standard 0/1 knapsack boolean DP; answer = `total - 2 × max_j_where_dp[j]`.
+> Each stone ultimately gets a sign `+1` or `-1`; minimize `|P - N| = |total - 2N|`. Maximize `N ≤ total/2`. Same as subset sum to target. `dp[j]` = True if subset sum `j` is reachable, for `j ≤ total // 2`. Standard 0/1 knapsack boolean DP; answer = `total - 2 × max_j_where_dp[j]`.
+
 
 > [!note]- Python Solution
 > ```python
-> def lastStoneWeightII(stones: list[int]) -> int:
+> def last_stone_weight_ii(stones):
 >     total = sum(stones)
 >     target = total // 2
 >     dp = [False] * (target + 1)
@@ -357,16 +606,41 @@ difficulty: mixed
 ### Coin Change (Min Coins)
 
 > [!example] Problem
-> Minimum coins from unlimited denominations to make amount `A`. Return -1 if impossible.
+> You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+> Return the fewest number of coins that you need to make up that amount. If that amount of money cannot be made up by any combination of the coins, return -1.
+> You may assume that you have an infinite number of each kind of coin.
+> 
+> **Example 1:**
+> ```
+> Input: coins = [1,2,5], amount = 11
+> Output: 3
+> Explanation: 11 = 5 + 5 + 1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: coins = [2], amount = 3
+> Output: -1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: coins = [1], amount = 0
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - 1 <= coins.length <= 12
+> - 1 <= coins[i] <= 2^{31} - 1
+> - 0 <= amount <= 10^4
 
 > [!info] Approach
-> - **WHY:** Coins are reusable → unbounded knapsack. Overlapping subproblems: the optimal solution for amount `i` reuses optimal solutions for `i - coin`.
-> - **WHAT:** `dp[i]` = min coins to make amount `i`.
-> - **HOW:** `dp[i] = min(dp[i-c] + 1)` for each coin `c ≤ i`; forward sweep (reuse allowed). Base: `dp[0]=0`, rest `inf`.
+> Coins are reusable → unbounded knapsack. Overlapping subproblems: the optimal solution for amount `i` reuses optimal solutions for `i - coin`. `dp[i]` = min coins to make amount `i`. `dp[i] = min(dp[i-c] + 1)` for each coin `c ≤ i`; forward sweep (reuse allowed). Base: `dp[0]=0`, rest `inf`.
+
 
 > [!note]- Python Solution
 > ```python
-> def coinChange(coins: list[int], amount: int) -> int:
+> def coin_change(coins, amount):
 >     dp = [float('inf')] * (amount + 1)
 >     dp[0] = 0
 >     for i in range(1, amount + 1):
@@ -387,16 +661,48 @@ difficulty: mixed
 ### Coin Change II (Total Ways)
 
 > [!example] Problem
-> Count combinations (not permutations) of coins summing to `amount`.
+> You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
+> Return the number of combinations that make up that amount. If that amount of money cannot be made up by any combination of the coins, return 0.
+> You may assume that you have an infinite number of each kind of coin.
+> The answer is guaranteed to fit into a signed 32-bit integer.
+> 
+> **Example 1:**
+> ```
+> Input: amount = 5, coins = [1,2,5]
+> Output: 4
+> Explanation: there are four ways to make up the amount:
+> 5=5
+> 5=2+2+1
+> 5=2+1+1+1
+> 5=1+1+1+1+1
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: amount = 3, coins = [2]
+> Output: 0
+> Explanation: the amount of 3 cannot be made up just with coins of 2.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: amount = 10, coins = [10]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= coins.length <= 300
+> - 1 <= coins[i] <= 5000
+> - All the values of coins are unique.
+> - 0 <= amount <= 5000
 
 > [!info] Approach
-> - **WHY:** Combinations require each denomination to be processed once, not per position. Loop coins outer, amounts inner.
-> - **WHAT:** `dp[i]` = number of combination ways to make amount `i`.
-> - **HOW:** Outer loop over coins; inner forward sweep: `dp[i] += dp[i-c]`. This ensures [1,2] and [2,1] are the same combination.
+> Combinations require each denomination to be processed once, not per position. Loop coins outer, amounts inner. `dp[i]` = number of combination ways to make amount `i`. Outer loop over coins; inner forward sweep: `dp[i] += dp[i-c]`. This ensures [1,2] and [2,1] are the same combination.
+
 
 > [!note]- Python Solution
 > ```python
-> def change(amount: int, coins: list[int]) -> int:
+> def change(amount, coins):
 >     dp = [0] * (amount + 1)
 >     dp[0] = 1
 >     for c in coins:
@@ -416,16 +722,33 @@ difficulty: mixed
 ### Perfect Squares
 
 > [!example] Problem
-> Minimum number of perfect squares summing to `n`.
+> Given an integer n, return the least number of perfect square numbers that sum to n.
+> A perfect square is an integer that is the square of an integer; in other words, it is the product of some integer with itself. For example, 1, 4, 9, and 16 are perfect squares while 3 and 11 are not.
+> 
+> **Example 1:**
+> ```
+> Input: n = 12
+> Output: 3
+> Explanation: 12 = 4 + 4 + 4.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 13
+> Output: 2
+> Explanation: 13 = 4 + 9.
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 10^4
 
 > [!info] Approach
-> - **WHY:** Perfect squares are unlimited "coins"; this is unbounded knapsack / coin change with coins = {1,4,9,16,...}.
-> - **WHAT:** `dp[i]` = min squares summing to `i`.
-> - **HOW:** `dp[i] = min(dp[i - k²] + 1)` for all `k² ≤ i`. Base: `dp[0]=0`.
+> Perfect squares are unlimited "coins"; this is unbounded knapsack / coin change with coins = {1,4,9,16,...}. `dp[i]` = min squares summing to `i`. `dp[i] = min(dp[i - k²] + 1)` for all `k² ≤ i`. Base: `dp[0]=0`.
+
 
 > [!note]- Python Solution
 > ```python
-> def numSquares(n: int) -> int:
+> def num_squares(n):
 >     squares = [k*k for k in range(1, int(n**0.5) + 1)]
 >     dp = [float('inf')] * (n + 1)
 >     dp[0] = 0
@@ -450,16 +773,42 @@ difficulty: mixed
 ### Longest Common Subsequence
 
 > [!example] Problem
-> Length of longest common subsequence (non-contiguous) of two strings.
+> Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
+> A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+> A common subsequence of two strings is a subsequence that is common to both strings.
+> 
+> **Example 1:**
+> ```
+> Input: text1 = "abcde", text2 = "ace" 
+> Output: 3  
+> Explanation: The longest common subsequence is "ace" and its length is 3.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: text1 = "abc", text2 = "abc"
+> Output: 3
+> Explanation: The longest common subsequence is "abc" and its length is 3.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: text1 = "abc", text2 = "def"
+> Output: 0
+> Explanation: There is no such common subsequence, so the result is 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= text1.length, text2.length <= 1000
+> - text1 and text2 consist of only lowercase English characters.
 
 > [!info] Approach
-> - **WHY:** Matching characters at positions `i,j` yields a subproblem on the remaining suffixes; these sub-results are reused.
-> - **WHAT:** `dp[i][j]` = LCS length of `s1[0..i-1]` and `s2[0..j-1]`.
-> - **HOW:** If `s1[i-1]==s2[j-1]`: `dp[i][j] = dp[i-1][j-1]+1`; else `max(dp[i-1][j], dp[i][j-1])`. Space: roll to one row.
+> Matching characters at positions `i,j` yields a subproblem on the remaining suffixes; these sub-results are reused. `dp[i][j]` = LCS length of `s1[0..i-1]` and `s2[0..j-1]`. If `s1[i-1]==s2[j-1]`: `dp[i][j] = dp[i-1][j-1]+1`; else `max(dp[i-1][j], dp[i][j-1])`. Space: roll to one row.
+
 
 > [!note]- Python Solution
 > ```python
-> def longestCommonSubsequence(text1: str, text2: str) -> int:
+> def longest_common_subsequence(text1, text2):
 >     if len(text1) < len(text2):
 >         text1, text2 = text2, text1
 >     prev = [0] * (len(text2) + 1)
@@ -482,16 +831,42 @@ difficulty: mixed
 ### Edit Distance
 
 > [!example] Problem
-> Minimum insert/delete/replace operations to convert `word1` to `word2`.
+> Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
+> You have the following three operations permitted on a word
+> 
+> **Example 1:**
+> ```
+> Input: word1 = "horse", word2 = "ros"
+> Output: 3
+> Explanation: 
+> horse -> rorse (replace 'h' with 'r')
+> rorse -> rose (remove 'r')
+> rose -> ros (remove 'e')
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: word1 = "intention", word2 = "execution"
+> Output: 5
+> Explanation: 
+> intention -> inention (remove 't')
+> inention -> enention (replace 'i' with 'e')
+> enention -> exention (replace 'n' with 'x')
+> exention -> exection (replace 'n' with 'c')
+> exection -> execution (insert 'u')
+> ```
+> 
+> **Constraints:**
+> - 0 <= word1.length, word2.length <= 500
+> - word1 and word2 consist of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** Three operations at each mismatch create overlapping subproblems on shorter string pairs.
-> - **WHAT:** `dp[i][j]` = edit distance between `word1[0..i-1]` and `word2[0..j-1]`.
-> - **HOW:** If chars match: `dp[i-1][j-1]`; else `1 + min(replace=dp[i-1][j-1], delete=dp[i-1][j], insert=dp[i][j-1])`. Base: `dp[i][0]=i`, `dp[0][j]=j`.
+> Three operations at each mismatch create overlapping subproblems on shorter string pairs. `dp[i][j]` = edit distance between `word1[0..i-1]` and `word2[0..j-1]`. If chars match: `dp[i-1][j-1]`; else `1 + min(replace=dp[i-1][j-1], delete=dp[i-1][j], insert=dp[i][j-1])`. Base: `dp[i][0]=i`, `dp[0][j]=j`.
+
 
 > [!note]- Python Solution
 > ```python
-> def minDistance(word1: str, word2: str) -> int:
+> def min_distance(word1, word2):
 >     m, n = len(word1), len(word2)
 >     prev = list(range(n + 1))
 >     for i in range(1, m + 1):
@@ -516,16 +891,34 @@ difficulty: mixed
 ### Longest Palindromic Subsequence
 
 > [!example] Problem
-> Length of longest palindromic subsequence in string `s`.
+> Given a string s, find the longest palindromic subsequence's length in s.
+> A subsequence is a sequence that can be derived from another sequence by deleting some or no elements without changing the order of the remaining elements.
+> 
+> **Example 1:**
+> ```
+> Input: s = "bbbab"
+> Output: 4
+> Explanation: One possible longest palindromic subsequence is "bbbb".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "cbbd"
+> Output: 2
+> Explanation: One possible longest palindromic subsequence is "bb".
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 1000
+> - s consists only of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** A palindrome is its own reverse; LPS(s) = LCS(s, reverse(s)). Both overlapping subproblems.
-> - **WHAT:** `dp[i][j]` = LPS length in `s[i..j]`.
-> - **HOW:** If `s[i]==s[j]`: `dp[i][j] = dp[i+1][j-1]+2`; else `max(dp[i+1][j], dp[i][j-1])`. Fill diagonals outward (length 1→2→…→n).
+> A palindrome is its own reverse; LPS(s) = LCS(s, reverse(s)). Both overlapping subproblems. `dp[i][j]` = LPS length in `s[i..j]`. If `s[i]==s[j]`: `dp[i][j] = dp[i+1][j-1]+2`; else `max(dp[i+1][j], dp[i][j-1])`. Fill diagonals outward (length 1→2→…→n).
+
 
 > [!note]- Python Solution
 > ```python
-> def longestPalindromeSubseq(s: str) -> int:
+> def longest_palindrome_subseq(s):
 >     n = len(s)
 >     dp = [[0] * n for _ in range(n)]
 >     for i in range(n):
@@ -551,16 +944,39 @@ difficulty: mixed
 ### Minimum ASCII Delete Sum for Two Strings
 
 > [!example] Problem
-> Find minimum sum of ASCII values of deleted characters to make two strings equal.
+> Given two strings s1 and s2, return the lowest ASCII sum of deleted characters to make two strings equal.
+> 
+> **Example 1:**
+> ```
+> Input: s1 = "sea", s2 = "eat"
+> Output: 231
+> Explanation: Deleting "s" from "sea" adds the ASCII value of "s" (115) to the sum.
+> Deleting "t" from "eat" adds 116 to the sum.
+> At the end, both strings are equal, and 115 + 116 = 231 is the minimum sum possible to achieve this.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s1 = "delete", s2 = "leet"
+> Output: 403
+> Explanation: Deleting "dee" from "delete" to turn the string into "let",
+> adds 100[d] + 101[e] + 101[e] to the sum.
+> Deleting "e" from "leet" adds 101[e] to the sum.
+> At the end, both strings are equal to "let", and the answer is 100+101+101+101 = 403.
+> If instead we turned both strings into "lee" or "eet", we would get answers of 433 or 417, which are higher.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s1.length, s2.length <= 1000
+> - s1 and s2 consist of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** Deleting characters to equalize is equivalent to keeping the maximum-weight common subsequence (measured in ASCII values). Overlapping on pairs of string prefixes.
-> - **WHAT:** `dp[i][j]` = min ASCII delete cost to equalize `s1[0..i-1]` and `s2[0..j-1]`.
-> - **HOW:** If `s1[i-1]==s2[j-1]`: `dp[i][j]=dp[i-1][j-1]`; else `min(dp[i-1][j]+ord(s1[i-1]), dp[i][j-1]+ord(s2[j-1]))`. Base: prefix ASCII sums.
+> Deleting characters to equalize is equivalent to keeping the maximum-weight common subsequence (measured in ASCII values). Overlapping on pairs of string prefixes. `dp[i][j]` = min ASCII delete cost to equalize `s1[0..i-1]` and `s2[0..j-1]`. If `s1[i-1]==s2[j-1]`: `dp[i][j]=dp[i-1][j-1]`; else `min(dp[i-1][j]+ord(s1[i-1]), dp[i][j-1]+ord(s2[j-1]))`. Base: prefix ASCII sums.
+
 
 > [!note]- Python Solution
 > ```python
-> def minimumDeleteSum(s1: str, s2: str) -> int:
+> def minimum_delete_sum(s1, s2):
 >     m, n = len(s1), len(s2)
 >     prev = [sum(ord(c) for c in s2[:j]) for j in range(n + 1)]
 >     for i in range(1, m + 1):
@@ -585,16 +1001,51 @@ difficulty: mixed
 ### Minimum Window Subsequence (LC 727)
 
 > [!example] Problem
-> Given strings s and t, find the minimum length substring of s such that t is a subsequence of that substring. Return "" if none exists.
+> Given strings `s1` and `s2`, return *the minimum contiguous substring part of *`s1`*, so that *`s2`* is a subsequence of the part*.
+> 
+> If there is no such window in `s1` that covers all characters in `s2`, return the empty string `""`. If there are multiple such minimum-length windows, return the one with the **left-most starting index**.
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** s1 = "abcdebdde", s2 = "bde"
+> **Output:** "bcde"
+> **Explanation:** 
+> "bcde" is the answer because it occurs before "bdde" which has the same length.
+> "deb" is not a smaller window because the elements of s2 in the window must occur in order.
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** s1 = "jmeqksfrsdcmsiwvaovztaqenprpvnbstl", s2 = "u"
+> **Output:** ""
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= s1.length <= 2 * 10^4`
+> 	
+> - `1 <= s2.length <= 100`
+> 	
+> - `s1` and `s2` consist of lowercase English letters.
 
 > [!info] Approach
-> - WHY: Brute force tries all substrings O(n²*m). DP achieves O(n*m): track, for each position in s, the earliest start index in s such that t[0..j] has been matched as a subsequence ending at that position.
-> - WHAT: 2D DP — dp[i][j] = starting index in s such that s[dp[i][j]..i] contains t[0..j] as a subsequence.
-> - HOW: dp[i][j] = dp[i-1][j-1] if s[i]==t[j] else dp[i-1][j]. Base: dp[i][0] = i when s[i]==t[0]. When dp[i][len(t)-1] is valid, compute window length = i - dp[i][len(t)-1] + 1 and track minimum.
+> Brute force tries all substrings O(n²*m). DP achieves O(n*m): track, for each position in s, the earliest start index in s such that t[0..j] has been matched as a subsequence ending at that position. 2D DP — dp[i][j] = starting index in s such that s[dp[i][j]..i] contains t[0..j] as a subsequence. dp[i][j] = dp[i-1][j-1] if s[i]==t[j] else dp[i-1][j]. Base: dp[i][0] = i when s[i]==t[0]. When dp[i][len(t)-1] is valid, compute window length = i - dp[i][len(t)-1] + 1 and track minimum.
+
 
 > [!note]- Python Solution
 > ```python
-> def minWindow(s: str, t: str) -> str:
+> def min_window(s, t):
 >     m, n = len(s), len(t)
 >     # dp[j] = start index in s for matching t[0..j] ending at current s position
 >     INF = float('inf')
@@ -635,16 +1086,36 @@ difficulty: mixed
 ### Unique Paths
 
 > [!example] Problem
-> Count distinct paths from top-left to bottom-right of m×n grid moving only right or down.
+> There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
+> Given the two integers m and n, return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+> The test cases are generated so that the answer will be less than or equal to 2 * 109.
+> 
+> **Example 1:**
+> ```
+> Input: m = 3, n = 7
+> Output: 28
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: m = 3, n = 2
+> Output: 3
+> Explanation: From the top-left corner, there are a total of 3 ways to reach the bottom-right corner:
+> 1. Right -> Down -> Down
+> 2. Down -> Down -> Right
+> 3. Down -> Right -> Down
+> ```
+> 
+> **Constraints:**
+> - 1 <= m, n <= 100
 
 > [!info] Approach
-> - **WHY:** Each cell is reachable from exactly above or left; paths to any cell = sum of paths to two neighbors — overlapping.
-> - **WHAT:** `dp[j]` = paths to column `j` of current row (rolling 1D array).
-> - **HOW:** `dp[j] += dp[j-1]` for each row. Base: all 1s initially (single path along edges).
+> Each cell is reachable from exactly above or left; paths to any cell = sum of paths to two neighbors — overlapping. `dp[j]` = paths to column `j` of current row (rolling 1D array). `dp[j] += dp[j-1]` for each row. Base: all 1s initially (single path along edges).
+
 
 > [!note]- Python Solution
 > ```python
-> def uniquePaths(m: int, n: int) -> int:
+> def unique_paths(m, n):
 >     dp = [1] * n
 >     for _ in range(1, m):
 >         for j in range(1, n):
@@ -663,16 +1134,40 @@ difficulty: mixed
 ### Unique Paths II (With Obstacles)
 
 > [!example] Problem
-> Unique paths but some cells are blocked (obstacle=1).
+> You are given an m x n integer array grid. There is a robot initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
+> An obstacle and space are marked as 1 or 0 respectively in grid. A path that the robot takes cannot include any square that is an obstacle.
+> Return the number of possible unique paths that the robot can take to reach the bottom-right corner.
+> The testcases are generated so that the answer will be less than or equal to 2 * 109.
+> 
+> **Example 1:**
+> ```
+> Input: obstacleGrid = [[0,0,0],[0,1,0],[0,0,0]]
+> Output: 2
+> Explanation: There is one obstacle in the middle of the 3x3 grid above.
+> There are two ways to reach the bottom-right corner:
+> 1. Right -> Right -> Down -> Down
+> 2. Down -> Down -> Right -> Right
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: obstacleGrid = [[0,1],[0,0]]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - m == obstacleGrid.length
+> - n == obstacleGrid[i].length
+> - 1 <= m, n <= 100
+> - obstacleGrid[i][j] is 0 or 1.
 
 > [!info] Approach
-> - **WHY:** Same grid DP but obstacle cells have zero paths and block propagation downstream.
-> - **WHAT:** `dp[j]` = paths to `(i,j)` treating blocked cells as 0.
-> - **HOW:** Same recurrence; set `dp[j]=0` when `obstacleGrid[i][j]==1`. Careful with first row/col initialization.
+> Same grid DP but obstacle cells have zero paths and block propagation downstream. `dp[j]` = paths to `(i,j)` treating blocked cells as 0. Same recurrence; set `dp[j]=0` when `obstacleGrid[i][j]==1`. Careful with first row/col initialization.
+
 
 > [!note]- Python Solution
 > ```python
-> def uniquePathsWithObstacles(obstacleGrid: list[list[int]]) -> int:
+> def unique_paths_with_obstacles(obstacleGrid):
 >     m, n = len(obstacleGrid), len(obstacleGrid[0])
 >     dp = [0] * n
 >     dp[0] = 1 if obstacleGrid[0][0] == 0 else 0
@@ -696,16 +1191,35 @@ difficulty: mixed
 ### Minimum Path Sum
 
 > [!example] Problem
-> Top-left to bottom-right, moving right/down only. Minimize sum of values on path.
+> Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
+> Note: You can only move either down or right at any point in time.
+> 
+> **Example 1:**
+> ```
+> Input: grid = [[1,3,1],[1,5,1],[4,2,1]]
+> Output: 7
+> Explanation: Because the path 1 → 3 → 1 → 1 → 1 minimizes the sum.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: grid = [[1,2,3],[4,5,6]]
+> Output: 12
+> ```
+> 
+> **Constraints:**
+> - m == grid.length
+> - n == grid[i].length
+> - 1 <= m, n <= 200
+> - 0 <= grid[i][j] <= 200
 
 > [!info] Approach
-> - **WHY:** Min-cost path to `(i,j)` = grid value + min of cost from above or left — overlapping.
-> - **WHAT:** `dp[j]` = min cost to reach column `j` of current row.
-> - **HOW:** `dp[j] = grid[i][j] + min(dp[j], dp[j-1])`. Initialize first row as prefix sums.
+> Min-cost path to `(i,j)` = grid value + min of cost from above or left — overlapping. `dp[j]` = min cost to reach column `j` of current row. `dp[j] = grid[i][j] + min(dp[j], dp[j-1])`. Initialize first row as prefix sums.
+
 
 > [!note]- Python Solution
 > ```python
-> def minPathSum(grid: list[list[int]]) -> int:
+> def min_path_sum(grid):
 >     m, n = len(grid), len(grid[0])
 >     dp = grid[0][:]
 >     for j in range(1, n):
@@ -728,16 +1242,39 @@ difficulty: mixed
 ### Maximal Square
 
 > [!example] Problem
-> Largest square of 1s in a binary matrix; return its area.
+> Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+> 
+> **Example 1:**
+> ```
+> Input: matrix = [["1","0","1","0","0"],["1","0","1","1","1"],["1","1","1","1","1"],["1","0","0","1","0"]]
+> Output: 4
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: matrix = [["0","1"],["1","0"]]
+> Output: 1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: matrix = [["0"]]
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - m == matrix.length
+> - n == matrix[i].length
+> - 1 <= m, n <= 300
+> - matrix[i][j] is '0' or '1'.
 
 > [!info] Approach
-> - **WHY:** A square of side `k` at `(i,j)` requires squares of side `k-1` at three adjacent neighbors — optimal substructure with overlapping sub-rectangles.
-> - **WHAT:** `dp[i][j]` = side of largest all-1s square with bottom-right at `(i,j)`.
-> - **HOW:** If `matrix[i][j]=='1'`: `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`. Roll to two rows or 1D.
+> A square of side `k` at `(i,j)` requires squares of side `k-1` at three adjacent neighbors — optimal substructure with overlapping sub-rectangles. `dp[i][j]` = side of largest all-1s square with bottom-right at `(i,j)`. If `matrix[i][j]=='1'`: `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`. Roll to two rows or 1D.
+
 
 > [!note]- Python Solution
 > ```python
-> def maximalSquare(matrix: list[list[str]]) -> int:
+> def maximal_square(matrix):
 >     m, n = len(matrix), len(matrix[0])
 >     dp = [[0] * (n + 1) for _ in range(m + 1)]
 >     side = 0
@@ -762,16 +1299,37 @@ difficulty: mixed
 ### Burst Balloons
 
 > [!example] Problem
-> `n` balloons with values. Bursting balloon `i` scores `nums[i-1]*nums[i]*nums[i+1]`. Maximize total coins.
+> You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
+> If you burst the ith balloon, you will get nums[i - 1] * nums[i] * nums[i + 1] coins. If i - 1 or i + 1 goes out of bounds of the array, then treat it as if there is a balloon with a 1 painted on it.
+> Return the maximum coins you can collect by bursting the balloons wisely.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [3,1,5,8]
+> Output: 167
+> Explanation:
+> nums = [3,1,5,8] --> [3,5,8] --> [3,8] --> [8] --> []
+> coins =  3*1*5    +   3*5*8   +  1*3*8  + 1*8*1 = 167
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,5]
+> Output: 10
+> ```
+> 
+> **Constraints:**
+> - n == nums.length
+> - 1 <= n <= 300
+> - 0 <= nums[i] <= 100
 
 > [!info] Approach
-> - **WHY:** Choosing which balloon to burst first/last creates overlapping sub-intervals. Thinking "last balloon burst" in an interval gives clean independence.
-> - **WHAT:** `dp[i][j]` = max coins from bursting all balloons strictly between `i` and `j` (pad array with 1s at both ends).
-> - **HOW:** For each `k` in `(i,j)`: `dp[i][j] = max(dp[i][k] + nums[i]*nums[k]*nums[j] + dp[k][j])`. Fill by increasing interval length.
+> Choosing which balloon to burst first/last creates overlapping sub-intervals. Thinking "last balloon burst" in an interval gives clean independence. `dp[i][j]` = max coins from bursting all balloons strictly between `i` and `j` (pad array with 1s at both ends). For each `k` in `(i,j)`: `dp[i][j] = max(dp[i][k] + nums[i]*nums[k]*nums[j] + dp[k][j])`. Fill by increasing interval length.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxCoins(nums: list[int]) -> int:
+> def max_coins(nums):
 >     nums = [1] + nums + [1]
 >     n = len(nums)
 >     dp = [[0] * n for _ in range(n)]
@@ -800,13 +1358,12 @@ difficulty: mixed
 > Given dimensions of matrices to multiply in sequence, find the optimal parenthesization minimizing scalar multiplications.
 
 > [!info] Approach
-> - **WHY:** Splitting the chain at any point `k` yields independent subproblems for left and right chains; optimal split depends on results of all sub-chains — overlapping.
-> - **WHAT:** `dp[i][j]` = min cost to multiply matrices `i` through `j`.
-> - **HOW:** `dp[i][j] = min(dp[i][k] + dp[k+1][j] + dims[i-1]*dims[k]*dims[j])` for `k` in `[i,j)`. Base: `dp[i][i]=0`.
+> Splitting the chain at any point `k` yields independent subproblems for left and right chains; optimal split depends on results of all sub-chains — overlapping. `dp[i][j]` = min cost to multiply matrices `i` through `j`. `dp[i][j] = min(dp[i][k] + dp[k+1][j] + dims[i-1]*dims[k]*dims[j])` for `k` in `[i,j)`. Base: `dp[i][i]=0`.
+
 
 > [!note]- Python Solution
 > ```python
-> def matrixChainOrder(dims: list[int]) -> int:
+> def matrix_chain_order(dims):
 >     n = len(dims) - 1  # n matrices
 >     dp = [[0] * n for _ in range(n)]
 >     for length in range(2, n + 1):
@@ -830,16 +1387,39 @@ difficulty: mixed
 ### Palindrome Partitioning II (Minimum Cuts)
 
 > [!example] Problem
-> Minimum cuts to partition `s` into palindromic substrings.
+> Given a string s, partition s such that every substring of the partition is a palindrome.
+> Return the minimum cuts needed for a palindrome partitioning of s.
+> 
+> **Example 1:**
+> ```
+> Input: s = "aab"
+> Output: 1
+> Explanation: The palindrome partitioning ["aa","b"] could be produced using 1 cut.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "a"
+> Output: 0
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "ab"
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 2000
+> - s consists of lowercase English letters only.
 
 > [!info] Approach
-> - **WHY:** Min cuts for `s[0..i]` depends on min cuts for all valid palindromic suffixes — overlapping.
-> - **WHAT:** `dp[i]` = min cuts for `s[0..i]`. Precompute `is_pal[i][j]` in O(n²).
-> - **HOW:** `dp[i] = min(dp[j-1]+1)` for all `j ≤ i` where `s[j..i]` is palindrome; `dp[j-1]=-1` when `j=0`.
+> Min cuts for `s[0..i]` depends on min cuts for all valid palindromic suffixes — overlapping. `dp[i]` = min cuts for `s[0..i]`. Precompute `is_pal[i][j]` in O(n²). `dp[i] = min(dp[j-1]+1)` for all `j ≤ i` where `s[j..i]` is palindrome; `dp[j-1]=-1` when `j=0`.
+
 
 > [!note]- Python Solution
 > ```python
-> def minCut(s: str) -> int:
+> def min_cut(s):
 >     n = len(s)
 >     is_pal = [[False] * n for _ in range(n)]
 >     for i in range(n - 1, -1, -1):
@@ -864,16 +1444,34 @@ difficulty: mixed
 ### Strange Printer
 
 > [!example] Problem
-> A printer can only print a sequence of the same character. Minimum turns to print string `s`.
+> There is a strange printer with the following two special properties:
+> Given a string s, return the minimum number of turns the printer needed to print it.
+> 
+> **Example 1:**
+> ```
+> Input: s = "aaabbb"
+> Output: 2
+> Explanation: Print "aaa" first and then print "bbb".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "aba"
+> Output: 2
+> Explanation: Print "aaa" first and then print "b" from the second place of the string, which will cover the existing character 'a'.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 100
+> - s consists of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** Printing `s[i..j]` can leverage if `s[i]==s[k]` for some `k` in `(i,j)` — we can extend the first turn to cover `s[k]`. Interval DP captures this.
-> - **WHAT:** `dp[i][j]` = min turns to print `s[i..j]`.
-> - **HOW:** Base: `dp[i][i]=1`. For `i<j`: start with `dp[i][j] = dp[i+1][j] + 1` (print `s[i]` alone, then recurse). If `s[i]==s[k]` for some `k` in `(i,j]`: `dp[i][j] = min(dp[i][j], dp[i+1][k] + dp[k+1][j])` — merge `s[i]` with `s[k]`'s turn.
+> Printing `s[i..j]` can leverage if `s[i]==s[k]` for some `k` in `(i,j)` — we can extend the first turn to cover `s[k]`. Interval DP captures this. `dp[i][j]` = min turns to print `s[i..j]`. Base: `dp[i][i]=1`. For `i<j`: start with `dp[i][j] = dp[i+1][j] + 1` (print `s[i]` alone, then recurse). If `s[i]==s[k]` for some `k` in `(i,j]`: `dp[i][j] = min(dp[i][j], dp[i+1][k] + dp[k+1][j])` — merge `s[i]` with `s[k]`'s turn.
+
 
 > [!note]- Python Solution
 > ```python
-> def strangePrinter(s: str) -> int:
+> def strange_printer(s):
 >     n = len(s)
 >     dp = [[0] * n for _ in range(n)]
 >     for i in range(n - 1, -1, -1):
@@ -900,18 +1498,36 @@ difficulty: mixed
 ### Diameter of Binary Tree
 
 > [!example] Problem
-> Length of longest path between any two nodes (may not pass through root).
+> Given the root of a binary tree, return the length of the diameter of the tree.
+> The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
+> The length of a path between two nodes is represented by the number of edges between them.
+> 
+> **Example 1:**
+> ```
+> Input: root = [1,2,3,4,5]
+> Output: 3
+> Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: root = [1,2]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the tree is in the range [1, 10^4].
+> - -100 <= Node.val <= 100
 
 > [!info] Approach
-> - **WHY:** The diameter through a node = depth of left subtree + depth of right subtree. Post-order DFS — each node's result depends on its children's results.
-> - **WHAT:** For each node, compute depth (max path to leaf) and update global diameter.
-> - **HOW:** DFS returns depth; at each node `diameter = max(diameter, left_depth + right_depth)`. Return `max(left, right) + 1`.
+> The diameter through a node = depth of left subtree + depth of right subtree. Post-order DFS — each node's result depends on its children's results. For each node, compute depth (max path to leaf) and update global diameter. DFS returns depth; at each node `diameter = max(diameter, left_depth + right_depth)`. Return `max(left, right) + 1`.
+
 
 > [!note]- Python Solution
 > ```python
-> def diameterOfBinaryTree(root) -> int:
+> def diameter_of_binary_tree(root):
 >     ans = 0
->     def depth(node) -> int:
+>     def depth(node):
 >         nonlocal ans
 >         if not node:
 >             return 0
@@ -933,18 +1549,37 @@ difficulty: mixed
 ### Binary Tree Maximum Path Sum
 
 > [!example] Problem
-> Maximum sum of any path in a binary tree (path can start and end at any nodes).
+> A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
+> The path sum of a path is the sum of the node's values in the path.
+> Given the root of a binary tree, return the maximum path sum of any non-empty path.
+> 
+> **Example 1:**
+> ```
+> Input: root = [1,2,3]
+> Output: 6
+> Explanation: The optimal path is 2 -> 1 -> 3 with a path sum of 2 + 1 + 3 = 6.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: root = [-10,9,20,null,null,15,7]
+> Output: 42
+> Explanation: The optimal path is 15 -> 20 -> 7 with a path sum of 15 + 20 + 7 = 42.
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the tree is in the range [1, 3 * 10^4].
+> - -1000 <= Node.val <= 1000
 
 > [!info] Approach
-> - **WHY:** At each node, the max path through it = node.val + max(0, left_gain) + max(0, right_gain). But the recursive return must only pass one arm upward (can't fork up).
-> - **WHAT:** DFS returns max single-arm gain from node upward; updates global answer with both arms.
-> - **HOW:** `left_gain = max(0, dfs(left))`, `right_gain = max(0, dfs(right))`. `ans = max(ans, node.val + left_gain + right_gain)`. Return `node.val + max(left_gain, right_gain)`.
+> At each node, the max path through it = node.val + max(0, left_gain) + max(0, right_gain). But the recursive return must only pass one arm upward (can't fork up). DFS returns max single-arm gain from node upward; updates global answer with both arms. `left_gain = max(0, dfs(left))`, `right_gain = max(0, dfs(right))`. `ans = max(ans, node.val + left_gain + right_gain)`. Return `node.val + max(left_gain, right_gain)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxPathSum(root) -> int:
+> def max_path_sum(root):
 >     ans = float('-inf')
->     def dfs(node) -> int:
+>     def dfs(node):
 >         nonlocal ans
 >         if not node:
 >             return 0
@@ -967,16 +1602,35 @@ difficulty: mixed
 ### House Robber III
 
 > [!example] Problem
-> Rob houses in a binary tree; no two directly connected nodes. Maximize sum.
+> The thief has found himself a new place for his thievery again. There is only one entrance to this area, called root.
+> Besides the root, each house has one and only one parent house. After a tour, the smart thief realized that all houses in this place form a binary tree. It will automatically contact the police if two directly-linked houses were broken into on the same night.
+> Given the root of the binary tree, return the maximum amount of money the thief can rob without alerting the police.
+> 
+> **Example 1:**
+> ```
+> Input: root = [3,2,3,null,3,null,1]
+> Output: 7
+> Explanation: Maximum amount of money the thief can rob = 3 + 3 + 1 = 7.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: root = [3,4,5,1,3,null,1]
+> Output: 9
+> Explanation: Maximum amount of money the thief can rob = 4 + 5 = 9.
+> ```
+> 
+> **Constraints:**
+> - The number of nodes in the tree is in the range [1, 10^4].
+> - 0 <= Node.val <= 10^4
 
 > [!info] Approach
-> - **WHY:** At each node, two choices: rob it (can't rob children) or don't (can rob children). Post-order DP — decision at node depends on subtree results.
-> - **WHAT:** For each node, return `(rob, skip)` = max profit with and without robbing this node.
-> - **HOW:** `rob = node.val + left_skip + right_skip`; `skip = max(left_rob, left_skip) + max(right_rob, right_skip)`.
+> At each node, two choices: rob it (can't rob children) or don't (can rob children). Post-order DP — decision at node depends on subtree results. For each node, return `(rob, skip)` = max profit with and without robbing this node. `rob = node.val + left_skip + right_skip`; `skip = max(left_rob, left_skip) + max(right_rob, right_skip)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def rob(root) -> int:
+> def rob(root):
 >     def dfs(node):
 >         if not node:
 >             return 0, 0  # (rob, skip)
@@ -1000,12 +1654,33 @@ difficulty: mixed
 
 ### Best Time to Buy and Sell Stock (All Variants)
 
-> [!example] Problem I — One transaction
-> Max profit with at most 1 buy-sell.
+> [!example] Problem
+> You are given an array prices where prices[i] is the price of a given stock on the ith day.
+> You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
+> Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
+> 
+> **Example 1:**
+> ```
+> Input: prices = [7,1,5,3,6,4]
+> Output: 5
+> Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
+> Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: prices = [7,6,4,3,1]
+> Output: 0
+> Explanation: In this case, no transactions are done and the max profit = 0.
+> ```
+> 
+> **Constraints:**
+> - 1 <= prices.length <= 10^5
+> - 0 <= prices[i] <= 10^4
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(prices: list[int]) -> int:
+> def max_profit(prices):
 >     min_price, max_profit = float('inf'), 0
 >     for p in prices:
 >         min_price = min(min_price, p)
@@ -1017,7 +1692,7 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(prices: list[int]) -> int:
+> def max_profit(prices):
 >     return sum(max(0, prices[i] - prices[i-1]) for i in range(1, len(prices)))
 > ```
 
@@ -1025,7 +1700,7 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(prices: list[int]) -> int:
+> def max_profit(prices):
 >     b1 = b2 = float('-inf')
 >     s1 = s2 = 0
 >     for p in prices:
@@ -1040,7 +1715,7 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(k: int, prices: list[int]) -> int:
+> def max_profit(k, prices):
 >     n = len(prices)
 >     if not prices or k == 0:
 >         return 0
@@ -1067,13 +1742,12 @@ difficulty: mixed
 > Unlimited transactions; must rest 1 day after selling.
 
 > [!info] Approach
-> - **WHY:** Three states model the constraint: holding, just sold (cooldown), resting. Transitions connect states across days.
-> - **WHAT:** `held` = best profit when holding; `sold` = best on day of sell; `rest` = best when not holding and not in cooldown.
-> - **HOW:** `held = max(held, rest - price)`, `sold = held + price`, `rest = max(rest, sold)`.
+> Three states model the constraint: holding, just sold (cooldown), resting. Transitions connect states across days. `held` = best profit when holding; `sold` = best on day of sell; `rest` = best when not holding and not in cooldown. `held = max(held, rest - price)`, `sold = held + price`, `rest = max(rest, sold)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(prices: list[int]) -> int:
+> def max_profit(prices):
 >     held, sold, rest = float('-inf'), 0, 0
 >     for p in prices:
 >         held, sold, rest = max(held, rest - p), held + p, max(rest, sold)
@@ -1091,12 +1765,12 @@ difficulty: mixed
 > Unlimited transactions; fixed `fee` per sell.
 
 > [!info] Approach
-> - **WHAT:** Two states: `hold` (best profit holding), `cash` (best profit not holding).
-> - **HOW:** `hold = max(hold, cash - price)`, `cash = max(cash, hold + price - fee)`.
+> Two states: `hold` (best profit holding), `cash` (best profit not holding). `hold = max(hold, cash - price)`, `cash = max(cash, hold + price - fee)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxProfit(prices: list[int], fee: int) -> int:
+> def max_profit(prices, fee):
 >     hold, cash = float('-inf'), 0
 >     for p in prices:
 >         hold, cash = max(hold, cash - p), max(cash, hold + p - fee)
@@ -1116,18 +1790,40 @@ difficulty: mixed
 ### Shortest Path Visiting All Nodes
 
 > [!example] Problem
-> In an undirected connected graph, find the shortest path that visits every node at least once.
+> You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
+> Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
+> 
+> **Example 1:**
+> ```
+> Input: graph = [[1,2,3],[0],[0],[0]]
+> Output: 4
+> Explanation: One possible path is [1,0,2,0,3]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]
+> Output: 4
+> Explanation: One possible path is [0,1,4,2,3]
+> ```
+> 
+> **Constraints:**
+> - n == graph.length
+> - 1 <= n <= 12
+> - 0 <= graph[i].length < n
+> - graph[i] does not contain i.
+> - If graph[a] contains b, then graph[b] contains a.
+> - The input graph is always connected.
 
 > [!info] Approach
-> - **WHY:** State must encode which nodes have been visited; bitmask encodes visited set in O(1) space per state. BFS on state `(mask, last_node)` finds minimum steps.
-> - **WHAT:** BFS with state `(visited_mask, current_node)`. Start from all nodes simultaneously (distance 0).
-> - **HOW:** Enqueue `(1 << i, i)` for each node `i`. BFS level = distance. Terminate when `mask == (1<<n)-1`.
+> State must encode which nodes have been visited; bitmask encodes visited set in O(1) space per state. BFS on state `(mask, last_node)` finds minimum steps. BFS with state `(visited_mask, current_node)`. Start from all nodes simultaneously (distance 0). Enqueue `(1 << i, i)` for each node `i`. BFS level = distance. Terminate when `mask == (1<<n)-1`.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
 > 
-> def shortestPathLength(graph: list[list[int]]) -> int:
+> def shortest_path_length(graph):
 >     n = len(graph)
 >     full = (1 << n) - 1
 >     queue = deque()
@@ -1159,16 +1855,50 @@ difficulty: mixed
 ### Numbers At Most N Given Digit Set
 
 > [!example] Problem
-> Count positive integers ≤ `n` whose digits come from a given sorted set `digits`.
+> Given an array of digits which is sorted in non-decreasing order. You can write numbers using each digits[i] as many times as we want. For example, if digits = ['1','3','5'], we may write numbers such as '13', '551', and '1351315'.
+> Return the number of positive integers that can be generated that are less than or equal to a given integer n.
+> 
+> **Example 1:**
+> ```
+> Input: digits = ["1","3","5","7"], n = 100
+> Output: 20
+> Explanation: 
+> The 20 numbers that can be written are:
+> 1, 3, 5, 7, 11, 13, 15, 17, 31, 33, 35, 37, 51, 53, 55, 57, 71, 73, 75, 77.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: digits = ["1","4","9"], n = 1000000000
+> Output: 29523
+> Explanation: 
+> We can write 3 one digit numbers, 9 two digit numbers, 27 three digit numbers,
+> 81 four digit numbers, 243 five digit numbers, 729 six digit numbers,
+> 2187 seven digit numbers, 6561 eight digit numbers, and 19683 nine digit numbers.
+> In total, this is 29523 integers that can be written using the digits array.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: digits = ["7"], n = 8
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= digits.length <= 9
+> - digits[i].length == 1
+> - digits[i] is a digit from '1' to '9'.
+> - All the values in digits are unique.
+> - digits is sorted in non-decreasing order.
+> - 1 <= n <= 10^9
 
 > [!info] Approach
-> - **WHY:** Digit-by-digit construction with a "tight" constraint — once a digit below the bound is placed, all subsequent digits can be anything in the set.
-> - **WHAT:** Count numbers with fewer digits than `n` + count numbers with same digit count respecting the tight constraint.
-> - **HOW:** For `k < len(n_str)` digits: `|digits|^k` choices. For `k == len(n_str)`: iterate digit by digit, count choices where current digit < bound digit, then check tight equality.
+> Digit-by-digit construction with a "tight" constraint — once a digit below the bound is placed, all subsequent digits can be anything in the set. Count numbers with fewer digits than `n` + count numbers with same digit count respecting the tight constraint. For `k < len(n_str)` digits: `|digits|^k` choices. For `k == len(n_str)`: iterate digit by digit, count choices where current digit < bound digit, then check tight equality.
+
 
 > [!note]- Python Solution
 > ```python
-> def atMostNGivenDigitSet(digits: list[str], n: int) -> int:
+> def at_most_n_given_digit_set(digits, n):
 >     s = str(n)
 >     k = len(s)
 >     count = 0
@@ -1197,16 +1927,47 @@ difficulty: mixed
 ### Super Egg Drop
 
 > [!example] Problem
-> With `k` eggs and `n` floors, find the minimum number of trials to determine the critical floor in the worst case.
+> You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
+> You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+> Each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+> Return the minimum number of moves that you need to determine with certainty what the value of f is.
+> 
+> **Example 1:**
+> ```
+> Input: k = 1, n = 2
+> Output: 2
+> Explanation: 
+> Drop the egg from floor 1. If it breaks, we know that f = 0.
+> Otherwise, drop the egg from floor 2. If it breaks, we know that f = 1.
+> If it does not break, then we know f = 2.
+> Hence, we need at minimum 2 moves to determine with certainty what the value of f is.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: k = 2, n = 6
+> Output: 3
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: k = 3, n = 14
+> Output: 4
+> ```
+> 
+> **Constraints:**
+> - 1 <= k <= 100
+> - 1 <= n <= 10^4
 
 > [!info] Approach
-> - **WHY:** Naive DP `dp[k][n] = min over t(1 + max(dp[k-1][t-1], dp[k][n-t]))` is O(kn²). Inverted DP is O(kn log n).
-> - **WHAT (inverted):** `dp[m][k]` = max floors testable in `m` moves with `k` eggs.
-> - **HOW:** `dp[m][k] = dp[m-1][k-1] + dp[m-1][k] + 1`. Find minimum `m` where `dp[m][k] >= n`.
+> Naive DP `dp[k][n] = min over t(1 + max(dp[k-1][t-1], dp[k][n-t]))` is O(kn²). Inverted DP is O(kn log n). **WHAT (inverted):** `dp[m][k]` = max floors testable in `m` moves with `k` eggs. `dp[m][k] = dp[m-1][k-1] + dp[m-1][k] + 1`. Find minimum `m` where `dp[m][k] >= n`.
+
+
+
 
 > [!note]- Python Solution
 > ```python
-> def superEggDrop(k: int, n: int) -> int:
+> def super_egg_drop(k, n):
 >     m = 0
 >     dp = [0] * (k + 1)
 >     while dp[k] < n:
@@ -1231,17 +1992,39 @@ difficulty: mixed
 ### Longest Increasing Subsequence
 
 > [!example] Problem
-> Given an integer array `nums`, return the length of the longest strictly increasing subsequence.
+> Given an integer array nums, return the length of the longest strictly increasing subsequence.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [10,9,2,5,3,7,101,18]
+> Output: 4
+> Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [0,1,0,3,2,3]
+> Output: 4
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [7,7,7,7,7,7,7]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 2500
+> - -10^4 <= nums[i] <= 10^4
 
 > [!info] Approach
-> - **WHY:** Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n).
-> - **WHAT:** `tails[i]` = smallest tail element of all increasing subsequences of length `i+1` seen so far.
-> - **HOW:** For each `x` in `nums`, binary search `tails` for the first element `>= x`. If found, replace it with `x`; otherwise append `x`. Answer = `len(tails)`.
+> Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n). `tails[i]` = smallest tail element of all increasing subsequences of length `i+1` seen so far. For each `x` in `nums`, binary search `tails` for the first element `>= x`. If found, replace it with `x`; otherwise append `x`. Answer = `len(tails)`.
+
 
 > [!note]- Python Solution
 > ```python
 > import bisect
-> def lengthOfLIS(nums: list[int]) -> int:
+> def length_of_lis(nums):
 >     tails = []
 >     for x in nums:
 >         pos = bisect.bisect_left(tails, x)
@@ -1266,13 +2049,12 @@ difficulty: mixed
 > Given `nums`, return the number of longest increasing subsequences (LC 673).
 
 > [!info] Approach
-> - **WHY:** Length alone isn't enough; need to count paths. Two parallel arrays track both.
-> - **WHAT:** `length[i]` = LIS length ending at index `i`. `count[i]` = number of such subsequences.
-> - **HOW:** For each `i`, scan `j < i`. If `nums[j] < nums[i]`: if `length[j]+1 > length[i]`, update both; if equal, add `count[j]` to `count[i]`. Answer = sum of `count[i]` where `length[i] == max_length`.
+> Length alone isn't enough; need to count paths. Two parallel arrays track both. `length[i]` = LIS length ending at index `i`. `count[i]` = number of such subsequences. For each `i`, scan `j < i`. If `nums[j] < nums[i]`: if `length[j]+1 > length[i]`, update both; if equal, add `count[j]` to `count[i]`. Answer = sum of `count[i]` where `length[i] == max_length`.
+
 
 > [!note]- Python Solution
 > ```python
-> def findNumberOfLIS(nums: list[int]) -> int:
+> def find_number_of_lis(nums):
 >     n = len(nums)
 >     length = [1] * n
 >     count = [1] * n
@@ -1302,13 +2084,12 @@ difficulty: mixed
 > A bitonic subsequence first increases then decreases (either part may be empty). Find its maximum length.
 
 > [!info] Approach
-> - **WHY:** Decompose into LIS from the left and LIS from the right (longest decreasing = LIS reversed). The peak at index `i` contributes `lis[i] + lds[i] - 1`.
-> - **WHAT:** `lis[i]` = LIS length ending at `i`; `lds[i]` = longest decreasing subsequence starting at `i`.
-> - **HOW:** Compute `lis` left-to-right O(n²), `lds` right-to-left O(n²). Answer = `max(lis[i] + lds[i] - 1)`.
+> Decompose into LIS from the left and LIS from the right (longest decreasing = LIS reversed). The peak at index `i` contributes `lis[i] + lds[i] - 1`. `lis[i]` = LIS length ending at `i`; `lds[i]` = longest decreasing subsequence starting at `i`. Compute `lis` left-to-right O(n²), `lds` right-to-left O(n²). Answer = `max(lis[i] + lds[i] - 1)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def longestBitonicSubsequence(nums: list[int]) -> int:
+> def longest_bitonic_subsequence(nums):
 >     n = len(nums)
 >     lis = [1] * n
 >     lds = [1] * n
@@ -1336,16 +2117,44 @@ difficulty: mixed
 ### Distinct Subsequences
 
 > [!example] Problem
-> Given strings `s` and `t`, count the number of distinct subsequences of `s` that equal `t` (LC 115).
+> Given two strings s and t, return the number of distinct subsequences of s which equals t.
+> The test cases are generated so that the answer fits on a 32-bit signed integer.
+> 
+> **Example 1:**
+> ```
+> Input: s = "rabbbit", t = "rabbit"
+> Output: 3
+> Explanation:
+> As shown below, there are 3 ways you can generate "rabbit" from s.
+> rabbbit
+> rabbbit
+> rabbbit
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "babgbag", t = "bag"
+> Output: 5
+> Explanation:
+> As shown below, there are 5 ways you can generate "bag" from s.
+> babgbag
+> babgbag
+> babgbag
+> babgbag
+> babgbag
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length, t.length <= 1000
+> - s and t consist of English letters.
 
 > [!info] Approach
-> - **WHY:** At each position we either use `s[i]` to match `t[j]` or we skip it; both branches must be counted.
-> - **WHAT:** `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`.
-> - **HOW:** If `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use or skip). Else: `dp[i][j] = dp[i-1][j]`. Base: `dp[i][0] = 1` for all `i`.
+> At each position we either use `s[i]` to match `t[j]` or we skip it; both branches must be counted. `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`. If `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use or skip). Else: `dp[i][j] = dp[i-1][j]`. Base: `dp[i][0] = 1` for all `i`.
+
 
 > [!note]- Python Solution
 > ```python
-> def numDistinct(s: str, t: str) -> int:
+> def num_distinct(s, t):
 >     m, n = len(s), len(t)
 >     dp = [0] * (n + 1)
 >     dp[0] = 1
@@ -1367,16 +2176,45 @@ difficulty: mixed
 ### Interleaving String
 
 > [!example] Problem
-> Given `s1`, `s2`, `s3`, return true if `s3` is formed by an interleaving of `s1` and `s2` (LC 97).
+> Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
+> An interleaving of two strings s and t is a configuration where s and t are divided into n and m substrings respectively, such that:
+> Note: a + b is the concatenation of strings a and b.
+> 
+> **Example 1:**
+> ```
+> Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbcbcac"
+> Output: true
+> Explanation: One way to obtain s3 is:
+> Split s1 into s1 = "aa" + "bc" + "c", and s2 into s2 = "dbbc" + "a".
+> Interleaving the two splits, we get "aa" + "dbbc" + "bc" + "a" + "c" = "aadbbcbcac".
+> Since s3 can be obtained by interleaving s1 and s2, we return true.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s1 = "aabcc", s2 = "dbbca", s3 = "aadbbbaccc"
+> Output: false
+> Explanation: Notice how it is impossible to interleave s2 with any other string to obtain s3.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s1 = "", s2 = "", s3 = ""
+> Output: true
+> ```
+> 
+> **Constraints:**
+> - 0 <= s1.length, s2.length <= 100
+> - 0 <= s3.length <= 200
+> - s1, s2, and s3 consist of lowercase English letters.
 
 > [!info] Approach
-> - **WHY:** At each position in `s3` we choose whether the next character comes from `s1` or `s2`; overlapping subproblems arise.
-> - **WHAT:** `dp[i][j]` = true if `s3[:i+j]` can be formed from `s1[:i]` and `s2[:j]`.
-> - **HOW:** `dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])`. Base: `dp[0][0] = True`.
+> At each position in `s3` we choose whether the next character comes from `s1` or `s2`; overlapping subproblems arise. `dp[i][j]` = true if `s3[:i+j]` can be formed from `s1[:i]` and `s2[:j]`. `dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])`. Base: `dp[0][0] = True`.
+
 
 > [!note]- Python Solution
 > ```python
-> def isInterleave(s1: str, s2: str, s3: str) -> bool:
+> def is_interleave(s1, s2, s3):
 >     m, n = len(s1), len(s2)
 >     if m + n != len(s3):
 >         return False
@@ -1403,16 +2241,44 @@ difficulty: mixed
 ### Regular Expression Matching
 
 > [!example] Problem
-> Implement regex matching with `.` (any single char) and `*` (zero or more of preceding element) (LC 10).
+> Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
+> The matching should cover the entire input string (not partial).
+> 
+> **Example 1:**
+> ```
+> Input: s = "aa", p = "a"
+> Output: false
+> Explanation: "a" does not match the entire string "aa".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "aa", p = "a*"
+> Output: true
+> Explanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "ab", p = ".*"
+> Output: true
+> Explanation: ".*" means "zero or more (*) of any character (.)".
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 20
+> - 1 <= p.length <= 20
+> - s contains only lowercase English letters.
+> - p contains only lowercase English letters, '.', and '*'.
+> - It is guaranteed for each appearance of the character '*', there will be a previous valid character to match.
 
 > [!info] Approach
-> - **WHY:** `*` introduces branching — match zero occurrences (skip pattern pair) or one-or-more — creating overlapping sub-problems.
-> - **WHAT:** `dp[i][j]` = true if `s[:i]` matches `p[:j]`.
-> - **HOW:** If `p[j-1] == '*'`: `dp[i][j] = dp[i][j-2]` (zero uses) or `(dp[i-1][j] and (p[j-2]=='.' or p[j-2]==s[i-1]))` (one+ uses). Else: `dp[i][j] = dp[i-1][j-1] and (p[j-1]=='.' or p[j-1]==s[i-1])`.
+> `*` introduces branching — match zero occurrences (skip pattern pair) or one-or-more — creating overlapping sub-problems. `dp[i][j]` = true if `s[:i]` matches `p[:j]`. If `p[j-1] == '*'`: `dp[i][j] = dp[i][j-2]` (zero uses) or `(dp[i-1][j] and (p[j-2]=='.' or p[j-2]==s[i-1]))` (one+ uses). Else: `dp[i][j] = dp[i-1][j-1] and (p[j-1]=='.' or p[j-1]==s[i-1])`.
+
 
 > [!note]- Python Solution
 > ```python
-> def isMatch(s: str, p: str) -> bool:
+> def is_match(s, p):
 >     m, n = len(s), len(p)
 >     dp = [[False] * (n + 1) for _ in range(m + 1)]
 >     dp[0][0] = True
@@ -1442,16 +2308,39 @@ difficulty: mixed
 ### Knight Probability in Chessboard
 
 > [!example] Problem
-> A knight starts at `(r, c)` on an `n×n` board. After `k` moves, return the probability it stays on the board (LC 688).
+> On an n x n chessboard, a knight starts at the cell (row, column) and attempts to make exactly k moves. The rows and columns are 0-indexed, so the top-left cell is (0, 0), and the bottom-right cell is (n - 1, n - 1).
+> A chess knight has eight possible moves it can make, as illustrated below. Each move is two cells in a cardinal direction, then one cell in an orthogonal direction.
+> Each time the knight is to move, it chooses one of eight possible moves uniformly at random (even if the piece would go off the chessboard) and moves there.
+> The knight continues moving until it has made exactly k moves or has moved off the chessboard.
+> Return the probability that the knight remains on the board after it has stopped moving.
+> 
+> **Example 1:**
+> ```
+> Input: n = 3, k = 2, row = 0, column = 0
+> Output: 0.06250
+> Explanation: There are two moves (to (1,2), (2,1)) that will keep the knight on the board.
+> From each of those positions, there are also two moves that will keep the knight on the board.
+> The total probability the knight stays on the board is 0.0625.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 1, k = 0, row = 0, column = 0
+> Output: 1.00000
+> ```
+> 
+> **Constraints:**
+> - 1 <= n <= 25
+> - 0 <= k <= 100
+> - 0 <= row, column <= n - 1
 
 > [!info] Approach
-> - **WHY:** After each move, probability distributes over up to 8 neighbours; cells off-board contribute 0. Iterating forward avoids recomputing overlapping sums.
-> - **WHAT:** `dp[i][j]` = probability of being at `(i, j)` after the current step.
-> - **HOW:** Start with probability 1 at `(r, c)`. Each step: new `dp[ni][nj] += dp[i][j] / 8` for each valid knight move. Repeat `k` times; answer = `sum(dp)`.
+> After each move, probability distributes over up to 8 neighbours; cells off-board contribute 0. Iterating forward avoids recomputing overlapping sums. `dp[i][j]` = probability of being at `(i, j)` after the current step. Start with probability 1 at `(r, c)`. Each step: new `dp[ni][nj] += dp[i][j] / 8` for each valid knight move. Repeat `k` times; answer = `sum(dp)`.
+
 
 > [!note]- Python Solution
 > ```python
-> def knightProbability(n: int, k: int, row: int, column: int) -> float:
+> def knight_probability(n, k, row, column):
 >     moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
 >     dp = [[0.0] * n for _ in range(n)]
 >     dp[row][column] = 1.0
@@ -1479,16 +2368,44 @@ difficulty: mixed
 ### New 21 Game
 
 > [!example] Problem
-> Start at 0 points. Each turn draw a number in `[1, maxPts]` uniformly at random and add it. Stop once reaching `>= k`. Return probability the final score is `<= n` (LC 837).
+> Alice plays the following game, loosely based on the card game "21".
+> Alice starts with 0 points and draws numbers while she has less than k points. During each draw, she gains an integer number of points randomly from the range [1, maxPts], where maxPts is an integer. Each draw is independent and the outcomes have equal probabilities.
+> Alice stops drawing numbers when she gets k or more points.
+> Return the probability that Alice has n or fewer points.
+> Answers within 10-5 of the actual answer are considered accepted.
+> 
+> **Example 1:**
+> ```
+> Input: n = 10, k = 1, maxPts = 10
+> Output: 1.00000
+> Explanation: Alice gets a single card, then stops.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 6, k = 1, maxPts = 10
+> Output: 0.60000
+> Explanation: Alice gets a single card, then stops.
+> In 6 out of 10 possibilities, she is at or below 6 points.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: n = 21, k = 17, maxPts = 10
+> Output: 0.73278
+> ```
+> 
+> **Constraints:**
+> - 0 <= k <= n <= 10^4
+> - 1 <= maxPts <= 10^4
 
 > [!info] Approach
-> - **WHY:** `dp[x]` = probability of reaching exactly `x` before stopping. Each `dp[x]` is the average of `dp[x-1], ..., dp[x-maxPts]` (for `x < k`). A sliding window sum avoids O(n·maxPts) recomputation.
-> - **WHAT:** `dp[x]` = probability of landing on score `x`.
-> - **HOW:** Base `dp[0] = 1`. Maintain `window_sum`. For `x` in `1..n`: `dp[x] = window_sum / maxPts`. If `x < k`, add `dp[x]` to window; if `x >= maxPts`, subtract `dp[x - maxPts]`. Answer = `sum(dp[k..n])`.
+> `dp[x]` = probability of reaching exactly `x` before stopping. Each `dp[x]` is the average of `dp[x-1], ..., dp[x-maxPts]` (for `x < k`). A sliding window sum avoids O(n·maxPts) recomputation. `dp[x]` = probability of landing on score `x`. Base `dp[0] = 1`. Maintain `window_sum`. For `x` in `1..n`: `dp[x] = window_sum / maxPts`. If `x < k`, add `dp[x]` to window; if `x >= maxPts`, subtract `dp[x - maxPts]`. Answer = `sum(dp[k..n])`.
+
 
 > [!note]- Python Solution
 > ```python
-> def new21Game(n: int, k: int, maxPts: int) -> float:
+> def new21_game(n, k, maxPts):
 >     if k == 0 or n >= k + maxPts:
 >         return 1.0
 >     dp = [0.0] * (n + 1)
@@ -1516,17 +2433,39 @@ difficulty: mixed
 ### Shortest Path Visiting All Nodes (TSP Bitmask DP)
 
 > [!example] Problem
-> Find the shortest path that visits every node in an undirected graph (LC 847). Generalises to the Travelling Salesman bitmask DP template.
+> You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
+> Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
+> 
+> **Example 1:**
+> ```
+> Input: graph = [[1,2,3],[0],[0],[0]]
+> Output: 4
+> Explanation: One possible path is [1,0,2,0,3]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]
+> Output: 4
+> Explanation: One possible path is [0,1,4,2,3]
+> ```
+> 
+> **Constraints:**
+> - n == graph.length
+> - 1 <= n <= 12
+> - 0 <= graph[i].length < n
+> - graph[i] does not contain i.
+> - If graph[a] contains b, then graph[b] contains a.
+> - The input graph is always connected.
 
 > [!info] Approach
-> - **WHY:** With up to 12 nodes, 2^12 states × 12 nodes is feasible. BFS on `(node, visited_mask)` gives shortest path; DP on the same state gives minimum cost for weighted TSP.
-> - **WHAT:** `dist[mask][v]` = min steps to have visited exactly the nodes in `mask` and currently be at `v`.
-> - **HOW:** BFS (unweighted): enqueue all `(node, 1<<node)` with distance 0. Expand neighbours; stop when `mask == (1<<n)-1`. For weighted TSP: `dp[mask | (1<<u)][u] = min(dp[mask][v] + w(v,u))` over all `v` in `mask`.
+> With up to 12 nodes, 2^12 states × 12 nodes is feasible. BFS on `(node, visited_mask)` gives shortest path; DP on the same state gives minimum cost for weighted TSP. `dist[mask][v]` = min steps to have visited exactly the nodes in `mask` and currently be at `v`. BFS (unweighted): enqueue all `(node, 1<<node)` with distance 0. Expand neighbours; stop when `mask == (1<<n)-1`. For weighted TSP: `dp[mask | (1<<u)][u] = min(dp[mask][v] + w(v,u))` over all `v` in `mask`.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import deque
-> def shortestPathLength(graph: list[list[int]]) -> int:
+> def shortest_path_length(graph):
 >     n = len(graph)
 >     full = (1 << n) - 1
 >     dist = [[float('inf')] * n for _ in range(1 << n)]
@@ -1560,13 +2499,12 @@ difficulty: mixed
 > Given `nums` and integer `k`, return true if the array can be partitioned into `k` subsets each with equal sum (LC 698).
 
 > [!info] Approach
-> - **WHY:** Subset assignment is NP-hard in general but `n ≤ 16` makes 2^n bitmask DP feasible.
-> - **WHAT:** `dp[mask]` = true if the elements indicated by `mask` can be perfectly distributed into some number of full buckets.
-> - **HOW:** `target = total / k`. Iterate all masks in order. For each set mask, compute `current_sum = sum of selected elements % target`. Try adding each unselected element; if it fits, `dp[mask | (1<<i)] = True`. Answer = `dp[(1<<n)-1]`.
+> Subset assignment is NP-hard in general but `n ≤ 16` makes 2^n bitmask DP feasible. `dp[mask]` = true if the elements indicated by `mask` can be perfectly distributed into some number of full buckets. `target = total / k`. Iterate all masks in order. For each set mask, compute `current_sum = sum of selected elements % target`. Try adding each unselected element; if it fits, `dp[mask | (1<<i)] = True`. Answer = `dp[(1<<n)-1]`.
+
 
 > [!note]- Python Solution
 > ```python
-> def canPartitionKSubsets(nums: list[int], k: int) -> bool:
+> def can_partition_k_subsets(nums, k):
 >     total = sum(nums)
 >     if total % k:
 >         return False
@@ -1604,25 +2542,40 @@ difficulty: mixed
 ### Count Numbers with Unique Digits
 
 > [!example] Problem
-> Given `n`, count numbers in `[0, 10^n)` with all unique digits (LC 357).
+> Given an integer n, return the count of all numbers with unique digits, x, where 0 <= x < 10n.
+> 
+> **Example 1:**
+> ```
+> Input: n = 2
+> Output: 91
+> Explanation: The answer should be the total numbers in the range of 0 ≤ x < 100, excluding 11,22,33,44,55,66,77,88,99
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: n = 0
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 0 <= n <= 8
 
 > [!info] Approach
-> - **WHY:** At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
-> - **WHAT:** `dp[i]` = count of valid `i`-digit numbers (no leading zeros counted separately).
-> - **HOW:** `dp[0] = 1`. For length `i`: first digit has 9 choices (1–9); each subsequent digit has `10 - (i-1)` choices (avoid used). `dp[i] = 9 * 9 * 8 * ... * (10-i+1)`. Accumulate sum.
+> At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure. `dp[i]` = count of valid `i`-digit numbers (no leading zeros counted separately). `dp[0] = 1`. For length `i`: first digit has 9 choices (1–9); each subsequent digit has `10 - (i-1)` choices (avoid used). `dp[i] = 9 * 9 * 8 * ... * (10-i+1)`. Accumulate sum.
+
 
 > [!note]- Python Solution
 > ```python
-> def countNumbersWithUniqueDigits(n: int) -> int:
+> def count_numbers_with_unique_digits(n):
 >     if n == 0:
 >         return 1
->     res, unique = 10, 9
+>     result, unique = 10, 9
 >     available = 9
 >     for _ in range(n - 1):
 >         unique *= available
->         res += unique
+>         result += unique
 >         available -= 1
->     return res
+>     return result
 > ```
 
 > [!success] Complexity
@@ -1639,21 +2592,20 @@ difficulty: mixed
 > Count integers in `[1, n]` satisfying an arbitrary digit constraint (e.g., digit sum divisible by `k`, no two adjacent equal digits). General template with tight/free flag.
 
 > [!info] Approach
-> - **WHY:** Digit-by-digit construction with a `tight` flag tracks whether we are still bounded by `n`'s prefix, enabling safe enumeration without brute force.
-> - **WHAT:** State = `(position, constraint_state, tight, started)`. `tight=True` means all digits chosen so far match `n`'s prefix exactly.
-> - **HOW:** At each position, iterate digit 0–9 (or 0–`n[pos]` if tight). Recurse; memoize on `(pos, state, tight, started)`. Base case: `pos == len(digits)` — check if constraint satisfied.
+> Digit-by-digit construction with a `tight` flag tracks whether we are still bounded by `n`'s prefix, enabling safe enumeration without brute force. State = `(position, constraint_state, tight, started)`. `tight=True` means all digits chosen so far match `n`'s prefix exactly. At each position, iterate digit 0–9 (or 0–`n[pos]` if tight). Recurse; memoize on `(pos, state, tight, started)`. Base case: `pos == len(digits)` — check if constraint satisfied.
+
 
 > [!note]- Python Solution
 > ```python
 > from functools import lru_cache
->
-> def digitDP(n: int, k: int) -> int:
+> >
+> def digit_dp(n, k):
 >     """Count integers in [1, n] whose digit sum % k == 0."""
 >     digits = list(map(int, str(n)))
 >     L = len(digits)
->
+> >
 >     @lru_cache(maxsize=None)
->     def dp(pos: int, remainder: int, tight: bool, started: bool) -> int:
+>     def dp(pos, remainder, tight, started):
 >         if pos == L:
 >             return int(started and remainder == 0)
 >         limit = digits[pos] if tight else 9
@@ -1663,7 +2615,7 @@ difficulty: mixed
 >             new_rem = (remainder + d) % k if new_started else 0
 >             result += dp(pos + 1, new_rem, tight and d == limit, new_started)
 >         return result
->
+> >
 >     return dp(0, 0, True, False)
 > ```
 
@@ -1680,16 +2632,42 @@ difficulty: mixed
 ### Stone Game
 
 > [!example] Problem
-> Alice and Bob alternately take stones from either end of a row of piles. Both play optimally; Alice goes first. Return true if Alice wins (LC 877).
+> Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
+> The objective of the game is to end with the most stones. The total number of stones across all the piles is odd, so there are no ties.
+> Alice and Bob take turns, with Alice starting first. Each turn, a player takes the entire pile of stones either from the beginning or from the end of the row. This continues until there are no more piles left, at which point the person with the most stones wins.
+> Assuming Alice and Bob play optimally, return true if Alice wins the game, or false if Bob wins.
+> 
+> **Example 1:**
+> ```
+> Input: piles = [5,3,4,5]
+> Output: true
+> Explanation: 
+> Alice starts first, and can only take the first 5 or the last 5.
+> Say she takes the first 5, so that the row becomes [3, 4, 5].
+> If Bob takes 3, then the board is [4, 5], and Alice takes 5 to win with 10 points.
+> If Bob takes the last 5, then the board is [3, 4], and Alice takes 4 to win with 9 points.
+> This demonstrated that taking the first 5 was a winning move for Alice, so we return true.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: piles = [3,7,2,3]
+> Output: true
+> ```
+> 
+> **Constraints:**
+> - 2 <= piles.length <= 500
+> - piles.length is even.
+> - 1 <= piles[i] <= 500
+> - sum(piles[i]) is odd.
 
 > [!info] Approach
-> - **WHY:** Each player maximises their own score minus the opponent's; the decision at each subarray depends on what the opponent will optimally do.
-> - **WHAT:** `dp[i][j]` = maximum score difference (current player − other player) achievable on subarray `piles[i..j]`.
-> - **HOW:** `dp[i][j] = max(piles[i] - dp[i+1][j], piles[j] - dp[i][j-1])`. Base: `dp[i][i] = piles[i]`. Alice wins iff `dp[0][n-1] > 0`.
+> Each player maximises their own score minus the opponent's; the decision at each subarray depends on what the opponent will optimally do. `dp[i][j]` = maximum score difference (current player − other player) achievable on subarray `piles[i..j]`. `dp[i][j] = max(piles[i] - dp[i+1][j], piles[j] - dp[i][j-1])`. Base: `dp[i][i] = piles[i]`. Alice wins iff `dp[0][n-1] > 0`.
+
 
 > [!note]- Python Solution
 > ```python
-> def stoneGame(piles: list[int]) -> bool:
+> def stone_game(piles):
 >     n = len(piles)
 >     dp = piles[:]
 >     for length in range(2, n + 1):
@@ -1719,28 +2697,49 @@ difficulty: mixed
 ### Stone Game II
 
 > [!example] Problem
-> Players can take `1..2M` piles from the front; `M` updates to `max(M, X)` after taking `X`. Maximise stones for Alice (LC 1140).
+> Alice and Bob continue their games with piles of stones. There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i]. The objective of the game is to end with the most stones.
+> Alice and Bob take turns, with Alice starting first.
+> On each player's turn, that player can take all the stones in the first X remaining piles, where 1 <= X <= 2M. Then, we set M = max(M, X). Initially, M = 1.
+> The game continues until all the stones have been taken.
+> Assuming Alice and Bob play optimally, return the maximum number of stones Alice can get.
+> 
+> **Example 1:**
+> ```
+> Input: piles = [2,7,9,4,4]
+> Output: 10
+> Explanation:
+> So we return 10 since it's larger.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: piles = [1,2,3,4,5,100]
+> Output: 104
+> ```
+> 
+> **Constraints:**
+> - 1 <= piles.length <= 100
+> - 1 <= piles[i] <= 10^4
 
 > [!info] Approach
-> - **WHY:** The value of `M` changes each turn, so state must encode both position and current `M`.
-> - **WHAT:** `dp[i][m]` = max stones the current player can get from `piles[i:]` with current multiplier `m`.
-> - **HOW:** Precompute suffix sums. `dp[i][m] = suffix[i] - min(dp[i+x][max(m,x)] for x in 1..2m)` — the current player takes whatever minimises the opponent's haul. Fill right-to-left.
+> The value of `M` changes each turn, so state must encode both position and current `M`. `dp[i][m]` = max stones the current player can get from `piles[i:]` with current multiplier `m`. Precompute suffix sums. `dp[i][m] = suffix[i] - min(dp[i+x][max(m,x)] for x in 1..2m)` — the current player takes whatever minimises the opponent's haul. Fill right-to-left.
+
 
 > [!note]- Python Solution
 > ```python
 > from functools import lru_cache
-> def stoneGameII(piles: list[int]) -> int:
+> def stone_game_ii(piles):
 >     n = len(piles)
 >     suffix = [0] * (n + 1)
 >     for i in range(n - 1, -1, -1):
 >         suffix[i] = suffix[i + 1] + piles[i]
->
+> >
 >     @lru_cache(maxsize=None)
->     def dp(i: int, m: int) -> int:
+>     def dp(i, m):
 >         if i + 2 * m >= n:
 >             return suffix[i]
 >         return suffix[i] - min(dp(i + x, max(m, x)) for x in range(1, 2 * m + 1))
->
+> >
 >     return dp(0, 1)
 > ```
 
@@ -1755,16 +2754,39 @@ difficulty: mixed
 ### Predict the Winner
 
 > [!example] Problem
-> Two players pick from either end of `nums`. Return true if Player 1 can win or tie (LC 486).
+> You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
+> Player 1 and player 2 take turns, with player 1 starting first. Both players start the game with a score of 0. At each turn, the player takes one of the numbers from either end of the array (i.e., nums[0] or nums[nums.length - 1]) which reduces the size of the array by 1. The player adds the chosen number to their score. The game ends when there are no more elements in the array.
+> Return true if Player 1 can win the game. If the scores of both players are equal, then player 1 is still the winner, and you should also return true. You may assume that both players are playing optimally.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,5,2]
+> Output: false
+> Explanation: Initially, player 1 can choose between 1 and 2. 
+> If he chooses 2 (or 1), then player 2 can choose from 1 (or 2) and 5. If player 2 chooses 5, then player 1 will be left with 1 (or 2). 
+> So, final score of player 1 is 1 + 2 = 3, and player 2 is 5. 
+> Hence, player 1 will never be the winner and you need to return false.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,5,233,7]
+> Output: true
+> Explanation: Player 1 first chooses 1. Then player 2 has to choose between 5 and 7. No matter which number player 2 choose, player 1 can choose 233.
+> Finally, player 1 has more score (234) than player 2 (12), so you need to return True representing player1 can win.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 20
+> - 0 <= nums[i] <= 10^7
 
 > [!info] Approach
-> - **WHY:** Identical structure to Stone Game. `dp[i][j]` = score advantage of the current player over the opponent on subarray `nums[i..j]`.
-> - **WHAT:** `dp[i][j]` = max(nums[i] − dp[i+1][j], nums[j] − dp[i][j−1]).
-> - **HOW:** Fill by increasing subarray length. Player 1 wins iff `dp[0][n-1] >= 0`.
+> Identical structure to Stone Game. `dp[i][j]` = score advantage of the current player over the opponent on subarray `nums[i..j]`. `dp[i][j]` = max(nums[i] − dp[i+1][j], nums[j] − dp[i][j−1]). Fill by increasing subarray length. Player 1 wins iff `dp[0][n-1] >= 0`.
+
 
 > [!note]- Python Solution
 > ```python
-> def predictTheWinner(nums: list[int]) -> bool:
+> def predict_the_winner(nums):
 >     n = len(nums)
 >     dp = [[0] * n for _ in range(n)]
 >     for i in range(n):
@@ -1789,16 +2811,35 @@ difficulty: mixed
 ### Jump Game II
 
 > [!example] Problem
-> Given `nums` where `nums[i]` is max jump length from index `i`, return the minimum number of jumps to reach the last index (LC 45).
+> You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
+> Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums[i + j] where:
+> Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
+> 
+> **Example 1:**
+> ```
+> Input: nums = [2,3,1,1,4]
+> Output: 2
+> Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [2,3,0,1,4]
+> Output: 2
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^4
+> - 0 <= nums[i] <= 1000
+> - It's guaranteed that you can reach nums[n - 1].
 
 > [!info] Approach
-> - **WHY:** Greedy DP: at each jump, greedily extend to the farthest reachable index. Counting jumps only when forced to jump.
-> - **WHAT:** Track `current_end` (end of current jump range) and `farthest` (max reachable from within range).
-> - **HOW:** Iterate; update `farthest = max(farthest, i + nums[i])`. When `i == current_end` and not at last index: increment jumps, set `current_end = farthest`.
+> Greedy DP: at each jump, greedily extend to the farthest reachable index. Counting jumps only when forced to jump. Track `current_end` (end of current jump range) and `farthest` (max reachable from within range). Iterate; update `farthest = max(farthest, i + nums[i])`. When `i == current_end` and not at last index: increment jumps, set `current_end = farthest`.
+
 
 > [!note]- Python Solution
 > ```python
-> def jump(nums: list[int]) -> int:
+> def jump(nums):
 >     jumps = current_end = farthest = 0
 >     for i in range(len(nums) - 1):
 >         farthest = max(farthest, i + nums[i])
@@ -1819,22 +2860,41 @@ difficulty: mixed
 ### Maximum Product Subarray
 
 > [!example] Problem
-> Find the contiguous subarray with the largest product (LC 152).
+> Given an integer array nums, find a subarray that has the largest product, and return the product.
+> The test cases are generated so that the answer will fit in a 32-bit integer.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [2,3,-2,4]
+> Output: 6
+> Explanation: [2,3] has the largest product 6.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [-2,0,-1]
+> Output: 0
+> Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 2 * 10^4
+> - -10 <= nums[i] <= 10
+> - The product of any subarray of nums is guaranteed to fit in a 32-bit integer.
 
 > [!info] Approach
-> - **WHY:** A negative number flips max↔min, so both must be tracked at each position.
-> - **WHAT:** `max_prod` and `min_prod` ending at index `i`.
-> - **HOW:** At each element `x`: `max_prod, min_prod = max(x, max_prod*x, min_prod*x), min(x, max_prod*x, min_prod*x)`. Update global answer with `max_prod`.
+> A negative number flips max↔min, so both must be tracked at each position. `max_prod` and `min_prod` ending at index `i`. At each element `x`: `max_prod, min_prod = max(x, max_prod*x, min_prod*x), min(x, max_prod*x, min_prod*x)`. Update global answer with `max_prod`.
+
 
 > [!note]- Python Solution
 > ```python
-> def maxProduct(nums: list[int]) -> int:
->     max_p = min_p = res = nums[0]
+> def max_product(nums):
+>     max_p = min_p = result = nums[0]
 >     for x in nums[1:]:
 >         candidates = (x, max_p * x, min_p * x)
 >         max_p, min_p = max(candidates), min(candidates)
->         res = max(res, max_p)
->     return res
+>         result = max(result, max_p)
+>     return result
 > ```
 
 > [!success] Complexity
@@ -1848,17 +2908,44 @@ difficulty: mixed
 ### Arithmetic Slices II — Subsequence
 
 > [!example] Problem
-> Count the number of arithmetic subsequences (length ≥ 3) in `nums` (LC 446).
+> Given an integer array nums, return the number of all the arithmetic subsequences of nums.
+> A sequence of numbers is called arithmetic if it consists of at least three elements and if the difference between any two consecutive elements is the same.
+> A subsequence of an array is a sequence that can be formed by removing some elements (possibly none) of the array.
+> The test cases are generated so that the answer fits in 32-bit integer.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [2,4,6,8,10]
+> Output: 7
+> Explanation: All arithmetic subsequence slices are:
+> [2,4,6]
+> [4,6,8]
+> [6,8,10]
+> [2,4,6,8]
+> [4,6,8,10]
+> [2,4,6,8,10]
+> [2,6,10]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [7,7,7,7,7]
+> Output: 16
+> Explanation: Any subsequence of this array is arithmetic.
+> ```
+> 
+> **Constraints:**
+> - 1  <= nums.length <= 1000
+> - -2^{31} <= nums[i] <= 2^{31} - 1
 
 > [!info] Approach
-> - **WHY:** Unlike subarrays, subsequences can skip elements; tracking every possible common difference per ending index is necessary.
-> - **WHAT:** `dp[i]` is a dict mapping common difference `d` → count of **weak** arithmetic subsequences (length ≥ 2) ending at index `i` with difference `d`.
-> - **HOW:** For each pair `(j, i)` with `j < i`, `d = nums[i] - nums[j]`: `dp[i][d] += dp[j].get(d, 0) + 1`. The `+1` starts a new weak subsequence `(j,i)`. Each existing weak subseq extended to length ≥ 3 contributes `dp[j][d]` to the answer.
+> Unlike subarrays, subsequences can skip elements; tracking every possible common difference per ending index is necessary. `dp[i]` is a dict mapping common difference `d` → count of **weak** arithmetic subsequences (length ≥ 2) ending at index `i` with difference `d`. For each pair `(j, i)` with `j < i`, `d = nums[i] - nums[j]`: `dp[i][d] += dp[j].get(d, 0) + 1`. The `+1` starts a new weak subsequence `(j,i)`. Each existing weak subseq extended to length ≥ 3 contributes `dp[j][d]` to the answer.
+
 
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
-> def numberOfArithmeticSlices(nums: list[int]) -> int:
+> def number_of_arithmetic_slices(nums):
 >     n = len(nums)
 >     dp = [defaultdict(int) for _ in range(n)]
 >     ans = 0
@@ -1888,13 +2975,12 @@ difficulty: mixed
 > Find the length of the longest common contiguous substring shared by two strings.
 
 > [!info] Approach
-> - **WHY:** Unlike LCS, contiguity matters. A mismatch breaks the chain, so the DP state must reset to zero on mismatch.
-> - **WHAT:** `dp[i][j]` is the length of the longest common substring ending at `s1[i-1]` and `s2[j-1]`.
-> - **HOW:** If characters match, extend the diagonal: `dp[i][j] = dp[i-1][j-1] + 1`; else `dp[i][j] = 0`. Track the global maximum.
+> Unlike LCS, contiguity matters. A mismatch breaks the chain, so the DP state must reset to zero on mismatch. `dp[i][j]` is the length of the longest common substring ending at `s1[i-1]` and `s2[j-1]`. If characters match, extend the diagonal: `dp[i][j] = dp[i-1][j-1] + 1`; else `dp[i][j] = 0`. Track the global maximum.
+
 
 > [!note]- Python Solution
 > ```python
-> def longest_common_substring(s1: str, s2: str) -> int:
+> def longest_common_substring(s1, s2):
 >     m, n = len(s1), len(s2)
 >     prev = [0] * (n + 1)
 >     best = 0
@@ -1924,13 +3010,12 @@ difficulty: mixed
 > Given a sequence of matrices with dimensions `dims[i-1] × dims[i]`, find the minimum number of scalar multiplications to compute their product.
 
 > [!info] Approach
-> - **WHY:** The order of multiplication matters. Interval DP: `dp[i][j]` = minimum cost to multiply matrices `i` through `j`. Split at every `k` from `i` to `j-1`.
-> - **WHAT:** `dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]`.
-> - **HOW:** Fill by increasing interval length (length 1 has cost 0). Outer loop: `length` from 2 to n. Inner loops: `i`, then `k`.
+> The order of multiplication matters. Interval DP: `dp[i][j]` = minimum cost to multiply matrices `i` through `j`. Split at every `k` from `i` to `j-1`. `dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]`. Fill by increasing interval length (length 1 has cost 0). Outer loop: `length` from 2 to n. Inner loops: `i`, then `k`.
+
 
 > [!note]- Python Solution
 > ```python
-> def matrix_chain_order(dims: list[int]) -> int:
+> def matrix_chain_order(dims):
 >     n = len(dims) - 1
 >     dp = [[0] * n for _ in range(n)]
 >     for length in range(2, n + 1):
@@ -1955,16 +3040,45 @@ difficulty: mixed
 ### Super Egg Drop (LC 887)
 
 > [!example] Problem
-> Given `k` eggs and `n` floors, find the minimum number of moves needed to determine the critical floor in the worst case.
+> You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
+> You know that there exists a floor f where 0 <= f <= n such that any egg dropped at a floor higher than f will break, and any egg dropped at or below floor f will not break.
+> Each move, you may take an unbroken egg and drop it from any floor x (where 1 <= x <= n). If the egg breaks, you can no longer use it. However, if the egg does not break, you may reuse it in future moves.
+> Return the minimum number of moves that you need to determine with certainty what the value of f is.
+> 
+> **Example 1:**
+> ```
+> Input: k = 1, n = 2
+> Output: 2
+> Explanation: 
+> Drop the egg from floor 1. If it breaks, we know that f = 0.
+> Otherwise, drop the egg from floor 2. If it breaks, we know that f = 1.
+> If it does not break, then we know f = 2.
+> Hence, we need at minimum 2 moves to determine with certainty what the value of f is.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: k = 2, n = 6
+> Output: 3
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: k = 3, n = 14
+> Output: 4
+> ```
+> 
+> **Constraints:**
+> - 1 <= k <= 100
+> - 1 <= n <= 10^4
 
 > [!info] Approach
-> - **WHY:** Standard DP `dp[k][n]` = minimum tries for k eggs and n floors is O(kn²) which TLEs. The key reformulation: `dp2[m][k]` = maximum floors we can check with `m` moves and `k` eggs. Answer is the minimum `m` such that `dp2[m][k] >= n`.
-> - **WHAT:** `dp2[m][k] = dp2[m-1][k-1] + dp2[m-1][k] + 1`. If the egg breaks, we can check `dp2[m-1][k-1]` floors below. If it doesn't, we can check `dp2[m-1][k]` floors above.
-> - **HOW:** Increment `m` until `dp2[m][k] >= n`. Since `m <= n` and `k <= n`, the loops terminate.
+> Standard DP `dp[k][n]` = minimum tries for k eggs and n floors is O(kn²) which TLEs. The key reformulation: `dp2[m][k]` = maximum floors we can check with `m` moves and `k` eggs. Answer is the minimum `m` such that `dp2[m][k] >= n`. `dp2[m][k] = dp2[m-1][k-1] + dp2[m-1][k] + 1`. If the egg breaks, we can check `dp2[m-1][k-1]` floors below. If it doesn't, we can check `dp2[m-1][k]` floors above. Increment `m` until `dp2[m][k] >= n`. Since `m <= n` and `k <= n`, the loops terminate.
+
 
 > [!note]- Python Solution
 > ```python
-> def super_egg_drop(k: int, n: int) -> int:
+> def super_egg_drop(k, n):
 >     m = 0
 >     dp = [0] * (k + 1)
 >     while dp[k] < n:
@@ -1988,18 +3102,38 @@ difficulty: mixed
 ### Russian Doll Envelopes (LC 354)
 
 > [!example] Problem
-> Given a list of `(width, height)` envelopes, find the maximum number that can be nested inside each other (both width and height must be strictly larger).
+> You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope.
+> One envelope can fit into another if and only if both the width and height of one envelope are greater than the other envelope's width and height.
+> Return the maximum number of envelopes you can Russian doll (i.e., put one inside the other).
+> Note: You cannot rotate an envelope.
+> 
+> **Example 1:**
+> ```
+> Input: envelopes = [[5,4],[6,4],[6,7],[2,3]]
+> Output: 3
+> Explanation: The maximum number of envelopes you can Russian doll is 3 ([2,3] => [5,4] => [6,7]).
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: envelopes = [[1,1],[1,1],[1,1]]
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 1 <= envelopes.length <= 10^5
+> - envelopes[i].length == 2
+> - 1 <= wi, hi <= 10^5
 
 > [!info] Approach
-> - **WHY:** If we sort by width, this becomes LIS on heights. But with equal widths, we can't include two envelopes (a wider envelope can't fit inside one of the same width). Fix: sort by `(width asc, height desc)` — the descending height ensures equal-width envelopes can never form an increasing subsequence.
-> - **WHAT:** Sort by `(w asc, h desc)`. Extract heights. Run patience sort (O(n log n) LIS) on heights.
-> - **HOW:** `bisect_left` on the `tails` array — same as LC 300 LIS.
+> If we sort by width, this becomes LIS on heights. But with equal widths, we can't include two envelopes (a wider envelope can't fit inside one of the same width). Fix: sort by `(width asc, height desc)` — the descending height ensures equal-width envelopes can never form an increasing subsequence. Sort by `(w asc, h desc)`. Extract heights. Run patience sort (O(n log n) LIS) on heights. `bisect_left` on the `tails` array — same as LC 300 LIS.
+
 
 > [!note]- Python Solution
 > ```python
 > import bisect
->
-> def max_envelopes(envelopes: list[list[int]]) -> int:
+> >
+> def max_envelopes(envelopes):
 >     envelopes.sort(key=lambda x: (x[0], -x[1]))
 >     tails = []
 >     for _, h in envelopes:
