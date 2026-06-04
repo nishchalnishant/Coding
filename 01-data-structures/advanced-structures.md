@@ -137,8 +137,14 @@ class Trie:
 ```
 
 ### Common SDE 3 Trie Problems:
-1.  **Word Search II**: Use a Trie to store words, then perform backtracking on the grid to search for them efficiently.
-2.  **Maximum XOR of Two Numbers**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
+1.  **Word Search II `🔥 Google`**: Use a Trie to store words, then perform backtracking on the grid to search for them efficiently.
+2.  **Maximum XOR of Two Numbers `⭐ Google`**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
+
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
 
 ---
 
@@ -179,8 +185,8 @@ class FenwickTree:
 - **Trie**: Prefix match, autocomplete, word search in grid (store words, backtrack). Binary Trie: max XOR (prefer opposite bit).
 - **Segment Tree**: Range sum/min/max with point or range updates; O(log N) query/update. Lazy propagation for range add/update.
 - **Fenwick**: Range sum + point update; simpler than segment tree; O(N) space.
-- **LRU Cache**: O(1) get/put → HashMap + Doubly Linked List.
-- **LFU Cache**: O(1) get/put → HashMap of key→node + HashMap of freq→DLL + min_freq tracker.
+- **LRU Cache `🔥 Google`**: O(1) get/put → HashMap + Doubly Linked List.
+- **LFU Cache `⭐ Google`**: O(1) get/put → HashMap of key→node + HashMap of freq→DLL + min_freq tracker.
 
 ## Interview Strategy
 

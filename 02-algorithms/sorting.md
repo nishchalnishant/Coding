@@ -79,6 +79,12 @@ WHY sorting exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 
 Arranging data to optimize subsequent operations. Senior interviews focus on **algorithm selection reasoning**, stability under constraints, external sorting for data > RAM, and parallel implementations.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Theory & Mental Models
@@ -142,7 +148,7 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 ### Merge Sort — Divide & Conquer
 
 > [!IMPORTANT]
-> **The Click Moment**: "Sort a **linked list**" — OR — "need a **stable** sort" — OR — "**count inversions** in an array" — OR — "guarantee O(N log N) **regardless** of input distribution". Merge sort is the only comparison sort that achieves all four simultaneously.
+> **The Click Moment**: "Sort a **linked list `🔥 Google`**" — OR — "need a **stable** sort" — OR — "**count inversions** in an array" — OR — "guarantee O(N log N) **regardless** of input distribution". Merge sort is the only comparison sort that achieves all four simultaneously.
 
 > [!TIP]
 > Merge sort is like splitting a deck of cards in half, sorting each half separately, then merging the two sorted halves by repeatedly picking the smaller top card. Quicksort is like picking one card as a pivot and shuffling everything smaller to the left and everything larger to the right — then repeating on each side. Merge sort uses extra space for the merge step but guarantees O(N log N); quicksort sorts in-place and is faster in practice due to cache locality, but degrades to O(N²) on sorted input unless you randomize the pivot.
@@ -174,10 +180,10 @@ def _merge(left: list[int], right: list[int]) -> list[int]:
     return result
 
 #### Common Variants & Twists
-1. **Count of Range Sum**:
+1. **Count of Range Sum `⭐ Google`**:
    - **What (The Problem & Goal):** Given an array, find the number of subarrays whose sum lies in `[lower, upper]`.
    - **How (Intuition & Mental Model):** Calculate prefix sums. The problem becomes finding pairs `(i, j)` where `lower <= prefix[j] - prefix[i] <= upper`. Use merge sort on the prefix sums. Before merging the two sorted halves, for each element in the left half, use two pointers in the right half to find the window of elements that satisfy the range sum condition.
-2. **Reverse Pairs**:
+2. **Reverse Pairs `⭐ Google`**:
    - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
    - **How (Intuition & Mental Model):** Also a merge sort twist. Before merging, use two pointers to count how many `nums[i]` in the left half are greater than `2 * nums[j]` in the right half. Count first, then merge.
 ```
@@ -232,7 +238,7 @@ def _partition(nums: list[int], lo: int, hi: int) -> int:
 ### QuickSelect — Kth Order Statistic
 
 > [!IMPORTANT]
-> **The Click Moment**: "Find the **Kth largest / Kth smallest**" — OR — "**median** of an unsorted array" — OR — "O(N) average time is acceptable". QuickSelect is QuickSort that skips the irrelevant half. When the interviewer says "can you do better than O(N log N)?", this is almost always the answer.
+> **The Click Moment**: "Find the **Kth largest / Kth smallest `🔥 Google`**" — OR — "**median** of an unsorted array" — OR — "O(N) average time is acceptable". QuickSelect is QuickSort that skips the irrelevant half. When the interviewer says "can you do better than O(N log N)?", this is almost always the answer.
 
 - **Idea**: Partition around a pivot. If pivot lands at k, done. Otherwise recurse only into the side containing k.
 - **Complexity**: O(N) average, O(N²) worst (avoidable with random pivot). O(N) guaranteed with Median-of-Medians pivot (not expected in interviews).
@@ -254,10 +260,10 @@ def _quickselect(nums: list[int], lo: int, hi: int, target: int) -> int:
         return _quickselect(nums, lo, pivot_idx - 1, target)
 
 #### Common Variants & Twists
-1. **K Closest Points to Origin**:
+1. **K Closest Points to Origin `🔥 Google`**:
    - **What (The Problem & Goal):** Given a list of points, find the `k` points closest to the origin.
    - **How (Intuition & Mental Model):** Calculate squared distances. Use QuickSelect on these distances to find the `k`-th smallest. All points to the left of the resulting pivot are the `k` closest.
-2. **Top K Frequent Elements**:
+2. **Top K Frequent Elements `🔥 Google`**:
    - **What (The Problem & Goal):** Find the `k` most frequent elements.
    - **How (Intuition & Mental Model):** Count frequencies. Use QuickSelect on the unique elements based on their frequencies to find the top `k` in O(N) average time.
 ```
@@ -291,7 +297,7 @@ def sort_colors(nums: list[int]) -> None:
 1. **Sort Transformed Array**:
    - **What (The Problem & Goal):** Given a sorted array and a quadratic function `f(x) = ax^2 + bx + c`, return the sorted result of `f(x)` for each `x`.
    - **How (Intuition & Mental Model):** If `a > 0`, the function is a parabola opening upward; extreme values are at the ends of the array. Use two pointers starting at both ends and pick the larger value. If `a < 0`, start two pointers at both ends and pick the smaller value (filling the result array from middle or reverse).
-2. **Move Zeroes**:
+2. **Move Zeroes `🔥 Google`**:
    - **What (The Problem & Goal):** Move all 0s to the end of the array while maintaining the relative order of non-zero elements.
    - **How (Intuition & Mental Model):** Use two pointers. `lo` tracks where the next non-zero should go. `mid` iterates. Every time `nums[mid] != 0`, swap `nums[lo]` and `nums[mid]` and increment `lo`. This is a 2-way Dutch National Flag variation.
 ```
@@ -380,7 +386,7 @@ def largest_number(nums: list[int]) -> str:
 1. **Custom Sort String**:
    - **What (The Problem & Goal):** Given an order string `order` and a string `s`, sort the characters of `s` to follow the sequence of `order`.
    - **How (Intuition & Mental Model):** Create a mapping `char -> rank` based on `order`. Sort `s` using this rank as the key. Characters not in `order` can have any rank (e.g., infinity).
-2. **Queue Reconstruction by Height**:
+2. **Queue Reconstruction by Height `⭐ Google`**:
    - **What (The Problem & Goal):** Reconstruct a queue where each person is represented by `(h, k)` (height, number of people in front who are ≥ height).
    - **How (Intuition & Mental Model):** Sort people by height descending, and by `k` ascending for ties. Then, iterate and insert each person into the result list at index `k`. This works because all previously inserted people are taller, so their relative order isn't changed by inserting a shorter person at `k`.
 ```
@@ -459,16 +465,16 @@ For distributed sort (MapReduce model):
 ## 4. Common Interview Problems
 
 ### Medium
-- [Merge Intervals](problem-deep-dives.md#merge-intervals) — Sort by start time; sweep and merge.
-- [Kth Largest Element](problem-deep-dives.md#kth-largest-element) — QuickSelect O(N) avg or min-heap O(N log K).
-- **Sort Colors** — Dutch National Flag; single-pass three-pointer.
+- [Merge Intervals](problem-deep-dives.md#merge-intervals) `🔥 Google` — Sort by start time; sweep and merge.
+- [Kth Largest Element](problem-deep-dives.md#kth-largest-element) `🔥 Google` — QuickSelect O(N) avg or min-heap O(N log K).
+- **Sort Colors `⭐ Google`** — Dutch National Flag; single-pass three-pointer.
 - **Largest Number** — Custom comparator: `a+b > b+a`.
 - **Meeting Rooms II** — Sort starts and ends separately; two-pointer sweep for peak overlap.
 
 ### Hard
 - **Count Inversions** — Merge sort modification; count right-picks during merge.
 - **Maximum Gap** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
-- **Russian Doll Envelopes** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
+- **Russian Doll Envelopes `⭐ Google`** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
 
 ---
 
@@ -476,15 +482,15 @@ For distributed sort (MapReduce model):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Merge Intervals](problem-deep-dives.md#merge-intervals)** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
+| **[Merge Intervals](problem-deep-dives.md#merge-intervals) `🔥 Google`** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
 | **Meeting Rooms II** | "Max concurrent meetings" | Sort starts + ends; two-pointer sweep | Use a **min-heap** of end times for generality. |
 | **Largest Number** | "Lex concat order" | Custom comparator `a+b vs b+a` | Handle all-zeros: `[0,0]` → `"0"`, not `"00"`. |
 | **H-Index** | "Count vs. value crossover" | Sort desc or bucket sort | Find `i` where `citations[i] >= i+1`; off-by-one is common. |
-| **Kth Largest** | "Rank without full sort" | QuickSelect or min-heap-K | QuickSelect mutates array; min-heap is cleaner for streaming. |
+| **Kth Largest `🔥 Google`** | "Rank without full sort" | QuickSelect or min-heap-K | QuickSelect mutates array; min-heap is cleaner for streaming. |
 | **Count Inversions** | "Out-of-order pairs" | Modified merge sort | Count `len(left) - i` inversions on each right-side pick. |
-| **Russian Doll Envelopes** | "Nested 2D increasing" | Sort w asc, h **desc**; LIS on h | Height sort is **descending** to prevent same-width stacking. |
+| **Russian Doll Envelopes `⭐ Google`** | "Nested 2D increasing" | Sort w asc, h **desc**; LIS on h | Height sort is **descending** to prevent same-width stacking. |
 | **Maximum Gap** | "Largest gap in sorted form" | Bucket sort; gap spans empty bucket | Gap ≥ `(max - min) / (n-1)`; allocate `n-1` buckets. |
-| **Sort Colors (Dutch National Flag)** [M] | "Sort array of 0s, 1s, 2s in one pass" | Three pointers: `lo`, `mid`, `hi`; swap 0s left, 2s right | `mid` advances on 0 (after swap) and 1 (no swap), but NOT on 2 — element from `hi` is unknown. |
+| **Sort Colors (Dutch National Flag) `⭐ Google`** [M] | "Sort array of 0s, 1s, 2s in one pass" | Three pointers: `lo`, `mid`, `hi`; swap 0s left, 2s right | `mid` advances on 0 (after swap) and 1 (no swap), but NOT on 2 — element from `hi` is unknown. |
 | **Sort Characters by Frequency** [M] | "Descending frequency sort of string chars" | Count frequencies; sort by `-freq`; rebuild string | Bucket sort alternative: group by frequency index for O(N) vs O(N log N). |
 | **Wiggle Sort II** [M] | "nums[0] < nums[1] > nums[2] < ..." | QuickSelect for median; 3-way partition; interleave via index mapping | Index mapping `(1 + 2*i) % (n | 1)` places larger half at odd indices without extra space. |
 | **Find K-th Smallest Pair Distance** [H] | "Kth smallest absolute difference of any pair" | Binary search on answer; count pairs with distance ≤ mid via two pointers on sorted array | Binary search over difference value [0, max-min]; counting pairs is O(N) with two pointers. |
@@ -492,8 +498,8 @@ For distributed sort (MapReduce model):
 | **Largest Perimeter Triangle** [M] | "Largest triangle perimeter from array sides" | Sort desc; check first triplet where `a[i] < a[i-1] + a[i-2]` | Valid triangle: sum of two shorter sides > longest side. Only need to check adjacent triples after sorting. |
 | **Minimum Time Difference** [M] | "Min difference between any two times in list" | Convert to minutes; sort; check adjacent and wrap-around (last - first vs 1440) | Circular: last gap = `1440 - (last - first)`. Sort enables O(N log N) instead of O(N²) pairs. |
 | **Maximum Ice Cream Bars** [M] | "Buy max bars within budget; cheapest first" | Sort by cost; buy greedily from cheapest | Greedy works: maximizing count = minimize cost per item = take cheapest first. |
-| **3Sum Closest** [M] | "Triplet sum closest to target" | Sort; fix `i`; two pointers; update closest on each candidate | Update closest only; move both pointers on exact match for efficiency. |
-| **4Sum** [M] | "All unique quadruples summing to target" | Sort; fix two outer loops; two pointers for inner | Deduplicate at all four levels: outer loop `i`, second loop `j`, and both pointer positions. |
+| **3Sum Closest `🔥 Google`** [M] | "Triplet sum closest to target" | Sort; fix `i`; two pointers; update closest on each candidate | Update closest only; move both pointers on exact match for efficiency. |
+| **4Sum `⭐ Google`** [M] | "All unique quadruples summing to target" | Sort; fix two outer loops; two pointers for inner | Deduplicate at all four levels: outer loop `i`, second loop `j`, and both pointer positions. |
 
 ---
 

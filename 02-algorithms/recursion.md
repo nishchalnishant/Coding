@@ -1,5 +1,11 @@
 # Recursion — Complete Reference
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## First-Principles Map
@@ -91,7 +97,7 @@ RECURSION
 | Type | Structure | Example |
 | :--- | :--- | :--- |
 | **Linear** | f(n) calls f(n-1) | Factorial, linked-list traversal |
-| **Binary** | f(n) calls f(left) + f(right) | Tree traversal, merge sort |
+| **Binary `🔥 Google`** | f(n) calls f(left) + f(right) | Tree traversal, merge sort |
 | **Multi-branch** | f(n) calls f(n-c1), f(n-c2)... | Coin change, climbing stairs |
 | **Exponential (backtracking)** | 2^n branches | Subsets, permutations |
 | **Tail** | Result fully computed before recursive call | Accumulator-style fib |
@@ -186,12 +192,12 @@ Step 4 — CONVERT TO DP (if overlapping subproblems)
 | # | Pattern | Signal | Key Code Element |
 | :--- | :--- | :--- | :--- |
 | 1 | **Include/Exclude** | "all subsets / power set" | 2 branches at each index |
-| 2 | **Permutations** | "all orderings / arrangements" | `used[]` array or swap-based |
+| 2 | **Permutations `🔥 Google`** | "all orderings / arrangements" | `used[]` array or swap-based |
 | 3 | **IP/OP String Building** | "generate strings with constraints" | validity guard on each branch |
 | 4 | **Divide & Combine** | "split → solve independently → merge" | `solve(left) + solve(right)` |
 | 5 | **Mathematical** | "power, Hanoi, Josephus" | mathematical recurrence |
 | 6 | **Tree/Graph DFS** | "tree property / graph traversal" | structural post/pre-order |
-| 7 | **N-Queens / Constraint Satisfaction** | "place N things with constraints" | clash sets / bitmask |
+| 7 | **N-Queens / Constraint Satisfaction `🔥 Google`** | "place N things with constraints" | clash sets / bitmask |
 | 8 | **Memoization Bridge** | "recursion TLEs → overlapping subproblems" | `@lru_cache` + same state |
 
 ---
@@ -1270,7 +1276,7 @@ def word_break_dp(s, word_dict):
 | 4 | **Wrong duplicate guard** — `i > 0` allows wrong dedup | Use `i > start` for subsets/combos |
 | 5 | **Wrong permutation dedup** — `used[i-1]` vs `not used[i-1]` | `if i > 0 and nums[i]==nums[i-1] and not used[i-1]: continue` |
 | 6 | **Forgetting to restore state** — `path.pop()` missing | Always undo mutations before returning |
-| 7 | **Combination sum reuse** — `i+1` when reuse intended | `backtrack(i, ...)` (same `i`) for reuse; `i+1` for once-each |
+| 7 | **Combination sum reuse `🔥 Google`** — `i+1` when reuse intended | `backtrack(i, ...)` (same `i`) for reuse; `i+1` for once-each |
 | 8 | **Python recursion depth** — default limit ~1000 | `sys.setrecursionlimit(10**5)` or convert to iterative |
 | 9 | **Regex `*` zero-occurrence** — forgetting `dp(i, j+2)` | Skip branch: `dp(i, j+2)` OR consume: `first_match and dp(i+1, j)` |
 | 10 | **BST validation** — only checking immediate parent | Pass `(lo, hi)` range; check full ancestry |

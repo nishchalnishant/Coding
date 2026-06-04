@@ -15,11 +15,17 @@ difficulty: mixed
 - **Kahn's BFS:** Use when the queue stores zero in-degree nodes for topological ordering or cycle detection.
 - **Common pitfalls:** Mark visited when enqueuing, snapshot the queue size for level order, and always handle stale deque entries before using the front element.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Monotonic Deque
 
-### Sliding Window Maximum
+### Sliding Window Maximum `🔥 Google`
 
 > [!example] Problem
 > You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
@@ -187,7 +193,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game VI (DP + Sliding Window Max)
+### Jump Game VI (DP + Sliding Window Max) `🔥 Google`
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -221,7 +227,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Naive DP `dp[i] = nums[i] + max(dp[i-k..i-1])` is O(nk) — the inner max over a window of size k is expensive. DP with a monotonic decreasing deque to maintain `max(dp[i-k..i-1])` in O(1) per step. `dp[i] = nums[i] + max(dp[j] for j in range(max(0, i-k), i))`. Use a deque of indices in decreasing `dp` value order. Before computing `dp[i]`, evict indices outside the window `[i-k, i-1]` from the front. The front of the deque is `argmax` dp in the window.
-
 
 > [!note]- Python Solution
 > ```python
@@ -310,7 +315,7 @@ difficulty: mixed
 
 ## BFS / Level-order
 
-### Binary Tree Level Order Traversal
+### Binary Tree Level Order Traversal `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
@@ -339,7 +344,6 @@ difficulty: mixed
 
 > [!info] Approach
 > DFS mixes levels; BFS processes nodes level-by-level naturally. BFS with level-size snapshotting — record `len(queue)` before processing each level so we know when one level ends and the next begins. Enqueue root. At the start of each BFS iteration snapshot `size = len(queue)`. Dequeue exactly `size` nodes, collect their values, enqueue their children. Append the level list to results.
-
 
 > [!note]- Python Solution
 > ```python
@@ -377,72 +381,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Zigzag Level Order Traversal
-
-> [!example] Problem
-> Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
-> 
-> **Example 1:**
-> ```
-> Input: root = [3,9,20,null,null,15,7]
-> Output: [[3],[20,9],[15,7]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: root = [1]
-> Output: [[1]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: root = []
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the tree is in the range [0, 2000].
-> - -100 <= Node.val <= 100
-
-> [!info] Approach
-> BFS naturally produces left-to-right order; reversing odd levels is cheaper than changing traversal direction. Standard level-order BFS with a `left_to_right` flag; reverse odd-depth level lists before appending. Toggle `left_to_right` after each level. When False, reverse the collected level list. Children are always enqueued left-to-right; only the output list is reversed.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> from typing import Optional
-> >
-> def zigzag_level_order(root):
->     if not root:
->         return []
->     result = []
->     queue: deque[TreeNode] = deque([root])
->     left_to_right = True
->     while queue:
->         level = []
->         for _ in range(len(queue)):
->             node = queue.popleft()
->             level.append(node.val)
->             if node.left:
->                 queue.append(node.left)
->             if node.right:
->                 queue.append(node.right)
->         result.append(level if left_to_right else level[::-1])
->         left_to_right = not left_to_right
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(n).
-
-> [!tip] Alternatives
-> - Double-ended deque per level: append to front or back based on direction, avoiding the reversal. O(n) same, slightly more complex.
-> - DFS with depth parity: same O(n), call-stack based.
-
----
-
-### Binary Tree Right Side View
+### Binary Tree Right Side View `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
@@ -480,7 +419,6 @@ difficulty: mixed
 > [!info] Approach
 > The rightmost node at each level is exactly the last node dequeued in a level-order BFS. Level-order BFS; record the last node value at each level. Standard level-size snapshotting. After processing all nodes in a level, the most recently processed node value is the rightmost — append it to results.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -516,82 +454,6 @@ difficulty: mixed
 
 ## BFS Multi-Source
 
-### Rotting Oranges
-
-> [!example] Problem
-> You are given an m x n grid where each cell can have one of three values:
-> Every minute, any fresh orange that is 4-directionally adjacent to a rotten orange becomes rotten.
-> Return the minimum number of minutes that must elapse until no cell has a fresh orange. If this is impossible, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
-> Output: 4
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
-> Output: -1
-> Explanation: The orange in the bottom left corner (row 2, column 0) is never rotten, because rotting only happens 4-directionally.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: grid = [[0,2]]
-> Output: 0
-> Explanation: Since there are already no fresh oranges at minute 0, the answer is just 0.
-> ```
-> 
-> **Constraints:**
-> - m == grid.length
-> - n == grid[i].length
-> - 1 <= m, n <= 10
-> - grid[i][j] is 0, 1, or 2.
-
-> [!info] Approach
-> All rotten oranges spread simultaneously — not sequentially. A single-source BFS from the "first" rotten orange would give wrong timing. Multi-source BFS models all sources spreading in parallel from time 0. Seed the queue with ALL rotten cells at distance 0. BFS level = 1 minute. Count fresh oranges. Run BFS — each time a fresh orange is infected, decrement fresh count and enqueue the new cell with `time + 1`. After BFS, if fresh > 0, return -1 (blocked cells remain). Otherwise return the last timestamp used.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def oranges_rotting(grid):
->     rows, cols = len(grid), len(grid[0])
->     queue: deque[tuple[int, int, int]] = deque()
->     fresh = 0
->     for r in range(rows):
->         for c in range(cols):
->             if grid[r][c] == 2:
->                 queue.append((r, c, 0))
->             elif grid[r][c] == 1:
->                 fresh += 1
->     if fresh == 0:
->         return 0
->     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
->     minutes = 0
->     while queue:
->         r, c, t = queue.popleft()
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < rows and 0 <= nc < cols and grid[nr][nc] == 1:
->                 grid[nr][nc] = 2
->                 fresh -= 1
->                 minutes = t + 1
->                 queue.append((nr, nc, t + 1))
->     return minutes if fresh == 0 else -1
-> ```
-
-> [!success] Complexity
-> Time O(m × n). Space O(m × n).
-
-> [!tip] Alternatives
-> - DFS: Can compute reachability but cannot model simultaneous spread timing correctly. BFS is required.
-> - Repeated simulation passes: O(m × n × T) where T = answer — correct but wasteful.
-
----
-
 ### 01 Matrix
 
 > [!example] Problem
@@ -620,7 +482,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Running BFS from each `1` independently is O((m×n)²) — too slow. All `0` cells are sources; they spread distance simultaneously. Multi-source BFS seeded with all `0` cells at distance 0. Initialize all `0` cells with distance 0 in the queue. Initialize all `1` cells with `inf`. BFS outward — first time a `1` cell is reached sets its distance. BFS guarantees minimum distance.
-
 
 > [!note]- Python Solution
 > ```python
@@ -705,7 +566,6 @@ difficulty: mixed
 > [!info] Approach
 > Starting BFS from each room to find the nearest gate is O(G × m × n). Starting from all gates simultaneously is O(m × n). Multi-source BFS from all gates. Enqueue all cells with value `0` (gates). BFS outward — each `INF` cell reached gets distance = parent's distance + 1. Walls (`-1`) are never enqueued or updated.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -745,7 +605,6 @@ difficulty: mixed
 > [!info] Approach
 > The cell farthest from all land is the last cell reached when BFS expands outward from all land cells simultaneously. Multi-source BFS from all land cells. The last cell dequeued gives the maximum distance. Seed the queue with all `1` cells at distance 0. BFS outward filling `0` cells. Track the last distance assigned — that is the answer.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -781,7 +640,7 @@ difficulty: mixed
 
 ---
 
-### Shortest Path in Binary Matrix
+### Shortest Path in Binary Matrix `🔥 Google`
 
 > [!example] Problem
 > Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1.
@@ -815,7 +674,6 @@ difficulty: mixed
 > [!info] Approach
 > All edges have equal weight (each step costs 1), so BFS gives the shortest path. Single-source BFS from `(0,0)` over open (value `0`) cells. If start or end is `1`, return -1 immediately. BFS with 8 directions. The first time `(n-1, n-1)` is dequeued, return the current distance + 1.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -848,7 +706,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Knight Moves
+### Minimum Knight Moves `⭐ Google`
 
 > [!example] Problem
 > In an **infinite** chess board with coordinates from `-infinity` to `+infinity`, you have a **knight** at square `[0, 0]`.
@@ -891,7 +749,6 @@ difficulty: mixed
 > [!info] Approach
 > All moves have cost 1; BFS gives the minimum number of moves. BFS from `(0,0)` with 8 knight-move directions. Exploit symmetry to search in the first quadrant only, reducing state space by 4×. Reflect `(x, y)` to `(|x|, |y|)` — knight distances are symmetric. BFS from `(0,0)` inside a bounded box `[-2..x+2] × [-2..y+2]`; the `+2` buffer handles the small detours needed near the origin.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -924,71 +781,6 @@ difficulty: mixed
 ---
 
 ## BFS Single-Source
-
-### Word Ladder
-
-> [!example] Problem
-> A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
-> Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.
-> 
-> **Example 1:**
-> ```
-> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
-> Output: 5
-> Explanation: One shortest transformation sequence is "hit" -> "hot" -> "dot" -> "dog" -> cog", which is 5 words long.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
-> Output: 0
-> Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
-> ```
-> 
-> **Constraints:**
-> - 1 <= beginWord.length <= 10
-> - endWord.length == beginWord.length
-> - 1 <= wordList.length <= 5000
-> - wordList[i].length == beginWord.length
-> - beginWord, endWord, and wordList[i] consist of lowercase English letters.
-> - beginWord != endWord
-> - All the words in wordList are unique.
-
-> [!info] Approach
-> Each word is a graph node; an edge exists between two words that differ by one letter. We want shortest path → BFS. BFS on the implicit word graph. Removing visited words from the word set avoids revisiting (and is faster than a separate visited set). Enqueue `(beginWord, 1)`. For each dequeued word, generate all one-letter variants; if a variant is in the word set, enqueue it with distance + 1 and remove from the set. Return the distance when `endWord` is reached.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def ladder_length(beginWord, endWord, wordList):
->     word_set = set(wordList)
->     if endWord not in word_set:
->         return 0
->     queue: deque[tuple[str, int]] = deque([(beginWord, 1)])
->     word_set.discard(beginWord)
->     while queue:
->         word, dist = queue.popleft()
->         for i in range(len(word)):
->             for c in 'abcdefghijklmnopqrstuvwxyz':
->                 neighbor = word[:i] + c + word[i+1:]
->                 if neighbor == endWord:
->                     return dist + 1
->                 if neighbor in word_set:
->                     word_set.discard(neighbor)
->                     queue.append((neighbor, dist + 1))
->     return 0
-> ```
-
-> [!success] Complexity
-> Time O(N × L × 26) where N = word list size, L = word length. Space O(N × L).
-
-> [!tip] Alternatives
-> - Bidirectional BFS: expand from both `beginWord` and `endWord`, meet in the middle — reduces explored nodes to ~√ of one-directional BFS. Critical optimization for large word lists.
-> - DFS: finds a path but not shortest.
-
----
 
 ### Open the Lock
 
@@ -1031,7 +823,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each lock state is a node; each valid turn is an edge with weight 1. Shortest path → BFS. BFS on the 4-digit string state space. Each state has 8 neighbors (4 wheels × 2 directions). Mark deadends and the start as visited before BFS begins. The first time `target` is reached, return the current depth.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1098,7 +889,6 @@ difficulty: mixed
 > [!info] Approach
 > BFS over stops would revisit stops on the same route repeatedly. Model buses (routes) as nodes, not stops — each bus is taken at cost 1. BFS where each state is a bus route index, not a stop. Build `stop → [bus_indices]` map. BFS starts from all buses that include `source`. For each bus dequeued, visit all its stops; if `target` is reached, return bus count. For each stop on this bus, enqueue all other buses that serve it and haven't been visited. Mark buses as visited to avoid re-boarding.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
@@ -1149,7 +939,6 @@ difficulty: mixed
 > [!info] Approach
 > Standard BFS doesn't capture how many eliminations have been used — two paths to the same cell may have different remaining `k`. The state must include `k`. BFS with 3D state `(row, col, remaining_k)`. Enqueue `(0, 0, k)` with 0 steps. For each cell, try all 4 neighbors — if a neighbor is free, step to it; if it's an obstacle and `remaining_k > 0`, step to it and decrement `k`. Mark `(r, c, k)` as visited — not just `(r, c)`.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1188,7 +977,7 @@ difficulty: mixed
 
 ---
 
-### Cheapest Flights Within K Stops
+### Cheapest Flights Within K Stops `⭐ Google`
 
 > [!example] Problem
 > There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from city fromi to city toi with cost pricei.
@@ -1236,7 +1025,6 @@ difficulty: mixed
 > [!info] Approach
 > Standard Dijkstra may revisit a node via a longer path that uses fewer stops, blocking a cheaper path that needs more stops. The stop count is part of the state. BFS level-by-level (level = number of stops used). At each level, update costs. Use Bellman-Ford with exactly `k+1` relaxation rounds. Maintain `prices[node]` = cheapest price to reach `node` using at most `current_round` hops. Use a copy of prices per round to avoid using within-round updates.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_cheapest_price(n, flights, src, dst, k):
@@ -1262,7 +1050,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game III
+### Jump Game III `🔥 Google`
 
 > [!example] Problem
 > Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach any index with value 0.
@@ -1302,7 +1090,6 @@ difficulty: mixed
 > [!info] Approach
 > We need to determine reachability — BFS from `start` explores all reachable indices. BFS treating indices as graph nodes; edges are the two jump targets. Enqueue `start`. For each index, compute both jump targets. If in bounds and unvisited, enqueue. Return True immediately if a target index has value 0.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1335,7 +1122,7 @@ difficulty: mixed
 
 ## Topological Sort (Kahn's BFS)
 
-### Course Schedule
+### Course Schedule `🔥 Google`
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -1366,7 +1153,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The prerequisites form a directed graph; a cycle makes it impossible to finish all courses. Kahn's algorithm detects cycles via in-degree tracking. Topological sort using BFS (Kahn's algorithm). If all nodes are processed, the graph is a DAG (no cycle). Build adjacency list and in-degree array. Enqueue all nodes with in-degree 0. For each dequeued node, decrement neighbors' in-degrees; enqueue any that reach 0. Count processed nodes — if count equals `numCourses`, return True.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1400,78 +1186,7 @@ difficulty: mixed
 
 ---
 
-### Course Schedule II
-
-> [!example] Problem
-> There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
-> Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.
-> 
-> **Example 1:**
-> ```
-> Input: numCourses = 2, prerequisites = [[1,0]]
-> Output: [0,1]
-> Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
-> Output: [0,2,1,3]
-> Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
-> So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: numCourses = 1, prerequisites = []
-> Output: [0]
-> ```
-> 
-> **Constraints:**
-> - 1 <= numCourses <= 2000
-> - 0 <= prerequisites.length <= numCourses * (numCourses - 1)
-> - prerequisites[i].length == 2
-> - 0 <= ai, bi < numCourses
-> - ai != bi
-> - All the pairs [ai, bi] are distinct.
-
-> [!info] Approach
-> Topological sort produces a valid linear ordering of a DAG. Kahn's BFS directly yields this order. Same Kahn's BFS as Course Schedule, but record the processing order. Append each dequeued node to `order`. If `len(order) == numCourses`, the graph is a DAG and `order` is a valid schedule. Otherwise return `[]`.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def find_order(numCourses, prerequisites):
->     graph = [[] for _ in range(numCourses)]
->     in_degree = [0] * numCourses
->     for a, b in prerequisites:
->         graph[b].append(a)
->         in_degree[a] += 1
-> >
->     queue: deque[int] = deque(i for i in range(numCourses) if in_degree[i] == 0)
->     order = []
->     while queue:
->         node = queue.popleft()
->         order.append(node)
->         for neighbor in graph[node]:
->             in_degree[neighbor] -= 1
->             if in_degree[neighbor] == 0:
->                 queue.append(neighbor)
->     return order if len(order) == numCourses else []
-> ```
-
-> [!success] Complexity
-> Time O(V + E). Space O(V + E).
-
-> [!tip] Alternatives
-> - DFS postorder: process a node after all its descendants; reverse postorder gives topological order. O(V + E).
-> - Multiple valid orderings exist; both BFS and DFS give one valid answer but may differ.
-
----
-
-### Alien Dictionary
+### Alien Dictionary `⭐ Google`
 
 > [!example] Problem
 > There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
@@ -1526,7 +1241,6 @@ difficulty: mixed
 > [!info] Approach
 > Comparing adjacent words in the sorted list reveals ordering constraints between characters (directed edges). The full ordering is a topological sort of these constraints. Build a directed graph from character ordering constraints. Run Kahn's BFS topological sort. For each adjacent word pair, find the first differing character — that gives an edge. If word A is a prefix of word B but appears after B, return `""` (invalid). Run Kahn's BFS. If all characters are processed, the BFS output is the alien alphabet order.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
@@ -1572,7 +1286,7 @@ difficulty: mixed
 
 ## Design
 
-### Design Hit Counter
+### Design Hit Counter `⭐ Google`
 
 > [!example] Problem
 > Design a hit counter which counts the number of hits received in the past `5` minutes (i.e., the past `300` seconds).
@@ -1630,7 +1344,6 @@ difficulty: mixed
 > [!info] Approach
 > Hits older than 300 seconds are never useful again. A queue naturally evicts stale hits from the front. Deque of timestamps. At each operation, evict timestamps older than `timestamp - 300`. `hit`: append timestamp. `getHits`: evict front while `front <= timestamp - 300`, then return `len(deque)`. This assumes calls arrive with non-decreasing timestamps, which is the usual interview contract.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1657,7 +1370,7 @@ difficulty: mixed
 
 ---
 
-### Design Circular Queue
+### Design Circular Queue `⭐ Google`
 
 > [!example] Problem
 > Design your implementation of the circular queue. The circular queue is a linear data structure in which the operations are performed based on FIFO (First In First Out) principle, and the last position is connected back to the first position to make a circle. It is also called "Ring Buffer".
@@ -1693,7 +1406,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A plain list wastes space as the front pointer drifts forward. Modular arithmetic wraps pointers around, reusing vacated slots. Fixed-size array with `front`, `size`, and `capacity`. Rear index = `(front + size) % cap`. Using a `size` counter eliminates the ambiguity between full and empty (the "wasted slot" problem). Enqueue writes to `(front + size) % cap` and increments size. Dequeue advances `front` by 1 (mod cap) and decrements size.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1743,7 +1455,7 @@ difficulty: mixed
 
 ---
 
-### Moving Average from Data Stream
+### Moving Average from Data Stream `⭐ Google`
 
 > [!example] Problem
 > Given a stream of integers and a window size, calculate the moving average of all integers in the sliding window.
@@ -1789,7 +1501,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Recomputing the sum from scratch on each insertion is O(size). Maintain a running sum and update it incrementally in O(1). Fixed-size deque with a running sum. Append each new value to the deque and add to sum. If the deque exceeds `size`, pop from the front and subtract from sum. Return `sum / len(deque)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1849,7 +1560,6 @@ difficulty: mixed
 > [!info] Approach
 > Old timestamps outside the window are never useful again. A deque lets us discard them from the front in O(1). Deque storing timestamps. At each `ping`, evict all timestamps < `t - 3000` from the front. Deque size = answer. Append `t`. Pop from front while `front < t - 3000`. Return `len(deque)`.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1870,74 +1580,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Binary search on a list of all timestamps: O(log n) per call — unnecessary since timestamps are monotonically increasing.
-
----
-
-### Implement Queue Using Stacks
-
-> [!example] Problem
-> Implement a first in first out (FIFO) queue using only two stacks. The implemented queue should support all the functions of a normal queue (push, peek, pop, and empty).
-> Implement the MyQueue class:
-> Notes
-> 
-> **Example 1:**
-> ```
-> Input
-> ["MyQueue", "push", "push", "peek", "pop", "empty"]
-> [[], [1], [2], [], [], []]
-> Output
-> [null, null, null, 1, 1, false]
-> 
-> Explanation
-> MyQueue myQueue = new MyQueue();
-> myQueue.push(1); // queue is: [1]
-> myQueue.push(2); // queue is: [1, 2] (leftmost is front of the queue)
-> myQueue.peek(); // return 1
-> myQueue.pop(); // return 1, queue is [2]
-> myQueue.empty(); // return false
-> ```
-> 
-> **Constraints:**
-> - 1 <= x <= 9
-> - At most 100 calls will be made to push, pop, peek, and empty.
-> - All the calls to pop and peek are valid.
-
-> [!info] Approach
-> A single stack gives LIFO, not FIFO. Two stacks reverse each other: push onto stack1; when stack2 is empty, transfer all of stack1 into stack2 — this reverses the order, making stack2's top the oldest element. `push_stack` receives all pushes. `pop_stack` is filled lazily from `push_stack` when empty. Each element moves from push → pop exactly once, so amortized O(1) per dequeue.
-
-
-> [!note]- Python Solution
-> ```python
-> class MyQueue:
->     def __init__(self):
->         self._push: list[int] = []
->         self._pop: list[int] = []
-> >
->     def push(self, x):
->         self._push.append(x)
-> >
->     def pop(self):
->         self._transfer()
->         return self._pop.pop()
-> >
->     def peek(self):
->         self._transfer()
->         return self._pop[-1]
-> >
->     def empty(self):
->         return not self._push and not self._pop
-> >
->     def _transfer(self):
->         if not self._pop:
->             while self._push:
->                 self._pop.append(self._push.pop())
-> ```
-
-> [!success] Complexity
-> Time O(1) amortized for all operations. Space O(n).
-
-> [!tip] Alternatives
-> Transfer on every push instead of lazily: same O(1) amortized but requires reversal back after each operation — more complex.
 
 ---
 
@@ -1972,7 +1614,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A queue is FIFO; to make the most recently pushed element accessible first, we must rotate older elements behind the new one after each push. Single queue. After each `push(x)`, rotate the queue by popping from the front and re-appending, `len(q) - 1` times — x is now at the front. Push is O(n); pop and top are O(1). (Trade-off: opposite of queue-from-stacks.)
-
 
 > [!note]- Python Solution
 > ```python
@@ -2009,7 +1650,7 @@ difficulty: mixed
 
 ## Priority Queue / Heap
 
-### Task Scheduler
+### Task Scheduler `🔥 Google`
 
 > [!example] Problem
 > You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.
@@ -2047,7 +1688,6 @@ difficulty: mixed
 > [!info] Approach
 > We always want to execute the most frequent remaining task next (greedy). A max-heap gives the most frequent task in O(log k). When a task is on cooldown, it sits in a queue until it can be re-used. Max-heap of `(-count, task)` + cooldown queue of `(count_after_use, available_at_time)`. Build frequency map; push all `(-count,)` entries to the heap. At each time tick: if the cooldown queue front is ready (available_at <= time), push it back onto the heap. If the heap is non-empty, pop and execute the most frequent task, push it to the cooldown queue with updated count. Otherwise, idle. Increment time.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -2082,7 +1722,7 @@ difficulty: mixed
 
 ---
 
-### Find Median from Data Stream
+### Find Median from Data Stream `🔥 Google`
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
@@ -2112,7 +1752,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sorting on every query is O(n log n). Maintaining two heaps — a max-heap of the lower half and a min-heap of the upper half — lets us access the median in O(1). `lo` = max-heap (lower half), `hi` = min-heap (upper half). Invariant: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. The median is `lo[0]` (odd count) or `(lo[0] + hi[0]) / 2` (even count). `addNum`: push to `lo` (negate for max-heap), then balance by moving `lo`'s max to `hi` if `lo[0] > hi[0]` or sizes diverge. Rebalance so `lo` is never smaller than `hi`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2188,7 +1827,6 @@ difficulty: mixed
 > [!info] Approach
 > A circular buffer lets us use O(1) index arithmetic without shifting elements. Maintain `front`, `rear`, `size`, and an array of capacity `k`. Update indices with modulo arithmetic. For example, moving left uses `(idx - 1 + k) % k` and moving right uses `(idx + 1) % k`.
 
-
 > [!note]- Python Solution
 > ```python
 > class MyCircularDeque:
@@ -2217,7 +1855,7 @@ difficulty: mixed
 
 ## Sliding Window with Queue
 
-### Sliding Window Median (LC 480)
+### Sliding Window Median (LC 480) `⭐ Google`
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
@@ -2251,7 +1889,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Recalculating the median from scratch for each window is O(k log k) per step — too slow. Maintaining two heaps (like the "Find Median from Data Stream" problem) allows O(log k) updates, but removal of the outgoing element requires lazy deletion. Use a max-heap `lo` (lower half) and min-heap `hi` (upper half). On each step, add the incoming element and lazy-delete the outgoing element. Rebalance heaps after each operation. Lazy deletion: track counts of "dead" elements in each heap. When computing the median, first pop any dead elements from the heap tops. Balance rule: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2344,7 +1981,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The bottleneck is the most frequent task — it dictates the minimum frame length. Tasks can be arranged in cycles of length `n+1`; less frequent tasks or idle slots fill the gaps. Count task frequencies. The answer is `max(total_tasks, (max_freq - 1) * (n + 1) + count_of_tasks_with_max_freq)`. Count frequencies with a Counter. `max_freq` = highest frequency. `max_count` = number of tasks that share that frequency. Formula accounts for `max_freq - 1` complete cycles, each of length `n+1`, plus the final partial cycle of `max_count` tasks.
-
 
 > [!note]- Python Solution
 > ```python

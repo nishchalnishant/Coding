@@ -6,11 +6,17 @@ difficulty: mixed
 
 # Bit Manipulation — Problem Deep Dives
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## XOR Properties
 
-### Single Number
+### Single Number `🔥 Google`
 
 > [!example] Problem
 > Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
@@ -42,7 +48,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR is self-inverse: `a ^ a = 0` and `a ^ 0 = a`. All paired elements cancel; the unique element survives. XOR all elements together. Pairs annihilate; the lone value is the result. `reduce(xor, nums)`. One pass, no extra memory.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import reduce
@@ -60,7 +65,7 @@ difficulty: mixed
 
 ---
 
-### Single Number II (Three Copies — Bit Counting)
+### Single Number II (Three Copies — Bit Counting) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
@@ -86,7 +91,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR cancellation only works for pairs. With three copies, `x ^ x ^ x = x` — XOR fails. Instead, count bit occurrences: if a bit appears `3k` times across all numbers, it contributes 0 to the unique number. Count set bits at each of 32 positions. Take each count mod 3. Reconstruct the number from these remainders. Iterate bit positions 0–31. Sum how many numbers have bit `i` set. `count % 3` gives bit `i` of the unique number.
 
-
 > [!note]- Python Solution
 > ```python
 > def single_number_ii(nums):
@@ -108,7 +112,7 @@ difficulty: mixed
 
 ---
 
-### Single Number III (Two Unique — XOR Split)
+### Single Number III (Two Unique — XOR Split) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once. You can return the answer in any order.
@@ -141,7 +145,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR all elements → `xor_sum = x ^ y`. Since `x ≠ y`, at least one bit differs. That differing bit can partition the array so `x` and `y` end up in different groups. XOR each group independently to isolate each unique. Find any set bit in `xor_sum` (rightmost: `xor_sum & (-xor_sum)`). Partition array on that bit; XOR each partition. Two-pass: pass 1 computes `xor_sum`; pass 2 partitions and XORs each group.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import reduce
@@ -169,7 +172,7 @@ difficulty: mixed
 
 ---
 
-### Missing Number
+### Missing Number `🔥 Google`
 
 > [!example] Problem
 > Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
@@ -207,7 +210,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR of `[0..n] XOR [all nums]` cancels all present values; what's left is the missing value. XOR all indices `0..n` with all values in `nums`. Missing value survives. `reduce(xor, range(n+1)) ^ reduce(xor, nums)`.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import reduce
@@ -226,7 +228,7 @@ difficulty: mixed
 
 ---
 
-### Find the Difference
+### Find the Difference `⭐ Google`
 
 > [!example] Problem
 > You are given two strings s and t.
@@ -254,7 +256,6 @@ difficulty: mixed
 > [!info] Approach
 > Same as Single Number — every character in `s` appears once in `t` as a "pair", except the extra character. XOR all characters in both strings; pairs cancel. XOR all characters in `s` and `t` together. The unpaired character (the added one) survives. Convert chars to ord values; XOR all together.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import reduce
@@ -275,7 +276,7 @@ difficulty: mixed
 
 ## Bit Counting
 
-### Number of 1 Bits (Hamming Weight)
+### Number of 1 Bits (Hamming Weight) `🔥 Google`
 
 > [!example] Problem
 > Given a positive integer n, write a function that returns the number of set bits in its binary representation (also known as the Hamming weight).
@@ -309,7 +310,6 @@ difficulty: mixed
 
 > [!info] Approach
 > `n & (n-1)` clears the lowest set bit. Each iteration removes exactly one set bit — O(k) where k = number of set bits, not O(32). Brian Kernighan's algorithm — loop while `n != 0`, clear lowest set bit each iteration. Count iterations until `n == 0`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -359,7 +359,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR produces a number with 1s exactly at positions where the inputs differ. Count those 1s. `hamming_distance(x, y) = popcount(x ^ y)`. XOR then apply Brian Kernighan's or `bin().count('1')`.
 
-
 > [!note]- Python Solution
 > ```python
 > def hamming_distance(x, y):
@@ -379,7 +378,7 @@ difficulty: mixed
 
 ---
 
-### Counting Bits (DP Approach)
+### Counting Bits (DP Approach) `⭐ Google`
 
 > [!example] Problem
 > Given an integer n, return an array ans of length n + 1 such that for each i (0 <= i <= n), ans[i] is the number of 1's in the binary representation of i.
@@ -413,7 +412,6 @@ difficulty: mixed
 > [!info] Approach
 > `i >> 1` is a smaller subproblem already solved. The number of bits in `i` = bits in `i >> 1` plus the lowest bit of `i`. DP recurrence: `dp[i] = dp[i >> 1] + (i & 1)`. Single pass `i = 1` to `n`; use previously computed values.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_bits(n):
@@ -431,7 +429,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Bits
+### Reverse Bits `🔥 Google`
 
 > [!example] Problem
 > Reverse bits of a given 32 bits unsigned integer.
@@ -458,7 +456,6 @@ difficulty: mixed
 > [!info] Approach
 > Bit `i` of input should become bit `31-i` of output. Process each bit from LSB to MSB, shifting result left each step. Extract LSB of `n`; OR into `result`; shift `result` left, `n` right; repeat 32 times. 32 iterations. After 32 iterations, undo the final left shift (or structure the loop to avoid it).
 
-
 > [!note]- Python Solution
 > ```python
 > def reverse_bits(n):
@@ -479,7 +476,7 @@ difficulty: mixed
 
 ## Bit Tricks
 
-### Power of Two
+### Power of Two `🔥 Google`
 
 > [!example] Problem
 > Given an integer n, return true if it is a power of two. Otherwise, return false.
@@ -511,7 +508,6 @@ difficulty: mixed
 > [!info] Approach
 > A power of two has exactly one set bit. `n & (n-1)` clears the lowest set bit — if `n` is a power of two, the result is 0. Check `n > 0 and (n & (n-1)) == 0`. Guard `n > 0` is mandatory — `0 & (0-1) == 0` but 0 is not a power of two.
 
-
 > [!note]- Python Solution
 > ```python
 > def is_power_of_two(n):
@@ -526,7 +522,7 @@ difficulty: mixed
 
 ---
 
-### Power of Four
+### Power of Four `🔥 Google`
 
 > [!example] Problem
 > Given an integer n, return true if it is a power of four. Otherwise, return false.
@@ -555,7 +551,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Powers of four are powers of two with the set bit at an even bit position (0, 2, 4, ...). Mask `0x55555555` = `0101...0101` in binary — has 1s at all even positions. Must be power of two AND the set bit must be at an even position. `n > 0 and (n & (n-1)) == 0 and (n & 0x55555555) != 0`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -600,7 +595,6 @@ difficulty: mixed
 > [!info] Approach
 > Any bit position where `left` and `right` differ will have both 0 and 1 values in the range — their AND is 0. Only the common prefix bits (where left = right from MSB down) survive. Right-shift both until equal; that common prefix is the answer. Shift count is the number of trailing zeros added back. Count shifts while `left != right`; shift both right; shift result back left.
 
-
 > [!note]- Python Solution
 > ```python
 > def range_bitwise_and(left, right):
@@ -643,7 +637,6 @@ difficulty: mixed
 > [!info] Approach
 > Addition in binary: sum-without-carry = `a XOR b`; carry = `(a AND b) << 1`. Repeat until no carry. Iterative XOR + AND until carry is zero. While `b != 0`: `carry = (a & b) << 1`; `a = a ^ b`; `b = carry`. Return `a`. In Python, need to handle 32-bit overflow with masking: `mask = 0xFFFFFFFF`; work modulo mask; at end if `a > 0x7FFFFFFF`: `a = ~(a ^ mask)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def get_sum(a, b):
@@ -676,7 +669,6 @@ difficulty: mixed
 > [!info] Approach
 > Integer `mask` in `[0, 2^n)` bijects to subsets — bit `k` set means element `k` is included. Hardware-level iteration over all integers is faster than recursive backtracking. Iterate `mask` from `0` to `(1 << n) - 1`; for each mask, collect elements whose bit is set. For each `mask`, check each bit position `k`; include `nums[k]` if `mask & (1 << k)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def subsets(nums):
@@ -696,7 +688,7 @@ difficulty: mixed
 
 ---
 
-### Shortest Path Visiting All Nodes (BFS + Bitmask)
+### Shortest Path Visiting All Nodes (BFS + Bitmask) `⭐ Google`
 
 > [!example] Problem
 > You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
@@ -726,7 +718,6 @@ difficulty: mixed
 
 > [!info] Approach
 > "Visit all nodes, revisits allowed" — standard BFS fails because visited state must encode which nodes have been visited, not just current position. Bitmask encodes the entire visit history. BFS on state `(node, visited_mask)`. Goal: `visited_mask == (1 << n) - 1`. Multi-source BFS — start from all nodes simultaneously (each with its own bit set). State space: O(N · 2^N). BFS guarantees minimum steps.
-
 
 > [!note]- Python Solution
 > ```python
@@ -797,7 +788,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Skills are a finite set (≤ 16). State = bitmask of covered skills. DP over all 2^M skill subsets; for each state, try adding each person. `dp[mask]` = smallest list of people achieving skill coverage `mask`. Transition: for each person with skills `p_mask`, update `dp[mask | p_mask]`. Initialize `dp[0] = []`. For each existing state `mask` and each person, compute new coverage. Return `dp[(1<<m)-1]`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -884,76 +874,6 @@ difficulty: mixed
 ---
 
 ## XOR Trie
-
-### Maximum XOR of Two Numbers in an Array
-
-> [!example] Problem
-> Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [3,10,5,25,2,8]
-> Output: 28
-> Explanation: The maximum result is 5 XOR 25 = 28.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [14,70,53,83,49,91,36,80,92,51,66,70]
-> Output: 127
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^5
-> - 0 <= nums[i] <= 2^{31} - 1
-
-> [!info] Approach
-> Brute force is O(N²). A trie lets us greedily maximize XOR bit-by-bit from MSB. For each query number, at each bit, we want the opposite bit — if it exists in the trie, take it; otherwise take the same bit. Insert all numbers MSB-first into a binary trie. For each number, query the trie greedily for maximum XOR. Trie node has children `{0: ..., 1: ...}`. Insert: bit-by-bit from bit 31 to 0. Query: at each level, try to go to `1 - bit`; if present, add `1 << bit_pos` to result.
-
-
-> [!note]- Python Solution
-> ```python
-> class XORTrie:
->     def __init__(self):
->         self.root: dict = {}
-> 
->     def insert(self, num):
->         node = self.root
->         for bit in range(31, -1, -1):
->             b = (num >> bit) & 1
->             if b not in node:
->                 node[b] = {}
->             node = node[b]
-> 
->     def max_xor(self, num):
->         node = self.root
->         result = 0
->         for bit in range(31, -1, -1):
->             b = (num >> bit) & 1
->             want = 1 - b               # greedily take opposite bit
->             if want in node:
->                 result |= (1 << bit)
->                 node = node[want]
->             elif b in node:
->                 node = node[b]
->             else:
->                 break
->         return result
-> 
-> def find_maximum_xor(nums):
->     trie = XORTrie()
->     for num in nums:
->         trie.insert(num)
->     return max(trie.max_xor(num) for num in nums)
-> ```
-
-> [!success] Complexity
-> Time O(N · 32) = O(N), Space O(N · 32) = O(N).
-
-> [!tip] Alternatives
-> Bit-by-bit greedy with prefix set — for each bit from MSB, check if any pair can achieve this XOR bit. O(32 · N). Brute force O(N²). Trie is canonical.
-
----
 
 ### Maximum XOR with Element from Array (LC 1707)
 
@@ -1051,7 +971,6 @@ difficulty: mixed
 
 > [!info] Approach
 > State must encode current position AND which keys have been collected. Without keys in state, we can't determine which locks are passable. Bitmask of up to 6 keys = 64 possible key states. BFS on state `(r, c, keys_mask)`. Move onto a lock cell only if the corresponding key bit is set. Preprocess grid for start position, key count. BFS with state space O(R · C · 2^K). Goal: `keys_mask == (1 << num_keys) - 1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1151,7 +1070,6 @@ difficulty: mixed
 > [!info] Approach
 > Each byte's high bits determine its role. Bit masks isolate the relevant prefix bits. No parsing needed — pure bit-check. For each byte, determine if it's a 1-byte char, 2/3/4-byte leader, or continuation byte using masks. Track how many continuation bytes are expected; each subsequent byte must match `10xxxxxx`. Iterate bytes. If `expected_continuations > 0`, check `byte & 0xC0 == 0x80`. Otherwise classify the byte's prefix to set new expected count. Invalid if counts mismatch or byte is out of range.
 
-
 > [!note]- Python Solution
 > ```python
 > def valid_utf8(data):
@@ -1218,7 +1136,6 @@ difficulty: mixed
 > [!info] Approach
 > The standard binary-reflected Gray code has a closed-form formula: Gray code of integer `i` is `i ^ (i >> 1)`. Adjacent integers in Gray code differ by exactly one bit. Generate `[i ^ (i >> 1) for i in range(1 << n)]`. For `i` and `i+1`, `(i ^ (i>>1)) ^ ((i+1) ^ ((i+1)>>1))` always has exactly one bit set (the carry bit). This is provable by induction on the binary addition carry chain.
 
-
 > [!note]- Python Solution
 > ```python
 > def gray_code(n):
@@ -1263,7 +1180,6 @@ difficulty: mixed
 > [!info] Approach
 > XOR is its own inverse: `encoded[i] = arr[i] ^ arr[i+1]` → `arr[i+1] = encoded[i] ^ arr[i]`. Given `arr[0]`, each subsequent element is uniquely determined. Sequential XOR: `arr[i+1] = encoded[i] ^ arr[i]`. Initialize `arr = [first]`. For each value in `encoded`, append `encoded[i] ^ arr[-1]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def decode(encoded, first):
@@ -1281,7 +1197,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number (Bit Approach)
+### Find the Duplicate Number (Bit Approach) `⭐ Google`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -1314,7 +1230,6 @@ difficulty: mixed
 
 > [!info] Approach
 > For each bit position, count how many numbers in `[1, n]` have that bit set (call it `expected`) vs. how many in `nums` have it set (call it `actual`). If `actual > expected`, the duplicate has this bit set. For each of the 32 bit positions, compare bit frequency in `nums` vs. `[1..n]`. Reconstruct the duplicate from the differing bits. Outer loop over 32 bit positions; inner loop counts set bits in `nums` and in `range(1, n+1)`. If `count_nums > count_range`, set that bit in the answer.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1372,7 +1287,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Bitwise greediness is not enough because pairings interact globally. The state is which elements of the second array are already used. Bitmask DP: `dp[mask]` is the minimum cost after assigning the first `popcount(mask)` elements of `nums1`. For each mask, try assigning the next `nums1[i]` to every unused `nums2[j]` and transition to `mask | (1 << j)`.
-
 
 > [!note]- Python Solution
 > ```python

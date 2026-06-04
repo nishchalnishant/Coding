@@ -80,6 +80,12 @@ WHY graph algorithms exist → WHAT they do → HOW they work → WHEN to use �
 
 Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: correct algorithm selection, Dijkstra implementation with lazy deletion guard, Bellman-Ford for negative weights, and distributed graph thinking.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Theory & Mental Models
@@ -132,7 +138,7 @@ Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: cor
 | **0/1 weight edges** | 0-1 BFS (deque) | O(V + E) |
 | **Topological order** | Kahn's (BFS) or DFS postorder | O(V + E) |
 | **Connected components** | DFS / Union-Find | O(V + E) |
-| **Minimum spanning tree** | Kruskal (sort edges + DSU) / Prim (heap) | O(E log E) |
+| **Minimum spanning tree `⭐ Google`** | Kruskal (sort edges + DSU) / Prim (heap) | O(E log E) |
 
 ---
 
@@ -160,7 +166,7 @@ def bfs(adj: dict, start: int, target: int) -> int:
     return -1  # unreachable
 
 #### Common Variants & Twists
-1. **Shortest Path in Binary Matrix**:
+1. **Shortest Path in Binary Matrix `🔥 Google`**:
    - **What (The Problem & Goal):** Find the shortest path from top-left to bottom-right in a grid of 0s and 1s (where 0 is a path).
    - **How (Intuition & Mental Model):** Treat the grid as an unweighted graph. Use BFS. Each state is `(r, c)`. The level of the BFS at which you first reach the target is the answer.
 2. **Open the Lock**:
@@ -202,13 +208,13 @@ def dfs_topo(adj: dict, n: int) -> list[int]:
     return [] if has_cycle[0] else topo[::-1]
 
 #### Common Variants & Twists
-1. **Critical Connections in a Network (Bridges)**:
+1. **Critical Connections in a Network (Bridges) `⭐ Google`**:
    - **What (The Problem & Goal):** Find all edges in an undirected graph that, if removed, would disconnect the graph.
    - **How (Intuition & Mental Model):** Use Tarjan's algorithm or a similar DFS-based approach. Track the `discovery_time` and `lowest_reachable_time` for each node. An edge `(u, v)` is a bridge if the lowest time reachable from `v` is strictly greater than the discovery time of `u`.
-2. **Reconstruct Itinerary**:
+2. **Reconstruct Itinerary `⭐ Google`**:
    - **What (The Problem & Goal):** Given a list of airline tickets, reconstruct the itinerary in order, starting from "JFK". If multiple valid itineraries exist, return the one with the smallest lexicographical order.
    - **How (Intuition & Mental Model):** This is a search for an **Eulerian Path** in a directed graph. Use Hierholzer's algorithm: DFS through neighbors in lexicographical order. When a node has no more outgoing edges, push it to the result stack. The final itinerary is the reversed stack.
-3. **Is Graph Bipartite (2-Coloring Check)**:
+3. **Is Graph Bipartite (2-Coloring Check) `🔥 Google`**:
    - **What (The Problem & Goal):** Can you color the graph using 2 colors such that no two adjacent nodes have the same color?
    - **How (Intuition & Mental Model):** Use DFS. Alternate coloring neighbors with `1 - color[node]`. If you hit an already colored neighbor with the same color as the current node, a color conflict cycle exists (not bipartite). Handle disconnected graphs by calling the search from every unvisited node.
 
@@ -300,7 +306,7 @@ def bellman_ford(edges: list[tuple[int,int,int]], n: int, start: int) -> tuple[l
     return dist, has_negative_cycle
 
 #### Common Variants & Twists
-1. **Cheapest Flights Within K Stops**:
+1. **Cheapest Flights Within K Stops `⭐ Google`**:
    - **What (The Problem & Goal):** Find the cheapest price from source to destination with at most `k` stops.
    - **How (Intuition & Mental Model):** This is a bounded shortest path problem. Run Bellman-Ford for exactly `k+1` iterations. Each iteration `i` represents the minimum cost to reach nodes with at most `i-1` stops. Crucially, use a copy of the distance array to ensure you're only using distances from the *previous* iteration (to avoid using more than `k` edges in a single pass).
 ```
@@ -342,7 +348,7 @@ def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float
 ### Topological Sort — Kahn's Algorithm
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Ordering with dependencies**" — OR — "**build order**" — OR — "**course schedule** (can all courses be taken?)" — OR — "detect cycle in directed graph". Kahn's: maintain in-degree; process zero-in-degree nodes; cycle exists if not all nodes are processed.
+> **The Click Moment**: "**Ordering with dependencies**" — OR — "**build order**" — OR — "**course schedule `🔥 Google`** (can all courses be taken?)" — OR — "detect cycle in directed graph". Kahn's: maintain in-degree; process zero-in-degree nodes; cycle exists if not all nodes are processed.
 
 ```python
 def kahn_topo_sort(n: int, edges: list[tuple[int,int]]) -> list[int]:
@@ -363,7 +369,7 @@ def kahn_topo_sort(n: int, edges: list[tuple[int,int]]) -> list[int]:
     return order if len(order) == n else []  # [] = cycle detected
 
 #### Common Variants & Twists
-1. **Alien Dictionary**:
+1. **Alien Dictionary `⭐ Google`**:
    - **What (The Problem & Goal):** Deriving character ordering from a sorted list of words in an alien language.
    - **How (Intuition & Mental Model):** Compare adjacent words to find the first character mismatch (e.g., "word1[i]" vs "word2[i]"). This gives a directed edge `word1[i] -> word2[i]`. Build the graph of characters and run Kahn's algorithm. If the number of sorted characters is less than the number of unique characters, a cycle exists (invalid dictionary).
 ```
@@ -402,7 +408,7 @@ def zero_one_bfs(adj: dict, start: int, target: int) -> int:
 ### Minimum Spanning Tree — Kruskal's and Prim's
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Minimum cost to connect** all nodes" — OR — "**minimum spanning tree**". Kruskal: sort edges, use DSU to greedily add cheapest non-cycle edge. Prim: from any node, greedily grow the MST by adding the cheapest edge from the frontier (min-heap).
+> **The Click Moment**: "**Minimum cost to connect** all nodes" — OR — "**minimum spanning tree `⭐ Google`**". Kruskal: sort edges, use DSU to greedily add cheapest non-cycle edge. Prim: from any node, greedily grow the MST by adding the cheapest edge from the frontier (min-heap).
 
 ```python
 # Kruskal's (requires Union-Find / DSU)
@@ -511,21 +517,21 @@ def prim_mst(n: int, adj: dict) -> int:
 ## 5. Common Interview Problems
 
 ### Medium
-- [Course Schedule](problem-deep-dives.md#course-schedule) — Kahn's topo sort; detect cycle.
-- [Course Schedule II](problem-deep-dives.md#course-schedule) — Same; return the order.
-- [Network Delay Time](problem-deep-dives.md#network-delay-time) — Dijkstra from source; answer = max(dist) if all nodes reached.
-- **Number of Islands** — DFS/BFS flood fill (see graphs.md).
-- **Clone Graph** — DFS with `old→clone` map.
-- **Rotting Oranges** — Multi-source BFS.
+- [Course Schedule](problem-deep-dives.md#course-schedule) `🔥 Google` — Kahn's topo sort; detect cycle.
+- [Course Schedule II](problem-deep-dives.md#course-schedule) `🔥 Google` — Same; return the order.
+- [Network Delay Time](problem-deep-dives.md#network-delay-time) `🔥 Google` — Dijkstra from source; answer = max(dist) if all nodes reached.
+- **Number of Islands `🔥 Google`** — DFS/BFS flood fill (see graphs.md).
+- **Clone Graph `🔥 Google`** — DFS with `old→clone` map.
+- **Rotting Oranges `🔥 Google`** — Multi-source BFS.
 - **Evaluate Division** — Build weighted directed graph; DFS/BFS with accumulated product.
 
 ### Hard
-- [Word Ladder](problem-deep-dives.md#word-ladder) — BFS; neighbors = one-letter edits in word set.
-- [Alien Dictionary](problem-deep-dives.md#alien-dictionary) — Build edges from adjacent word pairs; Kahn's topo.
-- [Cheapest Flights Within K Stops](problem-deep-dives.md#cheapest-flights-within-k-stops) — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
+- [Word Ladder](problem-deep-dives.md#word-ladder) `🔥 Google` — BFS; neighbors = one-letter edits in word set.
+- [Alien Dictionary](problem-deep-dives.md#alien-dictionary) `⭐ Google` — Build edges from adjacent word pairs; Kahn's topo.
+- [Cheapest Flights Within K Stops](problem-deep-dives.md#cheapest-flights-within-k-stops) `⭐ Google` — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
 - **Find the City with Smallest Reachable Neighbors** — Floyd-Warshall; count reachable cities within threshold.
-- **Reconstruct Itinerary** — Eulerian path; Hierholzer's algorithm; DFS with lexicographic neighbor ordering.
-- **Critical Connections in a Network** — Tarjan's bridge-finding algorithm.
+- **Reconstruct Itinerary `⭐ Google`** — Eulerian path; Hierholzer's algorithm; DFS with lexicographic neighbor ordering.
+- **Critical Connections in a Network `⭐ Google`** — Tarjan's bridge-finding algorithm.
 
 ---
 
@@ -533,27 +539,27 @@ def prim_mst(n: int, adj: dict) -> int:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Course Schedule](problem-deep-dives.md#course-schedule)** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
-| **[Network Delay Time](problem-deep-dives.md#network-delay-time)** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
-| **[Word Ladder](problem-deep-dives.md#word-ladder)** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
-| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary)** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
+| **[Course Schedule](problem-deep-dives.md#course-schedule) `🔥 Google`** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
+| **[Network Delay Time](problem-deep-dives.md#network-delay-time) `🔥 Google`** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
+| **[Word Ladder](problem-deep-dives.md#word-ladder) `🔥 Google`** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
+| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary) `⭐ Google`** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
 | **[Cheapest Flights K Stops](problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | Bellman-Ford for K+1 rounds | Standard Dijkstra doesn't work — need to track stop count in state. |
-| **Number of Islands** | "Connected components in grid" | DFS/BFS flood-fill; count calls | In-place mark (`'1'→'0'`) avoids visited set. Recursion limit for 200×200 grid. |
+| **Number of Islands `🔥 Google`** | "Connected components in grid" | DFS/BFS flood-fill; count calls | In-place mark (`'1'→'0'`) avoids visited set. Recursion limit for 200×200 grid. |
 | **Evaluate Division** | "Graph: nodes=variables, edges=ratios" | Build weighted graph; BFS/DFS to find path product | Handle disconnected components (query impossible → -1). Bidirectional edges: A/B and B/A. |
-| **Reconstruct Itinerary** | "Eulerian path with lexicographic order" | Hierholzer's; DFS with sorted neighbors; post-order reversal | Must visit all edges exactly once — Eulerian, not Hamiltonian. Sort neighbors for lex order. |
-| **Critical Connections** | "Bridges in undirected graph" | Tarjan's: discovery time + low value; bridge if `low[v] > disc[u]` | Low[v] = min(disc[v], min low of DFS descendants). Requires tracking parent to avoid trivial back-edge. |
+| **Reconstruct Itinerary `⭐ Google`** | "Eulerian path with lexicographic order" | Hierholzer's; DFS with sorted neighbors; post-order reversal | Must visit all edges exactly once — Eulerian, not Hamiltonian. Sort neighbors for lex order. |
+| **Critical Connections `⭐ Google`** | "Bridges in undirected graph" | Tarjan's: discovery time + low value; bridge if `low[v] > disc[u]` | Low[v] = min(disc[v], min low of DFS descendants). Requires tracking parent to avoid trivial back-edge. |
 | **Find if Path Exists in Graph [E]** | "Simple reachability check" | BFS/DFS from source; return True if destination visited | DSU also works: union all edges, check `find(src)==find(dst)`. BFS preferred for shortest path guarantee. |
 | **Find Center of Star Graph [E]** | "Identify hub node connected to all others" | Center appears in every edge; check first two edges | `edges[0]` and `edges[1]` share exactly one node — that's the center. O(1). |
-| **Clone Graph [M]** | "Deep copy a graph with arbitrary structure" | BFS/DFS; map `old→new` node; copy neighbors recursively | Must memoize (old→new) before recursing into neighbors to handle cycles. |
-| **Pacific Atlantic Water Flow [M]** | "Cells that can reach both oceans" | Reverse BFS from each ocean's border; find intersection | Multi-source BFS from all Pacific border cells, then all Atlantic border cells; return overlap. |
-| **All Paths From Source to Target [M]** | "Enumerate all paths in a DAG" | DFS backtracking; append to result when destination reached | DAG guarantees no cycles — no visited set needed. Backtrack by popping from path after each recursive call. |
-| **Is Graph Bipartite [M]** | "Can nodes be 2-colored with no edge within same color?" | BFS/DFS coloring; conflict = not bipartite | Handle disconnected graphs — BFS from every unvisited node. Bipartite ↔ no odd-length cycles. |
-| **Course Schedule II [M]** | "Return valid course ordering or [] if cycle exists" | Kahn's topological sort; return order only if `len(order)==n` | DFS topo: post-order reversal. Kahn's is cleaner for detecting cycles. Edge direction: prereq → course. |
+| **Clone Graph [M] `🔥 Google`** | "Deep copy a graph with arbitrary structure" | BFS/DFS; map `old→new` node; copy neighbors recursively | Must memoize (old→new) before recursing into neighbors to handle cycles. |
+| **Pacific Atlantic Water Flow [M] `🔥 Google`** | "Cells that can reach both oceans" | Reverse BFS from each ocean's border; find intersection | Multi-source BFS from all Pacific border cells, then all Atlantic border cells; return overlap. |
+| **All Paths From Source to Target [M] `🔥 Google`** | "Enumerate all paths in a DAG" | DFS backtracking; append to result when destination reached | DAG guarantees no cycles — no visited set needed. Backtrack by popping from path after each recursive call. |
+| **Is Graph Bipartite [M] `🔥 Google`** | "Can nodes be 2-colored with no edge within same color?" | BFS/DFS coloring; conflict = not bipartite | Handle disconnected graphs — BFS from every unvisited node. Bipartite ↔ no odd-length cycles. |
+| **Course Schedule II [M] `🔥 Google`** | "Return valid course ordering or [] if cycle exists" | Kahn's topological sort; return order only if `len(order)==n` | DFS topo: post-order reversal. Kahn's is cleaner for detecting cycles. Edge direction: prereq → course. |
 | **Find Eventual Safe States [M]** | "Nodes that cannot reach a cycle" | Reverse graph + topological sort; or DFS with 3-color state (unvisited/in-progress/safe) | In DFS: node is safe iff all its neighbors are safe. Memoize safe status to avoid recomputation. |
 | **Minimum Height Trees [M]** | "Find roots that minimize tree height" | Iteratively trim leaf nodes (degree 1) until 1 or 2 nodes remain | Same idea as topological sort from leaves inward. At most 2 centroids for any tree. |
 | **Dijkstra's Shortest Path [M]** | "Single-source shortest paths in weighted graph with non-negative weights" | Min-heap `(dist, node)`; relax neighbors; skip stale heap entries | Won't work with negative edges (use Bellman-Ford). Stale entry check: `if dist > current best, skip`. |
 | **Bus Routes [H]** | "Minimum bus transfers to reach destination" | BFS on bus routes (not stops); each route is a node; stop-to-routes mapping | Build `stop → list of routes` map; BFS expands entire routes, not individual stops. |
-| **Shortest Path Visiting All Nodes [H]** | "Shortest path that visits all nodes in undirected graph" | BFS with state `(node, visited_bitmask)`; start from all nodes simultaneously | Multi-source BFS with bitmask state. Goal state = `visited == (1<<n)-1`. State space O(N × 2^N). |
+| **Shortest Path Visiting All Nodes [H] `⭐ Google`** | "Shortest path that visits all nodes in undirected graph" | BFS with state `(node, visited_bitmask)`; start from all nodes simultaneously | Multi-source BFS with bitmask state. Goal state = `visited == (1<<n)-1`. State space O(N × 2^N). |
 
 ---
 

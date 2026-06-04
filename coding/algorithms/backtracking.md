@@ -10,11 +10,17 @@ Backtracking is DFS over choices: pick something, go deeper, undo if it doesn't 
 
 Prune when: the partial answer is already invalid, not enough room left to finish, or you'd repeat the same choice at the same depth (sort + skip duplicates).
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Subsets / Combinations
 
-### Subsets (Power Set)
+### Subsets (Power Set) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums of unique elements, return all possible subsets (the power set).
@@ -39,7 +45,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Every element has a binary choice — include or exclude. Tree depth = n, branching factor = 2, total leaves = 2^n. No pruning needed — every branch is valid. The `start` parameter enforces non-decreasing index selection, eliminating permutation variants of the same subset. At each recursive call, record the current path. Try adding each element from `start` onward; recurse with `start = i+1`; undo. Record subset at every node (not just leaves) — each partial path is itself a valid subset.
-
 
 > [!note]- Python Solution
 > ```python
@@ -66,7 +71,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Subsets II (with duplicates)
+### Subsets II (with duplicates) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
@@ -90,7 +95,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Duplicates produce identical subsets when same-valued elements are included at the same decision level. Sort to group duplicates together; skip `nums[i]` if `i > start and nums[i] == nums[i-1]`. The `i > start` (not `i > 0`) condition is critical: it only skips duplicates at the current level, not when the first copy was used at a parent level. Sort array; apply deduplication skip in backtracking loop. Same structure as Subsets but with `if i > start and nums[i] == nums[i-1]: continue`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -120,7 +124,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combination Sum (unbounded)
+### Combination Sum (unbounded) `🔥 Google`
 
 > [!example] Problem
 > Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
@@ -158,7 +162,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Elements can be reused, but combinations (not permutations) are needed. Using `start = i` (not `i+1`) in the recursive call allows re-selecting the same element. The `start` parameter enforces non-decreasing order, so `[2,3]` and `[3,2]` are treated as the same combination. At each step, try candidates from `start` onward. Prune when `candidate > remaining`. Record when `remaining == 0`. Recurse with `backtrack(i, remaining - candidates[i])` — same `i`, not `i+1`.
 
-
 > [!note]- Python Solution
 > ```python
 > def combination_sum(candidates, target):
@@ -188,7 +191,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combination Sum II (0/1 — no reuse)
+### Combination Sum II (0/1 — no reuse) `🔥 Google`
 
 > [!example] Problem
 > Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
@@ -225,7 +228,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > No reuse → recurse with `i+1`. Duplicates need the same skip pattern as Subsets II: `i > start and candidates[i] == candidates[i-1]`. Sort enables both early termination (break when candidate > remaining) and deduplication. Sort; backtrack with `i+1`; skip duplicates at same level; break early. `if i > start and candidates[i] == candidates[i-1]: continue`.
 
-
 > [!note]- Python Solution
 > ```python
 > def combination_sum2(candidates, target):
@@ -258,7 +260,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combinations
+### Combinations `🔥 Google`
 
 > [!example] Problem
 > Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
@@ -285,7 +287,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Fixed-size subset problem. At each level, choose one number from `start` to `n`; recurse with `start+1`. Prune when remaining slots can't be filled: `n - i + 1 < k - len(path)`. Standard subset backtracking with fixed depth k and pruning on remaining elements. Pruning: `if n - i + 1 < k - len(path): break` — not enough numbers remain.
-
 
 > [!note]- Python Solution
 > ```python
@@ -316,7 +317,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Letter Combinations of a Phone Number
+### Letter Combinations of a Phone Number `⭐ Google`
 
 > [!example] Problem
 > Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
@@ -346,7 +347,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Each digit maps to 3-4 letters — pure Cartesian product. Backtracking is the natural enumeration: at depth d, choose one letter for digit[d]; total combinations = product of group sizes. At each depth d, iterate over letters for `digits[d]`; append, recurse, pop. Base case: `d == len(digits)` → record. No pruning needed — every path is valid.
-
 
 > [!note]- Python Solution
 > ```python
@@ -383,7 +383,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Permutations
 
-### Permutations
+### Permutations `🔥 Google`
 
 > [!example] Problem
 > Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
@@ -413,7 +413,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Each permutation chooses from all remaining unused elements at each depth. Tree: depth n, branching factor decreasing from n to 1, total leaves = n!. A `used` boolean array gives O(1) per check without removing elements from the array. At each level, try all unused elements; mark used → recurse → mark unused. Base case: `len(path) == n`. No pruning — every branch leads to a valid permutation.
-
 
 > [!note]- Python Solution
 > ```python
@@ -447,7 +446,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Permutations II (with duplicates)
+### Permutations II (with duplicates) `🔥 Google`
 
 > [!example] Problem
 > Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
@@ -473,7 +472,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Duplicate values can appear at the same position in the permutation tree, generating identical permutations. Sort the array; skip element i if `nums[i] == nums[i-1]` and `used[i-1] == False` — this enforces canonical ordering: among duplicates, always use the leftmost first (so its predecessor is always used before it). Same structure as Permutations; sort + the `not used[i-1]` deduplication condition. `if i > 0 and nums[i] == nums[i-1] and not used[i-1]: continue`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -510,7 +508,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Next Permutation (iterative approach)
+### Next Permutation (iterative approach) `⭐ Google`
 
 > [!example] Problem
 > A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
@@ -542,7 +540,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Not backtracking per se, but generates the next item in the permutation enumeration order. Algorithm: find the rightmost "ascent" — the pivot where the sequence stops being descending from right. Swap pivot with the smallest element to its right that is larger, then reverse the suffix. (1) Find pivot: rightmost i where nums[i] < nums[i+1]. (2) Find rightmost j > i where nums[j] > nums[i]. (3) Swap i and j. (4) Reverse suffix from i+1. If no pivot found (fully descending), entire array is reversed.
-
 
 > [!note]- Python Solution
 > ```python
@@ -595,7 +592,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Each letter has two choices (upper/lower); digits have one choice. Binary tree of depth = number of letters. Total leaves = 2^(# letters). No pruning needed. At each index, if digit: recurse on next index directly. If letter: try lowercase and uppercase, recurse each. String building via list (mutable); convert at leaf.
 
-
 > [!note]- Python Solution
 > ```python
 > def letter_case_permutation(s):
@@ -626,7 +622,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## String Backtracking
 
-### Generate Parentheses
+### Generate Parentheses `⭐ Google`
 
 > [!example] Problem
 > Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
@@ -648,7 +644,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > At each position, two choices: `(` or `)`. Constraint-driven pruning eliminates all invalid paths: add `(` only if `open < n`; add `)` only if `close < open`. This prunes invalid sequences before they're fully built — no validity check needed at the leaf. Track `open_cnt` and `close_cnt`. Branch into `(` or `)` based on constraints. Leaf count = Catalan number C(n). The invariant `close < open` ensures every partial string is a valid prefix.
-
 
 > [!note]- Python Solution
 > ```python
@@ -676,7 +671,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Palindrome Partitioning
+### Palindrome Partitioning `🔥 Google`
 
 > [!example] Problem
 > Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
@@ -699,7 +694,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > At each position, try all possible next partition points. Pruning: skip substrings that aren't palindromes. Precomputing palindrome-ness for all substrings (O(n²)) avoids O(n) palindrome checks during backtracking. At each start, try substrings `s[start..end]` for end from start to n-1. If it's a palindrome, add and recurse on rest. Precompute `is_pal[i][j]` via DP in O(n²). Then backtracking is O(2^n) calls × O(1) palindrome check.
-
 
 > [!note]- Python Solution
 > ```python
@@ -769,7 +763,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > First compute minimum removals (one scan: track unmatched `(` as `open_rem`, unmatched `)` as `close_rem`). Then backtrack: at each character, keep or remove it. Pruning: (1) removal budget exhausted; (2) `close_cnt > open_cnt` in current path (invalid prefix); (3) consecutive same brackets — only remove the first of a run (deduplication without a set). Backtrack with state `(index, path, open_cnt, close_cnt, open_rem, close_rem)`. Compute open_rem, close_rem first; backtrack with those exact budgets.
 
-
 > [!note]- Python Solution
 > ```python
 > def remove_invalid_parentheses(s):
@@ -817,7 +810,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Search
+### Word Search `🔥 Google`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -850,7 +843,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Need to find a specific path through a grid — DFS with backtracking is the natural approach. Pruning: mismatch at any character immediately abandons that branch. Temporary in-place marking avoids extra visited array. DFS from each cell matching `word[0]`. At each step, mark cell visited (`'#'`), recurse on 4 neighbors for next character, then restore. Early return True on complete match. Board is restored on each backtrack.
-
 
 > [!note]- Python Solution
 > ```python
@@ -968,7 +960,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Board / Matrix Backtracking
 
-### N-Queens
+### N-Queens `🔥 Google`
 
 > [!example] Problem
 > The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
@@ -993,7 +985,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > One queen per row (DFS depth = row). At each row, try all columns; conflict check in O(1) using three constraint sets: `cols`, `diags` (row-col=const), `anti_diags` (row+col=const). Pruning eliminates all attacking positions immediately. Backtrack row by row. At each row, iterate columns; skip if any constraint set contains the column/diagonal. Add to sets before recursing; remove after. Leaf (row==n) records the board.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1030,7 +1021,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Sudoku Solver
+### Sudoku Solver `⭐ Google`
 
 > [!example] Problem
 > Write a program to solve a Sudoku puzzle by filling the empty cells.
@@ -1052,7 +1043,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Constraint satisfaction: each empty cell has a small set of valid digits. Backtrack on the first empty cell, try all valid digits, recurse. Pruning is per-digit in O(1) via pre-populated boolean arrays. The search space is theoretically 9^81 but practically near-constant for valid puzzles due to constraint propagation via elimination. Precompute `rows[r][d]`, `cols[c][d]`, `boxes[b][d]` tracking used digits. Iterate empty cells; try 1-9; recurse; undo if stuck. box_id = `(r//3)*3 + c//3`. Linear scan for next empty cell at each recursion level.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1098,7 +1088,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Unique Paths III
+### Unique Paths III `🔥 Google`
 
 > [!example] Problem
 > You are given an m x n integer array grid where grid[i][j] could be:
@@ -1142,7 +1132,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Hamiltonian path problem on a grid — no polynomial algorithm exists. DFS with backtracking, pruning when all non-obstacle cells must be visited exactly once. Count all non-obstacle cells (including start and end). DFS from start; at each step, mark visited; if at end and all cells visited, count +1. Track `remaining` count of unvisited non-obstacle cells. Prune when stuck (all 4 neighbors blocked and remaining > 1).
-
 
 > [!note]- Python Solution
 > ```python
@@ -1188,86 +1177,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Trie + Backtracking
 
-### Word Search II
-
-> [!example] Problem
-> Given an m x n board of characters and a list of strings words, return all words on the board.
-> Each word must be constructed from letters of sequentially adjacent cells, where adjacent cells are horizontally or vertically neighboring. The same letter cell may not be used more than once in a word.
-> 
-> **Example 1:**
-> ```
-> Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
-> Output: ["eat","oath"]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: board = [["a","b"],["c","d"]], words = ["abcb"]
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - m == board.length
-> - n == board[i].length
-> - 1 <= m, n <= 12
-> - board[i][j] is a lowercase English letter.
-> - 1 <= words.length <= 3 * 10^4
-> - 1 <= words[i].length <= 10
-> - words[i] consists of lowercase English letters.
-> - All the strings of words are unique.
-
-> [!info] Approach
-> Running Word Search I for each word is O(W · m · n · 4^L) — repeats identical board traversals. A Trie encodes all words simultaneously; DFS on the board drives the Trie traversal, sharing prefix exploration across all words. Build Trie of all words. DFS from each cell; at each step, advance in Trie if character exists. When reaching a word-end node, record the word. Key optimizations: (1) Delete found words from Trie (`node.word = None`) to avoid duplicates. (2) Prune empty Trie nodes (`del node[ch]` after DFS) — reduces future DFS calls significantly.
-
-
-> [!note]- Python Solution
-> ```python
-> def find_words(board, words):
->     # Build Trie
->     trie = {}
->     for word in words:
->         node = trie
->         for c in word:
->             node = node.setdefault(c, {})
->         node['$'] = word  # mark word end with the word itself
-> 
->     m, n = len(board), len(board[0])
->     result = []
-> 
->     def dfs(r, c, node):
->         ch = board[r][c]
->         if ch not in node:
->             return
->         nxt = node[ch]
->         if '$' in nxt:
->             result.append(nxt.pop('$'))  # found; remove to avoid duplicates
->         board[r][c] = '#'  # mark visited
->         for dr, dc in ((0, 1), (0, -1), (1, 0), (-1, 0)):
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < m and 0 <= nc < n and board[nr][nc] != '#':
->                 dfs(nr, nc, nxt)
->         board[r][c] = ch  # restore
->         if not nxt:  # prune empty trie node
->             del node[ch]
-> 
->     for r in range(m):
->         for c in range(n):
->             dfs(r, c, trie)
-> 
->     return result
-> ```
-
-> [!success] Complexity
-> O(m · n · 4^L) DFS calls amortized across all words (Trie pruning dramatically reduces this in practice); O(W · L) Trie space.
-
-> [!tip] Alternatives
-> Per-word DFS — O(W · m · n · 4^L), degrades badly for large W. Aho-Corasick automaton: adds failure links for more aggressive pruning — overkill, not expected in interviews.
-
----
-
-## Constraint Satisfaction / Pruning-Heavy
-
-### Combination Sum III
+### Combination Sum III `🔥 Google`
 
 > [!example] Problem
 > Find all valid combinations of k numbers that sum up to n such that the following conditions are true:
@@ -1308,7 +1218,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Fixed-size (exactly k elements), fixed-sum, fixed universe (1-9). Tight structural bounds enable strong pruning: (1) more than k elements chosen → stop; (2) remaining sum impossible with remaining numbers → stop (min achievable = sum of smallest k-len remaining numbers). Backtrack over digits 1-9 with `start`, tracking `remaining` and `count`. Prune when `count > k` or `remaining < 0`. Record when `count == k and remaining == 0`. Because the domain is tiny (1-9), no sorting needed — it's inherently sorted. Upper bound prune: if `remaining > sum(range(start, 10))[:k-len(path)]`, stop.
 
-
 > [!note]- Python Solution
 > ```python
 > def combination_sum3(k, n):
@@ -1347,7 +1256,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Target Sum
+### Target Sum `⭐ Google`
 
 > [!example] Problem
 > You are given an integer array nums and an integer target.
@@ -1380,7 +1289,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Binary choice per element (+ or -) → 2^n branches. DP solution exists, but backtracking is instructive. Pruning: track remaining reachable range — if `current + sum(remaining) < target` or `current - sum(remaining) > target`, prune. DP (subset sum variant) is O(n · total_sum) and preferred at scale. At each index, branch into `+nums[i]` and `-nums[i]`. Count paths reaching target at depth n. Backtracking here: O(2^n). DP reduction: let P = sum of positives, N = sum of negatives. P - N = target, P + N = total → P = (target + total) / 2. Count subsets summing to P.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1450,7 +1358,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Permutation backtracking where each position has a constraint. Fill positions 1..n left to right; at position `pos`, only place number `num` if `num % pos == 0 or pos % num == 0`. A `used` boolean array tracks which numbers remain. Backtrack over positions 1 to n. For each position, try all unused numbers satisfying the divisibility constraint. Track with `used` array. Pruning is implicit: invalid choices are simply not tried. Iterate numbers in decreasing order to hit more valid placements early (empirically faster).
 
-
 > [!note]- Python Solution
 > ```python
 > def count_arrangement(n):
@@ -1480,7 +1387,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Restore IP Addresses
+### Restore IP Addresses `⭐ Google`
 
 > [!example] Problem
 > A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros.
@@ -1510,7 +1417,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Exactly 4 segments, each 1-3 digits. Backtracking tries all split points. Pruning: (1) segment value > 255; (2) leading zeros (segment starting with '0' must be exactly '0'); (3) remaining digits can't form the remaining segments (each needs 1-3 digits). At each step, try taking 1, 2, or 3 characters as the next segment. If the segment is valid, recurse for the next segment. After choosing 4 segments, the entire string must be consumed. Feasibility check: `remaining_digits` must be between `remaining_segments` and `3 * remaining_segments`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1555,7 +1461,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## String Backtracking (continued)
 
-### Word Break II
+### Word Break II `🔥 Google`
 
 > [!example] Problem
 > Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
@@ -1591,7 +1497,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Try every possible first word; recurse on the suffix. Without memoization this is O(2^n) — many suffixes are explored repeatedly. Memoize the list of sentences producible from each suffix to eliminate redundant work. For each prefix `s[start:end]` that is in the word set, recurse on `s[end:]`. At `start == len(s)`, return `['']` (empty sentence). Cache results per `start`. Memoization key is `start` index. Value is list of sentence suffixes from that position. Build full sentences by prepending current word.
 
-
 > [!note]- Python Solution
 > ```python
 > def word_break(s, wordDict):
@@ -1626,7 +1531,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Palindrome Partitioning II (Minimum Cuts)
+### Palindrome Partitioning II (Minimum Cuts) `🔥 Google`
 
 > [!example] Problem
 > Given a string s, partition s such that every substring of the partition is a palindrome.
@@ -1657,9 +1562,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Pure backtracking (enumerate all partitions) is O(n · 2^n). This is an optimization problem — we want the minimum, not all solutions. DP with palindrome precomputation achieves O(n^2). Backtracking is included for completeness but DP is the correct approach here. **WHAT (DP):** Precompute `is_pal[i][j]`. Then `dp[i]` = min cuts for `s[:i]`. Transition: `dp[j] = min(dp[j], dp[i] + 1)` if `s[i:j]` is palindrome. `dp[0] = 0` (empty prefix needs 0 cuts). Final answer: `dp[n] - 1` (subtracting the artificial initial cut). Equivalently, `dp[i]` = min cuts for first `i` chars → `dp[n]`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1702,7 +1604,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > Enumerate all valid root-to-destination paths in a grid graph. DFS with backtracking; mark cells visited to prevent cycles; unmark on backtrack. From current cell (r,c), try all 4 directions. Move to neighbor if it's in bounds, open (value 1), and not visited. Mark visited before recursing; unmark after. Record path direction string at destination. Path encoded as direction string ('D','L','R','U'). Sort output lexicographically — lexicographic DFS order (try D,L,R,U alphabetically) naturally produces sorted output.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_path(maze):
@@ -1739,7 +1640,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Search (All Occurrences)
+### Word Search (All Occurrences) `🔥 Google`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -1772,7 +1673,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Extension of Word Search I: instead of stopping at the first match, collect all starting (r,c) positions. Same DFS + backtracking logic; just collect results instead of returning early. From each unvisited cell matching `word[0]`, run DFS. If DFS succeeds (all chars matched), add `(r,c)` to results. Each DFS is independent — board restored fully between starting cells. Use in-place `'#'` marking within a single DFS call.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1810,7 +1710,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Advanced Backtracking
 
-### N-Queens II (Count Only)
+### N-Queens II (Count Only) `🔥 Google`
 
 > [!example] Problem
 > The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
@@ -1834,7 +1734,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Same algorithm as N-Queens but without board construction or path copying — just increment a counter at the leaf. The absence of O(n^2) board copying makes each leaf O(1) instead of O(n^2), which matters for large n. Backtrack row by row; use three integer bitmasks for columns, diagonals, anti-diagonals. At each row, iterate valid column positions using bitmask operations. Bitmask trick: valid columns = `((1<<n) - 1) & ~(cols | diags | anti_diags)`. Extract LSB: `pos = available & (-available)`. Iterate: `available &= available - 1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1867,7 +1766,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Break (Decision — Backtracking + Memo)
+### Word Break (Decision — Backtracking + Memo) `🔥 Google`
 
 > [!example] Problem
 > Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
@@ -1903,7 +1802,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > At each position, try every dictionary word as the next segment. Naive recursion re-solves the same suffix repeatedly. Memoization on the start index reduces it to O(n^2 · L) where L = max word length. `backtrack(start)` returns True if `s[start:]` can be fully segmented. For each word in the dictionary that matches `s[start:start+len(word)]`, recurse on `start+len(word)`. Cache False results to avoid re-exploration. Check only words in the dictionary (not all prefixes). Short-circuit on first True. BFS or DP are preferred in interviews.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1942,7 +1840,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 > [!info] Approach
 > Generalizes Restore IP Addresses: given a digit string, split into exactly `k` segments each in range `[lo, hi]` with no leading zeros. Parameterized backtracking applies to many partitioning problems (CIDR, version strings). At each step, try taking 1 to `max_seg_len` characters. Validate the segment. Recurse on remainder with `k-1` segments left. Feasibility pruning bounds the remaining characters. Feasibility: `remaining_chars` must be in `[k-1, (k-1)*max_seg_len + max_seg_len]` — i.e., between 1 and `max_seg_len` per remaining segment.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2029,7 +1926,6 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 > [!info] Approach
 > We need the minimum removal and all unique results. BFS layer by layer ensures we find minimum removal first: when any valid string is found at a BFS level, all strings at that level are candidates and we stop expanding. BFS from the input string. Generate all strings with one character removed. Dedup with a visited set. For each string check if it's valid. Once a valid string is found, collect all valid strings from that BFS level and return. `is_valid(s)`: count open brackets, decrement on `)`, return false if count < 0, return `count == 0` at end.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -2077,78 +1973,3 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Expression Add Operators (LC 282)
-
-> [!example] Problem
-> Given a string num that contains only digits and an integer target, return all possibilities to insert the binary operators '+', '-', and/or '*' between the digits of num so that the resultant expression evaluates to the target value.
-> Note that operands in the returned expressions should not contain leading zeros.
-> Note that a number can contain multiple digits.
-> 
-> **Example 1:**
-> ```
-> Input: num = "123", target = 6
-> Output: ["1*2*3","1+2+3"]
-> Explanation: Both "1*2*3" and "1+2+3" evaluate to 6.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: num = "232", target = 8
-> Output: ["2*3+2","2+3*2"]
-> Explanation: Both "2*3+2" and "2+3*2" evaluate to 8.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: num = "3456237490", target = 9191
-> Output: []
-> Explanation: There are no expressions that can be created from "3456237490" to evaluate to 9191.
-> ```
-> 
-> **Constraints:**
-> - 1 <= num.length <= 10
-> - num consists of only digits.
-> - -2^{31} <= target <= 2^{31} - 1
-
-> [!info] Approach
-> We must try all ways to split the digit string and insert operators. Backtracking over all splits is O(4^n) but with careful pruning and tracking of the running evaluation (including the "last operand" for `*` precedence), this is manageable. Backtrack with `(index, expression_string, running_total, last_operand)`. For each position, try all prefixes as the next number. For each operator, update total: `+` adds, `-` subtracts, `*` undoes last op and re-applies with multiplication. Start at `index=0`, `total=0`, `last=0`. No leading zeros: skip if `num_str` starts with '0' and length > 1.
-
-
-> [!note]- Python Solution
-> ```python
-> def add_operators(num, target):
->     result = []
-> >
->     def backtrack(index, path, total, last):
->         if index == len(num):
->             if total == target:
->                 result.append(path)
->             return
->         for end in range(index + 1, len(num) + 1):
->             s = num[index:end]
->             if len(s) > 1 and s[0] == '0':
->                 break
->             n = int(s)
->             if index == 0:
->                 backtrack(end, s, n, n)
->             else:
->                 backtrack(end, path + '+' + s, total + n, n)
->                 backtrack(end, path + '-' + s, total - n, -n)
->                 backtrack(end, path + '*' + s, total - last + last * n, last * n)
-> >
->     backtrack(0, '', 0, 0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(4^n * n) — at each of n positions, 4 choices (3 operators + continue). String building adds O(n) per leaf. Space O(n) recursion depth.
-
-> [!tip] Alternatives
-> - Can't use `eval()` in production/interview — it doesn't handle operator precedence tracking correctly mid-backtrack anyway.
-> - Key insight: the `last` parameter is what makes `*` correct. When we multiply, we must undo the previous `+last` and apply `last * n` instead.
-
----
-
-## See Also (Extended)
-
-[[recursion]] | [[dynamic-programming]] | [[trie]] | [[graph]] | [[string-algorithms]]

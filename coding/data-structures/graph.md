@@ -12,11 +12,17 @@ difficulty: mixed
 
 **Edge cases worth checking**: empty graph, single node, disconnected components, duplicate edges, self-loops, cycles in a "tree" input, and recursion depth on large grids/graphs. For grid problems, confirm whether diagonals count, whether borders are included, and whether you can mutate the input to mark visited.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## BFS on Graphs
 
-### Rotting Oranges
+### Rotting Oranges `🔥 Google`
 
 > [!example] Problem
 > You are given an m x n grid where each cell can have one of three values:
@@ -51,9 +57,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Multi-source BFS — simultaneous spread from all rotten sources.** Rotting spreads simultaneously from all rotten sources. BFS levels naturally correspond to time steps; the first time a fresh orange is reached gives the minimum time to rot it. Seed queue with all initially rotten oranges at time 0, count fresh oranges. BFS level-by-level; each time a fresh orange is rotted, decrement fresh counter; track max time seen. Multi-source start avoids O(R × M×N) repeated BFS. Return max_time if fresh == 0, else -1.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -99,7 +102,7 @@ difficulty: mixed
 
 ---
 
-### Number of Islands (BFS)
+### Number of Islands (BFS) `🔥 Google`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -135,7 +138,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each island is a connected component. BFS naturally fans out level-by-level from a source cell, marking all reachable land as visited. Iterate every cell; when '1' found, BFS to mark all connected land as visited ('0'), increment count. Seed the queue with the trigger cell; mark visited on enqueue (not dequeue) to prevent duplicate entries. Mutating the grid avoids an extra visited array.
-
 
 > [!note]- Python Solution
 > ```python
@@ -223,7 +225,6 @@ difficulty: mixed
 > [!info] Approach
 > Multi-source BFS from all gates simultaneously guarantees every room is reached via the shortest path to any gate in O(M×N) rather than O(M×N × gates) from separate BFS per room. Seed queue with all gates (value 0); BFS outward; assign `dist[gate] + 1` to unvisited INF neighbors. Only enqueue cells that are INF — this acts as the visited guard. The first time a room is reached is always via its nearest gate.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -287,7 +288,6 @@ difficulty: mixed
 > [!info] Approach
 > Multi-source BFS from all 0-cells simultaneously propagates shortest distances outward in O(M×N). The alternative (BFS from each 1-cell) is O(M²×N²). Seed queue with all 0-positions (distance 0); mark 1-cells as unvisited (distance INF); BFS expanding to unvisited neighbors with distance + 1. Initialize dist matrix with 0 for zeroes, INF for ones. Enqueue all zeroes at start. Only update a cell if current dist > neighbor dist + 1.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -317,7 +317,7 @@ difficulty: mixed
 
 ---
 
-### Word Ladder
+### Word Ladder `🔥 Google`
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -348,9 +348,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **BFS on implicit word graph — L×26 mutation enumeration.** Shortest path in an implicit unweighted graph → BFS. Don't build the graph explicitly (O(N²) pairs); generate all L×26 single-character mutations of the current word and check against the word set — O(L×26) per word instead of O(N×L) pairwise comparison. BFS from `beginWord`; remove words from the set as soon as they are enqueued to prevent revisits. For each word dequeued, try all single-char mutations; if mutation == endWord, return. Otherwise enqueue if the word is still in the set and then delete it.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -383,156 +380,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Bidirectional BFS: expand from both `beginWord` and `endWord` simultaneously; reduces explored nodes from O(b^d) to O(b^(d/2)). Follow-up standard.
 > - Preprocessed adjacency via patterns: build `"h*t" → [hot, hit]` map; O(M×N) preprocessing, then O(M²×N) BFS — same asymptotic but faster in practice.
-
----
-
-### Shortest Path in Binary Matrix
-
-> [!example] Problem
-> Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1.
-> A clear path in a binary matrix is a path from the top-left cell (i.e., (0, 0)) to the bottom-right cell (i.e., (n - 1, n - 1)) such that:
-> The length of a clear path is the number of visited cells of this path.
-> 
-> **Example 1:**
-> ```
-> Input: grid = [[0,1],[1,0]]
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: grid = [[0,0,0],[1,1,0],[1,1,0]]
-> Output: 4
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: grid = [[1,0,0],[1,1,0],[1,1,0]]
-> Output: -1
-> ```
-> 
-> **Constraints:**
-> - n == grid.length
-> - n == grid[i].length
-> - 1 <= n <= 100
-> - grid[i][j] is 0 or 1
-
-> [!info] Approach
-> **BFS from (0,0) — 8-directional, mark on enqueue.** Shortest path in unweighted grid → BFS. 8-directional: diagonals allowed. BFS from (0,0) if grid[0][0] == 0; track distance. Mark cells visited by setting to 1 as you enqueue (not after dequeue) to prevent duplicate enqueueing; return distance when (n-1, n-1) is dequeued.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def shortest_path_binary_matrix(grid):
->     n = len(grid)
->     if grid[0][0] == 1 or grid[n-1][n-1] == 1:
->         return -1
-> 
->     dirs = [(dr,dc) for dr in [-1,0,1] for dc in [-1,0,1] if (dr,dc) != (0,0)]
->     queue = deque([(0, 0, 1)])
->     grid[0][0] = 1  # mark visited
-> 
->     while queue:
->         r, c, dist = queue.popleft()
->         if r == n-1 and c == n-1:
->             return dist
->         for dr, dc in dirs:
->             nr, nc = r+dr, c+dc
->             if 0 <= nr < n and 0 <= nc < n and grid[nr][nc] == 0:
->                 grid[nr][nc] = 1
->                 queue.append((nr, nc, dist + 1))
-> 
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(n²), Space O(n²).
-
-> [!tip] Alternatives
-> - A* with Chebyshev distance heuristic: faster in practice for large grids with clear paths.
-> - DFS: finds a path but not necessarily the shortest.
-
----
-
-### Minimum Knight Moves
-
-> [!example] Problem
-> In an **infinite** chess board with coordinates from `-infinity` to `+infinity`, you have a **knight** at square `[0, 0]`.
-> 
-> A knight has 8 possible moves it can make, as illustrated below. Each move is two squares in a cardinal direction, then one square in an orthogonal direction.
-> 
-> Return *the minimum number of steps needed to move the knight to the square* `[x, y]`. It is guaranteed the answer exists.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input:** x = 2, y = 1
-> **Output:** 1
-> **Explanation: **[0, 0] → [2, 1]
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> 
-> **Input:** x = 5, y = 5
-> **Output:** 4
-> **Explanation: **[0, 0] → [2, 1] → [4, 2] → [3, 4] → [5, 5]
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `-300 <= x, y <= 300`
-> 	
-> - `0 <= |x| + |y| <= 300`
-
-> [!info] Approach
-> **BFS with symmetry reduction to first quadrant.** Shortest path in an implicit unweighted graph → BFS. Knight moves are symmetric across axes, so work in the first quadrant `(|x|, |y|)`, reducing the search space. BFS from (0, 0); 8 knight move offsets. Use a `visited` set; use abs values to exploit symmetry; allow coordinates down to -2 (buffer for (0,0)/(1,1) edge cases).
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def min_knight_moves(x, y):
->     x, y = abs(x), abs(y)  # symmetry
->     MOVES = [(2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2)]
->     queue = deque([(0, 0, 0)])
->     visited = {(0, 0)}
-> 
->     while queue:
->         cx, cy, moves = queue.popleft()
->         if cx == x and cy == y:
->             return moves
->         for dx, dy in MOVES:
->             nx, ny = cx+dx, cy+dy
->             if (nx, ny) not in visited and nx >= -2 and ny >= -2:
->                 visited.add((nx, ny))
->                 queue.append((nx, ny, moves + 1))
-> 
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(max(|x|,|y|)²), Space O(max(|x|,|y|)²).
-
-> [!tip] Alternatives
-> - Bidirectional BFS: meet in the middle; reduces to O(sqrt(|x|²+|y|²)) frontier in practice.
-> - Mathematical formula: O(1) closed-form solution exists for knight distance, but BFS is expected in interviews.
 
 ---
 
@@ -571,9 +418,6 @@ difficulty: mixed
 > [!info] Approach
 > **Hash map + BFS over subordinate ids.** Tree/DAG reachability with value aggregation. Hash map first: direct subordinate ids require O(N) linear scan per lookup without a map; O(1) with a map. BFS/DFS from target employee id, sum importance values. Build `{id: employee}` map; BFS — dequeue id, add importance, enqueue all subordinate ids.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -606,9 +450,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Union-Find — reachability in O(E α(N)).** Union-Find answers "are they connected?" in near O(1) per query after O(E) union operations — no traversal needed. Union all edges; check if `find(source) == find(destination)`. Path compression + union by rank for optimal performance.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -677,9 +518,6 @@ difficulty: mixed
 > [!info] Approach
 > **O(1) — center appears in both the first and second edges.** The center appears in every edge. The center is the only node common to both the first and second edges — no traversal needed. Find the intersection of `edges[0]` and `edges[1]`. Check if `edges[0][0]` is in `edges[1]`; if so, it's the center; otherwise `edges[0][1]` is the center.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def find_center(edges):
@@ -699,7 +537,7 @@ difficulty: mixed
 
 ## DFS on Graphs
 
-### Number of Islands
+### Number of Islands `🔥 Google`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -735,9 +573,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **DFS sinking — flood-fill each component, count triggers.** Each island is a connected component of '1' cells. DFS marks all cells in a component as visited in one pass. Iterate every cell; when a '1' is found, DFS to sink all connected land (set to '0'), increment count. Sinking avoids a separate visited array — the mutation is the visit mark. Increment count only on the initial call, not within DFS.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -807,9 +642,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS recolor — guard against same-color infinite loop.** Connected-component traversal. Early return if original == new color: recursion would infinitely revisit cells (no termination condition). DFS from (sr, sc); recolor cells matching the original color. Guard with `if original == color: return image` before DFS.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def flood_fill(image, sr, sc, color):
@@ -866,9 +698,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS returning component size — sink inline.** Variation on Number of Islands where we need the maximum component size. DFS function returns the count of cells in the component instead of just marking. `1 + sum of returns from 4 neighbors`. Sink cells inline; DFS returns 0 for non-land or out-of-bounds. `max(dfs(r,c) for all r,c)` — zero-cost for water cells.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def max_area_of_island(grid):
@@ -921,9 +750,6 @@ difficulty: mixed
 > [!info] Approach
 > **Reverse DFS — mark border-safe 'O's, then flip interior.** Directly checking if an 'O' region is surrounded requires backtracking to undo if DFS touches a border. Instead: find all border-connected 'O's first (safe cells), then flip everything else. DFS from every border 'O', mark safe cells with sentinel 'S'. Then: interior 'O' → 'X', 'S' → 'O'. Walk all 4 borders, DFS from each 'O' found there.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def solve(board):
@@ -957,7 +783,7 @@ difficulty: mixed
 
 ---
 
-### Pacific Atlantic Water Flow
+### Pacific Atlantic Water Flow `🔥 Google`
 
 > [!example] Problem
 > There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
@@ -1003,9 +829,6 @@ difficulty: mixed
 > [!info] Approach
 > **Reverse BFS from both ocean borders — intersect reachable sets.** Checking forward from each cell whether it reaches both oceans requires O(M²N²) DFS calls. Reverse: "which cells can be reached from the ocean borders?" — water flows uphill in reverse. BFS from all Pacific border cells (mark reachable); BFS from all Atlantic border cells; intersect. Reverse BFS condition — expand to neighbors with height >= current height (uphill in the reverse direction).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1042,7 +865,7 @@ difficulty: mixed
 
 ---
 
-### All Paths From Source to Target
+### All Paths From Source to Target `🔥 Google`
 
 > [!example] Problem
 > Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
@@ -1072,9 +895,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS backtracking on DAG — no visited set needed.** It's a DAG — no cycles, so DFS can never revisit a node on the current path. No visited set needed. DFS with backtracking — enumerate all paths. When node n-1 is reached, record a copy of the current path. `path.append(nei)`, recurse, `path.pop()`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def all_paths_source_target(graph):
@@ -1103,7 +923,7 @@ difficulty: mixed
 
 ---
 
-### Number of Provinces (LC 547)
+### Number of Provinces (LC 547) `⭐ Google`
 
 > [!example] Problem
 > There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
@@ -1133,7 +953,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each province is a connected component of an undirected graph. DFS marks all cities in a component as visited in one pass. Iterate each city; if unvisited, DFS to mark all reachable cities, increment province count. Use a visited array instead of mutating the matrix. The matrix is symmetric but you only need to follow one direction per city.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1195,7 +1014,6 @@ difficulty: mixed
 > [!info] Approach
 > Any land cell connected to the border can reach the sea — it is NOT an enclave. Mirror of Surrounded Regions: mark all border-reachable land, then count remaining interior land. DFS/BFS from every border land cell, mark visited. Count unvisited land cells in the interior. Walk all 4 borders; DFS from each '1' encountered, sinking to 0. After traversal, sum remaining 1-cells.
 
-
 > [!note]- Python Solution
 > ```python
 > def num_enclaves(grid):
@@ -1224,7 +1042,7 @@ difficulty: mixed
 
 ---
 
-### Clone Graph
+### Clone Graph `🔥 Google`
 
 > [!example] Problem
 > Given a reference of a node in a connected undirected graph.
@@ -1277,9 +1095,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **DFS with original→clone map — register before recursing.** Without pre-registration, revisiting a node (via a cycle) creates a new clone instead of returning the existing one — producing duplicates and infinite loops. `{original: clone}` map as memo; DFS from start. Create clone, register in map, then recurse to clone neighbors. Guard `if n in visited: return visited[n]` handles cycles. Register BEFORE recursing into neighbors.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1345,9 +1160,6 @@ difficulty: mixed
 > [!info] Approach
 > **Three-color DFS — 0=unvisited, 1=in-progress, 2=safe.** Need to distinguish "currently being explored" (on the DFS path, could be on a cycle) from "confirmed safe" (all paths from it terminate). 0 = unvisited, 1 = in-progress (gray), 2 = confirmed safe (black). DFS reaching a gray node → cycle → current path is unsafe. Mark gray before recursing neighbors; mark black after all neighbors are confirmed safe.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def eventual_safe_nodes(graph):
@@ -1378,75 +1190,7 @@ difficulty: mixed
 
 ## Topological Sort
 
-### Course Schedule
-
-> [!example] Problem
-> There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
-> Return true if you can finish all courses. Otherwise, return false.
-> 
-> **Example 1:**
-> ```
-> Input: numCourses = 2, prerequisites = [[1,0]]
-> Output: true
-> Explanation: There are a total of 2 courses to take. 
-> To take course 1 you should have finished course 0. So it is possible.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
-> Output: false
-> Explanation: There are a total of 2 courses to take. 
-> To take course 1 you should have finished course 0, and to take course 0 you should also have finished course 1. So it is impossible.
-> ```
-> 
-> **Constraints:**
-> - 1 <= numCourses <= 2000
-> - 0 <= prerequisites.length <= 5000
-> - prerequisites[i].length == 2
-> - 0 <= ai, bi < numCourses
-> - All the pairs prerequisites[i] are unique.
-
-> [!info] Approach
-> **Kahn's BFS topo sort — cycle detection via leftover nodes.** A valid course ordering exists iff the dependency graph is a DAG (no directed cycles). Kahn's naturally detects cycles — if all nodes are processed, no cycle; if some remain with nonzero in-degree, they're in a cycle. Build adjacency list and in-degree array; seed queue with all in-degree-0 nodes; process, decrement neighbors' in-degrees; if neighbor reaches 0, enqueue it. If `completed == numCourses`, no cycle.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def can_finish(numCourses, prerequisites):
->     graph = [[] for _ in range(numCourses)]
->     indegree = [0] * numCourses
->     for a, b in prerequisites:
->         graph[b].append(a)
->         indegree[a] += 1
-> 
->     queue = deque(c for c in range(numCourses) if indegree[c] == 0)
->     completed = 0
->     while queue:
->         node = queue.popleft()
->         completed += 1
->         for nei in graph[node]:
->             indegree[nei] -= 1
->             if indegree[nei] == 0:
->                 queue.append(nei)
-> 
->     return completed == numCourses
-> ```
-
-> [!success] Complexity
-> Time O(V+E), Space O(V+E).
-
-> [!tip] Alternatives
-> - DFS cycle detection: gray/black coloring; back edge to gray node = cycle. O(V+E)/O(V). Use when you need cycle info per node, not just overall.
-> - Union-Find: only for undirected graphs — does not detect directed cycles.
-
----
-
-### Course Schedule II
+### Course Schedule II `🔥 Google`
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -1484,9 +1228,6 @@ difficulty: mixed
 > [!info] Approach
 > **Kahn's topo sort — collect removal order.** Kahn's algorithm naturally produces a topological order — the BFS order of removal. Same algorithm as Course Schedule; collect nodes as they're removed. If `len(order) == numCourses`, it's valid; otherwise a cycle was detected. Append node to `order` as it's dequeued; return order or [].
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1517,105 +1258,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS post-order: append node after all successors processed; reverse at end. O(V+E). Multiple valid orderings are possible — both Kahn's and DFS may give different correct answers.
 > - Edge direction gotcha: for "a requires b", edge is `b → a` (b must come before a), not `a → b`.
-
----
-
-### Alien Dictionary
-
-> [!example] Problem
-> There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
-> 
-> You are given a list of strings `words` from the alien language's dictionary. Now it is claimed that the strings in `words` are **sorted lexicographically** by the rules of this new language.
-> 
-> If this claim is incorrect, and the given arrangement of string in `words` cannot correspond to any order of letters, return `"".`
-> 
-> Otherwise, return *a string of the unique letters in the new alien language sorted in **lexicographically increasing order** by the new language's rules**. *If there are multiple solutions, return* **any of them***.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input:** words = ["wrt","wrf","er","ett","rftt"]
-> **Output:** "wertf"
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> 
-> **Input:** words = ["z","x"]
-> **Output:** "zx"
-> 
-> ```
-> 
-> Example 3:
-> 
-> ```
-> 
-> **Input:** words = ["z","x","z"]
-> **Output:** ""
-> **Explanation:** The order is invalid, so return `""`.
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `1 <= words.length <= 100`
-> 	
-> - `1 <= words[i].length <= 100`
-> 	
-> - `words[i]` consists of only lowercase English letters.
-
-> [!info] Approach
-> **Edge extraction from adjacent word pairs + Kahn's topo sort.** The sorted order gives exactly the first differing character between adjacent words — that encodes a directed edge (char_a → char_b). Kahn's topo sort produces the character order; a cycle means the ordering is contradictory. Compare each adjacent word pair, find first differing char, add directed edge. Then Kahn's BFS. Invalid input detection — if word A is a prefix of word B but A appears after B (e.g., "abc" before "ab"), return "" immediately.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque, defaultdict
-> 
-> def alien_order(words):
->     graph = {c: [] for w in words for c in w}
->     indegree = {c: 0 for c in graph}
-> 
->     for i in range(len(words) - 1):
->         w1, w2 = words[i], words[i+1]
->         min_len = min(len(w1), len(w2))
->         if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:
->             return ""  # invalid: longer word before its prefix
->         for j in range(min_len):
->             if w1[j] != w2[j]:
->                 graph[w1[j]].append(w2[j])
->                 indegree[w2[j]] += 1
->                 break
-> 
->     queue = deque(c for c in indegree if indegree[c] == 0)
->     result = []
->     while queue:
->         c = queue.popleft()
->         result.append(c)
->         for nei in graph[c]:
->             indegree[nei] -= 1
->             if indegree[nei] == 0:
->                 queue.append(nei)
-> 
->     return "".join(result) if len(result) == len(graph) else ""
-> ```
-
-> [!success] Complexity
-> Time O(C) where C = total characters. Space O(1) — alphabet ≤ 26 chars.
-
-> [!tip] Alternatives
-> - DFS post-order topo sort: cycle detection via gray/black; append in reverse post-order. Same complexity.
-> - Watch for duplicate edges: same char pair from multiple word comparisons — deduplicate in adjacency list.
 
 ---
 
@@ -1650,9 +1292,6 @@ difficulty: mixed
 > [!info] Approach
 > **Nodes with in-degree 0 — the only possible starting set.** Any node with an incoming edge is reachable from its predecessor — it doesn't need to be in the starting set. A node with in-degree 0 cannot be reached from any other node, so it must be in the starting set. The answer is exactly the set of nodes with in-degree 0. Collect all destination nodes from edges — these have in-degree ≥ 1; return all nodes not in this set.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def find_smallest_set_of_vertices(n, edges):
@@ -1671,7 +1310,7 @@ difficulty: mixed
 
 ## Shortest Path / Weighted
 
-### Network Delay Time (Dijkstra's)
+### Network Delay Time (Dijkstra's) `🔥 Google`
 
 > [!example] Problem
 > You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
@@ -1706,9 +1345,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Dijkstra's — min-heap SSSP with stale-entry skip.** Single-source shortest path on a weighted directed graph. Non-negative weights → Dijkstra: greedily processes nodes in order of increasing tentative distance; first time a node is popped = its shortest distance. Min-heap of `(cost, node)`; dist dict; skip stale entries (`cost > dist[node]`). After Dijkstra, answer = max of all shortest distances; -1 if any node unreached.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1748,7 +1384,7 @@ difficulty: mixed
 
 ---
 
-### Swim in Rising Water
+### Swim in Rising Water `⭐ Google`
 
 > [!example] Problem
 > You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).
@@ -1784,9 +1420,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Modified Dijkstra — minimize maximum edge weight (bottleneck path).** Minimize the maximum edge weight on any path → modified Dijkstra. `dist[r][c]` = minimum possible max-elevation to reach (r,c). Min-heap of `(max_elevation_so_far, r, c)`. Cost to reach neighbor = `max(dist[curr], grid[nr][nc])`. The first time we reach (n-1,n-1), we have the answer.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1825,83 +1458,7 @@ difficulty: mixed
 
 ---
 
-### Cheapest Flights Within K Stops
-
-> [!example] Problem
-> There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from city fromi to city toi with cost pricei.
-> You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
-> Output: 700
-> Explanation:
-> The graph is shown above.
-> The optimal path with at most 1 stop from city 0 to 3 is marked in red and has cost 100 + 600 = 700.
-> Note that the path through cities [0,1,2,3] is cheaper but is invalid because it uses 2 stops.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
-> Output: 200
-> Explanation:
-> The graph is shown above.
-> The optimal path with at most 1 stop from city 0 to 2 is marked in red and has cost 100 + 100 = 200.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0
-> Output: 500
-> Explanation:
-> The graph is shown above.
-> The optimal path with no stops from city 0 to 2 is marked in red and has cost 500.
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 100
-> - 0 <= flights.length <= (n * (n - 1) / 2)
-> - flights[i].length == 3
-> - 0 <= fromi, toi < n
-> - fromi != toi
-> - 1 <= pricei <= 10^4
-> - There will not be any multiple flights between two cities.
-> - 0 <= src, dst, k < n
-> - src != dst
-
-> [!info] Approach
-> **Bellman-Ford with k+1 rounds — copy dist array each round.** Shortest path with a constraint on the number of hops → Bellman-Ford with k+1 relaxation rounds. Standard Dijkstra can't bound hops. After i rounds of relaxation, `dist[v]` = cheapest path using at most i edges. Need at most k stops = k+1 edges. Copy dist array each round to prevent using edges discovered in the same round (would allow more than 1 edge per round effectively).
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def find_cheapest_price(n, flights, src, dst, k):
->     dist = [float('inf')] * n
->     dist[src] = 0
-> 
->     for _ in range(k + 1):
->         temp = dist[:]
->         for u, v, w in flights:
->             if dist[u] != float('inf') and dist[u] + w < temp[v]:
->                 temp[v] = dist[u] + w
->         dist = temp
-> 
->     return dist[dst] if dist[dst] != float('inf') else -1
-> ```
-
-> [!success] Complexity
-> Time O(k × E), Space O(V).
-
-> [!tip] Alternatives
-> - Dijkstra with state `(cost, node, stops_remaining)`: requires visited set on `(node, stops)` pairs. O(E log(V×K)).
-> - BFS level-by-level (k+1 levels): each level = one hop. O(k × E). Equivalent to Bellman-Ford.
-
----
-
-### Path with Minimum Effort (LC 1631)
+### Path with Minimum Effort (LC 1631) `⭐ Google`
 
 > [!example] Problem
 > You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
@@ -1938,7 +1495,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Minimize the maximum edge weight on a path = bottleneck shortest path. Modified Dijkstra: `dist[r][c]` = minimum possible max-absolute-diff to reach (r,c); greedily process cells in order of current effort. Min-heap of `(effort, r, c)`. Transition: `new_effort = max(current_effort, abs(heights[nr][nc] - heights[r][c]))`. First pop of (rows-1, cols-1) from the heap is the answer. Mark visited on pop to avoid reprocessing.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1983,7 +1539,6 @@ difficulty: mixed
 > [!info] Approach
 > In a DAG, a topological order guarantees that when a node is processed, all incoming dependencies are already finalized. Topologically sort the graph, then relax outgoing edges in that order. Initialize distances, process nodes in topo order, and update `dist[v] = min(dist[v], dist[u] + w)` for each edge.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
@@ -2023,7 +1578,7 @@ difficulty: mixed
 
 ## Bipartite / Coloring
 
-### Is Graph Bipartite?
+### Is Graph Bipartite? `🔥 Google`
 
 > [!example] Problem
 > There is an undirected graph with n nodes, where each node is numbered between 0 and n - 1. You are given a 2D array graph, where graph[u] is an array of nodes that node u is adjacent to. More formally, for each v in graph[u], there is an undirected edge between node u and node v. The graph has the following properties:
@@ -2055,9 +1610,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **BFS 2-coloring — alternating colors, fail on same-color neighbor.** A graph is bipartite iff it contains no odd-length cycle — equivalent to being 2-colorable. BFS/DFS assigning alternating colors (0/1); if any neighbor has the same color as the current node, not bipartite. Must handle disconnected components — run BFS/DFS from every unvisited node. Initialize all colors to -1 (uncolored). For each unvisited node, BFS assigning color 0; assign `1 - color[node]` to unvisited neighbors; return False if neighbor has same color.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2123,7 +1675,6 @@ difficulty: mixed
 > [!info] Approach
 > Equivalent to bipartite checking on an undirected graph where edges represent dislikes. 2-colorable iff no odd cycle. Build adjacency list from dislikes; BFS 2-coloring over all components (graph may be disconnected). People labeled 1..n — initialize color array of size n+1. For each uncolored node, BFS alternating colors; return False if same-color conflict found.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque, defaultdict
@@ -2162,7 +1713,7 @@ difficulty: mixed
 
 ## Advanced
 
-### Redundant Connection
+### Redundant Connection `🔥 Google`
 
 > [!example] Problem
 > In this problem, a tree is an undirected graph that is connected and has no cycles.
@@ -2192,9 +1743,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Union-Find — first edge connecting already-connected nodes is redundant.** Adding one edge to a tree creates exactly one cycle. Process edges in order; if both endpoints share the same root (`find(u) == find(v)`), they're already connected — this edge creates a cycle and is redundant. Union by rank + path compression; return immediately on first cycle-forming edge. For each edge (a, b): if `union(a, b)` returns False (same component), return [a, b].
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2234,16 +1782,13 @@ difficulty: mixed
 
 ---
 
-### Minimum Spanning Tree (Kruskal's)
+### Minimum Spanning Tree (Kruskal's) `⭐ Google`
 
 > [!example] Problem
 > Given a connected undirected weighted graph, find the minimum spanning tree — a subset of edges that connects all nodes with minimum total weight and no cycles.
 
 > [!info] Approach
 > **Kruskal's — sort edges by weight, greedily add if no cycle.** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2299,9 +1844,6 @@ difficulty: mixed
 > [!info] Approach
 > **Kahn's topo sort + DP — relax dp[v] = max(dp[u] + 1).** Only works on DAGs — cycles make the longest path undefined (infinite). Topological sort + DP: process nodes in topological order; `dp[node] = max(dp[predecessor] + 1)` for all incoming edges — no subproblem is accessed before it's solved. Kahn's to get topo order, then one DP pass. `dp[node] = max(dp[node], dp[prev] + 1)` as edges are relaxed during Kahn's.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -2337,7 +1879,7 @@ difficulty: mixed
 
 ---
 
-### Reconstruct Itinerary (LC 332)
+### Reconstruct Itinerary (LC 332) `⭐ Google`
 
 > [!example] Problem
 > You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
@@ -2367,7 +1909,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Eulerian path problem on a directed multigraph — visit every edge exactly once. Hierholzer's algorithm finds an Eulerian path in O(E log E): greedily follow edges; when stuck (no outgoing edges left), backtrack and prepend the current node. Build adjacency list with sorted neighbors (for lexicographic order) using a min-heap or sorted list. DFS: always pick the smallest neighbor; when a node has no more outgoing edges, prepend to result. Use a stack-based iterative post-order DFS: push node to result when its adjacency list is exhausted; reverse at the end.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2426,7 +1967,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Bridge detection requires Tarjan's algorithm. A bridge is an edge (u, v) where no back-edge from v's subtree reaches u or any ancestor of u — detected via `low[v] > disc[u]`. DFS with two arrays: `disc[u]` = discovery time, `low[u]` = lowest discovery time reachable from u's subtree (via back edges). If `low[v] > disc[u]`, edge (u,v) is a bridge. Track parent to avoid treating the tree edge back to parent as a back-edge. Update `low[u] = min(low[u], low[v])` after recursing into v; `low[u] = min(low[u], disc[v])` for back-edges.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2505,7 +2045,6 @@ difficulty: mixed
 > [!info] Approach
 > The roots of minimum height trees are the "center" nodes of the tree — at most 2 nodes lying on the longest path (diameter). Topological leaf-trimming: iteratively remove all current leaves; the last 1–2 remaining nodes are the answer. Build adjacency list and degree array. Seed a queue with all leaves (degree == 1). BFS layer-by-layer: remove current leaves, expose new leaves (nodes whose degree drops to 1). Stop when ≤ 2 nodes remain. Decrement `n` by the number of leaves removed each round; stop when `n <= 2` — remaining nodes are the answer.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -2545,14 +2084,13 @@ difficulty: mixed
 
 ## Advanced Graph Algorithms
 
-### Strongly Connected Components — Kosaraju's Algorithm
+### Strongly Connected Components — Kosaraju's Algorithm `⭐ Google`
 
 > [!example] Problem
 > Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.
 
 > [!info] Approach
 > Kosaraju's runs two DFS passes. The first pass computes finish-order (equivalent to reverse topological order). The second pass on the reversed graph extracts SCCs in that finish order. Pass 1 — DFS on original graph, push nodes to a stack in finish order. Pass 2 — pop from the stack, DFS on the transposed graph; each DFS tree in pass 2 is one SCC. Build adjacency list and its transpose. DFS on original, recording finish order in a stack. Then repeatedly pop from the stack and DFS on the transposed graph — all reachable unvisited nodes form one SCC.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2607,14 +2145,13 @@ difficulty: mixed
 
 ---
 
-### Minimum Spanning Tree — Prim's Algorithm
+### Minimum Spanning Tree — Prim's Algorithm `⭐ Google`
 
 > [!example] Problem
 > Given a weighted undirected connected graph, find the minimum spanning tree (MST) — the subset of edges that connects all vertices with minimum total weight.
 
 > [!info] Approach
 > Prim's grows the MST greedily from any starting node, always adding the cheapest edge that connects the current MST to an unvisited node. A min-heap makes this O(E log V). Use a min-heap of `(weight, node)`. Start with node 0. Greedily pick the smallest weight edge to an unvisited node, add it to the MST, and push all its edges into the heap. `visited` set tracks MST nodes. Pop from heap; if already visited, skip. Otherwise mark visited, add weight to MST cost, push all unvisited neighbours into the heap.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2657,7 +2194,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Dijkstra's is per-source (O(V * E log V) total for all-pairs). Floyd-Warshall's DP is simpler to implement and handles negative edges. For dense graphs it's competitive. `dist[i][j]` = shortest path from `i` to `j`. For each intermediate node `k`, check if routing through `k` shortens `dist[i][j]`. Initialize `dist[i][j]` to edge weight if edge exists, 0 if `i == j`, infinity otherwise. Triple loop: for each `k`, for each `i`, for each `j`: `dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])`.
-
 
 > [!note]- Python Solution
 > ```python

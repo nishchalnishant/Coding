@@ -79,6 +79,12 @@ WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go
 
 Make the **locally optimal choice** at each step; prove it leads to a **global optimum**. SDE-3 expects: proof intuition (exchange argument or "stays ahead"), knowing when greedy fails, and choosing between greedy and DP under pressure.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Theory & Mental Models
@@ -210,10 +216,10 @@ def jump_game_ii_min_jumps(nums: list[int]) -> int:
     return jumps
 
 #### Common Variants & Twists
-1. **Jump Game III**:
+1. **Jump Game III `🔥 Google`**:
    - **What (The Problem & Goal):** You can jump to `i + arr[i]` or `i - arr[i]`. Can you reach any index with value 0?
    - **How (Intuition & Mental Model):** This is actually a reachability problem on a graph. Use BFS or DFS starting from the given index.
-2. **Jump Game VII**:
+2. **Jump Game VII `🔥 Google`**:
    - **What (The Problem & Goal):** You can jump from `i` to `j` if `i + minJump <= j <= min(i + maxJump, s.length - 1)` and `s[j] == '0'`.
    - **How (Intuition & Mental Model):** Use a sliding window + DP approach. Keep track of how many indices in the current reachable window `[i - maxJump, i - minJump]` are themselves reachable. If the count > 0 and `s[i] == '0'`, then `i` is reachable.
 ```
@@ -248,7 +254,7 @@ def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
 ```
 
 > [!CAUTION]
-> The problem guarantees a **unique** valid start when `sum(gas) >= sum(cost)`. This uniqueness is key to the greedy correctness — if there were two valid starts, one would be contained within the other, contradicting the structure of the circular traversal.
+> The problem guarantees a **unique `🔥 Google`** valid start when `sum(gas) >= sum(cost)`. This uniqueness is key to the greedy correctness — if there were two valid starts, one would be contained within the other, contradicting the structure of the circular traversal.
 
 ---
 
@@ -270,7 +276,7 @@ def least_interval(tasks: list[str], n: int) -> int:
     return max(min_slots, len(tasks))
 
 #### Common Variants & Twists
-1. **Reorganize String**:
+1. **Reorganize String `🔥 Google`**:
    - **What (The Problem & Goal):** Rearrange characters in a string so that no two identical characters are adjacent.
    - **How (Intuition & Mental Model):** Greedily place the most frequent characters first. Use a Max-Heap to always pick the character with the highest remaining frequency. To avoid placing the same character twice, "wait" for one step before pushing the used character back into the heap.
 2. **Distant Barcodes**:
@@ -298,7 +304,7 @@ def candy(ratings: list[int]) -> int:
     return sum(candy)
 
 #### Common Variants & Twists
-1. **Trapping Rain Water**:
+1. **Trapping Rain Water `🔥 Google`**:
    - **What (The Problem & Goal):** Calculate how much water a terrain can trap after rain.
    - **How (Intuition & Mental Model):** Similar to the two-pass greedy in Candy. For each bar, the water level is `min(max_left, max_right) - height`. Precompute `max_left` and `max_right` using two passes.
 2. **Greatest Common Divisor of Strings**:
@@ -326,7 +332,7 @@ def partition_labels(s: str) -> list[int]:
     return partitions
 
 #### Common Variants & Twists
-1. **Merge Intervals**:
+1. **Merge Intervals `🔥 Google`**:
    - **What (The Problem & Goal):** Merge all overlapping intervals.
    - **How (Intuition & Mental Model):** Sort by start time. Iterate and maintain a `current_interval`. If the next interval starts before `current_interval.end`, extend `current_interval.end` to `max(current_end, next_end)`. Otherwise, push the current interval and start a new one.
 2. **Minimum Number of Groups to Create Non-overlapping Intervals**:
@@ -390,18 +396,18 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 > [!CAUTION]
 > Greedy fails when a locally optimal choice precludes a globally better one that requires "sacrificing" now for gain later. Classic greedy failures:
-> - **0/1 Knapsack**: Taking the highest value-density item can block a combination of smaller items with higher total value.
-> - **Coin Change (general denominations)**: US coins work greedily (25, 10, 5, 1); `[1, 3, 4]` with target 6 does not (`4+1+1` = 3 coins vs `3+3` = 2 coins).
-> - **Edit Distance**: Local character matches don't minimize global operations.
+> - **0/1 Knapsack `🔥 Google`**: Taking the highest value-density item can block a combination of smaller items with higher total value.
+> - **Coin Change (general denominations) `🔥 Google`**: US coins work greedily (25, 10, 5, 1); `[1, 3, 4]` with target 6 does not (`4+1+1` = 3 coins vs `3+3` = 2 coins).
+> - **Edit Distance `🔥 Google`**: Local character matches don't minimize global operations.
 >
 > Rule of thumb: if you can construct a counterexample, it's not greedy — reach for DP.
 
 ### Scalability: Online / Streaming Greedy
 
 > [!TIP]
-> Many greedy algorithms are **online** (process one element at a time without future knowledge):
+> Many greedy algorithms are **online `⭐ Google`** (process one element at a time without future knowledge):
 > - **Interval scheduling**: Sort offline is required. For online scheduling, use a priority queue of active intervals by end time.
-> - **Task Scheduler in production**: At Google scale, task scheduling is a distributed bin-packing problem — use the **Longest Processing Time (LPT)** greedy for makespan minimization on K machines.
+> - **Task Scheduler in production `🔥 Google`**: At Google scale, task scheduling is a distributed bin-packing problem — use the **Longest Processing Time (LPT)** greedy for makespan minimization on K machines.
 > - **Online ads**: Greedy matching of ads to slots using priority queue of bids — approximation ratio of `1 - 1/e` for online bipartite matching.
 
 ### Concurrency: Parallel Greedy
@@ -429,19 +435,19 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 - **Largest Perimeter Triangle** — Sort descending; first triple where `a < b + c`.
 
 ### Medium
-- **Jump Game I** — Track `farthest`; O(N) single pass.
-- [Jump Game II](problem-deep-dives.md#jump-game-ii) — Greedy BFS levels; O(N).
+- **Jump Game I `🔥 Google`** — Track `farthest`; O(N) single pass.
+- [Jump Game II](problem-deep-dives.md#jump-game-ii) `🔥 Google` — Greedy BFS levels; O(N).
 - [Non-overlapping Intervals](problem-deep-dives.md#non-overlapping-intervals) — Sort by end; keep non-overlapping.
 - **Meeting Rooms II** — Min-heap of end times; active room count = heap size.
 - [Gas Station](problem-deep-dives.md#gas-station) — Running tank; reset start on deficit.
-- [Task Scheduler](problem-deep-dives.md#task-scheduler) — Formula or heap simulation.
+- [Task Scheduler](problem-deep-dives.md#task-scheduler) `🔥 Google` — Formula or heap simulation.
 - **Partition Labels** — Last occurrence map; sweep and cut.
-- **Candy** — Two-pass: left-right then right-left.
+- **Candy `🔥 Google`** — Two-pass: left-right then right-left.
 - **Minimum Arrows to Burst Balloons** — Sort by end; shoot at end of each new balloon.
 
 ### Hard
 - **Minimum Refueling Stops** — Max-heap of reachable fuel; refuel largest when tank runs dry.
-- **IPO (Maximize Capital)** — Sort by capital; max-heap of available profits.
+- **IPO (Maximize Capital) `⭐ Google`** — Sort by capital; max-heap of available profits.
 - **Smallest Range Covering K Lists** — K-way merge + greedy window shrink.
 
 ---
@@ -450,14 +456,14 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Jump Game I** | Greedy Reach Tracking | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
-| **[Jump Game II](problem-deep-dives.md#jump-game-ii)** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
+| **Jump Game I `🔥 Google`** | Greedy Reach Tracking | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
+| **[Jump Game II](problem-deep-dives.md#jump-game-ii) `🔥 Google`** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
 | **[Non-overlapping Intervals](problem-deep-dives.md#non-overlapping-intervals)** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
 | **Min Arrows to Burst Balloons** | "Minimum shots to pop all balloons" | Sort by end; new arrow only if `start > arrow_pos` | `>` not `>=` — touching boundary is one shot. |
 | **[Gas Station](problem-deep-dives.md#gas-station)** | "Starting point for circular traversal" | Reset `start` when tank goes negative | Uniqueness: valid start exists iff `sum(gas) >= sum(cost)`. |
-| **[Task Scheduler](problem-deep-dives.md#task-scheduler)** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
+| **[Task Scheduler](problem-deep-dives.md#task-scheduler) `🔥 Google`** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
 | **Assign Cookies** | "Satisfy max children greedily" | Sort both; smallest sufficient cookie per smallest unsatisfied child | Two-pointer: greedily match smallest satisfied first. |
-| **Candy** | "Minimum candy with neighbor constraints" | Two-pass: L→R then R→L; `candy[i] = max(both passes)` | One pass fails — left and right constraints are independent. |
+| **Candy `🔥 Google`** | "Minimum candy with neighbor constraints" | Two-pass: L→R then R→L; `candy[i] = max(both passes)` | One pass fails — left and right constraints are independent. |
 | **Fractional Knapsack** | "Max value with fractional items" | Sort by value/weight; take greedily | 0/1 Knapsack is **not** greedy — needs DP. Verify items are divisible. |
 | **Minimum Refueling Stops** | "Fewest stops to reach destination" | Max-heap of reachable stations; refuel when tank < 0 | Greedily take the largest available fuel when you must stop — not the nearest. |
 | **Partition Labels** | "Partition so each letter in one part" | `last[ch]` map; extend `end`; cut at `i == end` | Each letter's last occurrence defines the minimum partition end. |
@@ -466,12 +472,12 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 | **Two City Scheduling** [M] | "Send N people to each of 2 cities at min cost" | Sort by `cost_A - cost_B`; first N go to A, rest to B | Sorting by cost difference selects people with greatest relative saving for each city. |
 | **Boats to Save People** [M] | "Min boats where each holds ≤ 2 people, total ≤ limit" | Sort; two pointers (lightest + heaviest); if sum ≤ limit pair them | Greedy: always try to pair the heaviest with the lightest; if impossible, heaviest goes alone. |
 | **Minimum Number of Arrows** [M] | "Min arrows to burst all balloons" | Sort by end; arrow at `end`; advance to next balloon not reached | Identical to "non-overlapping intervals" — one arrow can burst multiple overlapping balloons. |
-| **Queue Reconstruction by Height** [M] | "Reconstruct queue from (h, k) pairs" | Sort by height desc (ties: k asc); insert each person at index k | Taller people are placed first; inserting at `k` is valid since all remaining are shorter or equal. |
+| **Queue Reconstruction by Height `⭐ Google`** [M] | "Reconstruct queue from (h, k) pairs" | Sort by height desc (ties: k asc); insert each person at index k | Taller people are placed first; inserting at `k` is valid since all remaining are shorter or equal. |
 | **Car Pooling** [M] | "Can car with capacity C handle all trips?" | Difference array on stops; scan prefix sums | Or: sort events by position; track running passenger count. |
 | **Wiggle Subsequence** [M] | "Longest alternating up-down subsequence" | Greedy: count peaks and valleys; every direction change is a peak/valley | No need to track indices — just count alternating slopes. DP O(N²) exists but greedy is O(N). |
 | **Maximum Units on a Truck** [E] | "Greedy: load boxes with most units first" | Sort by units per box desc; load until capacity | Straightforward greedy; just don't forget to clamp last batch to remaining capacity. |
 | **Minimum Cost to Connect Sticks** [M] | "Merge sticks: cost = sum of two merged; minimize total" | Min-heap; always merge two smallest; push result back | Equivalent to Huffman encoding — merging smallest first minimizes total cost. |
-| **IPO (Maximize Capital)** [H] | "Pick K projects to maximize capital; project unlocks at capital threshold" | Sort by capital; max-heap of profits of unlocked projects | Unlock projects incrementally as capital grows; always pick highest-profit unlocked project. |
+| **IPO (Maximize Capital) `⭐ Google`** [H] | "Pick K projects to maximize capital; project unlocks at capital threshold" | Sort by capital; max-heap of profits of unlocked projects | Unlock projects incrementally as capital grows; always pick highest-profit unlocked project. |
 
 ---
 

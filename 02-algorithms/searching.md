@@ -90,7 +90,13 @@ WHY binary search exists → WHAT it is → HOW it works → WHEN to use → WHA
     └── BS on answer: verify predicate is truly monotone before applying
 ```
 
-Find an element or the optimal value satisfying a predicate. SDE-3 focus: **binary search on answer** (predicate function), rotated arrays, lower/upper bound semantics, and knowing which template to use for each variant.
+Find an element or the optimal value satisfying a predicate. SDE-3 focus: **binary search on answer `🔥 Google`** (predicate function), rotated arrays, lower/upper bound semantics, and knowing which template to use for each variant.
+
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
 
 ---
 
@@ -167,7 +173,7 @@ def binary_search_boundary(lo: int, hi: int, predicate) -> int:
 1. **Find K-th Smallest Pair Distance**:
    - **What (The Problem & Goal):** Given an array, find the k-th smallest absolute difference between any two elements.
    - **How (Intuition & Mental Model):** The range of possible distances is `[0, max(nums) - min(nums)]`. Binary search on the distance `d`. For each `mid`, count how many pairs have distance `<= mid` using two pointers in O(N).
-2. **K-th Smallest Element in a Sorted Matrix**:
+2. **K-th Smallest Element in a Sorted Matrix `⭐ Google`**:
    - **What (The Problem & Goal):** Find the k-th smallest element in an `n x n` matrix where each row and column is sorted in ascending order.
    - **How (Intuition & Mental Model):** The range of values is `[matrix[0][0], matrix[n-1][n-1]]`. Binary search on the value. For each `mid`, count how many elements are `<= mid` using a staircase traversal (starting from top-right) in O(N).
 ```
@@ -182,7 +188,7 @@ def binary_search_boundary(lo: int, hi: int, predicate) -> int:
 ### Lower Bound / Upper Bound
 
 > [!IMPORTANT]
-> **The Click Moment**: "First **position** where element **≥ target**" (lower bound) — OR — "last position where element **≤ target**" (upper bound) — OR — "**first/last occurrence**" of a value. These are the building blocks of all binary-search-on-index problems.
+> **The Click Moment**: "First **position** where element **≥ target `🔥 Google`**" (lower bound) — OR — "last position where element **≤ target `🔥 Google`**" (upper bound) — OR — "**first/last occurrence**" of a value. These are the building blocks of all binary-search-on-index problems.
 
 ```python
 def lower_bound(arr: list[int], target: int) -> int:
@@ -312,7 +318,7 @@ def aggressive_cows(stalls: list[int], cows: int) -> int:
 ### Rotated Sorted Array
 
 > [!IMPORTANT]
-> **The Click Moment**: "Search in a **rotated** sorted array" — OR — "find the **minimum** in a rotated array". One half of `[lo, hi]` is always sorted — use this to determine which side to search. Compare `nums[mid]` with `nums[lo]` and `nums[hi]` to identify the sorted half.
+> **The Click Moment**: "Search in a **rotated** sorted array" — OR — "find the **minimum `⭐ Google`** in a rotated array". One half of `[lo, hi]` is always sorted — use this to determine which side to search. Compare `nums[mid]` with `nums[lo]` and `nums[hi]` to identify the sorted half.
 
 ```python
 def search_rotated(nums: list[int], target: int) -> int:
@@ -344,10 +350,10 @@ def find_min_rotated(nums: list[int]) -> int:
     return nums[lo]
 
 #### Common Variants & Twists
-1. **Search in Rotated Sorted Array II (with duplicates)**:
+1. **Search in Rotated Sorted Array II (with duplicates) `🔥 Google`**:
    - **What (The Problem & Goal):** Same as searching in rotated array, but duplicates are allowed.
    - **How (Intuition & Mental Model):** If `nums[lo] == nums[mid] == nums[hi]`, we cannot tell which side is sorted. Increment `lo` and decrement `hi` and continue. This makes the worst-case O(N).
-2. **Find Minimum in Rotated Sorted Array II**:
+2. **Find Minimum in Rotated Sorted Array II `🔥 Google`**:
    - **What (The Problem & Goal):** Find minimum in rotated array with duplicates.
    - **How (Intuition & Mental Model):** Similar logic. If `nums[mid] == nums[hi]`, just decrement `hi`.
 ```
@@ -374,7 +380,7 @@ def find_peak_element(nums: list[int]) -> int:
     return lo
 
 #### Common Variants & Twists
-1. **Find Peak Element in 2D Matrix**:
+1. **Find Peak Element in 2D Matrix `⭐ Google`**:
    - **What (The Problem & Goal):** Find a peak element in an `m x n` matrix (greater than its 4 neighbors).
    - **How (Intuition & Mental Model):** Binary search on columns. For the middle column, find the global maximum element at `(row, mid)`. Compare it with its neighbors at `(row, mid-1)` and `(row, mid+1)`. Move toward the higher neighbor.
 ```
@@ -454,25 +460,25 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 ## 4. Common Interview Problems
 
 ### Easy
-- **Binary Search** — Classic exact match; `lo <= hi` template.
+- **Binary Search `🔥 Google`** — Classic exact match; `lo <= hi` template.
 - **First Bad Version** — Binary search on answer; first True in `[False...True]`.
 - **Guess Number Higher or Lower** — Same as exact match.
 
 ### Medium
 - **Find First and Last Position** — Lower bound + upper bound.
-- [Search in Rotated Sorted Array](problem-deep-dives.md#search-in-rotated-sorted-array) — Identify sorted half; recurse.
+- [Search in Rotated Sorted Array](problem-deep-dives.md#search-in-rotated-sorted-array) `🔥 Google` — Identify sorted half; recurse.
 - [Find Minimum in Rotated Array](problem-deep-dives.md#find-minimum-in-rotated-sorted-array) — Compare `mid` to `hi`.
-- **Koko Eating Bananas** — BS on answer `[1, max(piles)]`; predicate = can finish in H hours.
-- **Capacity to Ship Packages** — BS on answer; predicate = can fit in D days.
-- **Find Peak Element** — Compare with right neighbor; move toward higher side.
-- **Search a 2D Matrix** — Treat as flattened 1D array; `row = mid // n, col = mid % n`.
+- **Koko Eating Bananas `🔥 Google`** — BS on answer `[1, max(piles)]`; predicate = can finish in H hours.
+- **Capacity to Ship Packages `🔥 Google`** — BS on answer; predicate = can fit in D days.
+- **Find Peak Element `⭐ Google`** — Compare with right neighbor; move toward higher side.
+- **Search a 2D Matrix `⭐ Google`** — Treat as flattened 1D array; `row = mid // n, col = mid % n`.
 - **Random Pick with Weight** — Prefix sums + binary search on random float.
 
 ### Hard
-- [Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum) — BS on answer; predicate = can split into ≤ k parts with max ≤ mid.
-- [Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition; O(log(min(m,n))).
+- [Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum) `⭐ Google` — BS on answer; predicate = can split into ≤ k parts with max ≤ mid.
+- [Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) `🔥 Google` — Binary search on partition; O(log(min(m,n))).
 - **Minimize Max Distance to Gas Station** — BS on answer (floating point); predicate = can place stations.
-- **Aggressive Cows (or Magnetism)** — Maximize minimum distance; predicate = can place k cows.
+- **Aggressive Cows (or Magnetism) `⭐ Google`** — Maximize minimum distance; predicate = can place k cows.
 
 ---
 
@@ -484,23 +490,23 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 | **First / Last Position** | "Range of target in sorted array" | Lower bound + upper bound | Lower bound returns first ≥; subtract 1 for last occurrence. Handle "not found" case. |
 | **[Search Rotated Array](problem-deep-dives.md#search-in-rotated-sorted-array)** | "Binary search in rotated sorted" | Identify sorted half via `nums[lo] <= nums[mid]` | Duplicates → `nums[lo]==nums[mid]==nums[hi]` forces O(N) — clarify with interviewer. |
 | **[Find Min Rotated](problem-deep-dives.md#find-minimum-in-rotated-sorted-array)** | "Minimum in rotated sorted array" | `nums[mid] > nums[hi]` → min in right half | No duplicates simplifies; with duplicates: `hi -= 1` when equal. |
-| **Koko Eating Bananas** | "Minimum speed to finish in H hours" | BS on `[1, max(piles)]`; `ceil(p/k)` hours per pile | `math.ceil(p/k)` or `(p + k - 1) // k`; integer overflow on sum in other languages. |
-| **[Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum)** | "Minimize maximum subarray sum" | BS on `[max(A), sum(A)]`; greedy feasibility check | Single element > `max_sum` → infeasible; handle in predicate. |
+| **Koko Eating Bananas `🔥 Google`** | "Minimum speed to finish in H hours" | BS on `[1, max(piles)]`; `ceil(p/k)` hours per pile | `math.ceil(p/k)` or `(p + k - 1) // k`; integer overflow on sum in other languages. |
+| **[Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum) `⭐ Google`** | "Minimize maximum subarray sum" | BS on `[max(A), sum(A)]`; greedy feasibility check | Single element > `max_sum` → infeasible; handle in predicate. |
 | **[Median of Two Arrays](problem-deep-dives.md#median-of-two-sorted-arrays)** | "Median without merging, O(log N)" | Partition both arrays; `max(left) <= min(right)` | Sentinel `-inf`/`+inf` for empty partitions; even vs odd total length changes formula. |
-| **Find Peak Element** | "Any peak (greater than neighbors)" | Move toward larger neighbor | Multiple peaks: any valid answer; boundaries are treated as `-inf`. |
+| **Find Peak Element `⭐ Google`** | "Any peak (greater than neighbors)" | Move toward larger neighbor | Multiple peaks: any valid answer; boundaries are treated as `-inf`. |
 | **Random Pick by Weight** | "Weighted random selection" | Prefix sums + `bisect_left` on random float | Inclusive vs exclusive random range; prefix sum must be exclusive (start from 0). |
 | **Aggressive Cows** | "Maximize minimum distance between k cows" | BS on answer; predicate = can place k with min distance ≥ mid | Classic "maximize minimum" — predicate is greedy: greedily place cows starting from leftmost. |
 | **Guess Number Higher or Lower** [E] | "Binary search on number range" | `lo=1, hi=n`; call `guess(mid)`; adjust bounds on result | Template: `lo <= hi`; return `mid` on exact match. Canonical BS exercise. |
 | **Sqrt(x)** [E] | "Integer square root without built-ins" | BS on `[0, x]`; find largest `mid` where `mid*mid <= x` | Use `lo < hi` template; `hi = mid` when `mid*mid > x`. Avoid overflow: `mid <= x // mid` instead of `mid*mid`. |
 | **Count of Negative Numbers in Sorted Matrix** [E] | "Count negatives in row-wise and col-wise sorted matrix" | Start from top-right; move left on negative (count col+1), move down on non-negative | O(R+C) staircase traversal — faster than binary search per row when matrix is small. |
 | **First Bad Version** [E] | "Find first True in monotone bool sequence" | `lo < hi` boundary template; `hi = mid` when `isBadVersion(mid)` | Don't call `isBadVersion(mid+1)` inside the loop — minimize API calls. |
-| **Search in Rotated Sorted Array II** [M] | "Rotated array with duplicates; find target" | Duplicates degrade worst case to O(N): when `lo == mid == hi`, shrink bounds by 1 | Adds `lo += 1; hi -= 1` on ambiguous duplicate — key difference from no-duplicate version. |
-| **Find Minimum in Rotated Sorted Array II** [M] | "With duplicates; find minimum" | When `nums[mid] == nums[hi]`, `hi -= 1`; otherwise standard rotation logic | Deduplication step prevents false confidence about which half is sorted. |
+| **Search in Rotated Sorted Array II `🔥 Google`** [M] | "Rotated array with duplicates; find target" | Duplicates degrade worst case to O(N): when `lo == mid == hi`, shrink bounds by 1 | Adds `lo += 1; hi -= 1` on ambiguous duplicate — key difference from no-duplicate version. |
+| **Find Minimum in Rotated Sorted Array II `🔥 Google`** [M] | "With duplicates; find minimum" | When `nums[mid] == nums[hi]`, `hi -= 1`; otherwise standard rotation logic | Deduplication step prevents false confidence about which half is sorted. |
 | **Time Based Key-Value Store** [M] | "Get largest timestamp ≤ query" | Map `key → sorted (timestamp, value)` list; `bisect_right` on timestamps | `bisect_right(times, t) - 1` gives the insertion point's predecessor — the largest ≤ t. |
 | **Find Kth Missing Positive Number** [M] | "Binary search on missing count" | `missing count at index i = arr[i] - (i+1)`; BS for first index where missing ≥ k | After loop, `lo + k` is the answer — elements before `lo` are all present. |
 | **Minimize Max Distance to Gas Station** [H] | "Add K stations to minimize max gap" | BS on answer (max gap); feasibility = `ceil((gap / D) - 1)` additional stations per interval | Float BS: `eps = 1e-6`; count `int(gaps[i] / D)` stations needed per segment. |
-| **Count of Smaller Numbers After Self** [H] | "For each element, count elements to its right that are smaller" | Binary search into sorted suffix (built left-to-right via bisect); or BIT/merge sort | Merge sort approach gives O(N log N); bisect + insert gives O(N²) — know which to use. |
-| **Koko Eating Bananas** [M] | "Min eating speed to finish all piles in H hours" | BS on speed `[1, max(piles)]`; feasibility = `sum(ceil(p/k)) <= H` | `ceil(p/k)` in integer arithmetic: `(p + k - 1) // k`. |
+| **Count of Smaller Numbers After Self `⭐ Google`** [H] | "For each element, count elements to its right that are smaller" | Binary search into sorted suffix (built left-to-right via bisect); or BIT/merge sort | Merge sort approach gives O(N log N); bisect + insert gives O(N²) — know which to use. |
+| **Koko Eating Bananas `🔥 Google`** [M] | "Min eating speed to finish all piles in H hours" | BS on speed `[1, max(piles)]`; feasibility = `sum(ceil(p/k)) <= H` | `ceil(p/k)` in integer arithmetic: `(p + k - 1) // k`. |
 
 ---
 

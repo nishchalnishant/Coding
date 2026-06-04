@@ -11,6 +11,12 @@ Recursive brute force  →  memo (top-down)  →  tabulate (bottom-up)  →  com
 
 If you can execute those four moves on demand, most classic DP questions become engineering — not memorization.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## First-Principles Map
@@ -58,8 +64,8 @@ WHAT breaks the conversion
 | **Tabulate** | Reverse the recursion direction: if `f(i)` calls `f(i+1)`, fill `i` from high → low |
 | **1D space** | Transition uses only `dp[i-1]` / `dp[i-2]` → two variables |
 | **2D → 1 row** | Transition uses only row `i+1` → rolling array |
-| **0/1 knapsack** | Loop `w` **backward** (high → low) |
-| **Unbounded** | Loop `w` **forward** (low → high) |
+| **0/1 knapsack `🔥 Google`** | Loop `w` **backward** (high → low) |
+| **Unbounded `⭐ Google`** | Loop `w` **forward** (low → high) |
 | **Interval DP** | Outer loop = interval **length**; inner = left endpoint |
 
 ---

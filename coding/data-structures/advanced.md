@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Advanced Data Structures
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Skip List (Conceptual)
@@ -60,45 +66,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Number of Distinct Substrings
-
-> [!example] Problem
-> Count all distinct non-empty substrings of `s`.
-
-> [!info] Approach
-> Total substrings = n(n+1)/2. Each pair of adjacent suffixes in SA shares a prefix of length `LCP[i]`; those are already counted by an earlier suffix. Subtract total LCP sum. Distinct substrings = `n(n+1)/2 - sum(LCP)`. Build SA via prefix doubling (O(n log² n)) or SA-IS (O(n)). Build LCP via Kasai's O(n) algorithm.
-
-
-> [!note]- Python Solution
-> ```python
-> def count_distinct_substrings(s):
->     n = len(s)
->     # Simple O(n^2 log n) SA — replace with DC3/SA-IS for large n
->     sa = sorted(range(n), key=lambda i: s[i:])
-> 
->     # Kasai's LCP — O(n)
->     rank = [0] * n
->     for i, v in enumerate(sa):
->         rank[v] = i
->     lcp = [0] * n
->     h = 0
->     for i in range(n):
->         if rank[i] > 0:
->             j = sa[rank[i] - 1]
->             while i + h < n and j + h < n and s[i + h] == s[j + h]:
->                 h += 1
->             lcp[rank[i]] = h
->             if h:
->                 h -= 1
-> 
->     return n * (n + 1) // 2 - sum(lcp)
-> ```
-
-> [!success] Complexity
-> O(n log² n) build (O(n) with SA-IS) + O(n) LCP | Space O(n).
-
----
-
 ### Longest Common Prefix of Suffixes (LCP Array)
 
 > [!example] Problem
@@ -106,7 +73,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > LCP[i] tells us how many characters adjacent suffixes in SA share. Max LCP = longest repeated substring (appears at two positions = two adjacent suffixes in SA with high overlap). Kasai's algorithm exploits: if `LCP(SA[rank[i]], SA[rank[i]-1]) = h`, then `LCP(SA[rank[i+1]], SA[rank[i+1]-1]) >= h - 1`. This means `h` can only decrease by 1 per step across all i, so the total work is O(n). See implementation in `count_distinct_substrings` above. Longest repeated = `s[sa[idx] : sa[idx] + max(lcp)]`.
-
 
 > [!success] Complexity
 > Kasai LCP: O(n) | Space O(n).
@@ -222,7 +188,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ## LFU Cache — O(1) Implementation
 
-### LFU Cache
+### LFU Cache `⭐ Google`
 
 > [!example] Problem
 > Design and implement a data structure for a Least Frequently Used (LFU) cache.
@@ -341,7 +307,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Range Sum Query — Mutable (LC 307)
+### Range Sum Query — Mutable (LC 307) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -372,7 +338,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Prefix sums give O(1) query but O(n) update. Segment tree gives O(log n) for both. Build a segment tree where each node stores the sum of its range. Point update propagates changes up; range query combines relevant nodes. Tree size `4*n`. `build` fills leaves and merges upward. `update` walks to the leaf, updates, merges on the way back. `query` recursively combines: if query fully covers current node, return stored sum; if no overlap, return 0; else recurse into both children.
-
 
 > [!note]- Python Solution
 > ```python
@@ -434,7 +399,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Sparse table gives O(1) query but no updates. Segment tree gives O(log n) for both. Same structure as range sum but aggregate is `min` instead of `+`. Identity element is `float('inf')`. Build, update, query are identical to range sum — swap `+` for `min` and `0` for `inf` in the no-overlap base case.
 
-
 > [!note]- Python Solution
 > ```python
 > class RMQTree:
@@ -495,7 +459,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Identical motivation to RMQ — need dynamic range aggregate. Segment tree with `max` as the merge function and `-inf` as the no-overlap identity. Pattern is identical to RMQ. Key interview insight: segment tree is a template — swap `min`/`max`/`+` and the identity (`inf`/`-inf`/`0`) to solve sum/min/max variants with zero structural changes.
 
-
 > [!note]- Python Solution
 > ```python
 > class RMaxTree:
@@ -548,7 +511,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Count of Smaller Numbers After Self (LC 315)
+### Count of Smaller Numbers After Self (LC 315) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
@@ -582,7 +545,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Brute force is O(n²). Segment tree on coordinate-compressed values processes elements right-to-left: query "how many values in [0, nums[i]-1] are already inserted" then insert nums[i]. Coordinate-compress to [0, m-1]. Segment tree stores counts (point update, prefix-sum query). Traverse right to left: `counts[i] = query(0, rank[i]-1)`, then `update(rank[i], +1)`. Coordinate compress first: sort unique values, assign ranks. Use BIT/segment tree of size m. Right-to-left pass: query prefix sum up to rank[i]-1, then increment rank[i].
-
 
 > [!note]- Python Solution
 > ```python
@@ -650,7 +612,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Standard LIS DP is O(n²). To also count LIS paths, we need `length[i]` and `count[i]` for each ending index. Segment tree on coordinate-compressed values gives O(n log n). Segment tree where each leaf stores `(max_length, count)` for elements with that value. Node merge: if left.length > right.length → take left; if right > left → take right; if equal → sum counts. For each `nums[i]` (left to right), query the tree over `[0, rank[i]-1]` to get the best `(len, cnt)` for any element smaller than `nums[i]`. Then `new_len = len+1, new_cnt = cnt`. Point-update `rank[i]` with `(new_len, new_cnt)`. Merge rule: keep the entry with larger length; if tie, add counts.
-
 
 > [!note]- Python Solution
 > ```python
@@ -756,7 +717,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Brute force is O(n) per booking. Segment tree with lazy propagation on coordinate-compressed time or a dynamic segment tree (map-based) on [0, 10⁹] allows O(log n) per operation. "Difference array on events" — `add +1` at start, `-1` at end, query prefix max. For Calendar III, the answer is the prefix-max after all updates. For I/II, check that max ≤ 1 (or ≤ 2) before committing. Use a sorted map (balanced BST) as a difference array: `+1` at `start`, `-1` at `end`. Scan prefix sums to find max overlap. Python uses `SortedList` from `sortedcontainers` or a defaultdict with sorted keys.
 
-
 > [!note]- Python Solution
 > ```python
 > from sortedcontainers import SortedDict
@@ -835,7 +795,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Range Sum Query — Mutable (BIT version)
+### Range Sum Query — Mutable (BIT version) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -866,7 +826,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Fenwick tree is simpler to implement than segment tree for prefix-sum problems. ~10 lines of code vs 40+. `bit[i]` covers `lowbit(i)` elements ending at i. Update propagates right; query propagates left. Store original array. On `update(i, val)`: compute `delta = val - nums[i]`, update `nums[i]`, then propagate delta through BIT. `sumRange(l, r) = prefix(r+1) - prefix(l)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -915,7 +874,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Merge sort counts inversions in O(n log n) as a byproduct of merging. BIT gives an equivalent O(n log n) solution via coordinate compression and right-to-left traversal. Coordinate-compress to [1, m]. Process left to right: for each element at rank r, `inversions += query(m) - query(r)` (elements already inserted that are greater than current). Then `update(r, +1)`. Sort unique values to get ranks. BIT stores counts. After inserting r, `query(r)` = count of elements ≤ r already inserted. Elements already inserted with rank > r = `query(m) - query(r)` = inversions contributed by current element.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_inversions(nums):
@@ -952,7 +910,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Reverse Pairs (LC 493)
+### Reverse Pairs (LC 493) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, return the number of reverse pairs in the array.
@@ -983,7 +941,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Similar to count inversions but the condition is `nums[i] > 2 * nums[j]`. The multiplier prevents using a simple BIT on original values because inserting `nums[j]` and querying `nums[i] > 2 * nums[j]` requires knowing all future elements. Process right to left. For each `nums[i]`: query how many elements already inserted have value `< nums[i] / 2` (i.e., `nums[j]` already to the right where `2*nums[j] < nums[i]`). Then insert `nums[i]`. Coordinate-compress all values AND all `2*value` together (to handle the `2*nums[j]` query correctly). For each `nums[i]` (right to left): count elements with rank ≤ rank of `(nums[i]-1) // 2`... Alternatively: use merge sort which is cleaner.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1052,7 +1009,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Not a direct BIT problem, but often grouped here. Key insight: `count(max ≤ right) - count(max ≤ left-1)` where `count(max ≤ k)` = subarrays whose max ≤ k. `f(k)` = number of subarrays with all elements ≤ k. For a contiguous segment of length L where all elements ≤ k, it contributes `L*(L+1)//2` subarrays. Answer = `f(right) - f(left-1)`. Scan once; maintain `curr` = current run length of elements ≤ k. When element > k, reset curr to 0. Accumulate `curr` into total.
 
-
 > [!note]- Python Solution
 > ```python
 > def num_subarray_bounded_max(nums, left, right):
@@ -1081,7 +1037,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Range addition becomes two point updates on the difference array, and a point query becomes a prefix sum. Store a Fenwick tree over the difference array `diff`, where `diff[l] += delta` and `diff[r+1] -= delta`. Use a 1-indexed BIT. Add `delta` at `l + 1` and `-delta` at `r + 2` (if inside bounds). Querying index `i` is just the prefix sum up to `i + 1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1128,7 +1083,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Segment tree gives O(log n) query. For static arrays with many queries, O(1) is strictly better. The overlap trick works because `min` is idempotent: `min(a, a) = a`. `st[k][i]` = min of `nums[i..i+2^k-1]`. Query `[l,r]`: let `k = floor(log2(r-l+1))`. Answer = `min(st[k][l], st[k][r-2^k+1])`. The two windows overlap by `2^k - (r-l+1)` elements — OK because min is idempotent. Build with two nested loops. Precompute `log2` table to make queries O(1) (no `math.log` call).
 
-
 > [!note]- Python Solution
 > ```python
 > class SparseTableRMQ:
@@ -1167,7 +1121,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Naive LCA is O(depth) per query. Binary lifting gives O(log n). Euler tour + sparse table RMQ gives O(1) per query. Euler tour visits every node twice (entry and exit). `euler[i]` = node visited at step i, `depth[euler[i]]` = its depth. LCA of u and v = node with minimum depth in `euler[first[u]..first[v]]` (after ensuring `first[u] ≤ first[v]`). Apply sparse table for O(1) range-minimum by depth. DFS to build Euler tour array and `first[node]` = first occurrence index. Build sparse table on depths. `lca(u, v)`: query min-depth in `[first[u], first[v]]`, return that node.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1246,7 +1199,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > The conceptual section above covers the theory. This is the full implementation. Each node has a value and a list of `next` pointers, one per level. Head sentinel has `-inf`, tail sentinel has `+inf`. `MAX_LEVEL` = 16 is sufficient for n ≤ 5×10⁴. Probability p = 0.5. `_find_predecessors(target)` traverses from the top level downward, collecting the rightmost node at each level whose value is < target. `search` checks level 0. `add` generates a random level, inserts node. `erase` removes one occurrence.
 
-
 > [!note]- Python Solution
 > ```python
 > import random
@@ -1323,41 +1275,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Maximum of Subarrays of Size K (Sliding Window Maximum, LC 239)
-
-> [!example] Problem
-> Given array `nums` and integer `k`, return the maximum of each sliding window of size k.
-
-> [!info] Approach
-> Brute force is O(nk). A monotonic deque maintains candidates for the window maximum, discarding elements that can never be the answer — O(n) total. Deque stores indices in decreasing order of `nums[idx]`. Front = index of current max. Invariant: values at deque indices are strictly decreasing from front to back. For each new element: pop from back while `nums[back] ≤ nums[i]` (they're dominated). Push i. Pop from front if `front ≤ i - k` (out of window). When `i ≥ k-1`, `nums[dq[0]]` is the answer.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def max_sliding_window(nums, k):
->     dq: deque[int] = deque()   # indices, front = max
->     result = []
->     for i, v in enumerate(nums):
->         while dq and nums[dq[-1]] <= v:
->             dq.pop()
->         dq.append(i)
->         if dq[0] <= i - k:
->             dq.popleft()
->         if i >= k - 1:
->             result.append(nums[dq[0]])
->     return result
-> ```
-
-> [!success] Complexity
-> O(n) time | O(k) space.
-
-> [!tip] Alternatives
-> Segment tree / sparse table: O(n log n) or O(n log n) build + O(1) query per window — worse than deque. Two-pass block decomposition: O(n) but more complex. Deque is optimal and simplest.
-
----
-
 ### Sum of Subarray Ranges (LC 2104)
 
 > [!example] Problem
@@ -1406,7 +1323,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Brute force O(n²). Key insight: `sum of (max - min) = sum of max - sum of min`. Compute each separately using monotonic stack: for each element, find how many subarrays it is the max (or min) of. For each element `nums[i]` as the maximum: find `left[i]` = distance to previous greater-or-equal element, `right[i]` = distance to next greater element. Contribution = `nums[i] * left[i] * right[i]`. Symmetric for minimum. Two monotonic stack passes (one for max boundaries, one for min boundaries). Use strict vs. non-strict inequalities on one side to avoid double-counting duplicates.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1480,7 +1396,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 > [!info] Approach
 > Brute force O(m²n²). Fix the top and bottom row of the submatrix → reduce to a 1D "subarray sum equals target" problem solvable in O(n) with a hash map. For each pair of rows `(r1, r2)`, compute column-wise prefix sums `colsum[c]` = sum of `matrix[r1..r2][c]`. Then count subarrays of `colsum` summing to `target` using prefix sum + hash map. Precompute 2D prefix sums. Outer two loops: fix `r1` and `r2`. Inner loop: build running column sum, use `prefixSum - target` in a hash map to count subarrays.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1532,7 +1447,6 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 > [!info] Approach
 > Demonstrates the sqrt decomposition pattern. In practice, use a Fenwick tree for sum queries. Sqrt decomposition shines when the aggregate is complex (e.g., number of distinct elements, median) where segment trees require custom merge. Blocks of size `B = int(n**0.5)`. `block_sum[b]` = sum of `nums[b*B .. (b+1)*B - 1]`. Update: O(1) — update element and its block. Query: O(√n) — partial left + full middle blocks + partial right. For `sumRange(l, r)`: if l and r are in the same block, iterate directly. Otherwise: sum partial left block, sum full middle blocks via `block_sum`, sum partial right block.
-
 
 > [!note]- Python Solution
 > ```python

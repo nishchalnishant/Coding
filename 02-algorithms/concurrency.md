@@ -81,6 +81,12 @@ WHY concurrency exists → WHAT it is → HOW it works → WHEN to use → WHAT 
 
 Mastery of synchronization, memory models, and lock-free primitives. SDE-3 candidates are expected to go beyond "just using a lock" and discuss cache-line contention, memory barriers, and the ABA problem.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## 1. The Concurrency Hierarchy

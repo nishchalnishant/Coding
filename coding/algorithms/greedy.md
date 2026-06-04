@@ -8,11 +8,17 @@ difficulty: mixed
 
 Greedy works when a locally optimal choice at each step provably leads to a globally optimal solution (greedy-choice property + optimal substructure). Proof strategy: exchange argument — show any solution deviating from the greedy choice can be transformed into the greedy solution without worsening it. If no such argument holds, use DP.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Interval Greedy
 
-### Merge Intervals
+### Merge Intervals `🔥 Google`
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -39,7 +45,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > In arbitrary order, overlaps can't be detected without O(n²) pair checks. Sorting by start makes all overlapping intervals adjacent — one linear scan suffices. Sort by start; maintain a running merged interval; extend its end if current interval overlaps. `merged[-1][1] = max(merged[-1][1], end)` when `start ≤ merged[-1][1]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def merge(intervals):
@@ -61,7 +66,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Non-overlapping Intervals (Minimum number to remove)
+### Non-overlapping Intervals (Minimum number to remove) `🔥 Google`
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -95,7 +100,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Equivalent to maximizing the number of non-overlapping intervals kept (classic Activity Selection). Exchange argument: among all intervals overlapping with the current boundary, keeping the one with the earliest end leaves maximum room — any other choice can only tighten the constraint. Sort by end time. Greedily keep intervals that don't overlap with the last kept interval. Count removals. Track `last_end`; if `start >= last_end`, keep (update last_end = end); else remove (increment count).
-
 
 > [!note]- Python Solution
 > ```python
@@ -153,7 +157,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Each new meeting either reuses an ended room or opens a new one. The minimum rooms needed = maximum number of meetings simultaneously in progress. A min-heap on end times gives O(log n) access to the earliest-ending room. Sort meetings by start. Maintain a min-heap of end times. For each meeting, check if the earliest-ending room has freed up; if so, reuse it (heapreplace); else open a new room (heappush). Heap size at the end = rooms needed.
-
 
 > [!note]- Python Solution
 > ```python
@@ -220,7 +223,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Same as activity selection but we want to maximize simultaneous coverage (one arrow covers all overlapping intervals at a point). Exchange argument: sort by end; an arrow placed at the earliest end covers all current overlapping balloons — any later placement can only miss some. Sort by end. Greedily shoot at the end of the current balloon if it hasn't been burst yet. Arrow at `end`; skip all balloons with `start ≤ end`; next arrow at the next un-burst balloon's end.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_min_arrow_shots(points):
@@ -282,7 +284,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Coverage problem — must reach position `time` from 0. At each step, greedily pick the clip that extends coverage furthest from the current boundary. This is the interval covering (Jump Game) variant applied to intervals. Sort clips by start. Sweep: at each "current coverage end," find the clip starting ≤ current end that extends furthest. Advance coverage; increment clip count. Two pointers: `cur_end` (coverage end), `farthest` (best extension seen). When current clip starts > cur_end, coverage has a gap — return -1.
 
-
 > [!note]- Python Solution
 > ```python
 > def video_stitching(clips, time):
@@ -316,7 +317,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Same as Video Stitching — interval covering problem. Each tap defines a coverage interval; need to cover `[0, n]` with minimum intervals. Convert taps to intervals; apply greedy interval covering. Pre-process: for each position i, compute interval `[max(0, i-r), min(n, i+r)]`; sort by start; run jump-game-style greedy.
-
 
 > [!note]- Python Solution
 > ```python
@@ -355,7 +355,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > This is exactly Meeting Rooms II — minimum rooms = minimum groups. Two intervals in the same group must be non-overlapping; the minimum groups needed equals the maximum number of intervals simultaneously active. Sort by start; min-heap of group end times. For each interval, reuse a group if its end ≤ current start; else open a new group. Identical to Meeting Rooms II solution.
-
 
 > [!note]- Python Solution
 > ```python
@@ -412,7 +411,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Sort both. Greedily assign the smallest sufficient cookie to the least greedy unsatisfied child. Preserves bigger cookies for greedier children. Two pointers after sorting. Sort g and s. Two pointers i (children), j (cookies). If s[j] >= g[i]: i++, j++. Else j++. Return i.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_content_children(g, s):
@@ -464,7 +462,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Triangle inequality: a+b > c where a≤b≤c. If we sort descending, for any three consecutive elements a≥b≥c, if b+c > a they form a valid triangle. The first valid triple maximizes perimeter (sorted desc). Sort descending. Check consecutive triples. Sort desc. For i in range(len-2): if nums[i] < nums[i+1]+nums[i+2]: return sum of these three. Return 0.
 
-
 > [!note]- Python Solution
 > ```python
 > def largest_perimeter(nums):
@@ -485,7 +482,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Jump / Coverage Greedy
 
-### Jump Game (can reach?)
+### Jump Game (can reach?) `🔥 Google`
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -512,7 +509,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > At any reachable index i, all indices up to `i + nums[i]` are also reachable — the reachable set is always a contiguous prefix `[0, max_reach]`. Track the frontier; if current index exceeds it, the last index is unreachable. Track `max_reach = max(i + nums[i])` for all reachable i. If `i > max_reach` at any point, return False. Single pass; early exit the moment current index exceeds max_reach.
 
-
 > [!note]- Python Solution
 > ```python
 > def can_jump(nums):
@@ -532,7 +528,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game II (minimum jumps)
+### Jump Game II (minimum jumps) `🔥 Google`
 
 > [!example] Problem
 > You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
@@ -560,7 +556,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > At each "jump boundary," we must take a new jump. Exchange argument: among all positions reachable in the current jump, choosing the one that extends furthest is always optimal — picking any shorter reach can only worsen future options. Maintain `cur_end` (end of current jump range) and `farthest` (max reach seen so far). When `i == cur_end`, take a jump: increment count, advance `cur_end = farthest`. Loop only to `n-2` (last index doesn't need a jump from it).
 
-
 > [!note]- Python Solution
 > ```python
 > def jump(nums):
@@ -581,75 +576,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game III
-
-> [!example] Problem
-> Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach any index with value 0.
-> Notice that you can not jump outside of the array at any time.
-> 
-> **Example 1:**
-> ```
-> Input: arr = [4,2,3,0,3,1,2], start = 5
-> Output: true
-> Explanation: 
-> All possible ways to reach at index 3 with value 0 are: 
-> index 5 -> index 4 -> index 1 -> index 3 
-> index 5 -> index 6 -> index 4 -> index 1 -> index 3
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: arr = [4,2,3,0,3,1,2], start = 0
-> Output: true 
-> Explanation: 
-> One possible way to reach at index 3 with value 0 is: 
-> index 0 -> index 4 -> index 1 -> index 3
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: arr = [3,0,2,1,2], start = 2
-> Output: false
-> Explanation: There is no way to reach at index 1 with value 0.
-> ```
-> 
-> **Constraints:**
-> - 1 <= arr.length <= 5 * 10^4
-> - 0 <= arr[i] < arr.length
-> - 0 <= start < arr.length
-
-> [!info] Approach
-> Reachability question — BFS/DFS explores all reachable indices. No optimization required; visit each index at most once. BFS from start. At each position, try both `i + arr[i]` and `i - arr[i]`. If either has value 0, return True. `visited` set prevents cycles. Return False if queue exhausts without finding 0.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def can_reach(arr, start):
->     n = len(arr)
->     queue = deque([start])
->     visited = {start}
->     while queue:
->         i = queue.popleft()
->         if arr[i] == 0:
->             return True
->         for nxt in (i + arr[i], i - arr[i]):
->             if 0 <= nxt < n and nxt not in visited:
->                 visited.add(nxt)
->                 queue.append(nxt)
->     return False
-> ```
-
-> [!success] Complexity
-> O(n) time and space.
-
-> [!tip] Alternatives
-> DFS with visited array — same complexity. BFS is preferred (finds target at minimum jump distance if needed).
-
----
-
-### Jump Game VI (DP + Deque)
+### Jump Game VI (DP + Deque) `🔥 Google`
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -684,7 +611,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > `dp[i] = max(dp[i-1..i-k]) + nums[i]`. Naively O(nk); sliding window maximum via monotone deque gives O(n) per step, O(n) total. Maintain a max-deque over a window of size k. `dp[i] = deque_max + nums[i]`. Deque stores indices in decreasing dp-value order; pop front when out of window, pop back when dp[i-1] ≥ dp[deque.back()].
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -714,141 +640,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Minimum Refueling Stops (LC 871)
-
-> [!example] Problem
-> A car travels from a starting position to a destination which is target miles east of the starting position.
-> There are gas stations along the way. The gas stations are represented as an array stations where stations[i] = [positioni, fueli] indicates that the ith gas station is positioni miles east of the starting position and has fueli liters of gas.
-> The car starts with an infinite tank of gas, which initially has startFuel liters of fuel in it. It uses one liter of gas per one mile that it drives. When the car reaches a gas station, it may stop and refuel, transferring all the gas from the station into the car.
-> Return the minimum number of refueling stops the car must make in order to reach its destination. If it cannot reach the destination, return -1.
-> Note that if the car reaches a gas station with 0 fuel left, the car can still refuel there. If the car reaches the destination with 0 fuel left, it is still considered to have arrived.
-> 
-> **Example 1:**
-> ```
-> Input: target = 1, startFuel = 1, stations = []
-> Output: 0
-> Explanation: We can reach the target without refueling.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: target = 100, startFuel = 1, stations = [[10,100]]
-> Output: -1
-> Explanation: We can not reach the target (or even the first gas station).
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: target = 100, startFuel = 10, stations = [[10,60],[20,30],[30,30],[60,40]]
-> Output: 2
-> Explanation: We start with 10 liters of fuel.
-> We drive to position 10, expending 10 liters of fuel.  We refuel from 0 liters to 60 liters of gas.
-> Then, we drive from position 10 to position 60 (expending 50 liters of fuel),
-> and refuel from 10 liters to 50 liters of gas.  We then drive to and reach the target.
-> We made 2 refueling stops along the way, so we return 2.
-> ```
-> 
-> **Constraints:**
-> - 1 <= target, startFuel <= 10^9
-> - 0 <= stations.length <= 500
-> - 1 <= positioni < positioni+1 < target
-> - 1 <= fueli < 10^9
-
-> [!info] Approach
-> Greedy — at every point you'd prefer to have refueled at the most fuel-rich station you passed. Max-heap of fuels of passed stations. Drive as far as possible. When you run out, greedily pick the largest fuel station you passed (max-heap). Push all reachable stations' fuels into max-heap as you pass them. When fuel < 0: if heap empty return -1. Pop max fuel, add to tank, increment stops. Continue until reach target.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> 
-> def min_refuel_stops(target, startFuel, stations):
->     heap = []  # max-heap (negate values)
->     fuel = startFuel
->     stops = 0
->     prev = 0
->     for pos, f in stations + [[target, 0]]:
->         fuel -= pos - prev
->         while fuel < 0 and heap:
->             fuel += -heapq.heappop(heap)
->             stops += 1
->         if fuel < 0:
->             return -1
->         heapq.heappush(heap, -f)
->         prev = pos
->     return stops
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(n) space.
-
-> [!tip] Alternatives
-> DP: dp[i] = max distance reachable with exactly i stops — O(n²). Heap greedy is strictly better.
-
----
-
-## Scheduling
-
-### Task Scheduler
-
-> [!example] Problem
-> You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.
-> Return the minimum number of CPU intervals required to complete all tasks.
-> 
-> **Example 1:**
-> ```
-> Input: tasks = ["A","A","A","B","B","B"], n = 2
-> Output: 8
-> Explanation: A possible sequence is: A -> B -> idle -> A -> B -> idle -> A -> B.
-> After completing task A, you must wait two intervals before doing A again. The same applies to task B. In the 3 rd interval, neither A nor B can be done, so you idle. By the 4 th interval, you can do A again as 2 intervals have passed.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: tasks = ["A","C","A","B","D","B"], n = 1
-> Output: 6
-> Explanation: A possible sequence is: A -> B -> C -> D -> A -> B.
-> With a cooling interval of 1, you can repeat a task after just one other task.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: tasks = ["A","A","A", "B","B","B"], n = 3
-> Output: 10
-> Explanation: A possible sequence is: A -> B -> idle -> idle -> A -> B -> idle -> idle -> A -> B.
-> There are only two types of tasks, A and B, which need to be separated by 3 intervals. This leads to idling twice between repetitions of these tasks.
-> ```
-> 
-> **Constraints:**
-> - 1 <= tasks.length <= 10^4
-> - tasks[i] is an uppercase English letter.
-> - 0 <= n <= 100
-
-> [!info] Approach
-> The most frequent task is the bottleneck. It creates `(max_freq - 1)` "frames" each needing `(n+1)` slots. If enough other tasks fill all frames, no idles are needed — answer is simply `len(tasks)`. Compute `max_freq` and `max_count` (# tasks with that frequency). Formula: `(max_freq-1) * (n+1) + max_count`. Answer = `max(len(tasks), formula)`. Pure math; no simulation needed.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> 
-> def least_interval(tasks, n):
->     freq = Counter(tasks)
->     max_freq = max(freq.values())
->     max_count = sum(1 for v in freq.values() if v == max_freq)
->     slots = (max_freq - 1) * (n + 1) + max_count
->     return max(len(tasks), slots)
-> ```
-
-> [!success] Complexity
-> O(n) time (n = len(tasks)), O(1) space (≤ 26 distinct tasks).
-
-> [!tip] Alternatives
-> Greedy simulation with max-heap + cooldown queue: O(T * 26) per time step — correct but unnecessary. Use simulation only if you need the actual task schedule.
-
----
-
-### Candy (LC 135)
+### Candy (LC 135) `🔥 Google`
 
 > [!example] Problem
 > There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
@@ -905,7 +697,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Reorganize String
+### Reorganize String `🔥 Google`
 
 > [!example] Problem
 > Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
@@ -929,7 +721,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Impossible if any character appears more than `⌈n/2⌉` times. Otherwise, greedy: always place the most frequent available character that isn't the same as the previous one. Max-heap by frequency. At each step, pop the most frequent, append, and re-push after cooldown. Track `prev` (last placed char) — if top of heap == prev, temporarily swap with second-most-frequent.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1011,7 +802,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Generalization of Reorganize String with cooldown k instead of 1. Most frequent characters must be spread across n/k-sized "chunks." A greedy fill of k-size chunks from the most frequent characters produces a valid arrangement if possible. Max-heap by frequency. Fill k characters per round (one from each of the k most frequent). After each round, re-push decremented counts. Use a queue to enforce cooldown: after using a character, re-push only after k steps.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1102,7 +892,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Two insights: (1) If total gas < total cost, no solution. (2) If solution exists, the starting point is the index after the last point where cumulative tank went negative. Proof: any station between `start` and the negative-tank point would inherit a deficit. Track running tank. When tank < 0, reset to 0 and update start = i+1. Single pass. Feasibility check built into the same pass via total sum.
 
-
 > [!note]- Python Solution
 > ```python
 > def can_complete_circuit(gas, cost):
@@ -1125,7 +914,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Trapping Rain Water (greedy view)
+### Trapping Rain Water (greedy view) `🔥 Google`
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -1150,7 +939,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Water at position i is bounded by `min(max_left[i], max_right[i]) - height[i]`. Two-pointer greedy: the side with the smaller max bound determines water for its current position — we can process it without knowing the other side's remaining values. Two pointers `lo, hi`. Water trapped at `lo` = `left_max - height[lo]` if `left_max < right_max`. Process the side with the smaller max. Advance the pointer with the smaller current boundary; maintain running max for each side.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1190,7 +978,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > A GCD string must divide both strings. If `str1 + str2 == str2 + str1`, a GCD exists with length `gcd(len(str1), len(str2))`. This is the string analog of the Euclidean algorithm: the GCD of two strings is a repeated unit, and its length is `gcd(len1, len2)`. Check concatenation equality; if valid, return `str1[:gcd(len(str1), len(str2))]`. `math.gcd(m, n)`.
 
-
 > [!note]- Python Solution
 > ```python
 > from math import gcd
@@ -1216,7 +1003,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Each stick's length contributes to the total cost once per merge it participates in. Longer sticks participating in fewer merges reduces cost. Always merging the two shortest sticks minimizes total cost — this is Huffman coding's greedy insight. Min-heap. Repeatedly pop two smallest, combine, push the result, accumulate cost. n-1 merges; each O(log n); total O(n log n).
-
 
 > [!note]- Python Solution
 > ```python
@@ -1247,7 +1033,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > After removing k elements, we keep n-k elements. The minimum range of n-k consecutive elements in sorted order gives the answer. Sorting exposes this: after sort, optimal removal strategy is to remove `i` elements from the left and `k-i` from the right for i in 0..k. Sort; try all (i, k-i) splits for i in 0..k; answer = min(nums[n-1-(k-i)] - nums[i]). For 3 moves: 4 splits — (0,3),(1,2),(2,1),(3,0).
-
 
 > [!note]- Python Solution
 > ```python
@@ -1297,7 +1082,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Each character must stay in one partition — it determines the right boundary of the partition containing its first occurrence. Last occurrence map + greedy sweep. Build last[c] = last index of character c. Sweep left to right. Maintain current partition end = max(last[c] for c in current partition). When i == end: partition complete, record size, start new.
 
-
 > [!note]- Python Solution
 > ```python
 > def partition_labels(s):
@@ -1322,7 +1106,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Sorting-Based Greedy
 
-### Queue Reconstruction by Height (LC 406)
+### Queue Reconstruction by Height (LC 406) `⭐ Google`
 
 > [!example] Problem
 > You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
@@ -1357,7 +1141,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > Taller people are invisible to shorter ones for the k-count. So place taller people first — their relative order is determined by k alone. Inserting shorter people later doesn't affect any already-placed taller person's k value. Sort by height descending (ties: k ascending). Insert each person at index k into the result list. `result.insert(k, person)` — O(n) per insert, but n is small enough; taller people already placed are unaffected by later insertions.
 
-
 > [!note]- Python Solution
 > ```python
 > def reconstruct_queue(people):
@@ -1377,7 +1160,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### IPO (Maximize Capital, LC 502)
+### IPO (Maximize Capital, LC 502) `⭐ Google`
 
 > [!example] Problem
 > Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
@@ -1415,7 +1198,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > At each step, among all affordable projects, the greedy optimal is to pick the highest-profit one — taking less profit now can't help unlock better future projects than taking more profit. This is provable by exchange argument. Min-heap sorted by capital requirement (to find newly affordable projects efficiently). Max-heap of profits of all currently affordable projects. Sort projects by capital. For each of k steps: push all projects with `capital[i] ≤ W` into max-heap; pop the most profitable; add to W. If max-heap empty, can't proceed.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -1449,7 +1231,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > Greedy by earliest finishing time leaves the most room for future intervals. Sort by end time and always keep the next interval whose start is at least the end of the last kept interval. Track `last_end`; when `start >= last_end`, keep the interval and update `last_end = end`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1520,7 +1301,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > [!info] Approach
 > This is the classic "minimum jumps to cover a range" greedy problem. Sort clips by start time. At each step, among all clips that start at or before the current position, pick the one that extends the furthest. Sort by start. Maintain `cur_end` (current covered end) and `farthest` (furthest reach among clips starting ≤ `cur_end`). When we've processed all clips starting ≤ `cur_end`, we must extend using the farthest clip found, incrementing the count. Iterate through sorted clips. If `clip_start > cur_end`, return -1 (gap). Update `farthest`. When we've exhausted clips for this jump, set `cur_end = farthest`, increment count.
 
-
 > [!note]- Python Solution
 > ```python
 > def video_stitching(clips, time):
@@ -1585,7 +1365,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 > [!info] Approach
 > This reduces directly to the Jump Game II / interval cover problem. Each tap covers an interval. We want to cover `[0, n]` with the fewest intervals. Convert each tap to its interval. Then apply the same greedy: sort by left endpoint, for each coverage window pick the interval that extends farthest right. Build intervals `(max(0, i - ranges[i]), min(n, i + ranges[i]))` for each tap. Sort. Apply the Video Stitching greedy.
-
 
 > [!note]- Python Solution
 > ```python

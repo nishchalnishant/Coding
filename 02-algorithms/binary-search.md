@@ -43,6 +43,12 @@ DECISION
 - **Why it works**: Each step halves the interval → at most ⌈log₂ n⌉ steps → O(log n) time, O(1) space.
 - **Where it breaks**: Non-monotone predicates or unsorted data — the halving step may discard the answer.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 # Binary Search

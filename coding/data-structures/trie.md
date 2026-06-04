@@ -8,11 +8,17 @@ difficulty: mixed
 
 Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix trie.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Core Trie Implementation
 
-### Implement Trie (Prefix Tree)
+### Implement Trie (Prefix Tree) `🔥 Google`
 
 > [!example] Problem
 > A trie (pronounced as "try") or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.
@@ -114,7 +120,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Autocomplete / Prefix Search
 
-### Design Search Autocomplete System
+### Design Search Autocomplete System `🔥 Google`
 
 > [!example] Problem
 > Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character `'#'`).
@@ -247,7 +253,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Map Sum Pairs
+### Map Sum Pairs `⭐ Google`
 
 > [!example] Problem
 > Design a map that allows you to do the following:
@@ -392,7 +398,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Replace Words
+### Replace Words `⭐ Google`
 
 > [!example] Problem
 > In English, we have a concept called root, which can be followed by some other word to form another longer word - let's call this word derivative. For example, when the root "help" is followed by the word "ful", we can form a derivative "helpful".
@@ -467,7 +473,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Trie + Backtracking
 
-### Word Search II
+### Word Search II `🔥 Google`
 
 > [!example] Problem
 > Given an m x n board of characters and a list of strings words, return all words on the board.
@@ -645,7 +651,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## XOR Trie
 
-### Maximum XOR of Two Numbers in an Array
+### Maximum XOR of Two Numbers in an Array `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
@@ -926,7 +932,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Core Trie Operations (Extended)
 
-### Add and Search Word
+### Add and Search Word `🔥 Google`
 
 > [!example] Problem
 > Design a data structure with `addWord(word)` and `search(word)`. `search` supports the wildcard character `.` which matches any single letter. Return true if the word (with wildcards) matches any previously added word.
@@ -979,7 +985,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Prefix Problems
 
-### Search Suggestions System
+### Search Suggestions System `⭐ Google`
 
 > [!example] Problem
 > You are given an array of strings products and a string searchWord.
@@ -1054,7 +1060,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Prefix and Suffix Search
+### Prefix and Suffix Search `⭐ Google`
 
 > [!example] Problem
 > Design a special dictionary that searches the words in it by a prefix and a suffix.
@@ -1445,7 +1451,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Bitwise Trie / Other
 
-### Design File System
+### Design File System `⭐ Google`
 
 > [!example] Problem
 > You are asked to design a file system that allows you to create new paths and associate them with different values.
@@ -1642,7 +1648,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Palindrome Pairs
+### Palindrome Pairs `⭐ Google`
 
 > [!example] Problem
 > You are given a 0-indexed array of unique strings words.
@@ -1716,7 +1722,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Design Search Autocomplete System (Trie + DFS Variant)
+### Design Search Autocomplete System (Trie + DFS Variant) `🔥 Google`
 
 > [!example] Problem
 > Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character `'#'`).
@@ -1858,7 +1864,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Suffix Trie / Advanced
 
-### Implement Trie II (Count Operations)
+### Implement Trie II (Count Operations) `🔥 Google`
 
 > [!example] Problem
 > Implement a trie with `insert(word)`, `countWordsEqualTo(word)` (exact count of that word inserted), `countWordsStartingWith(prefix)` (count of all inserted words with that prefix), and `erase(word)` (remove one occurrence).
@@ -1920,7 +1926,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Shortest Unique Prefix for Every Word
+### Shortest Unique Prefix for Every Word `⭐ Google`
 
 > [!example] Problem
 > Given a list of words, find the shortest prefix for each word that uniquely identifies it (no other word starts with that prefix).
@@ -1967,7 +1973,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Maximum XOR of Two Numbers — Prefix Hash Approach
+### Maximum XOR of Two Numbers — Prefix Hash Approach `⭐ Google`
 
 > [!example] Problem (Variant of LC 421)
 > Same as LC 421 (max XOR in array) but solved without an explicit trie node class — using a set-based prefix approach to contrast with the trie solution.
@@ -2002,7 +2008,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ## See Also
 
 [[string-algorithms]] | [[backtracking]] | [[hashing]]
-### Implement Trie II (Count Prefixes and Equal Words)
+### Implement Trie II (Count Prefixes and Equal Words) `🔥 Google`
 
 > [!example] Problem
 > Extend a trie so you can count how many words equal a string and how many words have a given prefix.
@@ -2034,7 +2040,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Trie Applications
 
-### Replace Words (LC 648)
+### Replace Words (LC 648) `⭐ Google`
 
 > [!example] Problem
 > In English, we have a concept called root, which can be followed by some other word to form another longer word - let's call this word derivative. For example, when the root "help" is followed by the word "ful", we can form a derivative "helpful".
@@ -2109,7 +2115,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Palindrome Pairs (LC 336)
+### Palindrome Pairs (LC 336) `⭐ Google`
 
 > [!example] Problem
 > You are given a 0-indexed array of unique strings words.

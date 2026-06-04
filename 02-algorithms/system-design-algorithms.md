@@ -115,6 +115,12 @@ System Design Algorithms — First Principles
 
 These are the "Big Tech" algorithms that power distributed systems. While standard DSA (DP, Graphs) tests logic, these test your ability to build scalable, resilient infrastructure.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Complexity & Properties at a Glance
@@ -300,9 +306,9 @@ class TokenBucket:
 **Vector Clocks**: Array of counters, one per node. `V[i]` = events node i has seen. Two events are concurrent if neither vector dominates the other. Used by Dynamo, Riak for conflict detection.
 
 ### CAP Theorem (interview must-know)
-- **C**onsistency: every read returns the most recent write.
+- **C `🔥 Google`**onsistency: every read returns the most recent write.
 - **A**vailability: every request gets a (possibly stale) response.
-- **P**artition tolerance: system continues despite network splits.
+- **P `⭐ Google`**artition tolerance: system continues despite network splits.
 - Cannot have all three. Real choice: **CP** (Zookeeper, HBase, Spanner) or **AP** (Cassandra, DynamoDB, CouchDB).
 - Modern framing: **PACELC** — during normal ops, trade-off between latency (L) and consistency (C).
 

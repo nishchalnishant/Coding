@@ -9,11 +9,17 @@ difficulty: mixed
 > [!info] First Principles
 > Mathematical patterns collapse O(n) or O(n²) simulations to O(√n) or O(log n) using number-theoretic identities. Core toolkit: (1) Sieve — all primes in O(n log log n); (2) Euclidean GCD — O(log min(a,b)); (3) Fast exponentiation — O(log n); (4) Modular arithmetic — mod at every + and ×; (5) Precomputed factorials + inverse factorials — O(n) build, O(1) query for nCr.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Number Theory — Primes / Sieve
 
-### Count Primes (Sieve of Eratosthenes)
+### Count Primes (Sieve of Eratosthenes) `⭐ Google`
 
 > [!example] Problem
 > Given an integer n, return the number of prime numbers that are strictly less than n.
@@ -42,7 +48,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Trial division per number is O(√n) × O(n) = O(n√n). The Sieve marks composites in bulk: starting from p², every multiple of p is composite. Each composite is marked once by its smallest prime factor → O(n log log n) total work. Boolean array `is_prime[0..n-1]`; mark composites; count remaining True entries. Initialize all True. Set `is_prime[0]=is_prime[1]=False`. For each `p` from 2 to √n: if `is_prime[p]`, mark `p*p, p*p+p, ...` False. Starting at `p²` (not `2p`) because smaller multiples were already marked by smaller primes.
-
 
 > [!note]- Python Solution
 > ```python
@@ -96,7 +101,6 @@ difficulty: mixed
 > [!info] Approach
 > Collect all primes in `[left, right]` efficiently; scan adjacent pairs for minimum gap. Sieve `[0, right]` or a segmented sieve for large ranges; filter to `[left, right]`; find min adjacent gap. Standard sieve up to `right`. Collect primes in range. If fewer than 2, return `[-1, -1]`. Linear scan for minimum gap between consecutive primes.
 
-
 > [!note]- Python Solution
 > ```python
 > def closest_primes(left, right):
@@ -130,33 +134,6 @@ difficulty: mixed
 ---
 
 ## GCD / LCM
-
-### GCD of Strings
-
-> [!example] Problem
-> Largest string `t` that divides both strings `s1` and `s2` (i.e., concatenating copies of `t` produces each string).
-
-> [!info] Approach
-> If a GCD string exists, `s1 + s2 == s2 + s1` (necessary condition — both must be periodic with the same period). The GCD string's length = `gcd(len(s1), len(s2))`. Verify concatenation commutativity; if valid, return `s1[:gcd(len(s1),len(s2))]`. Check `s1 + s2 == s2 + s1`. If True, `gcd_len = gcd(len(s1), len(s2))`; return `s1[:gcd_len]`. If False, return `""`.
-
-
-> [!note]- Python Solution
-> ```python
-> from math import gcd
-> 
-> def gcd_of_strings(str1, str2):
->     if str1 + str2 != str2 + str1:
->         return ""
->     return str1[:gcd(len(str1), len(str2))]
-> ```
-
-> [!success] Complexity
-> Time O(m + n) for concatenation check. Space O(m + n) for concatenated strings.
-
-> [!tip] Alternatives
-> Check divisibility directly by verifying each string is a repetition of the prefix — O(m + n) but more verbose.
-
----
 
 ### Find Greatest Common Divisor of Array
 
@@ -200,7 +177,6 @@ difficulty: mixed
 
 > [!info] Approach
 > By property of GCD: `gcd(array) = gcd(gcd(a1, a2), a3, ...)`. For GCD of just max and min: `gcd(min(nums), max(nums))`. `gcd(min(nums), max(nums))` — the GCD of any set is bounded by the GCD of its extremes. Single pass to find min and max; apply Euclidean GCD.
-
 
 > [!note]- Python Solution
 > ```python
@@ -249,7 +225,6 @@ difficulty: mixed
 > [!info] Approach
 > Fraction `a/b` is simplified iff `gcd(a, b) = 1` (coprime). Iterate all pairs and filter. For each `b` from 2 to `n`, for each `a` from 1 to `b-1`, include `a/b` if `gcd(a, b) == 1`. Double loop; GCD check per pair. O(n²) pairs, each O(log n) GCD check.
 
-
 > [!note]- Python Solution
 > ```python
 > from math import gcd
@@ -279,7 +254,6 @@ difficulty: mixed
 > [!info] Approach
 > By Bézout's Identity, integers `ax + by = z` has a solution iff `z` is a multiple of `gcd(x, y)`. Pouring between jugs is equivalent to computing integer linear combinations of `x` and `y`. `target` is achievable iff `target ≤ x + y` and `target % gcd(x, y) == 0`. Check both conditions. No simulation needed.
 
-
 > [!note]- Python Solution
 > ```python
 > from math import gcd
@@ -302,14 +276,13 @@ difficulty: mixed
 
 ## Modular Arithmetic
 
-### Pow(x, n) (Fast Exponentiation with Mod)
+### Pow(x, n) (Fast Exponentiation with Mod) `🔥 Google`
 
 > [!example] Problem
 > Compute `x^n` efficiently; handle negative exponents.
 
 > [!info] Approach
 > Naive O(n) multiplication. D&C: `x^n = (x^(n/2))^2`. Each level halves the exponent → O(log n) multiplications. Iterative binary exponentiation — process bits of `n` from LSB to MSB. If `n` negative: `x = 1/x`, `n = -n`. While `n > 0`: if LSB set, multiply result by `x`; square `x`; right-shift `n`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -364,7 +337,6 @@ difficulty: mixed
 
 > [!info] Approach
 > `b` is too large to compute as an integer. Use the identity: `a^[d1,...,dk] = (a^[d1,...,dk-1])^10 × a^dk`. Process one digit at a time; apply mod throughout. Iterate digits left to right; maintain running result raised to 10th power each step, multiplied by `a^digit`. `1337 = 7 × 191` (not prime), so Fermat's little theorem doesn't directly apply — use direct modular exponentiation.
-
 
 > [!note]- Python Solution
 > ```python
@@ -426,7 +398,6 @@ difficulty: mixed
 > [!info] Approach
 > Even positions: 5 choices (0,2,4,6,8); odd positions: 4 choices (2,3,5,7). Positions are independent → multiply. Use fast exponentiation for large `n`. `answer = 5^(ceil(n/2)) × 4^(floor(n/2)) mod (10^9+7)`. `even_count = (n + 1) // 2` (positions 0, 2, 4, ...); `odd_count = n // 2`. Fast pow for each.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_good_numbers(n):
@@ -451,7 +422,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Fermat's little theorem (`a^(m-2) mod m`) only works for prime `m`. Extended Euclidean algorithm solves `ax + my = gcd(a,m) = 1` for any `m` coprime to `a`. Extended GCD returns `(g, x, y)` where `a×x + m×y = g`. If `g=1`, then `x mod m` is the inverse. `extended_gcd(a, m)` → `(g, x, y)`. Inverse = `x % m` if `g == 1`, else no inverse.
-
 
 > [!note]- Python Solution
 > ```python
@@ -506,7 +476,6 @@ difficulty: mixed
 > [!info] Approach
 > Each interior element is the sum of two elements directly above: `C(n,k) = C(n-1,k-1) + C(n-1,k)`. This is the defining recurrence of binomial coefficients. Build rows iteratively; each row has one more element than the previous. Row `i` has `i+1` elements. `row[j] = prev[j-1] + prev[j]`. Edges are always 1.
 
-
 > [!note]- Python Solution
 > ```python
 > def generate(numRows):
@@ -558,7 +527,6 @@ difficulty: mixed
 > [!info] Approach
 > Only need one row; can build in-place by updating right to left to avoid overwriting needed values. Start with `[1]`; for each new row, insert 1 at start and add adjacent pairs (right to left to avoid using updated values). `row[j] += row[j-1]` from `j = len(row)-1` down to 1; append 1 at end each iteration.
 
-
 > [!note]- Python Solution
 > ```python
 > def get_row(rowIndex):
@@ -578,7 +546,7 @@ difficulty: mixed
 
 ---
 
-### Unique Paths (Combinatorics Approach)
+### Unique Paths (Combinatorics Approach) `🔥 Google`
 
 > [!example] Problem
 > There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
@@ -606,7 +574,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Any path makes exactly `(m-1)` down moves and `(n-1)` right moves in some order. Total moves = `m+n-2`; we choose which `m-1` are down moves → `C(m+n-2, m-1)`. `answer = math.comb(m + n - 2, m - 1)`. Python's `math.comb` computes this exactly in O(min(m,n)) time without overflow using integer arithmetic.
-
 
 > [!note]- Python Solution
 > ```python
@@ -651,7 +618,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Floating-point slope representation causes rounding errors — two points with the same true slope may produce different floats. GCD-normalized integer `(dy, dx)` tuple is exact. For each anchor point, compute normalized slope to every other point; use frequency map to find the most common slope (+ handle duplicates). For each pair `(anchor, other)`: `dx = other.x - anchor.x`, `dy = other.y - anchor.y`. Normalize: `g = gcd(|dy|, |dx|)`, `slope = (dy//g, dx//g)`. Force canonical sign: if `dx < 0`, negate both. Duplicates (same point) counted separately.
-
 
 > [!note]- Python Solution
 > ```python
@@ -717,7 +683,6 @@ difficulty: mixed
 > [!info] Approach
 > Incrementing `n-1` elements by 1 is equivalent to decrementing 1 element by 1. Minimum total absolute deviation from a central value is minimized at the **median** (not mean). Sort; find median; sum of absolute differences from median. Sort `nums`. Median = `nums[n//2]`. Answer = `sum(|x - median|)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_moves2(nums):
@@ -736,7 +701,7 @@ difficulty: mixed
 
 ## Digit / Sequence Math
 
-### Factorial Trailing Zeroes
+### Factorial Trailing Zeroes `⭐ Google`
 
 > [!example] Problem
 > Given an integer n, return the number of trailing zeroes in n!.
@@ -768,7 +733,6 @@ difficulty: mixed
 > [!info] Approach
 > Trailing zeros come from factors of 10 = 2 × 5. There are always more factors of 2 than 5 in n!, so count factors of 5. Each multiple of 5 contributes one 5; multiples of 25 contribute an extra; etc. `count = n//5 + n//25 + n//125 + ...` until power of 5 exceeds n (Legendre's formula). Iteratively add `n // (5^k)` while `5^k ≤ n`.
 
-
 > [!note]- Python Solution
 > ```python
 > def trailing_zeroes(n):
@@ -795,7 +759,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Binary search or Newton's method both give O(log x) convergence. Newton's: `r = (r + x//r) // 2` converges quadratically. Binary search on `[0, x]` for largest `m` where `m² ≤ x`. `lo=0, hi=x`. While `lo ≤ hi`: `mid=(lo+hi)//2`; if `mid*mid ≤ x`, try larger (`lo=mid+1`); else smaller (`hi=mid-1`).
-
 
 > [!note]- Python Solution
 > ```python
@@ -829,7 +792,7 @@ difficulty: mixed
 
 ---
 
-### Nth Digit
+### Nth Digit `🔥 Google`
 
 > [!example] Problem
 > Given an integer n, return the nth digit of the infinite integer sequence [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...].
@@ -852,7 +815,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Group digits by number of digits: 1-digit (9 numbers, 9 digits), 2-digit (90 numbers, 180 digits), etc. Determine which group `n` falls in, then pinpoint the exact number and digit within it. Subtract group sizes until finding the right group; compute offset. For each digit count `d`: group has `9 × 10^(d-1)` numbers contributing `d × 9 × 10^(d-1)` digits. When `n` falls in group `d`: `num = 10^(d-1) + (n-1)//d`; digit index within `num` = `(n-1) % d`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -887,7 +849,6 @@ difficulty: mixed
 > [!info] Approach
 > Generate ugly numbers in order; each ugly number = another ugly number × {2, 3, or 5}. Three-pointer approach tracks which ugly number to multiply next by each prime. Maintain three pointers `p2, p3, p5` into the `ugly` list. Each step: `next = min(ugly[p2]*2, ugly[p3]*3, ugly[p5]*5)`; advance all pointers that produced the minimum. Initialize `ugly=[1]`, `p2=p3=p5=0`. Repeat n-1 times. Advancing all tied pointers prevents duplicates.
 
-
 > [!note]- Python Solution
 > ```python
 > def nth_ugly_number(n):
@@ -918,7 +879,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A number n has exactly 4 divisors iff: (1) `n = p³` for prime `p` (divisors: 1, p, p², p³) or (2) `n = p × q` for distinct primes `p, q` (divisors: 1, p, q, pq). Check factorization up to √n. For each number, count distinct divisors up to √n; accumulate sum if exactly 4 found. For each `num`, trial divide. If exactly 4 divisors, add their sum to result.
-
 
 > [!note]- Python Solution
 > ```python
@@ -955,7 +915,6 @@ difficulty: mixed
 > [!info] Approach
 > Total moves = sum of absolute differences from the target value. This is minimized at the **median** by the L1 regression property — the median minimizes sum of absolute deviations. Sort; find median; sum `|x - median|` for all x. Same as "Minimum Moves to Equal Array Elements" variant above.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_moves2(nums):
@@ -979,7 +938,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Subarray sum `sum(i+1..j) = prefix[j] - prefix[i]`. Divisible by k iff `prefix[j] ≡ prefix[i] (mod k)`. So count pairs of equal prefix sums mod k. Frequency map of `prefix_sum % k`. Each pair of equal remainders contributes one valid subarray. Initialize `remainder_count = {0: 1}` (empty prefix). For each element, update `prefix_sum`, compute `r = prefix_sum % k`; add `remainder_count.get(r, 0)` to answer; increment `remainder_count[r]`. Handle negative remainders: `r = (prefix_sum % k + k) % k`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1007,7 +965,7 @@ difficulty: mixed
 
 ## Number Encoding / Conversion
 
-### Integer to Roman
+### Integer to Roman `⭐ Google`
 
 > [!example] Problem
 > Seven different symbols represent Roman numerals with the following values:
@@ -1043,7 +1001,6 @@ difficulty: mixed
 > [!info] Approach
 > Roman numerals are a greedy positional system. Subtractive forms (IV=4, IX=9, XL=40, ...) can be handled by including them as explicit "values" in the table. Greedily subtract the largest fitting value. Table of `(value, symbol)` pairs in descending order including all 13 subtractive forms. While `num > 0`: find largest value ≤ num, append symbol, subtract value. 13 symbols: 1000→M, 900→CM, 500→D, 400→CD, 100→C, 90→XC, 50→L, 40→XL, 10→X, 9→IX, 5→V, 4→IV, 1→I.
 
-
 > [!note]- Python Solution
 > ```python
 > def int_to_roman(num):
@@ -1068,7 +1025,7 @@ difficulty: mixed
 
 ---
 
-### Roman to Integer
+### Roman to Integer `⭐ Google`
 
 > [!example] Problem
 > Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
@@ -1117,7 +1074,6 @@ difficulty: mixed
 > [!info] Approach
 > Subtractive rule: if a smaller value appears before a larger value, subtract it (e.g., IV = 5-1 = 4). Otherwise add. Scan left to right: if `val[s[i]] < val[s[i+1]]`, subtract; else add. Map each symbol to its value; single pass with lookahead. For each character (except last): if its value is less than the next character's value, subtract; else add. Add the last character unconditionally.
 
-
 > [!note]- Python Solution
 > ```python
 > def roman_to_int(s):
@@ -1140,7 +1096,7 @@ difficulty: mixed
 
 ---
 
-### Excel Sheet Column Number
+### Excel Sheet Column Number `⭐ Google`
 
 > [!example] Problem
 > Given a string columnTitle that represents the column title as appears in an Excel sheet, return its corresponding column number.
@@ -1184,7 +1140,6 @@ difficulty: mixed
 > [!info] Approach
 > This is base-26 to base-10 conversion where 'A'=1, ..., 'Z'=26 (1-indexed, not 0-indexed). Same as positional notation: `result = result * 26 + digit_value`. Scan left to right; multiply running total by 26 and add current letter's value. `result = 0`. For each char `c`: `result = result * 26 + (ord(c) - ord('A') + 1)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def title_to_number(columnTitle):
@@ -1199,62 +1154,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Reverse: `columnNumberToTitle` — reverse base-26 with 1-indexed adjustment: `(num - 1) % 26` maps to 'A'–'Z'.
-
----
-
-### Happy Number
-
-> [!example] Problem
-> Write an algorithm to determine if a number n is happy.
-> A happy number is a number defined by the following process:
-> Return true if n is a happy number, and false if not.
-> 
-> **Example 1:**
-> ```
-> Input: n = 19
-> Output: true
-> Explanation:
-> 12 + 92 = 82
-> 82 + 22 = 68
-> 62 + 82 = 100
-> 12 + 02 + 02 = 1
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 2
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 2^{31} - 1
-
-> [!info] Approach
-> Unhappy numbers enter a cycle. Classic cycle detection: Floyd's (slow/fast pointer) or a seen-set. For sum-of-squares, any cycle for non-happy numbers passes through 4 (known fact), but seen-set is simpler and general. Apply digit-square-sum repeatedly; if we hit 1 → happy; if we see a repeated number → not happy. Floyd's two-pointer on the implicit sequence — slow moves one step, fast moves two steps. Cycle iff `slow == fast`; happy iff that meeting point is 1.
-
-
-> [!note]- Python Solution
-> ```python
-> def is_happy(n):
->     def digit_sq_sum(x):
->         total = 0
->         while x:
->             x, d = divmod(x, 10)
->             total += d * d
->         return total
-> 
->     slow, fast = n, digit_sq_sum(n)
->     while fast != 1 and slow != fast:
->         slow = digit_sq_sum(slow)
->         fast = digit_sq_sum(digit_sq_sum(fast))
->     return fast == 1
-> ```
-
-> [!success] Complexity
-> Time O(log n) per step, O(log n) steps until cycle detected. Space O(1) with Floyd's.
-
-> [!tip] Alternatives
-> Seen-set: `while n not in seen: seen.add(n); n = digit_sq_sum(n)`. O(log n) space. Hardcode: all unhappy numbers cycle through 4 — can check `if n == 4: return False` as early exit.
 
 ---
 
@@ -1289,7 +1188,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Negative numbers and numbers ending in 0 (except 0 itself) are never palindromes. Reverse only the second half — avoids overflow and is more elegant than reversing the entire number. Repeatedly pop the last digit and build a reversed half. When `x ≤ reversed_half`, we've processed at least half the digits. `while x > reversed_half: reversed_half = reversed_half * 10 + x % 10; x //= 10`. Then `x == reversed_half` (even) or `x == reversed_half // 10` (odd length).
-
 
 > [!note]- Python Solution
 > ```python
@@ -1336,7 +1234,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Grade-school multiplication: digit `num1[i]` × digit `num2[j]` contributes to position `i + j` (units) and `i + j + 1` (carry). Work with a result array of size `len1 + len2`. Allocate `pos[len1 + len2]`. For each pair `(i, j)` (right to left): `prod = (num1[i] - '0') × (num2[j] - '0') + pos[i+j+1]`; `pos[i+j+1] = prod % 10`; `pos[i+j] += prod // 10`. Iterate `i` from end of num1, `j` from end of num2. Final answer: strip leading zeros; `"0"` if all zeros.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1418,7 +1315,6 @@ difficulty: mixed
 > [!info] Approach
 > Weighted sampling = prefix-sum + binary search. Build prefix sum array; generate a random float in `[0, total_weight)`. The correct index is the first prefix sum strictly greater than the random value. Precompute prefix sums. Each call: `r = random.random() * total`; binary search for first prefix sum > r → that index. `bisect_left` on prefix sums after multiplying random by total; or `bisect_right` on the raw prefix sum array after scaling.
 
-
 > [!note]- Python Solution
 > ```python
 > import random
@@ -1454,7 +1350,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Can't store the entire stream. Reservoir: keep a reservoir of k items. For item i (1-indexed): with probability `k/i`, replace a random reservoir element. Mathematical induction shows this maintains uniform distribution at every step. Fill reservoir with first k items. For each subsequent item i: pick `j = random(0, i)`. If `j < k`, replace `reservoir[j]` with `stream[i]`. Prove invariant: after seeing i items, each item has probability k/i of being in reservoir. Inductive step: item i+1 chosen with prob k/(i+1); each existing item survives with prob 1 - (k/(i+1)) × (1/k) = i/(i+1); combined probability for old items: k/i × i/(i+1) = k/(i+1). ✓
-
 
 > [!note]- Python Solution
 > ```python
@@ -1533,7 +1428,6 @@ difficulty: mixed
 > [!info] Approach
 > A bulb ends up on only if it is toggled an odd number of times. A bulb at position `k` is toggled once for every divisor of `k`. Count numbers with an odd number of divisors. Only perfect squares have an odd divisor count because one divisor pairs with each complementary divisor, except the square root. Return the integer square root of `n`.
 
-
 > [!note]- Python Solution
 > ```python
 > import math
@@ -1585,7 +1479,6 @@ difficulty: mixed
 > [!info] Approach
 > This is Bézout's identity. You can measure any amount that is a multiple of `gcd(x, y)`, up to `x + y`. So the condition is: `z <= x + y` AND `z % gcd(x, y) == 0`. Compute `g = gcd(x, y)`. Return `z <= x + y and z % g == 0`. `math.gcd(x, y)` — Python standard library.
 
-
 > [!note]- Python Solution
 > ```python
 > import math
@@ -1607,14 +1500,13 @@ difficulty: mixed
 
 ---
 
-### Matrix Exponentiation — Fibonacci in O(log n)
+### Matrix Exponentiation — Fibonacci in O(log n) `⭐ Google`
 
 > [!example] Problem
 > Compute the n-th Fibonacci number in O(log n) time using matrix exponentiation.
 
 > [!info] Approach
 > Fibonacci satisfies `[F(n+1), F(n)] = [[1,1],[1,0]]^n * [F(1), F(0)]`. Matrix exponentiation computes `M^n` in O(log n) matrix multiplications. Each multiplication is O(1) for 2×2 matrices. Define `mat_pow(M, n)` using repeated squaring: `M^n = (M^(n//2))^2` if n even, else `M * M^(n-1)`. Base matrix `M = [[1,1],[1,0]]`. Multiply using 2×2 matrix multiply. Return `result[0][1]` which is `F(n)`.
-
 
 > [!note]- Python Solution
 > ```python

@@ -42,6 +42,12 @@ DECISION
 - **Why it works**: Each element enters the window once and leaves once → O(n) pointer movements total regardless of window size.
 - **Where it breaks**: Non-contiguous subsets, or constraints that are not monotone (adding more elements doesn't consistently worsen/improve) — the shrink step becomes ambiguous.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 # Sliding Window
@@ -168,7 +174,7 @@ def variable_window(s, condition_fn):
     return best
 ```
 
-**Longest Substring Without Repeating Characters:**
+**Longest Substring Without Repeating Characters: `🔥 Google`**
 ```python
 def length_of_longest_substring(s):
     seen = {}
@@ -204,7 +210,7 @@ def longest_k_distinct(s, k):
     return best
 ```
 
-**Minimum Window Substring:**
+**Minimum Window Substring: `🔥 Google`**
 ```python
 from collections import Counter
 
@@ -341,12 +347,12 @@ def max_sliding_window(nums, k):
 | Question | Variant | Click moment | Core logic | Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
 | **Longest Substring Without Repeat** | Variable | Jump `left` past last index of char | `while s[right] in seen: left = max(left, seen[c]+1)` | Only jump if char is **inside** window. |
-| **Minimum Window Substring** | Variable + freq | Expand until valid; shrink while valid | Track `have` vs `need` per character | Shrink only when window still valid; record on valid shrink. |
+| **Minimum Window Substring `🔥 Google`** | Variable + freq | Expand until valid; shrink while valid | Track `have` vs `need` per character | Shrink only when window still valid; record on valid shrink. |
 | **Longest Repeating Char Replacement** | Variable | Window valid if `len - max_freq <= k` | Track max frequency in window | Answer uses max freq seen — OK if max_freq drops on shrink. |
 | **Subarray Sum ≥ Target** | Variable | Shrink while sum ≥ target | Greedy shrink minimizes length | Return 0 or -1 if no window; all-positive enables this variant. |
-| **Sliding Window Maximum** | Monotonic deque | Front = max; pop expired indices | Each index in/out deque once | Store **indices** in deque, not values. |
-| **Find All Anagrams** | Fixed | Window size = len(p) | Match frequency or match-count | Fixed window — slide by one char at a time. |
-| **Permutation in String** | Fixed | Same as anagram | `have == need` when all chars satisfied | Clarify if permutation must be contiguous (yes). |
+| **Sliding Window Maximum `🔥 Google`** | Monotonic deque | Front = max; pop expired indices | Each index in/out deque once | Store **indices** in deque, not values. |
+| **Find All Anagrams `⭐ Google`** | Fixed | Window size = len(p) | Match frequency or match-count | Fixed window — slide by one char at a time. |
+| **Permutation in String `⭐ Google`** | Fixed | Same as anagram | `have == need` when all chars satisfied | Clarify if permutation must be contiguous (yes). |
 | **Subarrays with K Distinct** | At-most trick | `exactly(K) = atMost(K) - atMost(K-1)` | Two passes with helper | "Exactly K" is not monotonic — never use one sliding window for exactly. |
 
 Walkthroughs: [problem-deep-dives.md](../problem-deep-dives.md). String windows: [string.md](../01-data-structures/string.md).
@@ -365,10 +371,10 @@ Walkthroughs: [problem-deep-dives.md](../problem-deep-dives.md). String windows:
 
 ## See also
 
-- [two-pointers.md](./two-pointers.md) — opposite-end scans; often combined with windows on strings
+- [two-pointers.md](./two-pointers.md) `🔥 Google` — opposite-end scans; often combined with windows on strings
 - [string.md](./string.md) — KMP, Rabin-Karp (pattern matching, not window)
-- [01-data-structures/string.md](../01-data-structures/string.md) — anagram / window canonical problems
-- [01-data-structures/array.md](../01-data-structures/array.md) — prefix sum when window fails
+- [01-data-structures/string.md](../01-data-structures/string.md) `⭐ Google` — anagram / window canonical problems
+- [01-data-structures/array.md](../01-data-structures/array.md) `⭐ Google` — prefix sum when window fails
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — sliding window triggers
 
 ---

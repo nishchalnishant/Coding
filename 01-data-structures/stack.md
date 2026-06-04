@@ -81,6 +81,12 @@ WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 
 LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next greater/smaller" in O(N), expression parsing, and the deque extension for sliding window problems.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Theory & Mental Models
@@ -134,7 +140,7 @@ LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next 
 ### Monotonic Stack — Next Greater Element
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Next greater** element to the right" — OR — "**nearest smaller** to the left" — OR — "**daily temperatures**, span, or stock price" problems. Any problem asking "for each element, find the first X in one direction" maps to a monotonic stack. Brute force is O(N²); monotonic stack is O(N) — each element pushed and popped exactly once.
+> **The Click Moment**: "**Next greater `⭐ Google`** element to the right" — OR — "**nearest smaller** to the left" — OR — "**daily temperatures `🔥 Google`**, span, or stock price" problems. Any problem asking "for each element, find the first X in one direction" maps to a monotonic stack. Brute force is O(N²); monotonic stack is O(N) — each element pushed and popped exactly once.
 
 - **Decreasing stack** (top = smallest): when a larger element arrives, all smaller stack elements have found their Next Greater → pop and record.
 - **Increasing stack** (top = largest): when a smaller element arrives, pop and record Next Smaller.
@@ -168,13 +174,13 @@ def daily_temperatures(temps: list[int]) -> list[int]:
 > Always store **indices** on the stack, not values. You need the index to compute distances (`i - j`) or to fill the result array. Storing values loses position information.
 
 #### Common Variants & Twists
-1. **Next Greater Element II (Circular Array Twist)**:
+1. **Next Greater Element II (Circular Array Twist) `⭐ Google`**:
    - **What (The Problem & Goal):** Find the next greater element, but the array is circular (the element after the last element is the first element).
    - **How (Intuition & Mental Model):** To simulate a circular array, iterate from `0` to `2*N - 1` and use the modulo operator `i % N` to wrap around. Use the exact same monotonic stack logic, but be careful not to double-push elements on the second pass (only query the stack).
-2. **Daily Temperatures**:
+2. **Daily Temperatures `🔥 Google`**:
    - **What (The Problem & Goal):** Given an array of temperatures, return an array answering "how many days do you have to wait until a warmer temperature?"
    - **How (Intuition & Mental Model):** This is the classic Next Greater Element problem in disguise. Instead of storing the *value* of the next greater element, you store the *distance* (difference in indices) by computing `current_index - stack.pop()`.
-3. **Online Stock Span**:
+3. **Online Stock Span `⭐ Google`**:
    - **What (The Problem & Goal):** You receive elements one by one (online). For each element, find how many consecutive previous days had a price `<=` today's price.
    - **How (Intuition & Mental Model):** Keep a monotonic decreasing stack of tuples: `(price, span)`. When a new price arrives, pop all prices `<= current`. As you pop, accumulate their spans. The current element's span becomes `1 + sum_of_popped_spans`.
 
@@ -303,10 +309,10 @@ def calculate(s: str) -> int:
 ```
 
 #### Common Variants & Twists
-1. **Basic Calculator II (Precedence Twist)**:
+1. **Basic Calculator II (Precedence Twist) `🔥 Google`**:
    - **What (The Problem & Goal):** The expression has `*` and `/` (higher precedence) alongside `+` and `-`, but no parentheses.
    - **How (Intuition & Mental Model):** Maintain a stack of numbers that will simply be summed up at the very end. Keep track of the *previous operator* seen. If it was `+` or `-`, push the number (or its negative). If it was `*` or `/`, immediately pop the top of the stack, perform the multiplication/division with the current number, and push the result back.
-2. **Decode String (Nested String Twist)**:
+2. **Decode String (Nested String Twist) `⭐ Google`**:
    - **What (The Problem & Goal):** Decode a string like `3[a2[c]]` into `accaccacc`.
    - **How (Intuition & Mental Model):** The stack stores "context" just like parentheses in math. When seeing `[`, push a tuple `(string_built_so_far, repeat_count)` onto the stack and reset your current trackers. When seeing `]`, pop the context, multiply your current inner string by `repeat_count`, and append it to `string_built_so_far`.
 
@@ -373,24 +379,24 @@ For very large streams that don't fit in memory: partition the stream into chunk
 ## 4. Common Interview Problems
 
 ### Easy
-- **Valid Parentheses** — Push opens; pop on close; check match.
-- **Min Stack** — Parallel min-tracking stack.
+- **Valid Parentheses `🔥 Google`** — Push opens; pop on close; check match.
+- **Min Stack `🔥 Google`** — Parallel min-tracking stack.
 - **Implement Queue using Stacks** — Two stacks: push to in-stack; pop lazy-moves to out-stack.
 
 ### Medium
-- **Daily Temperatures** — Decreasing monotonic stack of indices.
-- **Next Greater Element II** (circular) — Process `2N` indices with `% N`.
+- **Daily Temperatures `🔥 Google`** — Decreasing monotonic stack of indices.
+- **Next Greater Element II `⭐ Google`** (circular) — Process `2N` indices with `% N`.
 - **Evaluate RPN** — Operand stack; on operator, pop two and push result.
-- **Decode String** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
-- **Exclusive Time of Functions** — Stack of `(id, start)`; pause inner on nested start.
+- **Decode String `⭐ Google`** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
+- **Exclusive Time of Functions `⭐ Google`** — Stack of `(id, start)`; pause inner on nested start.
 - **Simplify Path** — Split by `/`; stack with `..` logic.
 
 ### Hard
-- **Largest Rectangle in Histogram** — Monotonic increasing stack; sentinel `0`.
-- **Maximal Rectangle** — Histogram per row + above.
-- **Trapping Rain Water** — Monotonic stack or two-pointer; stack explains "why" better.
-- **Basic Calculator I/II/III** — Two-stack or single stack with sign tracking.
-- **Maximum Frequency Stack** — FreqStack: push increments freq; pop from highest-freq bucket.
+- **Largest Rectangle in Histogram `🔥 Google`** — Monotonic increasing stack; sentinel `0`.
+- **Maximal Rectangle `⭐ Google`** — Histogram per row + above.
+- **Trapping Rain Water `🔥 Google`** — Monotonic stack or two-pointer; stack explains "why" better.
+- **Basic Calculator I/II/III `🔥 Google`** — Two-stack or single stack with sign tracking.
+- **Maximum Frequency Stack `⭐ Google`** — FreqStack: push increments freq; pop from highest-freq bucket.
 
 ---
 
@@ -398,25 +404,25 @@ For very large streams that don't fit in memory: partition the stream into chunk
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Daily Temperatures](../02-algorithms/problem-deep-dives.md#daily-temperatures)** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
-| **Next Greater Element II** | "Next greater in circular array" | Iterate `0..2N-1` with `% N`; same monotonic stack | Never push index `i % N` when `i >= N` — only query, don't double-add. |
-| **[Largest Rectangle](../02-algorithms/problem-deep-dives.md#largest-rectangle-in-histogram)** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
-| **Maximal Rectangle** | "Max rectangle of 1s in matrix" | Build histogram row by row; run LRH each row | Heights reset to 0 on encountering `'0'`; LRH applied to each row. |
-| **[Valid Parentheses](../02-algorithms/problem-deep-dives.md#valid-parentheses)** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
-| **Min Stack** | "O(1) getMin with push/pop" | Parallel min-stack synced with main | Popping from both stacks atomically; duplicates in min-stack are fine. |
-| **[Decode String](../02-algorithms/problem-deep-dives.md#decode-string)** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
-| **Exclusive Time of Functions** | "Non-overlapping function runtimes" | Stack of `(id, start)`; on end: `time += end - start + 1` | Nested calls: pause outer by subtracting inner's duration from outer's start time. |
-| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water)** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
-| **Maximum Frequency Stack** | "Pop most frequent; ties: most recent" | Map `freq→[elements]`; map `val→freq`; track `max_freq` | On pop, decrement `max_freq` if top bucket becomes empty. |
+| **[Daily Temperatures](../02-algorithms/problem-deep-dives.md#daily-temperatures) `🔥 Google`** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
+| **Next Greater Element II `⭐ Google`** | "Next greater in circular array" | Iterate `0..2N-1` with `% N`; same monotonic stack | Never push index `i % N` when `i >= N` — only query, don't double-add. |
+| **[Largest Rectangle](../02-algorithms/problem-deep-dives.md#largest-rectangle-in-histogram) `🔥 Google`** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
+| **Maximal Rectangle `⭐ Google`** | "Max rectangle of 1s in matrix" | Build histogram row by row; run LRH each row | Heights reset to 0 on encountering `'0'`; LRH applied to each row. |
+| **[Valid Parentheses](../02-algorithms/problem-deep-dives.md#valid-parentheses) `🔥 Google`** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
+| **Min Stack `🔥 Google`** | "O(1) getMin with push/pop" | Parallel min-stack synced with main | Popping from both stacks atomically; duplicates in min-stack are fine. |
+| **[Decode String](../02-algorithms/problem-deep-dives.md#decode-string) `⭐ Google`** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
+| **Exclusive Time of Functions `⭐ Google`** | "Non-overlapping function runtimes" | Stack of `(id, start)`; on end: `time += end - start + 1` | Nested calls: pause outer by subtracting inner's duration from outer's start time. |
+| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) `🔥 Google`** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
+| **Maximum Frequency Stack `⭐ Google`** | "Pop most frequent; ties: most recent" | Map `freq→[elements]`; map `val→freq`; track `max_freq` | On pop, decrement `max_freq` if top bucket becomes empty. |
 | **Balanced Parentheses** [E] | "Check if brackets are balanced" | Push open brackets; on close check top matches; stack empty at end | Map `')': '('` for clean matching; early return if stack empty on close. |
 | **Baseball Game** [E] | "Simulate score with ops `+`, `D`, `C`, int" | Stack; `+` sums top two; `D` doubles top; `C` pops top | Process in order; `+` looks at top two without popping them before pushing sum. |
 | **Remove All Adjacent Duplicates** [E] | "Repeatedly remove adjacent equal pairs" | Stack; push if top ≠ curr; pop if top == curr | Result is remaining stack joined — equivalent to cancellation like bracket matching. |
-| **Asteroid Collision** [M] | "Positive (right) and negative (left) collide; larger survives" | Stack; negative asteroid collides with positive top | Same size → both explode. Negative vs negative → no collision (both going left). |
-| **Online Stock Span** [M] | "Days where price ≤ today's for consecutive run" | Monotonic decreasing stack of `(price, span)`; merge spans | On pop, accumulate `span += popped_span` — key: spans propagate multiplicatively. |
-| **Remove K Digits** [M] | "Remove K digits to form smallest number" | Monotonic increasing stack; pop when top > curr and k > 0 | Strip leading zeros from result. If k > 0 after loop, trim last k from stack (they're already sorted). |
-| **Sum of Subarray Minimums** [M] | "Sum of min of every contiguous subarray" | Monotonic stack; compute left and right boundaries for each element as minimum | `answer += stack_val * left_count * right_count`; left boundary uses strict `<`, right uses `<=` to avoid double-counting equal values. |
-| **Largest Rectangle in Histogram** [H] | "Max area rectangle in bar chart" | Monotonic increasing stack; for each bar compute max width it can span | Width = `right_boundary - left_boundary - 1`; append sentinel `0` to flush remaining stack at end. |
-| **Basic Calculator II** [M] | "Evaluate expression with `+`, `-`, `*`, `/`" | Stack; flush on `+`/`-`; compute `*`/`/` with last operand | Unary minus: treat as `0 - ...`. Integer division truncates toward zero in Python use `int(a/b)` not `a//b` for negatives. |
+| **Asteroid Collision `⭐ Google`** [M] | "Positive (right) and negative (left) collide; larger survives" | Stack; negative asteroid collides with positive top | Same size → both explode. Negative vs negative → no collision (both going left). |
+| **Online Stock Span `⭐ Google`** [M] | "Days where price ≤ today's for consecutive run" | Monotonic decreasing stack of `(price, span)`; merge spans | On pop, accumulate `span += popped_span` — key: spans propagate multiplicatively. |
+| **Remove K Digits `⭐ Google`** [M] | "Remove K digits to form smallest number" | Monotonic increasing stack; pop when top > curr and k > 0 | Strip leading zeros from result. If k > 0 after loop, trim last k from stack (they're already sorted). |
+| **Sum of Subarray Minimums `⭐ Google`** [M] | "Sum of min of every contiguous subarray" | Monotonic stack; compute left and right boundaries for each element as minimum | `answer += stack_val * left_count * right_count`; left boundary uses strict `<`, right uses `<=` to avoid double-counting equal values. |
+| **Largest Rectangle in Histogram `🔥 Google`** [H] | "Max area rectangle in bar chart" | Monotonic increasing stack; for each bar compute max width it can span | Width = `right_boundary - left_boundary - 1`; append sentinel `0` to flush remaining stack at end. |
+| **Basic Calculator II `🔥 Google`** [M] | "Evaluate expression with `+`, `-`, `*`, `/`" | Stack; flush on `+`/`-`; compute `*`/`/` with last operand | Unary minus: treat as `0 - ...`. Integer division truncates toward zero in Python use `int(a/b)` not `a//b` for negatives. |
 | **Validate Stack Sequences** [M] | "Can `pushed` sequence produce `popped`?" | Simulate: push elements; pop greedily when top matches `popped[j]` | If stack is empty at end, sequences are valid. Greedy pop is always safe — no benefit to delaying. |
 
 ---
@@ -434,7 +440,7 @@ For very large streams that don't fit in memory: partition the stream into chunk
 ## See also
 
 - [Queue](queue.md) — monotonic deque for sliding window max/min
-- [Graph](../02-algorithms/graph.md) — iterative DFS uses an explicit stack
+- [Graph](../02-algorithms/graph.md) `⭐ Google` — iterative DFS uses an explicit stack
 - [Greedy](../02-algorithms/greedy.md) — some monotonic stack problems have greedy structure
 - [Patterns Master](../03-patterns/patterns-master.md) — monotonic stack pattern triggers
 

@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Sliding Window — Problem Set
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Fixed-Size Window
@@ -15,7 +21,7 @@ difficulty: mixed
 
 ---
 
-### Find All Anagrams in a String (LC 438)
+### Find All Anagrams in a String (LC 438) `⭐ Google`
 
 > [!example] Problem
 > Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
@@ -45,7 +51,6 @@ difficulty: mixed
 
 > [!info] Approach
 > An anagram is a permutation — same character frequencies, different order. Fixed window of size `len(p)`. Maintain a frequency diff between window and `need`. Track how many characters are "satisfied" with a `matches` counter — avoids O(26) dict comparison each step. On adding `s[right]`: if freq reaches exactly `need[c]` → `matches += 1`. On removing `s[left]`: if freq drops below `need[c]` → `matches -= 1`. When `matches == len(need)` → anagram found.
-
 
 > [!note]- Python Solution
 > ```python
@@ -114,7 +119,6 @@ difficulty: mixed
 > [!info] Approach
 > Maximizing average is equivalent to maximizing sum (k is fixed). Fixed-size sliding window on sum. Build initial window sum for first `k` elements. Slide: add `nums[i]`, remove `nums[i-k]`, update max. Trivial incremental sum — no auxiliary data structure needed.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_max_average(nums, k):
@@ -134,7 +138,7 @@ difficulty: mixed
 
 ---
 
-### Permutation in String (LC 567)
+### Permutation in String (LC 567) `⭐ Google`
 
 > [!example] Problem
 > Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
@@ -159,7 +163,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A permutation has the same character frequencies. Fixed window of size `len(s1)` with frequency matching. Same match-counter technique as Find All Anagrams — identical logic, just return True/False. When `matches == required` at any valid window position → return True.
-
 
 > [!note]- Python Solution
 > ```python
@@ -209,7 +212,7 @@ difficulty: mixed
 
 ---
 
-### Longest Substring Without Repeating Characters (LC 3)
+### Longest Substring Without Repeating Characters (LC 3) `🔥 Google`
 
 > [!example] Problem
 > Given a string s, find the length of the longest substring without duplicate characters.
@@ -243,7 +246,6 @@ difficulty: mixed
 > [!info] Approach
 > At most 0 duplicate characters per window. Expanding right adds a character; if it duplicates, shrink left past the previous occurrence. Track last-seen index of each character. On duplicate: `left = last_seen[c] + 1` (jump, not step-by-step). Only jump `left` if `last_seen[c] >= left` (character might be outside current window — stale).
 
-
 > [!note]- Python Solution
 > ```python
 > def length_of_longest_substring(s):
@@ -266,7 +268,7 @@ difficulty: mixed
 
 ---
 
-### Longest Repeating Character Replacement (LC 424)
+### Longest Repeating Character Replacement (LC 424) `🔥 Google`
 
 > [!example] Problem
 > You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
@@ -295,7 +297,6 @@ difficulty: mixed
 
 > [!info] Approach
 > In a window of length `L`, we need `L - max_count <= k` (replace all non-max-frequency characters). Expand while valid; shrink otherwise. Track `max_count` — the frequency of the most common character in the window. When `(window_size - max_count) > k` → shrink. Key insight: `max_count` never needs to decrease (we only care about the *best* window seen so far). When we shrink, `max_count` stays the same, and the window stays the same size or shrinks — we're looking for a *longer* window.
-
 
 > [!note]- Python Solution
 > ```python
@@ -364,7 +365,6 @@ difficulty: mixed
 > [!info] Approach
 > Longest subarray with at most 2 distinct values. Direct application of at-most-K window. Frequency map. While `len(freq) > 2` → shrink left: decrement `freq[s[left]]`; delete key if 0. Window length `right - left + 1` after shrinking is the candidate answer.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -432,7 +432,6 @@ difficulty: mixed
 > [!info] Approach
 > General form of the "at most K distinct" pattern. Shrink window when distinct count exceeds k. Frequency map. While `len(freq) > k` → shrink left. Window length is candidate answer. Remove key from freq map when its count reaches 0 to keep `len(freq)` accurate.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -497,7 +496,6 @@ difficulty: mixed
 > [!info] Approach
 > The "exactly k" constraint is not monotone for a window — adding elements can go over or under. Reframe as difference of two at-most problems. `at_most(k)` counts subarrays with ≤ k distinct values. Use a window where every valid `[left, right]` contributes `right - left + 1` subarrays (all subarrays ending at `right`). `count(exactly k) = at_most(k) - at_most(k-1)`.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -561,7 +559,6 @@ difficulty: mixed
 > [!info] Approach
 > Remap: odd → 1, even → 0. Problem becomes: count subarrays with sum exactly k. Same `at_most(k) - at_most(k-1)` trick applies. `at_most(k)` counts subarrays with at most k odd numbers. Sum of `right - left + 1` across valid windows. Window is valid when count of odds ≤ k. Shrink when count > k.
 
-
 > [!note]- Python Solution
 > ```python
 > def number_of_subarrays(nums, k):
@@ -595,7 +592,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Size Subarray Sum (LC 209)
+### Minimum Size Subarray Sum (LC 209) `⭐ Google`
 
 > [!example] Problem
 > Given an array of positive integers nums and a positive integer target, return the minimal length of a subarray whose sum is greater than or equal to target. If there is no such subarray, return 0 instead.
@@ -627,7 +624,6 @@ difficulty: mixed
 > [!info] Approach
 > Positive integers mean adding elements always increases sum, removing always decreases. Window constraint is monotone → shrink while valid. Expand right; once sum ≥ target, shrink left while still valid. Record minimum length at each valid state. Inner while loop shrinks and records — the answer is updated at the tightest valid window for each right.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_subarray_len(target, nums):
@@ -653,7 +649,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Window Substring (LC 76)
+### Minimum Window Substring (LC 76) `🔥 Google`
 
 > [!example] Problem
 > Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
@@ -689,7 +685,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Need to cover all characters of `t`. Use a `missing` counter — total characters still needed. Once 0 → window is valid → shrink. Expand right: if `need[c] > 0` before decrement, `missing -= 1`. Shrink while `missing == 0`: advance left past non-required characters (those with `need[s[left]] < 0`), record window, then remove `s[left]` from window. `need` can go negative (excess characters) — only decrement `missing` when `need[c]` was positive (character was still required).
-
 
 > [!note]- Python Solution
 > ```python
@@ -739,7 +734,7 @@ difficulty: mixed
 
 ---
 
-### Sliding Window Maximum (LC 239)
+### Sliding Window Maximum (LC 239) `🔥 Google`
 
 > [!example] Problem
 > You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
@@ -773,7 +768,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Recomputing max per window is O(nk). A deque maintaining a decreasing sequence of indices gives O(1) max lookup. Deque stores indices in decreasing order of their values. Front = index of max for current window. Before adding `i`: (1) pop front if it's outside window `[i-k+1, i]`; (2) pop back while `nums[deque[-1]] <= nums[i]` (smaller elements can never be max while `i` is in window). Append `i`. Record `nums[deque[0]]` once `i >= k-1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -812,7 +806,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Symmetric to sliding window maximum. Monotonic increasing deque where front = current min. Deque stores indices in increasing order of their values. Pop back while `nums[deque[-1]] >= val` (larger elements evicted — they can never be min while `val` is in window). Only change from max version: reverse comparison `nums[dq[-1]] > val` (use `>=` to maintain strictly increasing, or `>` for non-strictly).
-
 
 > [!note]- Python Solution
 > ```python
@@ -877,7 +870,6 @@ difficulty: mixed
 > [!info] Approach
 > Fixed window of size `k`; average ≥ threshold ↔ sum ≥ k * threshold. Avoids float division per window. Maintain a sliding sum over every window of length `k`. Count windows where sum ≥ `k * threshold`. Seed with sum of first `k` elements. Slide: add `arr[i]`, subtract `arr[i-k]`, check threshold.
 
-
 > [!note]- Python Solution
 > ```python
 > def num_of_subarrays(arr, k, threshold):
@@ -935,7 +927,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Fixed window of size `k`; track distinct count in the window alongside the running sum. Maintain a frequency map and window sum. A window qualifies when `len(freq) >= m`. Slide in O(1): add right element to freq/sum, remove left element from freq/sum (delete key at 0). Check qualification after each full window.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1015,7 +1006,6 @@ difficulty: mixed
 > [!info] Approach
 > Classic FIFO fixed window over a stream. Use a circular buffer (deque) of size `k`. Maintain a running sum. When deque reaches size `k`, subtract the oldest element before appending new one. `deque.popleft()` evicts oldest; `deque.append(val)` adds newest. No need to resum — O(1) update.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1078,7 +1068,6 @@ difficulty: mixed
 > [!info] Approach
 > Window contains at most `k` zeros. Expanding right adds ones (free) or zeros (costs 1 from budget). When zeros in window exceed `k`, shrink left. Track `zeros` count in the window. While `zeros > k` → if `nums[left] == 0`, decrement zeros; advance left. Answer is `right - left + 1` after each valid step — window never shrinks below the best size seen (LC 424 trick not needed here since we do want exact max).
 
-
 > [!note]- Python Solution
 > ```python
 > def longest_ones(nums, k):
@@ -1136,7 +1125,6 @@ difficulty: mixed
 > [!info] Approach
 > Deleting one element = flipping one 0 to nothing, or dropping one 1. Equivalent to: longest window with at most one 0, minus 1 (for the deleted element). Slide window keeping `zeros <= 1`. The answer is `window_size - 1` at maximum valid window. Exact same code as LC 1004 with `k=1`, subtract 1 from result. Edge: if whole array is ones, deleting one element gives `n-1`.
 
-
 > [!note]- Python Solution
 > ```python
 > def longest_subarray(nums):
@@ -1157,69 +1145,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > LC 1004 with k=1 is identical before the -1 adjustment. If the array has no zeros, the answer is `len(nums) - 1`.
-
----
-
-### Minimum Operations to Reduce X to Zero (LC 1658)
-
-> [!example] Problem
-> You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or the rightmost element from the array nums and subtract its value from x. Note that this modifies the array for future operations.
-> Return the minimum number of operations to reduce x to exactly 0 if it is possible, otherwise, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,4,2,3], x = 5
-> Output: 2
-> Explanation: The optimal solution is to remove the last two elements to reduce x to zero.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5,6,7,8,9], x = 4
-> Output: -1
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,2,20,1,1,3], x = 10
-> Output: 5
-> Explanation: The optimal solution is to remove the last three elements and the first two elements (5 operations in total) to reduce x to zero.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - 1 <= nums[i] <= 10^4
-> - 1 <= x <= 10^9
-
-> [!info] Approach
-> Removing from both ends with minimum total elements ↔ keeping a maximum-length middle subarray with sum `total - x`. Reframe as max-window problem. Find the longest subarray with sum exactly `total - x`. Minimum operations = `n - len(longest subarray)`. Use a variable window (shrink when sum exceeds target, track max length when sum == target). Requires all non-negative integers for monotone shrink property — guaranteed by constraints.
-
-
-> [!note]- Python Solution
-> ```python
-> def min_operations(nums, x):
->     target = sum(nums) - x
->     if target < 0:
->         return -1
->     if target == 0:
->         return len(nums)
->     left = window_sum = 0
->     best = -1
->     for right in range(len(nums)):
->         window_sum += nums[right]
->         while window_sum > target and left <= right:
->             window_sum -= nums[left]
->             left += 1
->         if window_sum == target:
->             best = max(best, right - left + 1)
->     return len(nums) - best if best != -1 else -1
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Prefix sum + hashmap O(n) — works but window is cleaner. Direct two-pointer from both ends without reframe is O(n²) in naive form.
 
 ---
 
@@ -1253,7 +1178,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Exactly-k trick: binary values make at_most well-defined. `exactly(goal) = at_most(goal) - at_most(goal-1)`. `at_most(k)` counts subarrays with sum ≤ k. Each right position contributes `right - left + 1` valid subarrays when window is valid. Shrink while sum > k. Handle `k < 0` edge case (return 0) to avoid infinite loop when goal=0.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1292,7 +1216,6 @@ difficulty: mixed
 
 > [!info] Approach
 > This IS LC 76 — the standard minimum window already handles duplicates via `missing` counter. `need[c]` tracks remaining required copies. `missing` = total characters still needed. Shrink while `missing == 0`. On add: decrement `need[c]`; if it was positive, decrement `missing`. On remove: increment `need[s[left]]`; if it becomes positive, increment `missing`. This correctly handles excess copies.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1340,7 +1263,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Minimum-length window with an exact distinct count. Expand until we have ≥ k distinct, then shrink while we still have ≥ k distinct, recording the minimum. Frequency map tracks distinct count. Once `len(freq) >= k` → window is valid → shrink left while still valid. Shrink: remove `nums[left]` from freq (delete at 0); stop when `len(freq) < k`. Record window size before overshoot.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1416,7 +1338,6 @@ difficulty: mixed
 > [!info] Approach
 > `max(window) - min(window) <= limit`. Need O(1) running max and min under variable window. Two deques: one decreasing (max), one increasing (min). Maintain `max_dq` (decreasing) and `min_dq` (increasing). Both store indices. When `max_dq[0] - min_dq[0] > limit` → shrink left, evicting stale front indices from both deques. Shrink by advancing `left`; pop deque fronts when they equal `left` (no longer in window). Record `right - left + 1` after each valid state.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import deque
@@ -1454,7 +1375,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game VI (LC 1696)
+### Jump Game VI (LC 1696) `🔥 Google`
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -1488,7 +1409,6 @@ difficulty: mixed
 
 > [!info] Approach
 > DP recurrence: `dp[i] = nums[i] + max(dp[i-k], ..., dp[i-1])`. Naive O(nk). Optimize with a decreasing deque of the last `k` dp values — front = max in range. `dp[i] = nums[i] + dp[deque_front]`. Maintain deque in decreasing dp-value order. Evict front when it's outside the `k`-window. Before computing `dp[i]`: evict stale front (`dq[0] < i - k`). After computing `dp[i]`: evict back while `dp[dq[-1]] <= dp[i]`; append `i`. Space-optimise by storing dp in original array.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1554,7 +1474,6 @@ difficulty: mixed
 > [!info] Approach
 > All elements are positive → product is monotonically non-decreasing as window expands. Shrink when product ≥ k. Maintain running product. Each valid window `[left, right]` contributes `right - left + 1` subarrays ending at `right` (all subarrays `[left..right], [left+1..right], ..., [right..right]` are valid). Shrink by dividing out `nums[left]` and advancing left. Handle edge `k <= 1` upfront (product of positives is always ≥ 1).
 
-
 > [!note]- Python Solution
 > ```python
 > def num_subarray_product_less_than_k(nums, k):
@@ -1587,7 +1506,6 @@ difficulty: mixed
 > [!info] Approach
 > Non-negative elements ensure monotone sum — expanding can only increase sum, so shrink-when-violated is valid. Expand right; when sum > k, shrink left. Track max window length after each step. The while-loop shrink guarantees the window is valid at every right before recording length.
 
-
 > [!note]- Python Solution
 > ```python
 > def longest_subarray_sum_leq_k(nums, k):
@@ -1606,142 +1524,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > With negative numbers: monotone queue approach or Kadane variant needed — shrink-when-violated breaks without non-negativity guarantee.
-
----
-
-### Minimum Number of Flips to Make Binary String Alternating (LC 1888)
-
-> [!example] Problem
-> You are given a binary string s. You are allowed to perform two types of operations on the string in any sequence:
-> Return the minimum number of type-2 operations you need to perform such that s becomes alternating.
-> The string is called alternating if no two adjacent characters are equal.
-> 
-> **Example 1:**
-> ```
-> Input: s = "111000"
-> Output: 2
-> Explanation: Use the first operation two times to make s = "100011".
-> Then, use the second operation on the third and sixth elements to make s = "101010".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "010"
-> Output: 0
-> Explanation: The string is already alternating.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "1110"
-> Output: 1
-> Explanation: Use the second operation on the second element to make s = "1010".
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^5
-> - s[i] is either '0' or '1'.
-
-> [!info] Approach
-> Rotating is equivalent to considering the string doubled (`s + s`) with a fixed window of size `n`. For each window, count mismatches with both possible alternating patterns ("0101..." and "1010..."). Answer is `min(mismatches)` over all windows. Use fixed sliding window of size `n` on `s + s`. Track mismatches with pattern-0 (`"01"` repeating) and pattern-1 (`"10"` repeating). Slide in O(1). On slide out: if removed char matched pattern-0 at that position, decrement mismatch-0 count. On slide in: if new char mismatches pattern at new position, increment. Track min of both mismatch counts.
-
-
-> [!note]- Python Solution
-> ```python
-> def min_flips(s):
->     n = len(s)
->     t = s + s
->     # mismatch counts with "010101..." and "101010..."
->     diff0 = diff1 = 0
->     for i in range(n):
->         expected0 = str(i % 2)          # pattern: 010101...
->         expected1 = str((i + 1) % 2)    # pattern: 101010...
->         if t[i] != expected0:
->             diff0 += 1
->         if t[i] != expected1:
->             diff1 += 1
-> 
->     best = min(diff0, diff1)
->     for i in range(n, 2 * n):
->         # Add right element
->         expected0 = str(i % 2)
->         expected1 = str((i + 1) % 2)
->         if t[i] != expected0:
->             diff0 += 1
->         if t[i] != expected1:
->             diff1 += 1
->         # Remove left element (index i - n)
->         left = i - n
->         if t[left] != str(left % 2):
->             diff0 -= 1
->         if t[left] != str((left + 1) % 2):
->             diff1 -= 1
->         best = min(best, diff0, diff1)
-> 
->     return best
-> ```
-
-> [!success] Complexity
-> O(n) time, O(n) space (doubled string).
-
-> [!tip] Alternatives
-> Enumerate all n rotations naively O(n²) — too slow. Fixed window on doubled string is the canonical O(n) approach.
-
----
-
-### Grumpy Bookstore Owner (LC 1052)
-
-> [!example] Problem
-> There is a bookstore owner that has a store open for n minutes. You are given an integer array customers of length n where customers[i] is the number of the customers that enter the store at the start of the ith minute and all those customers leave after the end of that minute.
-> During certain minutes, the bookstore owner is grumpy. You are given a binary array grumpy where grumpy[i] is 1 if the bookstore owner is grumpy during the ith minute, and is 0 otherwise.
-> When the bookstore owner is grumpy, the customers entering during that minute are not satisfied. Otherwise, they are satisfied.
-> The bookstore owner knows a secret technique to remain not grumpy for minutes consecutive minutes, but this technique can only be used once.
-> Return the maximum number of customers that can be satisfied throughout the day.
-> 
-> **Example 1:**
-> ```
-> Input: customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
-> Output: 16
-> Explanation:
-> The bookstore owner keeps themselves not grumpy for the last 3 minutes.
-> The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: customers = [1], grumpy = [0], minutes = 1
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - n == customers.length == grumpy.length
-> - 1 <= minutes <= n <= 2 * 10^4
-> - 0 <= customers[i] <= 1000
-> - grumpy[i] is either 0 or 1.
-
-> [!info] Approach
-> Base satisfied = customers where `grumpy[i] == 0`. Extra bonus = customers recovered in a window of size `minutes` where `grumpy[i] == 1`. Maximize base + max bonus window. Fixed window of size `minutes` tracking sum of `customers[i]` where `grumpy[i] == 1`. Find the window with maximum such sum. Seed base with all non-grumpy customers. Slide window of size `minutes` summing only grumpy-window customers. Max bonus = best grumpy-window sum.
-
-
-> [!note]- Python Solution
-> ```python
-> def max_satisfied(customers, grumpy, minutes):
->     base = sum(c for c, g in zip(customers, grumpy) if g == 0)
->     # Extra customers we can recover in a window of size `minutes`
->     extra = sum(customers[i] * grumpy[i] for i in range(minutes))
->     best_extra = extra
->     for i in range(minutes, len(customers)):
->         extra += customers[i] * grumpy[i]
->         extra -= customers[i - minutes] * grumpy[i - minutes]
->         best_extra = max(best_extra, extra)
->     return base + best_extra
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Brute force: try each starting position for the window O(n·minutes) — unnecessary; fixed sliding window is O(n).
 
 ---
 
@@ -1815,7 +1597,6 @@ difficulty: mixed
 > [!info] Approach
 > Straightforward fixed window of size `k`. No state needed beyond running sum. Maintain sliding sum of exactly `k` elements. Compare to `lower` and `upper` each step. Seed with first `k` elements. Slide: add right, remove left-k, evaluate.
 
-
 > [!note]- Python Solution
 > ```python
 > def diet_plan_performance(calories, k, lower, upper):
@@ -1885,7 +1666,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Exactly-5-distinct-vowels, all characters must be vowels. Use the at_most trick restricted to vowel-only substrings. `at_most(k)` counts substrings (all vowels) with ≤ k distinct vowels. Filter non-vowels by resetting window. On encountering a consonant, reset `left = right + 1` and clear freq. `exactly(5) = at_most(5) - at_most(4)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1959,7 +1739,6 @@ difficulty: mixed
 > [!info] Approach
 > The window size is fixed, so every move only removes one character and adds one character. That makes the update O(1) per step. Maintain a running vowel count for the current window and slide it across the string. Initialize the first window, then for each step subtract the left character, add the new right character, and update the best count.
 
-
 > [!note]- Python Solution
 > ```python
 > def max_vowels(s, k):
@@ -1983,7 +1762,7 @@ difficulty: mixed
 
 ## Sliding Window — More Problems
 
-### Grumpy Bookstore Owner (LC 1052)
+### Grumpy Bookstore Owner (LC 1052) `⭐ Google`
 
 > [!example] Problem
 > There is a bookstore owner that has a store open for n minutes. You are given an integer array customers of length n where customers[i] is the number of the customers that enter the store at the start of the ith minute and all those customers leave after the end of that minute.
@@ -2015,7 +1794,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Customers at non-grumpy minutes are always satisfied. Customers at grumpy minutes are only satisfied during the technique window. We want to choose the `minutes`-long window that maximises the extra customers gained. Base count = sum of `customers[i]` where `grumpy[i] == 0`. Extra count for a window = sum of `customers[i]` where `grumpy[i] == 1` within the window. Slide a fixed window of size `minutes` to find the maximum extra. Compute base. Slide window: at each step, add `customers[right] * grumpy[right]` and subtract `customers[right - minutes] * grumpy[right - minutes]`. Track max window extra.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2075,7 +1853,6 @@ difficulty: mixed
 
 > [!info] Approach
 > There are only two valid alternating patterns: "0101..." and "1010...". Simulate all cyclic shifts by doubling the string and using a sliding window of length `n`. Double the string (`s + s`). For each window of length `n`, count the differences from both target patterns. Take the minimum differences seen across all windows. Use a sliding window on `s + s`. Maintain the count of mismatches with pattern "010101..." and "101010...". Slide: subtract the outgoing character's mismatch contribution, add the incoming character's. Track the minimum.
-
 
 > [!note]- Python Solution
 > ```python

@@ -6,6 +6,12 @@ difficulty: mixed
 
 # String Algorithms
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## KMP (Knuth-Morris-Pratt)
@@ -20,8 +26,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > Naive search rescans characters already matched; O(nm) is unacceptable for large text. Pre-process the pattern once into an LPS (Longest Proper Prefix which is also Suffix) array that encodes where to restart matching on mismatch. `lps[i]` = length of longest proper prefix of `P[0..i]` that is also a suffix. On mismatch at pattern position `j`, jump to `lps[j-1]`; the text pointer `i` never moves backward. O(n+m) total because every character is "visited" at most twice.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -81,8 +85,6 @@ difficulty: mixed
 > [!info] Approach
 > Standard substring search is O(nm); we need every occurrence, not just the first. KMP search as above, but after each match at `i - j`, reset `j = lps[j-1]` (not 0) to allow overlapping. The line `j = lps[j-1]` after a match is the key — it reuses the overlap, so overlapping occurrences like `"aaa"` in `"aaaa"` are all found.
 
-
-
 > [!note]- Python Solution
 > ```python
 > def find_all_occurrences(text, pattern):
@@ -113,58 +115,6 @@ difficulty: mixed
 
 ---
 
-### Repeated Substring Pattern
-
-> [!example] Problem
-> Given a string s, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
-> 
-> **Example 1:**
-> ```
-> Input: s = "abab"
-> Output: true
-> Explanation: It is the substring "ab" twice.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aba"
-> Output: false
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "abcabcabcabc"
-> Output: true
-> Explanation: It is the substring "abc" four times or the substring "abcabc" twice.
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^4
-> - s consists of lowercase English letters.
-
-> [!info] Approach
-> [!info] Approach
-> Brute-force tries every divisor length — O(n√n). KMP gives O(n). If s has period p (smallest repeating unit), then `n % p == 0` and the LPS value encodes that period: period = `n - lps[n-1]`. Build LPS of the full string s. If `lps[n-1] > 0` and `n % (n - lps[n-1]) == 0`, a valid period exists. Equivalently, check if s appears in `(s+s)[1:-1]`.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def repeated_substring_pattern(s):
->     n = len(s)
->     lps = build_lps(s)
->     period = n - lps[n - 1]
->     return lps[n - 1] > 0 and n % period == 0
-> ```
-
-> [!success] Complexity
-> Time O(n) | Space O(n).
-
-> [!tip] Alternatives
-> `s in (s+s)[1:-1]` — one-liner using string containment; O(n) via Python's internal search (Boyer-Moore-Horspool), but less explicit about why it works.
-
----
-
 ### Add Minimum Characters to Make String a Palindrome
 
 > [!example] Problem
@@ -173,8 +123,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > We need the longest prefix of s that is already a palindrome; characters after that prefix must be reflected at the front. Concatenate `s + '#' + reverse(s)`. The LPS value at the last position gives the length of the longest prefix of s that matches a suffix of `reverse(s)` — that's the longest palindromic prefix. `LPS[last]` on the concatenated string = length of longest palindromic prefix. Minimum additions = `n - LPS[last]`.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -211,8 +159,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > Direct character-by-character comparison at each position is O(nm). Hashing reduces window comparison to O(1) per step. Represent each window as a polynomial hash. Sliding the window right removes the leftmost character and adds the rightmost: `hash(new) = (hash(old) - text[i]*BASE^(m-1)) * BASE + text[i+m]`. Pre-compute `BASE^(m-1) mod MOD`. On hash match, verify character-by-character to rule out collisions. Double hashing (two independent mod values) reduces false positive probability to ~1/(p₁·p₂).
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -279,8 +225,6 @@ difficulty: mixed
 > [!info] Approach
 > Checking all substrings for duplicates is O(n³). We need a smarter search space reduction. Binary search on length L. For each L, use rolling hash to collect all length-L substring hashes in a set; if any hash appears twice (and verification confirms no collision), a duplicate of length L exists. Binary search `[1, n-1]`. `check(L)`: slide window of size L, compute hash in O(1) per step, store in set. If duplicate found, record it; search larger L. If not, search smaller. Total: O(n log n).
 
-
-
 > [!note]- Python Solution
 > ```python
 > def longest_dup_substring(s):
@@ -335,8 +279,6 @@ difficulty: mixed
 > [!info] Approach
 > We need to find all substrings of even length where both halves are identical — checking naively is O(n³). For each possible half-length `L` (1 to n//2), slide a window of size `2L` and check if the left half hash equals the right half hash. Count distinct matches using a set. Maintain two rolling hashes (left window and right window of size L) simultaneously. When both hashes match, store the canonical string in a set for deduplication.
 
-
-
 > [!note]- Python Solution
 > ```python
 > def count_distinct_echo_substrings(s):
@@ -381,8 +323,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > Same goal as KMP — O(n+m) pattern matching. Z-algorithm is sometimes easier to reason about. `Z[i]` = length of the longest substring starting at position i of the concatenated string `P + '$' + T` that matches a prefix of the whole string. When `Z[i] == len(P)`, a match starts at `i - len(P) - 1` in T. Maintain a Z-box `[l, r]` — the rightmost interval where a match with a prefix is known. For each i: if `i <= r`, initialize `Z[i] = min(r - i + 1, Z[i - l])`; then try to extend. The total number of character comparisons is O(n+m) because the right boundary r only moves right.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -444,8 +384,6 @@ difficulty: mixed
 > [!info] Approach
 > B can span at most `ceil(len(B)/len(A)) + 1` copies of A. We only need to check a bounded repetition. Repeat A enough times to be at least as long as B, then check if B is a substring. If not, try once more repetition. The minimum repetitions needed is `ceil(len(B) / len(A))`. If B isn't found there, try `ceil + 1` (B might straddle one more copy). Use KMP or Z-algorithm for the search to stay O(|A| + |B|).
 
-
-
 > [!note]- Python Solution
 > ```python
 > import math
@@ -473,7 +411,7 @@ difficulty: mixed
 
 ---
 
-### Longest Palindromic Substring — Expand Around Center
+### Longest Palindromic Substring — Expand Around Center `🔥 Google`
 
 > [!example] Problem
 > Given a string s, return the longest palindromic substring in s.
@@ -498,8 +436,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > A palindrome reads the same forwards and backwards; the structural invariant is symmetry around a center. There are `2n - 1` possible centers (n single characters + n-1 gaps between characters). From each center, expand outward while `s[l] == s[r]`. For each i, try both odd-center `(i, i)` and even-center `(i, i+1)`. Track the longest expansion. No extra space needed.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -552,8 +488,6 @@ difficulty: mixed
 > [!info] Approach
 > Each center expansion contributes one palindrome per step. Counting is a minor modification of the longest palindrome approach. For each center, expand as long as characters match; each valid `(l, r)` pair is one palindromic substring. Same 2n-1 centers. For each center, count the number of valid expansions (each step adds 1 to count).
 
-
-
 > [!note]- Python Solution
 > ```python
 > def count_substrings(s):
@@ -574,72 +508,6 @@ difficulty: mixed
 
 ---
 
-### Palindrome Partitioning II — Minimum Cuts
-
-> [!example] Problem
-> Given a string s, partition s such that every substring of the partition is a palindrome.
-> Return the minimum cuts needed for a palindrome partitioning of s.
-> 
-> **Example 1:**
-> ```
-> Input: s = "aab"
-> Output: 1
-> Explanation: The palindrome partitioning ["aa","b"] could be produced using 1 cut.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "a"
-> Output: 0
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "ab"
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 2000
-> - s consists of lowercase English letters only.
-
-> [!info] Approach
-> [!info] Approach
-> We want the minimum cuts — this is an optimization problem over all valid partitions. `dp[i]` = minimum cuts to partition `s[0..i]` into palindromes. For each i, find all palindromes ending at i and update: if `s[j..i]` is a palindrome, `dp[i] = min(dp[i], dp[j-1] + 1)`. Pre-compute `is_pal[i][j]` using expand-around-center in O(n²). Then linear scan for `dp[i]`. Base: `dp[i] = i` (cut every character). If `s[0..i]` is itself a palindrome, `dp[i] = 0`.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def min_cut(s):
->     n = len(s)
->     # Precompute palindrome table via expand-around-center
->     is_pal = [[False] * n for _ in range(n)]
->     for center in range(2 * n - 1):
->         l, r = center // 2, (center + 1) // 2
->         while l >= 0 and r < n and s[l] == s[r]:
->             is_pal[l][r] = True
->             l -= 1; r += 1
-> 
->     dp = list(range(n))   # dp[i] = i means i cuts (all single chars)
->     for i in range(1, n):
->         if is_pal[0][i]:
->             dp[i] = 0
->             continue
->         for j in range(1, i + 1):
->             if is_pal[j][i]:
->                 dp[i] = min(dp[i], dp[j - 1] + 1)
->     return dp[n - 1]
-> ```
-
-> [!success] Complexity
-> Time O(n²) | Space O(n²) for palindrome table; reducible to O(n) by computing palindromes on-the-fly.
-
-> [!tip] Alternatives
-> Manacher's for O(n) palindrome precomputation, then same DP: still O(n²) overall due to DP transitions. O(n) DP using palindrome center expansions to push updates forward exists but is complex.
-
----
-
 ### Manacher's Algorithm — O(n) All Palindromes
 
 > [!example] Problem
@@ -648,8 +516,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > Naive expand-around-center is O(n²) because each center expands independently. Manacher reuses overlap between palindromes. Transform `s` by inserting `#` between every character (`a#b#b#a` → `#a#b#b#a#`) to unify odd and even cases. Maintain the rightmost palindrome center `c` and its right boundary `r`. For each position i: mirror `i` across `c` to get `mirror = 2c - i`. Initialize `P[i] = min(r - i, P[mirror])` — reuse what's already known. Then try to extend beyond that. Update `c, r` when a new palindrome extends past `r`. Each character is "extended past" at most once (because r only increases), so total comparisons = O(n).
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -705,8 +571,6 @@ difficulty: mixed
 > [!info] Approach
 > Total substrings = n(n+1)/2. Duplicates arise when multiple suffixes share a common prefix. The LCP array captures exactly this overlap. Build suffix array SA (sorted order of all suffixes). Build LCP array via Kasai's algorithm: `LCP[i]` = longest common prefix between `SA[i]` and `SA[i-1]`. Each suffix contributes `(n - SA[i]) - LCP[i]` new distinct substrings (total length minus the shared prefix already counted). Distinct substrings = `n(n+1)/2 - sum(LCP)`.
 
-
-
 > [!note]- Python Solution
 > ```python
 > def count_distinct_substrings(s):
@@ -750,8 +614,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > Brute-force LCP computation between all suffix pairs is O(n²). Kasai's algorithm exploits the rank structure to do it in O(n). After building the suffix array SA, `LCP[i]` = length of common prefix between suffix `SA[i]` and suffix `SA[i-1]` in sorted order. The maximum LCP value = longest repeated substring. Kasai's key insight: if suffix starting at i has LCP of h with its SA predecessor, then suffix starting at `i+1` has LCP ≥ h-1 with its SA predecessor. This means we can start each computation from `h-1` and `h` only ever decreases by 1 between iterations → O(n) total.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -802,8 +664,6 @@ difficulty: mixed
 > [!info] Approach
 > We want the longest window satisfying a constraint on character diversity — a classic sliding window. Maintain a frequency map of characters in the current window. The window is valid iff `len(freq) <= K`. Expand right always; when invalid (K+1 distinct chars), shrink left until valid again. When `freq[s[left]] == 0` after decrement, delete from map — this decrements distinct count. Window size at each valid state is a candidate answer.
 
-
-
 > [!note]- Python Solution
 > ```python
 > def length_of_longest_substring_k_distinct(s, k):
@@ -830,7 +690,7 @@ difficulty: mixed
 
 ---
 
-### Permutation in String
+### Permutation in String `⭐ Google`
 
 > [!example] Problem
 > Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
@@ -856,8 +716,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > A permutation of `s1` is any arrangement of its characters; we need a window in `s2` with the same character frequencies. Fixed-size sliding window of size `len(s1)`. Compare character frequency arrays. When `matches == 26`, a permutation is found. Track `matches` = number of characters (out of 26) where window frequency equals s1 frequency. Slide window: add right char, remove left char, update `matches` accordingly. Avoids O(26) comparison per step.
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -904,439 +762,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Window Substring
-
-> [!example] Problem
-> Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
-> The testcases will be generated such that the answer is unique.
-> 
-> **Example 1:**
-> ```
-> Input: s = "ADOBECODEBANC", t = "ABC"
-> Output: "BANC"
-> Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "a", t = "a"
-> Output: "a"
-> Explanation: The entire string s is the minimum window.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "a", t = "aa"
-> Output: ""
-> Explanation: Both 'a's from t must be included in the window.
-> Since the largest window of s only has one 'a', return empty string.
-> ```
-> 
-> **Constraints:**
-> - m == s.length
-> - n == t.length
-> - 1 <= m, n <= 10^5
-> - s and t consist of uppercase and lowercase English letters.
-
-> [!info] Approach
-> [!info] Approach
-> We need the minimum-length window — expand to satisfy the constraint, then shrink to minimize. `need` = frequency of chars in t. `have` = frequency in current window. `formed` = distinct chars satisfying their required count. Expand right; when `formed == len(need)`, shrink left until invalid, recording minimum window. `formed` increments only when `have[c] == need[c]` (exact threshold), not on every increment. This makes the condition O(1) to check per step.
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> 
-> def min_window(s, t):
->     if not t or not s:
->         return ""
->     need = Counter(t)
->     have = {}
->     formed = required = len(need)
->     left = 0
->     best = (float('inf'), 0, 0)   # (length, left, right)
-> 
->     for right in range(len(s)):
->         c = s[right]
->         have[c] = have.get(c, 0) + 1
->         if c in need and have[c] == need[c]:
->             formed -= 1
->         while formed == 0:
->             if right - left + 1 < best[0]:
->                 best = (right - left + 1, left, right)
->             lc = s[left]
->             have[lc] -= 1
->             if lc in need and have[lc] < need[lc]:
->                 formed += 1
->             left += 1
-> 
->     return s[best[1]:best[2] + 1] if best[0] != float('inf') else ""
-> ```
-
-> [!success] Complexity
-> Time O(|s| + |t|) | Space O(|s| + |t|) (bounded by alphabet size in practice).
-
-> [!tip] Alternatives
-> Filtered array (pre-filter s to only chars in t): reduces inner work when |t| << |s|, same asymptotic but better constant. Brute force: O(|s|² · |t|).
-
----
-
-## Classic String Problems
-
----
-
-### Valid Palindrome
-
-> [!example] Problem
-> A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
-> Given a string s, return true if it is a palindrome, or false otherwise.
-> 
-> **Example 1:**
-> ```
-> Input: s = "A man, a plan, a canal: Panama"
-> Output: true
-> Explanation: "amanaplanacanalpanama" is a palindrome.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "race a car"
-> Output: false
-> Explanation: "raceacar" is not a palindrome.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = " "
-> Output: true
-> Explanation: s is an empty string "" after removing non-alphanumeric characters.
-> Since an empty string reads the same forward and backward, it is a palindrome.
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 2 * 10^5
-> - s consists only of printable ASCII characters.
-
-> [!info] Approach
-> [!info] Approach
-> Strip down to the essential characters and apply the two-pointer palindrome check. Two pointers from both ends. Skip non-alphanumeric characters; compare lowercase. No extra string creation needed — move pointers in-place.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def is_palindrome(s):
->     l, r = 0, len(s) - 1
->     while l < r:
->         while l < r and not s[l].isalnum():
->             l += 1
->         while l < r and not s[r].isalnum():
->             r -= 1
->         if s[l].lower() != s[r].lower():
->             return False
->         l += 1; r -= 1
->     return True
-> ```
-
-> [!success] Complexity
-> Time O(n) | Space O(1).
-
-> [!tip] Alternatives
-> Build cleaned string then compare to reverse: O(n) time, O(n) space — simpler but wasteful.
-
----
-
-### Valid Anagram
-
-> [!example] Problem
-> Given two strings s and t, return true if t is an anagram of s, and false otherwise.
-> 
-> **Example 1:**
-> ```
-> Input: s = "anagram", t = "nagaram"
-> Output: true
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "rat", t = "car"
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length, t.length <= 5 * 10^4
-> - s and t consist of lowercase English letters.
-
-> [!info] Approach
-> [!info] Approach
-> Anagrams are the same multiset of characters. Checking multiset equality is the core. Build frequency arrays (or Counter). If they match, anagram. One pass to build, one pass to compare. O(n) time. For Unicode inputs use Counter (not fixed 26-array).
-
-
-
-> [!note]- Python Solution
-> ```python
-> def is_anagram(s, t):
->     if len(s) != len(t):
->         return False
->     count = [0] * 26
->     for a, b in zip(s, t):
->         count[ord(a) - ord('a')] += 1
->         count[ord(b) - ord('a')] -= 1
->     return all(c == 0 for c in count)
-> ```
-
-> [!success] Complexity
-> Time O(n) | Space O(1).
-
-> [!tip] Alternatives
-> Sort both and compare: O(n log n). Counter subtraction: `Counter(s) == Counter(t)` — O(n), Pythonic.
-
----
-
-### Longest Common Prefix
-
-> [!example] Problem
-> Write a function to find the longest common prefix string amongst an array of strings.
-> If there is no common prefix, return an empty string "".
-> 
-> **Example 1:**
-> ```
-> Input: strs = ["flower","flow","flight"]
-> Output: "fl"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: strs = ["dog","racecar","car"]
-> Output: ""
-> Explanation: There is no common prefix among the input strings.
-> ```
-> 
-> **Constraints:**
-> - 1 <= strs.length <= 200
-> - 0 <= strs[i].length <= 200
-> - strs[i] consists of only lowercase English letters if it is non-empty.
-
-> [!info] Approach
-> [!info] Approach
-> The LCP can be at most the length of the shortest string, and is bounded by where any string diverges. Vertical scanning — for each character position, check if all strings agree. Stop at first disagreement. Compare position by position across all strings. Return the prefix up to the first mismatch.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def longest_common_prefix(strs):
->     if not strs:
->         return ""
->     for i, chars in enumerate(zip(*strs)):
->         if len(set(chars)) > 1:
->             return strs[0][:i]
->     return min(strs, key=len)
-> ```
-
-> [!success] Complexity
-> Time O(S) where S = total characters | Space O(1).
-
-> [!tip] Alternatives
-> Sort the array; LCP of first and last string = answer (they're the most different). Binary search on prefix length, O(S log(min_len)). Trie: overkill for a single query but useful for repeated LCP queries.
-
----
-
-### Group Anagrams
-
-> [!example] Problem
-> Given an array of strings strs, group the anagrams together. You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: strs = ["eat","tea","tan","ate","nat","bat"]
-> Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
-> Explanation:
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: strs = [""]
-> Output: [[""]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: strs = ["a"]
-> Output: [["a"]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= strs.length <= 10^4
-> - 0 <= strs[i].length <= 100
-> - strs[i] consists of lowercase English letters.
-
-> [!info] Approach
-> [!info] Approach
-> Anagrams share the same character multiset — use a canonical key that encodes the multiset. For each string, compute a canonical key (sorted string or 26-char tuple). Group strings by key using a hash map. Sorting each string: O(k log k) per string where k = max length. Total: O(nk log k). Alternatively, use a tuple of 26 counts as key: O(nk) total.
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def group_anagrams(strs):
->     groups = defaultdict(list)
->     for s in strs:
->         key = tuple(sorted(s))   # or: key = count_key(s)
->         groups[key].append(s)
->     return list(groups.values())
-> ```
-
-> [!success] Complexity
-> Time O(nk log k) with sort key, O(nk) with count-tuple key | Space O(nk).
-
-> [!tip] Alternatives
-> Prime product key: assign a prime to each letter, multiply. Unique per anagram group but risks integer overflow for long strings.
-
----
-
-### Longest Substring Without Repeating Characters
-
-> [!example] Problem
-> Given a string s, find the length of the longest substring without duplicate characters.
-> 
-> **Example 1:**
-> ```
-> Input: s = "abcabcbb"
-> Output: 3
-> Explanation: The answer is "abc", with the length of 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "bbbbb"
-> Output: 1
-> Explanation: The answer is "b", with the length of 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "pwwkew"
-> Output: 3
-> Explanation: The answer is "wke", with the length of 3.
-> Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
-> ```
-> 
-> **Constraints:**
-> - 0 <= s.length <= 5 * 10^4
-> - s consists of English letters, digits, symbols and spaces.
-
-> [!info] Approach
-> [!info] Approach
-> Classic sliding window — maintain the invariant that the window has no duplicate. Track the last seen index of each character. When a character reappears inside the window, advance `left` to `last_seen[c] + 1`. Direct index tracking is more efficient than a frequency-decrement approach for this problem.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def length_of_longest_substring(s):
->     last_seen = {}
->     left = result = 0
->     for right, c in enumerate(s):
->         if c in last_seen and last_seen[c] >= left:
->             left = last_seen[c] + 1
->         last_seen[c] = right
->         result = max(result, right - left + 1)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n) | Space O(min(n, alphabet_size)).
-
-> [!tip] Alternatives
-> Set-based sliding window: `while c in window: remove s[left]; left++`. Same O(n) but more operations. Frequency map: also O(n), more general.
-
----
-
-### Find All Anagrams in a String
-
-> [!example] Problem
-> Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: s = "cbaebabacd", p = "abc"
-> Output: [0,6]
-> Explanation:
-> The substring with start index = 0 is "cba", which is an anagram of "abc".
-> The substring with start index = 6 is "bac", which is an anagram of "abc".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "abab", p = "ab"
-> Output: [0,1,2]
-> Explanation:
-> The substring with start index = 0 is "ab", which is an anagram of "ab".
-> The substring with start index = 1 is "ba", which is an anagram of "ab".
-> The substring with start index = 2 is "ab", which is an anagram of "ab".
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length, p.length <= 3 * 10^4
-> - s and p consist of lowercase English letters.
-
-> [!info] Approach
-> [!info] Approach
-> An anagram of p is a fixed-size window in s with the same character frequencies. Sliding window of fixed size `len(p)`. Track matches (same `matches` counter as Permutation in String). Identical to Permutation in String but collect all starting indices where `matches == 26` instead of returning True on first match.
-
-
-
-> [!note]- Python Solution
-> ```python
-> def find_anagrams(s, p):
->     if len(p) > len(s):
->         return []
->     need = [0] * 26
->     have = [0] * 26
->     for c in p:
->         need[ord(c) - ord('a')] += 1
->     matches = sum(1 for i in range(26) if need[i] == 0)
->     result = []
->     k = len(p)
-> 
->     def update(c, delta):
->         nonlocal matches
->         idx = ord(c) - ord('a')
->         old, have[idx] = have[idx], have[idx] + delta
->         if old == need[idx]:
->             matches -= 1
->         if have[idx] == need[idx]:
->             matches += 1
-> 
->     for i in range(k):
->         update(s[i], 1)
->     if matches == 26:
->         result.append(0)
->     for i in range(k, len(s)):
->         update(s[i], 1)
->         update(s[i - k], -1)
->         if matches == 26:
->             result.append(i - k + 1)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(|s| + |p|) | Space O(1).
-
-> [!tip] Alternatives
-> Counter comparison per window: O(26 · |s|) = O(|s|). Sorting each window: O(|s| · k log k) — too slow.
-
----
-
-## DP on Strings
-
----
-
-### Regular Expression Matching (LC 10)
+### Regular Expression Matching (LC 10) `🔥 Google`
 
 > [!example] Problem
 > Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
@@ -1373,7 +799,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > `'*'` creates a choice — use the preceding element 0 times (skip `pattern[i-1]` and `'*'`) or 1+ times (consume `s[j]` if it matches). These choices overlap across subproblems → DP. `dp[i][j]` = True if `s[:i]` matches `p[:j]`.
-
 
 >   - Base: `dp[0][0] = True`. `dp[0][j] = True` if `p[j-1] == '*'` and `dp[0][j-2] == True` (star eliminates the preceding element).
 >   - Transition: if `p[j-1] in {s[i-1], '.'}`: `dp[i][j] = dp[i-1][j-1]`.
@@ -1446,7 +871,6 @@ difficulty: mixed
 > [!info] Approach
 > `'*'` can match any sequence — creates branching over all possible lengths. DP avoids recomputing overlapping subproblems. `dp[i][j]` = True if `s[:i]` matches `p[:j]`.
 
-
 >   - Base: `dp[0][0] = True`. `dp[0][j] = True` if `p[:j]` is all `'*'` (each star matches empty).
 >   - Transition: if `p[j-1] in {s[i-1], '?'}`: `dp[i][j] = dp[i-1][j-1]`.
 >   - Else if `p[j-1] == '*'`: `dp[i][j] = dp[i-1][j]` (star matches one char) OR `dp[i][j-1]` (star matches empty).
@@ -1479,7 +903,7 @@ difficulty: mixed
 
 ---
 
-### Distinct Subsequences (LC 115)
+### Distinct Subsequences (LC 115) `⭐ Google`
 
 > [!example] Problem
 > Given two strings s and t, return the number of distinct subsequences of s which equals t.
@@ -1516,7 +940,6 @@ difficulty: mixed
 > [!info] Approach
 > [!info] Approach
 > At each character of `s`, we choose to include it (matching `t[j]`) or skip it. These choices create overlapping subproblems → DP. `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`.
-
 
 >   - Base: `dp[i][0] = 1` for all i (empty `t` matched by any prefix of `s`). `dp[0][j] = 0` for j > 0.
 >   - Transition: if `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use this char OR skip it).
@@ -1576,7 +999,6 @@ difficulty: mixed
 > [!info] Approach
 > We need the longest palindromic prefix. Once we know that prefix, the remaining suffix must be reversed and prepended. Build a KMP prefix table on `s + '#' + reverse(s)` to find the longest prefix of `s` that matches a suffix of the reversed string. The LPS value at the end gives the longest palindromic prefix length. Prepend the reverse of the remaining suffix.
 
-
 > [!note]- Python Solution
 > ```python
 > def shortest_palindrome(s):
@@ -1611,7 +1033,6 @@ difficulty: mixed
 > [!info] Approach
 > Minimum insertions = `n - LPS(s)`, where LPS is the Longest Palindromic Subsequence. Alternatively: min insertions = n - LCS(s, reverse(s)), since the LCS of s with its reverse is the longest palindromic subsequence. Compute LCS of `s` and `reverse(s)` using DP. `lcs[i][j]` = LCS length of `s[:i]` and `rev[:j]`. Answer is `n - lcs[n][n]`. Standard O(n²) DP. Can space-optimise to O(n) using two rows.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_insertions_palindrome(s):
@@ -1639,81 +1060,3 @@ difficulty: mixed
 
 ---
 
-### Palindrome Pairs (LC 336)
-
-> [!example] Problem
-> You are given a 0-indexed array of unique strings words.
-> A palindrome pair is a pair of integers (i, j) such that:
-> Return an array of all the palindrome pairs of words.
-> You must write an algorithm with O(sum of words[i].length) runtime complexity.
-> 
-> **Example 1:**
-> ```
-> Input: words = ["abcd","dcba","lls","s","sssll"]
-> Output: [[0,1],[1,0],[3,2],[2,4]]
-> Explanation: The palindromes are ["abcddcba","dcbaabcd","slls","llssssll"]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: words = ["bat","tab","cat"]
-> Output: [[0,1],[1,0]]
-> Explanation: The palindromes are ["battab","tabbat"]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: words = ["a",""]
-> Output: [[0,1],[1,0]]
-> Explanation: The palindromes are ["a","a"]
-> ```
-> 
-> **Constraints:**
-> - 1 <= words.length <= 5000
-> - 0 <= words[i].length <= 300
-> - words[i] consists of lowercase English letters.
-
-> [!info] Approach
-> Brute force O(n² * k) is too slow. For each word, consider all ways to split it: if the prefix is a palindrome and the reverse of the suffix exists in the word list, we have a valid pair (and vice versa). Build `word_map = {word: index}`. For each word `w` at index `i`, for every split point `k` in `0..len(w)`:
-
->   - If `w[:k]` is palindrome and `reverse(w[k:])` is in map: pair `(map[rev(w[k:])], i)`.
->   - If `w[k:]` is palindrome and `reverse(w[:k])` is in map (and `k > 0` to avoid double-counting): pair `(i, map[rev(w[:k])])`.
-> Skip pairing a word with itself (`j != i`).
-
-> [!note]- Python Solution
-> ```python
-> def palindrome_pairs(words):
->     word_map = {word: i for i, word in enumerate(words)}
->     result = []
-> >
->     def is_palindrome(s):
->         return s == s[::-1]
-> >
->     for i, word in enumerate(words):
->         n = len(word)
->         for k in range(n + 1):
->             prefix = word[:k]
->             suffix = word[k:]
->             if is_palindrome(prefix):
->                 rev_suffix = suffix[::-1]
->                 if rev_suffix in word_map and word_map[rev_suffix] != i:
->                     result.append([word_map[rev_suffix], i])
->             if k > 0 and is_palindrome(suffix):
->                 rev_prefix = prefix[::-1]
->                 if rev_prefix in word_map and word_map[rev_prefix] != i:
->                     result.append([i, word_map[rev_prefix]])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n * k²) where k = average word length (each split checks palindrome in O(k) and hash lookup in O(k)). Space O(n * k).
-
-> [!tip] Alternatives
-> - Trie-based approach: insert reversed words into a trie, walk each word through the trie checking palindrome conditions. Same asymptotic, higher constant.
-> - Key insight: every valid pair falls into one of two split cases — don't try to think of other cases.
-
----
-
-## See Also
-
-[[trie]] | [[dynamic-programming]] | [[hashing]] | [[sliding-window]]

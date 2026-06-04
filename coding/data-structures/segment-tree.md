@@ -8,6 +8,12 @@ difficulty: mixed
 
 Use a segment tree when you need fast range queries and fast updates on the same array, and the operation is associative (`sum`, `min`, `max`, `gcd`, etc.). For many prefix-sum-style problems, a BIT/Fenwick tree is simpler; for static queries, sparse table or prefix sums can be better.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Interview Checklist
@@ -19,7 +25,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Core Segment Tree
 
-### Range Sum Query — Mutable (Point Update, Range Query)
+### Range Sum Query — Mutable (Point Update, Range Query) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -280,7 +286,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Segment Tree Applications
 
-### Count of Range Sum
+### Count of Range Sum `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums and two integers lower and upper, return the number of range sums that lie in [lower, upper] inclusive.
@@ -394,7 +400,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > Standard LIS DP gives length only. We need both `length[i]` and `count[i]` for each index, updated optimally. `length[i]` = length of LIS ending at i. `count[i]` = number of such LIS. For each i, scan all j < i with `nums[j] < nums[i]`: if `length[j] + 1 > length[i]`, update length and reset count; if equal, add to count. O(n²) DP is simple. Segment tree on values (coordinate compressed) can reduce to O(n log n): tree node stores `(max_length, total_count)` for values processed so far; query `[0, nums[i]-1]` for best, then update at `nums[i]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_number_of_lis(nums):
@@ -425,7 +430,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Queue Reconstruction by Height
+### Queue Reconstruction by Height `⭐ Google`
 
 > [!example] Problem
 > You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
@@ -460,7 +465,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > We need to place people such that their k-constraint is satisfied. Greedy insertion works by processing tallest first. Sort by height descending (ties broken by k ascending). Insert each person at position k in the result list. Since taller people are already placed and shorter people don't affect the count of taller people in front, inserting at index k is always valid. This is a greedy O(n²) insertion. BIT/segment tree can optimize to O(n log n) by tracking the k-th empty slot.
 
-
 > [!note]- Python Solution
 > ```python
 > def reconstruct_queue(people):
@@ -484,7 +488,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Binary Indexed Tree (Fenwick Tree)
 
-### Range Sum Query — Mutable (BIT Implementation)
+### Range Sum Query — Mutable (BIT Implementation) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -566,7 +570,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Count of Smaller Numbers After Self
+### Count of Smaller Numbers After Self `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
@@ -601,7 +605,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > Brute force O(n²) compares every pair. We need a data structure that answers "how many inserted values are less than x" in O(log n). Process from right to left. Coordinate compress `nums` to range `[1, n]`. For each element, query BIT for prefix sum `[1, rank-1]` (count of smaller values already seen = values to the right), then update BIT at `rank`. Coordinate compression maps values to 1..n. BIT query at `rank-1` = count of right-side elements smaller than current. Then insert current into BIT.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_smaller(nums):
@@ -628,7 +631,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Reverse Pairs
+### Reverse Pairs `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, return the number of reverse pairs in the array.
@@ -659,7 +662,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 > [!info] Approach
 > Checking all pairs is O(n²). The condition `nums[i] > 2 * nums[j]` (with index order constraint) is an inversion-like problem amenable to merge sort or BIT. Process right to left using BIT. For each `nums[i]`, count already-inserted values `v` (from positions j > i) where `nums[i] > 2v`, i.e., `v < nums[i] / 2`, i.e., BIT prefix sum at `rank(floor((nums[i]-1)/2))`. Then insert `nums[i]` into BIT. Coordinate compress `nums` (and also `nums[i]//2` values for query). Two separate coordinate sets or unified set with both values.
-
 
 > [!note]- Python Solution
 > ```python
@@ -699,91 +701,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### My Calendar I (LC 729)
-
-> [!example] Problem
-> You are implementing a program to use as your calendar. We can add a new event if adding the event will not cause a double booking.
-> A double booking happens when two events have some non-empty intersection (i.e., some moment is common to both events.).
-> The event can be represented as a pair of integers startTime and endTime that represents a booking on the half-open interval [startTime, endTime), the range of real numbers x such that startTime <= x < endTime.
-> Implement the MyCalendar class
-> 
-> **Example 1:**
-> ```
-> Input
-> ["MyCalendar", "book", "book", "book"]
-> [[], [10, 20], [15, 25], [20, 30]]
-> Output
-> [null, true, false, true]
-> 
-> Explanation
-> MyCalendar myCalendar = new MyCalendar();
-> myCalendar.book(10, 20); // return True
-> myCalendar.book(15, 25); // return False, It can not be booked because time 15 is already booked by another event.
-> myCalendar.book(20, 30); // return True, The event can be booked, as the first event takes every time less than 20, but not including 20.
-> ```
-> 
-> **Constraints:**
-> - 0 <= start < end <= 10^9
-> - At most 1000 calls will be made to book.
-
-> [!info] Approach
-> [!info] Approach
-> Need to detect overlapping intervals efficiently on each insert. Maintain a sorted list of `(start, end)` pairs. Binary search to find neighbors; check only adjacent intervals for overlap. Two intervals `[s1, e1)` and `[s2, e2)` overlap iff `s1 < e2 and s2 < e1`. For a new booking `[s, e)`:.
-
-
->   - Find the insertion point `i` via `bisect_left` on starts.
->   - Check left neighbor (`i-1`): does it end after `s`?
->   - Check right neighbor (`i`): does it start before `e`?
->   - If neither overlaps, insert.
-
-> [!note]- Python Solution
-> ```python
-> from sortedcontainers import SortedList
-> >
-> class MyCalendar:
->     def __init__(self):
->         self.bookings = SortedList(key=lambda x: x[0])
-> >
->     def book(self, start, end):
->         # Find position of new booking by start
->         idx = self.bookings.bisect_key_left(start)
->         # Check right neighbor
->         if idx < len(self.bookings) and self.bookings[idx][0] < end:
->             return False
->         # Check left neighbor
->         if idx > 0 and self.bookings[idx - 1][1] > start:
->             return False
->         self.bookings.add((start, end))
->         return True
-> >
-> # Bisect-only alternative (no sortedcontainers):
-> import bisect
-> >
-> class MyCalendarBisect:
->     def __init__(self):
->         self.starts: list[int] = []
->         self.ends: list[int] = []
-> >
->     def book(self, start, end):
->         idx = bisect.bisect_left(self.starts, start)
->         if idx < len(self.starts) and self.starts[idx] < end:
->             return False
->         if idx > 0 and self.ends[idx - 1] > start:
->             return False
->         self.starts.insert(idx, start)
->         self.ends.insert(idx, end)
->         return True
-> ```
-
-> [!success] Complexity
-> Time O(log n) per query (bisect), O(n) per insert (list shift) | Space O(n). With a balanced BST (e.g., `SortedList`): O(log n) insert.
-
-> [!tip] Alternatives
-> - Segment tree with lazy propagation: O(log MAX) per operation, MAX = 10⁹ with coordinate compression — overkill for this problem but O(log n) insert guaranteed.
-> - Interval tree: O(log n) insert and query theoretically; complex to implement.
-
----
-
 ### My Calendar II (LC 731)
 
 > [!example] Problem
@@ -817,7 +734,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > [!info] Approach
 > Track both single bookings and double-booked regions. A new booking is invalid iff it intersects any already double-booked interval. Two lists — `calendar` (all accepted bookings) and `overlaps` (intervals that are already double-booked). For new `[s, e)`:.
-
 
 >   1. Check if `[s, e)` overlaps any interval in `overlaps`. If yes → return False.
 >   2. Else: add intersection of `[s, e)` with each existing booking in `calendar` to `overlaps`.
@@ -948,7 +864,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### The Skyline Problem (LC 218)
+### The Skyline Problem (LC 218) `⭐ Google`
 
 > [!example] Problem
 > A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
@@ -981,7 +897,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > [!info] Approach
 > At each x-coordinate, the visible height = max height of all buildings covering that x. Key points occur only at building left/right edges. Event-based sweep with a max-heap of active buildings.
-
 
 >   - Create events: `(left, -height, right)` for building starts (negative height for sort order), `(right, 0, 0)` for building ends.
 >   - Sort all events by x, then by height (starts before ends at same x — negative heights sort first).
@@ -1162,7 +1077,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 > [!info] Approach
 > Updating every element in a range directly is O(n). Lazy propagation stores a postponed update at internal nodes so repeated range updates stay logarithmic. Each node stores the sum of its segment and a lazy tag for pending additions. On full-cover update, modify the node sum and lazy tag. On partial overlap, push the lazy value to children before recursing.
 
-
 > [!note]- Python Solution
 > ```python
 > class SegTree:
@@ -1186,188 +1100,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Segment Tree Applications
 
-### Falling Squares (LC 699)
-
-> [!example] Problem
-> There are several squares being dropped onto the X-axis of a 2D plane.
-> You are given a 2D integer array positions where positions[i] = [lefti, sideLengthi] represents the ith square with a side length of sideLengthi that is dropped with its left edge aligned with X-coordinate lefti.
-> Each square is dropped one at a time from a height above any landed squares. It then falls downward (negative Y direction) until it either lands on the top side of another square or on the X-axis. A square brushing the left/right side of another square does not count as landing on it. Once it lands, it freezes in place and cannot be moved.
-> After each square is dropped, you must record the height of the current tallest stack of squares.
-> Return an integer array ans where ans[i] represents the height described above after dropping the ith square.
-> 
-> **Example 1:**
-> ```
-> Input: positions = [[1,2],[2,3],[6,1]]
-> Output: [2,5,5]
-> Explanation:
-> After the first drop, the tallest stack is square 1 with a height of 2.
-> After the second drop, the tallest stack is squares 1 and 2 with a height of 5.
-> After the third drop, the tallest stack is still squares 1 and 2 with a height of 5.
-> Thus, we return an answer of [2, 5, 5].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: positions = [[100,100],[200,100]]
-> Output: [100,100]
-> Explanation:
-> After the first drop, the tallest stack is square 1 with a height of 100.
-> After the second drop, the tallest stack is either square 1 or square 2, both with heights of 100.
-> Thus, we return an answer of [100, 100].
-> Note that square 2 only brushes the right side of square 1, which does not count as landing on it.
-> ```
-> 
-> **Constraints:**
-> - 1 <= positions.length <= 1000
-> - 1 <= lefti <= 10^8
-> - 1 <= sideLengthi <= 10^6
-
-> [!info] Approach
-> After each square falls at `[left, left+size)`, its height = size + max existing height in `[left, left+size)`. We need range-max-query and range-update, which a segment tree with lazy propagation handles in O(log n) per operation. Coordinate-compress all left and right endpoints (since positions can be large). Use a segment tree supporting range max query and range assignment update. For each square: query max height in its interval, compute new height = query result + size, update the interval to that new height, record the global max.
-
-
-> [!note]- Python Solution
-> ```python
-> def falling_squares(positions):
->     coords = set()
->     for left, size in positions:
->         coords.add(left)
->         coords.add(left + size)
->     sorted_coords = sorted(coords)
->     compress = {v: i for i, v in enumerate(sorted_coords)}
->     m = len(sorted_coords)
-> >
->     tree = [0] * (4 * m)
->     lazy = [0] * (4 * m)
-> >
->     def push_down(node):
->         if lazy[node] > 0:
->             for child in [2 * node, 2 * node + 1]:
->                 tree[child] = max(tree[child], lazy[node])
->                 lazy[child] = max(lazy[child], lazy[node])
->             lazy[node] = 0
-> >
->     def update(node, lo, hi, left, right, val):
->         if right <= lo or hi <= left:
->             return
->         if left <= lo and hi <= right:
->             tree[node] = max(tree[node], val)
->             lazy[node] = max(lazy[node], val)
->             return
->         push_down(node)
->         mid = (lo + hi) // 2
->         update(2 * node, lo, mid, left, right, val)
->         update(2 * node + 1, mid, hi, left, right, val)
->         tree[node] = max(tree[2 * node], tree[2 * node + 1])
-> >
->     def query(node, lo, hi, left, right):
->         if right <= lo or hi <= left:
->             return 0
->         if left <= lo and hi <= right:
->             return tree[node]
->         push_down(node)
->         mid = (lo + hi) // 2
->         left_max = query(2 * node, lo, mid, left, right)
->         right_max = query(2 * node + 1, mid, hi, left, right)
->         return max(left_max, right_max)
-> >
->     result = []
->     global_max = 0
->     for left, size in positions:
->         l = compress[left]
->         r = compress[left + size]
->         current_height = query(1, 0, m, l, r)
->         new_height = current_height + size
->         update(1, 0, m, l, r, new_height)
->         global_max = max(global_max, new_height)
->         result.append(global_max)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n log n) with coordinate compression. Space O(n).
-
-> [!tip] Alternatives
-> - Brute force: for each square, scan all previous squares for overlap — O(n²). Fine for small inputs.
-> - Sorted intervals + ordered dict: can work but segment tree with coordinate compression is the clean solution.
-
----
-
-### Count of Smaller Numbers After Self (LC 315) — BIT Approach
-
-> [!example] Problem
-> Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
-> 
-> **Example 1:**
-> ```
-> Input: nums = [5,2,6,1]
-> Output: [2,1,1,0]
-> Explanation:
-> To the right of 5 there are 2 smaller elements (2 and 1).
-> To the right of 2 there is only 1 smaller element (1).
-> To the right of 6 there is 1 smaller element (1).
-> To the right of 1 there is 0 smaller element.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [-1]
-> Output: [0]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [-1,-1]
-> Output: [0,0]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-
-> [!info] Approach
-> Scanning right to left, for each element we need "how many elements seen so far are smaller than the current element." A BIT on coordinate-compressed values answers this as a prefix-sum query. Coordinate-compress all values. Scan right to left. For each `nums[i]`: query BIT for prefix sum up to `rank[nums[i]] - 1` (count of smaller values already processed), then update BIT at `rank[nums[i]]`. Sort unique values to build rank map. Scan right to left: `count[i] = bit.query(rank[nums[i]] - 1)`. Then `bit.update(rank[nums[i]], 1)`.
-
-
-> [!note]- Python Solution
-> ```python
-> def count_smaller(nums):
->     sorted_unique = sorted(set(nums))
->     rank = {v: i + 1 for i, v in enumerate(sorted_unique)}
->     m = len(sorted_unique)
->     bit = [0] * (m + 1)
-> >
->     def update(i):
->         while i <= m:
->             bit[i] += 1
->             i += i & -i
-> >
->     def query(i):
->         total = 0
->         while i > 0:
->             total += bit[i]
->             i -= i & -i
->         return total
-> >
->     result = []
->     for num in reversed(nums):
->         r = rank[num]
->         result.append(query(r - 1))
->         update(r)
->     result.reverse()
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n log n), Space O(n).
-
-> [!tip] Alternatives
-> - Merge sort (divide and conquer): count inversions during merge — also O(n log n). More complex but avoids coordinate compression.
-> - Segment tree: equivalent to BIT for this problem; BIT is simpler to code.
-
----
-
-### Range Sum Query 2D — Mutable (LC 308)
+### Range Sum Query 2D — Mutable (LC 308) `⭐ Google`
 
 > [!example] Problem
 > Given a 2D matrix `matrix`, handle multiple queries of the following types:
@@ -1433,7 +1166,6 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 > [!info] Approach
 > A 2D Fenwick tree (BIT) extends the 1D BIT to two dimensions. Point update and range sum both run in O(log m * log n). Maintain a 2D BIT where `bit[i][j]` stores the sum for a "responsible region." Update propagates along both row and column axes simultaneously. Update `(r, c)` by delta: iterate `i = r+1` by `i += i & -i`, and for each `i` iterate `j = c+1` by `j += j & -j`, adding delta to `bit[i][j]`. Query prefix sum up to `(r, c)`: sum over all `i` and `j` indices descending by clearing the lowest bit.
-
 
 > [!note]- Python Solution
 > ```python

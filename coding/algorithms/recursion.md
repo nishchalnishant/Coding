@@ -9,118 +9,15 @@ difficulty: mixed
 > [!info] First Principles
 > Recursion reduces a problem to a smaller identical subproblem; the call stack manages state across levels. Backtracking = DFS over a decision tree — "make choice → recurse → undo choice". The invariant at every recursive call: the partial solution satisfies all constraints imposed so far. Complexity: subsets O(2^n · n), permutations O(n! · n), combinations O(C(n,k) · k).
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Foundation — Include/Exclude
-
-### Subsets (Power Set)
-
-> [!example] Problem
-> Given an integer array nums of unique elements, return all possible subsets (the power set).
-> The solution set must not contain duplicate subsets. Return the solution in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,3]
-> Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0]
-> Output: [[],[0]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10
-> - -10 <= nums[i] <= 10
-> - All the numbers of nums are unique.
-
-> [!info] Approach
-> Every element has exactly two choices — include or exclude. The 2^n subsets map to all binary strings of length n. Overlapping structure: subsets of `nums[0..i-1]` are extended by the decision on `nums[i]`. DFS/backtracking over the array; at each index, branch into "include" and "exclude". At index `i`, add current path to results, then recurse with `i+1` after optionally appending `nums[i]`. Or equivalently: iterate from `i` to `n`, choose `nums[j]`, recurse from `j+1`.
-
-
-> [!note]- Python Solution
-> ```python
-> def subsets(nums):
->     result = []
-> 
->     def dfs(start, path):
->         result.append(path[:])  # snapshot at every node (not just leaves)
->         for i in range(start, len(nums)):
->             path.append(nums[i])
->             dfs(i + 1, path)
->             path.pop()
-> 
->     dfs(0, [])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(2^n · n) — 2^n subsets, O(n) to copy each. Space O(n) call stack + O(2^n · n) output.
-
-> [!tip] Alternatives
-> Iterative: for each new number, extend all existing subsets. Bitmask: for each integer 0 to 2^n - 1, bits represent included elements.
-
----
-
-### Permutations
-
-> [!example] Problem
-> Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,3]
-> Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1]
-> Output: [[0,1],[1,0]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1]
-> Output: [[1]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 6
-> - -10 <= nums[i] <= 10
-> - All the integers of nums are unique.
-
-> [!info] Approach
-> n! orderings; at each position, any unused element can be placed. Backtracking explores all placements, undoing each choice before trying the next. At each recursion level, pick one unused element, add it, recurse with remaining. Swap `nums[i]` with `nums[start]`, recurse with `start+1`, swap back (in-place backtracking preserves O(1) space overhead per level).
-
-
-> [!note]- Python Solution
-> ```python
-> def permute(nums):
->     result = []
-> 
->     def dfs(start):
->         if start == len(nums):
->             result.append(nums[:])
->             return
->         for i in range(start, len(nums)):
->             nums[start], nums[i] = nums[i], nums[start]
->             dfs(start + 1)
->             nums[start], nums[i] = nums[i], nums[start]
-> 
->     dfs(0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n! · n). Space O(n) call stack depth.
-
-> [!tip] Alternatives
-> Use a `visited` boolean array and build path list separately — cleaner but O(n) extra space per level. `itertools.permutations` in production.
-
----
 
 ### Binary Tree Paths
 
@@ -146,7 +43,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Tree structure is inherently recursive; each subtree is a smaller instance of the same problem. No backtracking needed since strings are immutable (pass by value). DFS from root; accumulate path string; record when leaf is reached. Base case = leaf node → append path to result. Recursive case = recurse left and right with extended path string.
-
 
 > [!note]- Python Solution
 > ```python
@@ -184,7 +80,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sorting n items can be decomposed into sorting two halves independently (no overlap between halves) and merging in O(n). Recursion handles the split; the merge step is the key. Split array at midpoint, sort each half recursively, merge the two sorted halves. Base case = length ≤ 1. Split, conquer left, conquer right, merge in O(n) with two-pointer technique.
-
 
 > [!note]- Python Solution
 > ```python
@@ -225,7 +120,6 @@ difficulty: mixed
 > [!info] Approach
 > Naive recursion `f(n) = f(n-1) + f(n-2)` calls `f(k)` exponentially many times for overlapping `k`. Memoization caches each call once → O(n). Memoized recursion (top-down DP) vs iterative DP (bottom-up). Both O(n) time O(n) space; iterative reduces to O(1) space. Memoize using a dict or `@lru_cache`. For O(1) space, use two variables.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import lru_cache
@@ -257,75 +151,7 @@ difficulty: mixed
 
 ## Pruning & Constraints
 
-### Combination Sum (Unbounded)
-
-> [!example] Problem
-> Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
-> The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one of the chosen numbers is different.
-> The test cases are generated such that the number of unique combinations that sum up to target is less than 150 combinations for the given input.
-> 
-> **Example 1:**
-> ```
-> Input: candidates = [2,3,6,7], target = 7
-> Output: [[2,2,3],[7]]
-> Explanation:
-> 2 and 3 are candidates, and 2 + 2 + 3 = 7. Note that 2 can be used multiple times.
-> 7 is a candidate, and 7 = 7.
-> These are the only two combinations.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: candidates = [2,3,5], target = 8
-> Output: [[2,2,2,2],[2,3,3],[3,5]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: candidates = [2], target = 1
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - 1 <= candidates.length <= 30
-> - 2 <= candidates[i] <= 40
-> - All elements of candidates are distinct.
-> - 1 <= target <= 40
-
-> [!info] Approach
-> Unbounded choices — reuse is allowed. Backtracking explores all paths; pruning on `remaining < 0` cuts branches. DFS from index `start`; at each step include `candidates[i]` and stay at `i` (reuse) or move to `i+1`. Recurse with `(start=i, remaining-candidates[i])`. Backtrack by popping. Sort candidates for early termination.
-
-
-> [!note]- Python Solution
-> ```python
-> def combination_sum(candidates, target):
->     candidates.sort()
->     result = []
-> 
->     def dfs(start, path, remaining):
->         if remaining == 0:
->             result.append(path[:])
->             return
->         for i in range(start, len(candidates)):
->             if candidates[i] > remaining:
->                 break  # sorted → no point continuing
->             path.append(candidates[i])
->             dfs(i, path, remaining - candidates[i])  # i not i+1: reuse allowed
->             path.pop()
-> 
->     dfs(0, [], target)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(target/min_c) branches in worst case, output-sensitive. Space O(target/min_c) call depth.
-
-> [!tip] Alternatives
-> BFS level by level (sum increases by one candidate per level). DP for counting ways only.
-
----
-
-### Combination Sum II (No Reuse)
+### Combination Sum II (No Reuse) `🔥 Google`
 
 > [!example] Problem
 > Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
@@ -362,7 +188,6 @@ difficulty: mixed
 > [!info] Approach
 > Elements can repeat in input but not in output combinations. Key: sort + skip-duplicate guard prevents generating `[1a, 2]` and `[1b, 2]` separately when two `1`s exist. Same DFS but recurse with `i+1` and skip `candidates[j] == candidates[j-1]` when `j > start`. `if j > start and candidates[j] == candidates[j-1]: continue` — only skip siblings, not the first occurrence at a level.
 
-
 > [!note]- Python Solution
 > ```python
 > def combination_sum2(candidates, target):
@@ -394,61 +219,7 @@ difficulty: mixed
 
 ---
 
-### Generate Parentheses
-
-> [!example] Problem
-> Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
-> 
-> **Example 1:**
-> ```
-> Input: n = 3
-> Output: ["((()))","(()())","(())()","()(())","()()()"]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 1
-> Output: ["()"]
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 8
-
-> [!info] Approach
-> Validity constraints are locally checkable at each position — prune invalid branches without generating full strings. DFS building the string character by character. State = `(open_count, close_count)`. Add `(` if `open < n`; add `)` if `close < open`. Leaf = string of length `2n`.
-
-
-> [!note]- Python Solution
-> ```python
-> def generate_parenthesis(n):
->     result = []
-> 
->     def dfs(path, open_c, close_c):
->         if len(path) == 2 * n:
->             result.append(''.join(path))
->             return
->         if open_c < n:
->             path.append('(')
->             dfs(path, open_c + 1, close_c)
->             path.pop()
->         if close_c < open_c:
->             path.append(')')
->             dfs(path, open_c, close_c + 1)
->             path.pop()
-> 
->     dfs([], 0, 0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(4^n / √n) — Catalan number C_n counts valid strings. Space O(n) depth.
-
-> [!tip] Alternatives
-> Iterative BFS building strings level by level. DP building from smaller valid sequences.
-
----
-
-### Word Search (Grid Backtracking)
+### Word Search (Grid Backtracking) `🔥 Google`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -482,7 +253,6 @@ difficulty: mixed
 > [!info] Approach
 > Exponential state space of paths; backtracking explores all starting positions and directions, pruning when the current character doesn't match. DFS from each cell; mark visited in-place (avoid extra space); restore on backtrack. Mark `board[r][c]` with a sentinel (e.g., `'#'`) before recursing, restore after. Check bounds and match before recursing.
 
-
 > [!note]- Python Solution
 > ```python
 > def exist(board, word):
@@ -509,247 +279,7 @@ difficulty: mixed
 
 ---
 
-### Palindrome Partitioning
-
-> [!example] Problem
-> Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
-> 
-> **Example 1:**
-> ```
-> Input: s = "aab"
-> Output: [["a","a","b"],["aa","b"]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "a"
-> Output: [["a"]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 16
-> - s contains only lowercase English letters.
-
-> [!info] Approach
-> Exponential number of partitions; prune by only recursing on palindromic prefixes. Precomputing `is_pal[i][j]` eliminates repeated palindrome checks. DFS from `start`; at each position try all palindromic prefixes starting at `start`. Precompute `is_pal` in O(n²). DFS: for each `end ≥ start`, if `is_pal[start][end]`, add substring and recurse from `end+1`.
-
-
-> [!note]- Python Solution
-> ```python
-> def partition(s):
->     n = len(s)
->     is_pal = [[False] * n for _ in range(n)]
->     for i in range(n - 1, -1, -1):
->         for j in range(i, n):
->             is_pal[i][j] = s[i] == s[j] and (j - i < 2 or is_pal[i+1][j-1])
-> 
->     result = []
-> 
->     def dfs(start, path):
->         if start == n:
->             result.append(path[:])
->             return
->         for end in range(start, n):
->             if is_pal[start][end]:
->                 path.append(s[start:end+1])
->                 dfs(end + 1, path)
->                 path.pop()
-> 
->     dfs(0, [])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n² + 2^n) — O(n²) precompute, O(2^n) worst-case partitions. Space O(n²) table.
-
-> [!tip] Alternatives
-> Check palindrome inline (O(n) per check) if not precomputing — O(n · 2^n) total.
-
----
-
-### Letter Case Permutation
-
-> [!example] Problem
-> Given a string s, you can transform every letter individually to be lowercase or uppercase to create another string.
-> Return a list of all possible strings we could create. Return the output in any order.
-> 
-> **Example 1:**
-> ```
-> Input: s = "a1b2"
-> Output: ["a1b2","a1B2","A1b2","A1B2"]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "3z4"
-> Output: ["3z4","3Z4"]
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 12
-> - s consists of lowercase English letters, uppercase English letters, and digits.
-
-> [!info] Approach
-> Each letter creates a binary branch (upper/lower); digits have no branch. Backtracking with character-level mutation. DFS character by character; digits pass through; letters branch into two calls. At index `i`, if digit: recurse with `i+1`. If letter: set lowercase, recurse, set uppercase, recurse.
-
-
-> [!note]- Python Solution
-> ```python
-> def letter_case_permutation(s):
->     result = []
->     chars = list(s)
-> 
->     def dfs(i):
->         if i == len(chars):
->             result.append(''.join(chars))
->             return
->         dfs(i + 1)  # keep as-is (handles digits and one letter branch)
->         if chars[i].isalpha():
->             chars[i] = chars[i].upper() if chars[i].islower() else chars[i].lower()
->             dfs(i + 1)
->             chars[i] = chars[i].upper() if chars[i].islower() else chars[i].lower()
-> 
->     dfs(0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(2^L · n) where L = number of letters. Space O(n) depth.
-
-> [!tip] Alternatives
-> BFS: start with `[s]`, for each letter position expand all current strings into two versions.
-
----
-
-## Constraint Satisfaction
-
-### N-Queens
-
-> [!example] Problem
-> The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
-> Given an integer n, return all distinct solutions to the n-queens puzzle. You may return the answer in any order.
-> Each solution contains a distinct board configuration of the n-queens' placement, where 'Q' and '.' both indicate a queen and an empty space, respectively.
-> 
-> **Example 1:**
-> ```
-> Input: n = 4
-> Output: [[".Q..","...Q","Q...","..Q."],["..Q.","Q...","...Q",".Q.."]]
-> Explanation: There exist two distinct solutions to the 4-queens puzzle as shown above
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 1
-> Output: [["Q"]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 9
-
-> [!info] Approach
-> 8^8 brute force positions; backtracking with clash sets prunes immediately when a queen attacks another. At most N! leaves to visit (one queen per row). Place one queen per row; track occupied columns and diagonals. Track sets `cols`, `diag1` (r-c), `diag2` (r+c). For each row, try each column not in any set; add to sets, recurse, remove.
-
-
-> [!note]- Python Solution
-> ```python
-> def solve_n_queens(n):
->     result = []
->     queens = []  # queens[r] = column of queen in row r
->     cols = set()
->     diag1 = set()  # r - c
->     diag2 = set()  # r + c
-> 
->     def dfs(row):
->         if row == n:
->             board = ['.' * c + 'Q' + '.' * (n - c - 1) for c in queens]
->             result.append(board)
->             return
->         for col in range(n):
->             if col in cols or (row - col) in diag1 or (row + col) in diag2:
->                 continue
->             cols.add(col); diag1.add(row - col); diag2.add(row + col)
->             queens.append(col)
->             dfs(row + 1)
->             queens.pop()
->             cols.remove(col); diag1.remove(row - col); diag2.remove(row + col)
-> 
->     dfs(0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n!) upper bound — pruning makes it much faster in practice. Space O(n) depth + O(n) tracking sets.
-
-> [!tip] Alternatives
-> Bitmask for columns and diagonals — constant-factor speedup. DLX (Dancing Links) for very large n.
-
----
-
-### Sudoku Solver
-
-> [!example] Problem
-> Write a program to solve a Sudoku puzzle by filling the empty cells.
-> A sudoku solution must satisfy all of the following rules:
-> The '.' character indicates empty cells.
-> 
-> **Example 1:**
-> ```
-> Input: board = [["5","3",".",".","7",".",".",".","."],["6",".",".","1","9","5",".",".","."],[".","9","8",".",".",".",".","6","."],["8",".",".",".","6",".",".",".","3"],["4",".",".","8",".","3",".",".","1"],["7",".",".",".","2",".",".",".","6"],[".","6",".",".",".",".","2","8","."],[".",".",".","4","1","9",".",".","5"],[".",".",".",".","8",".",".","7","9"]]
-> Output: [["5","3","4","6","7","8","9","1","2"],["6","7","2","1","9","5","3","4","8"],["1","9","8","3","4","2","5","6","7"],["8","5","9","7","6","1","4","2","3"],["4","2","6","8","5","3","7","9","1"],["7","1","3","9","2","4","8","5","6"],["9","6","1","5","3","7","2","8","4"],["2","8","7","4","1","9","6","3","5"],["3","4","5","2","8","6","1","7","9"]]
-> Explanation: The input board is shown above and the only valid solution is shown below:
-> ```
-> 
-> **Constraints:**
-> - board.length == 9
-> - board[i].length == 9
-> - board[i][j] is a digit or '.'.
-> - It is guaranteed that the input board has only one solution.
-
-> [!info] Approach
-> Constraint satisfaction; 9 choices per empty cell but constraints prune rapidly. Backtracking with early exit on first valid solution. Find next empty cell, try digits 1-9, check validity, recurse. Precompute sets for each row, column, and 3×3 box. At each empty cell, try only valid digits; backtrack immediately on failure.
-
-
-> [!note]- Python Solution
-> ```python
-> def solve_sudoku(board):
->     rows = [set() for _ in range(9)]
->     cols = [set() for _ in range(9)]
->     boxes = [set() for _ in range(9)]
-> 
->     for r in range(9):
->         for c in range(9):
->             if board[r][c] != '.':
->                 d = board[r][c]
->                 rows[r].add(d); cols[c].add(d); boxes[(r//3)*3+c//3].add(d)
-> 
->     def solve():
->         for r in range(9):
->             for c in range(9):
->                 if board[r][c] == '.':
->                     box_id = (r // 3) * 3 + c // 3
->                     for d in '123456789':
->                         if d not in rows[r] and d not in cols[c] and d not in boxes[box_id]:
->                             board[r][c] = d
->                             rows[r].add(d); cols[c].add(d); boxes[box_id].add(d)
->                             if solve():
->                                 return True
->                             board[r][c] = '.'
->                             rows[r].discard(d); cols[c].discard(d); boxes[box_id].discard(d)
->                     return False
->         return True
-> 
->     solve()
-> ```
-
-> [!success] Complexity
-> Time O(9^(empty_cells)) worst case; in practice much faster with constraint propagation. Space O(81) board + O(81) recursion depth.
-
-> [!tip] Alternatives
-> Arc consistency / constraint propagation (AC-3) reduces candidates before backtracking. DLX for competitive solving.
-
----
-
-### Word Search II (Trie + Backtracking)
+### Word Search II (Trie + Backtracking) `🔥 Google`
 
 > [!example] Problem
 > Given an m x n board of characters and a list of strings words, return all words on the board.
@@ -779,7 +309,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Running Word Search separately for each word is O(W · m·n · 4^L). A Trie lets one DFS pass check all words simultaneously — prune when the current path isn't a prefix of any word. Build Trie from word list. DFS from each cell; follow Trie nodes; when a terminal node is reached, record the word. At each cell, check `trie_node.children[char]`. If present, descend. If `trie_node.word`, add to results. Mark visited, recurse 4 directions, unmark. Prune exhausted Trie subtrees.
-
 
 > [!note]- Python Solution
 > ```python
@@ -850,7 +379,6 @@ difficulty: mixed
 > [!info] Approach
 > Each integer `k` in `[1..n]` can be the root; values `1..k-1` form the left subtree and `k+1..n` form the right subtree. Recursive structure — memoize on `(lo, hi)`. Return all possible root nodes for the BST using values `lo` to `hi`. For each root `k` in `[lo, hi]`, generate all left subtrees (using `lo..k-1`) and all right subtrees (using `k+1..hi`), combine every pair.
 
-
 > [!note]- Python Solution
 > ```python
 > from functools import lru_cache
@@ -918,7 +446,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Exponential operator assignments require backtracking. Multiplication's precedence requires tracking the previously added operand to undo and reapply multiplication. DFS building expression string; carry `curr_val` (running value) and `prev_operand` (last added term, for `*` precedence). For each position, try each multi-digit number (avoid leading zeros). On `*`: `curr_val = curr_val - prev_operand + prev_operand * num`; on `+/-`: standard addition.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1044,7 +571,6 @@ difficulty: mixed
 > [!info] Approach
 > Unknown grid topology — must explore via state-space DFS. Track visited coordinates; after each branch, return the robot to the previous position and heading (backtracking). DFS in four directions; track `(row, col)` in visited set; after exploring a subtree, reverse the robot back. Try each of 4 directions (relative to current heading using direction vectors). On return: turn 180°, move forward, turn 180° to restore position+heading.
 
-
 > [!note]- Python Solution
 > ```python
 > def clean_room(robot):
@@ -1081,7 +607,7 @@ difficulty: mixed
 
 ## Foundation — Recursion Fundamentals
 
-### Binary Search (Recursive)
+### Binary Search (Recursive) `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.
@@ -1109,7 +635,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The array is sorted — at each step the search space halves by comparing the midpoint. Recursion mirrors the decision tree: go left or go right. Compute mid; if `nums[mid] == target` return mid; recurse on left or right half. Pass `lo`, `hi` as parameters. Base case: `lo > hi` → return -1. No extra space beyond call stack.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1143,7 +668,6 @@ difficulty: mixed
 > [!info] Approach
 > The recurrence is T(n) = 2T(n-1) + 1. Moving `n` disks = move top `n-1` to B (using C), move largest to C, move `n-1` from B to C (using A). Classic divide-and-conquer recursion with no overlapping subproblems. Recursion with three named pegs; base case is 1 disk. `hanoi(n-1, src, aux, dst)` → move disk n → `hanoi(n-1, aux, src, dst)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def hanoi(n, src, aux, dst):
@@ -1176,7 +700,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each element has exactly two choices — include or exclude. The include/exclude recursion tree has 2^n leaves, each representing one subsequence. DFS from index 0; branch into "include `arr[i]`" and "exclude `arr[i]`"; print at leaf. Carry a running `path`. At index == n, print path. Recurse both branches at each step.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1214,7 +737,6 @@ difficulty: mixed
 > [!info] Approach
 > After each elimination the circle shrinks by 1 and the indices shift. The recurrence `J(n,k) = (J(n-1,k) + k) % n` computes the survivor's position in the reduced circle and maps it back to the original numbering. Recursive formula: `J(1,k) = 0`; `J(n,k) = (J(n-1,k) + k) % n`. Memoize or convert to iteration to avoid O(n) stack depth.
 
-
 > [!note]- Python Solution
 > ```python
 > # Recursive (clean but O(n) stack)
@@ -1241,67 +763,7 @@ difficulty: mixed
 
 ## Graph — Recursive Traversal
 
-### All Paths from Source to Target
-
-> [!example] Problem
-> Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
-> The graph is given as follows: graph[i] is a list of all nodes you can visit from node i (i.e., there is a directed edge from node i to node graph[i][j]).
-> 
-> **Example 1:**
-> ```
-> Input: graph = [[1,2],[3],[3],[]]
-> Output: [[0,1,3],[0,2,3]]
-> Explanation: There are two paths: 0 -> 1 -> 3 and 0 -> 2 -> 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: graph = [[4,3,1],[3,2,4],[3],[4],[]]
-> Output: [[0,4],[0,3,4],[0,1,3,4],[0,1,2,3,4],[0,1,4]]
-> ```
-> 
-> **Constraints:**
-> - n == graph.length
-> - 2 <= n <= 15
-> - 0 <= graph[i][j] < n
-> - graph[i][j] != i (i.e., there will be no self-loops).
-> - All the elements of graph[i] are unique.
-> - The input graph is guaranteed to be a DAG.
-
-> [!info] Approach
-> DAG has no cycles so recursion terminates naturally. Backtracking explores all paths without needing an explicit visited set (DAG guarantees no revisit loops). DFS from 0; at each node extend path along all neighbors; record when node n-1 is reached. Backtrack by appending node, recursing through neighbors, then popping.
-
-
-> [!note]- Python Solution
-> ```python
-> def all_paths_source_target(graph):
->     target = len(graph) - 1
->     result = []
-> 
->     def dfs(node, path):
->         if node == target:
->             result.append(path[:])
->             return
->         for neighbor in graph[node]:
->             path.append(neighbor)
->             dfs(neighbor, path)
->             path.pop()
-> 
->     dfs(0, [0])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(2^n · n) — up to 2^n paths in a complete DAG, O(n) to copy each. Space O(n) call depth.
-
-> [!tip] Alternatives
-> BFS with path accumulation — uses O(2^n · n) memory for all partial paths simultaneously; DFS is memory-friendlier.
-
----
-
-## String Recursion
-
-### Decode String (Recursive)
+### Decode String (Recursive) `⭐ Google`
 
 > [!example] Problem
 > Given an encoded string, return its decoded string.
@@ -1335,7 +797,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Nested brackets are naturally recursive — decoding the inner bracket is a subproblem of the same type. Recursion with an index pointer consumes the string in one pass. Recursive descent parser; when `[` is encountered, recurse; when `]` is encountered, return current decoded string. Pass a mutable index (via list). Accumulate digits for `k`, accumulate chars for the current segment, recurse on `[`, multiply result on `]`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1407,7 +868,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Nested structure is recursively defined — a list element is either an integer (base case) or another list (recursive case). DFS through the nested list; at each element, if integer → add to result; if list → recurse. Single recursive function that iterates over the current list and dispatches based on element type.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1504,7 +964,6 @@ difficulty: mixed
 > [!info] Approach
 > Each nesting level increments the depth multiplier — a natural recursion where the depth parameter is passed down. Recursive DFS; carry `depth` parameter; add `value * depth` for integers; recurse with `depth + 1` for nested lists. Start with `depth=1`. At each integer, accumulate `val * depth`. At each list, recurse with `depth + 1`.
 
-
 > [!note]- Python Solution
 > ```python
 > def depth_sum(nestedList, depth=1):
@@ -1537,7 +996,7 @@ difficulty: mixed
 
 ## Dynamic Programming Foundations (Recursive + Memo)
 
-### Climbing Stairs (Memoized Recursion)
+### Climbing Stairs (Memoized Recursion) `🔥 Google`
 
 > [!example] Problem
 > You are climbing a staircase. It takes n steps to reach the top.
@@ -1567,7 +1026,6 @@ difficulty: mixed
 
 > [!info] Approach
 > At each stair, you can arrive from stair `n-1` (one step) or stair `n-2` (two steps). The problem has optimal substructure and overlapping subproblems — identical to Fibonacci. `ways(n) = ways(n-1) + ways(n-2)` with `ways(0) = 1`, `ways(1) = 1`. Memoize to avoid recomputation. `@lru_cache` or manual dict. Can extend to k steps: `ways(n) = sum(ways(n-i) for i in 1..k if n-i >= 0)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1602,252 +1060,7 @@ difficulty: mixed
 
 ---
 
-### Count Good Numbers
-
-> [!example] Problem
-> A digit string is good if the digits (0-indexed) at even indices are even and the digits at odd indices are prime (2, 3, 5, or 7).
-> Given an integer n, return the total number of good digit strings of length n. Since the answer may be large, return it modulo 109 + 7.
-> A digit string is a string consisting of digits 0 through 9 that may contain leading zeros.
-> 
-> **Example 1:**
-> ```
-> Input: n = 1
-> Output: 5
-> Explanation: The good numbers of length 1 are "0", "2", "4", "6", "8".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 4
-> Output: 400
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: n = 50
-> Output: 564908303
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 1015
-
-> [!info] Approach
-> The count factorises: `5^(ceil(n/2)) * 4^(floor(n/2))`. Computing large powers requires fast exponentiation (recursive divide-and-conquer). `countGoodNumbers(n) = pow(5, even_positions) * pow(4, odd_positions) % MOD`. Even positions = `ceil(n/2)` = `(n+1)//2`. Odd positions = `floor(n/2)` = `n//2`. Use recursive fast-power.
-
-
-> [!note]- Python Solution
-> ```python
-> def count_good_numbers(n):
->     MOD = 10 ** 9 + 7
-> 
->     def fast_pow(base, exp):
->         if exp == 0:
->             return 1
->         half = fast_pow(base, exp // 2)
->         if exp % 2 == 0:
->             return half * half % MOD
->         return half * half % MOD * base % MOD
-> 
->     even_positions = (n + 1) // 2  # indices 0, 2, 4, ...
->     odd_positions = n // 2         # indices 1, 3, 5, ...
->     return fast_pow(5, even_positions) * fast_pow(4, odd_positions) % MOD
-> ```
-
-> [!success] Complexity
-> Time O(log n) for fast exponentiation. Space O(log n) call depth.
-
-> [!tip] Alternatives
-> Python's built-in `pow(base, exp, mod)` performs modular fast exponentiation in one call — use in actual interviews.
-
----
-
-## Mutual / Cross-Recursion
-
-### Wildcard Matching (LC 44)
-
-> [!example] Problem
-> Given an input string (s) and a pattern (p), implement wildcard pattern matching with support for '?' and '*' where:
-> The matching should cover the entire input string (not partial).
-> 
-> **Example 1:**
-> ```
-> Input: s = "aa", p = "a"
-> Output: false
-> Explanation: "a" does not match the entire string "aa".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aa", p = "*"
-> Output: true
-> Explanation: '*' matches any sequence.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "cb", p = "?a"
-> Output: false
-> Explanation: '?' matches 'c', but the second letter is 'a', which does not match 'b'.
-> ```
-> 
-> **Constraints:**
-> - 0 <= s.length, p.length <= 2000
-> - s contains only lowercase English letters.
-> - p contains only lowercase English letters, '?' or '*'.
-
-> [!info] Approach
-> At each position the decision branches: `?` forces a single-char match, `*` can consume 0 or more chars — mutual choices that require exploring both sub-cases. Memoisation collapses exponential branching to O(m·n). Recursive function `dp(i, j)` on indices into `s` and `p`, memoised. Base cases: both exhausted → `True`; pattern exhausted → `False`; string exhausted → remaining pattern must be all `*`. Recursive: if `p[j] == '*'`, try skip-star (`dp(i, j+1)`) or consume-one (`dp(i+1, j)`). Else if `p[j] == '?'` or `p[j] == s[i]`, advance both.
-
-
-> [!note]- Python Solution
-> ```python
-> from functools import lru_cache
-> 
-> def is_match(s, p):
->     @lru_cache(maxsize=None)
->     def dp(i, j):
->         if i == len(s) and j == len(p):
->             return True
->         if j == len(p):
->             return False
->         if i == len(s):
->             return all(c == '*' for c in p[j:])
->         if p[j] == '*':
->             return dp(i, j + 1) or dp(i + 1, j)
->         if p[j] == '?' or p[j] == s[i]:
->             return dp(i + 1, j + 1)
->         return False
->     return dp(0, 0)
-> ```
-
-> [!success] Complexity
-> Time O(m·n), Space O(m·n) memo table.
-
-> [!tip] Alternatives
-> Greedy: track last `*` position and last matched index — O(m+n) time, O(1) space. Bottom-up DP table also common.
-
----
-
-### Regular Expression Matching (LC 10)
-
-> [!example] Problem
-> Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
-> The matching should cover the entire input string (not partial).
-> 
-> **Example 1:**
-> ```
-> Input: s = "aa", p = "a"
-> Output: false
-> Explanation: "a" does not match the entire string "aa".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aa", p = "a*"
-> Output: true
-> Explanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "ab", p = ".*"
-> Output: true
-> Explanation: ".*" means "zero or more (*) of any character (.)".
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 20
-> - 1 <= p.length <= 20
-> - s contains only lowercase English letters.
-> - p contains only lowercase English letters, '.', and '*'.
-> - It is guaranteed for each appearance of the character '*', there will be a previous valid character to match.
-
-> [!info] Approach
-> `*` introduces a cross-recursion: either the preceding element matches and we try consuming one more char, or we skip the `x*` unit entirely — two recursive branches with shared subproblems. Memoised recursion `dp(i, j)` on string index `i` and pattern index `j`. If `j+1 < len(p)` and `p[j+1] == '*'`: either skip the `x*` pair (`dp(i, j+2)`) or, if current chars match, consume one from `s` (`dp(i+1, j)`). Otherwise if chars match (`.` or exact), advance both.
-
-
-> [!note]- Python Solution
-> ```python
-> from functools import lru_cache
-> 
-> def is_match(s, p):
->     @lru_cache(maxsize=None)
->     def dp(i, j):
->         if j == len(p):
->             return i == len(s)
->         first_match = i < len(s) and p[j] in {s[i], '.'}
->         if j + 1 < len(p) and p[j + 1] == '*':
->             return dp(i, j + 2) or (first_match and dp(i + 1, j))
->         return first_match and dp(i + 1, j + 1)
->     return dp(0, 0)
-> ```
-
-> [!success] Complexity
-> Time O(m·n), Space O(m·n) memo table.
-
-> [!tip] Alternatives
-> Bottom-up DP (classic interview approach). NFA simulation (Thompson's construction) gives O(m·n) without recursion.
-
----
-
-## Structural Tree Recursion
-
-### Flatten Binary Tree to Linked List (LC 114)
-
-> [!example] Problem
-> Given the root of a binary tree, flatten the tree into a "linked list"
-> 
-> **Example 1:**
-> ```
-> Input: root = [1,2,5,3,4,null,6]
-> Output: [1,null,2,null,3,null,4,null,5,null,6]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: root = []
-> Output: []
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: root = [0]
-> Output: [0]
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the tree is in the range [0, 2000].
-> - -100 <= Node.val <= 100
-
-> [!info] Approach
-> Preorder visits root → left subtree → right subtree. If we recursively flatten both subtrees, we can stitch: root → flattened-left → flattened-right by connecting root.right to the left chain's tail, then moving the left chain to the right. Post-order style recursion — flatten left and right children first, then rewire. Recursively flatten `root.left` and `root.right`. Find the rightmost node of the flattened left subtree. Attach `root.right` to it, move the left chain to `root.right`, set `root.left = None`.
-
-
-> [!note]- Python Solution
-> ```python
-> def flatten(root):
->     if not root:
->         return
->     flatten(root.left)
->     flatten(root.right)
->     if root.left:
->         tail = root.left
->         while tail.right:
->             tail = tail.right
->         tail.right = root.right
->         root.right = root.left
->         root.left = None
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(h) call stack (h = tree height).
-
-> [!tip] Alternatives
-> Morris traversal: O(1) space, O(n) time — find inorder predecessor to rewire without a stack.
-
----
-
-### Construct Binary Tree from Preorder and Inorder Traversal (LC 105)
+### Construct Binary Tree from Preorder and Inorder Traversal (LC 105) `🔥 Google`
 
 > [!example] Problem
 > Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
@@ -1875,7 +1088,6 @@ difficulty: mixed
 
 > [!info] Approach
 > `preorder[0]` is always the root. Its index in `inorder` splits the array into left and right subtrees. Recursion mirrors the structural decomposition. Recurse with shrinking subarrays (or index bounds + hash map for O(1) lookup). Root = `preorder[0]`. Find `mid = inorder.index(root.val)`. Left subtree uses `preorder[1:mid+1]` and `inorder[:mid]`. Right uses the remainder.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1906,7 +1118,7 @@ difficulty: mixed
 
 ---
 
-### Serialize and Deserialize Binary Tree (LC 297)
+### Serialize and Deserialize Binary Tree (LC 297) `🔥 Google`
 
 > [!example] Problem
 > Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
@@ -1931,7 +1143,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Preorder traversal with explicit null markers uniquely encodes any binary tree, enabling recursive reconstruction without an inorder array. Serialize via DFS preorder, emit `"#"` for nulls. Deserialize by consuming tokens from a queue. Serialize: `root.val, serialize(left), serialize(right)` joined by a delimiter. Deserialize: pop from `deque`; if `"#"` return `None`; else create node and recurse for left then right.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1971,69 +1182,7 @@ difficulty: mixed
 
 ---
 
-### Count Complete Tree Nodes (LC 222)
-
-> [!example] Problem
-> Given the root of a complete binary tree, return the number of the nodes in the tree.
-> According to Wikipedia, every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible. It can have between 1 and 2h nodes inclusive at the last level h.
-> Design an algorithm that runs in less than O(n) time complexity.
-> 
-> **Example 1:**
-> ```
-> Input: root = [1,2,3,4,5,6]
-> Output: 6
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: root = []
-> Output: 0
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: root = [1]
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the tree is in the range [0, 5 * 10^4].
-> - 0 <= Node.val <= 5 * 10^4
-> - The tree is guaranteed to be complete.
-
-> [!info] Approach
-> In a complete binary tree, the height of the leftmost path equals the height of the rightmost path iff the left subtree is a perfect binary tree. This lets us skip half the tree per recursion level. Compute left-height and right-height at each node. If equal, left subtree is perfect → count = `2^left_h - 1 + 1` (include root) + recurse right. Else recurse left. `left_h = right_h` → left is full, so `(1 << left_h) + count(root.right)`. Otherwise `(1 << right_h) + count(root.left)`.
-
-
-> [!note]- Python Solution
-> ```python
-> def count_nodes(root):
->     if not root:
->         return 0
->     left_h = right_h = 0
->     l, r = root, root
->     while l:
->         left_h += 1
->         l = l.left
->     while r:
->         right_h += 1
->         r = r.right
->     if left_h == right_h:
->         return (1 << left_h) - 1
->     return 1 + countNodes(root.left) + countNodes(root.right)
-> ```
-
-> [!success] Complexity
-> Time O(log^2 n) — O(log n) levels, O(log n) height check each. Space O(log n) call stack.
-
-> [!tip] Alternatives
-> Binary search on node index at the last level: O(log^2 n) iterative.
-
----
-
-## Combinatorial Generation
-
-### Permutations II (LC 47)
+### Permutations II (LC 47) `🔥 Google`
 
 > [!example] Problem
 > Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
@@ -2059,7 +1208,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Duplicates at the same recursion level produce identical branches. Sorting + skipping duplicate elements at each level prunes these branches exactly. Backtracking with a `used` boolean array; sort first. Sort `nums`. At each level, skip `nums[i]` if `nums[i] == nums[i-1]` and `not used[i-1]` (sibling was already explored — ensures we always use the left duplicate before the right at any level).
-
 
 > [!note]- Python Solution
 > ```python
@@ -2094,7 +1242,7 @@ difficulty: mixed
 
 ---
 
-### Subsets II (LC 90)
+### Subsets II (LC 90) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
@@ -2118,7 +1266,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Same duplicate-skip strategy as Permutations II but applied to the combination/subset template. At each index in a sorted array, skip if current equals previous and previous was not part of the current path extension. Sort + backtracking; record path at every node, skip duplicate siblings. Sort `nums`. In the loop `for i in range(start, n)`: if `i > start and nums[i] == nums[i-1]`, skip. Append path snapshot, continue.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2147,7 +1294,7 @@ difficulty: mixed
 
 ---
 
-### Combinations (LC 77)
+### Combinations (LC 77) `🔥 Google`
 
 > [!example] Problem
 > Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
@@ -2174,7 +1321,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Classic choose-k-from-n combinatorial generation. At each level choose one number ≥ current start, recurse with start+1 until path length equals k. Backtracking with a start index and path length guard. Prune early: if remaining elements `n - i + 1 < k - len(path)`, no valid completion possible — skip.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2206,7 +1352,7 @@ difficulty: mixed
 
 ## Divide and Conquer — Advanced
 
-### Maximum Subarray — D&C (O(n log n))
+### Maximum Subarray — D&C (O(n log n)) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -2239,7 +1385,6 @@ difficulty: mixed
 > [!info] Approach
 > Illustrates D&C: split at mid; max subarray is entirely in left half, entirely in right half, or crosses the midpoint. Crossing case is O(n) per level; depth is O(log n). Recurse on left and right halves; compute max crossing sum by linear scan outward from `mid`. `max_cross` = max suffix of left + max prefix of right. Return `max(max_left, max_right, max_cross)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def max_sub_array(nums):
@@ -2270,14 +1415,13 @@ difficulty: mixed
 
 ---
 
-### Pow(x, n) — Fast Exponentiation
+### Pow(x, n) — Fast Exponentiation `🔥 Google`
 
 > [!example] Problem
 > Implement `pow(x, n)` for real `x` and integer `n` (including negative `n`).
 
 > [!info] Approach
 > Naive O(n) multiplication is too slow for large `n`. Halving the exponent each call gives O(log n) multiplications. Recursive fast exponentiation (exponentiation by squaring). If `n == 0` return 1. If `n < 0`, compute `1 / pow(x, -n)`. If `n` is even, `half = pow(x, n//2); return half * half`. If odd, `return x * pow(x, n-1)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2307,7 +1451,6 @@ difficulty: mixed
 
 > [!info] Approach
 > During merge sort, when a right-half element is placed before left-half elements, all remaining left-half elements form inversions with it. Counting this during merge is O(n log n) total. Modified merge sort that accumulates an inversion count. In the merge step, when `right[j] < left[i]`, add `len(left) - i` to the count (all remaining left elements are greater than `right[j]`).
-
 
 > [!note]- Python Solution
 > ```python
@@ -2342,7 +1485,7 @@ difficulty: mixed
 
 ## Recursion on Graphs
 
-### Clone Graph (LC 133)
+### Clone Graph (LC 133) `🔥 Google`
 
 > [!example] Problem
 > Given a reference of a node in a connected undirected graph.
@@ -2396,7 +1539,6 @@ difficulty: mixed
 > [!info] Approach
 > DFS naturally visits each node once; a hash map from original → clone prevents revisiting and handles cycles. DFS with a `visited` dict mapping original nodes to their clones. If node already in `visited`, return its clone. Otherwise create a new node, record it in `visited`, then recursively clone each neighbor and append to the new node's neighbors list.
 
-
 > [!note]- Python Solution
 > ```python
 > def clone_graph(node):
@@ -2424,7 +1566,7 @@ difficulty: mixed
 
 ---
 
-### Number of Islands (LC 200)
+### Number of Islands (LC 200) `🔥 Google`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -2461,7 +1603,6 @@ difficulty: mixed
 > [!info] Approach
 > DFS flood-fill: when a `'1'` is found, recursively sink the entire connected land mass (mark as `'0'`) so it is never counted again. Each DFS call corresponds to one island. Iterate over all cells; on encountering `'1'`, increment count and launch DFS to mark the island. DFS marks `grid[r][c] = '0'` then recurses into all 4 directions if in-bounds and `== '1'`.
 
-
 > [!note]- Python Solution
 > ```python
 > def num_islands(grid):
@@ -2495,7 +1636,7 @@ difficulty: mixed
 
 ## Recursive Parsing / Evaluation
 
-### Basic Calculator II (LC 227)
+### Basic Calculator II (LC 227) `🔥 Google`
 
 > [!example] Problem
 > Given a string s which represents an expression, evaluate this expression and return its value.
@@ -2530,7 +1671,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Operator precedence makes this a parsing problem. A recursive descent parser separates addition/subtraction (low precedence) from multiplication/division (high precedence) using mutual recursion between grammar levels. Recursive descent: `expr → term (('+' | '-') term)*`, `term → factor (('*' | '/') factor)*`. Use an index pointer (wrapped in a list for mutability) advanced through the string. `parse_expr` calls `parse_term` repeatedly; `parse_term` calls `parse_factor` (a number).
-
 
 > [!note]- Python Solution
 > ```python
@@ -2571,91 +1711,6 @@ difficulty: mixed
 
 ---
 
-### Evaluate Division (LC 399)
-
-> [!example] Problem
-> You are given an array of variable pairs equations and an array of real numbers values, where equations[i] = [Ai, Bi] and values[i] represent the equation Ai / Bi = values[i]. Each Ai or Bi is a string that represents a single variable.
-> You are also given some queries, where queries[j] = [Cj, Dj] represents the jth query where you must find the answer for Cj / Dj = ?.
-> Return the answers to all queries. If a single answer cannot be determined, return -1.0.
-> Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction.
-> Note: The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them.
-> 
-> **Example 1:**
-> ```
-> Input: equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
-> Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000]
-> Explanation: 
-> Given: a / b = 2.0, b / c = 3.0
-> queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? 
-> return: [6.0, 0.5, -1.0, 1.0, -1.0 ]
-> note: x is undefined => -1.0
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0], queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
-> Output: [3.75000,0.40000,5.00000,0.20000]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],["a","c"],["x","y"]]
-> Output: [0.50000,2.00000,-1.00000,-1.00000]
-> ```
-> 
-> **Constraints:**
-> - 1 <= equations.length <= 20
-> - equations[i].length == 2
-> - 1 <= Ai.length, Bi.length <= 5
-> - values.length == equations.length
-> - 0.0 < values[i] <= 20.0
-> - 1 <= queries.length <= 20
-> - queries[i].length == 2
-> - 1 <= Cj.length, Dj.length <= 5
-> - Ai, Bi, Cj, Dj consist of lower case English letters and digits.
-
-> [!info] Approach
-> Model as a weighted directed graph: edge `a → b` has weight `val`, edge `b → a` has weight `1/val`. A query `x/y` is a path product from `x` to `y` — DFS with running product. Build adjacency list, then DFS for each query. DFS from `src` to `dst`, multiplying edge weights along the path, using a `visited` set to avoid cycles. Return accumulated product or `-1.0` if destination unreachable.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def calc_equation(equations, values, queries):
->     graph = defaultdict(dict)
->     for (a, b), val in zip(equations, values):
->         graph[a][b] = val
->         graph[b][a] = 1.0 / val
-> 
->     def dfs(src, dst, visited):
->         if src not in graph or dst not in graph:
->             return -1.0
->         if src == dst:
->             return 1.0
->         visited.add(src)
->         for neighbor, weight in graph[src].items():
->             if neighbor in visited:
->                 continue
->             result = dfs(neighbor, dst, visited)
->             if result != -1.0:
->                 return weight * result
->         return -1.0
-> 
->     return [dfs(a, b, set()) for a, b in queries]
-> ```
-
-> [!success] Complexity
-> Time O(Q · (V + E)) where Q = number of queries. Space O(V + E) for the graph.
-
-> [!tip] Alternatives
-> Union-Find with weighted edges (O(α(V)) per query after build). Floyd-Warshall O(V^3) preprocessing for O(1) queries — viable when V is small.
-
----
-
-## See Also
-
-[[dynamic-programming]] | [[backtracking]] | [[tree]] | [[divide-and-conquer]]
 ### Fast Doubling Fibonacci
 
 > [!example] Problem
@@ -2663,7 +1718,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The recurrence can be reduced by halving `n`, which turns linear recursion into logarithmic recursion depth. Use the fast-doubling identities: `F(2k) = F(k) * (2*F(k+1) - F(k))` and `F(2k+1) = F(k)^2 + F(k+1)^2`. A helper returns `(F(n), F(n+1))`, allowing each recursive step to reuse the same subproblem results.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2691,7 +1745,7 @@ difficulty: mixed
 
 ## Recursion — More Problems
 
-### Predict the Winner (LC 486)
+### Predict the Winner (LC 486) `⭐ Google`
 
 > [!example] Problem
 > You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
@@ -2722,7 +1776,6 @@ difficulty: mixed
 
 > [!info] Approach
 > This is a minimax recursion. From any subarray `[i, j]`, the current player picks the end that maximises their net advantage (their score minus the opponent's future score). If the first player's net advantage from the full array is ≥ 0, they win. `dp(i, j)` = maximum score advantage the current player can achieve over the opponent from subarray `[i, j]`. Base: `dp(i, i) = nums[i]`. Recurrence: `max(nums[i] - dp(i+1, j), nums[j] - dp(i, j-1))`. Memoize with `@lru_cache`. Return `dp(0, n-1) >= 0`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2788,7 +1841,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Lazy flattening with a stack: push the full list onto the stack. When `hasNext()` is called, peel the top until an integer is at the top. `next()` then pops and returns it. Stack holds iterators (via index pointers or list iterators). When the top element is a list, push the new list's iterator. When it's an integer, it's ready to be returned. Use a stack of `(nested_list, index)` pairs. `_advance()` is called by `hasNext()` to ensure the top is an integer.
-
 
 > [!note]- Python Solution
 > ```python

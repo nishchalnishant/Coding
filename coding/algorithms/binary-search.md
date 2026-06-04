@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Binary Search — Problem Set
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Lower Bound / Upper Bound
@@ -47,7 +53,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Need the leftmost index where `arr[i] >= target` — classic lower bound problem. Binary search with `hi = len(nums)` because the answer may be one past the last element. If `nums[mid] < target` → `lo = mid + 1`; else `hi = mid`. Loop terminates at `lo == hi`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -99,7 +104,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The version sequence has a monotone predicate: False…False, True…True. First True is a lower bound problem. Binary search on `[1, n]`. If `isBadVersion(mid)` is True, the first bad version is at `mid` or earlier. `if isBadVersion(mid): hi = mid` (don't discard mid); else `lo = mid + 1`. Terminates at `lo == hi`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -159,7 +163,6 @@ difficulty: mixed
 > [!info] Approach
 > Upper bound variant — find first index where `letters[i] > target`. Binary search; if `lo` ends at `len(letters)`, no letter qualifies → wrap to `letters[0]`. If `letters[mid] <= target` → `lo = mid + 1`; else `hi = mid`. Answer is `letters[lo % len]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def next_greatest_letter(letters, target):
@@ -211,7 +214,6 @@ difficulty: mixed
 > [!info] Approach
 > Array is sorted. For index `i`, there are `n - i` papers with at least `citations[i]` citations. Need the leftmost `i` where `citations[i] >= n - i`. Binary search for the leftmost valid index. Then `h = n - i`. If `citations[mid] < n - mid` → not enough citations here → `lo = mid + 1`; else `hi = mid`.
 
-
 > [!note]- Python Solution
 > ```python
 > def h_index(citations):
@@ -241,7 +243,7 @@ difficulty: mixed
 
 ---
 
-### Koko Eating Bananas (LC 875)
+### Koko Eating Bananas (LC 875) `🔥 Google`
 
 > [!example] Problem
 > Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.
@@ -275,7 +277,6 @@ difficulty: mixed
 > [!info] Approach
 > Larger `k` → fewer hours needed. Monotone: if speed `k` works, any speed `k' > k` also works. Binary search on `k`. Search `k` in `[1, max(piles)]`. Feasibility: `sum(ceil(p/k)) <= h`. `ceil(p/k)` without `math.ceil` → `-(-p // k)`. If feasible → `hi = mid` (try slower); else `lo = mid + 1`.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_eating_speed(piles, h):
@@ -300,7 +301,7 @@ difficulty: mixed
 
 ---
 
-### Capacity To Ship Packages Within D Days (LC 1011)
+### Capacity To Ship Packages Within D Days (LC 1011) `⭐ Google`
 
 > [!example] Problem
 > A conveyor belt has packages that must be shipped from one port to another within days days.
@@ -349,7 +350,6 @@ difficulty: mixed
 > [!info] Approach
 > Larger capacity → fewer days. Monotone predicate on capacity. Search capacity in `[max(weights), sum(weights)]` — minimum needed to ship heaviest package; maximum ships all in one day. Greedy feasibility: greedily fill each day; when adding next weight exceeds capacity, start a new day.
 
-
 > [!note]- Python Solution
 > ```python
 > def ship_within_days(weights, days):
@@ -380,7 +380,7 @@ difficulty: mixed
 
 ---
 
-### Split Array Largest Sum (LC 410)
+### Split Array Largest Sum (LC 410) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, split nums into k non-empty subarrays such that the largest sum of any subarray is minimized.
@@ -410,7 +410,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Larger allowed max-sum → easier to fit into `k` parts. Monotone predicate on the answer value. Binary search on `max_sum` in `[max(nums), sum(nums)]`. Feasibility: greedy partition counting. Greedily extend current subarray; when adding next element would exceed `max_sum`, start new part. If parts ≤ k → feasible.
-
 
 > [!note]- Python Solution
 > ```python
@@ -487,7 +486,6 @@ difficulty: mixed
 > [!info] Approach
 > Smaller allowed gap → more stations needed. Monotone on gap size → binary search on floating-point answer. Search `d` in `[0, stations[-1] - stations[0]]`. For each existing gap `g`, stations needed = `floor(g / d)`. 100 iterations of binary search achieves precision ~1e-30, well within the required 1e-6.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_max_gas_dist(stations, k):
@@ -560,7 +558,6 @@ difficulty: mixed
 > [!info] Approach
 > Higher speed → arrive earlier. Monotone integer predicate. Search `v` in `[1, 10^7]`. Each intermediate leg takes `ceil(d/v)` hours; last leg takes `d/v` (fractional OK). Early exit: if `hour <= n - 1`, impossible (each of `n-1` waits costs at least 1 hour).
 
-
 > [!note]- Python Solution
 > ```python
 > import math
@@ -600,7 +597,7 @@ difficulty: mixed
 
 ---
 
-### Search in Rotated Sorted Array (LC 33)
+### Search in Rotated Sorted Array (LC 33) `🔥 Google`
 
 > [!example] Problem
 > There is an integer array nums sorted in ascending order (with distinct values).
@@ -636,7 +633,6 @@ difficulty: mixed
 > [!info] Approach
 > Not fully sorted, but one half around any `mid` is always sorted. Use that to make a binary decision. Standard BS with an extra check — determine the sorted half, test if target is in it. If `nums[lo] <= nums[mid]`, left half `[lo, mid]` is sorted. If target in `[nums[lo], nums[mid])` → go left; else go right.
 
-
 > [!note]- Python Solution
 > ```python
 > def search(nums, target):
@@ -666,7 +662,7 @@ difficulty: mixed
 
 ---
 
-### Find Minimum in Rotated Sorted Array (LC 153)
+### Find Minimum in Rotated Sorted Array (LC 153) `🔥 Google`
 
 > [!example] Problem
 > Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
@@ -705,7 +701,6 @@ difficulty: mixed
 > [!info] Approach
 > Minimum is the rotation boundary. Compare `nums[mid]` with `nums[hi]`: if `nums[mid] > nums[hi]`, the minimum must be to the right. Binary search shrinking toward the minimum. Invariant: minimum is always in `[lo, hi]`. `if nums[mid] > nums[hi]: lo = mid + 1` else `hi = mid`. Do NOT compare with `nums[lo]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_min(nums):
@@ -727,7 +722,7 @@ difficulty: mixed
 
 ---
 
-### Search in Rotated Sorted Array II (LC 81)
+### Search in Rotated Sorted Array II (LC 81) `🔥 Google`
 
 > [!example] Problem
 > There is an integer array nums sorted in non-decreasing order (not necessarily with distinct values).
@@ -755,7 +750,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Duplicates create ambiguity: when `nums[lo] == nums[mid] == nums[hi]`, we cannot determine which half is sorted. Same logic as LC 33 with an extra degenerate case to shrink both boundaries. On ambiguity → `lo += 1; hi -= 1`. Worst case O(n) for all-same arrays.
-
 
 > [!note]- Python Solution
 > ```python
@@ -785,7 +779,7 @@ difficulty: mixed
 
 ---
 
-### Find Minimum in Rotated Sorted Array II (LC 154)
+### Find Minimum in Rotated Sorted Array II (LC 154) `🔥 Google`
 
 > [!example] Problem
 > Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,4,4,5,6,7] might become:
@@ -814,7 +808,6 @@ difficulty: mixed
 > [!info] Approach
 > Same as LC 153 but `nums[mid] == nums[hi]` is now possible — can't determine which half contains the minimum. When equal, safely shrink `hi` by 1 (minimum is not lost since `nums[mid] == nums[hi]`). Three-way branch on `nums[mid]` vs `nums[hi]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_min_with_dups(nums):
@@ -842,7 +835,7 @@ difficulty: mixed
 
 ---
 
-### Find Peak Element (LC 162)
+### Find Peak Element (LC 162) `⭐ Google`
 
 > [!example] Problem
 > A peak element is an element that is strictly greater than its neighbors.
@@ -871,7 +864,6 @@ difficulty: mixed
 
 > [!info] Approach
 > If `nums[mid] < nums[mid+1]`, the slope is ascending to the right — a peak must exist in `[mid+1, hi]`. Symmetric for descending slope. Invariant: a peak always exists in `[lo, hi]`. Shrink toward the uphill side. `if nums[mid] < nums[mid+1]: lo = mid + 1` else `hi = mid`. Terminates at `lo == hi` which is a peak.
-
 
 > [!note]- Python Solution
 > ```python
@@ -927,7 +919,6 @@ difficulty: mixed
 > [!info] Approach
 > Strictly unimodal — same ascending/descending slope argument as LC 162. Unique peak guaranteed. Identical binary search structure. `nums[mid] < nums[mid+1]` → still ascending → peak is right. Same code as LC 162; mountain guarantee makes the result unique.
 
-
 > [!note]- Python Solution
 > ```python
 > def peak_index_in_mountain_array(arr):
@@ -981,7 +972,6 @@ difficulty: mixed
 > [!info] Approach
 > Binary search on columns. At column `mid`, find the row with the maximum value in that column. That row-maximum is either a 2D peak (exceeds left/right neighbors), or its larger neighbor points us toward a column containing a peak. Binary search on columns `[lo, hi]`. At `mid_col`, find `max_row`. Compare with left/right columns. If `mat[max_row][mid_col] < mat[max_row][mid_col+1]` → a peak exists to the right; else left or at mid.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_peak_grid(mat):
@@ -1015,7 +1005,7 @@ difficulty: mixed
 
 ---
 
-### Median of Two Sorted Arrays (LC 4)
+### Median of Two Sorted Arrays (LC 4) `🔥 Google`
 
 > [!example] Problem
 > Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
@@ -1045,7 +1035,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Merging is O(m+n). The median partitions the combined array so the left half has `(m+n)//2` elements. Binary search on the partition in the smaller array. For each partition `i` in `nums1`, the partition `j = half - i` in `nums2` is determined. Valid when `max_left_A ≤ min_right_B` AND `max_left_B ≤ min_right_A`. If `max_left1 > min_right2` → partition too far right in nums1 → `hi = i - 1`; else `lo = i + 1`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1084,7 +1073,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a Sorted Matrix (LC 378)
+### Kth Smallest Element in a Sorted Matrix (LC 378) `⭐ Google`
 
 > [!example] Problem
 > Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
@@ -1113,7 +1102,6 @@ difficulty: mixed
 
 > [!info] Approach
 > "How many elements ≤ x?" is a monotone function of x. Binary search on the value range. Search value `d` in `[matrix[0][0], matrix[n-1][n-1]]`. Count elements ≤ d using staircase traversal O(n). Start top-right. If `matrix[row][col] <= d` → all `col+1` elements in this row qualify → `row += 1`; else `col -= 1`. If count ≥ k → `hi = mid`; else `lo = mid + 1`. Answer is always an actual matrix element.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1148,136 +1136,7 @@ difficulty: mixed
 
 ---
 
-### Find K-th Smallest Pair Distance (LC 719)
-
-> [!example] Problem
-> The distance of a pair of integers a and b is defined as the absolute difference between a and b.
-> Given an integer array nums and an integer k, return the kth smallest distance among all the pairs nums[i] and nums[j] where 0 <= i < j < nums.length.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,1], k = 1
-> Output: 0
-> Explanation: Here are all the pairs:
-> (1,3) -> 2
-> (1,1) -> 0
-> (3,1) -> 2
-> Then the 1st smallest distance pair is (1,1), and its distance is 0.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,1,1], k = 2
-> Output: 0
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,6,1], k = 3
-> Output: 5
-> ```
-> 
-> **Constraints:**
-> - n == nums.length
-> - 2 <= n <= 10^4
-> - 0 <= nums[i] <= 10^6
-> - 1 <= k <= n * (n - 1) / 2
-
-> [!info] Approach
-> Cannot enumerate all O(n²) pairs. "How many pairs have distance ≤ d?" is monotone in d → binary search on distance. Sort array. Search distance `d` in `[0, nums[-1] - nums[0]]`. Count pairs with distance ≤ d via two-pointer sliding window. For each `right`, advance `left` while `nums[right] - nums[left] > d`. Pairs ending at `right` with distance ≤ d = `right - left`. If count ≥ k → `hi = mid`; else `lo = mid + 1`.
-
-
-> [!note]- Python Solution
-> ```python
-> def smallest_distance_pair(nums, k):
->     nums.sort()
->     n = len(nums)
-> 
->     def count_pairs_le(d):
->         count = left = 0
->         for right in range(n):
->             while nums[right] - nums[left] > d:
->                 left += 1
->             count += right - left
->         return count
-> 
->     lo, hi = 0, nums[-1] - nums[0]
->     while lo < hi:
->         mid = lo + (hi - lo) // 2
->         if count_pairs_le(mid) >= k:
->             hi = mid
->         else:
->             lo = mid + 1
->     return lo
-> ```
-
-> [!success] Complexity
-> O(n log n + n log W) time where W = max - min. O(1) extra space after sort.
-
-> [!tip] Alternatives
-> Sort all pair distances O(n² log n) — TLE; bucket counting for small W O(n + W).
-
----
-
-## 2D Matrix Binary Search
-
----
-
-### Search a 2D Matrix (LC 74)
-
-> [!example] Problem
-> You are given an m x n integer matrix matrix with the following two properties:
-> Given an integer target, return true if target is in matrix or false otherwise.
-> You must write a solution in O(log(m * n)) time complexity.
-> 
-> **Example 1:**
-> ```
-> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
-> Output: true
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - m == matrix.length
-> - n == matrix[i].length
-> - 1 <= m, n <= 100
-> - -10^4 <= matrix[i][j], target <= 10^4
-
-> [!info] Approach
-> Matrix has a total order — treat it as a 1D sorted array of m*n elements. Virtual binary search on index 0..m*n-1. Map mid → row=mid//n, col=mid%n. lo=0, hi=m*n-1. While lo<=hi: mid=(lo+hi)//2; val=matrix[mid//n][mid%n]. Compare with target, standard binary search logic.
-
-
-> [!note]- Python Solution
-> ```python
-> def search_matrix(matrix, target):
->     m, n = len(matrix), len(matrix[0])
->     lo, hi = 0, m * n - 1
->     while lo <= hi:
->         mid = lo + (hi - lo) // 2
->         val = matrix[mid // n][mid % n]
->         if val == target:
->             return True
->         elif val < target:
->             lo = mid + 1
->         else:
->             hi = mid - 1
->     return False
-> ```
-
-> [!success] Complexity
-> O(log(m*n)) time, O(1) space.
-
-> [!tip] Alternatives
-> Row-by-row binary search O(m log n) — valid but slower; staircase search O(m+n) — works but overkill when total order exists.
-
----
-
-### Search a 2D Matrix II (LC 240)
+### Search a 2D Matrix II (LC 240) `⭐ Google`
 
 > [!example] Problem
 > Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties
@@ -1305,7 +1164,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Rows AND columns are sorted but rows don't have total order (first of row i+1 may be less than last of row i). Can't treat as a 1D sorted array. Staircase search — start from the top-right corner. If matrix[r][c] == target: found. If > target: go left (c--). If < target: go down (r++). Each step eliminates a row or column. O(m+n) total.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1371,7 +1229,6 @@ difficulty: mixed
 > [!info] Approach
 > Search space `[1, n]` is totally ordered and the API gives three-way comparison — textbook binary search. Standard BS template with the API replacing a direct comparison. `lo=1, hi=n`. While `lo <= hi`: if `guess(mid)==0` return mid; if `guess(mid)==-1` the answer is lower → `hi=mid-1`; else `lo=mid+1`.
 
-
 > [!note]- Python Solution
 > ```python
 > def guess_number(n):
@@ -1429,7 +1286,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Need leftmost and rightmost occurrence — two separate lower/upper bound searches. `bisect_left` gives the first index where `nums[i] >= target`; `bisect_right` gives the first index where `nums[i] > target` (so last occurrence = that - 1). First = lower_bound(target). If `nums[first] != target` → not found. Last = upper_bound(target) - 1.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1507,7 +1363,6 @@ difficulty: mixed
 > [!info] Approach
 > More days → more flowers bloomed → easier to form bouquets. Monotone predicate on day. Binary search on `day` in `[min(bloomDay), max(bloomDay)]`. Feasibility: scan the array counting consecutive bloomed flowers; form a bouquet every time we accumulate `k` in a row. Count bouquets formed; if `>= m` → feasible. Early exit: if `m * k > len(bloomDay)` → impossible.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_days(bloomDay, m, k):
@@ -1572,7 +1427,6 @@ difficulty: mixed
 > [!info] Approach
 > The answer is always a contiguous subarray of length `k`. Binary search for the left boundary of this window. Search left index `i` in `[0, len(arr) - k]`. Window `[i, i+k)` is optimal if `x - arr[i] <= arr[i+k] - x` (left element is at least as close as the right element just outside). If `x - arr[mid] > arr[mid+k] - x` → window is too far left → `lo = mid + 1`; else `hi = mid`. Answer is `arr[lo : lo + k]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_closest_elements(arr, k, x):
@@ -1594,70 +1448,7 @@ difficulty: mixed
 
 ---
 
-### Count of Smaller Numbers After Self (LC 315)
-
-> [!example] Problem
-> Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
-> 
-> **Example 1:**
-> ```
-> Input: nums = [5,2,6,1]
-> Output: [2,1,1,0]
-> Explanation:
-> To the right of 5 there are 2 smaller elements (2 and 1).
-> To the right of 2 there is only 1 smaller element (1).
-> To the right of 6 there is 1 smaller element (1).
-> To the right of 1 there is 0 smaller element.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [-1]
-> Output: [0]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [-1,-1]
-> Output: [0,0]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-
-> [!info] Approach
-> Process right to left, maintaining a sorted structure. Binary search for insertion position gives the count of smaller elements already seen. Build a sorted list of "seen" elements (right to left). For each new element, `bisect_left` gives its insertion rank = count of smaller elements to its right. Insert `nums[i]` into the sorted list (using `insort`). Count = `bisect_left(sorted_list, nums[i])`.
-
-
-> [!note]- Python Solution
-> ```python
-> from bisect import bisect_left, insort
-> 
-> def count_smaller(nums):
->     sorted_seen = []
->     result = []
->     for num in reversed(nums):
->         count = bisect_left(sorted_seen, num)
->         result.append(count)
->         insort(sorted_seen, num)
->     result.reverse()
->     return result
-> ```
-
-> [!success] Complexity
-> O(n²) worst case (insort is O(n) due to list shifts) — passes LC constraints for n ≤ 10^5. O(n log n) with a Fenwick tree or merge-sort.
-
-> [!tip] Alternatives
-> **Merge sort** O(n log n) — count inversions during merge; **Fenwick/BIT tree** O(n log n) with coordinate compression — optimal.
-
----
-
-## Second Occurrence / Exact Match Variants
-
----
-
-### Search a 2D Matrix — Row + Column BS (LC 74 variant note)
+### Search a 2D Matrix — Row + Column BS (LC 74 variant note) `⭐ Google`
 
 > [!example] Problem
 > You are given an m x n integer matrix matrix with the following two properties:
@@ -1684,7 +1475,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Useful when the single-index trick is not obvious in an interview. Also illustrates composing two independent binary searches. BS on rows: find the last row where `matrix[row][0] <= target` (this is the only row that can contain target). Then BS within that row. Row search: `if matrix[mid][0] <= target: lo = mid` else `hi = mid - 1`. Then standard column search.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1720,117 +1510,7 @@ difficulty: mixed
 
 ---
 
-### Sqrt(x) — Integer Square Root (LC 69)
-
-> [!example] Problem
-> Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.
-> You must not use any built-in exponent function or operator.
-> 
-> **Example 1:**
-> ```
-> Input: x = 4
-> Output: 2
-> Explanation: The square root of 4 is 2, so we return 2.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: x = 8
-> Output: 2
-> Explanation: The square root of 8 is 2.82842..., and since we round it down to the nearest integer, 2 is returned.
-> ```
-> 
-> **Constraints:**
-> - 0 <= x <= 2^{31} - 1
-
-> [!info] Approach
-> Find the largest integer `k` such that `k² <= x`. Classic "find upper bound of predicate" problem. Binary search `k` in `[0, x]` (or `[0, x//2 + 1]` for efficiency). Find the last `k` where `k*k <= x`. If `mid * mid <= x` → `lo = mid + 1` (can go larger); else `hi = mid - 1`. Answer is `hi` (the last valid mid).
-
-
-> [!note]- Python Solution
-> ```python
-> def my_sqrt(x):
->     if x < 2:
->         return x
->     lo, hi = 1, x // 2
->     while lo <= hi:
->         mid = lo + (hi - lo) // 2
->         sq = mid * mid
->         if sq == x:
->             return mid
->         elif sq < x:
->             lo = mid + 1
->         else:
->             hi = mid - 1
->     return hi   # hi is the floor when loop ends
-> ```
-
-> [!success] Complexity
-> O(log x) time, O(1) space.
-
-> [!tip] Alternatives
-> Newton's method converges faster in practice; `int(x**0.5)` uses hardware FP (may have precision issues for large x).
-
----
-
-### Find the Duplicate Number (LC 287) — BS on Value
-
-> [!example] Problem
-> Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
-> There is only one repeated number in nums, return this repeated number.
-> You must solve the problem without modifying the array nums and using only constant extra space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,4,2,2]
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,1,3,4,2]
-> Output: 3
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,3,3,3,3]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 10^5
-> - nums.length == n + 1
-> - 1 <= nums[i] <= n
-> - All the integers in nums appear only once except for precisely one integer which appears two or more times.
-
-> [!info] Approach
-> Count of integers in `[1, mid]` that appear in `nums` — if > `mid`, by pigeonhole the duplicate is ≤ `mid`. Monotone predicate → binary search on value. Search `mid` in `[1, n]`. Count elements in `nums` that are `<= mid`. If count > mid → duplicate in lower half. `if count > mid: hi = mid` else `lo = mid + 1`. Not a standard in-place BS — it's BS on the value space, not the index space.
-
-
-> [!note]- Python Solution
-> ```python
-> def find_duplicate(nums):
->     lo, hi = 1, len(nums) - 1
->     while lo < hi:
->         mid = lo + (hi - lo) // 2
->         count = sum(1 for x in nums if x <= mid)
->         if count > mid:
->             hi = mid   # duplicate is in [lo, mid]
->         else:
->             lo = mid + 1
->     return lo
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(1) space (no extra data structures).
-
-> [!tip] Alternatives
-> Floyd's cycle detection O(n) O(1) — optimal; XOR/sum tricks work only when exactly one duplicate appears exactly twice.
-
----
-
-### Longest Increasing Subsequence — Length via BS (LC 300)
+### Longest Increasing Subsequence — Length via BS (LC 300) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, return the length of the longest strictly increasing subsequence.
@@ -1860,7 +1540,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Patience sorting uses a `tails` array where `tails[i]` is the smallest tail of all LIS of length `i+1`. `tails` is always sorted → binary search for insertion point. For each element, `bisect_left(tails, num)` gives the position to replace (or extend if at end). The length of `tails` at the end is the LIS length. If `num > tails[-1]` → append (extend LIS). Else → replace `tails[pos]` = num (maintain smallest tails for future options).
-
 
 > [!note]- Python Solution
 > ```python
@@ -1895,7 +1574,6 @@ difficulty: mixed
 
 > [!info] Approach
 > If a distance `d` works, any smaller distance also works. That monotonic predicate makes the answer searchable. Sort positions and binary search the answer `d`. The feasibility check greedily places each cow at the earliest valid stall. Place the first cow at the first stall, then keep placing the next cow at the first position with gap `>= d`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1971,7 +1649,6 @@ difficulty: mixed
 > [!info] Approach
 > The distance range is `[0, max(nums) - min(nums)]`. Binary search on the answer: for a candidate distance `mid`, count how many pairs have distance ≤ `mid` using a two-pointer scan on the sorted array. Sort the array. Binary search on `mid`. For each index `i`, find the leftmost `j` such that `nums[i] - nums[j] <= mid` using two pointers. The count of such pairs is `i - j`. `lo = 0`, `hi = nums[-1] - nums[0]`. Count pairs with distance ≤ `mid`: two-pointer `left` tracking the start of the window for each `right`. Return the smallest `mid` where `count >= k`.
 
-
 > [!note]- Python Solution
 > ```python
 > def smallest_distance_pair(nums, k):
@@ -2008,7 +1685,7 @@ difficulty: mixed
 
 ---
 
-### Sqrt(x) — Integer Square Root (LC 69)
+### Sqrt(x) — Integer Square Root (LC 69) `🔥 Google`
 
 > [!example] Problem
 > Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.
@@ -2033,7 +1710,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Binary search on the answer: the answer lies in `[0, x]`. Find the largest integer `mid` such that `mid * mid <= x`. Classic binary search for the last True position in a boolean predicate `mid * mid <= x`. `lo = 0`, `hi = x`. While `lo <= hi`: `mid = (lo + hi) // 2`. If `mid * mid <= x` set `result = mid` and `lo = mid + 1`. Else `hi = mid - 1`.
-
 
 > [!note]- Python Solution
 > ```python

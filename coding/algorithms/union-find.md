@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Union-Find — Problem Deep Dives
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## DSU Template
@@ -51,7 +57,7 @@ difficulty: mixed
 
 ## Basic Union-Find
 
-### Number of Connected Components in an Undirected Graph
+### Number of Connected Components in an Undirected Graph `🔥 Google`
 
 > [!example] Problem
 > You have a graph of `n` nodes. You are given an integer `n` and an array `edges` where `edges[i] = [a_i, b_i]` indicates that there is an edge between `a_i` and `b_i` in the graph.
@@ -98,7 +104,6 @@ difficulty: mixed
 > [!info] Approach
 > BFS/DFS counts components in O(V+E) per call — fine for one-shot. DSU enables incremental edge-addition with O(α) per union/query. Here they're equivalent; DSU is the canonical pattern. Union all edges; answer = `dsu.components`. Initialize `components = n`; decrement by 1 on each successful union.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_components(n, edges):
@@ -116,7 +121,7 @@ difficulty: mixed
 
 ---
 
-### Number of Provinces (Matrix Form)
+### Number of Provinces (Matrix Form) `⭐ Google`
 
 > [!example] Problem
 > There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
@@ -147,7 +152,6 @@ difficulty: mixed
 > [!info] Approach
 > Adjacency matrix encodes undirected edges. Treat `isConnected[i][j] == 1` as edge `(i, j)`. Iterate upper triangle, union connected pairs; count components. Only process upper triangle (`j > i`) to avoid redundant unions and double-decrementing.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_circle_num(isConnected):
@@ -168,7 +172,7 @@ difficulty: mixed
 
 ---
 
-### Graph Valid Tree
+### Graph Valid Tree `⭐ Google`
 
 > [!example] Problem
 > You have a graph of `n` nodes labeled from `0` to `n - 1`. You are given an integer n and a list of `edges` where `edges[i] = [a_i, b_i]` indicates that there is an undirected edge between nodes `a_i` and `b_i` in the graph.
@@ -215,7 +219,6 @@ difficulty: mixed
 > [!info] Approach
 > A valid tree on `n` nodes has exactly `n-1` edges and no cycles — equivalently, it is connected and acyclic. DSU cycle detection + single-component check. Short-circuit if `len(edges) != n-1`. Process edges; if any union returns `False` (cycle) → not a tree.
 
-
 > [!note]- Python Solution
 > ```python
 > def valid_tree(n, edges):
@@ -236,58 +239,7 @@ difficulty: mixed
 
 ---
 
-### Redundant Connection
-
-> [!example] Problem
-> In this problem, a tree is an undirected graph that is connected and has no cycles.
-> You are given a graph that started as a tree with n nodes labeled from 1 to n, with one additional edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed. The graph is represented as an array edges of length n where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the graph.
-> Return an edge that can be removed so that the resulting graph is a tree of n nodes. If there are multiple answers, return the answer that occurs last in the input.
-> 
-> **Example 1:**
-> ```
-> Input: edges = [[1,2],[1,3],[2,3]]
-> Output: [2,3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: edges = [[1,2],[2,3],[3,4],[1,4],[1,5]]
-> Output: [1,4]
-> ```
-> 
-> **Constraints:**
-> - n == edges.length
-> - 3 <= n <= 1000
-> - edges[i].length == 2
-> - 1 <= ai < bi <= edges.length
-> - ai != bi
-> - There are no repeated edges.
-> - The given graph is connected.
-
-> [!info] Approach
-> The redundant edge is the first edge where both endpoints are already connected when processed in input order. That is a DSU cycle-detection query. Process edges in order; return the first `(u, v)` where `find(u) == find(v)` before union. `union` returns `False` when already connected → that's the answer.
-
-
-> [!note]- Python Solution
-> ```python
-> def find_redundant_connection(edges):
->     n = len(edges)
->     dsu = DSU(n + 1)
->     for u, v in edges:
->         if not dsu.union(u, v):
->             return [u, v]
->     return []
-> ```
-
-> [!success] Complexity
-> Time O(N·α(N)) ≈ O(N), Space O(N).
-
-> [!tip] Alternatives
-> DFS cycle detection — O(N²) overall. DSU is O(N) and canonical.
-
----
-
-### Satisfiability of Equality Equations
+### Satisfiability of Equality Equations `⭐ Google`
 
 > [!example] Problem
 > You are given an array of strings equations that represent relationships between variables where each string equations[i] is of length 4 and takes one of two different forms: "xi==yi" or "xi!=yi".Here, xi and yi are lowercase letters (not necessarily different) that represent one-letter variable names.
@@ -319,7 +271,6 @@ difficulty: mixed
 > [!info] Approach
 > `==` is transitive. Must union all equal pairs before checking inequalities — single-pass fails on ordering. Pass 1: union all `==` pairs. Pass 2: verify no `!=` pair has both sides in the same component. 26 lowercase letters → DSU of size 26. If `find(x) == find(y)` for a `!=` constraint → contradiction.
 
-
 > [!note]- Python Solution
 > ```python
 > def equations_possible(equations):
@@ -347,7 +298,7 @@ difficulty: mixed
 
 ## Weighted / Ranked Union-Find
 
-### Accounts Merge (Email Graph)
+### Accounts Merge (Email Graph) `🔥 Google`
 
 > [!example] Problem
 > Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
@@ -380,7 +331,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Emails are the identity key, not names. Accounts sharing any email are the same person — transitive merging is DSU. DSU over all unique emails (map each to integer index). Union all emails within an account. Group by DSU root; sort per group. Map `email → index`. For each account, union the first email with all subsequent ones. After all unions, group indices by root.
-
 
 > [!note]- Python Solution
 > ```python
@@ -469,7 +419,6 @@ difficulty: mixed
 > [!info] Approach
 > Swap pairs are transitive — if `(0,1)` and `(1,2)` are pairs, all three indices form one free-rearrangement group. DSU finds these components. Union all paired indices. Within each component, sort characters, assign smallest first. Group indices by DSU root. For each group, collect and sort characters; assign back to sorted index positions.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -546,7 +495,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Variables are nodes; edges are ratios. If `A/B = k` and `B/C = m`, then `A/C = k·m` — path product. Weighted DSU accumulates products along compressed paths. `weight[x]` = `value(x) / value(root(x))`. On `find`, accumulate product. On `union(A, B, k)`, adjust root weights for consistency. Query `C/D`: if same root, answer = `weight[C] / weight[D]`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -629,7 +577,6 @@ difficulty: mixed
 > [!info] Approach
 > Complete graph MST. Kruskal: sort all O(N²) edges, greedily add cheapest non-cycle edge using DSU. Generate all pairwise Manhattan distance edges; sort; apply Kruskal with DSU. Stop early when `n-1` edges are added. Prim's with simple array is O(N²) and avoids generating/sorting edges — better for dense graphs.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_cost_connect_points(points):
@@ -669,7 +616,6 @@ difficulty: mixed
 
 > [!info] Approach
 > An edge is critical if excluding it raises MST cost. Pseudo-critical if forcing its inclusion keeps cost equal to base MST. For each edge, run two Kruskal experiments: exclude it and force-include it. Base MST first. For edge `e`: critical if `MST_without_e > base`. Pseudo-critical if `MST_with_e_forced == base`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -716,7 +662,7 @@ difficulty: mixed
 
 ## Dynamic / Offline Union-Find
 
-### Number of Islands II
+### Number of Islands II `🔥 Google`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -752,7 +698,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Islands are connected components growing dynamically. Re-running BFS is O(M·N) per operation. DSU handles each addition in O(α) — orders of magnitude faster. DSU on 2D grid encoded as `r*cols + c`. On `addLand`, increment component count, then union with adjacent land cells. Track which cells are land (set). Skip duplicate additions. DSU's `union` automatically decrements component count on merge.
-
 
 > [!note]- Python Solution
 > ```python
@@ -829,7 +774,6 @@ difficulty: mixed
 > [!info] Approach
 > Malware spreads to the entire connected component. Removing node `x` only helps if `x` is the sole infected node in its component — otherwise another infected node spreads malware to that component anyway. DSU to find component sizes. For each component, count infected nodes. Only single-infected components are saveable. Build full DSU. Count infected nodes per component root. The best removal candidate is the infected node whose component has exactly 1 infected node and the largest size. Tie-break: smallest index.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -869,7 +813,7 @@ difficulty: mixed
 
 ## DSU for Other Problems
 
-### Longest Consecutive Sequence (DSU Approach)
+### Longest Consecutive Sequence (DSU Approach) `🔥 Google`
 
 > [!example] Problem
 > Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
@@ -900,7 +844,6 @@ difficulty: mixed
 
 > [!info] Approach
 > `x` and `x+1` belong to the same consecutive run — union them. The largest component size is the answer. Map each value to an index; union `x` with `x+1` if `x+1` exists. Max component size = answer. Build `val → index` map. For each value, if `val+1` exists, union their indices.
-
 
 > [!note]- Python Solution
 > ```python
@@ -965,7 +908,6 @@ difficulty: mixed
 > [!info] Approach
 > For general graphs Dijkstra (max-heap variant) is canonical and handles multiple alternate paths. Weighted DSU works on trees — only one path exists between any two nodes. Weighted DSU where `weight[x]` = probability of `x` relative to its root. Query: `weight[start] / weight[end]` if same root. `union(A, B, p)`: adjust root weight so `weight[A] / weight[B] = p`. Valid only when graph is a tree.
 
-
 > [!note]- Python Solution
 > ```python
 > def max_probability_dsu(n: int, edges: list[list[int]], succProb: list[float],
@@ -1004,7 +946,7 @@ difficulty: mixed
 
 ## Directed Graph Union-Find
 
-### Redundant Connection II
+### Redundant Connection II `🔥 Google`
 
 > [!example] Problem
 > In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -1033,7 +975,6 @@ difficulty: mixed
 
 > [!info] Approach
 > In a directed tree (rooted), every non-root has in-degree 1. The extra edge creates either (a) a node with in-degree 2, or (b) a cycle with all in-degrees 1, or (c) both. These three cases need separate handling. First detect any node with in-degree 2 — candidates `cand1` (first edge into it) and `cand2` (second edge). Then run DSU on all edges, skipping `cand2` if it exists. If a cycle forms, the redundant edge is `cand1` (if cand2 exists) or the cycle-forming edge (if no cand2). Pass 1: record in-degree-2 candidates. Pass 2: DSU union excluding `cand2`. If no cycle detected with `cand2` excluded → return `cand2`. If cycle detected and `cand1` exists → return `cand1`. If cycle and no candidate → return the cycle edge.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1082,73 +1023,6 @@ difficulty: mixed
 
 ## Grid / Coordinate Union-Find
 
-### Swim in Rising Water
-
-> [!example] Problem
-> You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).
-> It starts raining, and water gradually rises over time. At time t, the water level is t, meaning any cell with elevation less than equal to t is submerged or reachable.
-> You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim.
-> Return the minimum time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).
-> 
-> **Example 1:**
-> ```
-> Input: grid = [[0,2],[1,3]]
-> Output: 3
-> Explanation:
-> At time 0, you are in grid location (0, 0).
-> You cannot go anywhere else because 4-directionally adjacent neighbors have a higher elevation than t = 0.
-> You cannot reach point (1, 1) until time 3.
-> When the depth of water is 3, we can swim anywhere inside the grid.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]
-> Output: 16
-> Explanation: The final route is shown.
-> We need to wait until time 16 so that (0, 0) and (4, 4) are connected.
-> ```
-> 
-> **Constraints:**
-> - n == grid.length
-> - n == grid[i].length
-> - 1 <= n <= 50
-> - 0 <= grid[i][j] < n2
-> - Each value grid[i][j] is unique.
-
-> [!info] Approach
-> Sort all cells by elevation. Process them in order, unioning each cell with already-processed adjacent cells. The answer is the elevation of the last cell processed when `(0,0)` and `(n-1,n-1)` first become connected. Kruskal-style: sort cells by elevation, add them one by one, union with processed neighbors. Stop when start and end are connected. Create list of `(elevation, r, c)`, sort it. Maintain `visited` set. For each cell in order, mark visited, union with adjacent visited cells, check connectivity.
-
-
-> [!note]- Python Solution
-> ```python
-> def swim_in_water(grid):
->     n = len(grid)
->     cells = sorted((grid[r][c], r, c) for r in range(n) for c in range(n))
->     dsu = DSU(n * n)
->     visited = set()
->     dirs = [(1,0),(-1,0),(0,1),(0,-1)]
-> 
->     for elev, r, c in cells:
->         visited.add((r, c))
->         idx = r * n + c
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if (nr, nc) in visited:
->                 dsu.union(idx, nr * n + nc)
->         if dsu.connected(0, (n-1)*n + (n-1)):
->             return elev
->     return grid[n-1][n-1]
-> ```
-
-> [!success] Complexity
-> Time O(N²·log N) for sort, Space O(N²).
-
-> [!tip] Alternatives
-> Binary search + BFS/DFS — O(N²·log N). Dijkstra (min-heap over max elevation on path) — O(N²·log N), arguably more intuitive. DSU is elegant for the "when do two cells become connected" framing.
-
----
-
 ### Most Stones Removed with Same Row or Column
 
 > [!example] Problem
@@ -1194,7 +1068,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Stones in the same connected component (row/column sharing is transitive) can all be reduced to 1 stone. Answer = total stones − number of components. DSU where stones sharing a row or column are in the same component. Use coordinate compression: treat row `r` and column `c` as separate nodes with an offset to avoid collision. Map rows to `[0, 10000]` and cols to `[10001, 20001]`. Union `row_r` with `col_c` for each stone. Count distinct roots among only the stone positions.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1273,7 +1146,6 @@ difficulty: mixed
 > [!info] Approach
 > Swap pairs define groups of indices that can be freely rearranged among themselves. Within each group, match `source` values to `target` values optimally (minimize mismatches = maximize matches). DSU to find index groups. For each group, build frequency maps of `source` and `target` values; match greedily. For each DSU component, count how many `source[i]` values can be matched to `target[i]` values in the group. Unmatched positions contribute 1 each to Hamming distance.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import Counter, defaultdict
@@ -1309,7 +1181,7 @@ difficulty: mixed
 
 ## Connectivity With Constraints
 
-### Minimum Cost to Make at Least One Valid Path in a Grid
+### Minimum Cost to Make at Least One Valid Path in a Grid `⭐ Google`
 
 > [!example] Problem
 > Given an m x n grid. Each cell of the grid has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of grid[i][j] can be:
@@ -1348,7 +1220,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Edge weights are 0 (follow direction) or 1 (change direction). This is a 0-1 BFS problem — but can also be viewed as DSU on "0-cost" groups followed by checking connectivity. 0-1 BFS: use deque; free (0-cost) moves go to front, cost-1 moves go to back. Process in Dijkstra-like order. For cell `(r,c)`, the free neighbor is determined by `grid[r][c]`. All other neighbors cost 1. Track `dist` array initialized to infinity.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1429,7 +1300,6 @@ difficulty: mixed
 > [!info] Approach
 > We want minimal spanning forest for Alice and Bob independently. Shared edges (type 3) are doubly valuable — use them first. Any edge that doesn't reduce components is redundant. Run two DSUs (Alice, Bob). Process type-3 edges first (union in both). Then type-1 in Alice's DSU, type-2 in Bob's. Count edges used; answer = total edges − edges used. An edge is removable if its union returns `False` in both relevant DSUs. Final check: both DSUs must reach 1 component, else return -1.
 
-
 > [!note]- Python Solution
 > ```python
 > def max_num_edges_to_remove(n, edges):
@@ -1465,7 +1335,7 @@ difficulty: mixed
 
 ---
 
-### Making a Large Island
+### Making a Large Island `⭐ Google`
 
 > [!example] Problem
 > You are given an n x n binary matrix grid. You are allowed to change at most one 0 to be 1.
@@ -1501,7 +1371,6 @@ difficulty: mixed
 
 > [!info] Approach
 > After flipping a 0, the new cell connects up to 4 adjacent islands. Island sizes are needed instantly → DSU component sizes. Build DSU over existing 1-cells. For each 0-cell, sum sizes of distinct adjacent components + 1. Track overall max. Label each cell's DSU root. For each 0-cell, collect unique roots of neighboring 1-cells (avoid double-counting same component), sum their sizes.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1593,7 +1462,6 @@ difficulty: mixed
 > [!info] Approach
 > Process nodes in increasing order of value. When adding a node, union it with already-processed neighbors. Two same-value nodes in the same component form `count*(count-1)/2` new paths. Sort nodes by value. Process batches of equal value. Union nodes in each batch with lower-valued neighbors. Count pairs within the merged component. Group nodes by value. For each value group, union all nodes of that value with their neighbors (which have ≤ current value). Count same-value nodes per component root; add `k*(k+1)/2` where `k` = count.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1644,7 +1512,7 @@ difficulty: mixed
 
 ---
 
-### Largest Component Size by Common Factor
+### Largest Component Size by Common Factor `⭐ Google`
 
 > [!example] Problem
 > You are given an integer array of unique positive integers nums. Consider the following graph:
@@ -1675,7 +1543,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Shared prime factors link numbers together transitively. Union each number with all its prime factors; then prime factors link all numbers sharing them. For each number, factorize it, union the number with each of its prime factors. Count max component size. Nodes are both numbers (index) and prime factors (up to max value). Use dict-based DSU. For each `nums[i]`, find primes, union `nums[i]` with each prime, then count component size for each original number.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1731,7 +1598,7 @@ difficulty: mixed
 ## See Also
 
 [[graph]] | [[graph-algorithms]] | [[sorting]]
-### Accounts Merge
+### Accounts Merge `🔥 Google`
 
 > [!example] Problem
 > Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
@@ -1764,7 +1631,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Shared emails create connected components. If two accounts share any email, they belong to the same merged group. Use DSU to union all emails in the same account. Then group emails by final root. Map each email to the first owner seen. When a new account contains an already-seen email, union the account’s emails together under that root.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1807,7 +1673,7 @@ difficulty: mixed
 
 ## Union-Find — More Problems
 
-### Redundant Connection II (LC 685, Directed Graph)
+### Redundant Connection II (LC 685, Directed Graph) `🔥 Google`
 
 > [!example] Problem
 > In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -1929,7 +1795,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Indices connected by swap pairs (directly or transitively) can be rearranged freely. Use Union-Find to group connected indices, then sort each group's characters and reassign them in sorted order to the smallest positions. Union all paired indices. Group indices by root. For each group, collect the characters at those indices, sort them, and reassign the sorted characters to the sorted indices. `collections.defaultdict(list)` — `groups[find(i)].append(i)` for all `i`. For each group, sort both the indices and the characters, then assign characters back.
-
 
 > [!note]- Python Solution
 > ```python

@@ -93,6 +93,12 @@ WHY tries exist → WHAT they are → HOW they work → WHEN to use → WHAT can
     └── Returning prefix match as word match: StartsWith returning True ≠ Search returning True
 ```
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Theory & Mental Models
@@ -148,7 +154,7 @@ A **Trie** (pronounced "try") is an n-ary tree where each path from root to a no
 L = length of key, Σ = alphabet size (26 for lowercase letters).
 
 > [!IMPORTANT]
-> **Click Moment**: "autocomplete / prefix search / word dictionary" → Trie. If you also need "**maximum XOR**" or "**find number differing in most bits**" → XOR Trie (binary trie on bit representation).
+> **Click Moment**: "autocomplete / prefix search / word dictionary" → Trie. If you also need "**maximum XOR `⭐ Google`**" or "**find number differing in most bits**" → XOR Trie (binary trie on bit representation).
 
 ---
 
@@ -247,7 +253,7 @@ def _dfs(self, node: TrieNode, path: list[str], results: list[str]) -> None:
 ```
 
 #### Common Variants & Twists
-1. **Design Search Autocomplete System**:
+1. **Design Search Autocomplete System `🔥 Google`**:
    - **What (The Problem & Goal):** Design a system that returns the top 3 most frequently searched words starting with a given prefix.
    - **How (Intuition & Mental Model):** Instead of a full DFS on every keystroke (which is slow), store a list of the "top 3 words" directly in each `TrieNode` during the insertion phase. When a word's frequency increases, update the "top 3" list in all its ancestor nodes.
 2. **Implement Magic Dictionary**:
@@ -406,11 +412,11 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 
 | Question | Pattern | Core Logic | Trickiness & Details |
 |----------|---------|------------|----------------------|
-| **Implement Trie** [E] | Trie Insert/Search | TrieNode with `children` dict + `is_end`; walk on insert/search/startsWith | Don't forget `is_end = True` after inserting last char |
-| **Word Search II** [H] | Trie + Grid DFS Backtrack | Build trie of words; DFS from each cell; prune when no prefix match | Mark visited with `#`; prune dead trie nodes after finding to cut later DFS |
-| **Maximum XOR of Two Numbers** [M] | XOR Trie (Binary, Greedy) | Binary XOR trie; greedily choose opposite bit | Process bits from MSB (bit 31) to LSB; handle negative numbers with sign bit |
-| **Replace Words** [M] | Trie Prefix Lookup | Build trie of roots; for each word walk trie until is_end or end of word | Return shortest root prefix, not full word |
-| **Design Search Autocomplete** [M] | Trie + DFS / Top-K Cache | Trie insert + DFS from prefix node; optionally rank by frequency | Store top-3 at each node (lazy — update on insert) to avoid DFS on every query |
+| **Implement Trie `🔥 Google`** [E] | Trie Insert/Search | TrieNode with `children` dict + `is_end`; walk on insert/search/startsWith | Don't forget `is_end = True` after inserting last char |
+| **Word Search II `🔥 Google`** [H] | Trie + Grid DFS Backtrack | Build trie of words; DFS from each cell; prune when no prefix match | Mark visited with `#`; prune dead trie nodes after finding to cut later DFS |
+| **Maximum XOR of Two Numbers `⭐ Google`** [M] | XOR Trie (Binary, Greedy) | Binary XOR trie; greedily choose opposite bit | Process bits from MSB (bit 31) to LSB; handle negative numbers with sign bit |
+| **Replace Words `⭐ Google`** [M] | Trie Prefix Lookup | Build trie of roots; for each word walk trie until is_end or end of word | Return shortest root prefix, not full word |
+| **Design Search Autocomplete `🔥 Google`** [M] | Trie + DFS / Top-K Cache | Trie insert + DFS from prefix node; optionally rank by frequency | Store top-3 at each node (lazy — update on insert) to avoid DFS on every query |
 | **Longest Word in Dictionary** [M] | Trie BFS on is_end Nodes | Insert all; BFS/DFS only on `is_end` nodes; track longest | Must be buildable one char at a time from root — only traverse via `is_end` nodes |
 | **Map Sum Pairs** [M] | Trie with Subtree Sums | Trie where each node stores sum of all key values in its subtree | On insert, if key already exists, subtract old value before adding new |
 | **Word Squares** [H] | Trie + Backtrack (Column Prefix) | Build trie; at row `k` need prefix = column `k` of all previous words | Store word list at each trie node; backtrack using prefix constraint per row |

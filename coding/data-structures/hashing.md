@@ -6,11 +6,17 @@ difficulty: mixed
 
 # Hashing Problems
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Complement Map
 
-### Two Sum
+### Two Sum `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -45,7 +51,6 @@ difficulty: mixed
 > [!info] Approach
 > Brute force checks every pair — O(n²). We need to answer "have I seen the complement of this number?" in O(1). A hash map from value to index. For each `x`, check if `target - x` is already stored. Single pass. Before storing `x`, look up `target - x`. If found, return `[seen[complement], i]`. Store `x → i` after checking to avoid using the same index twice.
 
-
 > [!note]- Python Solution
 > ```python
 > def two_sum(nums, target):
@@ -66,7 +71,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum (hash-based)
+### 3Sum (hash-based) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -105,7 +110,6 @@ difficulty: mixed
 > [!info] Approach
 > Reduce to two-sum: fix element `a`, find pair `(b, c)` with `b + c = -a` in the remaining array. Sort first to handle duplicates. For each index `i`, use a set to find complements in `nums[i+1:]`. Sort. Skip duplicate values of `a`. For the inner scan, use a seen set: if `target - b` in seen, record triplet; else add `b` to seen.
 
-
 > [!note]- Python Solution
 > ```python
 > def three_sum(nums):
@@ -140,7 +144,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum (hash-based)
+### 4Sum (hash-based) `⭐ Google`
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -165,7 +169,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Reduce to 3Sum by fixing one element. Reduce 3Sum to 2Sum by fixing another. Sort + two outer loops (skip duplicates) + hash set inner two-sum. Fix `nums[i]` and `nums[j]`. Inner target is `target - nums[i] - nums[j]`. Use seen set for two-sum on remaining elements.
-
 
 > [!note]- Python Solution
 > ```python
@@ -238,7 +241,6 @@ difficulty: mixed
 > [!info] Approach
 > Each number can only pair once — we need to greedily match available complements, consuming them. Frequency map. For each `x`, check if `k - x` has remaining count. If yes, form a pair and decrement both counts. Build `Counter`. For each unique `x`, pairs formed = `min(freq[x], freq[k - x])` if `x != k - x`, else `freq[x] // 2`. Sum all.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
@@ -266,49 +268,6 @@ difficulty: mixed
 ---
 
 ## Frequency Map
-
-### Valid Anagram
-
-> [!example] Problem
-> Given two strings s and t, return true if t is an anagram of s, and false otherwise.
-> 
-> **Example 1:**
-> ```
-> Input: s = "anagram", t = "nagaram"
-> Output: true
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "rat", t = "car"
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length, t.length <= 5 * 10^4
-> - s and t consist of lowercase English letters.
-
-> [!info] Approach
-> Anagram = identical character frequency distributions. Count character frequencies for both strings and compare. `Counter(s) == Counter(t)`. Or use a single 26-element array: increment for `s`, decrement for `t`, check all zeros.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def is_anagram(s, t):
->     if len(s) != len(t):
->         return False
->     return Counter(s) == Counter(t)
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(1) — at most 26 distinct characters.
-
-> [!tip] Alternatives
-> Sort both strings and compare — O(n log n), simpler but slower.
-
----
 
 ### First Unique Character in a String
 
@@ -341,7 +300,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Need both frequency (to identify unique) and order (to find the first). Count all frequencies, then scan left to right for the first character with count 1. `Counter` in one pass; second pass finds first with count 1. Two O(n) passes.
-
 
 > [!note]- Python Solution
 > ```python
@@ -394,7 +352,6 @@ difficulty: mixed
 > [!info] Approach
 > This is a frequency matching problem; each character in the note must be available at least as many times as needed. Count letters in the magazine and decrement as you consume letters from the note. Use a hash map or `Counter`; if any needed character drops below zero, return `false`. A quick length check can short-circuit impossible cases.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
@@ -418,136 +375,7 @@ difficulty: mixed
 
 ---
 
-### Group Anagrams
-
-> [!example] Problem
-> Given an array of strings strs, group the anagrams together. You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: strs = ["eat","tea","tan","ate","nat","bat"]
-> Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
-> Explanation:
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: strs = [""]
-> Output: [[""]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: strs = ["a"]
-> Output: [["a"]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= strs.length <= 10^4
-> - 0 <= strs[i].length <= 100
-> - strs[i] consists of lowercase English letters.
-
-> [!info] Approach
-> Anagrams share a canonical form. Grouping by canonical key clusters anagrams. Map from canonical key to list of strings. Key = sorted tuple of characters. For each string, compute `tuple(sorted(s))` as key, append to `defaultdict(list)`.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def group_anagrams(strs):
->     groups = defaultdict(list)
->     for s in strs:
->         key = tuple(sorted(s))
->         groups[key].append(s)
->     return list(groups.values())
-> ```
-
-> [!success] Complexity
-> Time O(nk log k) where k = max string length; Space O(nk).
-
-> [!tip] Alternatives
-> 26-count tuple key — O(nk) time, avoids sort. Better for long strings with limited alphabet.
-
----
-
-### Find All Anagrams in a String
-
-> [!example] Problem
-> Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: s = "cbaebabacd", p = "abc"
-> Output: [0,6]
-> Explanation:
-> The substring with start index = 0 is "cba", which is an anagram of "abc".
-> The substring with start index = 6 is "bac", which is an anagram of "abc".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "abab", p = "ab"
-> Output: [0,1,2]
-> Explanation:
-> The substring with start index = 0 is "ab", which is an anagram of "ab".
-> The substring with start index = 1 is "ba", which is an anagram of "ab".
-> The substring with start index = 2 is "ab", which is an anagram of "ab".
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length, p.length <= 3 * 10^4
-> - s and p consist of lowercase English letters.
-
-> [!info] Approach
-> Check every substring of length `len(p)` — O(n * |p|) naively. Sliding window amortizes character counting. Maintain a frequency diff between current window and `p`. Track how many characters are "satisfied". Use two Counter maps (window and p). Track `have` = number of chars where window count equals p count. When `have == len(p_count)`, record the start.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def find_anagrams(s, p):
->     if len(p) > len(s):
->         return []
->     p_count = Counter(p)
->     window = Counter(s[:len(p)])
->     result = []
->     have = sum(1 for c in p_count if window[c] == p_count[c])
->     need = len(p_count)
->     if have == need:
->         result.append(0)
->     for i in range(len(p), len(s)):
->         # Add right character
->         right = s[i]
->         if right in p_count:
->             if window[right] == p_count[right]:
->                 have -= 1
->             window[right] += 1
->             if window[right] == p_count[right]:
->                 have += 1
->         # Remove left character
->         left = s[i - len(p)]
->         if left in p_count:
->             if window[left] == p_count[left]:
->                 have -= 1
->             window[left] -= 1
->             if window[left] == p_count[left]:
->                 have += 1
->         if have == need:
->             result.append(i - len(p) + 1)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(1) — 26-character alphabet.
-
-> [!tip] Alternatives
-> Compare full Counter objects each step — O(n * 26), effectively O(n) but with higher constant.
-
----
-
-### Top K Frequent Elements
+### Top K Frequent Elements `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
@@ -572,7 +400,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sorting by frequency is O(n log n). Bucket sort on frequency gives O(n). Count frequencies, then place each number into a bucket indexed by its frequency. Collect from the highest-frequency buckets downward. `Counter` → buckets list of size `n+1` where `buckets[f]` holds all numbers with frequency `f`. Iterate from index `n` down and collect until we have `k` elements.
-
 
 > [!note]- Python Solution
 > ```python
@@ -632,7 +459,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each domain contributes its count to itself and all suffix domains. Aggregate with a frequency map. Parse count and domain. Split domain on `.` and generate all suffixes. Accumulate counts. For `"9 discuss.leetcode.com"` add 9 to `discuss.leetcode.com`, `leetcode.com`, and `com`. Format output as `"count domain"` strings.
-
 
 > [!note]- Python Solution
 > ```python
@@ -695,7 +521,6 @@ difficulty: mixed
 > [!info] Approach
 > Need characters ordered by count descending. Count frequencies, then rebuild string: higher-frequency characters first. `Counter`, then sort by count descending, rebuild via `ch * count` concatenation.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import Counter
@@ -714,84 +539,6 @@ difficulty: mixed
 
 ---
 
-### Minimum Window Substring
-
-> [!example] Problem
-> Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
-> The testcases will be generated such that the answer is unique.
-> 
-> **Example 1:**
-> ```
-> Input: s = "ADOBECODEBANC", t = "ABC"
-> Output: "BANC"
-> Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "a", t = "a"
-> Output: "a"
-> Explanation: The entire string s is the minimum window.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "a", t = "aa"
-> Output: ""
-> Explanation: Both 'a's from t must be included in the window.
-> Since the largest window of s only has one 'a', return empty string.
-> ```
-> 
-> **Constraints:**
-> - m == s.length
-> - n == t.length
-> - 1 <= m, n <= 10^5
-> - s and t consist of uppercase and lowercase English letters.
-
-> [!info] Approach
-> Enumerate all substrings — O(n²). Shrinkable window: expand right until valid, shrink left while still valid. `t_count` maps required frequencies. `window` tracks current window frequencies. `have` counts how many distinct chars are "satisfied" (window count >= required). Expand right, update `have` when a char's count first meets requirement. Shrink left while `have == need`. Record minimum window during each valid state.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def min_window(s, t):
->     if not t or not s:
->         return ''
->     t_count = Counter(t)
->     need = len(t_count)
->     window = {}
->     have = 0
->     left = 0
->     best_len = float('inf')
->     best_left = 0
->     for right, ch in enumerate(s):
->         window[ch] = window.get(ch, 0) + 1
->         if ch in t_count and window[ch] == t_count[ch]:
->             have += 1
->         while have == need:
->             if right - left + 1 < best_len:
->                 best_len = right - left + 1
->                 best_left = left
->             left_ch = s[left]
->             window[left_ch] -= 1
->             if left_ch in t_count and window[left_ch] < t_count[left_ch]:
->                 have -= 1
->             left += 1
->     return s[best_left:best_left + best_len] if best_len != float('inf') else ''
-> ```
-
-> [!success] Complexity
-> Time O(n + m) where m = len(t); Space O(m).
-
-> [!tip] Alternatives
-> No fundamentally better approach. Optimized version: pre-filter `s` to only characters in `t` before sliding — reduces work when t is small and s has many irrelevant chars.
-
----
-
-## Prefix Sum + Map
-
 ### Longest Subarray with Sum K
 
 > [!example] Problem
@@ -799,7 +546,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sliding window fails with negatives. Prefix sum trick: subarray `[i+1, j]` has sum `k` iff `prefix[j] - prefix[i] = k`, i.e., `prefix[i] = prefix[j] - k`. For maximum length, store the *first* occurrence of each prefix sum. When we see `prefix - k` again later, the gap is as large as possible. `first_seen = {0: -1}`. At index `i`, if `prefix - k` in map, update `best = max(best, i - first_seen[prefix - k])`. Only insert prefix if not already present (preserve earliest index).
-
 
 > [!note]- Python Solution
 > ```python
@@ -858,7 +604,6 @@ difficulty: mixed
 > [!info] Approach
 > Map odd/even to 1/0. Problem becomes: count subarrays with sum exactly `k` — identical to LC 560. Parity prefix sum. `prefix[j] - prefix[i] = k` means subarray `[i+1, j]` has exactly `k` odd numbers. `seen = {0: 1}`. Running sum increments by 1 for odd elements, 0 for even. Look up `prefix - k` in `seen` before updating map.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -883,63 +628,7 @@ difficulty: mixed
 
 ---
 
-### Binary Subarrays with Sum
-
-> [!example] Problem
-> Given a binary array nums and an integer goal, return the number of non-empty subarrays with a sum goal.
-> A subarray is a contiguous part of the array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,0,1,0,1], goal = 2
-> Output: 4
-> Explanation: The 4 subarrays are bolded and underlined below:
-> [1,0,1,0,1]
-> [1,0,1,0,1]
-> [1,0,1,0,1]
-> [1,0,1,0,1]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,0,0,0,0], goal = 0
-> Output: 15
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 3 * 10^4
-> - nums[i] is either 0 or 1.
-> - 0 <= goal <= nums.length
-
-> [!info] Approach
-> Same prefix sum framework as LC 560. Binary values make the prefix strictly non-decreasing. `seen = {0: 1}`. At each index track running sum; add `seen[prefix - goal]` to answer. Identical to subarray sum equals k. The binary constraint doesn't change the algorithm, only guarantees prefix is non-negative.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def num_subarrays_with_sum(nums, goal):
->     seen = defaultdict(int)
->     seen[0] = 1
->     prefix = 0
->     count = 0
->     for x in nums:
->         prefix += x
->         count += seen[prefix - goal]
->         seen[prefix] += 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(n).
-
-> [!tip] Alternatives
-> `at_most(goal) - at_most(goal - 1)` with sliding window — O(n) O(1) space, exploits binary non-negativity.
-
----
-
-### Subarray Sum Equals K
+### Subarray Sum Equals K `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -964,7 +653,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sliding window fails with negatives (sum can decrease when adding elements). Need a different invariant. prefix[j] - prefix[i] = k implies prefix[i] = prefix[j] - k. Count how many times each prefix sum has appeared. Maintain running prefix sum. Before updating the map, check `seen[prefix - k]`. Initialize `seen = {0: 1}` to handle subarrays starting at index 0.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1020,7 +708,6 @@ difficulty: mixed
 > [!info] Approach
 > "Equal 0s and 1s" means the difference between 0-count and 1-count is 0 over the subarray. Replace 0 with -1. Problem becomes: longest subarray with sum 0. Use prefix sum + first-seen map. Track running sum with 0→-1 transform. When `prefix` repeats, the subarray between the two occurrences has sum 0. Store `first_seen = {0: -1}` and compare `i - first_seen[prefix]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_max_length(nums):
@@ -1051,7 +738,6 @@ difficulty: mixed
 
 > [!info] Approach
 > We want `(total - subarray_sum) % P == 0`, i.e., `subarray_sum % P == total % P`. Find the shortest subarray with that remainder. Prefix sums mod P. For each `j`, want the most recent `i` where `prefix[i] % P == (prefix[j] - rem) % P`. `rem = sum(nums) % P`. If `rem == 0`, return 0. Use `seen = {0: -1}`. At each step store `prefix % P → i`. Look up `(prefix - rem) % P`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1107,7 +793,6 @@ difficulty: mixed
 > [!info] Approach
 > `(prefix[j] - prefix[i]) % K == 0` iff `prefix[j] % K == prefix[i] % K`. Count pairs of equal remainders. Frequency map of prefix sums mod K. Each pair of indices with equal remainder contributes one valid subarray. `seen = {0: 1}`. For each element, compute `prefix % K` (handle negatives: `% K` in Python already returns non-negative). Add `seen[(prefix % K)]` to count. Increment map.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1134,101 +819,7 @@ difficulty: mixed
 
 ## Design
 
-### LRU Cache
-
-> [!example] Problem
-> Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
-> Implement the LRUCache class:
-> The functions get and put must each run in O(1) average time complexity.
-> 
-> **Example 1:**
-> ```
-> Input
-> ["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
-> [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
-> Output
-> [null, null, null, 1, null, -1, null, -1, 3, 4]
-> 
-> Explanation
-> LRUCache lRUCache = new LRUCache(2);
-> lRUCache.put(1, 1); // cache is {1=1}
-> lRUCache.put(2, 2); // cache is {1=1, 2=2}
-> lRUCache.get(1);    // return 1
-> lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-> lRUCache.get(2);    // returns -1 (not found)
-> lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-> lRUCache.get(1);    // return -1 (not found)
-> lRUCache.get(3);    // return 3
-> lRUCache.get(4);    // return 4
-> ```
-> 
-> **Constraints:**
-> - 1 <= capacity <= 3000
-> - 0 <= key <= 10^4
-> - 0 <= value <= 10^5
-> - At most 2 * 10^5 calls will be made to get and put.
-
-> [!info] Approach
-> O(1) access requires a hash map. O(1) eviction (remove oldest access) requires a doubly linked list (DLL) so we can splice out any node in O(1). `key → DLL node` map for O(1) lookup. DLL ordered by recency: head = MRU, tail = LRU. Dummy head and tail eliminate null checks. On `get`: look up node, move to front, return val. On `put`: if key exists update and move to front; else insert at front; if over capacity evict tail.
-
-
-> [!note]- Python Solution
-> ```python
-> class DLLNode:
->     def __init__(self, key=0, val=0):
->         self.key = key
->         self.val = val
->         self.prev: 'DLLNode | None' = None
->         self.next: 'DLLNode | None' = None
-> >
-> class LRUCache:
->     def __init__(self, capacity):
->         self.cap = capacity
->         self.map: dict[int, DLLNode] = {}
->         self.head = DLLNode()  # dummy MRU
->         self.tail = DLLNode()  # dummy LRU
->         self.head.next = self.tail
->         self.tail.prev = self.head
-> >
->     def _remove(self, node):
->         node.prev.next = node.next  # type: ignore
->         node.next.prev = node.prev  # type: ignore
-> >
->     def _insert_front(self, node):
->         node.next = self.head.next
->         node.prev = self.head
->         self.head.next.prev = node  # type: ignore
->         self.head.next = node
-> >
->     def get(self, key):
->         if key not in self.map:
->             return -1
->         node = self.map[key]
->         self._remove(node)
->         self._insert_front(node)
->         return node.val
-> >
->     def put(self, key, value):
->         if key in self.map:
->             self._remove(self.map[key])
->         node = DLLNode(key, value)
->         self.map[key] = node
->         self._insert_front(node)
->         if len(self.map) > self.cap:
->             lru = self.tail.prev  # type: ignore
->             self._remove(lru)
->             del self.map[lru.key]
-> ```
-
-> [!success] Complexity
-> Time O(1) all ops; Space O(capacity).
-
-> [!tip] Alternatives
-> Python `OrderedDict` — `move_to_end` and `popitem(last=False)` give same semantics in 5 lines. Mention in interviews, but know the DLL approach.
-
----
-
-### Insert Delete GetRandom O(1)
+### Insert Delete GetRandom O(1) `🔥 Google`
 
 > [!example] Problem
 > Implement the RandomizedSet class:
@@ -1260,7 +851,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Hash map gives O(1) insert/delete/lookup. But random access requires an array. Combining both enables all three in O(1). `vals` list for O(1) random access. `idx_map` maps value to its index in `vals`. Delete: swap target with last element to avoid gaps, then pop. Insert appends to list and stores index in map. Remove swaps target with last element, updates map for the moved element, pops the list, deletes map entry for removed value.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1301,7 +891,7 @@ difficulty: mixed
 
 ---
 
-### Design HashMap
+### Design HashMap `⭐ Google`
 
 > [!example] Problem
 > Design a HashMap without using any built-in hash table libraries.
@@ -1333,7 +923,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Understand collision resolution. Chaining: each bucket holds a list of `(key, value)` pairs. Array of `capacity` buckets. Hash function: `key % capacity` with prime capacity to reduce clustering. `put` scans bucket for existing key (update) or appends. `get` scans for key, returns -1 if absent. `remove` filters out the key.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1408,7 +997,6 @@ difficulty: mixed
 > [!info] Approach
 > Membership check in O(1) is exactly what a hash set provides. Insert elements one by one. If an element is already in the set, a duplicate exists. Single pass: if `x in seen` return True; else `seen.add(x)`. Short-circuits on first duplicate.
 
-
 > [!note]- Python Solution
 > ```python
 > def contains_duplicate(nums):
@@ -1452,7 +1040,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Set intersection directly models the problem. O(1) membership check makes it efficient. Convert both to sets. Return their intersection as a list. `set(nums1) & set(nums2)` in Python. For an explicit approach: iterate the smaller set, check membership in the larger.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1510,7 +1097,6 @@ difficulty: mixed
 > [!info] Approach
 > We want the largest valid pair sum — greedy with two pointers after sorting is cleanest. Hash set alternative: for each `x`, check if any value in `[k - x - (n-1)..k - x - 1]` is present. Sort. Use two pointers. If `nums[l] + nums[r] < k`, record sum and advance `l`. Else shrink `r`. After sort, `l = 0`, `r = n - 1`. Converge inward. Track `best = max(best, sum)` when `sum < k`.
 
-
 > [!note]- Python Solution
 > ```python
 > def two_sum_less_than_k(nums, k):
@@ -1537,7 +1123,7 @@ difficulty: mixed
 
 ## Miscellaneous
 
-### Longest Consecutive Sequence
+### Longest Consecutive Sequence `🔥 Google`
 
 > [!example] Problem
 > Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
@@ -1568,7 +1154,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Sorting is O(n log n). We need O(n). Hash set enables O(1) membership checks. Only start counting a sequence from `x` if `x - 1` is NOT in the set. This prevents redundant work — each element is visited at most twice total. Build set. For each `x`, if `x - 1 not in set`, extend the chain `x, x+1, x+2, ...` while each successor is in the set.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1631,7 +1216,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Words are fixed length. Enumerate all starting offsets 0 to `word_len - 1`. For each, slide a window of `num_words` words and compare word frequency maps. `words_count` = Counter of required words. Slide a window by one word at a time. Track current window word frequencies and a `have` count. For each offset in `[0, word_len)`, maintain a sliding window of exactly `num_words * word_len` characters. Add/remove one word at a time from window ends.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1704,7 +1288,6 @@ difficulty: mixed
 > [!info] Approach
 > For each pair of points, their line is defined by slope. Points on the same line share the same slope relative to a fixed anchor. Fix each point as anchor. For all other points, compute the slope as a reduced fraction `(dy/gcd, dx/gcd)`. Count max slope frequency. For each anchor `i`, build a slope map. Use `gcd` to normalize: slope = `(dy // g, dx // g)`. Handle vertical lines (`dx == 0`) and same-point duplicates separately.
 
-
 > [!note]- Python Solution
 > ```python
 > from math import gcd
@@ -1769,7 +1352,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Binary search on length `L`: if a duplicate of length `L` exists, so does one of length `L-1`. Check feasibility via rolling hash to avoid O(n²) string comparison. Binary search `L` in `[1, n-1]`. For each `L`, use Rabin-Karp: compute polynomial rolling hash for every window of length `L`; if any hash repeats, verify the match (hash collision guard). Hash = `sum(ord(s[i]) * base^(L-1-i)) % mod` for window. Rolling update: `new_hash = (old_hash * base - ord(left) * base^L + ord(right)) % mod`. Store hashes in a set. Return the window on collision.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1848,7 +1430,6 @@ difficulty: mixed
 > [!info] Approach
 > Files with the same content are duplicates. Content is the natural key for a hash map. Parse each string into `(directory, filename, content)`. Group file paths by content string. For each entry split on spaces: first token is directory, rest are `name(content)` tokens. Extract content between `(` and `)`. Map `content → list[full_path]`. Return groups with size ≥ 2.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1873,7 +1454,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum II
+### 4Sum II `⭐ Google`
 
 > [!example] Problem
 > Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
@@ -1905,7 +1486,6 @@ difficulty: mixed
 > [!info] Approach
 > Brute force O(n⁴). Split into two pairs: count all `A[i] + B[j]` sums, then for each `C[k] + D[l]` check if its negation was seen. Hash map `ab_sum → count`. Then iterate all C, D pairs and look up `-(C[k] + D[l])`. Two nested loops for AB → Counter. Two nested loops for CD → look up complement. Sum all matching counts.
 
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1934,61 +1514,6 @@ difficulty: mixed
 ## See Also
 
 [[array]] | [[sliding-window]] | [[string]] | [[two-pointers]]
-### Ransom Note
-
-> [!example] Problem
-> Given two strings ransomNote and magazine, return true if ransomNote can be constructed by using the letters from magazine and false otherwise.
-> Each letter in magazine can only be used once in ransomNote.
-> 
-> **Example 1:**
-> ```
-> Input: ransomNote = "a", magazine = "b"
-> Output: false
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: ransomNote = "aa", magazine = "ab"
-> Output: false
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: ransomNote = "aa", magazine = "aab"
-> Output: true
-> ```
-> 
-> **Constraints:**
-> - 1 <= ransomNote.length, magazine.length <= 10^5
-> - ransomNote and magazine consist of lowercase English letters.
-
-> [!info] Approach
-> This is a frequency matching problem; each character in the note must be available at least as many times as needed. Count letters in the magazine and decrement as you consume letters from the note. Use a hash map or `Counter`; if any needed character drops below zero, return false.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> 
-> def can_construct(ransom_note, magazine):
->     count = Counter(magazine)
->     for ch in ransom_note:
->         if count[ch] == 0:
->             return False
->         count[ch] -= 1
->     return True
-> ```
-
-> [!success] Complexity
-> O(m + n) time, O(1) extra space for lowercase letters.
-
-> [!tip] Alternatives
-> Sort + two pointers works too, but frequency counting is the direct interview answer.
-
----
-
-## Prefix Sum + Hashing
-
 ### Subarray Sums Divisible by K (LC 974)
 
 > [!example] Problem
@@ -2016,7 +1541,6 @@ difficulty: mixed
 
 > [!info] Approach
 > `sum(i..j) % k == 0` iff `prefix[j] % k == prefix[i-1] % k`. So we count pairs of equal remainders among prefix sums. Track `remainder -> count` in a hash map. For each prefix sum, look up how many prior prefix sums had the same remainder mod `k`. Initialize `{0: 1}`. For each element, compute `remainder = running_sum % k`. In Python, `%` always returns non-negative values, so no adjustment needed. Add `count_map[remainder]` to the answer, then increment `count_map[remainder]`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2074,7 +1598,6 @@ difficulty: mixed
 > [!info] Approach
 > Map 0 → -1. Now "equal 0s and 1s" means "subarray sum = 0". A subarray `[i+1..j]` sums to zero iff `prefix[j] == prefix[i]`. We want the maximum `j - i` among equal prefix sums. Hash map of `prefix_sum -> first_index`. When a prefix sum repeats, the distance gives a candidate max length. Initialize `{0: -1}`. For each index `i`, update `prefix`. If `prefix` is in the map, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise record `first_seen[prefix] = i`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_max_length(nums):
@@ -2099,7 +1622,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum II (LC 454)
+### 4Sum II (LC 454) `⭐ Google`
 
 > [!example] Problem
 > Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
@@ -2130,7 +1653,6 @@ difficulty: mixed
 
 > [!info] Approach
 > O(n⁴) brute force is too slow. Split the four arrays into two pairs. All pairwise sums from (A, B) can be stored in a hash map; then for each pairwise sum from (C, D), look up its negative. Build a frequency map of `a + b` for all pairs from A and B. Then for each pair `(c, d)`, query the map for `-(c + d)`. `ab_count = Counter(a + b for a in A for b in B)`. Then `total = sum(ab_count[-(c + d)] for c in C for d in D)`.
-
 
 > [!note]- Python Solution
 > ```python

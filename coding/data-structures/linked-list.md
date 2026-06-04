@@ -27,11 +27,17 @@ difficulty: mixed
 - `k = 1`, `k > length`, or `left == right`.
 - Cycles absent vs present; duplicate values vs duplicate nodes.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## In-Place Reversal
 
-### ==Reverse Linked List
+### ==Reverse Linked List `🔥 Google`
 
 > [!example] Problem
 > Given the head of a singly linked list, reverse the list, and return the reversed list.
@@ -61,9 +67,6 @@ difficulty: mixed
 > [!info] Approach
 > **Three-pointer iterative reversal.** We cannot reverse without visiting every node. The question is whether we need O(n) space (recursion stack) or O(1). Iteratively reversing edges is O(1) space. Three-pointer technique maintaining invariant: `prev` is the fully-reversed prefix, `curr` is the unprocessed suffix head. Save `nxt = curr.next` before overwriting. Set `curr.next = prev`. Advance `prev = curr`, `curr = nxt`. When `curr` is None, `prev` is the new head. Watch the order carefully: save `next` before rewiring or you lose the rest of the list.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from typing import Optional
@@ -90,7 +93,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Linked List II
+### Reverse Linked List II `🔥 Google`
 
 > [!example] Problem
 > Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
@@ -115,9 +118,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Find pre-node + in-place splice-reversal.** We need to splice a reversed sublist back into the outer list. A dummy node handles the case where `left == 1` (head changes). Find `pre` (node before position `left`). Then run `right - left` iterations of in-place splice-reversal. Each iteration: save `nxt = curr.next`, detach `nxt` from its position, reattach it after `pre`. This inserts nodes one by one at the front of the reversed section. After `right - left` iterations, the segment is reversed. If `left == right`, the loop runs zero times and the list stays unchanged.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -144,7 +144,7 @@ difficulty: mixed
 
 ---
 
-### Palindrome Linked List
+### Palindrome Linked List `⭐ Google`
 
 > [!example] Problem
 > Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
@@ -167,9 +167,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Find middle + reverse second half + compare.** Arrays allow index-based palindrome check in O(1) space. Linked lists don't. The trick: reverse the second half in-place and compare. Three-step: find middle (slow/fast pointers), skip the exact middle on odd-length lists, reverse second half, compare both halves node-by-node. Slow/fast to find middle. If the list has odd length, advance `slow` one more step to skip the middle node. Reverse from that point onward. Walk two pointers — one from `head`, one from reversed head — checking values. Restore (optional): reverse second half back.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -208,7 +205,7 @@ difficulty: mixed
 
 ---
 
-### ==Reorder List
+### ==Reorder List `🔥 Google`
 
 > [!example] Problem
 > You are given the head of a singly linked-list. The list can be represented as:
@@ -244,9 +241,6 @@ difficulty: mixed
 > [!info] Approach
 > **Find middle + reverse second half + interleave.** We need nodes from both ends simultaneously. The structure is: first half forward, second half backward, interleaved. Three clean steps — find middle, reverse second half, interleave two halves. Slow/fast to find mid. Reverse second half. Merge two halves alternating: take one from first, one from second (reversed), repeat until second half is exhausted.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def reorder_list(head):
@@ -281,7 +275,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Nodes in K-Group
+### Reverse Nodes in K-Group `⭐ Google`
 
 > [!example] Problem
 > Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
@@ -307,9 +301,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Count-verify + in-place reversal per group.** We reverse groups of exactly K. Must verify K nodes exist before reversing each group — don't reverse a partial tail. Count K nodes forward. If fewer than K remain, return head as-is. Reverse K nodes. Connect tail of reversed group to result of recursive call on the rest. Check-count loop + standard in-place reversal of exactly K nodes. After reversing, `head` (original) is the tail of the reversed group; link it to the recursive result.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -343,7 +334,7 @@ difficulty: mixed
 
 ## Fast / Slow Pointers
 
-### Linked List Cycle
+### Linked List Cycle `🔥 Google`
 
 > [!example] Problem
 > Given head, the head of a linked list, determine if the linked list has a cycle in it.
@@ -378,9 +369,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Floyd's fast/slow pointer cycle detection.** Without Floyd's, you'd need to store all visited nodes in a hash set — O(n) space. Floyd's uses two pointers that must meet inside a cycle. Fast moves 2 steps, slow moves 1. If they ever point to the same node, a cycle exists. If fast reaches null, no cycle. Start both at `head`. Loop: `slow = slow.next`, `fast = fast.next.next`. Check `slow is fast` (identity, not equality). If `fast` or `fast.next` is None, exit — no cycle. The identity check matters whenever node values can repeat.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -430,9 +418,6 @@ difficulty: mixed
 > [!info] Approach
 > **Fast/slow one-pass middle finder.** Without knowing the length, we'd need two passes (one to count, one to find middle). Fast/slow achieves this in one pass. Fast moves 2 steps, slow moves 1. When fast reaches the end, slow is at the middle. `while fast and fast.next: slow=slow.next, fast=fast.next.next`. When loop exits, `slow` is the middle. For odd-length: exact middle. For even-length: second of the two middles (because fast exhausts before the last step).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def middle_node(head):
@@ -452,7 +437,7 @@ difficulty: mixed
 
 ---
 
-### Remove Nth Node From End of List
+### Remove Nth Node From End of List `🔥 Google`
 
 > [!example] Problem
 > Given the head of a linked list, remove the nth node from the end of the list and return its head.
@@ -483,9 +468,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Two pointers with N+1 gap.** We don't know the length. One pointer can be N steps ahead — when it hits null, the other is at the target. Two pointers with a dummy head. `fast` advances N+1 steps ahead (one extra to land `slow` before the deletion target). Then both advance until `fast` is None. Dummy → head. Advance `fast` by `n+1` steps. Then `while fast: slow=slow.next, fast=fast.next`. Now `slow` is the predecessor of the node to delete. `slow.next = slow.next.next`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -552,9 +534,6 @@ difficulty: mixed
 > [!info] Approach
 > **Slow/fast with prev pointer — land before middle.** To delete a node in a singly linked list, you need the node before it. So we need slow/fast but with `slow` landing one step before the middle. Modified slow/fast: keep a `prev` pointer one behind `slow`. When fast exits, `prev.next = slow.next`. `prev = dummy`, advance `fast` two steps, `slow` one step, `prev` follows `slow`. When `fast` is None (or `fast.next` is None), `slow` is the middle node to delete; `prev.next = slow.next`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def delete_middle(head):
@@ -576,7 +555,7 @@ difficulty: mixed
 
 ---
 
-### Happy Number
+### Happy Number `🔥 Google`
 
 > [!example] Problem
 > Write an algorithm to determine if a number n is happy.
@@ -606,9 +585,6 @@ difficulty: mixed
 > [!info] Approach
 > **Floyd's cycle detection on the implicit sequence.** The sequence either terminates at 1 or enters a cycle. Instead of tracking all seen numbers in a hash set (O(n) space), we apply Floyd's on the sequence `f(n), f(f(n)), ...` where `f` computes the digit-square sum. Fast pointer applies `f` twice per step, slow applies once. If they meet at 1 → happy. If they meet at any other value → cycle, not happy. Define `digit_square_sum`. Run slow/fast until `slow == fast`. If the meeting value is 1, return True. Else return False.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def is_happy(n):
@@ -637,7 +613,7 @@ difficulty: mixed
 
 ## Floyd's Cycle Detection
 
-### Linked List Cycle II
+### Linked List Cycle II `🔥 Google`
 
 > [!example] Problem
 > Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
@@ -673,9 +649,6 @@ difficulty: mixed
 > [!info] Approach
 > **Floyd's two-phase cycle entry detection.** Detection alone is O(1) space. Finding the entry requires a mathematical insight from Floyd's algorithm. After slow/fast meet inside cycle, reset one pointer to head. Advance both at speed 1. Their meeting point is the cycle entry. Phase 1 — slow and fast meet after slow travels distance `d+c`, fast travels `d+c+L` (one full cycle extra), where `d` = head-to-entry, `c` = entry-to-meeting, `L` = cycle length. This implies `d = L - c = d'` (distance from meeting point back to entry). Phase 2 — slow resets to head, both advance 1 step at a time → they meet at the entry.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def detect_cycle(head):
@@ -703,7 +676,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number (Floyd's variant)
+### Find the Duplicate Number (Floyd's variant) `⭐ Google`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -737,9 +710,6 @@ difficulty: mixed
 > [!info] Approach
 > **Floyd's on implicit linked list defined by array values.** Values in [1, n] define an implicit linked list: `next(i) = nums[i]`. Index 0 is the entry point (not part of cycle since all values ≥ 1). The duplicate value creates two pointers to the same node — the cycle entry. Floyd's cycle detection on the implicit graph. Phase 1 finds the meeting point inside cycle; Phase 2 finds the cycle entry = duplicate. Identical to Linked List Cycle II but operating on array indices. `slow = nums[slow]`, `fast = nums[nums[fast]]`. After meeting, reset `slow = nums[0]` (not 0, because the linked list starts from `nums[0]`).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def find_duplicate(nums):
@@ -769,7 +739,7 @@ difficulty: mixed
 
 ## Merge / Sorting
 
-### Merge Two Sorted Lists
+### Merge Two Sorted Lists `🔥 Google`
 
 > [!example] Problem
 > You are given the heads of two sorted linked lists list1 and list2.
@@ -802,9 +772,6 @@ difficulty: mixed
 > [!info] Approach
 > **Dummy head + two-pointer merge.** Two-pointer merge from merge sort. A dummy head eliminates the special case of "what is the initial head of the result?" Compare heads of both lists, attach the smaller, advance that pointer. Append the remaining non-empty list. `dummy → result chain`. `curr` pointer builds the result. While both `l1` and `l2` non-null: attach smaller, advance it. After loop, attach the non-null remainder.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def merge_two_lists(l1, l2):
@@ -831,82 +798,7 @@ difficulty: mixed
 
 ---
 
-### Merge K Sorted Lists
-
-> [!example] Problem
-> You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
-> Merge all the linked-lists into one sorted linked-list and return it.
-> 
-> **Example 1:**
-> ```
-> Input: lists = [[1,4,5],[1,3,4],[2,6]]
-> Output: [1,1,2,3,4,4,5,6]
-> Explanation: The linked-lists are:
-> [
->   1->4->5,
->   1->3->4,
->   2->6
-> ]
-> merging them into one sorted linked list:
-> 1->1->2->3->4->4->5->6
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: lists = []
-> Output: []
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: lists = [[]]
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - k == lists.length
-> - 0 <= k <= 10^4
-> - 0 <= lists[i].length <= 500
-> - -10^4 <= lists[i][j] <= 10^4
-> - lists[i] is sorted in ascending order.
-> - The sum of lists[i].length will not exceed 10^4.
-
-> [!info] Approach
-> **Min-heap of size k.** Naively merging one by one is O(nk) — repeatedly touching each node. Min-heap always extracts the globally smallest remaining node in O(log k). Min-heap of `(val, list_index, node)`. Extract minimum, push its successor. The `list_index` tie-breaks to avoid comparing `ListNode` objects. Initialize heap with heads of all non-null lists. While heap non-empty: pop min node, attach to result, push `node.next` if non-null.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> 
-> def merge_k_lists(lists):
->     dummy = ListNode(0)
->     curr = dummy
->     heap = []
->     for i, node in enumerate(lists):
->         if node:
->             heapq.heappush(heap, (node.val, i, node))
->     while heap:
->         val, i, node = heapq.heappop(heap)
->         curr.next = node
->         curr = curr.next
->         if node.next:
->             heapq.heappush(heap, (node.next.val, i, node.next))
->     return dummy.next
-> ```
-
-> [!success] Complexity
-> Time O(N log k) where N = total nodes, Space O(k) heap.
-
-> [!tip] Alternatives
-> - Divide-and-conquer pairwise merge: O(N log k) time, O(log k) stack. Same asymptotic; avoids heap setup.
-> - Sequential merge: O(Nk) — never use when k > 2.
-
----
-
-### Sort List
+### Sort List `⭐ Google`
 
 > [!example] Problem
 > Given the head of a linked list, return the list after sorting it in ascending order.
@@ -935,9 +827,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Bottom-up merge sort on linked list.** Quicksort on linked lists has O(n²) worst case (no random access for pivot selection). Merge sort is naturally suited to linked lists — splitting is O(n) with slow/fast, merging is O(n). Bottom-up merge sort to achieve O(1) space (avoids O(log n) recursion stack). For each sublist size `size = 1, 2, 4, 8, ...`: split list into pairs of `size`-length sublists, merge each pair, connect results. One full pass per doubling of `size`, log n passes total. This is the version interviewers like when they explicitly ask for O(1) extra space.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1028,9 +917,6 @@ difficulty: mixed
 > [!info] Approach
 > **Dummy head + find-insertion-point per node.** Insertion sort builds a sorted prefix. On a linked list we can't binary search, so finding the insertion point is O(n) per element, giving O(n²) total — acceptable when asked specifically for insertion sort. Maintain a sorted prefix after a dummy head. For each new node from the original list, find where it fits in the sorted prefix and splice it in. Detach each node from the original list. Walk the sorted prefix from `dummy` until `prev.next.val > node.val` or `prev.next` is None. Insert `node` between `prev` and `prev.next`. If the input is nearly sorted, this often behaves closer to linear time.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def insertion_sort_list(head):
@@ -1058,7 +944,7 @@ difficulty: mixed
 
 ## Copy / Design
 
-### Copy List with Random Pointer
+### Copy List with Random Pointer `🔥 Google`
 
 > [!example] Problem
 > A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null.
@@ -1094,9 +980,6 @@ difficulty: mixed
 > [!info] Approach
 > **Hash map original→clone, two-pass wiring.** Copying `next` is easy. `random` points to arbitrary nodes — we need to map original nodes to their clones to set `random` correctly. Hash map `original → clone`. Two passes: first create all clones, second assign `next` and `random` using the map. Pass 1: iterate and create `{node: ListNode(node.val)}` for all nodes. Pass 2: for each original node, set `clone.next = map[node.next]`, `clone.random = map[node.random]`. Mapping `None → None` keeps the wiring concise.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > class Node:
@@ -1129,7 +1012,7 @@ difficulty: mixed
 
 ---
 
-### LRU Cache
+### LRU Cache `🔥 Google`
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
@@ -1165,9 +1048,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Doubly linked list + hash map.** We need O(1) access (hash map) and O(1) eviction/promotion (doubly linked list). Neither alone suffices. Doubly linked list for recency order (MRU at head, LRU at tail) + hash map for O(1) node lookup by key. Dummy head and dummy tail eliminate all edge cases in `_remove` and `_insert_front`. On `get`: remove from current position, insert at front, return value. On `put`: if key exists, remove old; create new node, insert at front, update map; if over capacity, remove LRU (tail.prev), delete from map.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1261,9 +1141,6 @@ difficulty: mixed
 > [!info] Approach
 > **Digit-by-digit addition with carry.** Reverse storage means digit-by-digit addition naturally flows head-to-tail. We just need to handle carry. Simulate grade-school addition: sum digit-by-digit with carry. Create new result nodes. `carry = 0`. While `l1` or `l2` or `carry` non-zero: sum the current digits (0 if list exhausted) + carry. New digit = sum % 10, carry = sum // 10. Append digit node to result.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def add_two_numbers(l1, l2):
@@ -1292,7 +1169,7 @@ difficulty: mixed
 
 ---
 
-### Swap Nodes in Pairs
+### Swap Nodes in Pairs `⭐ Google`
 
 > [!example] Problem
 > Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
@@ -1328,9 +1205,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Dummy head + iterative pair swapping.** Naive approach fails on the head node when `left=1`. Dummy node makes head swapping clean. Iterative: use dummy head, advance `curr` as the node before each pair. Swap `curr.next` and `curr.next.next`. Advance by 2. Save `first = curr.next`, `second = curr.next.next`. Then: `curr.next = second`, `first.next = second.next`, `second.next = first`. Advance `curr = first` (first is now behind second after swap).
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1405,9 +1279,6 @@ difficulty: mixed
 > [!info] Approach
 > **Two pointers traversing both lists — alignment by total distance.** Lists may have different lengths before the intersection. We need pointers to align. Two pointers, each traversing both lists (A then B, B then A). After at most m+n steps, they're aligned at the same position — either the intersection or both at None. `p1` traverses A then B; `p2` traverses B then A. When one reaches None, redirect to the other list's head. They travel m+n and n+m steps respectively — equal total. They meet at the intersection (or both reach None simultaneously = no intersection).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def get_intersection_node(headA, headB):
@@ -1451,9 +1322,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Make circular, find new tail, break circle.** Rotating by k is equivalent to making it circular and breaking at position `n - k%n` from the head (i.e., the new head is `n - k%n` steps from the current head). Find length, make circular, find new tail (n - k%n - 1 steps from head), break circle there. Walk to find length and tail. Connect tail to head (circular). Walk to position `n - k%n - 1` for new tail. `new_head = new_tail.next`. Break: `new_tail.next = None`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1514,9 +1382,6 @@ difficulty: mixed
 > [!info] Approach
 > **Single pass: skip consecutive equal nodes.** The list is sorted, so duplicates are adjacent. One pass suffices — no need for a hash set. For each node, skip all successors with the same value by jumping `curr.next` forward. Iterate `curr`. While `curr.next` exists and `curr.next.val == curr.val`, set `curr.next = curr.next.next`. After the inner loop, advance `curr = curr.next`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def delete_duplicates_i(head):
@@ -1562,9 +1427,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Dummy head + prev pointer skipping duplicate runs.** Unlike version I (keep one copy), we must skip all occurrences of a duplicated value. A dummy head handles the case where the head itself is a duplicate. Pointer `prev` tracks the last confirmed-unique node. When duplicates are detected, skip all of them. Dummy head. `prev = dummy`. While `curr` non-null: if `curr.next` exists and `curr.val == curr.next.val`, record `dup_val`, advance `curr` past all nodes with that value, set `prev.next = curr.next`. Else `prev = curr`. `curr = curr.next`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1619,9 +1481,6 @@ difficulty: mixed
 > [!info] Approach
 > **Two dummy heads — collect two sublists, then join.** In-place partition on a linked list is tricky because pointers travel only forward. Simpler: collect "<x" nodes and ">=x" nodes into two separate chains, then concatenate. `less_dummy` heads the "<x" partition; `greater_dummy` heads the ">=x" partition. Walk the list, routing each node into the appropriate chain. Connect: `less_tail.next = greater_dummy.next`. Null-terminate the greater chain (`greater_tail.next = None`) to avoid cycles if the original tail landed in the less chain.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def partition(head, x):
@@ -1652,7 +1511,7 @@ difficulty: mixed
 
 ---
 
-### Flatten a Multilevel Doubly Linked List
+### Flatten a Multilevel Doubly Linked List `⭐ Google`
 
 > [!example] Problem
 > You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional child pointer. This child pointer may or may not point to a separate doubly linked list, also containing these special nodes. These child lists may have one or more children of their own, and so on, to produce a multilevel data structure as shown in the example below.
@@ -1719,9 +1578,6 @@ difficulty: mixed
 > [!info] Approach
 > **Iterative in-place child list splicing.** Each child list must be inserted between the current node and its next node. This is a pointer surgery problem — splice the child list in-place. When a `child` is encountered: find the tail of the child list, then wire: `curr.next = child`, `child.prev = curr`, `tail.next = next_node`, `next_node.prev = tail` (if next_node exists). Clear `curr.child`. Iterate `curr`. If `curr.child` exists: save `next_node = curr.next`, find child tail (walk to its end), perform 4-pointer surgery, clear `curr.child`. Continue — `curr.next` is now the start of the former child list, so we naturally continue into it.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > class DLLNodeM:
@@ -1761,114 +1617,6 @@ difficulty: mixed
 
 ---
 
-### ==LFU Cache
-
-> [!example] Problem
-> Design and implement a data structure for a Least Frequently Used (LFU) cache.
-> Implement the LFUCache class:
-> To determine the least frequently used key, a use counter is maintained for each key in the cache. The key with the smallest use counter is the least frequently used key.
-> When a key is first inserted into the cache, its use counter is set to 1 (due to the put operation). The use counter for a key in the cache is incremented either a get or put operation is called on it.
-> The functions get and put must each run in O(1) average time complexity.
-> 
-> **Example 1:**
-> ```
-> Input
-> ["LFUCache", "put", "put", "get", "put", "get", "get", "put", "get", "get", "get"]
-> [[2], [1, 1], [2, 2], [1], [3, 3], [2], [3], [4, 4], [1], [3], [4]]
-> Output
-> [null, null, null, 1, null, -1, 3, null, -1, 3, 4]
-> 
-> Explanation
-> // cnt(x) = the use counter for key x
-> // cache=[] will show the last used order for tiebreakers (leftmost element is  most recent)
-> LFUCache lfu = new LFUCache(2);
-> lfu.put(1, 1);   // cache=[1,_], cnt(1)=1
-> lfu.put(2, 2);   // cache=[2,1], cnt(2)=1, cnt(1)=1
-> lfu.get(1);      // return 1
->                  // cache=[1,2], cnt(2)=1, cnt(1)=2
-> lfu.put(3, 3);   // 2 is the LFU key because cnt(2)=1 is the smallest, invalidate 2.
->                  // cache=[3,1], cnt(3)=1, cnt(1)=2
-> lfu.get(2);      // return -1 (not found)
-> lfu.get(3);      // return 3
->                  // cache=[3,1], cnt(3)=2, cnt(1)=2
-> lfu.put(4, 4);   // Both 1 and 3 have the same cnt, but 1 is LRU, invalidate 1.
->                  // cache=[4,3], cnt(4)=1, cnt(3)=2
-> lfu.get(1);      // return -1 (not found)
-> lfu.get(3);      // return 3
->                  // cache=[3,4], cnt(4)=1, cnt(3)=3
-> lfu.get(4);      // return 4
->                  // cache=[4,3], cnt(4)=2, cnt(3)=3
-> ```
-> 
-> **Constraints:**
-> - 1 <= capacity <= 10^4
-> - 0 <= key <= 10^5
-> - 0 <= value <= 10^9
-> - At most 2 * 10^5 calls will be made to get and put.
-
-> [!info] Approach
-> **Two hash maps + one frequency-keyed map of doubly linked lists.** LRU is frequency=1-only. LFU needs per-frequency ordering. A `freq → OrderedDict` (or DLL) groups nodes by frequency; `min_freq` tracks the lowest frequency bucket for O(1) eviction. `key_map: {key → (val, freq)}`. `freq_map: {freq → OrderedDict[key]}` (OrderedDict preserves insertion order = LRU within each frequency). `min_freq` is the current minimum. On `get`: increment freq, move key from old freq bucket to new freq bucket, update `min_freq` if old bucket is now empty and `min_freq` was that old freq. On `put`: if over capacity, evict from `freq_map[min_freq]` (popitem from the front = LRU). Then insert at freq=1, set `min_freq = 1`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import OrderedDict
-> 
-> class LFUCache:
->     def __init__(self, capacity):
->         self.cap = capacity
->         self.min_freq = 0
->         self.key_map: dict[int, list] = {}          # key -> [val, freq]
->         self.freq_map: dict[int, OrderedDict] = {}  # freq -> OrderedDict{key: None}
-> 
->     def _update(self, key):
->         val, freq = self.key_map[key]
->         self.key_map[key] = [val, freq + 1]
->         self.freq_map[freq].pop(key)
->         if not self.freq_map[freq]:
->             del self.freq_map[freq]
->             if self.min_freq == freq:
->                 self.min_freq += 1
->         self.freq_map.setdefault(freq + 1, OrderedDict())[key] = None
-> 
->     def get(self, key):
->         if key not in self.key_map:
->             return -1
->         self._update(key)
->         return self.key_map[key][0]
-> 
->     def put(self, key, value):
->         if self.cap <= 0:
->             return
->         if key in self.key_map:
->             self.key_map[key][0] = value
->             self._update(key)
->             return
->         if len(self.key_map) >= self.cap:
->             evict_key, _ = self.freq_map[self.min_freq].popitem(last=False)
->             if not self.freq_map[self.min_freq]:
->                 del self.freq_map[self.min_freq]
->             del self.key_map[evict_key]
->         self.key_map[key] = [value, 1]
->         self.freq_map.setdefault(1, OrderedDict())[key] = None
->         self.min_freq = 1
-> ```
-
-> [!success] Complexity
-> Time O(1) per get/put, Space O(capacity).
-
-> [!tip] Alternatives
-> - Two DLLs per frequency (like LRU but nested): avoids OrderedDict; pure pointer operations. More code, same complexity.
-> - Segment tree / heap-based: O(log n) per op; overkill.
-> - Key insight: `min_freq` only resets to 1 on `put` of a new key; on `get`/`update` it can only increase by 1.
-
----
-
-## See Also
-
-[[two-pointers]] | [[heap]] | [[tree]]
 ### Rotate List
 
 > [!example] Problem
@@ -1893,7 +1641,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A rotation just changes where the tail reconnects to the head. Once you know the list length, you can convert the problem into a cut point. Make the list circular, compute `k % n`, and cut at the new tail. Find tail and length, connect tail to head, advance to the new tail `n - k - 1` steps from the head, then break the cycle.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1928,7 +1675,7 @@ difficulty: mixed
 
 ## Design
 
-### ==LRU Cache (Doubly Linked List + Hash Map)
+### ==LRU Cache (Doubly Linked List + Hash Map) `🔥 Google`
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
@@ -1964,7 +1711,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A hash map gives O(1) lookup but can't track recency. A doubly linked list lets us move any node to the head (most recently used) in O(1) using pointers. Together they solve both requirements. Maintain a dict `key -> node`. The DLL has a sentinel head (most recent) and tail (least recent). On every access, unlink the node and re-insert it just after the head. `get`: if key missing return -1, else move node to front and return value. `put`: if key exists update value and move to front; if new key and at capacity, remove the node just before the tail (LRU), then insert new node at front.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2023,112 +1769,3 @@ difficulty: mixed
 
 ---
 
-### Flatten a Multilevel Doubly Linked List
-
-> [!example] Problem
-> You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional child pointer. This child pointer may or may not point to a separate doubly linked list, also containing these special nodes. These child lists may have one or more children of their own, and so on, to produce a multilevel data structure as shown in the example below.
-> Given the head of the first level of the list, flatten the list so that all the nodes appear in a single-level, doubly linked list. Let curr be a node with a child list. The nodes in the child list should appear after curr and before curr.next in the flattened list.
-> Return the head of the flattened list. The nodes in the list must have all of their child pointers set to null.
-> 
-> **Example 1:**
-> ```
-> Input: head = [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
-> Output: [1,2,3,7,8,11,12,9,10,4,5,6]
-> Explanation: The multilevel linked list in the input is shown.
-> After flattening the multilevel linked list it becomes:
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: head = [1,2,null,3]
-> Output: [1,3,2]
-> Explanation: The multilevel linked list in the input is shown.
-> After flattening the multilevel linked list it becomes:
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: head = []
-> Output: []
-> Explanation: There could be empty list in the input.
-> ```
-> 
-> **Example 4:**
-> ```
-> 1---2---3---4---5---6--NULL
->          |
->          7---8---9---10--NULL
->              |
->              11--12--NULL
-> ```
-> 
-> **Example 5:**
-> ```
-> [1,2,3,4,5,6,null]
-> [7,8,9,10,null]
-> [11,12,null]
-> ```
-> 
-> **Example 6:**
-> ```
-> [1,    2,    3, 4, 5, 6, null]
->              |
-> [null, null, 7,    8, 9, 10, null]
->                    |
-> [            null, 11, 12, null]
-> ```
-> 
-> **Example 7:**
-> ```
-> [1,2,3,4,5,6,null,null,null,7,8,9,10,null,null,11,12]
-> ```
-> 
-> **Constraints:**
-> - The number of Nodes will not exceed 1000.
-> - 1 <= Node.val <= 10^5
-
-> [!info] Approach
-> The structure is like a tree where `child` is a subtree. DFS naturally processes each child list before continuing the main list. Use a stack. When a node has a child, push `node.next` onto the stack (to return to later), then walk into `child` as the new `next`. After the child chain ends (next is None), pop from the stack. Walk the list. At each node with a `child`: push `node.next` to stack, set `node.next = node.child`, fix prev pointers, clear `node.child`. When `node.next` is None and stack is non-empty, pop and link.
-
-
-> [!note]- Python Solution
-> ```python
-> class Node:
->     def __init__(self, val=0, prev=None, next=None, child=None):
->         self.val = val
->         self.prev = prev
->         self.next = next
->         self.child = child
-> >
-> def flatten(head):
->     if not head:
->         return None
->     stack = []
->     curr = head
->     while curr:
->         if curr.child:
->             if curr.next:
->                 stack.append(curr.next)
->             curr.next = curr.child
->             curr.next.prev = curr
->             curr.child = None
->         if not curr.next and stack:
->             nxt = stack.pop()
->             curr.next = nxt
->             nxt.prev = curr
->         curr = curr.next
->     return head
-> ```
-
-> [!success] Complexity
-> Time O(n) where n = total nodes, Space O(d) where d = maximum nesting depth.
-
-> [!tip] Alternatives
-> - Recursive DFS: recurse into child, get the tail of the flattened child list, then reconnect — elegant but O(d) call stack.
-> - Both approaches are O(n) time; iterative stack is preferred when depth could be large.
-
----
-
-## See Also
-
-[[two-pointers]] | [[heap]] | [[tree]]

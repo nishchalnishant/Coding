@@ -14,6 +14,12 @@ difficulty: mixed
 - For k-way merge problems, seed the heap with one candidate from each sorted source.
 - Tie-break rules matter; many heap bugs come from the secondary key, not the heap itself.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Top-K Pattern
@@ -49,7 +55,6 @@ difficulty: mixed
 
 > [!info] Approach
 > We need the `k`th largest at all times without sorting after every insert. A min-heap of size exactly `k` holds the top-`k` elements seen so far. The root (minimum of the heap) is always the `k`th largest. On each `add`, push the new value. If heap size exceeds `k`, pop the minimum. Root is the answer in O(1); each insert is O(log k).
-
 
 > [!note]- Python Solution
 > ```python
@@ -109,7 +114,6 @@ difficulty: mixed
 > [!info] Approach
 > We always need the two current maximums — repeated maximum extraction is a max-heap problem. A max-heap (negate for Python's min-heap) gives O(log n) each pop/push. Pop twice, push `abs(a - b)` if non-zero. Repeat until one or zero stones remain.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -133,7 +137,7 @@ difficulty: mixed
 
 ---
 
-### K Closest Points to Origin
+### K Closest Points to Origin `🔥 Google`
 
 > [!example] Problem
 > Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane and an integer k, return the k closest points to the origin (0, 0).
@@ -165,7 +169,6 @@ difficulty: mixed
 > [!info] Approach
 > Want the `k` smallest by distance without fully sorting n points. Max-heap of size `k` on squared distance (no sqrt needed — monotone with distance). For each point compute `x²+y²`. Push `(-dist, x, y)` onto a max-heap. If size exceeds `k`, pop the farthest. Remaining heap contains the `k` closest.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -188,61 +191,7 @@ difficulty: mixed
 
 ---
 
-### Top K Frequent Elements
-
-> [!example] Problem
-> Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,1,2,2,3], k = 2
-> Output: [1,2]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1], k = 1
-> Output: [1]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-> - k is in the range [1, the number of unique elements in the array].
-> - It is guaranteed that the answer is unique.
-
-> [!info] Approach
-> Need the `k` elements by frequency, not by value. Count frequencies, then use a min-heap of size `k` on `(freq, element)`. Root is the least frequent among the top-`k` — pop when overflow. Build `Counter` in O(n). Heap push `(freq, num)` for each unique num; pop when size > k. Alternatively, bucket sort by frequency for O(n).
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> from collections import Counter
-> >
-> def top_k_frequent(nums, k):
->     count = Counter(nums)
->     # Bucket sort: O(n) — index = frequency
->     buckets = [[] for _ in range(len(nums) + 1)]
->     for num, freq in count.items():
->         buckets[freq].append(num)
->     result = []
->     for freq in range(len(buckets) - 1, 0, -1):
->         result.extend(buckets[freq])
->         if len(result) >= k:
->             return result[:k]
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n) with bucket sort; O(n log k) with heap. Space O(n).
-
-> [!tip] Alternatives
-> `heapq.nlargest(k, count.items(), key=lambda x: x[1])` — clean but O(n log k).
-
----
-
-### Furthest Building You Can Reach
+### Furthest Building You Can Reach `⭐ Google`
 
 > [!example] Problem
 > You are given an integer array heights representing the heights of buildings, some bricks, and some ladders.
@@ -282,7 +231,6 @@ difficulty: mixed
 > [!info] Approach
 > We want to save ladders for the largest jumps but can't see the future — greedy with reconsideration. Min-heap tracks the sizes of jumps where we used a ladder. When bricks run out, swap the smallest ladder-jump back to bricks if possible. For each upward jump, assign a ladder (push jump to heap). If ladders exhausted, pop the smallest ladder-jump, reclaim it as bricks. If bricks insufficient for the current jump, stop.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -310,7 +258,7 @@ difficulty: mixed
 
 ---
 
-### Kth Largest Element in an Array
+### Kth Largest Element in an Array `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the kth largest element in the array.
@@ -336,7 +284,6 @@ difficulty: mixed
 > [!info] Approach
 > Sorting is O(n log n) but we only need one order-statistic. A size-k min-heap scans once. Min-heap of size exactly `k`. After processing all elements, the root is the k-th largest. For each number, push to heap. If heap exceeds size `k`, pop the minimum. Root after full pass is the answer in O(1).
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -358,7 +305,7 @@ difficulty: mixed
 
 ---
 
-### Top K Frequent Words
+### Top K Frequent Words `🔥 Google`
 
 > [!example] Problem
 > Given an array of strings words and an integer k, return the k most frequent strings.
@@ -388,7 +335,6 @@ difficulty: mixed
 > [!info] Approach
 > We need two ordering rules: higher frequency first, then lexicographically smaller word first on ties. Use `heapq.nsmallest(...)` with key `(-freq, word)`. This still uses a heap internally but keeps the tie-break rule correct. Count with `Counter`, then ask for the `k` best items under that custom key. This is safer than hand-rolling a size-`k` heap because naive tuple ordering is easy to get wrong for ties.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -414,184 +360,7 @@ difficulty: mixed
 
 ## Scheduling / Reorganization
 
-### Task Scheduler
-
-> [!example] Problem
-> You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.
-> Return the minimum number of CPU intervals required to complete all tasks.
-> 
-> **Example 1:**
-> ```
-> Input: tasks = ["A","A","A","B","B","B"], n = 2
-> Output: 8
-> Explanation: A possible sequence is: A -> B -> idle -> A -> B -> idle -> A -> B.
-> After completing task A, you must wait two intervals before doing A again. The same applies to task B. In the 3 rd interval, neither A nor B can be done, so you idle. By the 4 th interval, you can do A again as 2 intervals have passed.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: tasks = ["A","C","A","B","D","B"], n = 1
-> Output: 6
-> Explanation: A possible sequence is: A -> B -> C -> D -> A -> B.
-> With a cooling interval of 1, you can repeat a task after just one other task.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: tasks = ["A","A","A", "B","B","B"], n = 3
-> Output: 10
-> Explanation: A possible sequence is: A -> B -> idle -> idle -> A -> B -> idle -> idle -> A -> B.
-> There are only two types of tasks, A and B, which need to be separated by 3 intervals. This leads to idling twice between repetitions of these tasks.
-> ```
-> 
-> **Constraints:**
-> - 1 <= tasks.length <= 10^4
-> - tasks[i] is an uppercase English letter.
-> - 0 <= n <= 100
-
-> [!info] Approach
-> The bottleneck is the most frequent task — it forces idle gaps. Math formula: `(max_freq - 1) * (n + 1) + count_of_tasks_with_max_freq`, capped at `len(tasks)`. When variety fills all slots, there's no idle time. Count frequencies. Compute `max_freq`. The formula models "frames" of size `n+1` with the most frequent task anchoring each frame. Return `max(formula, len(tasks))`.
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def least_interval(tasks, n):
->     freq = Counter(tasks)
->     max_freq = max(freq.values())
->     count_max = sum(1 for v in freq.values() if v == max_freq)
->     # Frames: (max_freq-1) full frames + last partial frame
->     formula = (max_freq - 1) * (n + 1) + count_max
->     return max(formula, len(tasks))
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(1) — only 26 task types.
-
-> [!tip] Alternatives
-> Simulation with max-heap + queue for cooldown tracking — O(t log 26) but matches the intuition more directly. Use for follow-ups requiring the actual schedule order.
-
----
-
-### Reorganize String
-
-> [!example] Problem
-> Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
-> Return any possible rearrangement of s or return "" if not possible.
-> 
-> **Example 1:**
-> ```
-> Input: s = "aab"
-> Output: "aba"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aaab"
-> Output: ""
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 500
-> - s consists of lowercase English letters.
-
-> [!info] Approach
-> To prevent repeats, always place the most frequent remaining character that isn't equal to the last placed. Max-heap by frequency. Each step, pop the most frequent, append it. If it equals the last placed character, pop the second most frequent instead, then push the first back. Impossible if `max_freq > (len(s) + 1) // 2`. Otherwise, greedily fill from the heap.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> from collections import Counter
-> >
-> def reorganize_string(s):
->     freq = Counter(s)
->     heap = [(-cnt, ch) for ch, cnt in freq.items()]
->     heapq.heapify(heap)
->     result = []
->     prev_cnt, prev_ch = 0, ''
->     while heap:
->         cnt, ch = heapq.heappop(heap)
->         result.append(ch)
->         if prev_cnt < 0:
->             heapq.heappush(heap, (prev_cnt, prev_ch))
->         prev_cnt, prev_ch = cnt + 1, ch  # increment (negated, so +1 = less frequent)
->     return ''.join(result) if len(result) == len(s) else ''
-> ```
-
-> [!success] Complexity
-> Time O(n log k) where k ≤ 26; Space O(k).
-
-> [!tip] Alternatives
-> Interleave approach — place most frequent chars at even indices first (O(n), simpler). Heap approach generalizes to arbitrary constraints.
-
----
-
-## Two Heaps
-
-### Find Median from Data Stream
-
-> [!example] Problem
-> The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
-> Implement the MedianFinder class
-> 
-> **Example 1:**
-> ```
-> Input
-> ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
-> [[], [1], [2], [], [3], []]
-> Output
-> [null, null, null, 1.5, null, 2.0]
-> 
-> Explanation
-> MedianFinder medianFinder = new MedianFinder();
-> medianFinder.addNum(1);    // arr = [1]
-> medianFinder.addNum(2);    // arr = [1, 2]
-> medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
-> medianFinder.addNum(3);    // arr[1, 2, 3]
-> medianFinder.findMedian(); // return 2.0
-> ```
-> 
-> **Constraints:**
-> - -10^5 <= num <= 10^5
-> - There will be at least one element in the data structure before calling findMedian.
-> - At most 5 * 10^4 calls will be made to addNum and findMedian.
-
-> [!info] Approach
-> Finding the median requires the middle element(s). Sorting after each insert is O(n log n). Two heaps partition at the median: `lo` (max-heap, lower half) and `hi` (min-heap, upper half). Invariant: `max(lo) <= min(hi)` and `|len(lo) - len(hi)| <= 1`. Always push to `lo`, then move `lo`'s max to `hi` to maintain order. Rebalance sizes so `lo` is never smaller than `hi`. Median is either `lo[0]` or the average of both tops.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> >
-> class MedianFinder:
->     def __init__(self):
->         self._lo: list[int] = []  # max-heap (negated)
->         self._hi: list[int] = []  # min-heap
-> >
->     def add_num(self, num):
->         heapq.heappush(self._lo, -num)
->         heapq.heappush(self._hi, -heapq.heappop(self._lo))
->         if len(self._lo) < len(self._hi):
->             heapq.heappush(self._lo, -heapq.heappop(self._hi))
-> >
->     def find_median(self):
->         if len(self._lo) > len(self._hi):
->             return float(-self._lo[0])
->         return (-self._lo[0] + self._hi[0]) / 2.0
-> ```
-
-> [!success] Complexity
-> Time O(log n) per add, O(1) find_median; Space O(n).
-
-> [!tip] Alternatives
-> Order statistics tree (AVL with rank augmentation) — O(log n) all ops but complex to implement. Segment tree on compressed values for integer streams.
-
----
-
-### Sliding Window Median
+### Sliding Window Median `⭐ Google`
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
@@ -625,7 +394,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Naively recomputing the median per window is O(nk). We need to handle sliding-out elements efficiently. Two heaps + lazy deletion. Track elements that have left the window in a `Counter`. When they surface at heap tops during pop, discard them. Maintain `lo` (max-heap) and `hi` (min-heap). Slide window: add new element, mark removed element as "invalid". Rebalance heaps. When reading tops, skip invalid elements.
-
 
 > [!note]- Python Solution
 > ```python
@@ -698,7 +466,7 @@ difficulty: mixed
 
 ---
 
-### IPO (Maximize Capital)
+### IPO (Maximize Capital) `⭐ Google`
 
 > [!example] Problem
 > Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
@@ -736,7 +504,6 @@ difficulty: mixed
 > [!info] Approach
 > Greedy — always take the most profitable project currently affordable. Projects unlock as capital grows. Sort projects by required capital. Sweep a pointer to unlock affordable projects into a max-heap of profits. Each round, pop the best available profit. Sort `zip(capital, profits)` by capital. Use a pointer `i` advancing when `projects[i][0] <= w`. Max-heap holds unlocked profits (negated). Repeat `k` times.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -765,7 +532,7 @@ difficulty: mixed
 
 ## K-Way Merge
 
-### Merge K Sorted Lists
+### Merge K Sorted Lists `🔥 Google`
 
 > [!example] Problem
 > You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
@@ -807,7 +574,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Naive pairwise merge is O(nk). We want O(n log k) by always extracting the global minimum across k list heads. Min-heap of size k holds one `(value, list_id, node)` tuple per list. Pop gives the global min; push the next node from that list. Seed heap with head of each non-null list. Use `list_id` as tie-breaker to avoid comparing `ListNode` objects (not comparable in Python).
-
 
 > [!note]- Python Solution
 > ```python
@@ -874,7 +640,6 @@ difficulty: mixed
 > [!info] Approach
 > There are `m*n` possible pairs — we need the k smallest without enumerating all. Treat this as a k-way merge: each row `i` of the implicit `m x n` sum matrix is sorted (since `nums2` is sorted). Seed heap with `(nums1[i] + nums2[0], i, 0)` for each `i`. Pop smallest `(sum, i, j)`, record pair. Push `(nums1[i] + nums2[j+1], i, j+1)` if `j+1 < len(nums2)`. Stop after k pops.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -902,7 +667,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a Sorted Matrix
+### Kth Smallest Element in a Sorted Matrix `⭐ Google`
 
 > [!example] Problem
 > Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
@@ -932,7 +697,6 @@ difficulty: mixed
 > [!info] Approach
 > Each row is a sorted list — this is K-way merge of n sorted arrays. Min-heap seeded with the first element of each row. Pop `k` times; each pop advances the column in that row. Push `(matrix[i][0], i, 0)` for all `i`. Pop k-1 times advancing `(matrix[i][j+1], i, j+1)`. The k-th pop is the answer.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -957,7 +721,7 @@ difficulty: mixed
 
 ---
 
-### Smallest Range Covering Elements from K Lists (Heap Variant)
+### Smallest Range Covering Elements from K Lists (Heap Variant) `⭐ Google`
 
 > [!example] Problem
 > You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
@@ -988,7 +752,6 @@ difficulty: mixed
 
 > [!info] Approach
 > We need a window containing one element per list. Sliding window on a sorted merged sequence won't track list coverage. K-way merge with a global max tracker. The current range is `[heap_min, current_max]`. Advance the minimum (pop from heap, push next from same list) to shrink the range. Seed heap with `(lists[i][0], i, 0)`. Track `cur_max = max of all initial first elements`. Each pop gives a new candidate min; update range if `cur_max - min` is smaller. Stop when any list is exhausted.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1030,7 +793,6 @@ difficulty: mixed
 > [!info] Approach
 > This is the general form of "Kth Smallest in a Sorted Matrix" — M sorted sequences, find the k-th minimum globally. Min-heap seeded with the first element of each array. Pop once per step, advance that array's pointer. After k pops, the last popped is the answer. Push `(arrays[i][0], i, 0)` for all i. Pop and push `(arrays[i][j+1], i, j+1)` until k pops done.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -1064,7 +826,6 @@ difficulty: mixed
 > [!info] Approach
 > Classic interval overlap problem — need to track which jobs are active at each moment. Sort by start time. Use a min-heap keyed by end time to track active jobs. At each new job's start, evict all jobs that have ended. Sort jobs by start. For each job, pop from heap all jobs with `end <= job.start`. Push current job's end time and load. Track running sum of active loads and record maximum.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -1095,74 +856,7 @@ difficulty: mixed
 
 ## Dijkstra / Graph
 
-### Network Delay Time
-
-> [!example] Problem
-> You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
-> We will send a signal from a given node k. Return the minimum time it takes for all the n nodes to receive the signal. If it is impossible for all the n nodes to receive the signal, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: times = [[2,1,1],[2,3,1],[3,4,1]], n = 4, k = 2
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: times = [[1,2,1]], n = 2, k = 1
-> Output: 1
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: times = [[1,2,1]], n = 2, k = 2
-> Output: -1
-> ```
-> 
-> **Constraints:**
-> - 1 <= k <= n <= 100
-> - 1 <= times.length <= 6000
-> - times[i].length == 3
-> - 1 <= ui, vi <= n
-> - ui != vi
-> - 0 <= wi <= 100
-> - All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
-
-> [!info] Approach
-> Shortest path from a single source to all nodes — Dijkstra's algorithm. It applies here because edge weights are non-negative. Min-heap of `(dist, node)`. Relax edges greedily. Once all nodes popped from heap, the maximum dist is the answer. Build adjacency list. Push `(0, k)`. Pop min dist node; skip if already visited. Relax neighbors. Track visited set. Answer = `max(dist.values())` if `len(dist) == n` else `-1`.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> from collections import defaultdict
-> >
-> def network_delay_time(times, n, k):
->     graph = defaultdict(list)
->     for u, v, w in times:
->         graph[u].append((w, v))
->     dist = {}
->     heap = [(0, k)]
->     while heap:
->         d, u = heapq.heappop(heap)
->         if u in dist:
->             continue
->         dist[u] = d
->         for w, v in graph[u]:
->             if v not in dist:
->                 heapq.heappush(heap, (d + w, v))
->     return max(dist.values()) if len(dist) == n else -1
-> ```
-
-> [!success] Complexity
-> Time O((V + E) log V); Space O(V + E).
-
-> [!tip] Alternatives
-> Bellman-Ford — O(VE), handles negative weights but much slower. Floyd-Warshall — O(V³), all-pairs; overkill for single-source.
-
----
-
-### Path with Minimum Effort
+### Path with Minimum Effort `⭐ Google`
 
 > [!example] Problem
 > You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
@@ -1200,7 +894,6 @@ difficulty: mixed
 > [!info] Approach
 > Minimizing the maximum edge weight along a path — modified Dijkstra where "dist" is the bottleneck edge. Min-heap of `(effort, row, col)`. `effort` = max diff seen so far on the current path. Relax: new effort = `max(current_effort, abs(neighbor_height - current_height))`. Push `(0, 0, 0)`. For each pop, update neighbors with `max(effort, abs diff)`. Skip if already visited at a better effort.
 
-
 > [!note]- Python Solution
 > ```python
 > import heapq
@@ -1235,78 +928,7 @@ difficulty: mixed
 
 ---
 
-### Swim in Rising Water
-
-> [!example] Problem
-> You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).
-> It starts raining, and water gradually rises over time. At time t, the water level is t, meaning any cell with elevation less than equal to t is submerged or reachable.
-> You can swim from a square to another 4-directionally adjacent square if and only if the elevation of both squares individually are at most t. You can swim infinite distances in zero time. Of course, you must stay within the boundaries of the grid during your swim.
-> Return the minimum time until you can reach the bottom right square (n - 1, n - 1) if you start at the top left square (0, 0).
-> 
-> **Example 1:**
-> ```
-> Input: grid = [[0,2],[1,3]]
-> Output: 3
-> Explanation:
-> At time 0, you are in grid location (0, 0).
-> You cannot go anywhere else because 4-directionally adjacent neighbors have a higher elevation than t = 0.
-> You cannot reach point (1, 1) until time 3.
-> When the depth of water is 3, we can swim anywhere inside the grid.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: grid = [[0,1,2,3,4],[24,23,22,21,5],[12,13,14,15,16],[11,17,18,19,20],[10,9,8,7,6]]
-> Output: 16
-> Explanation: The final route is shown.
-> We need to wait until time 16 so that (0, 0) and (4, 4) are connected.
-> ```
-> 
-> **Constraints:**
-> - n == grid.length
-> - n == grid[i].length
-> - 1 <= n <= 50
-> - 0 <= grid[i][j] < n2
-> - Each value grid[i][j] is unique.
-
-> [!info] Approach
-> Same bottleneck-path structure as "Path with Minimum Effort" — minimize the maximum elevation encountered. Min-heap of `(elevation, row, col)`. The answer is the max elevation on the optimal path, i.e. when we reach `(n-1, n-1)` via Dijkstra-style expansion. Push `(grid[0][0], 0, 0)`. Pop min elevation; if it's the destination return it. Mark visited. Push unvisited neighbors with `max(current_t, grid[nr][nc])`.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> >
-> def swim_in_water(grid):
->     n = len(grid)
->     visited = [[False] * n for _ in range(n)]
->     heap = [(grid[0][0], 0, 0)]
->     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
->     while heap:
->         t, r, c = heapq.heappop(heap)
->         if r == n - 1 and c == n - 1:
->             return t
->         if visited[r][c]:
->             continue
->         visited[r][c] = True
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < n and 0 <= nc < n and not visited[nr][nc]:
->                 heapq.heappush(heap, (max(t, grid[nr][nc]), nr, nc))
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(n² log n²); Space O(n²).
-
-> [!tip] Alternatives
-> Binary search on `t` + BFS connectivity — O(n² log n). Union-Find adding edges in elevation order — O(n² α(n²)), essentially linear. All three approaches appear in interviews.
-
----
-
-## Design
-
-### Design Twitter
+### Design Twitter `🔥 Google`
 
 > [!example] Problem
 > Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and is able to see the 10 most recent tweets in the user's news feed.
@@ -1340,7 +962,6 @@ difficulty: mixed
 
 > [!info] Approach
 > News feed merges multiple sorted tweet streams (one per followee) — this is K-way merge on recency. Store each user's tweets as a list (ordered by insertion = by time using a global counter). `get_news_feed` collects all candidate tweet lists and uses a max-heap on timestamp to extract the 10 most recent. Global `time` counter increments with each tweet. Each user has a list of `(time, tweetId)`. For feed: seed heap with latest tweet from each followee+self. Pop max; push that user's next tweet. Collect 10.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1390,7 +1011,7 @@ difficulty: mixed
 
 ---
 
-### Ugly Number II
+### Ugly Number II `⭐ Google`
 
 > [!example] Problem
 > An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5.
@@ -1415,7 +1036,6 @@ difficulty: mixed
 
 > [!info] Approach
 > We need to generate ugly numbers in order without iterating all integers. Min-heap seeded with `{1}`. Each pop gives the next ugly number; multiply by 2, 3, 5 to generate candidates. Use a visited set to avoid duplicates. Push 1. Pop min (= current ugly). Push `val*2, val*3, val*5` if not seen. Repeat n times.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1446,7 +1066,7 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[graph-algorithms]] | [[sliding-window]] | [[two-pointers]]
-### Smallest Range Covering Elements from K Lists
+### Smallest Range Covering Elements from K Lists `⭐ Google`
 
 > [!example] Problem
 > You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
@@ -1477,7 +1097,6 @@ difficulty: mixed
 
 > [!info] Approach
 > To keep a valid range, we must always know the current minimum and maximum among the chosen elements from each list. Keep one pointer per list and a min-heap of the current heads. Track the current maximum separately. Pop the smallest value from the heap, update the best range, advance that list, and push the next value. Stop when one list is exhausted.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1512,7 +1131,7 @@ difficulty: mixed
 
 ## Heap Applications
 
-### Reorganize String (LC 767)
+### Reorganize String (LC 767) `🔥 Google`
 
 > [!example] Problem
 > Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
@@ -1536,7 +1155,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Greedy: always place the most frequent remaining character, as long as it is not the same as the last placed character. A max-heap efficiently gives us the most frequent character at each step. Use a max-heap of `(-count, char)`. At each step, pop the most frequent character. If it matches the last placed character, pop the second most frequent instead (or return "" if no second exists), then push the first back. Alternate approach (cleaner): pop the top character, append it, push the previous character back (if count > 0). This naturally avoids placing the same character twice in a row.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1569,72 +1187,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Interleave by frequency: sort characters by count, fill even indices first then odd indices. O(n log n) but simpler to reason about.
 > - Key insight: if `max_freq > (len(s) + 1) // 2`, it is impossible — the most frequent character would have to be adjacent to itself.
-
----
-
-### IPO — Maximize Capital (LC 502)
-
-> [!example] Problem
-> Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
-> You are given n projects where the ith project has a pure profit profits[i] and a minimum capital of capital[i] is needed to start it.
-> Initially, you have w capital. When you finish a project, you will obtain its pure profit and the profit will be added to your total capital.
-> Pick a list of at most k distinct projects from given projects to maximize your final capital, and return the final maximized capital.
-> The answer is guaranteed to fit in a 32-bit signed integer.
-> 
-> **Example 1:**
-> ```
-> Input: k = 2, w = 0, profits = [1,2,3], capital = [0,1,1]
-> Output: 4
-> Explanation: Since your initial capital is 0, you can only start the project indexed 0.
-> After finishing it you will obtain profit 1 and your capital becomes 1.
-> With capital 1, you can either start the project indexed 1 or the project indexed 2.
-> Since you can choose at most 2 projects, you need to finish the project indexed 2 to get the maximum capital.
-> Therefore, output the final maximized capital, which is 0 + 1 + 3 = 4.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: k = 3, w = 0, profits = [1,2,3], capital = [0,1,2]
-> Output: 6
-> ```
-> 
-> **Constraints:**
-> - 1 <= k <= 10^5
-> - 0 <= w <= 10^9
-> - n == profits.length
-> - n == capital.length
-> - 1 <= n <= 10^5
-> - 0 <= profits[i] <= 10^4
-> - 0 <= capital[i] <= 10^9
-
-> [!info] Approach
-> Greedy: at each step, among all projects you can currently afford, pick the one with the highest profit. A max-heap of available profits makes this O(log n) per step. Sort projects by required capital. Use a pointer to "unlock" projects as capital grows. At each of the `k` steps, push all newly affordable projects into a max-heap, then pop the highest profit. Sort `(capital, profit)` pairs. Pointer `i` advances while `capital[i] <= w`. After unlocking, pop from the max-heap and add profit to `w`. Repeat `k` times.
-
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> >
-> def find_maximized_capital(k, w, profits, capital):
->     projects = sorted(zip(capital, profits))
->     available = []   # max-heap (negated profits)
->     i = 0
->     for _ in range(k):
->         while i < len(projects) and projects[i][0] <= w:
->             heapq.heappush(available, -projects[i][1])
->             i += 1
->         if not available:
->             break
->         w += -heapq.heappop(available)
->     return w
-> ```
-
-> [!success] Complexity
-> Time O(n log n + k log n), Space O(n).
-
-> [!tip] Alternatives
-> - No better asymptotic complexity — sorting and heap are both necessary.
-> - Key insight: we never need to re-evaluate already rejected projects; once a project is unaffordable at some capital level it won't become more expensive later (projects are sorted by cost, not by time).
 
 ---
 
@@ -1680,7 +1232,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Greedy: only refuel when you must (you've run out of fuel). When you do refuel, pick the largest available fuel among all stations you've already passed — that minimizes the number of stops. Drive as far as possible. As you pass each station, push its fuel into a max-heap. When you run out of fuel, greedily pop the largest available fuel and use it. Each pop is one stop. Walk through stations in order. While `fuel < station.position - current_position` and heap is non-empty, pop the largest fuel and add it to `fuel` (increment stops). If still can't reach the next station, return -1.
-
 
 > [!note]- Python Solution
 > ```python

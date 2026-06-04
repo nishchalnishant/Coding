@@ -46,6 +46,12 @@ DECISION
 - **Why it works**: Each pointer moves at most n steps in one direction → O(n) total comparisons for the whole search.
 - **Where it breaks**: Unsorted data (sort first, adding O(n log n)); problems requiring non-contiguous or multi-pass pairing where pointer convergence doesn't cover all candidates.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 # Two Pointers
@@ -119,7 +125,7 @@ def converging(arr, target):
     return (-1, -1)
 ```
 
-**3Sum template:**
+**3Sum template: `🔥 Google`**
 ```python
 def three_sum(nums):
     nums.sort()
@@ -273,14 +279,14 @@ def sort_colors(nums):
 
 | Question | Variant | Click moment | Core logic | Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Two Sum II (sorted)** | Converging | Complement from both ends | If sum too small → `lo++`; too big → `hi--` | Input must be **sorted**; 1-indexed return in some problems. |
-| **3Sum** | Converging + skip | Fix i; two-pointer on rest | Skip duplicates at i, lo, hi | Sort first; skip **all** equal values at each level. |
-| **Container With Most Water** | Converging | Move shorter side | `area = min(h[lo], h[hi]) * (hi-lo)` | Moving taller side never increases min height. |
-| **Trapping Rain Water** | Converging | Advance smaller `l_max`/`r_max` side | Water at i from min of max heights | Two-pointer O(n) O(1); differs from stack solution. |
-| **Linked List Cycle** | Fast/slow | Floyd; meet proves cycle | Fast 2 steps, slow 1 | Check `fast` and `fast.next` before advancing. |
+| **Two Sum II (sorted) `🔥 Google`** | Converging | Complement from both ends | If sum too small → `lo++`; too big → `hi--` | Input must be **sorted**; 1-indexed return in some problems. |
+| **3Sum `🔥 Google`** | Converging + skip | Fix i; two-pointer on rest | Skip duplicates at i, lo, hi | Sort first; skip **all** equal values at each level. |
+| **Container With Most Water `🔥 Google`** | Converging | Move shorter side | `area = min(h[lo], h[hi]) * (hi-lo)` | Moving taller side never increases min height. |
+| **Trapping Rain Water `🔥 Google`** | Converging | Advance smaller `l_max`/`r_max` side | Water at i from min of max heights | Two-pointer O(n) O(1); differs from stack solution. |
+| **Linked List Cycle `🔥 Google`** | Fast/slow | Floyd; meet proves cycle | Fast 2 steps, slow 1 | Check `fast` and `fast.next` before advancing. |
 | **Cycle Entry** | Fast/slow | Reset one ptr to head after meet | Both move 1 step until meet | Entry distance equals steps from head to meet. |
 | **Remove Duplicates (sorted)** | Same-direction | `write` only on new value | `if nums[fast] != nums[write]: write++` | Return `write+1` as new length. |
-| **Sort Colors (Dutch flag)** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
+| **Sort Colors (Dutch flag) `⭐ Google`** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
 
 Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/linked-list.md).
 
@@ -298,9 +304,9 @@ Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [l
 ## See also
 
 - [sliding-window.md](./sliding-window.md) — contiguous substring/subarray (often on strings)
-- [binary-search.md](./binary-search.md) — when monotonic predicate replaces scanning
-- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) — fast/slow canonical problems
-- [01-data-structures/array.md](../01-data-structures/array.md) — array two-pointer variants
+- [binary-search.md](./binary-search.md) `🔥 Google` — when monotonic predicate replaces scanning
+- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) `⭐ Google` — fast/slow canonical problems
+- [01-data-structures/array.md](../01-data-structures/array.md) `⭐ Google` — array two-pointer variants
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — two-pointer triggers
 
 ---

@@ -8,11 +8,17 @@ difficulty: mixed
 
 **Pattern map**: Tree problems reduce to one of five techniques — DFS traversal (preorder/inorder/postorder), level-order BFS, LCA (post-order recurse), Tree DP (post-order returning tuples), BST operations (exploit ordering). The remaining problems are construction/serialization and O(1)-space Morris traversal.
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## DFS Traversal
 
-### Binary Tree Inorder Traversal
+### Binary Tree Inorder Traversal `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, return the inorder traversal of its nodes' values.
@@ -50,7 +56,6 @@ difficulty: mixed
 > [!info] Approach
 > Recursive inorder is trivial; the iterative version uses an explicit stack to simulate the call stack. Key pattern: push all left children first, then process on pop, then pivot to right child. Iterative inorder — maintain a stack; keep going left until None, then pop and visit, then move to right child. `while curr or stack`: inner `while curr` pushes all lefts; `curr = stack.pop()` processes node, appends value; `curr = curr.right` to explore right subtree.
 
-
 > [!note]- Python Solution
 > ```python
 > def inorder_traversal(root):
@@ -75,7 +80,7 @@ difficulty: mixed
 
 ---
 
-### Invert Binary Tree
+### Invert Binary Tree `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, invert the tree, and return its root.
@@ -104,9 +109,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Post-order recursive swap.** Hierarchy is mirrored by swapping children at every node independently. What we need: visit every node once and swap its two children. Post-order recursion — swap after both subtrees are inverted. Base case `not root → None`. Recurse left and right, then swap: `root.left, root.right = invertTree(root.right), invertTree(root.left)`. Pre-order also works since swapping is an O(1) local operation.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -150,9 +152,6 @@ difficulty: mixed
 > [!info] Approach
 > **Recursive mirror(l, r) — outer and inner pair matching.** Symmetry means the left subtree mirrors the right subtree. Two subtrees mirror each other iff their roots are equal AND the outer pair matches (left.left ↔ right.right) AND the inner pair matches (left.right ↔ right.left). Define `mirror(l, r)` to check symmetry recursively. Base cases: both None → True (symmetric absence), exactly one None → False. Otherwise: `l.val == r.val and mirror(l.left, r.right) and mirror(l.right, r.left)`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def is_symmetric(root):
@@ -174,7 +173,7 @@ difficulty: mixed
 
 ---
 
-### Maximum Depth of Binary Tree
+### Maximum Depth of Binary Tree `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, return its maximum depth.
@@ -198,9 +197,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Post-order recursive max height.** Depth of a tree = 1 + max depth of its subtrees. This is the definition recursively applied. Post-order recursion — a node can't contribute its depth until both subtrees report theirs. Base case `not root → 0`; otherwise `1 + max(maxDepth(left), maxDepth(right))`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -245,7 +241,6 @@ difficulty: mixed
 > [!info] Approach
 > Critical trap: a node with only one child is NOT a leaf. Minimum depth must reach a node where BOTH children are None. Simply returning `1 + min(left_depth, right_depth)` fails for nodes with a single child — the zero-depth from the absent child would win incorrectly. Post-order recursion with explicit single-child guard. If left is None, return `1 + right_depth`; if right is None, return `1 + left_depth`; otherwise `1 + min(left, right)`. Base case: `not root → 0`. Then check left/right nullity before min.
 
-
 > [!note]- Python Solution
 > ```python
 > def min_depth(root):
@@ -269,7 +264,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum
+### Path Sum `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
@@ -307,9 +302,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS subtracting current value — check at leaf.** A root-to-leaf path is uniquely defined by the sequence of nodes from root to a leaf. DFS naturally models path extension. Subtract the current node's value from the target as we descend; at a leaf, check if remaining equals zero. The leaf check is critical — only return True at nodes where `not left and not right` (both children null), not at any node where partial sum matches.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def has_path_sum(root, targetSum):
@@ -330,7 +322,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum II
+### Path Sum II `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. Each path should be returned as a list of the node values, not node references.
@@ -365,7 +357,6 @@ difficulty: mixed
 > [!info] Approach
 > Collecting all paths requires backtracking — extend the path on entry, collect at leaves, pop on exit. The pop on the way back up is essential; without it the path list carries values from sibling branches. DFS backtracking — maintain a mutable `path` list; append on enter, pop on exit; collect a copy at leaves. At leaf (`not left and not right`) and `remaining == 0`: `result.append(list(path))` (copy! not reference). Then `path.pop()` on return regardless of whether this was a leaf.
 
-
 > [!note]- Python Solution
 > ```python
 > def path_sum(root, targetSum):
@@ -393,7 +384,7 @@ difficulty: mixed
 
 ---
 
-### Sum Root to Leaf Numbers
+### Sum Root to Leaf Numbers `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary tree containing digits from 0 to 9 only.
@@ -430,7 +421,6 @@ difficulty: mixed
 > [!info] Approach
 > As we descend, the current number is `parent_number * 10 + node.val`. At a leaf, this is the fully formed number. DFS naturally threads this accumulated value downward. DFS passing accumulated value; sum up leaf contributions. `dfs(node, curr_num)` — `curr_num = curr_num * 10 + node.val`; at leaf return `curr_num`; otherwise return `dfs(left, curr_num) + dfs(right, curr_num)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def sum_numbers(root):
@@ -453,7 +443,7 @@ difficulty: mixed
 
 ---
 
-### Count Complete Tree Nodes
+### Count Complete Tree Nodes `⭐ Google`
 
 > [!example] Problem
 > Given the root of a complete binary tree, return the number of the nodes in the tree.
@@ -485,7 +475,6 @@ difficulty: mixed
 
 > [!info] Approach
 > A naive O(n) traversal ignores the complete tree property. In a complete tree, every level except possibly the last is full, and the last level fills left to right. That lets us detect when one subtree is perfect and count it with `2^h - 1` instead of visiting every node. Compare the leftmost height of `root.left` and `root.right`. If they are equal, the left subtree is perfect, so count it in O(1) and recurse only on the right. Otherwise, the right subtree is perfect, so count it in O(1) and recurse only on the left. `height(node)` follows `.left` pointers only. If `left_h == right_h`, return `2^left_h + countNodes(root.right)`; else return `2^right_h + countNodes(root.left)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -553,9 +542,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS with propagated path_max.** Goodness depends on the path from root to the node — we need to carry the maximum value seen so far. Purely structural traversal can't determine goodness without ancestor context. Pass `path_max` down; a node is good iff `node.val >= path_max`. Update `path_max = max(path_max, node.val)` before recursing; root is always good.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def good_nodes(root):
@@ -608,7 +594,6 @@ difficulty: mixed
 > [!info] Approach
 > Two trees are the same iff their roots match and both subtrees are recursively the same. A null/non-null mismatch immediately returns false. Simultaneous pre-order DFS on both trees; fail on any structural or value mismatch. Base cases: both None → True; exactly one None → False; `p.val != q.val` → False. Recurse: `isSameTree(p.left, q.left) and isSameTree(p.right, q.right)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def is_same_tree(p, q):
@@ -630,7 +615,7 @@ difficulty: mixed
 
 ---
 
-### Subtree of Another Tree
+### Subtree of Another Tree `⭐ Google`
 
 > [!example] Problem
 > Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.
@@ -656,7 +641,6 @@ difficulty: mixed
 
 > [!info] Approach
 > For each node in `root`, check if the subtree rooted there matches `subRoot`. Reuses `isSameTree` as a subroutine — classic compositional approach. DFS over `root`; at each node invoke `isSameTree(node, subRoot)`. Short-circuit on match. `isSubtree(root, subRoot)` — if not root: False; if `isSameTree(root, subRoot)`: True; else recurse left and right.
-
 
 > [!note]- Python Solution
 > ```python
@@ -712,9 +696,6 @@ difficulty: mixed
 > [!info] Approach
 > **Morris-style in-place threading — find inorder predecessor.** Preorder = root → left → right. To flatten in-place without extra space: for each node with a left child, the end of the left subtree's rightmost chain should point to the original right subtree. Morris-style threading applied to flattening. Move the left subtree to the right and null the left. For each `curr` with a left child: find rightmost node in left subtree (`prev`), wire `prev.right = curr.right`, move `curr.right = curr.left`, null `curr.left`. Advance `curr = curr.right`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def flatten(root):
@@ -740,7 +721,7 @@ difficulty: mixed
 
 ---
 
-### Step-By-Step Directions From a Binary Tree Node to Another
+### Step-By-Step Directions From a Binary Tree Node to Another `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary tree with n nodes. Each node is uniquely assigned a value from 1 to n. You are also given an integer startValue representing the value of the start node s, and a different integer destValue representing the value of the destination node t.
@@ -771,9 +752,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **DFS to root→start and root→dest paths, strip common prefix.** The shortest path between two nodes in a tree goes through their LCA. Find root→start and root→dest as L/R sequences; strip the common prefix (= path to LCA); start's remaining path becomes all 'U's (going up to LCA), dest's remaining path is the L/R directions from LCA to dest. DFS to record L/R path from root to each target node, then strip common prefix.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -815,68 +793,7 @@ difficulty: mixed
 
 ## Level Order BFS
 
-### Binary Tree Level Order Traversal
-
-> [!example] Problem
-> Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
-> 
-> **Example 1:**
-> ```
-> Input: root = [3,9,20,null,null,15,7]
-> Output: [[3],[9,20],[15,7]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: root = [1]
-> Output: [[1]]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: root = []
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the tree is in the range [0, 2000].
-> - -1000 <= Node.val <= 1000
-
-> [!info] Approach
-> **BFS with level-size snapshot.** Level grouping requires knowing when one level ends and the next begins. BFS processes nodes in breadth-first order, which exactly corresponds to levels. Snapshot the queue size at the start of each iteration — that many nodes form the current level. Inner loop runs exactly `level_size` times; enqueue children during inner loop; append collected level after inner loop.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def level_order(root):
->     if not root:
->         return []
->     result, queue = [], deque([root])
->     while queue:
->         level = []
->         for _ in range(len(queue)):
->             node = queue.popleft()
->             level.append(node.val)
->             if node.left:  queue.append(node.left)
->             if node.right: queue.append(node.right)
->         result.append(level)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n) — queue holds up to n/2 nodes at widest level.
-
-> [!tip] Alternatives
-> - DFS with depth parameter: `dfs(node, depth)` appends to `result[depth]`. O(n)/O(h) — better space for tall trees.
-> - Two-list swap: maintain `current_level` and `next_level`, swap after each level. Same complexity.
-
----
-
-### Binary Tree Zigzag Level Order Traversal
+### Binary Tree Zigzag Level Order Traversal `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
@@ -905,7 +822,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Same as level-order BFS but every other level needs reversal. Toggle a flag per level rather than using a deque with dual-end insertion — simpler and avoids subtle off-by-one errors. BFS with level-size snapshot; after building each level list, conditionally reverse it before appending. `left_to_right = True` initially; after collecting each level: if `not left_to_right`, `level.reverse()`; then `left_to_right = not left_to_right`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -940,75 +856,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Right Side View
-
-> [!example] Problem
-> Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
-> 
-> **Example 1:**
-> ```
-> Input: root = [1,2,3,null,5,null,4]
-> Output: [1,3,4]
-> Explanation:
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: root = [1,2,3,4,null,null,null,5]
-> Output: [1,3,4,5]
-> Explanation:
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: root = [1,null,3]
-> Output: [1,3]
-> ```
-> 
-> **Example 4:**
-> ```
-> Input: root = []
-> Output: []
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the tree is in the range [0, 100].
-> - -100 <= Node.val <= 100
-
-> [!info] Approach
-> **BFS — capture last node per level.** The rightmost visible node at each level is the last node processed in a BFS level sweep. Level-order BFS; record the value of the last node processed per level. Snapshot level size; run inner loop; append value only when `i == level_size - 1`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def right_side_view(root):
->     if not root:
->         return []
->     result, queue = [], deque([root])
->     while queue:
->         level_size = len(queue)
->         for i in range(level_size):
->             node = queue.popleft()
->             if i == level_size - 1:
->                 result.append(node.val)
->             if node.left:  queue.append(node.left)
->             if node.right: queue.append(node.right)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - DFS right-first with depth: visit right before left; append only on first visit to a new depth. O(n)/O(h) — better for wide trees.
-
----
-
-### Populating Next Right Pointers in Each Node
+### Populating Next Right Pointers in Each Node `⭐ Google`
 
 > [!example] Problem
 > You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
@@ -1045,9 +893,6 @@ difficulty: mixed
 > [!info] Approach
 > **O(1) space — walk current level to connect next level.** Perfect binary tree: every internal node has exactly two children; all leaves at the same level. Once level k is connected via next pointers, we can traverse it like a linked list to connect level k+1. For each node in level k: `node.left.next = node.right` (sibling connection) and `node.right.next = node.next.left if node.next else None` (cousin connection). Start with `leftmost = root`; inner loop walks the current level using `head.next`; outer loop descends via `leftmost = leftmost.left`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def connect(root):
@@ -1074,7 +919,7 @@ difficulty: mixed
 
 ---
 
-### Vertical Order Traversal of a Binary Tree
+### Vertical Order Traversal of a Binary Tree `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
@@ -1123,9 +968,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS collect (col, row, val) tuples, sort, group.** Vertical order is defined by column assignment: root at col 0, left child at col-1, right child at col+1, row increases by 1 per level. Sort-based approach — collect all (col, row, val) tuples and sorting by (col, row, val) handles ties correctly. DFS assigning (row, col) to each node, collect all tuples, sort, then group by column.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > from collections import defaultdict
@@ -1159,7 +1001,7 @@ difficulty: mixed
 
 ---
 
-### All Nodes Distance K in Binary Tree
+### All Nodes Distance K in Binary Tree `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree, the value of a target node target, and an integer k, return an array of the values of all nodes that have a distance k from the target node.
@@ -1187,9 +1029,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Build undirected graph, BFS k steps from target.** In a tree, distance can only go downward from any node. But from the target, distance can also go upward through parents — making this a graph problem. Adding parent edges allows BFS to spread in all directions from target. Build an adjacency list (bidirectional) via one DFS, then BFS from target for exactly k steps. Build graph first, BFS second, collect nodes at distance == k.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1233,7 +1072,7 @@ difficulty: mixed
 
 ## Lowest Common Ancestor
 
-### Lowest Common Ancestor of a Binary Tree
+### Lowest Common Ancestor of a Binary Tree `🔥 Google`
 
 > [!example] Problem
 > Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
@@ -1269,9 +1108,6 @@ difficulty: mixed
 > [!info] Approach
 > **Post-order recursion — converge at split node.** The LCA is determined by what comes back from both subtrees — we need children to report before the parent decides. If the current node is None, p, or q, return it. Recurse left and right. If both return non-None, both targets were found in different subtrees → current node is LCA. If only one side returns non-None, the LCA is in that subtree. `if left and right: return root; return left or right`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def lowest_common_ancestor(root, p, q):
@@ -1293,16 +1129,13 @@ difficulty: mixed
 
 ---
 
-### Lowest Common Ancestor of a BST
+### Lowest Common Ancestor of a BST `🔥 Google`
 
 > [!example] Problem
 > Same as above but the tree is a BST. Exploit the ordering property.
 
 > [!info] Approach
 > **Iterative BST-guided descent — O(h) instead of O(n).** In a BST, if both p and q are less than root, their LCA must be in the left subtree. If both are greater, LCA is in the right subtree. The moment they "diverge" (one ≤ root ≤ other, or one equals root), the current root is the LCA. Iteratively follow the BST property — no recursion into both subtrees. If both p, q < root, go left. If both > root, go right. Otherwise return root.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1327,7 +1160,7 @@ difficulty: mixed
 
 ## Tree DP
 
-### Diameter of Binary Tree
+### Diameter of Binary Tree `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, return the length of the diameter of the tree.
@@ -1354,9 +1187,6 @@ difficulty: mixed
 > [!info] Approach
 > **Post-order height DFS with global diameter update.** The diameter through any node = left_height + right_height. We can't compute this without first knowing both subtree heights — post-order. `height(node)` returns the height of the subtree; as a side effect, updates global `diameter = max(diameter, left + right)`. Return `1 + max(left, right)` upward; update `best[0]` with `l + r` at each node.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def diameter_of_binary_tree(root):
@@ -1380,7 +1210,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Maximum Path Sum
+### Binary Tree Maximum Path Sum `🔥 Google`
 
 > [!example] Problem
 > A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
@@ -1408,9 +1238,6 @@ difficulty: mixed
 > [!info] Approach
 > **Post-order gain DFS — clamp negatives to 0.** A path should not extend into a subtree that contributes a negative sum — drop it (treat as 0). Distinguish two roles — the "gain returned to parent" (extends into at most one child) vs. the "path through this node as apex" (can use both children). `gain(node) = node.val + max(l, r)` returned upward; global update = `node.val + l + r` (where l and r already have negatives clamped to 0).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def max_path_sum(root):
@@ -1435,7 +1262,7 @@ difficulty: mixed
 
 ---
 
-### House Robber III
+### House Robber III `🔥 Google`
 
 > [!example] Problem
 > The thief has found himself a new place for his thievery again. There is only one entrance to this area, called root.
@@ -1463,9 +1290,6 @@ difficulty: mixed
 > [!info] Approach
 > **Post-order DP returning (rob, skip) pair.** The parent's optimal choice (rob or skip its parent) depends on both options at each child — returning a single value forces suboptimal choices. `dp(node)` returns `(rob, skip)` — maximum money if we rob vs. skip this node. `rob = node.val + l_skip + r_skip`; `skip = max(l_rob, l_skip) + max(r_rob, r_skip)`. Post-order: compute children first.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def rob(root):
@@ -1489,7 +1313,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Cameras
+### Binary Tree Cameras `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
@@ -1515,9 +1339,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Greedy post-order — delay cameras upward.** It's always optimal to delay camera placement upward (put the camera at the parent of an uncovered leaf rather than at the leaf). Three states per node — 0 = uncovered (needs a camera from parent), 1 = covered but no camera, 2 = has a camera. Null nodes return 1 (trivially covered). If any child returns 0, place a camera here (return 2, increment count). If any child has a camera (returns 2), this node is covered (return 1). Otherwise return 0 (push responsibility to parent).
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1547,7 +1368,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum III
+### Path Sum III `⭐ Google`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return the number of paths where the sum of the values along the path equals targetSum.
@@ -1573,9 +1394,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **DFS with prefix sum hash map + backtracking.** A downward path ending at node X has sum = `running_sum[X] - running_sum[ancestor]`. If `running_sum[X] - targetSum` was seen at some ancestor, that ancestor→X path sums to targetSum. Maintain `{prefix_sum: count}` hash map; initialize with `{0: 1}` (empty path from root). DFS — add node.val to running sum, query map for `running_sum - targetSum`, increment map, recurse children, then decrement map on backtrack (critical: prevents prefix sum from leaking into sibling branches).
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1611,7 +1429,7 @@ difficulty: mixed
 
 ## BST Operations
 
-### Validate Binary Search Tree
+### Validate Binary Search Tree `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary tree, determine if it is a valid binary search tree (BST).
@@ -1637,9 +1455,6 @@ difficulty: mixed
 > [!info] Approach
 > **Recursive range validation — propagate (lo, hi) bounds.** Checking only `node.left.val < node.val < node.right.val` misses global violations. Carry `(lo, hi)` bounds down the tree; each node must satisfy `lo < node.val < hi`. Going left, tighten upper bound to `node.val`; going right, tighten lower bound. `validate(node, lo, hi)` — fail if not `lo < node.val < hi`, else recurse with tightened bounds.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def is_valid_bst(root):
@@ -1662,7 +1477,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a BST
+### Kth Smallest Element in a BST `🔥 Google`
 
 > [!example] Problem
 > Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
@@ -1686,9 +1501,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Iterative inorder with early exit at k.** BST inorder traversal yields values in ascending sorted order — the kth node visited is the kth smallest. Iterative form allows clean early termination at exactly k pops. Standard iterative inorder — push all left children onto stack, pop, decrement k, if k == 0 return. `while stack or root`: push all left children, pop, decrement k, if k == 0 return val, else advance to right child.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1722,7 +1534,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Insert follows BST search path to find the null slot. Delete has three cases: leaf (just remove), one child (bypass the node), two children (replace with inorder successor or predecessor then delete that successor). Insert — recurse into left or right based on comparison; on hitting None, return a new node. Delete — recurse to find target; on finding it, handle the three cases. Delete's two-child case: find inorder successor (leftmost in right subtree), copy its value to current node, then delete successor from right subtree.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1792,9 +1603,6 @@ difficulty: mixed
 > [!info] Approach
 > **DFS with BST pruning — skip entire subtrees.** Unlike a general tree, BST allows skipping entire subtrees. If `node.val < low`, the left subtree contains only smaller values — skip it. If `node.val > high`, right subtree contains only larger values — skip it. DFS that prunes based on BST ordering. Only recurse left if `node.val > low`; only recurse right if `node.val < high`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def range_sum_bst(root, low, high):
@@ -1819,7 +1627,7 @@ difficulty: mixed
 
 ---
 
-### Recover Binary Search Tree
+### Recover Binary Search Tree `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
@@ -1844,9 +1652,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Inorder DFS — detect inversion pair(s), swap values.** A correct BST's inorder traversal is strictly ascending. Two swapped nodes create inversions. If adjacent in inorder: one inversion. If non-adjacent: two inversions. Inorder DFS tracking `prev`; on first inversion set `first = prev, second = curr`; on second inversion update `second = curr`. Swap `first.val` and `second.val`. One or two inversion sites. Always: `first = prev` at first inversion; `second = curr` at each inversion (covers both one and two inversion cases).
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1881,7 +1686,7 @@ difficulty: mixed
 
 ## Construction / Serialization
 
-### Serialize and Deserialize Binary Tree
+### Serialize and Deserialize Binary Tree `🔥 Google`
 
 > [!example] Problem
 > Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
@@ -1906,9 +1711,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Preorder DFS with null markers — iterator-based deserialization.** Preorder places the root first, so during deserialization we can reconstruct the root before its children — naturally recursive. Inorder alone is insufficient (can't determine split without knowing root). DFS emitting node values and `#` for null, comma-delimited. Deserialize using an iterator over tokens. Serialize: DFS pre-order appending values or `#`. Deserialize: iterate tokens; `#` → return None; otherwise create node, recurse left, recurse right. Use an iterator to advance position across recursive calls.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1947,7 +1749,7 @@ difficulty: mixed
 
 ---
 
-### Construct Binary Tree from Preorder and Inorder Traversal
+### Construct Binary Tree from Preorder and Inorder Traversal `🔥 Google`
 
 > [!example] Problem
 > Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
@@ -1975,9 +1777,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Preorder index advance + inorder hash map for O(1) root lookup.** Preorder[0] is always the root; find it in inorder — everything left is the left subtree, everything right is the right subtree. Hash map gives O(1) inorder index lookup instead of O(n) linear scan. Advance a global preorder index as you recurse; pass inorder bounds to slice logically without creating new arrays. `build(in_left, in_right)` — take `preorder[pre_idx]` as root, find its inorder position `mid`, build left subtree with `in_left..mid-1`, right subtree with `mid+1..in_right`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2009,7 +1808,7 @@ difficulty: mixed
 
 ---
 
-### Construct Binary Tree from Inorder and Postorder Traversal
+### Construct Binary Tree from Inorder and Postorder Traversal `⭐ Google`
 
 > [!example] Problem
 > Given two integer arrays inorder and postorder where inorder is the inorder traversal of a binary tree and postorder is the postorder traversal of the same tree, construct and return the binary tree.
@@ -2037,7 +1836,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Postorder's last element is always the root. Find it in inorder — elements to its left form the left subtree, elements to its right form the right subtree. Symmetric to the preorder+inorder problem. Walk postorder array right-to-left (using a decrementing index); build right subtree before left (reversed postorder visits root, right, left). `build(in_left, in_right)` — take `postorder[post_idx]` as root, decrement index, find root in inorder hash map as `mid`, build right subtree `(mid+1, in_right)` FIRST, then left `(in_left, mid-1)`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2070,10 +1868,9 @@ difficulty: mixed
 
 ## Morris Traversal / Iterative Postorder
 
-### Morris Inorder Traversal (Technique)
+### Morris Inorder Traversal (Technique) `⭐ Google`
 
 > **Morris threading — O(1) space inorder via temporary right pointer threads.** Standard inorder traversal uses O(h) stack space. Morris traversal achieves O(1) auxiliary space by temporarily threading the tree — using unused right pointers of inorder predecessors to "remember" where to return after exploring a left subtree. For each node `curr`: if no left child, visit and move right. Otherwise find inorder predecessor (rightmost in left subtree). If predecessor.right is None: create thread, go left. If predecessor.right is curr: unthread, visit, go right. The tree is temporarily mutated and fully restored on completion.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2111,7 +1908,6 @@ difficulty: mixed
 
 > **Morris threading — visit on first encounter (threading), not second.** Preorder visits root before children. In Morris traversal, the first encounter with a node (when we create the thread) corresponds to preorder. Same as Morris inorder but visit node when threading (first encounter) rather than when unthreading (second encounter). When `pre.right is None` (first encounter): set thread, visit node, go left. When `pre.right is curr` (second encounter): remove thread, go right (do NOT visit again).
 
-
 > [!note]- Python Solution
 > ```python
 > def morris_preorder(root):
@@ -2146,7 +1942,6 @@ difficulty: mixed
 ### Iterative Postorder Traversal (Technique)
 
 > **1-stack iterative postorder with last_visited sentinel.** Postorder (L → R → Root) is the hardest iterative traversal. The root is encountered twice — once when first descending and once after returning from the right subtree. A `last_visited` pointer distinguishes these two cases. Standard iterative inorder base — after exhausting left children, peek at the stack top. If it has an unvisited right child, go right. Otherwise process the node and record `last_visited`. Peek at `stack[-1]`. If `peek.right` exists and `peek.right is not last_visited`, go right. Otherwise: process (append), pop, set `last_visited = popped_node`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2189,7 +1984,6 @@ difficulty: mixed
 
 > [!info] Approach
 > The boundary is not a standard traversal; it is a combination of three ordered pieces with non-overlapping responsibilities. Collect the left boundary excluding leaves, then all leaves left-to-right, then the right boundary excluding leaves and reverse it. Handle edge cases carefully so the root and leaf nodes are not duplicated.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2240,7 +2034,7 @@ difficulty: mixed
 
 ## Special Tree Problems
 
-### Count Complete Tree Nodes (LC 222)
+### Count Complete Tree Nodes (LC 222) `⭐ Google`
 
 > [!example] Problem
 > Given the root of a complete binary tree, return the number of the nodes in the tree.
@@ -2273,7 +2067,6 @@ difficulty: mixed
 > [!info] Approach
 > A full binary tree of height `h` has `2^h - 1` nodes. In a complete tree, at least one of the left or right subtrees is a perfect binary tree — we can use this to skip entire subtrees in O(log²n). Compute the height of the leftmost path and the rightmost path of any subtree. If equal, the subtree is perfect: return `2^height - 1`. Otherwise, recurse on both children. `left_height` = length of left spine. `right_height` = length of right spine. If equal, return `(1 << left_height) - 1`. Else return `1 + count(root.left) + count(root.right)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def count_nodes(root):
@@ -2303,7 +2096,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Cameras (LC 968)
+### Binary Tree Cameras (LC 968) `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
@@ -2329,7 +2122,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Greedy: leaf nodes should never have cameras — it's always better to place a camera on the parent, which then covers both the leaf and the grandparent. Post-order DFS. Each node returns one of three states: 0 = not covered, 1 = has a camera, 2 = covered (no camera). A parent places a camera if either child is uncovered (state 0). For each node: if either child is uncovered (state 0), place a camera here (state 1, increment count). If either child has a camera (state 1), this node is covered (state 2). Otherwise (both children covered without cameras), return state 0 — let the parent handle coverage. After DFS, if root returns state 0, place one more camera.
-
 
 > [!note]- Python Solution
 > ```python
@@ -2364,7 +2156,7 @@ difficulty: mixed
 
 ---
 
-### Recover Binary Search Tree (LC 99)
+### Recover Binary Search Tree (LC 99) `⭐ Google`
 
 > [!example] Problem
 > You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
@@ -2389,7 +2181,6 @@ difficulty: mixed
 
 > [!info] Approach
 > In an inorder traversal of a valid BST, values are strictly increasing. A swap creates at most two "inversions" (places where `prev > current`). The first node of the first inversion and the second node of the last inversion are the swapped pair. Inorder traversal (iterative or recursive). Track `prev`, `first_bad`, and `second_bad`. At each inversion (`prev.val > curr.val`): if `first_bad` is not set, set it to `prev`; always update `second_bad` to `curr`. After traversal, swap `first_bad.val` and `second_bad.val`.
-
 
 > [!note]- Python Solution
 > ```python

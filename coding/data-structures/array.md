@@ -6,11 +6,17 @@ difficulty: mixed
 
 # Array Problems — Deep Dive
 
+
+> [!abstract] Google Interview Legend
+> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
+> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 ---
 
 ## Two Pointers
 
-### Two Sum (sorted variant)
+### Two Sum (sorted variant) `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -45,9 +51,6 @@ difficulty: mixed
 > [!info] Approach
 > **Two Pointers on sorted array.** The array is sorted — we can exploit this. A pair either has too-small a sum (advance left) or too-large a sum (advance right). No pair is missed because every skip is provably invalid. Two pointers at opposite ends converging inward based on sum comparison. `l=0, r=n-1`. If `numbers[l] + numbers[r] == target`, done. If sum < target, `l++` (we need larger). If sum > target, `r--` (we need smaller). The sorted invariant guarantees we never skip valid pairs.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def two_sum_sorted(numbers, target):
@@ -76,7 +79,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum
+### 3Sum `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -114,8 +117,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Fix + Two Pointers.** Brute force O(n³) is too slow. Fixing one element reduces it to a 2Sum on the remaining sorted suffix. Sort once, fix `nums[i]`, run two pointers on `i+1..n-1`. Sort. For each `i`, if `nums[i] > 0` break (sorted — no triplet can sum to 0). Skip duplicate `i`. Run two-pointer on the suffix. On match, skip duplicate `left` and `right` before advancing both. Three deduplication sites: `i`, `left`, `right`.
-
-
 
 > In an interview: sorting is what makes the duplicate skipping and early break safe, so this pattern is usually the cleanest solution in interviews.
 
@@ -160,7 +161,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum Closest
+### 3Sum Closest `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
@@ -188,9 +189,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Sort + Two Pointers with closest tracking.** Same sorted + two-pointer framework as 3Sum, but instead of equality we track the minimum distance. Track `closest` as best sum seen. After computing current sum, advance `l` or `r` to pull sum toward target. Sort. For each `i`, two-pointer on suffix. Compute `s = nums[i]+nums[l]+nums[r]`. Update `closest` if `|s - target| < |closest - target|`. If `s < target`, `l++`. If `s > target`, `r--`. If exact match, return immediately.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -224,7 +222,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum
+### 4Sum `⭐ Google`
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -249,9 +247,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Two nested loops + Two Pointers.** Generalizes 3Sum by adding one more fixed element. Fix two elements (i, j) and run two pointers on the rest. Two nested loops fix first two elements; two pointers find the last two. Deduplicate at all four levels. Sort. Outer loop `i`, inner loop `j = i+1`. Skip duplicate `i` and `j`. Two pointers `l=j+1, r=n-1`. Same pointer logic as 3Sum. Early termination: if the smallest possible sum for the current `i` is already too large, break; if the largest possible sum is still too small, continue.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -295,7 +290,7 @@ difficulty: mixed
 
 ---
 
-### Container with Most Water
+### Container with Most Water `🔥 Google`
 
 > [!example] Problem
 > You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
@@ -324,9 +319,6 @@ difficulty: mixed
 > [!info] Approach
 > **Two Pointers — advance the shorter line.** Area = min(height[l], height[r]) × (r - l). To maximize, we must consider both height and width. Brute force O(n²) tries all pairs. Two pointers. The width decreases as pointers converge, so we must compensate with greater height. `l=0, r=n-1`. Compute area. Always advance the pointer pointing to the shorter line — moving the taller line can never increase `min(h[l], h[r])` while width also decreases.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def max_area(height):
@@ -351,7 +343,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water
+### Trapping Rain Water `🔥 Google`
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -376,9 +368,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Two Pointers — binding constraint side.** Water at index `i` is bounded by `min(max_left, max_right) - height[i]`. We need left-max and right-max for every position. Two pointers eliminating the need for prefix/suffix arrays. The side with the smaller max is the binding constraint. `l=0, r=n-1`, `l_max=r_max=0`. If `l_max <= r_max`, the left side is the constraint, so water at `l` is `l_max - height[l]` and we advance `l`. Otherwise, the right side is the constraint, so water at `r` is `r_max - height[r]` and we decrement `r`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -457,9 +446,6 @@ difficulty: mixed
 > [!info] Approach
 > **Two Pointers — slow/fast write pattern.** Sorted guarantees duplicates are adjacent. We need one pointer tracking the write position (valid prefix) and one scanning forward. Two pointers — `slow` marks next write index, `fast` scans for new values. `slow=1`. For `fast` in `1..n-1`: if `nums[fast] != nums[slow-1]`, write `nums[slow] = nums[fast]`, `slow++`. Return `slow`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def remove_duplicates(nums):
@@ -482,7 +468,7 @@ difficulty: mixed
 
 ---
 
-### Next Permutation
+### Next Permutation `⭐ Google`
 
 > [!example] Problem
 > A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
@@ -514,8 +500,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Three-step: find rightmost descent, swap, reverse suffix.** A permutation is "next" if we increment the rightmost possible position. We find the rightmost "dip" — a position where the element is smaller than something to its right. Three-step algorithm: find rightmost descent, swap with next-larger suffix element, reverse the suffix.
-
-
 
 > 1. Scan right-to-left to find index `i` where `nums[i] < nums[i+1]` (rightmost ascending pair from the right).
 > 2. If none found, the whole array is descending — just reverse it.
@@ -582,9 +566,6 @@ difficulty: mixed
 > [!info] Approach
 > **Variable sliding window — zero count tracking.** We want the longest window containing at most `k` zeros. This is monotone: a larger window is valid as long as zero-count ≤ k. Variable sliding window tracking zero count. Expand `r`. If `nums[r] == 0`, increment zero count. If zeros > k, shrink `l` until zeros ≤ k (moving `l` past a zero decrements zero count). Track `r - l + 1` as window size.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def longest_ones(nums, k):
@@ -606,63 +587,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - Prefix sum counting zeros: O(n) time, O(n) space. Overkill for this structure.
 > - The window can only grow (never shrink smaller than `best`) — optimization: replace `while` with `if` to achieve O(n) with fixed-size window advance.
-
----
-
-### Longest Repeating Character Replacement
-
-> [!example] Problem
-> You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
-> Return the length of the longest substring containing the same letter you can get after performing the above operations.
-> 
-> **Example 1:**
-> ```
-> Input: s = "ABAB", k = 2
-> Output: 4
-> Explanation: Replace the two 'A's with two 'B's or vice versa.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "AABABBA", k = 1
-> Output: 4
-> Explanation: Replace the one 'A' in the middle with 'B' and form "AABBBBA".
-> The substring "BBBB" has the longest repeating letters, which is 4.
-> There may exists other ways to achieve this answer too.
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^5
-> - s consists of only uppercase English letters.
-> - 0 <= k <= s.length
-
-> [!info] Approach
-> **Variable window with monotone max_freq trick.** The valid condition for a window is: `window_len - max_freq_char ≤ k`. Characters that aren't the majority must be replaced. Variable window with frequency map. Track `max_freq` (highest frequency of any character in window). Expand `r`. Update freq map. If `(r - l + 1) - max_freq > k`, shrink `l` by one (decrement freq of `s[l]`). Key insight: `max_freq` never needs to decrease — a smaller `max_freq` cannot yield a larger valid window.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def character_replacement(s, k):
->     freq = {}
->     l = max_freq = best = 0
->     for r, ch in enumerate(s):
->         freq[ch] = freq.get(ch, 0) + 1
->         max_freq = max(max_freq, freq[ch])
->         if (r - l + 1) - max_freq > k:
->             freq[s[l]] -= 1
->             l += 1
->         best = max(best, r - l + 1)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1) (26 letters max).
-
-> [!tip] Alternatives
-> - Recompute max freq on every shrink: O(26n) = O(n). Correct but `max_freq` monotone trick avoids it.
-> - Binary search on answer: O(n log n). Not needed.
 
 ---
 
@@ -694,9 +618,6 @@ difficulty: mixed
 > [!info] Approach
 > **Exactly-k = at_most(k) − at_most(k−1).** Sliding window with exact count is non-monotone — a window can become invalid as it grows but also as elements fall out. Direct counting is intractable. Transform "exactly k" to "at most k" − "at most k−1". The "at most k" function is monotone. `at_most(k)` counts subarrays with ≤ k distinct integers. Use standard sliding window: expand right, if distinct count > k shrink left, add `r - l + 1` (all subarrays ending at `r` and starting at `l..r`). Answer = `at_most(k) - at_most(k-1)`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def subarrays_with_k_distinct(nums, k):
@@ -721,253 +642,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > - Direct exact-k sliding window with two pointers marking left boundary range: O(n), same complexity, more complex implementation.
-
----
-
-### Minimum Window Substring
-
-> [!example] Problem
-> Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
-> The testcases will be generated such that the answer is unique.
-> 
-> **Example 1:**
-> ```
-> Input: s = "ADOBECODEBANC", t = "ABC"
-> Output: "BANC"
-> Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "a", t = "a"
-> Output: "a"
-> Explanation: The entire string s is the minimum window.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "a", t = "aa"
-> Output: ""
-> Explanation: Both 'a's from t must be included in the window.
-> Since the largest window of s only has one 'a', return empty string.
-> ```
-> 
-> **Constraints:**
-> - m == s.length
-> - n == t.length
-> - 1 <= m, n <= 10^5
-> - s and t consist of uppercase and lowercase English letters.
-
-> [!info] Approach
-> **Sliding window with `have` counter.** We need to find a window satisfying a multi-character frequency requirement. The window is shrinkable once all requirements are met. Sliding window with a `have` counter tracking how many distinct characters have met their required frequency. Build `need` freq map for `t`. Expand `r`. For each char, if its count in window hits required count, `have++`. When `have == len(need)`, try to shrink: record window, shrink `l`. If removing `s[l]` drops a count below required, `have--`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> 
-> def min_window(s, t):
->     if not t or not s:
->         return ""
->     need = Counter(t)
->     have, required = 0, len(need)
->     window = {}
->     best_l, best_r = 0, float('inf')
->     l = 0
->     for r, ch in enumerate(s):
->         window[ch] = window.get(ch, 0) + 1
->         if ch in need and window[ch] == need[ch]:
->             have += 1
->         while have == required:
->             if r - l < best_r - best_l:
->                 best_l, best_r = l, r
->             lch = s[l]
->             window[lch] -= 1
->             if lch in need and window[lch] < need[lch]:
->                 have -= 1
->             l += 1
->     return s[best_l:best_r + 1] if best_r != float('inf') else ""
-> ```
-
-> [!success] Complexity
-> Time O(|s| + |t|), Space O(|t|).
-
-> [!tip] Alternatives
-> - Filter `s` to only positions containing characters in `t` (optimized for sparse `t`): reduces effective n. Same asymptotic, better constant when `|t| << |s|`.
-
----
-
-### Sliding Window Maximum
-
-> [!example] Problem
-> You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
-> Return the max sliding window.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
-> Output: [3,3,5,5,6,7]
-> Explanation: 
-> Window position                Max
-> ---------------               -----
-> [1  3  -1] -3  5  3  6  7       3
->  1 [3  -1  -3] 5  3  6  7       3
->  1  3 [-1  -3  5] 3  6  7       5
->  1  3  -1 [-3  5  3] 6  7       5
->  1  3  -1  -3 [5  3  6] 7       6
->  1  3  -1  -3  5 [3  6  7]      7
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1], k = 1
-> Output: [1]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-> - 1 <= k <= nums.length
-
-> [!info] Approach
-> **Monotonic decreasing deque.** Naively recomputing max per window is O(nk). We need a structure that maintains max as the window slides. Monotonic decreasing deque — front is always the current window max. Rear elements smaller than the incoming element are useless (they'll never be max while this element is in window). For each `r`: pop rear of deque while `deque` is non-empty and `nums[deque[-1]] <= nums[r]`. Append `r`. Pop front if `deque[0] <= r - k` (out of window). Once `r >= k-1`, the front index gives the current window max.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def max_sliding_window(nums, k):
->     dq: deque[int] = deque()  # stores indices
->     result = []
->     for r in range(len(nums)):
->         # Remove elements outside window
->         while dq and dq[0] <= r - k:
->             dq.popleft()
->         # Maintain decreasing order
->         while dq and nums[dq[-1]] <= nums[r]:
->             dq.pop()
->         dq.append(r)
->         if r >= k - 1:
->             result.append(nums[dq[0]])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(k).
-
-> [!tip] Alternatives
-> - Segment tree or sparse table: O(n log n) build, O(1) query. Overkill; deque is optimal.
-> - Max-heap: O(n log n) — need lazy deletion to remove expired elements; more complex.
-
----
-
-## Prefix Sum
-
-### Subarray Sum Equals K
-
-> [!example] Problem
-> Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
-> A subarray is a contiguous non-empty sequence of elements within an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,1], k = 2
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,2,3], k = 3
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^4
-> - -1000 <= nums[i] <= 1000
-> - -10^7 <= k <= 10^7
-
-> [!info] Approach
-> **Prefix sum + hash map complement lookup.** Sliding window fails with negatives (sum not monotone). Prefix sum enables O(1) range sum computation. For any subarray `[l, r]`: `sum = prefix[r] - prefix[l-1]`. We need `prefix[r] - prefix[l-1] == k`, i.e., `prefix[l-1] == prefix[r] - k`. Count previous prefix sums equal to `prefix[r] - k`. Scan left to right, maintaining `running_sum` and a hash map `seen` of count of each prefix sum seen so far. Seed `seen[0] = 1` (empty prefix). For each element, `count += seen[running_sum - k]`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def subarray_sum(nums, k):
->     seen = {0: 1}
->     running = count = 0
->     for x in nums:
->         running += x
->         count += seen.get(running - k, 0)
->         seen[running] = seen.get(running, 0) + 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Brute force O(n²): compute all subarray sums directly. Too slow for large n.
-> - Sliding window: fails on arrays with negative numbers.
-
----
-
-### Subarray Sums Divisible by K
-
-> [!example] Problem
-> Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
-> A subarray is a contiguous part of an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [4,5,0,-2,-3,1], k = 5
-> Output: 7
-> Explanation: There are 7 subarrays with a sum divisible by k = 5:
-> [4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5], k = 9
-> Output: 0
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 3 * 10^4
-> - -10^4 <= nums[i] <= 10^4
-> - 2 <= k <= 10^4
-
-> [!info] Approach
-> **Prefix modulo — same remainder pairs.** `sum(l..r) % k == 0` iff `prefix[r] % k == prefix[l-1] % k`. Two positions with the same remainder have a "zero-remainder" gap between them. Store frequency of each `prefix % k` seen. Count same-remainder pairs. Scan with `running % k`. Handle negative modulo: `(running % k + k) % k`. Seed `seen[0] = 1`. For each position, `count += seen[running % k]` before incrementing.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def subarrays_div_by_k(nums, k):
->     seen = {0: 1}
->     running = count = 0
->     for x in nums:
->         running += x
->         rem = (running % k + k) % k  # normalize negative modulo
->         count += seen.get(rem, 0)
->         seen[rem] = seen.get(rem, 0) + 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(k) (at most k distinct remainders).
-
-> [!tip] Alternatives
-> - Brute force O(n²): compute subarray sums directly.
-> - Python's `%` is always non-negative so normalization is Python-specific bonus; in Java/C++, it's essential.
 
 ---
 
@@ -1008,9 +682,6 @@ difficulty: mixed
 > [!info] Approach
 > **Prefix modulo — first-occurrence index map.** Same modulo insight as above. `sum(l..r) % k == 0` iff `prefix[r] % k == prefix[l-1] % k`. Additionally require length ≥ 2, meaning indices must be at least 2 apart. Map `remainder → first index` seen. On seeing the same remainder again, check index gap ≥ 2. Seed `seen[0] = -1` (empty prefix at index -1). For each index `i`, compute `rem`. If `rem in seen` and `i - seen[rem] >= 2`, return True. Otherwise, record `rem → i` only if not already present (want first occurrence).
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def check_subarray_sum(nums, k):
@@ -1036,7 +707,7 @@ difficulty: mixed
 
 ---
 
-### Product of Array Except Self
+### Product of Array Except Self `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
@@ -1062,9 +733,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Two-pass left/right product accumulation.** Division is disallowed (and breaks on zeros). We can compute left-product prefix and right-product suffix. Two-pass: first build left products into output, then multiply by right products on a second right-to-left pass using a running variable. Pass 1: `output[i] = product of nums[0..i-1]`. Pass 2: maintain `right = 1`, scan right to left, multiply `output[i] *= right`, then `right *= nums[i]`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1093,7 +761,7 @@ difficulty: mixed
 
 ## Kadane's Algorithm
 
-### Maximum Subarray
+### Maximum Subarray `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -1126,9 +794,6 @@ difficulty: mixed
 > [!info] Approach
 > **Kadane's algorithm — local reset on negative prefix.** At each position, either start a new subarray here or extend the current one — whichever is larger. The decision is local and optimal. Kadane's algorithm: `cur = max(nums[i], cur + nums[i])`. This captures "reset if current prefix hurts". Initialize `cur = best = nums[0]` (handles all-negative case). For each subsequent element: `cur = max(x, cur + x)`. Update `best = max(best, cur)`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def max_subarray(nums):
@@ -1149,56 +814,6 @@ difficulty: mixed
 
 ---
 
-### Maximum Product Subarray
-
-> [!example] Problem
-> Given an integer array nums, find a subarray that has the largest product, and return the product.
-> The test cases are generated so that the answer will fit in a 32-bit integer.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,3,-2,4]
-> Output: 6
-> Explanation: [2,3] has the largest product 6.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [-2,0,-1]
-> Output: 0
-> Explanation: The result cannot be 2, because [-2,-1] is not a subarray.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^4
-> - -10 <= nums[i] <= 10
-> - The product of any subarray of nums is guaranteed to fit in a 32-bit integer.
-
-> [!info] Approach
-> **Track max and min simultaneously.** Products differ from sums: a large negative × large negative = large positive. We can't just track max — we must also track min (most negative) because a future negative can flip it to max. Track `max_prod` and `min_prod` at each position. On negative element, swap them before multiplying. At each element `x`: new `max_prod = max(x, max_prod * x, min_prod * x)`, new `min_prod = min(x, max_prod * x, min_prod * x)`. Use temps to avoid overwriting. Update global best.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def max_product(nums):
->     max_p = min_p = best = nums[0]
->     for x in nums[1:]:
->         candidates = (x, max_p * x, min_p * x)
->         max_p, min_p = max(candidates), min(candidates)
->         best = max(best, max_p)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Prefix/suffix product scan: For each zero crossing, products reset. Scan left-to-right and right-to-left, skip zeros; take max of both scans. O(n) time, O(1) space. Different mental model but equivalent.
-
----
-
 ### Maximum Circular Subarray Sum (Maximum Sum Circular Subarray)
 
 > [!example] Problem
@@ -1206,9 +821,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Kadane's max + Kadane's min on total sum.** Two cases: (1) max subarray is non-wrapping — standard Kadane's; (2) it wraps around the ends. The wrap-around case is equivalent to the total sum minus the minimum subarray (the middle we exclude). Run Kadane's twice: once for max subarray, once for min subarray. Answer = max(kadane_max, total - kadane_min). Edge case: if all elements are negative, `total - kadane_min` = 0 (the empty subarray), which is wrong. In this case, return `kadane_max`.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1240,7 +852,7 @@ difficulty: mixed
 
 ## Dutch National Flag / Partitioning
 
-### Sort Colors
+### Sort Colors `⭐ Google`
 
 > [!example] Problem
 > Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
@@ -1266,9 +878,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Dutch National Flag — three-pointer partition.** We can't use comparison sort and achieve O(n) with O(1) space in one pass. Three distinct values → three-way partition. Dutch National Flag algorithm: three pointers maintain invariant regions: `[0..lo)` are 0s, `[lo..mid)` are 1s, `(hi..n-1]` are 2s. `[mid..hi]` is unexamined. `lo=0, mid=0, hi=n-1`. While `mid <= hi`: if `nums[mid]==0`, swap with `lo`, advance both; if `nums[mid]==1`, advance `mid`; if `nums[mid]==2`, swap with `hi`, decrement `hi` — do NOT advance `mid` (swapped element from `hi` is unexamined).
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1322,9 +931,6 @@ difficulty: mixed
 > [!info] Approach
 > **Sign-flip in-place visited marking.** We need to mark visited values without extra space. The array indices themselves serve as a hash table. Use sign-flip as an in-place "visited" marker. Index `i` being negative means value `i+1` has been seen. For each value `x = abs(nums[i])`, negate `nums[x-1]`. After marking, collect all indices where value is still positive — those indices +1 are the missing values.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def find_disappeared_numbers(nums):
@@ -1346,7 +952,7 @@ difficulty: mixed
 
 ## Boyer-Moore Voting
 
-### Majority Element
+### Majority Element `⭐ Google`
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -1371,9 +977,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Boyer-Moore voting — cancellation argument.** Hash map O(n) space, sorting O(n log n). Boyer-Moore pairs different elements and cancels them. The majority element (count > n/2) outlasts all others combined. Maintain `candidate` and `count`. If count hits 0, pick current element as new candidate. Increment on same, decrement on different. This works because: imagine each "non-candidate" vote cancels one "candidate" vote. Since majority has > n/2 votes, it survives after all cancellations.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1401,72 +1004,7 @@ difficulty: mixed
 
 ---
 
-### Majority Element II
-
-> [!example] Problem
-> Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [3,2,3]
-> Output: [3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1]
-> Output: [1]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,2]
-> Output: [1,2]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 5 * 10^4
-> - -10^9 <= nums[i] <= 10^9
-
-> [!info] Approach
-> **Boyer-Moore with two candidates.** There can be at most 2 elements with count > n/3. Boyer-Moore generalizes to track 2 candidates. Two candidates, two counts. Decrement both when a third distinct value appears. Verify both candidates in a second pass. Maintain `c1, c2, cnt1, cnt2`. For each `x`: if `x == c1`, cnt1++; elif `x == c2`, cnt2++; elif `cnt1 == 0`, c1=x, cnt1=1; elif `cnt2 == 0`, c2=x, cnt2=1; else cnt1--, cnt2--. Second pass: count actual frequencies and filter `> n/3`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def majority_element_ii(nums):
->     c1 = c2 = None
->     cnt1 = cnt2 = 0
->     for x in nums:
->         if x == c1:
->             cnt1 += 1
->         elif x == c2:
->             cnt2 += 1
->         elif cnt1 == 0:
->             c1, cnt1 = x, 1
->         elif cnt2 == 0:
->             c2, cnt2 = x, 1
->         else:
->             cnt1 -= 1
->             cnt2 -= 1
->     n = len(nums)
->     return [c for c in (c1, c2) if c is not None and nums.count(c) > n // 3]
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Hash map: O(n) time, O(n) space. Safe when you forget the voting trick.
-> - The order of the if-elif chain matters — check equality first, then zero-count adoption, then decrement.
-
----
-
-## Floyd's Cycle Detection (on Arrays)
-
-### Find the Duplicate Number
+### Find the Duplicate Number `⭐ Google`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -1499,9 +1037,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Floyd's cycle detection on implicit linked list.** Values in [1, n] can be treated as "next pointers" — `nums[i]` says "go to index nums[i]". Since multiple indices point to the same value, a cycle must exist. The duplicate is the cycle entry. Floyd's cycle detection on the implicit linked list defined by `next(i) = nums[i]`. Start from index 0 (guaranteed outside cycle since all values ≥ 1). Phase 1 — slow = nums[slow], fast = nums[nums[fast]] until they meet (inside cycle). Phase 2 — reset slow = nums[0] (the start), advance both at speed 1; they meet at the cycle entry = duplicate.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -1537,7 +1072,6 @@ difficulty: mixed
 
 > When you need to apply many range updates `[l, r] += val` and then query final values, the naive approach is O(n) per update — O(n × q) total for q updates. Difference array makes each update O(1) and reconstruction O(n), giving O(q + n) overall. Build `diff[]` where `diff[i] = arr[i] - arr[i-1]`. To add `val` to range `[l, r]`: `diff[l] += val`, `diff[r+1] -= val`. Reconstruct prefix sum to get the final array. Initialize `diff = [0] * (n + 1)`. For each update `(l, r, val)`: `diff[l] += val; diff[r+1] -= val`. After all updates, compute prefix sum of `diff` to get the result array.
 
-
 ---
 
 ### Car Pooling
@@ -1568,7 +1102,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each trip is a range update — passengers board at `from` and alight at `to`. We need to check the running passenger count never exceeds `capacity` at any stop. Difference array on stops (up to 1000 stops). `diff[from] += numPassengers`, `diff[to] -= numPassengers` (drop-off happens at `to`, so the open interval is `[from, to)`). Build `diff[0..1001]`. For each trip: `diff[from] += num; diff[to] -= num`. Reconstruct prefix sum; if any prefix sum > `capacity`, return False.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1635,7 +1168,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Each booking is a range update over flight indices. Naively applying each booking to every flight in range is O(n × b). Difference array reduces this to O(b + n). Difference array over 1-indexed flights. For booking `[first, last, seats]`: `diff[first] += seats; diff[last+1] -= seats`. Prefix sum of diff gives total bookings per flight. Build `diff[0..n+1]`. For each booking: `diff[first] += seats; diff[last+1] -= seats`. Prefix sum of `diff[1..n]` is the answer.
-
 
 > [!note]- Python Solution
 > ```python
@@ -1706,7 +1238,6 @@ difficulty: mixed
 > [!info] Approach
 > Classic difference array application — multiple range increments on an initially zero array. For each update `[l, r, inc]`: `diff[l] += inc; diff[r+1] -= inc`. Prefix sum of `diff` is the final array. Build `diff[0..n]` (size n+1 to handle r+1 = n). Apply all updates. Prefix-sum `diff[0..n-1]` in-place.
 
-
 > [!note]- Python Solution
 > ```python
 > def get_modified_array(length, updates):
@@ -1733,7 +1264,7 @@ difficulty: mixed
 
 ## Miscellaneous Array Techniques
 
-### Best Time to Buy and Sell Stock
+### Best Time to Buy and Sell Stock `🔥 Google`
 
 > [!example] Problem
 > You are given an array prices where prices[i] is the price of a given stock on the ith day.
@@ -1762,7 +1293,6 @@ difficulty: mixed
 > [!info] Approach
 > Track the minimum price seen so far. Profit at day `i` = `prices[i] - min_so_far`. The best sell day for any buy day is always the global minimum to the left. Single pass — maintain `min_price` and `max_profit`. `min_price = inf, max_profit = 0`. For each price: `min_price = min(min_price, price)`, `max_profit = max(max_profit, price - min_price)`.
 
-
 > [!note]- Python Solution
 > ```python
 > def max_profit(prices):
@@ -1784,7 +1314,7 @@ difficulty: mixed
 
 ---
 
-### Move Zeroes
+### Move Zeroes `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
@@ -1809,7 +1339,6 @@ difficulty: mixed
 > [!info] Approach
 > We need to compact non-zero elements to the front, preserving order, without allocating extra space. Two-pointer — `slow` tracks the next write position for non-zero elements; `fast` scans forward. `slow = 0`. For each `fast`: if `nums[fast] != 0`, set `nums[slow] = nums[fast]`, `slow++`. After the loop, zero out `nums[slow..n-1]`.
 
-
 > [!note]- Python Solution
 > ```python
 > def move_zeroes(nums):
@@ -1831,7 +1360,7 @@ difficulty: mixed
 
 ---
 
-### Two Sum (hash map variant)
+### Two Sum (hash map variant) `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -1866,9 +1395,6 @@ difficulty: mixed
 > [!info] Approach
 > **Hash map complement lookup.** Unsorted array → can't use two pointers (no sorted invariant). We need O(1) complement lookup. Hash map storing `value → index`. Single pass: check if complement exists before recording current. For each `(i, x)`: compute `complement = target - x`. If in map, return `[map[complement], i]`. Else record `x → i`. Checking before recording ensures we don't use same index twice.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def two_sum(nums, target):
@@ -1890,59 +1416,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game II
-
-> [!example] Problem
-> You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
-> Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums[i + j] where:
-> Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,3,1,1,4]
-> Output: 2
-> Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,3,0,1,4]
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^4
-> - 0 <= nums[i] <= 1000
-> - It's guaranteed that you can reach nums[n - 1].
-
-> [!info] Approach
-> **Greedy BFS — level-by-level farthest reach.** BFS in levels — each "level" is the set of positions reachable in exactly `jumps` steps. The next level is everything reachable from this level. We want the level containing `n-1`. Greedy BFS: track `current_end` (end of current BFS level) and `farthest` (max reachable from this level). Advance `i` from `0` to `n-2`. Update `farthest = max(farthest, i + nums[i])`. When `i == current_end`: a new jump is needed, `jumps++`, `current_end = farthest`. Stop when `current_end >= n-1`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def jump(nums):
->     jumps = current_end = farthest = 0
->     for i in range(len(nums) - 1):
->         farthest = max(farthest, i + nums[i])
->         if i == current_end:
->             jumps += 1
->             current_end = farthest
->     return jumps
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - DP `dp[i] = min jumps to reach i`: O(n²). Too slow.
-> - BFS with queue: O(n) but O(n) space. The greedy version is equivalent and optimal.
-
----
-
-### Spiral Matrix
+### Spiral Matrix `🔥 Google`
 
 > [!example] Problem
 > Given an m x n matrix, return all elements of the matrix in spiral order.
@@ -1967,9 +1441,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Boundary shrinking — four-direction cycling.** Spiral traversal has four directions cycling with shrinking boundaries. Maintain four boundary pointers: `top, bottom, left, right`. Traverse right, down, left, up, then shrink boundaries inward. While `top <= bottom and left <= right`: traverse right along `top` row, `top++`; traverse down along `right` col, `right--`; if `top <= bottom`, traverse left along `bottom` row, `bottom--`; if `left <= right`, traverse up along `left` col, `left++`. The inner checks prevent double-counting for single row/col cases.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2004,7 +1475,7 @@ difficulty: mixed
 
 ---
 
-### Set Matrix Zeroes
+### Set Matrix Zeroes `🔥 Google`
 
 > [!example] Problem
 > Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
@@ -2030,9 +1501,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Use first row/col as markers — O(1) space.** Marking naively while iterating spreads zeros incorrectly. We must first record which rows/cols to zero, then apply. O(1) space trick: use the first row and first column as markers. Handle them last. Record if row 0 or col 0 should be zeroed (check for existing zeros). For all other cells, if `matrix[i][j] == 0`, set `matrix[i][0] = 0` and `matrix[0][j] = 0`. Then zero out rows and cols using those markers. Finally handle row 0 and col 0 separately.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2072,66 +1540,6 @@ difficulty: mixed
 
 ---
 
-### Longest Consecutive Sequence
-
-> [!example] Problem
-> Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
-> You must write an algorithm that runs in O(n) time.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [100,4,200,1,3,2]
-> Output: 4
-> Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,3,7,2,5,8,4,6,0,1]
-> Output: 9
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,0,1,2]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - 0 <= nums.length <= 10^5
-> - -10^9 <= nums[i] <= 10^9
-
-> [!info] Approach
-> **Hash set — start sequences only from minimums.** Sorting is O(n log n). We need O(n) — use a hash set for O(1) membership tests. Only start counting a sequence from its minimum element (where `n-1` is not in the set). This ensures each element is processed at most once across all sequences. Insert all values into a set. For each `n`, if `n-1` not in set (start of sequence), count consecutive `n, n+1, n+2, ...` until gap. Update best length.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def longest_consecutive(nums):
->     num_set = set(nums)
->     best = 0
->     for n in num_set:
->         if n - 1 not in num_set:  # start of a sequence
->             cur = n
->             length = 1
->             while cur + 1 in num_set:
->                 cur += 1
->                 length += 1
->             best = max(best, length)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Sort and scan: O(n log n) time. Simpler to reason about but violates O(n) requirement.
-> - Union-Find: O(n α(n)) ≈ O(n). More complex; no advantage here.
-
----
-
 ### Rotate Array
 
 > [!example] Problem
@@ -2164,9 +1572,6 @@ difficulty: mixed
 > [!info] Approach
 > **Triple reversal trick.** Naively rotating element-by-element takes O(n×k). Reverse-trick achieves O(n) in-place. Three reversal operations: reverse all, reverse first k, reverse last n-k. Composing these reversal operations achieves the rotation. Normalize `k = k % n`. Reverse `nums[0:n]`. Reverse `nums[0:k]`. Reverse `nums[k:n]`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def rotate(nums, k):
@@ -2191,78 +1596,7 @@ difficulty: mixed
 
 ---
 
-### Median of Two Sorted Arrays
-
-> [!example] Problem
-> Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
-> The overall run time complexity should be O(log (m+n)).
-> 
-> **Example 1:**
-> ```
-> Input: nums1 = [1,3], nums2 = [2]
-> Output: 2.00000
-> Explanation: merged array = [1,2,3] and median is 2.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums1 = [1,2], nums2 = [3,4]
-> Output: 2.50000
-> Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
-> ```
-> 
-> **Constraints:**
-> - nums1.length == m
-> - nums2.length == n
-> - 0 <= m <= 1000
-> - 0 <= n <= 1000
-> - 1 <= m + n <= 2000
-> - -10^6 <= nums1[i], nums2[i] <= 10^6
-
-> [!info] Approach
-> **Binary search on shorter array partition.** Merging takes O(m+n). We need O(log(m+n)) — binary search. Binary search on the partition of the shorter array. Find split points such that `left_half` contains the (m+n+1)//2 smaller elements and `max(left_half) <= min(right_half)`. Binary search on shorter array (WLOG `m <= n`). Partition `nums1` at `i`, derive `nums2` partition `j = half - i`. Check: `nums1[i-1] <= nums2[j]` and `nums2[j-1] <= nums1[i]`. Adjust binary search accordingly. For odd total, median = `max(left sides)`. For even, median = `(max(left) + min(right)) / 2`.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def find_median_sorted_arrays(nums1, nums2):
->     if len(nums1) > len(nums2):
->         nums1, nums2 = nums2, nums1
->     m, n = len(nums1), len(nums2)
->     half = (m + n + 1) // 2
->     lo, hi = 0, m
->     while lo <= hi:
->         i = (lo + hi) // 2
->         j = half - i
->         l1 = nums1[i - 1] if i > 0 else float('-inf')
->         r1 = nums1[i] if i < m else float('inf')
->         l2 = nums2[j - 1] if j > 0 else float('-inf')
->         r2 = nums2[j] if j < n else float('inf')
->         if l1 <= r2 and l2 <= r1:
->             if (m + n) % 2 == 1:
->                 return float(max(l1, l2))
->             return (max(l1, l2) + min(r1, r2)) / 2
->         elif l1 > r2:
->             hi = i - 1
->         else:
->             lo = i + 1
->     return 0.0
-> ```
-
-> [!success] Complexity
-> Time O(log(min(m,n))), Space O(1).
-
-> [!tip] Alternatives
-> - Merge both arrays: O(m+n) time, O(m+n) space. Too slow.
-> - k-th element selection: O(log(m+n)) with a different recursive approach. Same complexity, different reasoning.
-
----
-
-## Range / Immutable Prefix Queries
-
-### Range Sum Query — Immutable (LC 303)
+### Range Sum Query — Immutable (LC 303) `⭐ Google`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following type:
@@ -2292,9 +1626,6 @@ difficulty: mixed
 > [!info] Approach
 > **Prefix sum array — O(1) per query.** Recomputing a range sum from scratch is O(n) per query. A prefix sum table converts any range-sum query to O(1) subtraction. Build `prefix[i] = nums[0] + ... + nums[i-1]` (1-indexed offset). Then `sum(l, r) = prefix[r+1] - prefix[l]`. Precompute `prefix[0..n]` where `prefix[0] = 0` and `prefix[i] = prefix[i-1] + nums[i-1]`. Each query: return `prefix[right+1] - prefix[left]`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > class NumArray:
@@ -2316,7 +1647,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query 2D — Immutable (LC 304)
+### Range Sum Query 2D — Immutable (LC 304) `⭐ Google`
 
 > [!example] Problem
 > Given a 2D matrix matrix, handle multiple queries of the following type:
@@ -2350,9 +1681,6 @@ difficulty: mixed
 > [!info] Approach
 > **2D prefix sum (inclusion-exclusion).** Each query touching O(m×n) cells is too slow for many queries. 2D prefix sums extend the 1D idea: `prefix[i][j]` = sum of the rectangle from `(0,0)` to `(i-1, j-1)`. Build `prefix[i][j] = prefix[i-1][j] + prefix[i][j-1] - prefix[i-1][j-1] + matrix[i-1][j-1]`. Query: inclusion-exclusion of four corners. `sum(r1,c1,r2,c2) = prefix[r2+1][c2+1] - prefix[r1][c2+1] - prefix[r2+1][c1] + prefix[r1][c1]`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > class NumMatrix:
@@ -2383,68 +1711,7 @@ difficulty: mixed
 
 ---
 
-### Contiguous Array (LC 525)
-
-> [!example] Problem
-> Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [0,1]
-> Output: 2
-> Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,0]
-> Output: 2
-> Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,1,1,1,1,1,0,0,0]
-> Output: 6
-> Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - nums[i] is either 0 or 1.
-
-> [!info] Approach
-> **Prefix sum with 0→−1 transform + first-occurrence hash map.** Replace every 0 with −1. A balanced subarray now has sum 0. We need the longest subarray with sum 0 — classic prefix-sum problem. Track running sum. If `prefix[j] == prefix[i]`, then `sum(i+1..j) == 0`. Maximize `j - i` using first-occurrence map. Seed `seen = {0: -1}`. For each index `i`, update `running`. If `running` in `seen`, candidate length = `i - seen[running]`. Else store `seen[running] = i`. Never overwrite (want earliest occurrence for max length).
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def find_max_length(nums):
->     seen = {0: -1}
->     running = best = 0
->     for i, x in enumerate(nums):
->         running += 1 if x == 1 else -1
->         if running in seen:
->             best = max(best, i - seen[running])
->         else:
->             seen[running] = i
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Brute force O(n²): count 0s and 1s for all subarrays. Too slow.
-> - The 0→−1 substitution is the key insight; without it, prefix sums don't detect balance directly.
-
----
-
-## Two-pass / Greedy
-
-### Jump Game (LC 55)
+### Jump Game (LC 55) `🔥 Google`
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -2471,9 +1738,6 @@ difficulty: mixed
 > [!info] Approach
 > **Greedy — track farthest reachable index.** We don't need to know which path reaches the end, only whether any path does. A greedy max-reach scan is sufficient. Single pass maintaining `reach = max index reachable so far`. If current index `i > reach`, we're stuck. `reach = 0`. For each `i` in `0..n-1`: if `i > reach`, return False. Update `reach = max(reach, i + nums[i])`. If `reach >= n-1` at any point, return True.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def can_jump(nums):
@@ -2491,62 +1755,6 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DP `dp[i] = True if reachable`: O(n²) worst case (inner loop per position). Correct but slow.
 > - Backward scan (find last "good" index): O(n), same greedy idea in reverse.
-
----
-
-### Candy (LC 135)
-
-> [!example] Problem
-> There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
-> You are giving candies to these children subjected to the following requirements:
-> Return the minimum number of candies you need to have to distribute the candies to the children.
-> 
-> **Example 1:**
-> ```
-> Input: ratings = [1,0,2]
-> Output: 5
-> Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: ratings = [1,2,2]
-> Output: 4
-> Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
-> The third child gets 1 candy because it satisfies the above two conditions.
-> ```
-> 
-> **Constraints:**
-> - n == ratings.length
-> - 1 <= n <= 2 * 10^4
-> - 0 <= ratings[i] <= 2 * 10^4
-
-> [!info] Approach
-> **Two-pass greedy — left then right.** The constraints are local (left neighbor, right neighbor). A single left-to-right pass satisfies left neighbors; a right-to-left pass fixes right neighbors without breaking left. Pass 1 (L→R): if `ratings[i] > ratings[i-1]`, `candy[i] = candy[i-1] + 1`, else `candy[i] = 1`. Pass 2 (R→L): if `ratings[i] > ratings[i+1]`, `candy[i] = max(candy[i], candy[i+1] + 1)`. Initialize all to 1. Left pass enforces left-rising constraint. Right pass enforces right-rising constraint using `max` to preserve the larger requirement.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def candy(ratings):
->     n = len(ratings)
->     candies = [1] * n
->     for i in range(1, n):
->         if ratings[i] > ratings[i - 1]:
->             candies[i] = candies[i - 1] + 1
->     for i in range(n - 2, -1, -1):
->         if ratings[i] > ratings[i + 1]:
->             candies[i] = max(candies[i], candies[i + 1] + 1)
->     return sum(candies)
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Single-pass with slope tracking (ascending/descending run lengths): O(n) time, O(1) space. More complex; handles "valley" ties.
-> - Greedy priority queue: O(n log n). No benefit over two-pass.
 
 ---
 
@@ -2593,9 +1801,6 @@ difficulty: mixed
 > [!info] Approach
 > **Greedy — reset start on deficit.** If total gas < total cost, no solution exists. Otherwise, a solution always exists. The greedy key: if we can't reach station `j` starting from `start`, then no station between `start` and `j` can be a valid start either (they would start with less surplus). Single pass tracking cumulative surplus. Reset start candidate whenever cumulative drops below zero. `total = 0, tank = 0, start = 0`. For each `i`: `tank += gas[i] - cost[i]`, `total += gas[i] - cost[i]`. If `tank < 0`, set `start = i + 1`, reset `tank = 0`. Return `start` if `total >= 0` else `-1`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def can_complete_circuit(gas, cost):
@@ -2621,7 +1826,7 @@ difficulty: mixed
 
 ## Matrix
 
-### Rotate Image (LC 48)
+### Rotate Image (LC 48) `🔥 Google`
 
 > [!example] Problem
 > You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
@@ -2647,9 +1852,6 @@ difficulty: mixed
 > [!info] Approach
 > **Transpose then reverse each row.** A 90° clockwise rotation of a matrix equals: transpose (swap `matrix[i][j]` with `matrix[j][i]`) followed by reversing each row. Both operations are O(n²) and in-place. Step 1: Transpose — swap upper-triangle elements across the main diagonal. Step 2: Reverse each row. Transpose: `for i in range(n): for j in range(i+1, n): swap matrix[i][j] and matrix[j][i]`. Reverse: `for row in matrix: row.reverse()`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def rotate(matrix):
@@ -2673,66 +1875,7 @@ difficulty: mixed
 
 ---
 
-### Search a 2D Matrix (LC 74)
-
-> [!example] Problem
-> You are given an m x n integer matrix matrix with the following two properties:
-> Given an integer target, return true if target is in matrix or false otherwise.
-> You must write a solution in O(log(m * n)) time complexity.
-> 
-> **Example 1:**
-> ```
-> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3
-> Output: true
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 13
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - m == matrix.length
-> - n == matrix[i].length
-> - 1 <= m, n <= 100
-> - -10^4 <= matrix[i][j], target <= 10^4
-
-> [!info] Approach
-> **Binary search treating the matrix as a flat sorted array.** The matrix is essentially a sorted 1D array laid out in rows. We can map a 1D index to 2D coordinates: `row = mid // n`, `col = mid % n`. Single binary search over the virtual index range `[0, m*n - 1]`. `lo=0, hi=m*n-1`. At each `mid`: `val = matrix[mid//n][mid%n]`. Compare with target; adjust `lo`/`hi` accordingly.
-
-
-
-
-> [!note]- Python Solution
-> ```python
-> def search_matrix(matrix, target):
->     m, n = len(matrix), len(matrix[0])
->     lo, hi = 0, m * n - 1
->     while lo <= hi:
->         mid = (lo + hi) // 2
->         val = matrix[mid // n][mid % n]
->         if val == target:
->             return True
->         elif val < target:
->             lo = mid + 1
->         else:
->             hi = mid - 1
->     return False
-> ```
-
-> [!success] Complexity
-> Time O(log(m×n)), Space O(1).
-
-> [!tip] Alternatives
-> - Staircase search (top-right to bottom-left): O(m+n). Used for LC 240 (Search a 2D Matrix II) where rows and cols are independently sorted but the stronger "row-start > prev row-end" property doesn't hold.
-> - Binary search per row: O(m log n). Suboptimal.
-
----
-
-## Intervals
-
-### Merge Intervals (LC 56)
+### Merge Intervals (LC 56) `🔥 Google`
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -2758,9 +1901,6 @@ difficulty: mixed
 
 > [!info] Approach
 > **Sort by start, linear merge scan.** After sorting by start time, overlapping intervals are adjacent. We only need to check if the current interval overlaps with the last merged one. Sort, then greedily extend the last merged interval or append a new one. Sort by `start`. Initialize `merged = [intervals[0]]`. For each subsequent interval: if `interval.start <= merged[-1].end`, merge by updating `merged[-1].end = max(merged[-1].end, interval.end)`. Else append.
-
-
-
 
 > [!note]- Python Solution
 > ```python
@@ -2816,9 +1956,6 @@ difficulty: mixed
 > [!info] Approach
 > **Three-phase linear scan: before, overlap, after.** The existing intervals are already sorted and non-overlapping. We can scan in one pass: collect all intervals that end before the new one starts, merge all that overlap, collect the rest. Three phases: (1) add intervals entirely before new interval; (2) merge all overlapping intervals into new interval; (3) add remaining intervals. Phase 1: while `intervals[i].end < new.start`, append. Phase 2: while `intervals[i].start <= new.end`, extend `new.start = min(new.start, ...)` and `new.end = max(new.end, ...)`. Append merged. Phase 3: append remaining.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def insert(intervals, newInterval):
@@ -2851,7 +1988,7 @@ difficulty: mixed
 
 ---
 
-### Non-overlapping Intervals (LC 435)
+### Non-overlapping Intervals (LC 435) `🔥 Google`
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -2886,9 +2023,6 @@ difficulty: mixed
 > [!info] Approach
 > **Greedy — sort by end, keep earliest-ending non-conflicting interval.** Classic interval scheduling maximization (keep max non-overlapping intervals). Minimum removals = n − max kept. The greedy is: always keep the interval that ends earliest — it leaves the most room for future intervals. Sort by end time. Greedily keep an interval if it starts at or after the previous kept interval's end. Sort by `end`. `prev_end = -inf, kept = 0`. For each interval: if `start >= prev_end`, keep it (`kept++`, update `prev_end = end`). Else skip (remove it). Answer = `n - kept`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def erase_overlap_intervals(intervals):
@@ -2914,7 +2048,7 @@ difficulty: mixed
 
 ## Miscellaneous (Continued)
 
-### First Missing Positive (LC 41)
+### First Missing Positive (LC 41) `⭐ Google`
 
 > [!example] Problem
 > Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
@@ -2948,9 +2082,6 @@ difficulty: mixed
 > [!info] Approach
 > **Index-as-hash — cyclic placement of values in range [1, n].** Any value outside [1, n] is irrelevant (answer is in [1, n+1]). We can treat the array itself as a hash table mapping value `v` to index `v-1`. Place each value `v` in [1, n] at index `v-1` by swapping. After rearrangement, the first index `i` where `nums[i] != i+1` gives answer `i+1`. Swap phase: for each `i`, while `1 <= nums[i] <= n` and `nums[nums[i]-1] != nums[i]`, swap `nums[i]` with `nums[nums[i]-1]`. Scan phase: return first `i+1` where `nums[i] != i+1`, else return `n+1`.
 
-
-
-
 > [!note]- Python Solution
 > ```python
 > def first_missing_positive(nums):
@@ -2980,7 +2111,7 @@ difficulty: mixed
 ## See Also
 
 [[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]
-### First Missing Positive
+### First Missing Positive `⭐ Google`
 
 > [!example] Problem
 > Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
@@ -3014,7 +2145,6 @@ difficulty: mixed
 > [!info] Approach
 > Values in `[1..n]` can be placed into their correct indices in-place. Anything outside that range can be ignored. Cyclic sort: keep swapping `nums[i]` into position `nums[i] - 1` while it is in range and not already placed. After placement, scan left to right; the first index `i` where `nums[i] != i + 1` gives the answer.
 
-
 > [!note]- Python Solution
 > ```python
 > def first_missing_positive(nums):
@@ -3042,7 +2172,7 @@ difficulty: mixed
 
 ## Prefix Sum
 
-### Subarray Sum Equals K (with negative numbers)
+### Subarray Sum Equals K (with negative numbers) `🔥 Google`
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -3067,7 +2197,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Two-pointer/sliding-window breaks with negatives. Prefix sums let us reframe: subarray `[i+1..j]` sums to `k` iff `prefix[j] - prefix[i] == k`, i.e., `prefix[i] == prefix[j] - k`. Track prefix sum frequency in a hash map. For each new prefix sum, check how many prior prefix sums equal `current - k`. Initialize map with `{0: 1}` (empty prefix). Walk the array accumulating `running_sum`; add `count_map[running_sum - k]` to the answer; then increment `count_map[running_sum]`.
-
 
 > [!note]- Python Solution
 > ```python
@@ -3126,7 +2255,6 @@ difficulty: mixed
 > [!info] Approach
 > Replace 0 with -1. Now "equal 0s and 1s" becomes "subarray sum = 0", which is exactly the prefix sum problem. Track the first index at which each prefix sum occurs. When a prefix sum repeats, the subarray between the two occurrences has sum 0. Initialize `{0: -1}`. For each index, compute prefix sum (treating 0 as -1). If seen before, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise, store `first_seen[prefix] = i`.
 
-
 > [!note]- Python Solution
 > ```python
 > def find_max_length(nums):
@@ -3151,7 +2279,7 @@ difficulty: mixed
 
 ---
 
-### Product of Array Except Self (no division)
+### Product of Array Except Self (no division) `🔥 Google`
 
 > [!example] Problem
 > Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
@@ -3177,7 +2305,6 @@ difficulty: mixed
 
 > [!info] Approach
 > Division breaks on zeros. Without it, for each position we need the product of everything to the left and to the right. Two passes. First pass (left to right) builds the running left-product into the output array. Second pass (right to left) multiplies in the running right-product in-place. `output[i]` after left pass = product of `nums[0..i-1]`. Then walk right to left with a `right_product` variable, multiply `output[i] *= right_product`, then `right_product *= nums[i]`.
-
 
 > [!note]- Python Solution
 > ```python
