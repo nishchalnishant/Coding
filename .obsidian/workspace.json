@@ -211,6 +211,13 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "MINDMAP-ALGO.pdf",
+    "MINDMAP-DS.pdf",
+    "MINDMAP.pdf",
+    "FLOWCHARTS.pdf",
+    "scripts/md-to-print-pdf.py",
+    "scripts",
+    "_mindmap_generated.txt",
     "04-behavioral/googliness-round.md",
     "FLOWCHARTS.md",
     "02-algorithms/problem-deep-dives.md",
@@ -238,10 +245,7 @@
     "coding/data-structures/string.md",
     "01-data-structures/string.md",
     "01-data-structures/queue.md",
-    "01-data-structures/stack.md",
     "coding/algorithms/recursion.md.tmp.52333.ad8b436f2cef",
-    "coding/data-structures",
-    "coding/algorithms",
-    "coding"
+    "coding/data-structures"
   ]
 }

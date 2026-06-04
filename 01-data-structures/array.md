@@ -367,6 +367,7 @@ def sort_colors(nums: list[int]) -> None:
         else:
             nums[mid], nums[hi] = nums[hi], nums[mid]
             hi -= 1  # don't increment mid — swapped element from hi is unexamined
+```
 
 ---
 
@@ -419,7 +420,6 @@ def find_duplicate(nums: list[int]) -> int:
         fast = nums[fast]
         
     return slow
-```
 ```
 
 ---
@@ -546,23 +546,23 @@ def reservoir_sample(stream, k: int) -> list:
 
 ## Flashcards
 
-**If the problem needs O(1) access by position → think Array because index = base + i×size.?** #flashcard
-If the problem needs O(1) access by position → think Array because index = base + i×size.
+**Why does the sliding window technique fail for subarray sum queries when an array contains negative numbers, and what is the O(N) alternative?** #flashcard
+Sliding window relies on monotonicity (expanding the window increases the sum; shrinking decreases it). If negative numbers are present, the sum isn't monotonic. The alternative is prefix sum + hash map (`seen[prefix_sum] = count`).
 
-**If the problem says "contiguous subarray satisfying a condition" → think Sliding Window (monotone) or Prefix Sum + Map (with negatives).?** #flashcard
-If the problem says "contiguous subarray satisfying a condition" → think Sliding Window (monotone) or Prefix Sum + Map (with negatives).
+**What is the difference array technique and when is it preferred over a segment tree?** #flashcard
+Difference array allows $O(1)$ range updates by modifying the boundaries (`diff[l] += val` and `diff[r+1] -= val`), followed by a single $O(N)$ prefix sum pass to rebuild the array. It is preferred when all updates are completed before any queries. Segment trees are needed when queries and updates are interleaved.
 
-**If the problem says "range sum queries on static data" → think Prefix Sum; O(1) per query after O(N) build.?** #flashcard
-If the problem says "range sum queries on static data" → think Prefix Sum; O(1) per query after O(N) build.
+**What is the common bug when running Kadane's algorithm on all-negative arrays, and how do you prevent it?** #flashcard
+Initializing the running sum `cur` or best sum `best` to `0`. If all numbers are negative, the algorithm will incorrectly return `0` instead of the least-negative element. To prevent this, initialize both `cur` and `best` to `nums[0]` and iterate from index 1.
 
-**If the problem says "many range-add updates, read final values" → think Difference Array; O(1) update, O(N) reconstruct.?** #flashcard
-If the problem says "many range-add updates, read final values" → think Difference Array; O(1) update, O(N) reconstruct.
+**Explain the Dutch National Flag 3-way partitioning pointer mechanics.** #flashcard
+Three pointers: `lo` (boundary for low values), `mid` (current element), and `hi` (boundary for high values).
+- `nums[mid] == 0`: Swap `nums[lo]` and `nums[mid]`, increment both `lo` and `mid`.
+- `nums[mid] == 1`: Increment `mid`.
+- `nums[mid] == 2`: Swap `nums[mid]` and `nums[hi]`, decrement `hi` (do NOT increment `mid` since the swapped element is unexamined).
 
-**If the problem says "maximum subarray sum" → think Kadane's; initialize to `nums[0]`, not 0.?** #flashcard
-If the problem says "maximum subarray sum" → think Kadane's; initialize to `nums[0]`, not 0.
+**How does Floyd's Cycle Detection find a duplicate in an array of size N+1 with elements in [1, N] in O(N) time and O(1) space?** #flashcard
+Treat the array as a linked list where `next_node = nums[current]`. Since values are in $[1, N]$, index 0 is guaranteed to be outside the cycle (no element points to 0).
+- **Phase 1**: Fast and slow pointers meet at an intersection point inside the cycle.
+- **Phase 2**: Reset slow pointer to 0, advance both at speed 1. They will meet at the cycle entry point, which represents the duplicate number.
 
-**If the problem says "sorted array + find pair/triplet with target sum" → think Two Pointers; advance the side that moves you toward the target.?** #flashcard
-If the problem says "sorted array + find pair/triplet with target sum" → think Two Pointers; advance the side that moves you toward the target.
-
-**If the problem says "partition into 3 groups in one pass" → think Dutch National Flag; three-pointer dance.?** #flashcard
-If the problem says "partition into 3 groups in one pass" → think Dutch National Flag; three-pointer dance.

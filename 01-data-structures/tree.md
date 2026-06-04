@@ -529,23 +529,26 @@ def deserialize(data: str):
 
 ## Flashcards
 
-**If the problem says "validate BST" → think Range Propagation; pass `(lo, hi)` bounds through recursion, not just local child comparison.?** #flashcard
-If the problem says "validate BST" → think Range Propagation; pass `(lo, hi)` bounds through recursion, not just local child comparison.
+**Why does validating a BST require range propagation rather than just comparing parent to immediate children?** #flashcard
+A BST node must be greater than *all* nodes in its left subtree and smaller than *all* nodes in its right subtree, not just its immediate children. Range propagation passes `(lo, hi)` bounds down through recursion: `(lo, node.val)` for left, and `(node.val, hi)` for right, ensuring global validity.
 
-**If the problem says "lowest common ancestor" → think Postorder DFS; if both sides return non-null, current node is LCA.?** #flashcard
-If the problem says "lowest common ancestor" → think Postorder DFS; if both sides return non-null, current node is LCA.
+**How does Morris Traversal achieve O(1) space tree traversal?** #flashcard
+By utilizing temporary threads. For each `current` node, if it has a left child, find its inorder predecessor (rightmost node of the left subtree):
+- If `predecessor.right` is `None`, set `predecessor.right = current` (thread created), move `current = current.left`.
+- If `predecessor.right` is `current`, restore `predecessor.right = None` (thread cut), visit `current`, move `current = current.right`.
 
-**If the problem says "diameter" or "maximum path sum" → think Tree DP with global variable; return single-arm gain to parent, update global with both arms at each node.?** #flashcard
-If the problem says "diameter" or "maximum path sum" → think Tree DP with global variable; return single-arm gain to parent, update global with both arms at each node.
+**Describe the postorder DFS logic for finding the Lowest Common Ancestor (LCA) of nodes P and Q in a binary tree.** #flashcard
+- If the current node is `None` or matches `P` or `Q`, return `current`.
+- Recurse left and right: `left_res = dfs(node.left)`, `right_res = dfs(node.right)`.
+- If both `left_res` and `right_res` are non-null, the current node is the LCA.
+- If only one is non-null, return that non-null result (propagates the found target upward).
 
-**If the problem says "K-th smallest in BST" → think Iterative Inorder; stop after K pops to avoid O(N) stack for large skewed trees.?** #flashcard
-If the problem says "K-th smallest in BST" → think Iterative Inorder; stop after K pops to avoid O(N) stack for large skewed trees.
+**How do you calculate the maximum path sum in a binary tree (paths can start/end anywhere)?** #flashcard
+Use Tree DP with a global max tracker. At each node:
+1. Recursively compute maximum single-arm gains: `left = max(0, dfs(node.left))` and `right = max(0, dfs(node.right))`.
+2. Update the global max with `node.val + left + right`.
+3. Return the maximum single-arm path to the parent: `node.val + max(left, right)`.
 
-**If the problem says "serialize/deserialize tree" → think Preorder with explicit `None` markers; inorder alone is insufficient for reconstruction.?** #flashcard
-If the problem says "serialize/deserialize tree" → think Preorder with explicit `None` markers; inorder alone is insufficient for reconstruction.
+**Why is preorder/postorder traversal with null markers preferred over inorder traversal for tree serialization?** #flashcard
+Inorder traversal is not unique; multiple distinct trees can produce the same inorder sequence, even with null markers. Preorder or postorder traversal with null markers records structural parent-child relationships uniquely, allowing unambiguous reconstruction.
 
-**If the problem says "O(1) space traversal" → think Morris Threading; temporarily link predecessor back to current, restore on second visit.?** #flashcard
-If the problem says "O(1) space traversal" → think Morris Threading; temporarily link predecessor back to current, restore on second visit.
-
-**If the problem says "level-order" or "connect level pointers" → think BFS with `len(queue)` snapshot per level.?** #flashcard
-If the problem says "level-order" or "connect level pointers" → think BFS with `len(queue)` snapshot per level.

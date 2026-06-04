@@ -47,6 +47,8 @@
 
 | What | Link |
 |------|------|
+| **Repo flowcharts (visual map)** | `FLOWCHARTS.md` |
+| **Mind map (30-min DS/algo revision)** | `MINDMAP.md` |
 | Pattern recognition master | `03-patterns/patterns-master.md` |
 | Interview cheatsheet | `03-patterns/interview-cheatsheet.md` |
 | Google revision guide | `03-patterns/GOOGLE_INTERVIEW_REVISION.md` |

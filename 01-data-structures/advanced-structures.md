@@ -382,11 +382,23 @@ class SkipList:
 
 ## Flashcards
 
-****Trie**?** #flashcard
-insert/search/startsWith O(L). Binary trie for max XOR. Word Search II: Trie + backtrack.
+**What are the time complexities of standard Trie operations, and what is its binary variant used for?** #flashcard
+Standard Trie operations (insert, search, startsWith) run in $O(L)$ time where $L$ is the string length. The Binary XOR Trie is a specialized bitwise trie used to find the maximum XOR of two elements in an array in $O(32 \cdot N)$ time.
 
-****Segment tree**?** #flashcard
-4*N nodes; build O(N); query/update O(log N). Lazy for range update.
+**What is the node allocation requirement for a recursive Segment Tree and what are its key complexities?** #flashcard
+A recursive Segment Tree requires a $4N$ node array allocation for a base array of size $N$. Its complexities are $O(N)$ for building the tree, and $O(\log N)$ for both range queries and range/point updates (using Lazy Propagation).
 
-****Fenwick**?** #flashcard
-update(i, delta), query(i) prefix sum; i += i&-i / i -= i&-i.
+**What is the core bit-manipulation trick used to navigate a Fenwick Tree (BIT)?** #flashcard
+- To update an index `i` (adding delta and climbing parent nodes): `i += i & (-i)`
+- To query prefix sum up to index `i` (climbing child nodes): `i -= i & (-i)`
+Both operate in $O(\log N)$ time and the tree requires only $O(N)$ space.
+
+**What is the MRU and LRU insertion logic in an O(1) LRU Cache?** #flashcard
+The Cache combines a HashMap with a Doubly Linked List (DLL). Direct lookups/writes happen in $O(1)$ via the HashMap. Freshly touched nodes are moved to the front of the DLL (MRU). If size exceeds capacity, the node at the tail (LRU) is removed from both DLL and HashMap in $O(1)$.
+
+**How does an O(1) LFU Cache resolve frequency ties in O(1) time?** #flashcard
+By using an `OrderedDict` (acting as a DLL) within each frequency bucket in a `freq_to_keys` map. The keys in the `OrderedDict` maintain the LRU order for that frequency, enabling $O(1)$ eviction of the absolute LFU element (and the LRU element if there's a frequency tie).
+
+**What is a Skip List and why is it preferred over balanced BSTs for concurrent sorted collections?** #flashcard
+A Skip List is a probabilistic data structure with multiple layered express lanes, providing $O(\log N)$ average search, insertion, and deletion. It is preferred for concurrent collections because it is much simpler to implement lock-free concurrency with local pointer updates than rebalancing a BST.
+

@@ -440,23 +440,27 @@ For very large streams that don't fit in memory: partition the stream into chunk
 
 ## Flashcards
 
-**If the problem says "next greater/smaller element" → think Monotonic Stack; brute force O(N²) → stack O(N) because each element pushed/popped once.?** #flashcard
-If the problem says "next greater/smaller element" → think Monotonic Stack; brute force O(N²) → stack O(N) because each element pushed/popped once.
+**What is a Monotonic Stack, and why does it achieve O(N) time complexity for finding the Next Greater Element?** #flashcard
+A Monotonic Stack is a stack that maintains its elements in a sorted (increasing or decreasing) order. It runs in $O(N)$ because each array element is pushed onto the stack exactly once and popped at most once, leading to an amortized $O(1)$ operations per element.
 
-**If the problem says "valid brackets" or "nested structure matching" → think Stack; push on open, pop-and-verify on close.?** #flashcard
-If the problem says "valid brackets" or "nested structure matching" → think Stack; push on open, pop-and-verify on close.
+**How does a Monotonic Increasing Stack solve the "Largest Rectangle in Histogram" problem in O(N) time?** #flashcard
+Maintain indices of bars in increasing height order. When a shorter bar of height $H$ at index $i$ is found:
+1. Pop the top index `cur` as the rectangle height.
+2. The new stack top index is the left boundary.
+3. The width of the rectangle is `i - stack[-1] - 1` (or `i` if stack is empty).
+4. Calculate the area and update max. Repeat until the stack top is shorter than $H$.
 
-**If the problem says "undo/redo" or "backtrack to previous state" → think Stack because LIFO naturally reverses recent actions.?** #flashcard
-If the problem says "undo/redo" or "backtrack to previous state" → think Stack because LIFO naturally reverses recent actions.
+**Describe the Min-Stack architecture for O(1) minimum element retrieval.** #flashcard
+Maintain a main stack for values and a parallel `min_stack` for running minimums.
+- **Push**: Push $X$ to the main stack, and push $\min(X, \text{min\_stack}[-1])$ to `min_stack`.
+- **Pop**: Pop from both stacks.
+- **GetMin**: Return the top of `min_stack`.
 
-**If the problem says "largest rectangle in histogram" → think Monotonic Increasing Stack; pop when a shorter bar arrives, compute width using remaining stack top.?** #flashcard
-If the problem says "largest rectangle in histogram" → think Monotonic Increasing Stack; pop when a shorter bar arrives, compute width using remaining stack top.
+**How do you evaluate nested arithmetic expressions containing parentheses "()" using a stack?** #flashcard
+Maintain a running `result` and `sign` (1 or -1).
+- When seeing `(`, push the current `(result, sign)` onto the stack and reset both.
+- When seeing `)`, pop the sign and previous result, update the sub-expression value: `result = prev_result + prev_sign * result`.
 
-**If the problem says "evaluate expression with parentheses" → think Stack saving `(result, sign)` context on `(` and restoring on `)`.?** #flashcard
-If the problem says "evaluate expression with parentheses" → think Stack saving `(result, sign)` context on `(` and restoring on `)`.
+**Why must neighbors be pushed onto the stack in reverse order during iterative DFS?** #flashcard
+Because stacks are Last-In-First-Out (LIFO). To process nodes from left to right (same order as recursion), you must push them onto the stack from right to left so the leftmost neighbor ends up at the top of the stack and is popped first.
 
-**If the problem says "iterative DFS" → think explicit Stack replacing the call stack; push neighbors in reverse order to preserve traversal direction.?** #flashcard
-If the problem says "iterative DFS" → think explicit Stack replacing the call stack; push neighbors in reverse order to preserve traversal direction.
-
-**If the problem needs O(1) getMin with push/pop → think Parallel Min-Stack synced with main stack.?** #flashcard
-If the problem needs O(1) getMin with push/pop → think Parallel Min-Stack synced with main stack.

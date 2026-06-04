@@ -23,6 +23,8 @@ A topic-first, high-signal prep repo targeting Google SDE-3 (L5) in a 6-week spr
 | What | Link |
 |------|------|
 | **Start here** | [`00-start-here/README.md`](00-start-here/README.md) |
+| **Flowcharts (repo map)** | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
+| **Mind map (30-min DS/algo revision)** | [`MINDMAP.md`](MINDMAP.md) |
 | **Patterns master** | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
 | **Cheatsheet + complexity** | [`05-revision/README.md`](05-revision/README.md) |
 | **Behavioral** | [`04-behavioral/README.md`](04-behavioral/README.md) |

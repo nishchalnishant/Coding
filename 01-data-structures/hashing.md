@@ -504,23 +504,29 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 
 ## Flashcards
 
-**If the problem says "find pair summing to target" → think Complement Map; store `x → index` and look up `target - x`.?** #flashcard
-If the problem says "find pair summing to target" → think Complement Map; store `x → index` and look up `target - x`.
+**Explain the Swap-with-Last optimization used to support O(1) getRandom alongside O(1) insert and delete.** #flashcard
+Combine a dynamic array `list` and a hash map `val_to_idx` mapping values to their array index:
+- **Insert**: Append value to `list`, record its index in `val_to_idx`.
+- **Delete**: Retrieve the target index `idx` from `val_to_idx`. Swap the element at `idx` with the last element of `list` in $O(1)$. Update the index of the swapped element in `val_to_idx`, delete the target from the map, and pop the last element from `list`.
+- **GetRandom**: Return a random element from `list` in $O(1)$ by generating an index in range.
 
-**If the problem says "count subarrays with sum = K" (with negatives) → think Prefix Sum + Hash Map; initialize `seen = {0?** #flashcard
-1}` before the loop.
+**Why must we initialize the prefix sum hash map with `{0: 1}` for the "Subarray Sum Equals K" problem?** #flashcard
+The key `0` with value `1` represents an empty prefix subarray. If a subarray starting at index 0 sums to exactly $K$, its prefix sum is $K$. The check `prefix_sum - K` evaluates to `0`. Without `{0: 1}` in the map, this subarray would be missed.
 
-**If the problem says "group strings by pattern" or "anagrams" → think Frequency-Key Map; key = `tuple(sorted(s))` or 26-count tuple.?** #flashcard
-If the problem says "group strings by pattern" or "anagrams" → think Frequency-Key Map; key = `tuple(sorted(s))` or 26-count tuple.
+**How does the "Longest Consecutive Sequence" algorithm achieve O(N) time using a HashSet?** #flashcard
+Push all numbers into a HashSet. Iterate through each number $X$:
+1. Check if $X - 1$ is in the set. If yes, skip (since $X$ is not the start of a sequence).
+2. If no, start counting a sequence: check $X + 1, X + 2, \dots$ in the set until a mismatch occurs.
+Each number is visited at most twice (once in the outer loop, and once as part of a sequence), resulting in $O(N)$ time.
 
-**If the problem says "O(1) insert, delete, getRandom" → think Hash Map + Array; swap-with-last on delete to preserve O(1) random access.?** #flashcard
-If the problem says "O(1) insert, delete, getRandom" → think Hash Map + Array; swap-with-last on delete to preserve O(1) random access.
+**What is a load factor in Hash Maps, and how is rehashing implemented?** #flashcard
+The load factor is the ratio $\alpha = \frac{\text{number of elements}}{\text{number of buckets}}$. When $\alpha$ exceeds a threshold (typically 0.7 or 0.75), rehashing is triggered:
+1. Allocate a new bucket array (typically $2\times$ size, ideally a prime number).
+2. Iterate through all key-value pairs in the old table.
+3. Compute their new bucket indices (`hash(key) % new_size`) and insert them into the new table.
 
-**If the problem says "longest consecutive sequence" → think Hash Set; only start a chain from `x` if `x-1` is not in the set.?** #flashcard
-If the problem says "longest consecutive sequence" → think Hash Set; only start a chain from `x` if `x-1` is not in the set.
+**What are the key properties and trade-offs of a Bloom Filter compared to a HashSet?** #flashcard
+A Bloom Filter is a space-efficient probabilistic data structure that uses a bit array and multiple hash functions.
+- **Trade-off**: It can yield false positives (stating an element is present when it is not) but never false negatives.
+- **Limitation**: Elements cannot be easily deleted, and the actual values are not stored.
 
-**If the problem says "sliding window with at most K distinct" → think Frequency Map as window state; delete key only when its count drops to 0.?** #flashcard
-If the problem says "sliding window with at most K distinct" → think Frequency Map as window state; delete key only when its count drops to 0.
-
-**If the problem involves custom hash map design → think Prime-sized bucket array + chaining; rehash when load factor exceeds 0.7.?** #flashcard
-If the problem involves custom hash map design → think Prime-sized bucket array + chaining; rehash when load factor exceeds 0.7.

@@ -464,23 +464,29 @@ def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
 
 ## Flashcards
 
-**If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.?** #flashcard
-If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.
+**Under what graph conditions is BFS guaranteed to find the shortest path, and what is the critical step to avoid redundant queue work?** #flashcard
+BFS guarantees the shortest path only in **unweighted graphs** (or graphs with uniform edge weights). The critical step is marking a node as visited **before enqueuing** it (not after dequeuing) to prevent duplicate enqueueing of the same node from different paths.
 
-**If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.?** #flashcard
-If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.
+**How does Kahn's algorithm perform topological sort and detect cycles in a directed graph?** #flashcard
+1. Compute the `in_degree` of all vertices.
+2. Queue all vertices with `in_degree == 0`.
+3. Pop a vertex `u`, add it to the topological order, and decrement the `in_degree` of all its neighbors.
+4. If a neighbor's `in_degree` drops to 0, queue it.
+5. If the final topological order length is less than the total number of vertices $V$, a cycle exists.
 
-**If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.?** #flashcard
-If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.
+**What is the Bidirectional BFS optimization, and how does it improve search complexity?** #flashcard
+Bidirectional BFS runs two simultaneous searches: one forward from the source and one backward from the target, meeting in the middle. At each iteration, it expands the smaller queue's frontier. This reduces the search space size from $O(b^d)$ to $O(b^{d/2})$, where $b$ is the branching factor and $d$ is the distance.
 
-**If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.?** #flashcard
-If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.
+**How does 0-1 BFS operate, and why is it preferred over Dijkstra's algorithm?** #flashcard
+0-1 BFS finds the shortest path in $O(V + E)$ when edge weights are strictly 0 or 1. It uses a `deque`:
+- If an edge has weight 0, append the neighbor to the **front** of the deque.
+- If weight is 1, append to the **back**.
+This keeps the deque sorted by distance without a min-heap, outperforming Dijkstra's $O(E \log V)$ time complexity.
 
-**If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.?** #flashcard
-If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.
+**How does the 3-color DFS algorithm detect cycles in a directed graph?** #flashcard
+Nodes are categorized into three states:
+- **White (0)**: Unvisited.
+- **Gray (1)**: Active (currently in the recursion stack).
+- **Black (2)**: Fully processed (DFS completed for this node and all its descendants).
+A cycle is detected if a neighbor is found in the **Gray** state during traversal.
 
-**If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.?** #flashcard
-If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
-
-**If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.?** #flashcard
-If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.

@@ -200,3 +200,24 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 2. **Select the Tool**: Choose the appropriate structure (e.g., "I need to find the nearest larger element → Monotonic Stack").
 3. **Identify the Pattern**: Match the problem to a structural pattern (e.g., "I need level-by-level info → BFS / Level Order").
 4. **Optimize**: Check if a more advanced structure (like DSU or a Heap) can reduce the time complexity from O(N²) to O(N log N) or O(α(N)).
+
+## Flashcards
+
+**What data structure should you reach for when you need to maintain a dynamic median from a stream of numbers?** #flashcard
+**Two Heaps**: A Max-Heap for the lower half of the numbers, and a Min-Heap for the upper half. Keeping them balanced within size difference $\le 1$ allows retrieval of the median in $O(1)$ time.
+
+**What data structure should you use to find the "Next Greater Element" (NGE) for all indices of an array in O(N) total time?** #flashcard
+**Monotonic Stack**: Keep a stack of indices/elements in strictly decreasing order. When you see a larger element, pop elements from the stack; this incoming element is their next greater element.
+
+**When should you select a Trie instead of a HashSet for string lookups?** #flashcard
+When you need **prefix matching** (e.g., autocomplete, finding all strings starting with prefix `P`), or when you need to prune a backtracking search space early by checking if a valid prefix path exists.
+
+**What underlying data structures make up an LRU Cache with O(1) get and put performance?** #flashcard
+A **HashMap** combined with a **Doubly Linked List (DLL)**. The DLL maintains the recency order (MRU at head, LRU at tail), and the HashMap maps keys directly to DLL Nodes for $O(1)$ direct access and updates.
+
+**When is an Adjacency List preferred over an Adjacency Matrix for graph representations?** #flashcard
+For **sparse graphs** (where the number of edges $E \ll V^2$). An Adjacency List requires only $O(V + E)$ space and allows $O(\text{degree})$ iteration over neighbors, whereas a matrix requires $O(V^2)$ space and $O(V)$ neighbor iteration.
+
+**What structure is required for range queries (Sum/Min/Max) with dynamic point updates, both in O(log N) time?** #flashcard
+A **Segment Tree** (or **Fenwick Tree / BIT** if only prefix sums are needed). They balance static prefix arrays (which have $O(1)$ query but $O(N)$ update) and raw arrays (which have $O(N)$ query but $O(1)$ update).
+

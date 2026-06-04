@@ -449,23 +449,27 @@ class CircularQueue:
 
 ## Flashcards
 
-**If the problem says "shortest path in unweighted graph" or "minimum steps" → think BFS with `deque` because first reach = shortest path.?** #flashcard
-If the problem says "shortest path in unweighted graph" or "minimum steps" → think BFS with `deque` because first reach = shortest path.
+**Why is `list.pop(0)` undesirable in Python for queue operations, and what should be used instead?** #flashcard
+`list.pop(0)` is an $O(N)$ operation because it requires shifting all remaining elements in the contiguous array one slot to the left. Instead, use `collections.deque`, which implements an $O(1)$ `popleft()` using a doubly-linked list of blocks.
 
-**If the problem says "level-order traversal" or "process layer by layer" → think BFS; snapshot `len(queue)` at the start of each level.?** #flashcard
-If the problem says "level-order traversal" or "process layer by layer" → think BFS; snapshot `len(queue)` at the start of each level.
+**How does a Monotonic Deque solve the "Sliding Window Maximum" in O(N) time?** #flashcard
+Maintain a deque storing indices of elements in strictly decreasing value order. For each index `i`:
+1. Pop indices from the back of the deque if their corresponding array values are $\le$ the new element `nums[i]`.
+2. Push `i` to the back.
+3. Pop the front of the deque if it falls outside the window (`dq[0] <= i - k`).
+4. The maximum value for the window ending at `i` is at index `dq[0]`.
 
-**If the problem says "all sources spread simultaneously" (rotten oranges, 01 matrix) → think Multi-Source BFS; enqueue all sources at distance 0 before starting.?** #flashcard
-If the problem says "all sources spread simultaneously" (rotten oranges, 01 matrix) → think Multi-Source BFS; enqueue all sources at distance 0 before starting.
+**Explain the Two-Stack Queue implementation and why it achieves O(1) amortized time.** #flashcard
+Use `stack1` for inputs (push) and `stack2` for outputs (pop/peek).
+- **Push**: Append to `stack1`.
+- **Pop/Peek**: If `stack2` is empty, pop all elements from `stack1` and push them onto `stack2` (reversing the order). Then pop/peek from `stack2`.
+Each element is pushed/popped onto each stack at most once, taking $O(1)$ amortized time.
 
-**If the problem says "maximum in every sliding window of size K" → think Monotonic Deque; store indices in decreasing value order.?** #flashcard
-If the problem says "maximum in every sliding window of size K" → think Monotonic Deque; store indices in decreasing value order.
+**Describe the pointers and arithmetic required to implement a Circular Queue (Ring Buffer) using a fixed array.** #flashcard
+Track array `cap`, current `size`, and `head` index.
+- **Enqueue**: If `size == cap`, throw full error. Else, insert at `(head + size) % cap` and increment `size`.
+- **Dequeue**: If `size == 0`, throw empty error. Else, read from `head`, update `head = (head + 1) % cap`, and decrement `size`.
 
-**If the problem says "fixed-capacity ring buffer" or "producer-consumer" → think Circular Queue with `front`/`size`/`cap` and modular arithmetic.?** #flashcard
-If the problem says "fixed-capacity ring buffer" or "producer-consumer" → think Circular Queue with `front`/`size`/`cap` and modular arithmetic.
+**Why is Multi-Source BFS preferred over running independent BFS from each source?** #flashcard
+Running independent BFS from $S$ sources takes $O(S \cdot (V + E))$ time. Multi-Source BFS enqueues all source nodes at distance 0 before starting, expanding all search fronts concurrently. This finds shortest distances to the nearest source for all nodes in a single $O(V + E)$ traversal.
 
-**If the problem says "implement queue using stacks" → think Two-Stack Queue; lazy transfer from push-stack to pop-stack only when pop-stack is empty.?** #flashcard
-If the problem says "implement queue using stacks" → think Two-Stack Queue; lazy transfer from push-stack to pop-stack only when pop-stack is empty.
-
-**If you see `list.pop(0)` in your solution → replace with `deque.popleft()` because `list.pop(0)` is O(N).?** #flashcard
-If you see `list.pop(0)` in your solution → replace with `deque.popleft()` because `list.pop(0)` is O(N).

@@ -229,3 +229,29 @@ Don't update the children until you're forced to visit them. Store the "pending 
 - [Fenwick Trees (BIT)](advanced-structures.md#fenwick-tree) — For simpler sum-based range queries.
 - [Prefix Sums](array.md#prefix-sum) — For static data.
 - [Coordinate Compression](miscellaneous.md#coordinate-compression) — Prerequisite for many Segment Tree problems.
+
+## Flashcards
+
+**Why does a recursive Segment Tree require 4N space instead of 2N for an array of size N?** #flashcard
+Because $N$ may not be a power of 2. In the worst case, the leaf nodes reside on the bottom level at index $2^{\lceil \log_2 N \rceil + 1} - 1$, which can be up to $4N$. Allocating $4N$ prevents out-of-bounds errors.
+
+**What is the time complexity of building, point-updating, and range-querying a Segment Tree of size N?** #flashcard
+- **Build**: $O(N)$
+- **Point Update**: $O(\log N)$
+- **Range Query**: $O(\log N)$
+
+**What is the core intuition behind Lazy Propagation in Segment Trees?** #flashcard
+To update a range $[L, R]$ in $O(\log N)$ rather than $O(N \log N)$ by deferring child updates. Pending updates are stored in a parallel `lazy` array and pushed down to children ONLY when those children are subsequently visited during a query or another update.
+
+**What are the correct identity elements when querying range Sum, Min, Max, and Greatest Common Divisor (GCD)?** #flashcard
+- **Sum**: `0`
+- **Min**: `+∞` (or `float('inf')` in Python)
+- **Max**: `-∞` (or `float('-inf')` in Python)
+- **GCD**: `0`
+
+**When should you prefer a Fenwick Tree (Binary Indexed Tree) over a Segment Tree?** #flashcard
+When the operations only involve prefix/range sums and point updates, and memory is tight. A Fenwick Tree requires only $O(N)$ space (1x size), has a much smaller constant factor, and is significantly simpler to code.
+
+**What is Coordinate Compression and when is it a prerequisite for Segment Trees?** #flashcard
+It is a technique that maps a large, sparse range of coordinate values (e.g., up to $10^9$) to a dense range of rank indices (e.g., $0$ to $2N-1$). It is required when the coordinate space is too large to allocate a $4N$ array directly.
+

@@ -459,3 +459,24 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 - [bit-manipulation.md](../02-algorithms/bit-manipulation.md) — XOR Trie for max XOR pair
 - [string.md](../02-algorithms/string.md) — Aho-Corasick for multi-pattern matching
 - [hashing.md](hashing.md) — alternative for exact word lookups when prefix search not needed
+
+## Flashcards
+
+**Why does a Trie outperform a Sorted Array + Binary Search for prefix matching with string length L and dictionary size N?** #flashcard
+Sorted array + binary search takes $O(L \log N)$ because each of the $\log N$ string comparisons takes up to $O(L)$ time. A Trie takes $O(L)$ time, which is completely independent of the dictionary size $N$.
+
+**What is the worst-case space complexity of a standard Trie storing N words of maximum length L over an alphabet of size Σ?** #flashcard
+$O(N \cdot L \cdot \Sigma)$ in the worst case where no words share any common prefixes, requiring a child pointer array of size $\Sigma$ at every node.
+
+**Why does a Trie node require an `is_end` flag instead of just checking if a node is a leaf?** #flashcard
+A node can be a complete word and also a prefix for longer words (e.g., "app" and "apple"). The `is_end` flag distinguishes valid word completions from intermediate prefix nodes.
+
+**What is the critical optimization that prevents Word Search II (Trie + Backtracking) from TLEing on dense boards?** #flashcard
+Pruning dead leaf nodes during backtracking: if a child `TrieNode` has no children remaining after exploration, delete it from its parent's `children` map (`del node.children[ch]`) to prevent subsequent DFS paths from re-exploring a dead branch.
+
+**How does a Binary XOR Trie find the maximum XOR pair for a number X in O(32) time?** #flashcard
+By processing bits from Most Significant Bit (MSB) to Least Significant Bit (LSB) and greedily choosing the path corresponding to the opposite bit of X at each step (since $1 \oplus 0 = 1$). If the opposite bit is unavailable, it falls back to the same bit.
+
+**What is a Compressed Trie (Radix Tree) and when does it improve space complexity?** #flashcard
+A Trie variant where all single-child intermediate chains are merged into single edges with substring labels. It reduces the node count to $O(N)$ for $N$ words, saving massive memory when there are many long non-branching sequences.
+

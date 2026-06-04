@@ -1,132 +1,121 @@
-# Recursion to DP: From Brute Force to Bottom-Up
+# Recursion → DP — The Conversion Bridge
 
-This guide is for the exact interview moment where you can see recursion, but you also suspect the recursion is repeating work. The goal is to learn the full progression:
+**Companion files:** [recursion.md](./recursion.md) (write the recurrence) · [dynamic-programming.md](./dynamic-programming.md) (pattern catalog + bugs)
 
-1. Write the recursive brute-force solution correctly.
-2. Identify the subproblem state.
-3. Add memoization to avoid repeated work.
-4. Convert the recurrence into a bottom-up table.
-5. Optimize space when the dependency window is small.
+Use this file when you can write recursion but suspect repeated subproblems. The interview workflow:
 
-If you can do those five steps cleanly, you can solve most classic DP interview questions without memorizing every pattern.
+```
+Recursive brute force  →  memo (top-down)  →  tabulate (bottom-up)  →  compress space
+     define state              cache state         fix fill order         drop unused rows
+```
 
----
-
-## First-Principles Thinking
-
-### What recursion is really doing
-
-Recursion is not the final solution. It is a way to describe the problem in terms of smaller versions of itself.
-
-The first question to ask is:
-
-> “If I already knew the answer to smaller subproblems, how would I build the answer for the current one?”
-
-That sentence is the DP transition.
-
-### Why recursion becomes DP
-
-DP appears when two things are true:
-
-1. The problem has **optimal substructure** or a counting structure built from smaller states.
-2. The same subproblem appears again and again in the recursion tree.
-
-When that happens:
-
-- plain recursion recomputes the same work many times,
-- memoization saves the result the first time,
-- bottom-up computes the same answers in dependency order.
-
-### The mental model
-
-Think in this order:
-
-- **Recursion:** “What are my choices?”
-- **Memoization:** “Have I solved this state before?”
-- **Bottom-up:** “In what order should I fill states so dependencies already exist?”
-
-That is the entire bridge from recursion to DP.
+If you can execute those four moves on demand, most classic DP questions become engineering — not memorization.
 
 ---
 
-## The Universal Progression
+## First-Principles Map
 
-### Step 1: Write the recursive state
+```
+WHY this bridge exists
+├── Plain recursion is the easiest way to define a correct recurrence
+├── Overlapping subproblems make the recursion tree exponential
+└── DP = same recurrence + each state computed once
 
-Define the smallest input that uniquely identifies a subproblem.
+WHAT changes at each stage
+├── Recursion:  state = function args; no cache
+├── Memo:       state → result map; same call tree, pruned
+├── Bottom-up:  state → table cell; explicit dependency order
+└── Space-opt:  keep only rows/columns the transition still needs
 
-Examples:
+HOW to convert (never skip step 1)
+├── Step 1 — Write recursive solution with correct base cases
+├── Step 2 — Name the state: minimum args that uniquely identify a subproblem
+├── Step 3 — Prove overlap: same state reached from different paths
+├── Step 4 — Memoize OR tabulate (pick based on table shape)
+└── Step 5 — Compress if transition only reads i-1, i-2, or one prior row
 
-- `f(i)` for position-based problems
-- `f(i, sum)` for subset/capacity problems
-- `f(i, j)` for two-string or grid problems
-- `f(i, j, k)` for interval or game problems
+WHEN overlap appears (signals)
+├── Same index pair (i, j) visited twice
+├── Same remaining amount / capacity recomputed
+├── Exponential tree depth with small input range (n ≤ 500, 2^n TLE)
+└── "Count / min / max ways" + choice at each step
 
-If your state is wrong, everything after that is wrong.
-
-### Step 2: Write the recurrence
-
-For each state, write:
-
-- what choices you can make,
-- how each choice changes the state,
-- what the base case is.
-
-This is where most interview solutions start to emerge.
-
-### Step 3: Detect overlap
-
-If the same `(state)` is reached through different paths, you have overlapping subproblems.
-
-Common signs:
-
-- repeated recursion on the same index pair,
-- same suffix/prefix subproblem appears multiple times,
-- exponential tree with duplicate states.
-
-### Step 4: Add memoization
-
-Store the answer for each state the first time you compute it.
-
-That turns exponential recursion into polynomial-time DP.
-
-### Step 5: Convert to bottom-up
-
-Once the recurrence is clear, ask:
-
-> “Which states must be computed before this one?”
-
-Then fill the table in that dependency order.
-
-### Step 6: Compress space
-
-If each state only needs:
-
-- the previous 1 row,
-- the previous 2 rows,
-- or a sliding window,
-
-then compress the DP table.
+WHAT breaks the conversion
+├── Wrong state (missing a dimension) → wrong memo key → wrong table
+├── Wrong fill order → read uninitialized cells
+├── 0/1 knapsack with forward w-loop → item used twice
+└── Mutable list in @lru_cache → TypeError; memoize on index only
+```
 
 ---
 
-## Bottom-Up Translation Checklist
+## Quick Revision Triggers
 
-Before coding tabulation, answer these in order:
-
-1. What is the state?
-2. What is the transition?
-3. What are the base cases?
-4. What is the iteration order?
-5. What dimensions can be compressed?
-
-If you can answer those five, the code is usually straightforward.
+| Stage | One-line test |
+|-------|----------------|
+| **State** | Can two different call paths produce the same `(args)`? → those args are your memo key |
+| **Memo** | Recurrence unchanged; only add `@lru_cache` or `dict` |
+| **Tabulate** | Reverse the recursion direction: if `f(i)` calls `f(i+1)`, fill `i` from high → low |
+| **1D space** | Transition uses only `dp[i-1]` / `dp[i-2]` → two variables |
+| **2D → 1 row** | Transition uses only row `i+1` → rolling array |
+| **0/1 knapsack** | Loop `w` **backward** (high → low) |
+| **Unbounded** | Loop `w` **forward** (low → high) |
+| **Interval DP** | Outer loop = interval **length**; inner = left endpoint |
 
 ---
 
-## Template You Should Memorize
+## Overlap in One Picture (Climbing Stairs)
 
-### Top-down memoized recursion
+```
+                    f(5)
+                   /    \
+               f(4)      f(3)        ← f(3) computed twice
+              /   \      /   \
+           f(3)  f(2)  f(2) f(1)     ← f(2) computed three times
+          /  \
+       f(2) f(1)
+```
+
+- **Recursion:** `O(2^n)` — revisits nodes.
+- **Memo on `n`:** `O(n)` time, `O(n)` stack + cache.
+- **Bottom-up:** `O(n)` time, `O(n)` table → `O(1)` with two variables.
+
+---
+
+## Iteration Order Cheat Sheet
+
+The #1 bottom-up bug is filling a cell before its dependencies exist. Use this table:
+
+| State shape | Recursive direction | Bottom-up fill order | Depends on |
+|-------------|--------------------|-----------------------|------------|
+| `f(i)` suffix from `i` | calls `f(i+1)`, `f(i+2)` | `i` from **n → 0** | future indices |
+| `f(i)` prefix to `i` | calls `f(i-1)`, `f(i-2)` | `i` from **0 → n** | past indices |
+| `f(amount)` unbounded | `amount - coin` | `amount` from **0 → target** | smaller amounts |
+| `f(i, w)` 0/1 knapsack | `i+1`, same `w` or `w-wt` | outer `i`, inner `w`; 1D: **w backward** | previous item row |
+| `f(i, j)` two strings | `i+1`, `j+1` | `i` **m→0**, `j` **n→0** (or row-major) | suffixes / larger indices |
+| `f(l, r)` interval | split at `k` | outer **length**, inner `l` | strictly smaller intervals |
+| `f(r, c)` grid paths | `r+1`, `c+1` | `r` **0→m**, `c` **0→n** | top and left neighbors |
+
+**Rule:** List what `dp[state]` reads on the RHS. Those cells must already be filled when you write `state`.
+
+---
+
+## Top-Down vs Bottom-Up — When to Use Which
+
+| Use **memo (top-down)** | Use **bottom-up** |
+|-------------------------|-------------------|
+| State space is sparse (hash map stays small) | State space is dense array — table is natural |
+| You want fastest path to correct code in interview | Recursion depth may overflow stack (`n > 10^4`) |
+| Interval / tree DP — order is awkward to explain | Space optimization (rolling row) matters |
+| Proving recurrence before committing to dimensions | Interviewer asks for iterative solution |
+
+Both are `O(states × work per state)` when done correctly. Pick the one you can explain cleanly; convert after.
+
+---
+
+## Templates
+
+### Top-down
 
 ```python
 from functools import lru_cache
@@ -135,321 +124,226 @@ from functools import lru_cache
 def solve(state1, state2):
     if base_case:
         return base_value
-
     best = initial_value
     for choice in choices:
         best = combine(best, solve(next_state))
     return best
 ```
 
-### Bottom-up tabulation
+**Interview tip:** Put `nums` / strings in closure; memoize only on `(i, j, …)` — avoids hashability bugs.
+
+### Bottom-up
 
 ```python
-dp = initialize_table()
-for state in valid_order:
-    dp[state] = transition_from_smaller_states()
+dp = initialize_table(base_cases)
+for state in dependency_order:          # see cheat sheet above
+    dp[state] = transition_from_smaller_states(dp)
 return dp[answer_state]
 ```
 
-### Space optimization
+### Space compression
 
 ```python
-prev = ...
-curr = ...
+prev, curr = base, base
 for state in order:
-    curr = compute_using_prev()
+    curr = compute_using(prev)         # or prev2, prev1 for Fibonacci-style
     prev = curr
+return prev
 ```
 
 ---
 
-## Worked Examples: Recursion → Memo → Bottom-Up
+## Worked Examples — Full Pipeline
 
-These examples are the real bridge from recursion to DP. Read them as transformations, not as separate solutions.
+Each example follows: **state → recurrence → brute → memo → tabulate → (optional) space-opt**.
 
-### 1. Climbing Stairs
+Complexity: **R** = recursive, **M** = memo, **B** = bottom-up, **S** = space-opt.
 
-#### Step A: Recursive brute force
+---
 
-```python
-def climb_stairs_recursive(n: int) -> int:
-    if n <= 2:
-        return n
-    return climb_stairs_recursive(n - 1) + climb_stairs_recursive(n - 2)
-```
+### 1. Climbing Stairs — linear / Fibonacci
 
-Why this works:
+**State:** `f(i)` = number of ways to reach step `i`.  
+**Recurrence:** `f(i) = f(i-1) + f(i-2)` · base: `f(1)=1, f(2)=2`.
 
-- To reach step `n`, your last move must come from `n-1` or `n-2`.
-- That means the answer is the sum of the answers to those smaller states.
-
-Why this is slow:
-
-- `f(n-1)` and `f(n-2)` both compute `f(n-3)`, `f(n-4)`, and so on.
-- The recursion tree repeats the same work exponentially.
-
-#### Step B: Memoized recursion
+| Stage | Code idea | Time | Space |
+|-------|-----------|------|-------|
+| R | `return f(n-1)+f(n-2)` | O(2^n) | O(n) stack |
+| M | `@lru_cache` on `n` | O(n) | O(n) |
+| B | `dp[i] = dp[i-1]+dp[i-2]`, `i: 3..n` | O(n) | O(n) |
+| S | `prev2, prev1` rolling | O(n) | O(1) |
 
 ```python
-from functools import lru_cache
-
-@lru_cache(None)
-def climb_stairs_memo(n: int) -> int:
-    if n <= 2:
-        return n
-    return climb_stairs_memo(n - 1) + climb_stairs_memo(n - 2)
-```
-
-What changed:
-
-- The recurrence did not change.
-- Only the repeated work was cached.
-
-#### Step C: Bottom-up tabulation
-
-```python
-def climb_stairs_bottom_up(n: int) -> int:
-    if n <= 2:
-        return n
+# B — bottom-up
+def climb(n: int) -> int:
+    if n <= 2: return n
     dp = [0] * (n + 1)
-    dp[1] = 1
-    dp[2] = 2
+    dp[1], dp[2] = 1, 2
     for i in range(3, n + 1):
         dp[i] = dp[i - 1] + dp[i - 2]
     return dp[n]
 ```
 
-#### Step D: Space optimization
-
-```python
-def climb_stairs_optimized(n: int) -> int:
-    if n <= 2:
-        return n
-    prev2, prev1 = 1, 2
-    for _ in range(3, n + 1):
-        prev2, prev1 = prev1, prev1 + prev2
-    return prev1
-```
-
-Main lesson:
-
-- If a state depends only on the previous two states, you do not need the whole table.
+**Lesson:** One-dimensional state depending on two prior values → rolling variables.
 
 ---
 
-### 2. House Robber
+### 2. House Robber — take / skip
 
-#### Step A: Recursive brute force
+**State:** `f(i)` = max loot from houses `i..n-1` (suffix formulation).  
+**Recurrence:** `f(i) = max(nums[i] + f(i+2), f(i+1))` · base: `f(n)=0`.
 
-```python
-def house_robber_recursive(nums: list[int], i: int = 0) -> int:
-    if i >= len(nums):
-        return 0
-    take = nums[i] + house_robber_recursive(nums, i + 2)
-    skip = house_robber_recursive(nums, i + 1)
-    return max(take, skip)
-```
-
-Why this works:
-
-- At house `i`, you either rob it and skip the next house, or skip it and move to the next house.
-
-Why this is a DP problem:
-
-- The same index `i` is computed from multiple paths.
-- That makes memoization useful.
-
-#### Step B: Memoized recursion
+| Stage | Time | Space |
+|-------|------|-------|
+| R | O(2^n) | O(n) |
+| M | O(n) | O(n) |
+| B | O(n) | O(n) |
+| S | O(n) | O(1) |
 
 ```python
-from functools import lru_cache
-
-@lru_cache(None)
-def house_robber_memo(nums_tuple: tuple[int, ...], i: int = 0) -> int:
-    if i >= len(nums_tuple):
-        return 0
-    take = nums_tuple[i] + house_robber_memo(nums_tuple, i + 2)
-    skip = house_robber_memo(nums_tuple, i + 1)
-    return max(take, skip)
-```
-
-Note:
-
-- For caching, the input array must be hashable if included in the memoized signature.
-- In interviews, it is cleaner to store `nums` externally and memoize only on `i`.
-
-Cleaner memo version:
-
-```python
-def house_robber_memo_clean(nums: list[int]) -> int:
+# M — memo on index only; nums in closure
+def rob(nums: list[int]) -> int:
     from functools import lru_cache
-
     @lru_cache(None)
-    def solve(i: int) -> int:
-        if i >= len(nums):
-            return 0
-        return max(nums[i] + solve(i + 2), solve(i + 1))
+    def f(i: int) -> int:
+        if i >= len(nums): return 0
+        return max(nums[i] + f(i + 2), f(i + 1))
+    return f(0)
 
-    return solve(0)
-```
-
-#### Step C: Bottom-up tabulation
-
-```python
-def house_robber_bottom_up(nums: list[int]) -> int:
+# B — fill suffix: i from n-1 down to 0
+def rob_tab(nums: list[int]) -> int:
     n = len(nums)
-    if n == 0:
-        return 0
-    if n == 1:
-        return nums[0]
-
     dp = [0] * (n + 1)
-    dp[n] = 0
-    dp[n - 1] = nums[n - 1]
-
-    for i in range(n - 2, -1, -1):
+    for i in range(n - 1, -1, -1):
         dp[i] = max(nums[i] + dp[i + 2], dp[i + 1])
     return dp[0]
 ```
 
-#### Step D: Space optimization
-
-```python
-def house_robber_optimized(nums: list[int]) -> int:
-    next1 = 0
-    next2 = 0
-    for i in range(len(nums) - 1, -1, -1):
-        current = max(nums[i] + next2, next1)
-        next2 = next1
-        next1 = current
-    return next1
-```
-
-Main lesson:
-
-- The recursive state is not “how many houses exist”; it is “what is the best answer starting from index `i`”.
+**Lesson:** “Take or skip” on a line → suffix index state; fill **right to left**.
 
 ---
 
-### 3. Coin Change (minimum coins)
+### 3. Decode Ways — suffix string, forward tabulation
 
-#### Step A: Recursive brute force
+**State:** `f(i)` = ways to decode `s[i:]`.  
+**Recurrence:** if `s[i]=='0'` → 0; else `f(i) = f(i+1)` + (optional) `f(i+2)` if two-digit valid.
+
+| Stage | Time | Space |
+|-------|------|-------|
+| R | O(2^n) | O(n) |
+| M | O(n) | O(n) |
+| B | O(n) | O(n) |
+| S | O(n) | O(1) |
 
 ```python
-def coin_change_recursive(coins: list[int], amount: int) -> int:
-    if amount == 0:
-        return 0
-    if amount < 0:
-        return float("inf")
+# R
+def num_decodings_r(s: str, i: int = 0) -> int:
+    if i == len(s): return 1
+    if s[i] == '0': return 0
+    ways = num_decodings_r(s, i + 1)
+    if i + 1 < len(s) and 10 <= int(s[i:i+2]) <= 26:
+        ways += num_decodings_r(s, i + 2)
+    return ways
 
-    best = float("inf")
-    for coin in coins:
-        candidate = coin_change_recursive(coins, amount - coin)
-        if candidate != float("inf"):
-            best = min(best, 1 + candidate)
-    return best
+# B — prefix formulation: dp[i] = ways for s[:i]; fill left to right
+def num_decodings(s: str) -> int:
+    n = len(s)
+    dp = [0] * (n + 1)
+    dp[0] = 1
+    dp[1] = 0 if s[0] == '0' else 1
+    for i in range(2, n + 1):
+        if s[i - 1] != '0':
+            dp[i] += dp[i - 1]
+        two = int(s[i - 2:i])
+        if 10 <= two <= 26:
+            dp[i] += dp[i - 2]
+    return dp[n]
 ```
 
-Why this works:
+**Lesson:** Suffix recursion ↔ prefix tabulation. Leading `'0'` is a dead branch — handle in base/transition, not after the fact.
 
-- For the remaining amount, try every coin.
-- The best result over all choices is the answer.
+---
 
-Why memoization matters:
+### 4. Coin Change (min coins) — unbounded knapsack
 
-- The same `amount` value gets recomputed many times.
+**State:** `f(rem)` = min coins to make amount `rem`.  
+**Recurrence:** try every coin: `f(rem) = min(1 + f(rem - coin))`.
 
-#### Step B: Memoized recursion
-
-```python
-def coin_change_memo(coins: list[int], amount: int) -> int:
-    from functools import lru_cache
-
-    @lru_cache(None)
-    def solve(rem: int) -> int:
-        if rem == 0:
-            return 0
-        if rem < 0:
-            return float("inf")
-
-        best = float("inf")
-        for coin in coins:
-            candidate = solve(rem - coin)
-            if candidate != float("inf"):
-                best = min(best, 1 + candidate)
-        return best
-
-    answer = solve(amount)
-    return -1 if answer == float("inf") else answer
-```
-
-#### Step C: Bottom-up tabulation
+| Stage | Time | Space |
+|-------|------|-------|
+| R | O(coins^amount) | O(amount) |
+| M | O(amount × coins) | O(amount) |
+| B | O(amount × coins) | O(amount) |
 
 ```python
-def coin_change_bottom_up(coins: list[int], amount: int) -> int:
-    dp = [float("inf")] * (amount + 1)
+# B — increasing amount; each coin reusable → inner coin loop
+def coin_change(coins: list[int], amount: int) -> int:
+    dp = [float('inf')] * (amount + 1)
     dp[0] = 0
-
-    for current in range(1, amount + 1):
-        for coin in coins:
-            if current - coin >= 0 and dp[current - coin] != float("inf"):
-                dp[current] = min(dp[current], dp[current - coin] + 1)
-
-    return -1 if dp[amount] == float("inf") else dp[amount]
+    for cur in range(1, amount + 1):
+        for c in coins:
+            if cur >= c and dp[cur - c] != float('inf'):
+                dp[cur] = min(dp[cur], dp[cur - c] + 1)
+    return -1 if dp[amount] == float('inf') else dp[amount]
 ```
 
-Main lesson:
-
-- This is an unbounded DP because you may use each coin many times.
-- That is why amount increases from `0` to target.
+**Lesson:** Unbounded reuse → iterate amount **forward**; transition reads **smaller** amount.
 
 ---
 
-### 4. Longest Common Subsequence
+### 5. Subset Sum — 0/1 knapsack (boolean)
 
-#### Step A: Recursive brute force
+**State:** `f(i, target)` = can we hit `target` using items from index `i` onward?  
+**Recurrence:** take or skip item `i`.
 
-```python
-def lcs_recursive(a: str, b: str, i: int = 0, j: int = 0) -> int:
-    if i == len(a) or j == len(b):
-        return 0
-    if a[i] == b[j]:
-        return 1 + lcs_recursive(a, b, i + 1, j + 1)
-    return max(
-        lcs_recursive(a, b, i + 1, j),
-        lcs_recursive(a, b, i, j + 1),
-    )
-```
-
-Why this works:
-
-- If the characters match, keep them and move diagonally.
-- If not, drop one from either side and try again.
-
-#### Step B: Memoized recursion
+| Stage | Time | Space |
+|-------|------|-------|
+| R | O(2^n) | O(n) |
+| M | O(n × target) | O(n × target) |
+| B | O(n × target) | O(target) with 1D |
 
 ```python
-def lcs_memo(a: str, b: str) -> int:
+# M
+def subset_sum_memo(nums: list[int], target: int) -> bool:
     from functools import lru_cache
-
     @lru_cache(None)
-    def solve(i: int, j: int) -> int:
-        if i == len(a) or j == len(b):
-            return 0
-        if a[i] == b[j]:
-            return 1 + solve(i + 1, j + 1)
-        return max(solve(i + 1, j), solve(i, j + 1))
+    def f(i: int, t: int) -> bool:
+        if t == 0: return True
+        if i == len(nums) or t < 0: return False
+        return f(i + 1, t - nums[i]) or f(i + 1, t)
+    return f(0, target)
 
-    return solve(0, 0)
+# B — 1D: dp[w] = achievable?; w goes BACKWARD per item
+def subset_sum(nums: list[int], target: int) -> bool:
+    dp = [False] * (target + 1)
+    dp[0] = True
+    for num in nums:
+        for w in range(target, num - 1, -1):   # backward = each item once
+            dp[w] = dp[w] or dp[w - num]
+    return dp[target]
 ```
 
-#### Step C: Bottom-up tabulation
+**Lesson:** 0/1 choice → **backward** capacity loop. Partition Equal Subset Sum = subset sum with `target = sum/2`.
+
+---
+
+### 6. Longest Common Subsequence — 2D string DP
+
+**State:** `f(i, j)` = LCS length of `a[i:]` and `b[j:]`.  
+**Recurrence:** match → `1 + f(i+1,j+1)`; else `max(f(i+1,j), f(i,j+1))`.
+
+| Stage | Time | Space |
+|-------|------|-------|
+| R | O(2^(m+n)) | O(m+n) |
+| M | O(m × n) | O(m × n) |
+| B | O(m × n) | O(m × n) |
+| S | O(m × n) | O(min(m,n)) one row |
 
 ```python
-def lcs_bottom_up(a: str, b: str) -> int:
+# B — fill from bottom-right: i m-1..0, j n-1..0
+def lcs(a: str, b: str) -> int:
     m, n = len(a), len(b)
     dp = [[0] * (n + 1) for _ in range(m + 1)]
-
     for i in range(m - 1, -1, -1):
         for j in range(n - 1, -1, -1):
             if a[i] == b[j]:
@@ -459,339 +353,160 @@ def lcs_bottom_up(a: str, b: str) -> int:
     return dp[0][0]
 ```
 
-Main lesson:
-
-- For two-string DP, the table often represents suffixes when built bottom-up from the end.
+**Lesson:** Two-sequence alignment → 2D table; match moves diagonally. Edit Distance uses the same grid with three operations instead of max.
 
 ---
 
-### 5. Unique Paths
+### 7. Edit Distance — 2D with three operations
 
-#### Step A: Recursive brute force
+**State:** `f(i, j)` = min edits to turn `a[i:]` into `b[j:]`.  
+**Recurrence:** match → `f(i+1,j+1)`; else `1 + min(delete, insert, replace)`.
 
 ```python
-def unique_paths_recursive(m: int, n: int, r: int = 0, c: int = 0) -> int:
-    if r == m - 1 and c == n - 1:
-        return 1
-    if r >= m or c >= n:
-        return 0
-    return unique_paths_recursive(m, n, r + 1, c) + unique_paths_recursive(m, n, r, c + 1)
+# B — same fill order as LCS; base: empty prefix costs
+def min_distance(a: str, b: str) -> int:
+    m, n = len(a), len(b)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(m + 1): dp[i][n] = m - i
+    for j in range(n + 1): dp[m][j] = n - j
+    for i in range(m - 1, -1, -1):
+        for j in range(n - 1, -1, -1):
+            if a[i] == b[j]:
+                dp[i][j] = dp[i + 1][j + 1]
+            else:
+                dp[i][j] = 1 + min(
+                    dp[i + 1][j],      # delete a[i]
+                    dp[i][j + 1],      # insert b[j]
+                    dp[i + 1][j + 1],  # replace
+                )
+    return dp[0][0]
 ```
 
-#### Step B: Memoized recursion
+**Lesson:** Initialize **border rows/cols** before the double loop — same state shape as LCS, different combine.
+
+---
+
+### 8. Unique Paths — grid DP
+
+**State:** `f(r, c)` = paths from `(0,0)` to `(r,c)`.  
+**Recurrence:** `f(r,c) = f(r-1,c) + f(r,c-1)`.
 
 ```python
-def unique_paths_memo(m: int, n: int) -> int:
-    from functools import lru_cache
-
-    @lru_cache(None)
-    def solve(r: int, c: int) -> int:
-        if r == m - 1 and c == n - 1:
-            return 1
-        if r >= m or c >= n:
-            return 0
-        return solve(r + 1, c) + solve(r, c + 1)
-
-    return solve(0, 0)
-```
-
-#### Step C: Bottom-up tabulation
-
-```python
-def unique_paths_bottom_up(m: int, n: int) -> int:
-    dp = [[0] * n for _ in range(m)]
-    for r in range(m):
-        dp[r][0] = 1
-    for c in range(n):
-        dp[0][c] = 1
-
+# B — top-left to bottom-right; first row/col = 1
+def unique_paths(m: int, n: int) -> int:
+    dp = [[1] * n for _ in range(m)]
     for r in range(1, m):
         for c in range(1, n):
             dp[r][c] = dp[r - 1][c] + dp[r][c - 1]
     return dp[m - 1][n - 1]
+
+# S — single row rolling
+def unique_paths_opt(m: int, n: int) -> int:
+    row = [1] * n
+    for _ in range(1, m):
+        for c in range(1, n):
+            row[c] += row[c - 1]
+    return row[-1]
 ```
 
-Main lesson:
-
-- Grid DP usually becomes easy once you decide which two directions feed the current cell.
+**Lesson:** Dependencies come from **top and left** → fill row-major forward.
 
 ---
 
-### 6. Burst Balloons
+### 9. Burst Balloons — interval DP (“last choice”)
 
-#### Step A: Recursive brute force
-
-```python
-def burst_balloons_recursive(nums: list[int], left: int, right: int) -> int:
-    if left + 1 == right:
-        return 0
-
-    best = 0
-    for k in range(left + 1, right):
-        best = max(
-            best,
-            nums[left] * nums[k] * nums[right]
-            + burst_balloons_recursive(nums, left, k)
-            + burst_balloons_recursive(nums, k, right),
-        )
-    return best
-```
-
-Why this is tricky:
-
-- You do not choose the first balloon to burst.
-- You choose the last balloon to burst inside an interval.
-- That makes the neighbors of the chosen balloon fixed.
-
-#### Step B: Memoized recursion
+**State:** `f(l, r)` = max coins bursting all balloons in open interval `(l, r)` (exclusive bounds; pad array with `1`).  
+**Recurrence:** pick **last** balloon `k` to burst in `(l,r)` → neighbors `l` and `r` stay fixed.
 
 ```python
-def burst_balloons_memo(nums: list[int]) -> int:
-    from functools import lru_cache
-
+# M — pad with 1; memo on (left, right)
+def max_coins(nums: list[int]) -> int:
     arr = [1] + nums + [1]
-
+    from functools import lru_cache
     @lru_cache(None)
-    def solve(left: int, right: int) -> int:
-        if left + 1 == right:
-            return 0
+    def f(l: int, r: int) -> int:
+        if l + 1 >= r: return 0
         best = 0
-        for k in range(left + 1, right):
-            best = max(
-                best,
-                arr[left] * arr[k] * arr[right] + solve(left, k) + solve(k, right),
-            )
+        for k in range(l + 1, r):
+            best = max(best, arr[l]*arr[k]*arr[r] + f(l, k) + f(k, r))
         return best
+    return f(0, len(arr) - 1)
 
-    return solve(0, len(arr) - 1)
-```
-
-#### Step C: Bottom-up tabulation
-
-```python
-def burst_balloons_bottom_up(nums: list[int]) -> int:
+# B — outer loop: interval length; inner: left endpoint
+def max_coins_tab(nums: list[int]) -> int:
     arr = [1] + nums + [1]
     n = len(arr)
     dp = [[0] * n for _ in range(n)]
-
     for length in range(2, n):
-        for left in range(0, n - length):
-            right = left + length
-            for k in range(left + 1, right):
-                dp[left][right] = max(
-                    dp[left][right],
-                    arr[left] * arr[k] * arr[right] + dp[left][k] + dp[k][right],
-                )
+        for l in range(0, n - length):
+            r = l + length
+            for k in range(l + 1, r):
+                dp[l][r] = max(dp[l][r], arr[l]*arr[k]*arr[r] + dp[l][k] + dp[k][r])
     return dp[0][n - 1]
 ```
 
-Main lesson:
-
-- Interval DP usually means “choose a split point” and fill by increasing interval length.
+**Lesson:** When “first action” makes neighbors unknown, reframe as **last action** in interval. Fill by **increasing interval length**.
 
 ---
 
-## 15 Problems That Show the Progression
+## 15-Problem Conversion Reference
 
-The table below is the important part. Read it as:
+One row per problem — use after you can do the nine worked examples above.
 
-- recursion state,
-- memo key,
-- bottom-up order,
-- and the main lesson you should learn.
+| # | Problem | State | Memo key | Fill order | Space-opt | Key lesson |
+|---|---------|-------|----------|------------|-----------|------------|
+| 1 | Climbing Stairs | `f(i)` ways to step `i` | `i` | `i ↑` | 2 vars | Fibonacci-style |
+| 2 | Min Cost Climbing Stairs | `f(i)` min cost to reach `i` | `i` | `i ↑` | 2 vars | Same shape, `min` + cost |
+| 3 | House Robber | `f(i)` max from `i..end` | `i` | `i ↓` | 2 vars | Take/skip destroys adjacency |
+| 4 | Decode Ways | `f(i)` ways for suffix `i` | `i` | prefix `i ↑` | 2 vars | `'0'` kills branch |
+| 5 | Coin Change | `f(amount)` min coins | `amount` | `amount ↑` | 1D array | Unbounded → forward |
+| 6 | Coin Change II | `f(i, amt)` ways, coins ≥ i | `(i, amt)` | coin outer, amt inner | 1D | Count = **add**, not min |
+| 7 | Subset Sum | `f(i, t)` hit target `t` | `(i, t)` | items outer, **w ↓** | 1D bool | 0/1 → backward |
+| 8 | Partition Equal Subset Sum | same as #7 | `(i, t)` | same | 1D | Target = `sum/2` |
+| 9 | Target Sum | `f(i, sum)` ways to sum | `(i, sum)` | item + offset shift | map or shifted array | Negative sums need offset |
+| 10 | LCS | `f(i, j)` suffix LCS | `(i, j)` | `i ↓`, `j ↓` | 1 row | Match → diagonal |
+| 11 | Edit Distance | `f(i, j)` min edits | `(i, j)` | `i ↓`, `j ↓` | 1 row | Border init matters |
+| 12 | Longest Palindromic Subseq | `f(l, r)` best in `[l,r]` | `(l, r)` | length ↑ | full table | Interval on one string |
+| 13 | Unique Paths | `f(r, c)` paths to cell | `(r, c)` | `r ↑`, `c ↑` | 1 row | Top + left deps |
+| 14 | Minimum Path Sum | `f(r, c)` min cost to cell | `(r, c)` | same as #13 | 1 row | Same grid, `min` combine |
+| 15 | Burst Balloons | `f(l, r)` max in interval | `(l, r)` | length ↑ | full table | **Last** burst, not first |
 
-| # | Problem | Recursive state | Memo key | Bottom-up order | Main lesson |
-|---|---|---|---|---|---|
-| 1 | Climbing Stairs | `f(i)` = ways to reach step `i` | `i` | left to right | The simplest Fibonacci-style DP |
-| 2 | Min Cost Climbing Stairs | `f(i)` = min cost to reach `i` | `i` | left to right | DP can minimize, not just count |
-| 3 | House Robber | `f(i)` = best loot from first `i` houses | `i` | left to right | Each state is “take or skip” |
-| 4 | Decode Ways | `f(i)` = ways to decode suffix starting at `i` | `i` | right to left | Base case may live at the end of the string |
-| 5 | Coin Change (min coins) | `f(amount)` = min coins for remaining amount | `amount` | increasing amount | Unbounded choice means forward transitions |
-| 6 | Coin Change II | `f(i, amount)` = ways using coins from index `i` onward | `(i, amount)` | by coin, then amount | Count DP uses addition, not min/max |
-| 7 | Subset Sum | `f(i, target)` = can we make target using first `i` items | `(i, target)` | item by item | Binary choice: take or skip |
-| 8 | Partition Equal Subset Sum | Same as subset sum | `(i, target)` | item by item | A “partition” problem is often a subset sum problem |
-| 9 | Target Sum | `f(i, sum)` = number of ways to reach sum with first `i` numbers | `(i, sum)` | item by item with offset | Negative sums often need shifting or hashing |
-| 10 | Longest Common Subsequence | `f(i, j)` = LCS of prefixes `s1[:i]`, `s2[:j]` | `(i, j)` | row-major / col-major | Two-string alignment is classic 2D DP |
-| 11 | Edit Distance | `f(i, j)` = min edits for prefixes `s1[:i]`, `s2[:j]` | `(i, j)` | row-major / col-major | Base rows/cols matter more than the recurrence |
-| 12 | Longest Palindromic Subsequence | `f(l, r)` = best in substring `s[l:r+1]` | `(l, r)` | increasing length | Interval DP fills by substring length |
-| 13 | Unique Paths | `f(r, c)` = ways to reach cell `(r, c)` | `(r, c)` | top-left to bottom-right | Grid DP is just 2D recursion with boundaries |
-| 14 | Minimum Path Sum | `f(r, c)` = min cost to reach cell `(r, c)` | `(r, c)` | top-left to bottom-right | Same structure as Unique Paths, different combine function |
-| 15 | Burst Balloons | `f(l, r)` = best score inside interval `(l, r)` | `(l, r)` | increasing interval length | Sometimes the best move is to choose the **last** action, not the first |
+**More depth:** [dynamic-programming.md](./dynamic-programming.md) — knapsack variants, stock DP, digit DP, bitmask.
 
 ---
 
-## How to Think Through Each Stage
+## Common Conversion Bugs
 
-### Stage A: Pure recursion
-
-Ask:
-
-- What are my choices?
-- What happens if I choose option A?
-- What happens if I choose option B?
-- What is the base case?
-
-At this stage, do not care about efficiency. Just make the recurrence correct.
-
-### Stage B: Memoization
-
-Ask:
-
-- What combination of parameters uniquely identifies the subproblem?
-- Can I use a map or array to cache the answer?
-- Are the repeated states obvious from the recursion tree?
-
-Use memoization when:
-
-- the same state appears multiple times,
-- the problem is still naturally recursive,
-- you want the easiest correctness proof.
-
-### Stage C: Bottom-up
-
-Ask:
-
-- What smaller states does this state depend on?
-- Can I reverse the recursion order into an iteration order?
-- Do I need one row, two rows, or the whole table?
-
-Use bottom-up when:
-
-- recursion depth is too high,
-- iterative filling is easier to explain,
-- or space optimization is important.
+| Bug | Symptom | Fix |
+|-----|---------|-----|
+| Wrong fill direction | Random-looking answers | Map recursive calls → dependency order (cheat sheet) |
+| 0/1 knapsack forward loop | Same item counted twice | Loop `w` from `target` down to `num` |
+| Unbounded knapsack backward | Impossible min coin counts | Loop `w` forward |
+| Missing base row/col | Off-by-one on small inputs | Write borders before nested loops (Edit Distance) |
+| State includes mutable array | `TypeError: unhashable` | Close over array; memoize `(i, j, …)` only |
+| Interval DP wrong loop | Always 0 / wrong max | Outer = **length**, not left endpoint alone |
+| Forgetting `inf` sentinel | `min` over empty set wrong | Init unreachable states to `inf`; check before return |
 
 ---
 
-## Problem-by-Problem Progression Notes
+## Interview Script (say this out loud)
 
-### 1. Climbing Stairs
+> “I'll define the recursive state and recurrence first — that's the proof of correctness.  
+> The same states repeat, so I'll memoize on `[state keys]`.  
+> For bottom-up I'll fill `[order]` because each state depends on `[deps]`.  
+> Space can drop to `[O(…)]` because we only need `[prior row / two vars]`.”
 
-- Recursion: `f(n) = f(n-1) + f(n-2)`
-- Memoization: cache `n`
-- Bottom-up: left to right from `1` to `n`
-- Key idea: this is Fibonacci with a story.
-
-### 2. Min Cost Climbing Stairs
-
-- Recursion: minimum cost to reach step `i`
-- Memoization: cache step index
-- Bottom-up: compute from lower steps upward
-- Key idea: same recursion as climbing stairs, but combine with `min` and cost.
-
-### 3. House Robber
-
-- Recursion: at each house, take or skip
-- Memoization: cache index
-- Bottom-up: `dp[i]` depends on `i-1` and `i-2`
-- Key idea: one choice destroys adjacency, so only two prior states matter.
-
-### 4. Decode Ways
-
-- Recursion: decode one digit or two digits if valid
-- Memoization: cache suffix index
-- Bottom-up: right to left
-- Key idea: base case on the empty suffix is crucial.
-
-### 5. Coin Change (min coins)
-
-- Recursion: choose any coin and reduce remaining amount
-- Memoization: cache amount
-- Bottom-up: amount increasing from `0` to target
-- Key idea: unbounded reuse means forward iteration is natural.
-
-### 6. Coin Change II
-
-- Recursion: count ways, not minimum
-- Memoization: cache `(i, amount)`
-- Bottom-up: coins outer loop, amount inner loop
-- Key idea: counting DP adds ways; it does not minimize them.
-
-### 7. Subset Sum
-
-- Recursion: take or skip the current item
-- Memoization: cache `(i, target)`
-- Bottom-up: item by item
-- Key idea: this pattern becomes many other partition problems.
-
-### 8. Partition Equal Subset Sum
-
-- Recursion: same as subset sum with target = total / 2
-- Memoization: same state
-- Bottom-up: same as subset sum
-- Key idea: many “partition” questions are disguised subset sum.
-
-### 9. Target Sum
-
-- Recursion: add or subtract each number
-- Memoization: cache `(i, running_sum)`
-- Bottom-up: offset-based 2D table or hashmap
-- Key idea: negative states often require shifting or sparse storage.
-
-### 10. LCS
-
-- Recursion: compare suffixes of two strings
-- Memoization: cache `(i, j)`
-- Bottom-up: fill from small prefixes to larger prefixes
-- Key idea: if characters match, move diagonally; otherwise choose best of two sides.
-
-### 11. Edit Distance
-
-- Recursion: insert, delete, replace
-- Memoization: cache `(i, j)`
-- Bottom-up: row/column DP
-- Key idea: the three operations are the recurrence.
-
-### 12. Longest Palindromic Subsequence
-
-- Recursion: solve inside substring `[l, r]`
-- Memoization: cache `(l, r)`
-- Bottom-up: increasing substring length
-- Key idea: interval DP almost always fills by length.
-
-### 13. Unique Paths
-
-- Recursion: move down or right
-- Memoization: cache cell
-- Bottom-up: fill row-major
-- Key idea: grid boundaries are the base cases.
-
-### 14. Minimum Path Sum
-
-- Recursion: same movement as Unique Paths
-- Memoization: cache cell
-- Bottom-up: same order
-- Key idea: same state shape, different combine function (`min` instead of count).
-
-### 15. Burst Balloons
-
-- Recursion: choose the **last** balloon to burst in an interval
-- Memoization: cache interval `(l, r)`
-- Bottom-up: increasing interval length
-- Key idea: interval DP often becomes easy once you shift from “first choice” to “last choice.”
-
----
-
-## How to Explain This in an Interview
-
-When you’re asked a DP question, say this out loud:
-
-> “I’ll first write the recursive version to define the state and recurrence.  
-> Then I’ll check whether states repeat and memoize them.  
-> After that I’ll convert the recurrence into bottom-up order and see whether space can be optimized.”
-
-That answer tells the interviewer:
-
-- you know the workflow,
-- you understand the reason behind DP,
-- and you can move from recursion to tabulation without guessing.
+That shows you understand **why** DP works, not just the pattern name.
 
 ---
 
 ## Final Mental Model
 
-Recursion is the language.
-Memoization is the cache.
-Bottom-up is the execution order.
+```
+Recursion  = language for the recurrence
+Memo       = cache on the recursion DAG
+Bottom-up  = topological sort of that DAG
+Space-opt  = drop dimensions no longer on the dependency frontier
+```
 
-If you can clearly define the recursion, the rest of DP is usually just engineering.
+Define the recursion clearly → everything else is table engineering.

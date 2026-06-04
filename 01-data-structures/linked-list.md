@@ -457,23 +457,27 @@ class LRUCache:
 
 ## Flashcards
 
-**If the problem needs O(1) insert/delete at a known position without shifting → think Linked List because pointer relinking is O(1).?** #flashcard
-If the problem needs O(1) insert/delete at a known position without shifting → think Linked List because pointer relinking is O(1).
+**Why do we use dummy head/tail nodes when implementing linked list manipulations (like reversing, deleting, or merging)?** #flashcard
+Dummy nodes eliminate edge cases where the head of the list changes (e.g., inserting at the head, deleting the head, or merging empty lists). This prevents complex null-pointer checks and keeps code clean.
 
-**If the problem says "detect cycle" or "find cycle entry" → think Floyd's fast & slow pointers; use `is` not `==` for identity.?** #flashcard
-If the problem says "detect cycle" or "find cycle entry" → think Floyd's fast & slow pointers; use `is` not `==` for identity.
+**Explain the pointer manipulation required to reverse a linked list iteratively in-place.** #flashcard
+Initialize `prev = None`, `curr = head`.
+```python
+while curr:
+    nxt = curr.next
+    curr.next = prev
+    prev = curr
+    curr = nxt
+return prev
+```
 
-**If the problem says "find middle" or "check palindrome" → think Fast & Slow pointers; slow lands at left-middle for even-length lists.?** #flashcard
-If the problem says "find middle" or "check palindrome" → think Fast & Slow pointers; slow lands at left-middle for even-length lists.
+**How does the fast and slow pointer technique identify the middle of a linked list, and where does `slow` land for even-length lists?** #flashcard
+Advance `slow` by 1 step and `fast` by 2 steps. When `fast` or `fast.next` becomes `None`, `slow` is at the midpoint. In even-length lists (e.g., 4 nodes), if starting both at `head`, `slow` lands at the 3rd node (start of the second half).
 
-**If the problem says "LRU Cache" or "O(1) eviction" → think Doubly Linked List + Hash Map; dummy head/tail eliminate edge cases.?** #flashcard
-If the problem says "LRU Cache" or "O(1) eviction" → think Doubly Linked List + Hash Map; dummy head/tail eliminate edge cases.
+**How do you resolve tie-breaking when pushing ListNode objects into a Python heapq for Merge K Sorted Lists?** #flashcard
+Since `ListNode` objects are not comparable, pushing `(node.val, node)` will raise a `TypeError` on duplicate values. To prevent this, push a 3-tuple `(node.val, list_index, node)`, using the unique `list_index` as the tie-breaker.
 
-**If the problem says "merge K sorted lists" → think Min-Heap of K nodes with tie-breaking by list index.?** #flashcard
-If the problem says "merge K sorted lists" → think Min-Heap of K nodes with tie-breaking by list index.
+**Describe the two-phase pointer mechanics of Floyd's Cycle Detection for finding the entry point of a loop.** #flashcard
+- **Phase 1**: Advance `slow` by 1 and `fast` by 2 until they meet at intersection $I$ inside the cycle.
+- **Phase 2**: Reset `slow` to `head` and leave `fast` at $I$. Advance both by 1 step. They will meet exactly at the cycle entry point.
 
-**If the problem says "reverse in K-groups" → think count K nodes first, reverse exactly K, recurse on remainder.?** #flashcard
-If the problem says "reverse in K-groups" → think count K nodes first, reverse exactly K, recurse on remainder.
-
-**If the problem says "remove Nth from end without knowing length" → think Two-pointer with N-step head start.?** #flashcard
-If the problem says "remove Nth from end without knowing length" → think Two-pointer with N-step head start.

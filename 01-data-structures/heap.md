@@ -426,23 +426,22 @@ For P99 latency from a live request stream:
 
 ## Flashcards
 
-**If the problem says "top K largest/smallest" → think Min-Heap of size K; pop when size exceeds K; root = K-th largest.?** #flashcard
-If the problem says "top K largest/smallest" → think Min-Heap of size K; pop when size exceeds K; root = K-th largest.
+**Why does building a heap from a raw array of size N using heapify take O(N) time instead of O(N log N)?** #flashcard
+Heapify runs bottom-up (calling sift-down on all internal nodes from index $N//2$ down to 0). Since the work done at each node is proportional to its height in the tree, and most nodes reside near the bottom (where height is small), the summation of heights $\sum \frac{N}{2^{h+1}} \cdot h$ converges to $O(N)$.
 
-**If the problem says "median of a stream" → think Two Heaps; max-heap for lower half (negated in Python), min-heap for upper half; rebalance on every insert.?** #flashcard
-If the problem says "median of a stream" → think Two Heaps; max-heap for lower half (negated in Python), min-heap for upper half; rebalance on every insert.
+**How does the Two-Heap pattern find the running median of a data stream in O(log N) insert and O(1) find time?** #flashcard
+Maintain a max-heap for the lower half of values and a min-heap for the upper half.
+- **Insert**: Push to max-heap, pop max-heap top and push to min-heap.
+- **Rebalance**: If `len(min_heap) > len(max_heap)`, pop min-heap top and push to max-heap. This keeps sizes balanced (max-heap size equal to or 1 larger than min-heap).
+- **Find**: If odd total size, median is the top of max-heap. If even, median is the average of both tops.
 
-**If the problem says "merge K sorted lists/arrays" → think K-Way Merge Heap; push `(value, list_idx, element_idx)` tuples with tie-breaking index.?** #flashcard
-If the problem says "merge K sorted lists/arrays" → think K-Way Merge Heap; push `(value, list_idx, element_idx)` tuples with tie-breaking index.
+**What is the time and space complexity of using a min-heap of size K to find the K-th largest element in a stream of N elements?** #flashcard
+- **Time Complexity**: $O(N \log K)$ because we push each of the $N$ elements into the heap and pop when its size exceeds $K$ (taking $\log K$ time per element).
+- **Space Complexity**: $O(K)$ to store the $K$ largest elements.
 
-**If the problem says "shortest path in weighted graph" → think Dijkstra with min-heap; `(cost, node)` tuple; skip already-settled nodes.?** #flashcard
-If the problem says "shortest path in weighted graph" → think Dijkstra with min-heap; `(cost, node)` tuple; skip already-settled nodes.
+**How do you implement a Max-Heap in Python using the heapq module?** #flashcard
+Negate the priority values before pushing and negate them again after popping (e.g., `heapq.heappush(heap, -val)`). For custom objects, use tuples of the form `(-priority_value, counter, object)`.
 
-**If the problem says "scheduling with deadlines or priorities" → think Max-Heap of available tasks; unlock tasks as capacity grows.?** #flashcard
-If the problem says "scheduling with deadlines or priorities" → think Max-Heap of available tasks; unlock tasks as capacity grows.
+**Explain the mechanism and complexity of K-way merging of sorted arrays using a heap.** #flashcard
+Push the first element of each of the $K$ arrays into a min-heap as `(val, array_index, element_index)`. Pop the minimum element, append it to the result, and push the next element from the same `array_index` to the heap (incrementing `element_index`). Time: $O(N \log K)$ where $N$ is the total elements; Space: $O(K)$ for the heap.
 
-**If you need a max-heap in Python → negate values before pushing and negate again after popping; use `(-priority, counter, item)` for stability.?** #flashcard
-If you need a max-heap in Python → negate values before pushing and negate again after popping; use `(-priority, counter, item)` for stability.
-
-**If the problem says "build heap from array" → use `heapq.heapify()` which is O(N)?** #flashcard
-not O(N log N).

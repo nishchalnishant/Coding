@@ -322,14 +322,19 @@ More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.m
 
 ## Flashcards
 
-**If the problem is substring with a frequency or uniqueness constraint → think Sliding Window; expand right, shrink left while invalid.?** #flashcard  
-If the problem is substring with a frequency or uniqueness constraint → think Sliding Window; expand right, shrink left while invalid.
+**Why is building a string using `s += char` inside a loop inefficient in Python, and what is the optimal O(N) alternative?** #flashcard
+Strings in Python are immutable. Doing `s += char` copies the entire string at each step, resulting in a total time complexity of $O(N^2)$. The optimal alternative is to append characters to a list and join them at the end: `''.join(char_list)`.
 
-**If the problem groups strings by same letters → think canonical key (sorted word or count tuple) in a hash map.?** #flashcard  
-If the problem groups strings by same letters → think canonical key (sorted word or count tuple) in a hash map.
+**What is the canonical key representation to group anagrams in a hash map, and what are the time complexity differences?** #flashcard
+- **Sorted string key**: Key is `tuple(sorted(s))` (or `"".join(sorted(s))`). Time: $O(N \cdot L \log L)$ where $L$ is the string length.
+- **Char count tuple**: Key is a 26-element tuple containing counts of each letter. Time: $O(N \cdot L)$, which is faster for long strings.
 
-**If building a string in a loop in Python → use list append + join, not += (O(n²)).?** #flashcard  
-If building a string in a loop in Python → use list append + join, not += (O(n²)).
+**What is the difference in sliding window state-tracking between checking for "longest substring without repeating characters" vs "minimum window substring"?** #flashcard
+- **Longest substring**: Track character indices in a map. Jump the left pointer `left = max(left, char_idx[ch] + 1)` on duplicates.
+- **Minimum window**: Maintain a frequency target `need` and current count `window`. Increment a `have` tracker when `window[ch] == need[ch]` and expand/shrink based on `have == len(need)`.
 
-**If subarray sum with negatives → prefix sum + map, not sliding window.?** #flashcard  
-If subarray sum with negatives → prefix sum + map, not sliding window — see array.md.
+**How do you find the longest palindromic substring in O(N^2) time and O(1) space, and what are the two centers to consider?** #flashcard
+Iterate through the string and treat each index as a center. Expand outward while characters match. You must expand from two distinct centers at each index $i$:
+1. **Odd-length center**: `expand(i, i)`
+2. **Even-length center**: `expand(i, i+1)`
+
