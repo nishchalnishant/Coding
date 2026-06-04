@@ -118,20 +118,25 @@ difficulty: mixed
 > Compute the nth Fibonacci number.
 
 > [!info] Approach
-> Naive recursion `f(n) = f(n-1) + f(n-2)` calls `f(k)` exponentially many times for overlapping `k`. Memoization caches each call once → O(n). Memoized recursion (top-down DP) vs iterative DP (bottom-up). Both O(n) time O(n) space; iterative reduces to O(1) space. Memoize using a dict or `@lru_cache`. For O(1) space, use two variables.
+> Naive recursion `f(n) = f(n-1) + f(n-2)` recomputes the same `k` over and over. Cache each `n` in a dict once → O(n). Same idea as bottom-up DP; iterative version can use O(1) space with two variables.
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> 
-> # Top-down memoized recursion
-> @lru_cache(maxsize=None)
+> # Top-down — memo dict
 > def fib_memo(n):
->     if n <= 1:
->         return n
->     return fib_memo(n - 1) + fib_memo(n - 2)
-> 
-> # Bottom-up DP — O(1) space
+>     memo = {}
+>
+>     def f(n):
+>         if n in memo:
+>             return memo[n]
+>         if n <= 1:
+>             return n
+>         memo[n] = f(n - 1) + f(n - 2)
+>         return memo[n]
+>
+>     return f(n)
+>
+> # Bottom-up — O(1) space
 > def fib_dp(n):
 >     if n <= 1:
 >         return n
@@ -381,15 +386,16 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> 
 > class TreeNode:
 >     def __init__(self, val=0, left=None, right=None):
 >         self.val = val; self.left = left; self.right = right
 > 
 > def generate_trees(n):
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def build(lo, hi):
+>         if (lo, hi) in memo:
+>             return memo[(lo, hi)]
 >         if lo > hi:
 >             return [None]
 >         trees = []
@@ -398,8 +404,9 @@ difficulty: mixed
 >                 for right in build(k + 1, hi):
 >                     root = TreeNode(k, left, right)
 >                     trees.append(root)
+>         memo[(lo, hi)] = trees
 >         return trees
-> 
+>
 >     return build(1, n)
 > ```
 
@@ -1025,30 +1032,37 @@ difficulty: mixed
 > - 1 <= n <= 45
 
 > [!info] Approach
-> At each stair, you can arrive from stair `n-1` (one step) or stair `n-2` (two steps). The problem has optimal substructure and overlapping subproblems — identical to Fibonacci. `ways(n) = ways(n-1) + ways(n-2)` with `ways(0) = 1`, `ways(1) = 1`. Memoize to avoid recomputation. `@lru_cache` or manual dict. Can extend to k steps: `ways(n) = sum(ways(n-i) for i in 1..k if n-i >= 0)`.
+> Memoize `ways(n)` in a dict — same recurrence as Fibonacci. For k step sizes, sum over `ways(n - s)` for each valid step `s`.
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> 
-> @lru_cache(maxsize=None)
 > def climb_stairs(n):
->     if n <= 1:
->         return 1
->     return climbStairs(n - 1) + climbStairs(n - 2)
-> 
+>     memo = {}
+>
+>     def ways(n):
+>         if n in memo:
+>             return memo[n]
+>         if n <= 1:
+>             return 1
+>         memo[n] = ways(n - 1) + ways(n - 2)
+>         return memo[n]
+>
+>     return ways(n)
+>
 > # Generalised: k distinct step sizes
 > def climb_stairs_k(n, steps):
->     from functools import lru_cache
-> 
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def dp(remaining):
+>         if remaining in memo:
+>             return memo[remaining]
 >         if remaining == 0:
 >             return 1
 >         if remaining < 0:
 >             return 0
->         return sum(dp(remaining - s) for s in steps)
-> 
+>         memo[remaining] = sum(dp(remaining - s) for s in steps)
+>         return memo[remaining]
+>
 >     return dp(n)
 > ```
 
@@ -1775,23 +1789,24 @@ difficulty: mixed
 > - 0 <= nums[i] <= 10^7
 
 > [!info] Approach
-> This is a minimax recursion. From any subarray `[i, j]`, the current player picks the end that maximises their net advantage (their score minus the opponent's future score). If the first player's net advantage from the full array is ≥ 0, they win. `dp(i, j)` = maximum score advantage the current player can achieve over the opponent from subarray `[i, j]`. Base: `dp(i, i) = nums[i]`. Recurrence: `max(nums[i] - dp(i+1, j), nums[j] - dp(i, j-1))`. Memoize with `@lru_cache`. Return `dp(0, n-1) >= 0`.
+> `dp(i, j)` = score advantage for the current player on subarray `[i, j]`. Base: `dp(i, i) = nums[i]`. Recurrence: `max(nums[i] - dp(i+1, j), nums[j] - dp(i, j-1))`. Cache `(i, j)` in a dict. First player wins if `dp(0, n-1) >= 0`.
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> >
 > def predict_the_winner(nums):
 >     n = len(nums)
-> >
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def dp(i, j):
+>         if (i, j) in memo:
+>             return memo[(i, j)]
 >         if i == j:
 >             return nums[i]
 >         pick_left = nums[i] - dp(i + 1, j)
 >         pick_right = nums[j] - dp(i, j - 1)
->         return max(pick_left, pick_right)
-> >
+>         memo[(i, j)] = max(pick_left, pick_right)
+>         return memo[(i, j)]
+>
 >     return dp(0, n - 1) >= 0
 > ```
 

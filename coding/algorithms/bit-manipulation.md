@@ -1290,13 +1290,13 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> 
 > def minimum_xor_sum(nums1, nums2):
 >     n = len(nums1)
-> 
->     @lru_cache(None)
+>     memo = {}
+>
 >     def dfs(mask):
+>         if mask in memo:
+>             return memo[mask]
 >         i = mask.bit_count()
 >         if i == n:
 >             return 0
@@ -1304,8 +1304,9 @@ difficulty: mixed
 >         for j in range(n):
 >             if not (mask & (1 << j)):
 >                 best = min(best, (nums1[i] ^ nums2[j]) + dfs(mask | (1 << j)))
+>         memo[mask] = best
 >         return best
-> 
+>
 >     return dfs(0)
 > ```
 

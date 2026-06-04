@@ -1874,7 +1874,7 @@ difficulty: mixed
 > Time O(V+E), Space O(V).
 
 > [!tip] Alternatives
-> - DFS with memoization: `@lru_cache` on node; top-down. O(V+E). Equivalent but less explicit about ordering.
+> - DFS with memo dict on node — top-down. O(V+E). Same idea, you just say the cache out loud.
 > - Bellman-Ford with negated weights: O(VE) — much slower; use only when you can't confirm DAG property.
 
 ---

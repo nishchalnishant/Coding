@@ -2287,25 +2287,26 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> >
 > def digit_dp(n, k):
 >     """Count integers in [1, n] whose digit sum % k == 0."""
 >     digits = list(map(int, str(n)))
 >     L = len(digits)
-> >
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def dp(pos, remainder, tight, started):
+>         if (pos, remainder, tight, started) in memo:
+>             return memo[(pos, remainder, tight, started)]
 >         if pos == L:
 >             return int(started and remainder == 0)
 >         limit = digits[pos] if tight else 9
->         result = 0
+>         total = 0
 >         for d in range(0, limit + 1):
 >             new_started = started or d > 0
 >             new_rem = (remainder + d) % k if new_started else 0
->             result += dp(pos + 1, new_rem, tight and d == limit, new_started)
->         return result
-> >
+>             total += dp(pos + 1, new_rem, tight and d == limit, new_started)
+>         memo[(pos, remainder, tight, started)] = total
+>         return total
+>
 >     return dp(0, 0, True, False)
 > ```
 
@@ -2415,19 +2416,22 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
 > def stone_game_ii(piles):
 >     n = len(piles)
 >     suffix = [0] * (n + 1)
 >     for i in range(n - 1, -1, -1):
 >         suffix[i] = suffix[i + 1] + piles[i]
-> >
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def dp(i, m):
+>         if (i, m) in memo:
+>             return memo[(i, m)]
 >         if i + 2 * m >= n:
 >             return suffix[i]
->         return suffix[i] - min(dp(i + x, max(m, x)) for x in range(1, 2 * m + 1))
-> >
+>         ans = suffix[i] - min(dp(i + x, max(m, x)) for x in range(1, 2 * m + 1))
+>         memo[(i, m)] = ans
+>         return ans
+>
 >     return dp(0, 1)
 > ```
 
@@ -2714,7 +2718,7 @@ difficulty: mixed
 > Time O(n³), Space O(n²).
 
 > [!tip] Alternatives
-> - Memoized recursion with `@lru_cache`: `solve(i, j)` — same asymptotic, easier to code correctly under pressure.
+> - Top-down with a memo dict on `(i, j)` — same asymptotic, easy to explain in an interview.
 > - Pattern: this is the canonical "interval DP" template. Also appears in: burst balloons, remove boxes, strange printer.
 
 ---

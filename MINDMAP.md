@@ -1617,7 +1617,7 @@ coding/algorithms/recursion.md
     │   ├── Merge Sort [M]
     │   │   → Base case = length ≤ 1. Split, conquer left, conquer right, merge in O(n) with two-pointer technique
     │   └── Fibonacci (Memoized Recursion vs DP) [M]
-    │       → Memoize using a dict or @lru_cache. For O(1) space, use two variables
+    │       → Cache each n in a memo dict. For O(1) space, use two variables
     ├── Pruning & Constraints
     │   ├── Combination Sum (Unbounded) [M]
     │   │   → Recurse with (start=i, remaining-candidates[i]). Backtrack by popping. Sort candidates for early termination
@@ -1665,7 +1665,7 @@ coding/algorithms/recursion.md
     │       → Start with depth=1. At each integer, accumulate val * depth. At each list, recurse with depth + 1
     ├── Dynamic Programming Foundations (Recursive + Memo)
     │   ├── Climbing Stairs (Memoized Recursion) [E]
-    │   │   → @lru_cache or manual dict. Can extend to k steps: ways(n) = sum(ways(n-i) for i in 1..k if n-i >= 0)
+    │   │   → memo dict on n. k steps: ways(n) = sum(ways(n-i) for i in 1..k if n-i >= 0)
     │   └── Count Good Numbers [M]
     │       → Even positions = ceil(n/2) = (n+1)//2. Odd positions = floor(n/2) = n//2. Use recursive fast-power
     ├── Mutual / Cross-Recursion
@@ -1708,7 +1708,7 @@ coding/algorithms/recursion.md
     │       → DFS from src to dst, multiplying edge weights along the path, using a visited set to avoid cycles. Return accumulated product or -1.0 if destination unreachable
     └── Recursion — More Problems
         ├── Predict the Winner (LC 486) [M]
-        │   → Memoize with @lru_cache. Return dp(0, n-1) >= 0
+        │   → memo dict on (i, j). Return dp(0, n-1) >= 0
         └── Flatten Nested List Iterator (LC 341) [M]
             → Use a stack of (nested_list, index) pairs. _advance() is called by hasNext() to ensure the top is an integer
 ```

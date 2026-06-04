@@ -688,11 +688,12 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> 
 > def diff_ways_to_compute(expression):
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def solve(s):
+>         if s in memo:
+>             return memo[s]
 >         results = []
 >         for i, ch in enumerate(s):
 >             if ch in '+-*':
@@ -708,8 +709,9 @@ difficulty: mixed
 >                             results.append(l * r)
 >         if not results:          # pure number, no operators
 >             results.append(int(s))
+>         memo[s] = results
 >         return results
-> 
+>
 >     return solve(expression)
 > ```
 
@@ -893,11 +895,12 @@ difficulty: mixed
 
 > [!note]- Python Solution
 > ```python
-> from functools import lru_cache
-> >
 > def diff_ways_to_compute(expression):
->     @lru_cache(maxsize=None)
+>     memo = {}
+>
 >     def solve(expr):
+>         if expr in memo:
+>             return memo[expr]
 >         results = []
 >         for i, ch in enumerate(expr):
 >             if ch in '+-*':
@@ -913,7 +916,9 @@ difficulty: mixed
 >                             results.append(l * r)
 >         if not results:
 >             results.append(int(expr))
+>         memo[expr] = results
 >         return results
+>
 >     return solve(expression)
 > ```
 

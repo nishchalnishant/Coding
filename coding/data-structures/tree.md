@@ -1308,7 +1308,7 @@ difficulty: mixed
 > Time O(n), Space O(h).
 
 > [!tip] Alternatives
-> - Memoized top-down with `@lru_cache` on (node, can_rob): same complexity, more overhead.
+> - Memo dict on `(node, can_rob)` — same complexity; explicit cache is easier to explain than a decorator.
 > - Naive recursion without caching: O(2^n) — recomputes subproblems exponentially.
 
 ---

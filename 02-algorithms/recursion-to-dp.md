@@ -50,7 +50,7 @@ WHAT breaks the conversion
 ├── Wrong state (missing a dimension) → wrong memo key → wrong table
 ├── Wrong fill order → read uninitialized cells
 ├── 0/1 knapsack with forward w-loop → item used twice
-└── Mutable list in @lru_cache → TypeError; memoize on index only
+└── Passing a list as memo key → TypeError; key on `(i, j, …)` only
 ```
 
 ---
@@ -60,7 +60,7 @@ WHAT breaks the conversion
 | Stage | One-line test |
 |-------|----------------|
 | **State** | Can two different call paths produce the same `(args)`? → those args are your memo key |
-| **Memo** | Recurrence unchanged; only add `@lru_cache` or `dict` |
+| **Memo** | Recurrence unchanged; cache state in a `dict` (check key, store before return) |
 | **Tabulate** | Reverse the recursion direction: if `f(i)` calls `f(i+1)`, fill `i` from high → low |
 | **1D space** | Transition uses only `dp[i-1]` / `dp[i-2]` → two variables |
 | **2D → 1 row** | Transition uses only row `i+1` → rolling array |
@@ -121,22 +121,29 @@ Both are `O(states × work per state)` when done correctly. Pick the one you can
 
 ## Templates
 
-### Top-down
+### Top-down (memo dict)
+
+Use a plain dict in interviews — easy to say “cache each subproblem by its state.” (`@lru_cache` is Python-only sugar; `maxsize=None` just means unlimited cache.)
 
 ```python
-from functools import lru_cache
+def solve(nums):
+    memo = {}
 
-@lru_cache(None)
-def solve(state1, state2):
-    if base_case:
-        return base_value
-    best = initial_value
-    for choice in choices:
-        best = combine(best, solve(next_state))
-    return best
+    def dfs(i, j):
+        if (i, j) in memo:
+            return memo[(i, j)]
+        if base_case:
+            return base_value
+        best = initial_value
+        for choice in choices:
+            best = combine(best, dfs(next_i, next_j))
+        memo[(i, j)] = best
+        return best
+
+    return dfs(start_i, start_j)
 ```
 
-**Interview tip:** Put `nums` / strings in closure; memoize only on `(i, j, …)` — avoids hashability bugs.
+**Interview tip:** Keep `nums` / strings in the outer scope; memo keys are only `(i, j, …)` — never the whole array.
 
 ### Bottom-up
 
@@ -175,7 +182,7 @@ Complexity: **R** = recursive, **M** = memo, **B** = bottom-up, **S** = space-op
 | Stage | Code idea | Time | Space |
 |-------|-----------|------|-------|
 | R | `return f(n-1)+f(n-2)` | O(2^n) | O(n) stack |
-| M | `@lru_cache` on `n` | O(n) | O(n) |
+| M | `memo[n]` dict | O(n) | O(n) |
 | B | `dp[i] = dp[i-1]+dp[i-2]`, `i: 3..n` | O(n) | O(n) |
 | S | `prev2, prev1` rolling | O(n) | O(1) |
 
@@ -207,13 +214,18 @@ def climb(n: int) -> int:
 | S | O(n) | O(1) |
 
 ```python
-# M — memo on index only; nums in closure
-def rob(nums: list[int]) -> int:
-    from functools import lru_cache
-    @lru_cache(None)
-    def f(i: int) -> int:
-        if i >= len(nums): return 0
-        return max(nums[i] + f(i + 2), f(i + 1))
+# M — memo on index; nums in closure
+def rob(nums):
+    memo = {}
+
+    def f(i):
+        if i in memo:
+            return memo[i]
+        if i >= len(nums):
+            return 0
+        memo[i] = max(nums[i] + f(i + 2), f(i + 1))
+        return memo[i]
+
     return f(0)
 
 # B — fill suffix: i from n-1 down to 0
@@ -310,13 +322,19 @@ def coin_change(coins: list[int], amount: int) -> int:
 
 ```python
 # M
-def subset_sum_memo(nums: list[int], target: int) -> bool:
-    from functools import lru_cache
-    @lru_cache(None)
-    def f(i: int, t: int) -> bool:
-        if t == 0: return True
-        if i == len(nums) or t < 0: return False
-        return f(i + 1, t - nums[i]) or f(i + 1, t)
+def subset_sum_memo(nums, target):
+    memo = {}
+
+    def f(i, t):
+        if (i, t) in memo:
+            return memo[(i, t)]
+        if t == 0:
+            return True
+        if i == len(nums) or t < 0:
+            return False
+        memo[(i, t)] = f(i + 1, t - nums[i]) or f(i + 1, t)
+        return memo[(i, t)]
+
     return f(0, target)
 
 # B — 1D: dp[w] = achievable?; w goes BACKWARD per item
@@ -426,16 +444,21 @@ def unique_paths_opt(m: int, n: int) -> int:
 
 ```python
 # M — pad with 1; memo on (left, right)
-def max_coins(nums: list[int]) -> int:
+def max_coins(nums):
     arr = [1] + nums + [1]
-    from functools import lru_cache
-    @lru_cache(None)
-    def f(l: int, r: int) -> int:
-        if l + 1 >= r: return 0
+    memo = {}
+
+    def f(left, right):
+        if (left, right) in memo:
+            return memo[(left, right)]
+        if left + 1 >= right:
+            return 0
         best = 0
-        for k in range(l + 1, r):
-            best = max(best, arr[l]*arr[k]*arr[r] + f(l, k) + f(k, r))
+        for k in range(left + 1, right):
+            best = max(best, arr[left] * arr[k] * arr[right] + f(left, k) + f(k, right))
+        memo[(left, right)] = best
         return best
+
     return f(0, len(arr) - 1)
 
 # B — outer loop: interval length; inner: left endpoint
