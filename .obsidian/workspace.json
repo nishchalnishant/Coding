@@ -211,6 +211,12 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "coding/patterns-quick-reference.md",
+    "coding/oop-design-patterns.md",
+    "coding/complexity-cheatsheet.md",
+    "coding/system-design.md",
+    "coding/behavioral-interview.md",
+    "coding/google-interview-strategy.md",
     "scripts/expand_python_readability.py",
     "scripts/humanize_coding.py",
     "leetcode-problems/problems/3640-trionic-array-ii.json",
@@ -221,7 +227,6 @@
     "leetcode-problems/problems/3635-earliest-finish-time-for-land-and-water-rides-ii.json",
     "leetcode-problems/problems/3634-minimum-removals-to-balance-array.json",
     "leetcode-problems/problems/3633-earliest-finish-time-for-land-and-water-rides-i.json",
-    "leetcode-problems/problems/3630-partition-array-for-maximum-xor-and-and.json",
     "leetcode-problems/README.md",
     "MINDMAP.md",
     "04-behavioral/googliness-round.md",
@@ -241,11 +246,6 @@
     "coding/data-structures/advanced.md",
     "03-patterns/leetcode-variants.md",
     "01-data-structures/array.md",
-    "coding/data-structures/heap.md",
-    "coding/data-structures/queue.md",
-    "01-data-structures/linked-list.md",
-    "01-data-structures/advanced-structures.md",
-    "coding/data-structures/array.md",
-    "coding/data-structures/string.md"
+    "coding/data-structures/heap.md"
   ]
 }
