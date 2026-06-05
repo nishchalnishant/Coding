@@ -291,7 +291,7 @@ def sort_colors(nums):
 | **Remove Duplicates (sorted)** | Same-direction | `write` only on new value | `if nums[fast] != nums[write]: write++` | Return `write+1` as new length. |
 | **Sort Colors (Dutch flag) `⚡ T1`** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
 
-Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/linked-list.md).
+Walkthroughs: [problem-deep-dives.md](./20-problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/07-linked-list.md).
 
 ---
 
@@ -300,16 +300,16 @@ Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [l
 - **Sorted array + pair/triplet sum** → converging two pointers after sort.
 - **Linked list cycle / middle / nth from end** → fast/slow (Floyd).
 - **In-place filter / partition / remove dupes** → same-direction write pointer.
-- **Unsorted two sum** → hash map, not two pointers ([hashing.md](../01-data-structures/hashing.md)).
+- **Unsorted two sum** → hash map, not two pointers ([hashing.md](../01-data-structures/02-hashing.md)).
 
 ---
 
 ## See also
 
-- [sliding-window.md](./sliding-window.md) — contiguous substring/subarray (often on strings)
-- [binary-search.md](./binary-search.md) — when monotonic predicate replaces scanning
-- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) — fast/slow canonical problems
-- [01-data-structures/array.md](../01-data-structures/array.md) — array two-pointer variants
+- [sliding-window.md](./04-sliding-window.md) — contiguous substring/subarray (often on strings)
+- [binary-search.md](./11-binary-search.md) — when monotonic predicate replaces scanning
+- [01-data-structures/linked-list.md](../01-data-structures/07-linked-list.md) — fast/slow canonical problems
+- [01-data-structures/array.md](../01-data-structures/01-array.md) — array two-pointer variants
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — two-pointer triggers
 
 ---

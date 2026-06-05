@@ -303,7 +303,7 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 | **Decode String** | Stack | Push context on `[` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
 | **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
 
-More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.md). String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/string.md) in `02-algorithms/`.
+More walkthroughs: [problem-deep-dives.md](../02-algorithms/20-problem-deep-dives.md). String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/02-string.md) in `02-algorithms/`.
 
 ---
 
@@ -312,19 +312,19 @@ More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.m
 - If the problem is **substring / subarray with constraint** → sliding window (variable or fixed size).
 - If the problem is **anagram or same multiset** → frequency map or sorted/canonical key.
 - If the problem is **palindrome `🎯 T2`** → expand around center (O(n²)) unless asked for O(n) (Manacher).
-- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → trie / Aho-Corasick ([trie.md](./trie.md)).
-- If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./array.md)).
+- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → trie / Aho-Corasick ([trie.md](./09-trie.md)).
+- If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./01-array.md)).
 - If building strings in a loop → **list + join**, never `s += c` in Python.
 
 ---
 
 ## See also
 
-- [array.md](./array.md) — sliding window and two pointers on numeric arrays
-- [hashing.md](./hashing.md) — frequency maps, group-by-key
-- [trie.md](./trie.md) — prefix dictionary, word search II
-- [stack.md](./stack.md) — decode string, parenthesis parsing
-- [02-algorithms/string.md](../02-algorithms/string.md) — KMP, Rabin-Karp, Z-function
+- [array.md](./01-array.md) — sliding window and two pointers on numeric arrays
+- [hashing.md](./02-hashing.md) — frequency maps, group-by-key
+- [trie.md](./09-trie.md) — prefix dictionary, word search II
+- [stack.md](./05-stack.md) — decode string, parenthesis parsing
+- [02-algorithms/string.md](../02-algorithms/02-string.md) — KMP, Rabin-Karp, Z-function
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — string pattern triggers
 
 ---

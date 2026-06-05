@@ -400,8 +400,8 @@ class CircularQueue:
 
 ### Easy / Medium
 - **Rotten Oranges** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
-- **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
-- **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
+- **[Word Ladder](../02-algorithms/20-problem-deep-dives.md#word-ladder) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
+- **[Sliding Window Maximum](../02-algorithms/20-problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
 - **Design Circular Queue** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
 - **Moving Average from Data Stream** — Fixed-size deque + running sum; evict front when over capacity.
 - **01 Matrix `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
@@ -409,7 +409,7 @@ class CircularQueue:
 ### Hard
 - **Sliding Window Minimum** — Same deque pattern; maintain increasing order (flip comparison).
 - **Maximum of Minimums of Every Window Size** — Monotonic stack for prev/next smaller element; fill answer array.
-- **[Cheapest Flights Within K Stops](../02-algorithms/problem-deep-dives.md#cheapest-flights-within-k-stops)** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
+- **[Cheapest Flights Within K Stops](../02-algorithms/20-problem-deep-dives.md#cheapest-flights-within-k-stops)** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
 - **Shortest Path in Binary Matrix `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
 
 ---
@@ -419,13 +419,13 @@ class CircularQueue:
 | Question | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- |
 | **Rotten Oranges** | "Simultaneous spread; minimum time" | Multi-source BFS from all rotten cells at t=0; count fresh | If `fresh > 0` after BFS → return -1 (blocked fresh cells). All-rotten or no-fresh are instant-return edge cases. |
-| **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; each word's neighbors = one-letter edits in word set | Remove word from set when visited — prevents revisit and cycles. Bidirectional BFS halves explored nodes for follow-up. |
-| **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** | "Max in every k-window in O(N)" | Deque of indices; pop back while `nums[back] < nums[i]`; pop front if expired | Each index enqueued/dequeued once → O(N). Store indices, not values, for window expiry check. |
+| **[Word Ladder](../02-algorithms/20-problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; each word's neighbors = one-letter edits in word set | Remove word from set when visited — prevents revisit and cycles. Bidirectional BFS halves explored nodes for follow-up. |
+| **[Sliding Window Maximum](../02-algorithms/20-problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** | "Max in every k-window in O(N)" | Deque of indices; pop back while `nums[back] < nums[i]`; pop front if expired | Each index enqueued/dequeued once → O(N). Store indices, not values, for window expiry check. |
 | **Shortest Path in Binary Matrix `⚡ T1`** | "Min path in 0-grid, 8 directions" | BFS on open (0) cells; 8-directional neighbors; return steps | Return -1 if `grid[0][0]` or `grid[n-1][n-1]` is 1. Mark visited before enqueue (not after dequeue) to avoid TLE. |
 | **01 Matrix `⚡ T1`** | "Distance to nearest 0 for every cell" | Multi-source BFS from all 0s; single pass O(RC) | BFS from targets (0s), not from each 1 individually — avoids O(R²C²). Initialize 1-cells to inf, 0-cells to 0. |
 | **Design Circular Queue** | "Bounded FIFO with O(1) all ops" | Array + `front`/`size`/`cap`; `rear = (front+size)%cap` | Use `size` counter over wasted-slot trick — cleaner. Thread-safety follow-up: add a mutex around enqueue/dequeue. |
 | **Moving Average from Data Stream** | "Average of last k values in O(1)" | Deque + running sum; evict front when `len > k` | Float division. Python `deque(maxlen=k)` auto-evicts but you still need the running sum — don't recompute. |
-| **[Cheapest Flights K Stops](../02-algorithms/problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | BFS level = stops; or Bellman-Ford K+1 rounds | Standard Dijkstra doesn't bound stops. Need state `(cost, node, stops)` and prune when `stops > K`. |
+| **[Cheapest Flights K Stops](../02-algorithms/20-problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | BFS level = stops; or Bellman-Ford K+1 rounds | Standard Dijkstra doesn't bound stops. Need state `(cost, node, stops)` and prune when `stops > K`. |
 | **Number of Recent Calls** [E] | "Count requests in last 3000ms window" | Deque; add timestamp; pop front while `front < t - 3000` | Deque size = answer; no need to count separately. |
 | **Implement Queue Using Stacks** [E] | "FIFO from two LIFOs" | Two stacks; lazy transfer: pour `s1 → s2` only when `s2` is empty | Amortized O(1) per operation — each element moves from s1 to s2 at most once. |
 | **Implement Stack Using Queues** [E] | "LIFO from one FIFO" | Enqueue then rotate: after each push, cycle all older elements behind the new one | `push` is O(N); `pop` and `top` are O(1) — opposite of stack-from-queues. |
@@ -451,9 +451,9 @@ class CircularQueue:
 
 ## See also
 
-- [Stack](stack.md) — stack vs queue; monotonic stack for next greater element
-- [Graph Algorithms](../02-algorithms/graph.md) — BFS shortest path; Dijkstra with priority queue
-- [Array](array.md) — sliding window (pointer-based); deque for window max variant
+- [Stack](05-stack.md) — stack vs queue; monotonic stack for next greater element
+- [Graph Algorithms](../02-algorithms/13-graph.md) — BFS shortest path; Dijkstra with priority queue
+- [Array](01-array.md) — sliding window (pointer-based); deque for window max variant
 - [Patterns Master](../03-patterns/patterns-master.md) — BFS and queue pattern recognition triggers
 
 ## Flashcards

@@ -1,10 +1,10 @@
 ---
 tags: [l3-google, tier3, stub]
-topic: Problem Deep Dives
+topic: Miscellaneous
 tier: T3-SKIP
 ---
 
-# Problem Deep Dives `💤 T3`
+# Miscellaneous `💤 T3`
 
 > [!warning] 💤 TIER 3 — Skim or Skip
 > **This topic is not required for Google L3 (SWE) interviews.**
@@ -12,11 +12,11 @@ tier: T3-SKIP
 
 ## What it is
 
-SDE-3 level deep dives. Good reference but overkill for L3 preparation.
+Advanced structures (persistent segment tree, Mo's algorithm). Well beyond L3 scope.
 
 ## What to study instead
 
-→ [02-algorithms/dynamic-programming.md](./dynamic-programming.md)
+→ [02-algorithms/dynamic-programming.md](./15-dynamic-programming.md)
 
 ---
 

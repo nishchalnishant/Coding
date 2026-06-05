@@ -1,10 +1,10 @@
 ---
 tags: [l3-google, tier3, stub]
-topic: Maths
+topic: Problem Deep Dives
 tier: T3-SKIP
 ---
 
-# Maths `💤 T3`
+# Problem Deep Dives `💤 T3`
 
 > [!warning] 💤 TIER 3 — Skim or Skip
 > **This topic is not required for Google L3 (SWE) interviews.**
@@ -12,11 +12,11 @@ tier: T3-SKIP
 
 ## What it is
 
-Number theory, GCD, modular arithmetic, matrix exponentiation. Not tested at L3 DSA rounds.
+SDE-3 level deep dives. Good reference but overkill for L3 preparation.
 
 ## What to study instead
 
-→ [dynamic-programming.md](./dynamic-programming.md)
+→ [02-algorithms/dynamic-programming.md](./15-dynamic-programming.md)
 
 ---
 

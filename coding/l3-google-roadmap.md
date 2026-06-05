@@ -49,7 +49,7 @@ DFS  → connected components; cycle detection; path existence; flood fill
 Both → O(V + E) time, O(V) space
 ```
 
-**Files:** [graph.md](./data-structures/graph.md) · [graphs.md](../01-data-structures/graphs.md) · [graph-algorithms.md](./algorithms/graph-algorithms.md)
+**Files:** [graph.md](./data-structures/13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [graph-algorithms.md](./algorithms/13-graph-algorithms.md)
 
 ---
 
@@ -88,7 +88,7 @@ def topo_sort(n, edges):
     return order if len(order) == n else []  # [] = cycle
 ```
 
-**Files:** [graph-algorithms.md](./algorithms/graph-algorithms.md) · [advanced-graphs.md](../02-algorithms/advanced-graphs.md)
+**Files:** [graph-algorithms.md](./algorithms/13-graph-algorithms.md) · [advanced-graphs.md](../02-algorithms/14-advanced-graphs.md)
 
 ---
 
@@ -124,7 +124,7 @@ class DSU:
         return True
 ```
 
-**Files:** [union-find.md](./algorithms/union-find.md)
+**Files:** [union-find.md](./algorithms/14-union-find.md)
 
 ---
 
@@ -159,7 +159,7 @@ def solve(arr, limit):
 
 **The recognition signal:** "minimum/maximum X such that [condition]" → binary search on X.
 
-**Files:** [binary-search.md](./algorithms/binary-search.md) · [searching.md](../02-algorithms/searching.md)
+**Files:** [binary-search.md](./algorithms/11-binary-search.md) · [searching.md](../02-algorithms/11-searching.md)
 
 ---
 
@@ -186,7 +186,7 @@ heapq.heappop(h)            # O(log n) — removes and returns smallest
 heapq.nlargest(k, arr)      # O(n log k) — top K largest
 ```
 
-**Files:** [heap.md](./data-structures/heap.md)
+**Files:** [heap.md](./data-structures/10-heap.md)
 
 ---
 
@@ -213,7 +213,7 @@ for right in range(len(s)):
     # Window is valid here — update answer
 ```
 
-**Files:** [sliding-window.md](./algorithms/sliding-window.md)
+**Files:** [sliding-window.md](./algorithms/04-sliding-window.md)
 
 ---
 
@@ -229,7 +229,7 @@ for right in range(len(s)):
 | **Container With Most Water** `⚡ T1` | Greedy two-pointer | Move the shorter wall inward |
 | **Linked List Cycle** `⚡ T1` | Fast/slow (Floyd's) | If they meet → cycle; else fast hits null |
 
-**Files:** [two-pointers.md](./algorithms/two-pointers.md)
+**Files:** [two-pointers.md](./algorithms/03-two-pointers.md)
 
 ---
 
@@ -268,7 +268,7 @@ class Trie:
         return node.is_end
 ```
 
-**Files:** [trie.md](./data-structures/trie.md)
+**Files:** [trie.md](./data-structures/09-trie.md)
 
 ---
 
@@ -292,7 +292,7 @@ class Trie:
 
 **Skip for L3:** Bitmask DP, Digit DP, Interval DP (Burst Balloons), Tree DP (complex variants)
 
-**Files:** [dynamic-programming.md](./algorithms/dynamic-programming.md) · [recursion-to-dp.md](../02-algorithms/recursion-to-dp.md)
+**Files:** [dynamic-programming.md](./algorithms/15-dynamic-programming.md) · [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md)
 
 ---
 
@@ -320,7 +320,7 @@ def backtrack(path, start, choices):
         path.pop()
 ```
 
-**Files:** [backtracking.md](./algorithms/backtracking.md)
+**Files:** [backtracking.md](./algorithms/12-backtracking.md)
 
 ---
 
@@ -337,7 +337,7 @@ def backtrack(path, start, choices):
 | **Validate BST** `🎯 T2` | DFS with bounds | Pass `(lo, hi)` bounds — NOT just check immediate children |
 | **Diameter of Binary Tree** `🎯 T2` | Post-order heights | `left_h + right_h` at each node; track global max |
 
-**Files:** [tree.md](./data-structures/tree.md)
+**Files:** [tree.md](./data-structures/08-tree.md)
 
 ---
 
@@ -473,30 +473,30 @@ Know these cold:
 ## Files in This Repository — By Tier
 
 ### ⚡ TIER 1 — Study These First
-- [graph-algorithms.md](./algorithms/graph-algorithms.md) — BFS, DFS, Topological Sort
-- [union-find.md](./algorithms/union-find.md) — DSU with path compression
-- [binary-search.md](./algorithms/binary-search.md) — All BS variants
-- [heap.md](./data-structures/heap.md) — All heap patterns
-- [sliding-window.md](./algorithms/sliding-window.md) — Fixed + variable window
-- [two-pointers.md](./algorithms/two-pointers.md) — Converging + fast/slow
-- [trie.md](./data-structures/trie.md) — Trie + Trie+DFS
-- [array.md](./data-structures/array.md) — Two-pointer/window/prefix patterns
-- [hashing.md](./data-structures/hashing.md) — Hash map patterns
-- [graphs.md](../01-data-structures/graphs.md) — Graph deep dive
-- [advanced-graphs.md](../02-algorithms/advanced-graphs.md) — Dijkstra, Topo, BFS variants
+- [graph-algorithms.md](./algorithms/13-graph-algorithms.md) — BFS, DFS, Topological Sort
+- [union-find.md](./algorithms/14-union-find.md) — DSU with path compression
+- [binary-search.md](./algorithms/11-binary-search.md) — All BS variants
+- [heap.md](./data-structures/10-heap.md) — All heap patterns
+- [sliding-window.md](./algorithms/04-sliding-window.md) — Fixed + variable window
+- [two-pointers.md](./algorithms/03-two-pointers.md) — Converging + fast/slow
+- [trie.md](./data-structures/09-trie.md) — Trie + Trie+DFS
+- [array.md](./data-structures/01-array.md) — Two-pointer/window/prefix patterns
+- [hashing.md](./data-structures/02-hashing.md) — Hash map patterns
+- [graphs.md](../01-data-structures/13-graphs.md) — Graph deep dive
+- [advanced-graphs.md](../02-algorithms/14-advanced-graphs.md) — Dijkstra, Topo, BFS variants
 
 ### 🎯 TIER 2 — Study After Tier 1
-- [dynamic-programming.md](./algorithms/dynamic-programming.md)
-- [backtracking.md](./algorithms/backtracking.md)
-- [tree.md](./data-structures/tree.md)
-- [recursion-to-dp.md](../02-algorithms/recursion-to-dp.md)
-- [linked-list.md](./data-structures/linked-list.md)
-- [stack.md](./data-structures/stack.md)
-- [greedy.md](./algorithms/greedy.md)
-- [sorting.md](./algorithms/sorting.md)
-- [string.md](./data-structures/string.md)
+- [dynamic-programming.md](./algorithms/15-dynamic-programming.md)
+- [backtracking.md](./algorithms/12-backtracking.md)
+- [tree.md](./data-structures/08-tree.md)
+- [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md)
+- [linked-list.md](./data-structures/07-linked-list.md)
+- [stack.md](./data-structures/05-stack.md)
+- [greedy.md](./algorithms/16-greedy.md)
+- [sorting.md](./algorithms/00-sorting.md)
+- [string.md](./data-structures/02-string.md)
 
 ### 💤 TIER 3 — Skim or Skip
-- [bit-manipulation.md](./algorithms/bit-manipulation.md)
-- [maths.md](./algorithms/maths.md)
+- [bit-manipulation.md](./algorithms/17-bit-manipulation.md)
+- [maths.md](./algorithms/17-maths.md)
 - [behavioral-interview.md](./behavioral-interview.md) — Read once; not a DSA topic

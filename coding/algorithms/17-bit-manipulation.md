@@ -16,7 +16,7 @@ Bit tricks (XOR, masks, shifts). Rarely tested at L3 — appears in <10% of docu
 
 ## What to study instead
 
-→ [binary-search.md](./binary-search.md) or [union-find.md](./union-find.md)
+→ [binary-search.md](./11-binary-search.md) or [union-find.md](./14-union-find.md)
 
 ---
 

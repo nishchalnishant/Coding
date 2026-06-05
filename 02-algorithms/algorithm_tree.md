@@ -98,7 +98,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 1. Sorting & Partitioning
 
-→ [sorting.md](./sorting.md) · [divide-and-conquer.md](./divide-and-conquer.md)
+→ [sorting.md](./00-sorting.md) · [divide-and-conquer.md](./18-divide-and-conquer.md)
 - **Merge Sort (Divide & Conquer)** — Recursive halving and merging; the standard for stable sorting and inversion counting.
     - *Variants:* Count of Range Sum, Reverse Pairs, Global Inversions.
 - **Quick Sort (Partitioning)** — Pivot-based partitioning; optimized for in-place sorting and cache efficiency.
@@ -114,7 +114,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 2. Searching & Binary Search
 
-→ [binary-search.md](./binary-search.md) · [searching.md](./searching.md)
+→ [binary-search.md](./11-binary-search.md) · [searching.md](./11-searching.md)
 - **Binary Search (Template Variants)** — Logarithmic search in sorted spaces using low/high pointers and mid-point logic.
     - *Patterns:* Left-most vs Right-most insertion point.
 - **Binary Search on Answer (Optimization)** — Searching the range of possible solutions when the "is possible" function is monotonic.
@@ -128,7 +128,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 3. Strings & Pattern Matching
 
-→ [string.md](./string.md) · [sliding-window.md](./sliding-window.md) · [trie.md](../01-data-structures/trie.md)
+→ [string.md](./02-string.md) · [sliding-window.md](./04-sliding-window.md) · [trie.md](../01-data-structures/09-trie.md)
 - **KMP (LPS Table)** — Pattern matching using a failure function to skip unnecessary comparisons in O(N+M).
     - *Variants:* strStr(), Shortest Palindrome (LPS of `s + # + rev(s)`), Repeated Substring Pattern.
 - **Rabin-Karp (Rolling Hash)** — Hash-based matching; constant time window updates enable efficient multi-pattern search.
@@ -144,11 +144,11 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 4. Union-Find (Disjoint Set Union)
 
-→ [union-find.md](./union-find.md) · [advanced-graphs.md](./advanced-graphs.md)
+→ [union-find.md](./14-union-find.md) · [advanced-graphs.md](./14-advanced-graphs.md)
 
 ## 4b. Graph Traversal & Shortest Path
 
-→ [graph.md](./graph.md) · [graphs.md](../01-data-structures/graphs.md) · [recursion/graph-recursion.md](./recursion/graph-recursion.md)
+→ [graph.md](./13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion/graph-recursion.md](./recursion/graph-recursion.md)
 - **Standard DSU (Path Compression + Rank)** — Near-constant time connectivity tracking and set merging.
     - *Variants:* Number of Provinces, Longest Consecutive Sequence.
 - **Kruskal's MST** — Greedy edge selection for minimum spanning trees; uses sorting and DSU for cycle detection.
@@ -160,7 +160,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 5. Dynamic Programming
 
-→ [dynamic-programming.md](./dynamic-programming.md) · [recursion-to-dp.md](./recursion-to-dp.md)
+→ [dynamic-programming.md](./15-dynamic-programming.md) · [recursion-to-dp.md](./15-recursion-to-dp.md)
 - **Linear DP (1D)** — Optimization over a sequence where the current state depends on a fixed number of previous states.
     - *Variants:* Fibonacci, House Robber, Decode Ways, Min Cost For Tickets.
 - **Knapsack Family** — Optimization problems involving item selection under capacity or budget constraints.
@@ -182,7 +182,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 6. Recursion & Backtracking
 
-→ [recursion.md](./recursion.md) · [backtracking.md](./backtracking.md)
+→ [recursion.md](./15-recursion.md) · [backtracking.md](./12-backtracking.md)
 - **Structural Recursion** — Processing data structures by delegating work to their self-similar sub-parts (trees, lists).
     - *Variants:* Lowest Common Ancestor (LCA), Flatten Binary Tree to Linked List.
 - **Memoized Recursion (Top-Down)** — Recursion with a cache to solve overlapping subproblems efficiently.
@@ -196,7 +196,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 7. Greedy Algorithms
 
-→ [greedy.md](./greedy.md)
+→ [greedy.md](./16-greedy.md)
 - **Interval Scheduling** — Greedy selection of non-overlapping intervals, usually optimized by end-time sorting.
     - *Variants:* Merge Intervals, Non-overlapping Intervals, Minimum Number of Arrows to Burst Balloons.
 - **Jump Game** — Reaching a target by tracking the maximum reachable range at each step.
@@ -206,7 +206,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 8. Mathematics & Bit Manipulation
 
-→ [maths.md](./maths.md) · [bit-manipulation.md](./bit-manipulation.md)
+→ [maths.md](./17-maths.md) · [bit-manipulation.md](./17-bit-manipulation.md)
 - **Number Theory**
     - *Variants:* Sieve of Eratosthenes, Prime Factorization, GCD (Euclidean), Fast Exponentiation.
 - **Bit Manipulation**

@@ -407,7 +407,7 @@ def delete(self, word: str) -> bool:
 
 ### Aho-Corasick (multi-pattern matching in a stream)
 
-Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../02-algorithms/string.md) for implementation sketch.
+Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../02-algorithms/02-string.md) for implementation sketch.
 
 ---
 
@@ -464,10 +464,10 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 
 ## See also
 
-- [backtracking.md](../02-algorithms/backtracking.md) — Word Search II uses Trie + backtracking together
-- [bit-manipulation.md](../02-algorithms/bit-manipulation.md) — XOR Trie for max XOR pair
-- [string.md](../02-algorithms/string.md) — Aho-Corasick for multi-pattern matching
-- [hashing.md](hashing.md) — alternative for exact word lookups when prefix search not needed
+- [backtracking.md](../02-algorithms/12-backtracking.md) — Word Search II uses Trie + backtracking together
+- [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md) — XOR Trie for max XOR pair
+- [string.md](../02-algorithms/02-string.md) — Aho-Corasick for multi-pattern matching
+- [hashing.md](02-hashing.md) — alternative for exact word lookups when prefix search not needed
 
 ## Flashcards
 

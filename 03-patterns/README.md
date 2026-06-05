@@ -97,13 +97,13 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | Resource | What's in it |
 |----------|-------------|
 | [`patterns-master.md`](./patterns-master.md) | **Primary guide.** 60-second recognition triggers for all major patterns. Read this first. |
-| [`02-algorithms/two-pointers.md`](../02-algorithms/two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
-| [`02-algorithms/sliding-window.md`](../02-algorithms/sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
-| [`02-algorithms/binary-search.md`](../02-algorithms/binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
+| [`02-algorithms/two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
+| [`02-algorithms/sliding-window.md`](../02-algorithms/04-sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
+| [`02-algorithms/binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
 | [`dynamic-programming/`](../02-algorithms/dynamic-programming/) | DP paradigms: 1D, 2D, interval, knapsack |
-| [`backtracking.md`](../02-algorithms/backtracking.md) | Backtracking template + pruning strategies |
-| [`graph.md`](../02-algorithms/graph.md) | BFS, DFS, topological sort, shortest path |
-| [`problem-deep-dives.md`](../02-algorithms/problem-deep-dives.md) | 100+ problems with pattern tags and key insights |
+| [`12-backtracking.md`](../02-algorithms/12-backtracking.md) | Backtracking template + pruning strategies |
+| [`13-graph.md`](../02-algorithms/13-graph.md) | BFS, DFS, topological sort, shortest path |
+| [`20-problem-deep-dives.md`](../02-algorithms/20-problem-deep-dives.md) | 100+ problems with pattern tags and key insights |
 
 ---
 

@@ -469,8 +469,8 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
 ### Medium
 - **Find First and Last Position** — Lower bound + upper bound.
-- [Search in Rotated Sorted Array](problem-deep-dives.md#search-in-rotated-sorted-array) — Identify sorted half; recurse.
-- [Find Minimum in Rotated Array](problem-deep-dives.md#find-minimum-in-rotated-sorted-array) — Compare `mid` to `hi`.
+- [Search in Rotated Sorted Array](20-problem-deep-dives.md#search-in-rotated-sorted-array) — Identify sorted half; recurse.
+- [Find Minimum in Rotated Array](20-problem-deep-dives.md#find-minimum-in-rotated-sorted-array) — Compare `mid` to `hi`.
 - **Koko Eating Bananas `⚡ T1`** — BS on answer `[1, max(piles)]`; predicate = can finish in H hours.
 - **Capacity to Ship Packages `⚡ T1`** — BS on answer; predicate = can fit in D days.
 - **Find Peak Element `⚡ T1`** — Compare with right neighbor; move toward higher side.
@@ -478,8 +478,8 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 - **Random Pick with Weight** — Prefix sums + binary search on random float.
 
 ### Hard
-- [Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum) — BS on answer; predicate = can split into ≤ k parts with max ≤ mid.
-- [Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition; O(log(min(m,n))).
+- [Split Array Largest Sum](20-problem-deep-dives.md#split-array-largest-sum) — BS on answer; predicate = can split into ≤ k parts with max ≤ mid.
+- [Median of Two Sorted Arrays](20-problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition; O(log(min(m,n))).
 - **Minimize Max Distance to Gas Station** — BS on answer (floating point); predicate = can place stations.
 - **Aggressive Cows (or Magnetism) `⚡ T1`** — Maximize minimum distance; predicate = can place k cows.
 
@@ -491,11 +491,11 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 | :--- | :--- | :--- | :--- | :--- |
 | **Classic Binary Search** | Binary Search (Exact Match) | "Find element in sorted array" | `lo <= hi`; shrink left or right | `mid = lo + (hi-lo)//2` avoids overflow in C++/Java; Python int is arbitrary size. |
 | **First / Last Position** | "Range of target in sorted array" | Lower bound + upper bound | Lower bound returns first ≥; subtract 1 for last occurrence. Handle "not found" case. |
-| **[Search Rotated Array](problem-deep-dives.md#search-in-rotated-sorted-array)** | "Binary search in rotated sorted" | Identify sorted half via `nums[lo] <= nums[mid]` | Duplicates → `nums[lo]==nums[mid]==nums[hi]` forces O(N) — clarify with interviewer. |
-| **[Find Min Rotated](problem-deep-dives.md#find-minimum-in-rotated-sorted-array)** | "Minimum in rotated sorted array" | `nums[mid] > nums[hi]` → min in right half | No duplicates simplifies; with duplicates: `hi -= 1` when equal. |
+| **[Search Rotated Array](20-problem-deep-dives.md#search-in-rotated-sorted-array)** | "Binary search in rotated sorted" | Identify sorted half via `nums[lo] <= nums[mid]` | Duplicates → `nums[lo]==nums[mid]==nums[hi]` forces O(N) — clarify with interviewer. |
+| **[Find Min Rotated](20-problem-deep-dives.md#find-minimum-in-rotated-sorted-array)** | "Minimum in rotated sorted array" | `nums[mid] > nums[hi]` → min in right half | No duplicates simplifies; with duplicates: `hi -= 1` when equal. |
 | **Koko Eating Bananas `⚡ T1`** | "Minimum speed to finish in H hours" | BS on `[1, max(piles)]`; `ceil(p/k)` hours per pile | `math.ceil(p/k)` or `(p + k - 1) // k`; integer overflow on sum in other languages. |
-| **[Split Array Largest Sum](problem-deep-dives.md#split-array-largest-sum) `⚡ T1`** | "Minimize maximum subarray sum" | BS on `[max(A), sum(A)]`; greedy feasibility check | Single element > `max_sum` → infeasible; handle in predicate. |
-| **[Median of Two Arrays](problem-deep-dives.md#median-of-two-sorted-arrays)** | "Median without merging, O(log N)" | Partition both arrays; `max(left) <= min(right)` | Sentinel `-inf`/`+inf` for empty partitions; even vs odd total length changes formula. |
+| **[Split Array Largest Sum](20-problem-deep-dives.md#split-array-largest-sum) `⚡ T1`** | "Minimize maximum subarray sum" | BS on `[max(A), sum(A)]`; greedy feasibility check | Single element > `max_sum` → infeasible; handle in predicate. |
+| **[Median of Two Arrays](20-problem-deep-dives.md#median-of-two-sorted-arrays)** | "Median without merging, O(log N)" | Partition both arrays; `max(left) <= min(right)` | Sentinel `-inf`/`+inf` for empty partitions; even vs odd total length changes formula. |
 | **Find Peak Element `⚡ T1`** | "Any peak (greater than neighbors)" | Move toward larger neighbor | Multiple peaks: any valid answer; boundaries are treated as `-inf`. |
 | **Random Pick by Weight** | "Weighted random selection" | Prefix sums + `bisect_left` on random float | Inclusive vs exclusive random range; prefix sum must be exclusive (start from 0). |
 | **Aggressive Cows `⚡ T1`** | "Maximize minimum distance between k cows" | BS on answer; predicate = can place k with min distance ≥ mid | Classic "maximize minimum" — predicate is greedy: greedily place cows starting from leftmost. |
@@ -527,8 +527,8 @@ def find_median_sorted_arrays(nums1: list[int], nums2: list[int]) -> float:
 
 ## See also
 
-- [Array](../01-data-structures/array.md) — sorted array prerequisites; binary search on rotated arrays
-- [Sorting](sorting.md) — ordering required for binary search on index
+- [Array](../01-data-structures/01-array.md) — sorted array prerequisites; binary search on rotated arrays
+- [Sorting](00-sorting.md) — ordering required for binary search on index
 - [Dynamic Programming](dynamic-programming/README.md) — some BS-on-answer problems reduce to DP feasibility checks
 - [Patterns Master](../../03-patterns/patterns-master.md) — binary search pattern triggers
 

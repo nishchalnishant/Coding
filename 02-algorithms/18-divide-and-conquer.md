@@ -407,8 +407,8 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 - **Count of Range Sum** — Merge sort augmented; count cross-half pairs in range [lower, upper].
 
 ### Hard
-- **[Merge K Sorted Lists](problem-deep-dives.md#merge-k-sorted-lists) `⚡ T1`** — D&C pairwise merge: O(N log K) time.
-- **[Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) `⚡ T1`** — Binary search on partition; O(log(min(m,n))).
+- **[Merge K Sorted Lists](20-problem-deep-dives.md#merge-k-sorted-lists) `⚡ T1`** — D&C pairwise merge: O(N log K) time.
+- **[Median of Two Sorted Arrays](20-problem-deep-dives.md#median-of-two-sorted-arrays) `⚡ T1`** — Binary search on partition; O(log(min(m,n))).
 - **Count of Smaller Numbers After Self `💤 T3`** — Merge sort augmented; count right-picks during merge.
 - **Reverse Pairs `💤 T3`** — Merge sort; count pairs `nums[i] > 2 × nums[j]` across halves.
 - **Closest Pair of Points** — O(N log N) D&C; strip scanning.
@@ -424,7 +424,7 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 | **QuickSelect `🎯 T2`** | "Kth largest in O(N) average" | Partition; recurse only into side with target | Mutates array; randomize pivot to avoid O(N²). Median-of-medians gives O(N) worst. |
 | **Pow(x,n)** | "Fast exponentiation" | `x^n = (x^(n/2))²`; odd: multiply by x once | Negative n: `x = 1/x, n = -n`; INT_MIN overflow in Java/C++. |
 | **Maximum Subarray (D&C) `🎯 T2`** | "Explain subarray beyond Kadane's" | Cross-midpoint expansion + max of three cases | O(N log N) — always mention Kadane is O(N) and preferred; D&C demonstrates recurrence thinking. |
-| **[Majority Element](problem-deep-dives.md#majority-element) `🎯 T2`** | "Element appearing >n/2 times" | Boyer-Moore O(N)/O(1) or D&C — majority of whole must be majority of some half | D&C: majority of neither half → no majority. Must verify in O(N) second pass. |
+| **[Majority Element](20-problem-deep-dives.md#majority-element) `🎯 T2`** | "Element appearing >n/2 times" | Boyer-Moore O(N)/O(1) or D&C — majority of whole must be majority of some half | D&C: majority of neither half → no majority. Must verify in O(N) second pass. |
 | **Merge K Sorted Lists `⚡ T1`** | "Merge K into one sorted list" | D&C pairwise merge: merge pairs in O(N log K) | K-way heap is also O(N log K) — D&C has better cache locality. |
 | **Reverse Pairs `💤 T3`** | "Pairs where nums[i] > 2×nums[j], i<j" | Modified merge sort; count cross-half pairs | Different from standard inversions — inequality is strict and scaled. Use two pointers in combine. |
 | **Closest Pair of Points** | "Min distance in 2D plane, O(N log N)" | D&C with strip of width 2δ; sort strip by y; check 7 candidates | 6-point packing argument ensures at most 7 comparisons per strip point. |
@@ -451,8 +451,8 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 
 ## See also
 
-- [Sorting](sorting.md) — merge sort and quicksort derivation; TimSort
-- [Searching](searching.md) — binary search as D&C; median of two sorted arrays
+- [Sorting](00-sorting.md) — merge sort and quicksort derivation; TimSort
+- [Searching](11-searching.md) — binary search as D&C; median of two sorted arrays
 - [Dynamic Programming](dynamic-programming/README.md) — overlapping vs independent subproblems
 - [Patterns Master](../../03-patterns/patterns-master.md) — D&C pattern recognition triggers
 

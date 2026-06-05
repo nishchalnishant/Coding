@@ -468,8 +468,8 @@ For distributed sort (MapReduce model):
 ## 4. Common Interview Problems
 
 ### Medium
-- [Merge Intervals](problem-deep-dives.md#merge-intervals) — Sort by start time; sweep and merge.
-- [Kth Largest Element](problem-deep-dives.md#kth-largest-element) — QuickSelect O(N) avg or min-heap O(N log K).
+- [Merge Intervals](20-problem-deep-dives.md#merge-intervals) — Sort by start time; sweep and merge.
+- [Kth Largest Element](20-problem-deep-dives.md#kth-largest-element) — QuickSelect O(N) avg or min-heap O(N log K).
 - **Sort Colors `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
 - **Largest Number** — Custom comparator: `a+b > b+a`.
 - **Meeting Rooms II** — Sort starts and ends separately; two-pointer sweep for peak overlap.
@@ -485,7 +485,7 @@ For distributed sort (MapReduce model):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Merge Intervals](problem-deep-dives.md#merge-intervals) `🎯 T2`** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
+| **[Merge Intervals](20-problem-deep-dives.md#merge-intervals) `🎯 T2`** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
 | **Meeting Rooms II** | "Max concurrent meetings" | Sort starts + ends; two-pointer sweep | Use a **min-heap** of end times for generality. |
 | **Largest Number** | "Lex concat order" | Custom comparator `a+b vs b+a` | Handle all-zeros: `[0,0]` → `"0"`, not `"00"`. |
 | **H-Index** | "Count vs. value crossover" | Sort desc or bucket sort | Find `i` where `citations[i] >= i+1`; off-by-one is common. |
@@ -520,9 +520,9 @@ For distributed sort (MapReduce model):
 
 ## See also
 
-- [Divide and Conquer](divide-and-conquer.md) — merge sort and quicksort derivation
-- [Heap](../01-data-structures/heap.md) — heap sort and top-K streaming
-- [Two Pointers](two-pointers.md) — Dutch National Flag, Meeting Rooms II
+- [Divide and Conquer](18-divide-and-conquer.md) — merge sort and quicksort derivation
+- [Heap](../01-data-structures/10-heap.md) — heap sort and top-K streaming
+- [Two Pointers](03-two-pointers.md) — Dutch National Flag, Meeting Rooms II
 - [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers
 
 ## Flashcards

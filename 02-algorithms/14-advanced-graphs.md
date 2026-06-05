@@ -311,7 +311,7 @@ class DSU:
 | :--- | :--- | :--- | :--- | :--- |
 | **Critical Connections [H]** | Tarjan's Bridges | "Remove one edge, network splits" | DFS with `disc[]` and `low[]`; bridge when `low[v] > disc[u]` | Undirected graph — must not back-track through parent; multi-edges require tracking parent edge index, not node |
 | **Reconstruct Itinerary [H]** | Hierholzer's (Eulerian Path) | "Use every ticket exactly once" | Sort adjacency lists; post-order DFS — add node to result only when no edges remain | Sort in reverse + `.pop()` for lexicographic order; result needs reversal at end |
-| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary) [H] `⚡ T1`** | Topological Sort (implicit graph) | "Derive character ordering from sorted word list" | Compare adjacent words char-by-char; first diff → directed edge; run Kahn's BFS | If word A is a prefix of word B and A comes after B in input → invalid (return `""`) |
+| **[Alien Dictionary](20-problem-deep-dives.md#alien-dictionary) [H] `⚡ T1`** | Topological Sort (implicit graph) | "Derive character ordering from sorted word list" | Compare adjacent words char-by-char; first diff → directed edge; run Kahn's BFS | If word A is a prefix of word B and A comes after B in input → invalid (return `""`) |
 | **Cheapest Flights Within K Stops [M]** `⚡ T1` | Bellman-Ford (bounded) | "Shortest path with at most K hops" | Run K+1 relaxation rounds; use snapshot of previous round to prevent cascading updates | Dijkstra fails here — greedily expanding cheapest node doesn't respect hop limit |
 | **Network Delay Time [M]** `⚡ T1` | Dijkstra | "Min time for signal to reach all nodes" | Standard Dijkstra from source; answer is `max(dist.values())`; return -1 if any node unreachable | Unreachable nodes — check `len(dist) == n`, not just final max |
 | **Path With Minimum Effort [M]** | Binary Search + BFS/DFS OR Dijkstra | "Minimize the maximum single-step difference" | Dijkstra where `dist[node]` = min effort to reach it; weight = `abs(h1 - h2)` | Binary search on answer + BFS also works; Dijkstra is cleaner and O((V+E) log V) |
@@ -330,6 +330,6 @@ class DSU:
 
 ## See also
 
-- [Graph Fundamentals](../01-data-structures/graphs.md) — BFS, DFS, and Dijkstra  
+- [Graph Fundamentals](../01-data-structures/13-graphs.md) — BFS, DFS, and Dijkstra  
 - [SDE-3 Roadmap](roadmap.md) — advanced study plan  
 - [Patterns Master](../../03-patterns/patterns-master.md)

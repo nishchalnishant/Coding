@@ -607,7 +607,7 @@ def dfs_iterative(start, choices):
 
 ## See also
 
-- [Trie](../01-data-structures/trie.md) — Word Search II (pruning via Trie prefix)
+- [Trie](../01-data-structures/09-trie.md) — Word Search II (pruning via Trie prefix)
 
 ---
 

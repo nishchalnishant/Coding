@@ -520,18 +520,18 @@ def prim_mst(n: int, adj: dict) -> int:
 ## 5. Common Interview Problems
 
 ### Medium
-- [Course Schedule](problem-deep-dives.md#course-schedule) — Kahn's topo sort; detect cycle.
-- [Course Schedule II](problem-deep-dives.md#course-schedule) — Same; return the order.
-- [Network Delay Time](problem-deep-dives.md#network-delay-time) — Dijkstra from source; answer = max(dist) if all nodes reached.
+- [Course Schedule](20-problem-deep-dives.md#course-schedule) — Kahn's topo sort; detect cycle.
+- [Course Schedule II](20-problem-deep-dives.md#course-schedule) — Same; return the order.
+- [Network Delay Time](20-problem-deep-dives.md#network-delay-time) — Dijkstra from source; answer = max(dist) if all nodes reached.
 - **Number of Islands `⚡ T1`** — DFS/BFS flood fill (see graphs.md).
 - **Clone Graph `⚡ T1`** — DFS with `old→clone` map.
 - **Rotting Oranges `⚡ T1`** — Multi-source BFS.
 - **Evaluate Division** — Build weighted directed graph; DFS/BFS with accumulated product.
 
 ### Hard
-- [Word Ladder](problem-deep-dives.md#word-ladder) — BFS; neighbors = one-letter edits in word set.
-- [Alien Dictionary](problem-deep-dives.md#alien-dictionary) — Build edges from adjacent word pairs; Kahn's topo.
-- [Cheapest Flights Within K Stops](problem-deep-dives.md#cheapest-flights-within-k-stops) — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
+- [Word Ladder](20-problem-deep-dives.md#word-ladder) — BFS; neighbors = one-letter edits in word set.
+- [Alien Dictionary](20-problem-deep-dives.md#alien-dictionary) — Build edges from adjacent word pairs; Kahn's topo.
+- [Cheapest Flights Within K Stops](20-problem-deep-dives.md#cheapest-flights-within-k-stops) — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
 - **Find the City with Smallest Reachable Neighbors** — Floyd-Warshall; count reachable cities within threshold.
 - **Reconstruct Itinerary** — Eulerian path; Hierholzer's algorithm; DFS with lexicographic neighbor ordering.
 - **Critical Connections in a Network** — Tarjan's bridge-finding algorithm.
@@ -542,11 +542,11 @@ def prim_mst(n: int, adj: dict) -> int:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Course Schedule](problem-deep-dives.md#course-schedule) `⚡ T1`** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
-| **[Network Delay Time](problem-deep-dives.md#network-delay-time)** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
-| **[Word Ladder](problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
-| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary) `⚡ T1`** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
-| **[Cheapest Flights K Stops](problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | Bellman-Ford for K+1 rounds | Standard Dijkstra doesn't work — need to track stop count in state. |
+| **[Course Schedule](20-problem-deep-dives.md#course-schedule) `⚡ T1`** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
+| **[Network Delay Time](20-problem-deep-dives.md#network-delay-time)** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
+| **[Word Ladder](20-problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
+| **[Alien Dictionary](20-problem-deep-dives.md#alien-dictionary) `⚡ T1`** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
+| **[Cheapest Flights K Stops](20-problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | Bellman-Ford for K+1 rounds | Standard Dijkstra doesn't work — need to track stop count in state. |
 | **Number of Islands `⚡ T1`** | "Connected components in grid" | DFS/BFS flood-fill; count calls | In-place mark (`'1'→'0'`) avoids visited set. Recursion limit for 200×200 grid. |
 | **Evaluate Division** | "Graph: nodes=variables, edges=ratios" | Build weighted graph; BFS/DFS to find path product | Handle disconnected components (query impossible → -1). Bidirectional edges: A/B and B/A. |
 | **Reconstruct Itinerary** | "Eulerian path with lexicographic order" | Hierholzer's; DFS with sorted neighbors; post-order reversal | Must visit all edges exactly once — Eulerian, not Hamiltonian. Sort neighbors for lex order. |
@@ -580,9 +580,9 @@ def prim_mst(n: int, adj: dict) -> int:
 
 ## See also
 
-- [Union Find](union-find.md) — DSU for Kruskal's MST and connectivity
-- [data-structures/graphs.md](../01-data-structures/graphs.md) — BFS/DFS templates and grid problems
-- [Heap](../01-data-structures/heap.md) — Dijkstra uses a min-heap
+- [Union Find](14-union-find.md) — DSU for Kruskal's MST and connectivity
+- [data-structures/graphs.md](../01-data-structures/13-graphs.md) — BFS/DFS templates and grid problems
+- [Heap](../01-data-structures/10-heap.md) — Dijkstra uses a min-heap
 - [Patterns Master](../../03-patterns/patterns-master.md) — graph pattern recognition triggers
 
 ## Flashcards

@@ -439,11 +439,11 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ### Medium
 - **Jump Game I `🎯 T2`** — Track `farthest`; O(N) single pass.
-- [Jump Game II](problem-deep-dives.md#jump-game-ii) — Greedy BFS levels; O(N).
-- [Non-overlapping Intervals](problem-deep-dives.md#non-overlapping-intervals) — Sort by end; keep non-overlapping.
+- [Jump Game II](20-problem-deep-dives.md#jump-game-ii) — Greedy BFS levels; O(N).
+- [Non-overlapping Intervals](20-problem-deep-dives.md#non-overlapping-intervals) — Sort by end; keep non-overlapping.
 - **Meeting Rooms II** `🎯 T2` — Min-heap of end times; active room count = heap size.
-- [Gas Station](problem-deep-dives.md#gas-station) — Running tank; reset start on deficit.
-- [Task Scheduler](problem-deep-dives.md#task-scheduler) — Formula or heap simulation.
+- [Gas Station](20-problem-deep-dives.md#gas-station) — Running tank; reset start on deficit.
+- [Task Scheduler](20-problem-deep-dives.md#task-scheduler) — Formula or heap simulation.
 - **Partition Labels** — Last occurrence map; sweep and cut.
 - **Candy `🎯 T2`** — Two-pass: left-right then right-left.
 - **Minimum Arrows to Burst Balloons** — Sort by end; shoot at end of each new balloon.
@@ -460,11 +460,11 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
 | **Jump Game I `🎯 T2`** | Greedy Reach Tracking | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
-| **[Jump Game II](problem-deep-dives.md#jump-game-ii) `🎯 T2`** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
-| **[Non-overlapping Intervals](problem-deep-dives.md#non-overlapping-intervals) `🎯 T2`** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
+| **[Jump Game II](20-problem-deep-dives.md#jump-game-ii) `🎯 T2`** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
+| **[Non-overlapping Intervals](20-problem-deep-dives.md#non-overlapping-intervals) `🎯 T2`** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
 | **Min Arrows to Burst Balloons** | "Minimum shots to pop all balloons" | Sort by end; new arrow only if `start > arrow_pos` | `>` not `>=` — touching boundary is one shot. |
-| **[Gas Station](problem-deep-dives.md#gas-station) `🎯 T2`** | "Starting point for circular traversal" | Reset `start` when tank goes negative | Uniqueness: valid start exists iff `sum(gas) >= sum(cost)`. |
-| **[Task Scheduler](problem-deep-dives.md#task-scheduler) `⚡ T1`** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
+| **[Gas Station](20-problem-deep-dives.md#gas-station) `🎯 T2`** | "Starting point for circular traversal" | Reset `start` when tank goes negative | Uniqueness: valid start exists iff `sum(gas) >= sum(cost)`. |
+| **[Task Scheduler](20-problem-deep-dives.md#task-scheduler) `⚡ T1`** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
 | **Assign Cookies** | "Satisfy max children greedily" | Sort both; smallest sufficient cookie per smallest unsatisfied child | Two-pointer: greedily match smallest satisfied first. |
 | **Candy `🎯 T2`** | "Minimum candy with neighbor constraints" | Two-pass: L→R then R→L; `candy[i] = max(both passes)` | One pass fails — left and right constraints are independent. |
 | **Fractional Knapsack** | "Max value with fractional items" | Sort by value/weight; take greedily | 0/1 Knapsack is **not** greedy — needs DP. Verify items are divisible. |

@@ -350,15 +350,15 @@ class RollbackDSU:
 
 ### Medium (High Frequency)
 - **Number of Connected Components** — DSU; initialize `components = n`; decrement on successful union.
-- **[Redundant Connection](problem-deep-dives.md#redundant-connection) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
-- **[Accounts Merge](problem-deep-dives.md#accounts-merge) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
+- **[Redundant Connection](20-problem-deep-dives.md#redundant-connection) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
+- **[Accounts Merge](20-problem-deep-dives.md#accounts-merge) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
 - **Graph Valid Tree `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
 - **Satisfiability of Equations** — Union all `==` pairs first; then check all `!=` pairs.
 
 ### Hard
 - **Number of Islands II `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
 - **Minimize Malware Spread** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
-- **[Evaluate Division](problem-deep-dives.md#evaluate-division)** — Weighted DSU; ratios as edge weights; query accumulates product path.
+- **[Evaluate Division](20-problem-deep-dives.md#evaluate-division)** — Weighted DSU; ratios as edge weights; query accumulates product path.
 - **Smallest String With Swaps** — DSU on index pairs; sort characters lexicographically within each component.
 
 ---
@@ -367,7 +367,7 @@ class RollbackDSU:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Redundant Connection](problem-deep-dives.md#redundant-connection) `⚡ T1`** | DSU Cycle Detection | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
+| **[Redundant Connection](20-problem-deep-dives.md#redundant-connection) `⚡ T1`** | DSU Cycle Detection | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
 | **Number of Islands II `⚡ T1`** | "Dynamic land additions; track component count" | DSU over 2D grid → 1D index `r*cols+c`; union 4-neighbors each add | Check bounds before union. Duplicate queries (same cell added twice) must not double-decrement count. |
 | **Accounts Merge `⚡ T1`** | "Same email = same person across accounts" | Union all emails within each account; group by DSU root; sort | Email is the DSU element (not account name). Map `email → integer index` first. |
 | **Kruskal MST `⚡ T1`** | "Min cost to connect all nodes" | Sort edges by weight; add edge if `union(u,v)` succeeds; stop at n-1 edges | Disconnected graph → return -1. Parallel edges → take cheapest; DSU handles duplicates naturally. |
@@ -399,8 +399,8 @@ class RollbackDSU:
 
 ## See also
 
-- [Graph Algorithms](graph.md) — Kruskal; when DSU vs BFS/DFS for connectivity
-- [Sorting](sorting.md) — edge sorting for Kruskal
+- [Graph Algorithms](13-graph.md) — Kruskal; when DSU vs BFS/DFS for connectivity
+- [Sorting](00-sorting.md) — edge sorting for Kruskal
 - [Patterns Master](../../03-patterns/patterns-master.md) — DSU pattern recognition triggers
 
 ## Flashcards

@@ -7,7 +7,7 @@
 
 Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file is self-contained; this page is your **navigation hub** — use it to pick what to read and in what order.
 
-**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (when to use what):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Algorithms (techniques):** [02-algorithms/README.md](../02-algorithms/README.md) · **Problem walkthroughs:** [02-algorithms/problem-deep-dives.md](../02-algorithms/problem-deep-dives.md)
+**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (when to use what):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Algorithms (techniques):** [02-algorithms/README.md](../02-algorithms/README.md) · **Problem walkthroughs:** [02-algorithms/problem-deep-dives.md](../02-algorithms/20-problem-deep-dives.md)
 
 ---
 
@@ -26,16 +26,16 @@ Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file 
 
 | Topic | Difficulty | Key patterns | File |
 |-------|------------|--------------|------|
-| **Arrays** | Easy–Hard | Two pointers, sliding window, prefix sum, Kadane | [array.md](./array.md) |
-| **Strings** | Easy–Hard | Sliding window, frequency map, KMP / Rabin-Karp | [string.md](./string.md) |
-| **Linked lists** | Easy–Med | Fast/slow, dummy node, reverse in place | [linked-list.md](./linked-list.md) |
-| **Stacks** | Easy–Med | Monotonic stack, brackets, next greater | [stack.md](./stack.md) |
-| **Queues / deque** | Easy–Med | BFS, monotonic deque, sliding window max | [queue.md](./queue.md) |
-| **Trees / BST** | Med–Hard | DFS/BFS, LCA, validate BST, tree DP | [tree.md](./tree.md) |
-| **Heaps** | Med–Hard | Top-K, merge K sorted, two-heap median | [heap.md](./heap.md) |
-| **Hash maps** | Easy–Med | Frequency, two sum, grouping, prefix + map | [hashing.md](./hashing.md) |
-| **Tries** | Med | Prefix search, word break, XOR trie | [trie.md](./trie.md) |
-| **Graphs** | Med–Hard | BFS/DFS, topo, union-find; weighted → [graph.md](../02-algorithms/graph.md) | [graphs.md](./graphs.md) |
+| **Arrays** | Easy–Hard | Two pointers, sliding window, prefix sum, Kadane | [array.md](./01-array.md) |
+| **Strings** | Easy–Hard | Sliding window, frequency map, KMP / Rabin-Karp | [string.md](./02-string.md) |
+| **Linked lists** | Easy–Med | Fast/slow, dummy node, reverse in place | [linked-list.md](./07-linked-list.md) |
+| **Stacks** | Easy–Med | Monotonic stack, brackets, next greater | [stack.md](./05-stack.md) |
+| **Queues / deque** | Easy–Med | BFS, monotonic deque, sliding window max | [queue.md](./06-queue.md) |
+| **Trees / BST** | Med–Hard | DFS/BFS, LCA, validate BST, tree DP | [tree.md](./08-tree.md) |
+| **Heaps** | Med–Hard | Top-K, merge K sorted, two-heap median | [heap.md](./10-heap.md) |
+| **Hash maps** | Easy–Med | Frequency, two sum, grouping, prefix + map | [hashing.md](./02-hashing.md) |
+| **Tries** | Med | Prefix search, word break, XOR trie | [trie.md](./09-trie.md) |
+| **Graphs** | Med–Hard | BFS/DFS, topo, union-find; weighted → [graph.md](../02-algorithms/13-graph.md) | [graphs.md](./13-graphs.md) |
 | **DS decision tree** | — | “Which structure for this constraint?” | [ds_tree.md](./ds_tree.md) |
 
 ---
@@ -60,21 +60,21 @@ Read top-to-bottom on first pass; on revision, jump to the **bold** sections.
 ## Study progression (beginner → advanced)
 
 **Foundation (~week 1)**  
-1. [array.md](./array.md) — prefix sum, two-pointer, sliding window  
-2. [hashing.md](./hashing.md) — frequency maps, two sum  
-3. [string.md](./string.md) — treat as char arrays + windows  
-4. [linked-list.md](./linked-list.md) — dummy node, fast/slow  
+1. [array.md](./01-array.md) — prefix sum, two-pointer, sliding window  
+2. [hashing.md](./02-hashing.md) — frequency maps, two sum  
+3. [string.md](./02-string.md) — treat as char arrays + windows  
+4. [linked-list.md](./07-linked-list.md) — dummy node, fast/slow  
 
 **Core L4 (~week 1–2)**  
-5. [stack.md](./stack.md) — monotonic stack  
-6. [queue.md](./queue.md) — BFS + monotonic deque  
-7. [tree.md](./tree.md) — traversals, LCA, BST  
-8. [graphs.md](./graphs.md) — BFS/DFS, topo, grids  
+5. [stack.md](./05-stack.md) — monotonic stack  
+6. [queue.md](./06-queue.md) — BFS + monotonic deque  
+7. [tree.md](./08-tree.md) — traversals, LCA, BST  
+8. [graphs.md](./13-graphs.md) — BFS/DFS, topo, grids  
 
 **Differentiators (~week 3+)**  
-9. [heap.md](./heap.md) — top-K, merge K, median stream  
-10. [trie.md](./trie.md) — prefix / dictionary problems  
-11. Union-find — [union-find.md](../02-algorithms/union-find.md)  
+9. [heap.md](./10-heap.md) — top-K, merge K, median stream  
+10. [trie.md](./09-trie.md) — prefix / dictionary problems  
+11. Union-find — [union-find.md](../02-algorithms/14-union-find.md)  
 
 **Good to know (time permitting)**  
 

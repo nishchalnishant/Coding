@@ -6,7 +6,7 @@
 > `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
 
 
-**Companion files:** [recursion.md](./recursion.md) (write the recurrence) · [dynamic-programming.md](./dynamic-programming.md) (pattern catalog + bugs)
+**Companion files:** [recursion.md](./15-recursion.md) (write the recurrence) · [dynamic-programming.md](./15-dynamic-programming.md) (pattern catalog + bugs)
 
 Use this file when you can write recursion but suspect repeated subproblems. The interview workflow:
 
@@ -503,7 +503,7 @@ One row per problem — use after you can do the nine worked examples above.
 | 14 | Minimum Path Sum | `f(r, c)` min cost to cell | `(r, c)` | same as #13 | 1 row | Same grid, `min` combine |
 | 15 | Burst Balloons | `f(l, r)` max in interval | `(l, r)` | length ↑ | full table | **Last** burst, not first |
 
-**More depth:** [dynamic-programming.md](./dynamic-programming.md) — knapsack variants, stock DP, digit DP, bitmask.
+**More depth:** [dynamic-programming.md](./15-dynamic-programming.md) — knapsack variants, stock DP, digit DP, bitmask.
 
 ---
 

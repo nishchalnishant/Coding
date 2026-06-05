@@ -130,7 +130,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Two pointers (opposite ends + same direction), sliding window (variable/fixed), prefix sum, Kadane.
 
-- Full notes: [../01-data-structures/array.md](../01-data-structures/array.md)  
+- Full notes: [../01-data-structures/array.md](../01-data-structures/01-array.md)  
 - Patterns: `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md`
 
 **Google-style practice (names only — use your platform):** Two Sum, 3Sum, Subarray Sum Equals K, Longest Substring Without Repeating Characters, Minimum Window Substring, Trapping Rain Water, Merge Intervals, Product of Array Except Self.
@@ -143,7 +143,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Frequency map for anagrams; sliding window; KMP/Rabin-Karp at high level; palindrome (expand from center or DP).
 
-- Full notes: [string.md](../01-data-structures/string.md) (DS + windows); [string algorithms](../02-algorithms/string.md) (KMP, Rabin-Karp), [hashing.md](../01-data-structures/hashing.md)
+- Full notes: [string.md](../01-data-structures/02-string.md) (DS + windows); [string algorithms](../02-algorithms/02-string.md) (KMP, Rabin-Karp), [hashing.md](../01-data-structures/02-hashing.md)
 
 **Practice:** Group Anagrams, Valid Anagram, Longest Palindromic Substring, Minimum Window Substring, Find All Anagrams in a String.
 
@@ -153,7 +153,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Dummy node, fast/slow (middle, cycle), reverse in place, merge two sorted.
 
-- Full notes: [data-structures/linked-list.md](../01-data-structures/linked-list.md)
+- Full notes: [data-structures/linked-list.md](../01-data-structures/07-linked-list.md)
 
 **Practice:** Reverse Linked List, Linked List Cycle II, Merge Two Sorted Lists, Remove Nth From End.
 
@@ -163,7 +163,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Monotonic stack (next greater, histogram), valid parentheses, monotonic deque (sliding window max).
 
-- Full notes: [data-structures/stack.md](../01-data-structures/stack.md), [data-structures/queue.md](../01-data-structures/queue.md)
+- Full notes: [data-structures/stack.md](../01-data-structures/05-stack.md), [data-structures/queue.md](../01-data-structures/06-queue.md)
 
 **Practice:** Daily Temperatures, Largest Rectangle in Histogram, Sliding Window Maximum, Valid Parentheses.
 
@@ -173,7 +173,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Pre/in/post/level order; LCA (BST vs general); validate BST; tree DP (max path sum); serialize/deserialize idea.
 
-- Full notes: [data-structures/tree.md](../01-data-structures/tree.md)
+- Full notes: [data-structures/tree.md](../01-data-structures/08-tree.md)
 
 **Practice:** Lowest Common Ancestor, Validate BST, Binary Tree Maximum Path Sum, Serialize and Deserialize Binary Tree, Kth Smallest in BST.
 
@@ -183,7 +183,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Min-heap for “K largest” (heap size K); merge K sorted lists; two heaps for median.
 
-- Full notes: [data-structures/heap.md](../01-data-structures/heap.md)
+- Full notes: [data-structures/heap.md](../01-data-structures/10-heap.md)
 
 **Practice:** Merge K Sorted Lists, Top K Frequent Elements, Find Median from Data Stream.
 
@@ -193,7 +193,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Lower/upper bound; binary search on answer (minimize max, etc.); rotated sorted array.
 
-- Full notes: [algorithms/searching.md](../02-algorithms/searching.md)
+- Full notes: [algorithms/searching.md](../02-algorithms/11-searching.md)
 
 **Practice:** Search in Rotated Sorted Array, Find First and Last Position, Koko Eating Bananas (or similar BS-on-answer).
 
@@ -203,9 +203,9 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Adjacency list; BFS shortest path (unweighted); DFS for components/cycle; topological sort (Kahn / DFS); Dijkstra (non-negative weights); when to use Union-Find.
 
-- Full notes: [algorithms/graph.md](../02-algorithms/graph.md), [data-structures/graphs.md](../01-data-structures/graphs.md)  
-- Union-Find: [algorithms/union-find.md](../02-algorithms/union-find.md)  
-- Advanced (if L5+): [../advanced-dsa/advanced-graphs.md](../advanced-dsa/advanced-graphs.md)
+- Full notes: [algorithms/graph.md](../02-algorithms/13-graph.md), [data-structures/graphs.md](../01-data-structures/13-graphs.md)  
+- Union-Find: [algorithms/union-find.md](../02-algorithms/14-union-find.md)  
+- Advanced (if L5+): [../advanced-dsa/advanced-graphs.md](../advanced-dsa/14-advanced-graphs.md)
 
 **Practice:** Number of Islands, Course Schedule, Rotten Oranges, Clone Graph, Word Ladder (BFS), Cheapest Flights Within K Stops (or Bellman/Dijkstra variant).
 
@@ -226,7 +226,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Sort + greedy for intervals; backtracking template (choose, recurse, undo).
 
-- Full notes: [algorithms/greedy.md](../02-algorithms/greedy.md), [algorithms/backtracking.md](../02-algorithms/backtracking.md)
+- Full notes: [algorithms/greedy.md](../02-algorithms/16-greedy.md), [algorithms/backtracking.md](../02-algorithms/12-backtracking.md)
 
 **Practice:** Jump Game, Merge Intervals / Non-overlapping Intervals, Permutations, Combination Sum, Word Search.
 
@@ -236,7 +236,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** XOR for single number; n & (n-1) clears lowest bit; bitmask for subsets when N small.
 
-- Full notes: [algorithms/bit-manipulation.md](../02-algorithms/bit-manipulation.md)
+- Full notes: [algorithms/bit-manipulation.md](../02-algorithms/17-bit-manipulation.md)
 
 ---
 
@@ -244,7 +244,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** GCD, modular arithmetic basics; merge/quick sort complexity; when counting sort applies.
 
-- Full notes: [algorithms/maths.md](../02-algorithms/maths.md), [algorithms/sorting.md](../02-algorithms/sorting.md)
+- Full notes: [algorithms/maths.md](../02-algorithms/17-maths.md), [algorithms/sorting.md](../02-algorithms/00-sorting.md)
 
 ---
 
@@ -266,12 +266,12 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 | Day | Focus | Action |
 |-----|--------|--------|
-| 1 | Arrays + hashing | Review [array](../01-data-structures/array.md) + [hashing](../01-data-structures/hashing.md); 4 problems |
-| 2 | Strings + two pointers | [string](../01-data-structures/string.md) + sliding window pattern; 4 problems |
-| 3 | Trees + BST | [tree](../01-data-structures/tree.md); 3 problems |
-| 4 | Graphs | [graph](../02-algorithms/graph.md); BFS/DFS/topo; 4 problems |
+| 1 | Arrays + hashing | Review [array](../01-data-structures/01-array.md) + [hashing](../01-data-structures/02-hashing.md); 4 problems |
+| 2 | Strings + two pointers | [string](../01-data-structures/02-string.md) + sliding window pattern; 4 problems |
+| 3 | Trees + BST | [tree](../01-data-structures/08-tree.md); 3 problems |
+| 4 | Graphs | [graph](../02-algorithms/13-graph.md); BFS/DFS/topo; 4 problems |
 | 5 | DP | [DP README](../02-algorithms/dynamic-programming/README.md) + [dp-advanced](../02-algorithms/dynamic-programming/advanced-dp-optimizations.md); 4 problems |
-| 6 | Heap + binary search + stack | [heap](../01-data-structures/heap.md), [searching](../02-algorithms/searching.md), [stack](../01-data-structures/stack.md); 4 problems |
+| 6 | Heap + binary search + stack | [heap](../01-data-structures/10-heap.md), [searching](../02-algorithms/11-searching.md), [stack](../01-data-structures/05-stack.md); 4 problems |
 | 7 | Mixed mock | 2 timed problems (45 min each) + review mistakes |
 
 ### If you have 48 hours
@@ -311,8 +311,8 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | Need | File |
 |------|------|
 | **One-page patterns** | [GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md) |
-| **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/array.md) |
-| **Graphs (compact)** | [algorithms/graph.md](../02-algorithms/graph.md) |
-| **Graphs (long examples)** | [data-structures/graphs.md](../01-data-structures/graphs.md) |
+| **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/01-array.md) |
+| **Graphs (compact)** | [algorithms/graph.md](../02-algorithms/13-graph.md) |
+| **Graphs (long examples)** | [data-structures/graphs.md](../01-data-structures/13-graphs.md) |
 | **DP** | [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md) |
 | **Full topic index** | [01-data-structures](../01-data-structures/README.md), [02-algorithms](../02-algorithms/README.md) |

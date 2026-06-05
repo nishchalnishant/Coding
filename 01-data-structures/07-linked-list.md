@@ -400,21 +400,21 @@ class LRUCache:
 ## 4. Common Interview Problems
 
 ### Easy
-- [Reverse Linked List](../02-algorithms/problem-deep-dives.md#reverse-linked-list) — Three-pointer iterative; recursive is shorter but O(N) stack.
+- [Reverse Linked List](../02-algorithms/20-problem-deep-dives.md#reverse-linked-list) — Three-pointer iterative; recursive is shorter but O(N) stack.
 - **Linked List Cycle `🎯 T2`** — Fast & slow; `O is O` identity check.
 - **Merge Two Sorted Lists `🎯 T2`** — Dummy head; two-pointer merge.
 
 ### Medium
-- [Remove Nth From End](../02-algorithms/problem-deep-dives.md#remove-nth-from-end) — Fast advances N steps first; both advance together until fast.next is null.
-- [Copy List with Random Pointer](../02-algorithms/problem-deep-dives.md#copy-list-with-random-pointer) — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
+- [Remove Nth From End](../02-algorithms/20-problem-deep-dives.md#remove-nth-from-end) — Fast advances N steps first; both advance together until fast.next is null.
+- [Copy List with Random Pointer](../02-algorithms/20-problem-deep-dives.md#copy-list-with-random-pointer) — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
 - **Palindrome Linked List** — Find middle, reverse second half, compare, restore.
 - **Add Two Numbers** — Digit-by-digit sum with carry; handle length mismatch.
 - **Reorder List `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
 - **Swap Nodes in Pairs** — Reverse every two nodes; dummy node simplifies head case.
 
 ### Hard
-- [Merge K Sorted Lists](../02-algorithms/problem-deep-dives.md#merge-k-sorted-lists) — Min-heap of K nodes; or divide-and-conquer pairwise merge.
-- [LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) — DLL + hash map; dummy head/tail to avoid edge cases.
+- [Merge K Sorted Lists](../02-algorithms/20-problem-deep-dives.md#merge-k-sorted-lists) — Min-heap of K nodes; or divide-and-conquer pairwise merge.
+- [LRU Cache](../02-algorithms/20-problem-deep-dives.md#lru-cache) — DLL + hash map; dummy head/tail to avoid edge cases.
 - **Reverse K-Group** — Recursion or iterative; check K nodes exist before reversing.
 - **Sort List** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
 
@@ -424,10 +424,10 @@ class LRUCache:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Reverse List](../02-algorithms/problem-deep-dives.md#reverse-linked-list)** | Iterative Pointer Reversal | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
-| **[Remove Nth From End](../02-algorithms/problem-deep-dives.md#remove-nth-from-end)** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
-| **[Merge K Lists](../02-algorithms/problem-deep-dives.md#merge-k-sorted-lists)** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
-| **[LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) `🎯 T2`** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
+| **[Reverse List](../02-algorithms/20-problem-deep-dives.md#reverse-linked-list)** | Iterative Pointer Reversal | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
+| **[Remove Nth From End](../02-algorithms/20-problem-deep-dives.md#remove-nth-from-end)** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
+| **[Merge K Lists](../02-algorithms/20-problem-deep-dives.md#merge-k-sorted-lists)** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
+| **[LRU Cache](../02-algorithms/20-problem-deep-dives.md#lru-cache) `🎯 T2`** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
 | **Detect Cycle Entry** | "Where does the cycle begin?" | Two-pointer meet inside cycle; reset slow to head; advance both by 1 | The math: meeting point is exactly `L` steps from entry — derive it once, remember it. |
 | **Palindrome LL** | "Is the list a palindrome?" | Find middle, reverse second half, compare | Restore the second half after comparison — mutation side effect trap. |
 | **Reverse K-Group** | "Reverse every K nodes" | Count K nodes; reverse; connect tail to result of recursive call | Fewer than K nodes at end — don't reverse; just return `head`. |
@@ -459,9 +459,9 @@ class LRUCache:
 
 ## See also
 
-- [Heap](heap.md) — Merge K sorted lists via min-heap
-- [Hashing](hashing.md) — Copy list with random pointer; LRU cache hash map component
-- [Stack](stack.md) — Recursion uses call stack; iterative reversal eliminates it
+- [Heap](10-heap.md) — Merge K sorted lists via min-heap
+- [Hashing](02-hashing.md) — Copy list with random pointer; LRU cache hash map component
+- [Stack](05-stack.md) — Recursion uses call stack; iterative reversal eliminates it
 - [Patterns Master](../03-patterns/patterns-master.md) — fast & slow pointer pattern triggers
 
 ## Flashcards

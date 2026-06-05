@@ -1,10 +1,10 @@
 ---
 tags: [l3-google, tier3, stub]
-topic: Miscellaneous
+topic: Maths
 tier: T3-SKIP
 ---
 
-# Miscellaneous `💤 T3`
+# Maths `💤 T3`
 
 > [!warning] 💤 TIER 3 — Skim or Skip
 > **This topic is not required for Google L3 (SWE) interviews.**
@@ -12,11 +12,11 @@ tier: T3-SKIP
 
 ## What it is
 
-Advanced structures (persistent segment tree, Mo's algorithm). Well beyond L3 scope.
+Number theory, combinatorics, probability. Not a primary L3 topic area.
 
 ## What to study instead
 
-→ [02-algorithms/dynamic-programming.md](./dynamic-programming.md)
+→ [02-algorithms/dynamic-programming.md](./15-dynamic-programming.md)
 
 ---
 

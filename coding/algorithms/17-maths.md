@@ -1,10 +1,10 @@
 ---
 tags: [l3-google, tier3, stub]
-topic: Bit Manipulation
+topic: Maths
 tier: T3-SKIP
 ---
 
-# Bit Manipulation `💤 T3`
+# Maths `💤 T3`
 
 > [!warning] 💤 TIER 3 — Skim or Skip
 > **This topic is not required for Google L3 (SWE) interviews.**
@@ -12,11 +12,11 @@ tier: T3-SKIP
 
 ## What it is
 
-Bit tricks. Not L3 priority. Redirected — see coding/algorithms/bit-manipulation.md stub.
+Number theory, GCD, modular arithmetic, matrix exponentiation. Not tested at L3 DSA rounds.
 
 ## What to study instead
 
-→ [02-algorithms/graph.md](./graph.md)
+→ [dynamic-programming.md](./15-dynamic-programming.md)
 
 ---
 

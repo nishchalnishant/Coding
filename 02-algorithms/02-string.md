@@ -576,13 +576,13 @@ class AhoCorasick:
 ### Medium
 - **Longest Substring Without Repeating Chars** — Sliding window + last-seen index map.
 - **Longest Palindromic Substring `🎯 T2`** — Expand from center; O(N²).
-- [Group Anagrams](problem-deep-dives.md#group-anagrams) — `sorted(word)` or 26-count tuple as key.
+- [Group Anagrams](20-problem-deep-dives.md#group-anagrams) — `sorted(word)` or 26-count tuple as key.
 - **Find All Anagrams in String** — Fixed-size sliding window + counter comparison.
 - **Encode and Decode Strings `🎯 T2`** — Length-prefixed encoding: `f"{len(s)}#{s}"`.
 - **Longest Palindromic Subsequence `🎯 T2`** — DP or LCS with `reversed(s)`.
 
 ### Hard
-- [Minimum Window Substring](problem-deep-dives.md#minimum-window-substring) — Sliding window + `have`/`required` count logic.
+- [Minimum Window Substring](20-problem-deep-dives.md#minimum-window-substring) — Sliding window + `have`/`required` count logic.
 - **Edit Distance `🎯 T2`** — 2D DP; space-optimize to 1D rolling array.
 - **Implement strStr() (KMP)** — Build LPS; scan without backtracking text pointer.
 - **Regular Expression Matching** — 2D DP; handle `*` = zero or more of preceding.
@@ -597,13 +597,13 @@ class AhoCorasick:
 | :--- | :--- | :--- | :--- | :--- |
 | **Longest Palindromic Substring `🎯 T2`** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
 | **Longest Palindromic Subsequence `🎯 T2`** | "Longest non-contiguous palindrome" | DP or `LCS(s, reversed(s))` | Subsequence ≠ substring; LCS reduction is the cleanest approach. |
-| **[Min Window Substring](problem-deep-dives.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right; shrink left while `have==required` | `have` tracks saturation (== need[ch]), not total count. Unicode: use full Counter, not 26-char array. |
+| **[Min Window Substring](20-problem-deep-dives.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right; shrink left while `have==required` | `have` tracks saturation (== need[ch]), not total count. Unicode: use full Counter, not 26-char array. |
 | **Substring with Concatenation** | "Window containing all words exactly once" | Fixed word-length window; multiset word comparison | Multiple occurrences of same word require multiset, not set. O(N×W×K) with rolling word-hash. |
-| **[Group Anagrams](problem-deep-dives.md#group-anagrams) `⚡ T1`** | "Same letters, different order" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` O(K log K) vs count O(K). |
+| **[Group Anagrams](20-problem-deep-dives.md#group-anagrams) `⚡ T1`** | "Same letters, different order" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` O(K log K) vs count O(K). |
 | **Valid Parenthesis String** | "`*` can be `(`, `)`, or empty" | Greedy range `[lo, hi]` of possible open-count | `lo = max(0, lo-1)` (can't go negative); `hi` increases on `*`. |
 | **KMP strStr** | "First occurrence of needle in haystack" | Build LPS; scan text without backtracking text pointer | LPS `length = lps[length-1]` on mismatch — not `length -= 1`. |
 | **Repeated String Match** | "Minimum copies of A to contain B" | Build `A * ceil(len(B)/len(A)) + 1`; KMP/find | At most `ceil(len(B)/len(A)) + 1` copies suffice — prove bound. |
-| **[Edit Distance](problem-deep-dives.md#edit-distance) `🎯 T2`** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
+| **[Edit Distance](20-problem-deep-dives.md#edit-distance) `🎯 T2`** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
 | **Distinct Subsequences `🎯 T2`** | "Ways to form T as subsequence of S" | `dp[i][j]` = count ways for `s[:i]` containing `t[:j]` | Mod by large prime for large inputs; base case `dp[i][0]=1` (empty T always 1 way). |
 | **Valid Palindrome `🎯 T2`** [E] | "Ignore non-alphanumeric; check palindrome" | Two pointers; `isalnum()` skip; compare `lower()` | `''.join(c.lower() for c in s if c.isalnum())` then `== reversed` is also clean. |
 | **Reverse Words in a String** [E] | "Reverse word order, single spaces, no leading/trailing" | `' '.join(reversed(s.split()))` in Python | In-place without split: reverse entire string, then reverse each word. |
@@ -635,8 +635,8 @@ class AhoCorasick:
 
 ## See also
 
-- [Array](../01-data-structures/array.md) — sliding window on arrays applies identically to strings
-- [Hashing](../01-data-structures/hashing.md) — frequency maps for anagram detection; rolling hash
+- [Array](../01-data-structures/01-array.md) — sliding window on arrays applies identically to strings
+- [Hashing](../01-data-structures/02-hashing.md) — frequency maps for anagram detection; rolling hash
 - [Dynamic Programming](dynamic-programming/README.md) — LCS, edit distance, LPS
 - [Patterns Master](../../03-patterns/patterns-master.md) — string pattern recognition triggers
 

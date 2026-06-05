@@ -94,7 +94,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 1. Arrays & Hashing
 
-→ [array.md](./array.md) · [hashing.md](./hashing.md)
+→ [array.md](./01-array.md) · [hashing.md](./02-hashing.md)
 - **Two Pointers** — Using two indices to scan a sorted or linear structure from different directions or at different speeds.
     - *Patterns:* Opposite direction (Two Sum II), Same direction (Remove Duplicates), Sliding Window (Subarray Sum).
 - **Sliding Window** — Maintaining a sub-segment of an array/string to satisfy specific frequency, sum, or character constraints.
@@ -107,7 +107,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 2. Linked Lists
 
-→ [linked-list.md](./linked-list.md)
+→ [linked-list.md](./07-linked-list.md)
 - **Traversal & Basic Ops** — Standard pointer manipulation for list modification and structural analysis.
     - *Patterns:* Reverse a Linked List, Middle of the Linked List.
 - **Two Pointers (Fast & Slow)** — Using two pointers at different speeds (Tortoise and Hare) for cycle and midpoint detection.
@@ -119,7 +119,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 3. Stacks & Queues
 
-→ [stack.md](./stack.md) · [queue.md](./queue.md)
+→ [stack.md](./05-stack.md) · [queue.md](./06-queue.md)
 - **Monotonic Stack** — Maintaining a stack in sorted order to solve "Next Greater/Smaller" problems in O(N).
     - *Patterns:* Next Greater Element, Daily Temperatures, Largest Rectangle in Histogram, Trapping Rain Water.
 - **Monotonic Queue** — Maintaining a queue of elements to efficiently track the max/min in a moving window.
@@ -129,7 +129,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 4. Trees (Binary, BST, N-ary)
 
-→ [tree.md](./tree.md)
+→ [tree.md](./08-tree.md)
 - **DFS Traversals** — Deep exploration of branches using recursion or an explicit stack.
     - *Patterns:* Inorder, Preorder, Postorder (Recursive vs Iterative with Stack).
 - **BFS (Level Order)** — Layer-by-layer traversal; used for level-based analysis and shortest paths in unweighted trees.
@@ -143,7 +143,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 5. Heaps (Priority Queues)
 
-→ [heap.md](./heap.md)
+→ [heap.md](./10-heap.md)
 - **Top K Elements** — Using a min/max-heap to track the largest/smallest elements in O(N log K).
     - *Patterns:* Kth Largest Element in an Array, Top K Frequent Elements, K Closest Points to Origin.
 - **Merging K-Sorted Data** — Combining multiple sorted streams using a priority queue to maintain global order.
@@ -153,7 +153,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 6. Graphs
 
-→ [graphs.md](./graphs.md) · weighted algos: [graph.md](../02-algorithms/graph.md)
+→ [graphs.md](./13-graphs.md) · weighted algos: [graph.md](../02-algorithms/13-graph.md)
 - **Representations** — Choosing between Adjacency Lists (Space-efficient) and Adjacency Matrices (Lookup-efficient).
     - *Patterns:* Adjacency List (Standard), Adjacency Matrix (Dense/Grid).
 - **Basic Traversal** — Foundation for exploring connectivity and node relationships.
@@ -168,7 +168,7 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 7. Matrices & Grids
 
-→ [array.md](./array.md) (spiral / in-place) · [graphs.md](./graphs.md) (islands, flood fill)
+→ [array.md](./01-array.md) (spiral / in-place) · [graphs.md](./13-graphs.md) (islands, flood fill)
 - **Matrix Traversal** — Systematic exploration of 2D grids using specific spatial patterns.
     - *Patterns:* Spiral Matrix, Diagonal Traverse, Transpose Matrix.
 - **In-place Manipulation** — Modifying matrix structure without allocating significant extra space.

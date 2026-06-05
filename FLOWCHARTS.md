@@ -19,7 +19,7 @@ Read constraints + examples
 ├── Contiguous subarray / substring + constraint?
 ├── Sorted input OR "minimize max / maximize min"?
 └── Tree or graph structure?
-│   └── Shortest path (unweighted)      → BFS (01-data-structures/graphs.md) `⚡ T1`
+│   └── Shortest path (unweighted)      → BFS (01-data-structures/13-graphs.md) `⚡ T1`
 ```
 
 
@@ -29,7 +29,7 @@ Read constraints + examples
 00-start-here/README.md
 └── Entry point (topic-first; don't read linearly)
     └── Have 14 days?   → DP `⚡ T1` · Binary Search `🎯 T2`
-    │                     + 02-algorithms/problem-deep-dives.md#l4-must-nail-problems
+    │                     + 02-algorithms/20-problem-deep-dives.md#l4-must-nail-problems
     │                     + 03-patterns/GOOGLE_INTERVIEW_REVISION.md (Part D)
     │                     Hour 8–16: 05-revision/README.md + Quick Revision Triggers per weak topic
     │                     Hour 16–24: 2 timed mocks + problem-deep-dives L4 list redo
