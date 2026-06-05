@@ -1,5 +1,10 @@
 # Data Structures — Start Here
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, use it as a lookup.
+> Not a coding practice file. Do not deep-study it like a topic file.
+
+
 Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file is self-contained; this page is your **navigation hub** — use it to pick what to read and in what order.
 
 **Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (when to use what):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Algorithms (techniques):** [02-algorithms/README.md](../02-algorithms/README.md) · **Problem walkthroughs:** [02-algorithms/problem-deep-dives.md](../02-algorithms/problem-deep-dives.md)

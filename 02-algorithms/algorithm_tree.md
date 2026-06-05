@@ -85,6 +85,11 @@ DECISION — problem signal → algorithm family
 
 # The Algorithm Tree: Your Strategic Map
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, use it as a lookup.
+> Not a coding practice file. Do not deep-study it like a topic file.
+
+
 If the Data Structure Tree was your "Toolkit," this is your **"Battle Plan."** Most candidates panic because they try to solve every problem from scratch. We don't do that. We recognize the **Pattern**, apply the **Template**, and then handle the **Twist.**
 
 When you're reading a problem, I want you to ask: "Is this a **Dependency** problem? (Topo Sort)" or "Is this an **Optimization** problem with overlapping parts? (DP)". This tree is your index for mapping a vague interview question to a concrete logical trigger.

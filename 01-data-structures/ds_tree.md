@@ -81,6 +81,11 @@ DECISION — access pattern → DS (tactical lookup table)
 
 # The Data Structure Tree: Your Tactical Toolkit
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, use it as a lookup.
+> Not a coding practice file. Do not deep-study it like a topic file.
+
+
 Think of this as your "Map of the Hardware." When you're in an interview and the problem feels overwhelming, I want you to come back here. The secret to SDE-3 mastery isn't knowing every data structure; it's knowing **which tool to grab for which constraint.** 
 
 If you need the "next greater" element, you reach for the **Monotonic Stack**. If you're maintaining a dynamic median, you reach for **Two Heaps**. This tree is your rapid-revision guide to making those structural decisions in seconds.
