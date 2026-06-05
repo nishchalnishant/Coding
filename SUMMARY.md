@@ -26,8 +26,6 @@
 * [Graphs](01-data-structures/graphs.md)
 * [Heap](01-data-structures/heap.md)
 * [Trie](01-data-structures/trie.md)
-* [Segment Tree](01-data-structures/segment-tree.md)
-* [Advanced Structures](01-data-structures/advanced-structures.md)
 * [DS Decision Tree](01-data-structures/ds_tree.md)
 
 ---
@@ -48,9 +46,6 @@
 * [String Algorithms](02-algorithms/string.md)
 * [Bit Manipulation](02-algorithms/bit-manipulation.md)
 * [Maths](02-algorithms/maths.md)
-* [SQL](02-algorithms/sql.md)
-* [Concurrency & LLD](02-algorithms/concurrency.md)
-* [System Design Algorithms](02-algorithms/system-design-algorithms.md)
 * [Miscellaneous](02-algorithms/miscellaneous.md)
 * [Problem Deep Dives](02-algorithms/problem-deep-dives.md)
 * [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
@@ -69,14 +64,12 @@
 Problem lists with approaches — companion to [Mind Map](MINDMAP.md).
 
 ### Data Structures
-* [Advanced](coding/data-structures/advanced.md)
 * [Array](coding/data-structures/array.md)
 * [Graph](coding/data-structures/graph.md)
 * [Hashing](coding/data-structures/hashing.md)
 * [Heap](coding/data-structures/heap.md)
 * [Linked List](coding/data-structures/linked-list.md)
 * [Queue](coding/data-structures/queue.md)
-* [Segment Tree](coding/data-structures/segment-tree.md)
 * [Stack](coding/data-structures/stack.md)
 * [String](coding/data-structures/string.md)
 * [Tree](coding/data-structures/tree.md)
@@ -110,7 +103,6 @@ Problem lists with approaches — companion to [Mind Map](MINDMAP.md).
 * [Interview Cheatsheet](03-patterns/interview-cheatsheet.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
 * [Google Quick Sheet](03-patterns/GOOGLE_QUICK_SHEET.md)
-* [System Design](03-patterns/system-design.md)
 
 ---
 
@@ -128,9 +120,3 @@ Problem lists with approaches — companion to [Mind Map](MINDMAP.md).
 ---
 
 ## Books
-* [Index](books/README.md)
-* [Elements of Programming Interviews](books/elements-of-programming-interviews-in-python.md)
-* [The Algorithm Design Manual](books/the-algorithm-design-manual.md)
-* [Dynamic Programming for Coding Interviews](books/dynamic-programming-for-coding-interviews.md)
-* [Competitive Programming 3](books/cp3.md)
-* [Data Structures & Algorithms Using Python](books/data-structures-and-algorithms-using-python.md)

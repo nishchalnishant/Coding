@@ -214,14 +214,12 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 9. Concurrency & Parallelism
 
-→ [concurrency.md](./concurrency.md)
 - **Producer-Consumer** — Synchronization between data sources and sinks using bounded buffers and semaphores.
 - **Read-Write Locking** — Optimizing for high-read throughput while ensuring exclusive write access.
 - **Barrier/Phaser Synchronization** — Multi-threaded coordination where threads must wait at specific checkpoints.
 
 ## 10. System Design Algorithms (Distributed Scale)
 
-→ [system-design-algorithms.md](./system-design-algorithms.md)
 - **Consistent Hashing** — Distributed data partitioning that minimizes reshuffling during node churn.
 - **Bloom Filters & HyperLogLog** — Space-efficient probabilistic structures for membership and cardinality estimation.
 - **Rate Limiting (Token/Leaky Bucket)** — Algorithms for flow control and protecting systems from traffic bursts.

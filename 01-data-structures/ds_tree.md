@@ -178,14 +178,12 @@ If you need the "next greater" element, you reach for the **Monotonic Stack**. I
 
 ## 8. Advanced Structures
 
-→ [trie.md](./trie.md) · [segment-tree.md](./segment-tree.md) · [advanced-structures.md](./advanced-structures.md) · DSU: [union-find.md](../02-algorithms/union-find.md)
 - **Trie (Prefix Tree)** — Optimized string storage and prefix retrieval; essential for dictionary-based apps.
     - *Patterns:* Implement Trie, Word Search II (Trie + DFS).
 - **Disjoint Set Union (DSU)** — Tracking connected components and dynamic merging with near-O(1) performance.
     - *Patterns:* Redundant Connection, Accounts Merge (Group elements).
 - **Segment Trees / Fenwick Trees** — Advanced structures for efficient range updates and range queries in O(log N).
     - *Patterns:* Range Sum Query - Mutable, Count of Smaller Numbers After Self.
-    - *Deep Dive:* [Segment Trees](segment-tree.md).
 
 ## 9. Concurrency Primitives
 - **Semaphores & Mutexes** — Atomic locks and signals for multi-threaded resource management.

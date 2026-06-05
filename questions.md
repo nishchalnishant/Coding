@@ -101,7 +101,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Merge K Sorted Lists](coding/data-structures/linked-list.md#merge-k-sorted-lists) — Merge `k` sorted linked lists into one sorted linked list [H]
 - [ ] [Kth Largest Element](02-algorithms/problem-deep-dives.md#kth-largest-element) — Find kth largest element in array [M]
 - [ ] [Top K Frequent](coding/data-structures/heap.md#top-k-frequent-elements) — Return the k most frequent elements or words. [M]
-- [ ] [Find Median from Stream](02-algorithms/sql.md#median) — Solve the standard interview variant of Find Median from Stream. [H]
 - [ ] [K Closest Points](coding/data-structures/heap.md#k-closest-points-to-origin) — Return the points closest to the origin. [M]
 - [ ] [IPO](01-data-structures/heap.md#ipo-pick-up-to-k-projects-to-maximize-capital-can-only-start-if-current-capital-required) — Given `k` project slots, initial capital `w`, and lists of `profits` and `capital` requirements, maximize final capital by picking at most `k` projects [H]
 - [ ] [Reorganize String](coding/data-structures/heap.md#reorganize-string-lc-767) — Rearrange a string so no two adjacent characters are the same. Return `""` if impossible [M]
@@ -110,7 +109,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Smallest Range (K Lists)](02-algorithms/problem-deep-dives.md#lis) — Solve the standard interview variant of Smallest Range (K Lists). [H]
 - [ ] [Last Stone Weight](coding/data-structures/heap.md#last-stone-weight) — Each turn smash the two heaviest stones. If equal, both destroyed; otherwise the difference survives. Return the weight of the last stone (or 0) [E]
 - [ ] [Kth Largest in Stream](02-algorithms/problem-deep-dives.md#kth-largest) — Solve the standard interview variant of Kth Largest in Stream. [E]
-- [ ] [Find Median from Stream](02-algorithms/sql.md#median) — Solve the standard interview variant of Find Median from Stream. [H]
 - [ ] [Furthest Building You Can Reach](coding/data-structures/heap.md#furthest-building-you-can-reach) — Given building heights, `bricks`, and `ladders`, greedily use resources to advance. Ladders handle any jump; bricks handle a jump of exactly that size. Maximize the building index reached [M]
 - [ ] [Single-Threaded CPU](01-data-structures/heap.md#single-threaded-cpu) — Solve the standard interview variant of Single-Threaded CPU. [M]
 - [ ] [Maximum Performance of a Team](01-data-structures/heap.md#maximum-performance-of-a-team) — Solve the standard interview variant of Maximum Performance of a Team. [M]
@@ -167,21 +165,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Segment Tree
 
-- [ ] [Range Sum Query - Mutable](01-data-structures/segment-tree.md#range-sum-query-mutable) — Given an array of integers, support two operations: (1) update a single element, (2) query the sum over a range `[l, r]`. LeetCode 307 [M]
 - [ ] [Range Minimum Query](02-algorithms/miscellaneous.md#sparse-table-o1-range-minimum-query-static-arrays) — Given array `nums`, support point updates and range minimum queries `queryMin(l, r)` in O(log n) [M]
-- [ ] [Falling Squares](coding/data-structures/segment-tree.md#falling-squares-lc-699) — Squares fall from the sky at positions `(left, side_length)`. After each square falls, return the current maximum height of any stack. A square lands on top of whatever is below it in its x-range [H]
-- [ ] [Count of Smaller Numbers After Self](coding/data-structures/advanced.md#count-of-smaller-numbers-after-self-lc-315) — For each element `nums[i]`, count how many elements to its right are strictly smaller. LeetCode 315 [H]
-- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) — Given buildings `[left, right, height]`, output the skyline — a list of `[x, height]` key points where the visible height changes [H]
-- [ ] [My Calendar I](coding/data-structures/segment-tree.md#my-calendar-i-lc-729) — Implement a calendar that rejects double bookings. `book(start, end)` returns False if `[start, end)` overlaps any existing booking, True and inserts it otherwise [M]
-- [ ] [My Calendar II](coding/data-structures/segment-tree.md#my-calendar-ii-lc-731) — Allow bookings unless they cause a triple booking (3 overlapping events at any point). `book(start, end)` returns False if it would create a triple overlap [M]
-- [ ] [My Calendar III](coding/data-structures/segment-tree.md#my-calendar-iii-lc-732) — After each `book(start, end)` call, return the maximum number of concurrent events (k-booking) at any point in time [H]
-- [ ] [Count of Range Sum](coding/data-structures/segment-tree.md#count-of-range-sum) — Given array `nums`, count the number of range sums `S(i, j)` such that `lower <= S(i, j) <= upper`. LeetCode 327 [H]
-- [ ] [Rectangle Area II](01-data-structures/segment-tree.md#rectangle-area-ii) — Solve the standard interview variant of Rectangle Area II. [H]
-- [ ] [Maximum Sum of Subarray No Larger Than K](01-data-structures/segment-tree.md#maximum-sum-of-subarray-no-larger-than-k) — Solve the standard interview variant of Maximum Sum of Subarray No Larger Than K. [H]
-- [ ] [Number of Longest Increasing Subsequences](coding/data-structures/advanced.md#number-of-longest-increasing-subsequences-lc-673) — Given `nums`, return the number of distinct longest increasing subsequences [M]
-- [ ] [Interval Sum with Range Add](01-data-structures/segment-tree.md#interval-sum-with-range-add) — Solve the standard interview variant of Interval Sum with Range Add. [M]
-- [ ] [Coordinate Compression Pattern](01-data-structures/segment-tree.md#coordinate-compression-pattern) — Solve the standard interview variant of Coordinate Compression Pattern. [M]
-- [ ] [Segment Tree Beats (Ji Driver)](coding/data-structures/advanced.md#segment-tree) — Solve the standard interview variant of Segment Tree Beats (Ji Driver). [H]
 
 ### Stack
 
@@ -248,7 +232,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Longest Word in Dictionary](coding/data-structures/trie.md#longest-word-in-dictionary) — Given a list of strings, find the longest word that can be built one character at a time — each prefix of the word must also be in the list. If there's a tie, return the lexicographically smallest [M]
 - [ ] [Map Sum Pairs](coding/data-structures/trie.md#map-sum-pairs) — Implement `MapSum` with `insert(key, val)` and `sum(prefix)` returning the sum of all key values whose keys start with `prefix` [M]
 - [ ] [Word Squares](coding/data-structures/trie.md#word-squares-lc-425) — Given a list of words (all same length), find all word squares. A word square is a set of words where the k-th row and k-th column form the same string [H]
-- [ ] [Number of Distinct Substrings](coding/data-structures/advanced.md#number-of-distinct-substrings) — Count all distinct non-empty substrings of `s` [H]
 
 ## Algorithms
 
@@ -325,15 +308,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] ----------
 - [ ] [Implement a thread-safe LRU cache](coding/data-structures/linked-list.md#lru-cache) — Solve the standard interview variant of Implement a thread-safe LRU cache. [H]
 - [ ] [Design a rate limiter shared across threads](02-algorithms/problem-deep-dives.md#rate-limiter) — Solve the standard interview variant of Design a rate limiter shared across threads. [H]
-- [ ] [Implement a countdown latch](02-algorithms/concurrency.md#implement-a-countdown-latch) — Solve the standard interview variant of Implement a countdown latch. [M]
-- [ ] [Fix this deadlocked code (given snippet)](02-algorithms/concurrency.md#fix-this-deadlocked-code-given-snippet) — Solve the standard interview variant of Fix this deadlocked code (given snippet). [M]
-- [ ] [How does a read-write lock differ from a mutex?](02-algorithms/concurrency.md#how-does-a-read-write-lock-differ-from-a-mutex) — Solve the standard interview variant of How does a read-write lock differ from a mutex?. [E]
-- [ ] [What is the ABA problem?](02-algorithms/concurrency.md#the-aba-problem) — Solve the standard interview variant of What is the ABA problem?. [M]
 - [ ] [Dining Philosophers](02-algorithms/problem-deep-dives.md#dining-philosophers-deadlock-free) — 5 philosophers need two forks; avoid deadlock [M]
-- [ ] [Building H2O](02-algorithms/concurrency.md#building-h2o) — Solve the standard interview variant of Building H2O. [H]
-- [ ] [Web Crawler](02-algorithms/concurrency.md#web-crawler) — Solve the standard interview variant of Web Crawler. [M]
-- [ ] [Traffic Light](02-algorithms/concurrency.md#traffic-light) — Solve the standard interview variant of Traffic Light. [M]
-- [ ] [Zero Even Odd](02-algorithms/concurrency.md#zero-even-odd) — Solve the standard interview variant of Zero Even Odd. [M]
 
 ### Divide And Conquer
 
@@ -344,14 +319,11 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Maximum Subarray (D&C)](coding/data-structures/array.md#maximum-subarray) — Find the contiguous subarray with the largest sum. Return the sum [M]
 - [ ] [Majority Element](coding/data-structures/array.md#majority-element) — Find the element appearing more than ⌊n/2⌋ times. Guaranteed to exist. Use O(1) space [E]
 - [ ] [Merge K Sorted Lists](coding/data-structures/linked-list.md#merge-k-sorted-lists) — Merge `k` sorted linked lists into one sorted linked list [H]
-- [ ] [Reverse Pairs](coding/data-structures/advanced.md#reverse-pairs-lc-493) — Count pairs `(i, j)` with `i < j` and `nums[i] > 2 * nums[j]`. LeetCode 493 [H]
 - [ ] [Closest Pair of Points](coding/algorithms/divide-and-conquer.md#closest-pair-of-points) — Find the minimum Euclidean distance between any two points in a 2D set. Achieve better than O(n²) [H]
 - [ ] [Majority Element](coding/data-structures/array.md#majority-element) — Find the element appearing more than ⌊n/2⌋ times. Guaranteed to exist. Use O(1) space [E]
 - [ ] [Sort List](coding/data-structures/linked-list.md#sort-list) — Sort a linked list in O(n log n) time and O(1) space [M]
 - [ ] [Beautiful Array](02-algorithms/divide-and-conquer.md#beautiful-array) — Solve the standard interview variant of Beautiful Array. [M]
 - [ ] [Different Ways to Add Parentheses](coding/algorithms/divide-and-conquer.md#different-ways-to-add-parentheses-lc-241) — Given a string of numbers and operators, return all possible results from computing all different ways to group numbers and operators [M]
-- [ ] [Count of Range Sum](coding/data-structures/segment-tree.md#count-of-range-sum) — Given array `nums`, count the number of range sums `S(i, j)` such that `lower <= S(i, j) <= upper`. LeetCode 327 [H]
-- [ ] [Reverse Pairs](coding/data-structures/advanced.md#reverse-pairs-lc-493) — Count pairs `(i, j)` with `i < j` and `nums[i] > 2 * nums[j]`. LeetCode 493 [H]
 
 ### Graph
 
@@ -395,7 +367,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Two City Scheduling](coding/data-structures/queue.md#scheduling) — Solve the standard interview variant of Two City Scheduling. [M]
 - [ ] [Boats to Save People](coding/algorithms/two-pointers.md#boats-to-save-people-lc-881) — Each person has a weight. Each boat carries at most 2 people with weight sum ≤ `limit`. Find minimum number of boats needed [M]
 - [ ] [Minimum Number of Arrows](coding/algorithms/greedy.md#minimum-number-of-arrows-to-burst-balloons) — Solve the standard interview variant of Minimum Number of Arrows. [M]
-- [ ] [Queue Reconstruction by Height](coding/data-structures/segment-tree.md#queue-reconstruction-by-height) — People stand in a queue; each person `[h, k]` has height h and k taller-or-equal people in front. Reconstruct the queue. LeetCode 406 [M]
 - [ ] [Car Pooling](coding/data-structures/array.md#car-pooling) — A vehicle can take `capacity` passengers. Given `trips[i] = [numPassengers, from, to]`, return true if it is possible to pick up and drop off all passengers without exceeding capacity at any stop [M]
 - [ ] [Wiggle Subsequence](02-algorithms/greedy.md#wiggle-subsequence) — Solve the standard interview variant of Wiggle Subsequence. [M]
 - [ ] [Maximum Units on a Truck](02-algorithms/greedy.md#maximum-units-on-a-truck) — Solve the standard interview variant of Maximum Units on a Truck. [E]
@@ -429,8 +400,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Meeting Rooms II](coding/algorithms/greedy.md#meeting-rooms-ii) — Given intervals [start, end], find the minimum number of conference rooms required [M]
 - [ ] [Range Sum Query Mutable](02-algorithms/miscellaneous.md#range-sum-query-mutable) — Given an array of integers, support two operations: (1) update a single element, (2) query the sum over a range `[l, r]`. LeetCode 307 [M]
 - [ ] [Count Smaller After Self](02-algorithms/miscellaneous.md#count-smaller-after-self) — Solve the standard interview variant of Count Smaller After Self. [H]
-- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) — Given buildings `[left, right, height]`, output the skyline — a list of `[x, height]` key points where the visible height changes [H]
-- [ ] [Design LFU Cache](coding/data-structures/advanced.md#lfu-cache) — Solve the standard interview variant of Design LFU Cache. [H]
 - [ ] [Non-Overlapping Intervals](coding/data-structures/array.md#non-overlapping-intervals-lc-435) — Find the minimum number of intervals to remove so that the rest are non-overlapping [M]
 - [ ] [Data Stream Intervals](coding/data-structures/array.md#intervals) — Solve the standard interview variant of Data Stream Intervals. [H]
 - [ ] [Design HashSet](coding/data-structures/queue.md#design) — Solve the standard interview variant of Design HashSet. [E]
@@ -440,7 +409,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Range Sum Query — Immutable](coding/data-structures/array.md#range-sum-query-immutable-lc-303) — Given an integer array, handle multiple queries each asking for the sum of elements between indices `left` and `right` (inclusive). Preprocess once, answer each query in O(1) [E]
 - [ ] [Snapshot Array](02-algorithms/miscellaneous.md#snapshot-array) — Solve the standard interview variant of Snapshot Array. [M]
 - [ ] [Find Median from Data Stream](coding/data-structures/queue.md#find-median-from-data-stream) — Design a data structure supporting `add_num(num)` and `find_median()` on a dynamic stream [H]
-- [ ] [The Skyline Problem](coding/data-structures/segment-tree.md#the-skyline-problem-lc-218) — Given buildings `[left, right, height]`, output the skyline — a list of `[x, height]` key points where the visible height changes [H]
 - [ ] [Minimum Interval to Include Each Query](02-algorithms/miscellaneous.md#minimum-interval-to-include-each-query) — Solve the standard interview variant of Minimum Interval to Include Each Query. [H]
 - [ ] [Data Stream as Disjoint Intervals](coding/data-structures/array.md#intervals) — Solve the standard interview variant of Data Stream as Disjoint Intervals. [H]
 
@@ -465,7 +433,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Time Based Key-Value Store](02-algorithms/searching.md#time-based-key-value-store) — Solve the standard interview variant of Time Based Key-Value Store. [M]
 - [ ] [Find Kth Missing Positive Number](02-algorithms/searching.md#find-kth-missing-positive-number) — Solve the standard interview variant of Find Kth Missing Positive Number. [M]
 - [ ] [Minimize Max Distance to Gas Station](coding/algorithms/binary-search.md#minimize-max-distance-to-gas-station-lc-774) — Sorted gas station positions. Add `k` new stations anywhere. Minimize the maximum gap between adjacent stations [H]
-- [ ] [Count of Smaller Numbers After Self](coding/data-structures/advanced.md#count-of-smaller-numbers-after-self-lc-315) — For each element `nums[i]`, count how many elements to its right are strictly smaller. LeetCode 315 [H]
 - [ ] [Koko Eating Bananas](coding/algorithms/binary-search.md#koko-eating-bananas-lc-875) — `piles` of bananas. Eat at constant speed `k` bananas/hour, one pile at a time. Must finish all piles in `h` hours. Minimize `k` [M]
 - [ ] [Capacity to Ship Packages Within D Days](coding/algorithms/binary-search.md#capacity-to-ship-packages-within-d-days-lc-1011) — Ship packages in order. Ship has fixed capacity per day. Minimize capacity to ship all within `days` days [M]
 - [ ] [Search a 2D Matrix](coding/data-structures/array.md#search-a-2d-matrix-lc-74) — Given an m×n matrix where each row is sorted and the first element of each row is greater than the last element of the previous row, search for a target value in O(log(m×n)) [M]

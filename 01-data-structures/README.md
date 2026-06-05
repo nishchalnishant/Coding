@@ -36,8 +36,6 @@ Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file 
 | **Hash maps** | Easy–Med | Frequency, two sum, grouping, prefix + map | [hashing.md](./hashing.md) |
 | **Tries** | Med | Prefix search, word break, XOR trie | [trie.md](./trie.md) |
 | **Graphs** | Med–Hard | BFS/DFS, topo, union-find; weighted → [graph.md](../02-algorithms/graph.md) | [graphs.md](./graphs.md) |
-| **Segment trees** | Hard | Range query/update, lazy propagation | [segment-tree.md](./segment-tree.md) |
-| **Advanced** | Hard | LRU/LFU, Bloom filter, Fenwick, skip list | [advanced-structures.md](./advanced-structures.md) |
 | **DS decision tree** | — | “Which structure for this constraint?” | [ds_tree.md](./ds_tree.md) |
 
 ---
@@ -77,10 +75,8 @@ Read top-to-bottom on first pass; on revision, jump to the **bold** sections.
 9. [heap.md](./heap.md) — top-K, merge K, median stream  
 10. [trie.md](./trie.md) — prefix / dictionary problems  
 11. Union-find — [union-find.md](../02-algorithms/union-find.md)  
-12. [segment-tree.md](./segment-tree.md) — concept-level OK for most L4 loops  
 
 **Good to know (time permitting)**  
-[advanced-structures.md](./advanced-structures.md) — unlikely to implement from scratch; know **use cases**.
 
 ---
 

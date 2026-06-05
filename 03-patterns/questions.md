@@ -179,9 +179,6 @@ This file serves as a centralized, interactive checklist for all the canonical i
 
 | Status | Question | Difficulty | Pattern | Link to Explanation |
 | :---: | :--- | :---: | :--- | :--- |
-| [ ] | Range Sum Query - Mutable — Given an array of integers, support two operations: (1) update a single element, (2) query the sum over a range `[l, r]`. LeetCode 307 | Medium | Segment / Fenwick Tree | [segment-tree.md](../01-data-structures/segment-tree.md#interview-questions--logic--trickiness) |
-| [ ] | Range Sum Query 2D - Mutable — Design a data structure for a 2D matrix that supports point updates and rectangular range sum queries | Hard | 2D Segment / Fenwick | [segment-tree.md](../01-data-structures/segment-tree.md#interview-questions--logic--trickiness) |
-| [ ] | Count of Smaller Numbers After Self — For each element `nums[i]`, count how many elements to its right are strictly smaller. LeetCode 315 | Hard | Fenwick Inversion Sums | [segment-tree.md](../01-data-structures/segment-tree.md#interview-questions--logic--trickiness) |
 
 ---
 

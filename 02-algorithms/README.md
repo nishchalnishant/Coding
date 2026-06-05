@@ -49,9 +49,6 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 | **Advanced graphs** | Tarjan SCC, bridges, Euler | [advanced-graphs.md](./advanced-graphs.md) |
 | **Bit manipulation** | XOR, subsets, power of 2 | [bit-manipulation.md](./bit-manipulation.md) |
 | **Maths** | GCD, primes, mod arithmetic | [maths.md](./maths.md) |
-| **System design algorithms** | Bloom, consistent hash, rate limit | [system-design-algorithms.md](./system-design-algorithms.md) |
-| **Concurrency** | Producer-consumer, locks (LLD-style) | [concurrency.md](./concurrency.md) |
-| **SQL** | Window functions, JOINs, CTEs | [sql.md](./sql.md) |
 | **Miscellaneous** | Cross-cutting tricks | [miscellaneous.md](./miscellaneous.md) |
 | **Problem bank (all topics)** | Full pseudocode walkthroughs + **[TOC at top](problem-deep-dives.md#jump-to-section)** | [problem-deep-dives.md](./problem-deep-dives.md) |
 

@@ -497,12 +497,6 @@ Know these cold:
 - [string.md](./data-structures/string.md)
 
 ### 💤 TIER 3 — Skim or Skip
-- [segment-tree.md](./data-structures/segment-tree.md)
-- [advanced.md](./data-structures/advanced.md)
 - [bit-manipulation.md](./algorithms/bit-manipulation.md)
 - [maths.md](./algorithms/maths.md)
-- [concurrency.md](../02-algorithms/concurrency.md)
-- [sql.md](../02-algorithms/sql.md)
-- [system-design.md](./system-design.md)
-- [oop-design-patterns.md](./oop-design-patterns.md)
 - [behavioral-interview.md](./behavioral-interview.md) — Read once; not a DSA topic
