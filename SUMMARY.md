@@ -14,6 +14,13 @@
 
 ---
 
+## L3 Execution Meta-Skills
+* [45-Minute Execution Plan](00-L3-EXECUTION-META/01-45-minute-execution-plan.md)
+* [Constraint Analysis Heuristics](00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md)
+* [Python Whiteboarding Cheatsheet](00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md)
+
+---
+
 ## Data Structures
 * [Index](01-data-structures/README.md)
 * [Array](01-data-structures/01-array.md)
