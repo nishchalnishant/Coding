@@ -1403,7 +1403,7 @@ difficulty: mixed
 
 ---
 
-### Swim in Rising Water
+### Swim in Rising Water `⚡ T1`
 
 > [!example] Problem
 > You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).

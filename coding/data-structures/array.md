@@ -710,7 +710,7 @@ difficulty: mixed
 
 ---
 
-### Product of Array Except Self
+### Product of Array Except Self `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
@@ -1607,7 +1607,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query — Immutable (LC 303) `💤 T3`
+### Range Sum Query — Immutable (LC 303) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following type:

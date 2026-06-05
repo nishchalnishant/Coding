@@ -332,7 +332,7 @@ difficulty: mixed
 
 ---
 
-### Fruits Into Baskets (At Most 2 Distinct) (LC 904)
+### Fruits Into Baskets (At Most 2 Distinct) (LC 904) `⚡ T1`
 
 > [!example] Problem
 > You are visiting a farm that has a single row of fruit trees arranged from left to right. The trees are represented by an integer array fruits where fruits[i] is the type of fruit the ith tree produces.

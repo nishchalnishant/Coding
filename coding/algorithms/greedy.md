@@ -1405,3 +1405,27 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 ## See Also (Extended)
 
 [[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]] | [[sliding-window]]
+
+
+### Hand of Straights `🎯 T2`
+
+**Problem**: Given a hand of cards and a groupSize, check if you can rearrange them into groups of `groupSize` consecutive cards.
+
+**Key Insight**: Use an ordered map (sorted Counter). Always start from the smallest card — if you can't form a group starting from smallest, it's impossible.
+
+```python
+from collections import Counter
+def isNStraightHand(hand, groupSize):
+    if len(hand) % groupSize: return False
+    count = Counter(hand)
+    for card in sorted(count):
+        if count[card]:
+            freq = count[card]
+            for i in range(groupSize):
+                count[card + i] -= freq
+                if count[card + i] < 0: return False
+    return True
+```
+
+**TC**: O(n log n) | **SC**: O(n) | Related: Task Scheduler (same greedy idea)
+

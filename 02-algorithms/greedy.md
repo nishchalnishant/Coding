@@ -441,7 +441,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 - **Jump Game I `🎯 T2`** — Track `farthest`; O(N) single pass.
 - [Jump Game II](problem-deep-dives.md#jump-game-ii) — Greedy BFS levels; O(N).
 - [Non-overlapping Intervals](problem-deep-dives.md#non-overlapping-intervals) — Sort by end; keep non-overlapping.
-- **Meeting Rooms II** — Min-heap of end times; active room count = heap size.
+- **Meeting Rooms II** — Min-heap of end times; active room count = heap size. `🎯 T2`
 - [Gas Station](problem-deep-dives.md#gas-station) — Running tank; reset start on deficit.
 - [Task Scheduler](problem-deep-dives.md#task-scheduler) — Formula or heap simulation.
 - **Partition Labels** — Last occurrence map; sweep and cut.
