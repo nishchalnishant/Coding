@@ -211,6 +211,10 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md",
+    "00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md",
+    "00-L3-EXECUTION-META/01-45-minute-execution-plan.md",
+    "00-L3-EXECUTION-META",
     "coding/algorithms/backtracking.md",
     "coding/algorithms/16-greedy.md",
     "coding/algorithms/13-graph-algorithms.md",
@@ -234,9 +238,6 @@
     "coding/data-structures/01-array.md",
     "coding/data-structures/02-string.md",
     "coding/data-structures/09-trie.md",
-    "coding/data-structures/02-hashing.md",
-    "coding/data-structures/05-stack.md",
-    "01-data-structures/08-tree.md",
     "05-revision",
     "scripts/expand_python_readability.py",
     "scripts/humanize_coding.py",
@@ -245,7 +246,6 @@
     "leetcode-problems/problems/3638-maximum-balanced-shipments.json",
     "leetcode-problems/problems/3637-trionic-array-i.json",
     "leetcode-problems/problems/3636-threshold-majority-queries.json",
-    "leetcode-problems/problems/3635-earliest-finish-time-for-land-and-water-rides-ii.json",
-    "leetcode-problems/problems/3634-minimum-removals-to-balance-array.json"
+    "leetcode-problems/problems/3635-earliest-finish-time-for-land-and-water-rides-ii.json"
   ]
 }
