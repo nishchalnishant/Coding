@@ -4,18 +4,22 @@ topic: Complexity Cheat Sheet
 difficulty: reference
 ---
 
-# Complexity Cheat Sheet — Complete Reference `🔥 Google`
+# Complexity Cheat Sheet — Complete Reference
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!tip] How to Use This
 > Before every interview, scan this page for 10 minutes. When asked "what's the complexity?", your answer must include BOTH time AND space, and the WHY — not just the label.
 
 ---
 
-## Big-O Quick Reference `🔥 Google`
+## Big-O Quick Reference
 
 ```
 O(1)        — constant     : hash lookup, array index access
@@ -44,7 +48,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Data Structure Operations `🔥 Google`
+## Data Structure Operations
 
 | Structure | Access | Search | Insert | Delete | Space |
 |-----------|--------|--------|--------|--------|-------|
@@ -68,7 +72,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Sorting Algorithms `🔥 Google`
+## Sorting Algorithms
 
 | Algorithm | Best | Average | Worst | Space | Stable? |
 |-----------|------|---------|-------|-------|---------|
@@ -91,7 +95,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Graph Algorithm Complexities `🔥 Google`
+## Graph Algorithm Complexities
 
 | Algorithm | Time | Space | Use Case |
 |-----------|------|-------|----------|
@@ -112,7 +116,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Dynamic Programming Complexities `🔥 Google`
+## Dynamic Programming Complexities
 
 | Problem | Time | Space | Optimized Space |
 |---------|------|-------|-----------------|
@@ -133,7 +137,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Tree Algorithm Complexities `🔥 Google`
+## Tree Algorithm Complexities
 
 | Operation | Balanced BST | Unbalanced BST | Heap |
 |-----------|-------------|----------------|------|
@@ -157,7 +161,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## String Algorithm Complexities `🔥 Google`
+## String Algorithm Complexities
 
 | Algorithm | Time | Space | Use Case |
 |-----------|------|-------|----------|
@@ -173,7 +177,7 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2^n) < O(n!)
 
 ---
 
-## Heap / Priority Queue Complexities `🔥 Google`
+## Heap / Priority Queue Complexities
 
 | Operation | Binary Heap | Fibonacci Heap |
 |-----------|------------|----------------|
@@ -196,7 +200,7 @@ heapq.nsmallest(k, arr)   # O(n log k)
 
 ---
 
-## Space Optimization Techniques `🔥 Google`
+## Space Optimization Techniques
 
 ### Rolling Array (DP space reduction)
 
@@ -248,7 +252,7 @@ for i, num in enumerate(nums):
 
 ---
 
-## Amortized Analysis `⭐ Google`
+## Amortized Analysis
 
 Some operations are expensive occasionally but cheap on average:
 
@@ -271,7 +275,7 @@ Amortized per insert: O(n)/n = O(1)
 
 ---
 
-## Master Theorem (Divide & Conquer) `⭐ Google`
+## Master Theorem (Divide & Conquer)
 
 For recurrences of the form: **T(n) = aT(n/b) + f(n)**
 
@@ -300,7 +304,7 @@ Case 3: f(n) = Ω(n^(log_b(a) + ε))  →  T(n) = Θ(f(n))
 
 ---
 
-## Complexity Pitfalls at Google Interviews `🔥 Google`
+## Complexity Pitfalls at Google Interviews
 
 ### Pitfall 1: Hidden O(n) operations
 ```python

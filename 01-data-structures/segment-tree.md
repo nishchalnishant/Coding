@@ -9,6 +9,12 @@ tags: [data-structures, segment-tree]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```
 WHY segment trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                        │                │               │               │
@@ -101,10 +107,7 @@ WHY segment trees exist → WHAT they are → HOW they work → WHEN to use → 
 Manage **Range Queries** and **Point/Range Updates** in $O(\log N)$. When a simple Prefix Sum fails due to frequent updates, the Segment Tree is your best friend.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -192,7 +195,7 @@ class SegmentTree:
 
 ## 3. SDE-3 Deep Dive: Lazy Propagation
 
-When you need to update an entire **range** (e.g., "Add 5 to every element from index 10 to 500"), updating each element individually is $O(K \log N)$. **Lazy Propagation** allows you to perform this range update in $O(\log N)$ by deferring updates until the nodes are actually needed.
+When you need to update an entire **range `💤 T3`** (e.g., "Add 5 to every element from index 10 to 500"), updating each element individually is $O(K \log N)$. **Lazy Propagation** allows you to perform this range update in $O(\log N)$ by deferring updates until the nodes are actually needed.
 
 ### The "Aha!" Moment
 Don't update the children until you're forced to visit them. Store the "pending work" in a `lazy` array. When you visit a node, "push" its lazy value down to its children.
@@ -203,21 +206,21 @@ Don't update the children until you're forced to visit them. Store the "pending 
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Range Sum Query - Mutable [M]** | Segment Tree | Frequent point updates + range queries | Standard recursive Segment Tree | $O(4N)$ space — don't forget the size! |
-| **Range Minimum Query [M]** | Segment Tree (Min) | Range min with updates | Same structure as sum tree; merge returns `min(left, right)` | Sentinel value is `float('inf')`, not `0` — wrong default silently breaks queries |
+| **Range Sum Query - Mutable [M] `💤 T3`** | Segment Tree | Frequent point updates + range queries | Standard recursive Segment Tree | $O(4N)$ space — don't forget the size! |
+| **Range Minimum Query [M] `💤 T3`** | Segment Tree (Min) | Range min with updates | Same structure as sum tree; merge returns `min(left, right)` | Sentinel value is `float('inf')`, not `0` — wrong default silently breaks queries |
 | **Falling Squares [H]** | Max-Segment Tree + Lazy | Range updates (new height) + Range max query | Store max height; lazy propagation for range update | The square "lands" on the max height of its range — relative, not absolute heights |
-| **Count of Smaller Numbers After Self [H] `⭐ Google`** | Segment Tree / BIT | Frequency array update + Prefix sum query | Traverse right to left; query `sum(0, val-1)`, then `update(val)` | Coordinate compression required when values are large or negative |
-| **The Skyline Problem [H] `⭐ Google`** | Max-Segment Tree | Max height at each x-coordinate | Coordinate-compress x values; sweep left-to-right updating max height | Usually solved with heap, but segment tree handles arbitrary range queries more robustly |
+| **Count of Smaller Numbers After Self [H] `💤 T3`** | Segment Tree / BIT | Frequency array update + Prefix sum query | Traverse right to left; query `sum(0, val-1)`, then `update(val)` | Coordinate compression required when values are large or negative |
+| **The Skyline Problem [H]** | Max-Segment Tree | Max height at each x-coordinate | Coordinate-compress x values; sweep left-to-right updating max height | Usually solved with heap, but segment tree handles arbitrary range queries more robustly |
 | **My Calendar I [M]** | Segment Tree / Sorted List | Overlap detection on interval add | Build lazily; query `[start, end-1]` before booking; set range to 1 | Booking requests can interleave unpredictably — segment tree handles non-sorted inserts naturally |
 | **My Calendar II [M]** | Segment Tree (count) | Triple booking detection | Maintain `bookings` (≥1) and `overlaps` (≥2) trees; reject if query on `overlaps` hits the new range | Two separate trees for "at least once" and "at least twice" |
 | **My Calendar III [H]** | Segment Tree + Lazy (max) | Max k concurrent events at any time | Range add +1 on `[start, end-1]`; global max query gives max concurrency | Lazy propagation critical — naive point updates are $O(N)$ per booking |
-| **Count of Range Sum [H] `⭐ Google`** | Segment Tree / Merge Sort | Count prefix sum pairs where `lower ≤ P[j] - P[i] ≤ upper` | Coordinate-compress prefix sums; for each `P[j]`, query `[P[j]-upper, P[j]-lower]` | Off-by-one in coordinate compression kills accuracy; merge sort alternative avoids it |
+| **Count of Range Sum [H]** | Segment Tree / Merge Sort | Count prefix sum pairs where `lower ≤ P[j] - P[i] ≤ upper` | Coordinate-compress prefix sums; for each `P[j]`, query `[P[j]-upper, P[j]-lower]` | Off-by-one in coordinate compression kills accuracy; merge sort alternative avoids it |
 | **Rectangle Area II [H]** | Segment Tree + Coordinate Compression | Union area of N rectangles | Sweep line over y; for active x-intervals, query covered length via segment tree | Counting distinct covered x-length via lazy tree is non-trivial — "count" node tracks segments |
 | **Maximum Sum of Subarray No Larger Than K [H]** | Segment Tree / Sorted Set | For each `j`, find max `P[i]` ≤ `P[j] - k` | Keep sorted prefix sums; binary search for `ceil(P[j] - k)` | Sorted set (SortedList in Python) with `bisect` achieves O(N log N); Segment Tree approach needs coordinate compression |
 | **Number of Longest Increasing Subsequences [M]** | Segment Tree on values | Max LIS length ending at val + count of such sequences | Maintain `(max_len, count)` pairs; query `[0, val-1]`, update at `val` | Merging `(len, count)` pairs requires handling ties correctly: same length → add counts |
 | **Interval Sum with Range Add [M]** | Segment Tree + Lazy Propagation | Range add on `[l, r]` then range sum query | Lazy node stores pending addend; push down before traversal | Must push lazy down before recursing into children — missing push causes stale values |
 | **Coordinate Compression Pattern** | Prerequisite technique | Values are too large for array indices | Map unique values to `[0, M)` range; use compressed index in the tree | Must sort **and** deduplicate; after compression, original problem logic is unchanged |
-| **Segment Tree Beats (Ji Driver) [H]** | Advanced: Range min-chmin | Range `a[i] = min(a[i], v)` + range sum query | Maintain per-node `max1`, `max2`, `cnt_max`, `sum`; break if `v ≥ max1`, push if `v > max2` | Extremely hard to implement under pressure — know the concept and complexity ($O(N \log^2 N)$); rarely asked in interviews |
+| **Segment Tree Beats (Ji Driver) [H] `💤 T3`** | Advanced: Range min-chmin | Range `a[i] = min(a[i], v)` + range sum query | Maintain per-node `max1`, `max2`, `cnt_max`, `sum`; break if `v ≥ max1`, push if `v > max2` | Extremely hard to implement under pressure — know the concept and complexity ($O(N \log^2 N)$); rarely asked in interviews |
 
 ---
 
@@ -226,7 +229,7 @@ Don't update the children until you're forced to visit them. Store the "pending 
 - "Dynamic range queries (Sum/Min/Max/GCD) + Frequent updates" → Segment Tree.
 - "Range Updates" (e.g., add `X` to `[L, R]`) → **Lazy Propagation**.
 - "Values are too large for an array index" → **Coordinate Compression** first.
-- "Memory is tight" → Consider a **Fenwick Tree** (BIT) if you only need Range Sums and Point Updates (it's O(N) space and simpler to code).
+- "Memory is tight" → Consider a **Fenwick Tree `💤 T3`** (BIT) if you only need Range Sums and Point Updates (it's O(N) space and simpler to code).
 
 ---
 
@@ -251,8 +254,8 @@ To update a range $[L, R]$ in $O(\log N)$ rather than $O(N \log N)$ by deferring
 
 **What are the correct identity elements when querying range Sum, Min, Max, and Greatest Common Divisor (GCD)?** #flashcard
 - **Sum**: `0`
-- **Min `🔥 Google`**: `+∞` (or `float('inf')` in Python)
-- **Max `🔥 Google`**: `-∞` (or `float('-inf')` in Python)
+- **Min `🎯 T2`**: `+∞` (or `float('inf')` in Python)
+- **Max `⚡ T1`**: `-∞` (or `float('-inf')` in Python)
 - **GCD**: `0`
 
 **When should you prefer a Fenwick Tree (Binary Indexed Tree) over a Segment Tree?** #flashcard

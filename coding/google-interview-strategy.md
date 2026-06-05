@@ -4,19 +4,22 @@ topic: Google Interview Strategy
 difficulty: meta
 ---
 
-# Google Interview — Meta-Strategy & Communication Guide `🔥 Google`
+# Google Interview — Meta-Strategy & Communication Guide
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!important] Read This First
 > Google's evaluation is not just "did you solve it?" — it's a holistic assessment across 4 axes simultaneously. Most candidates fail not because they don't know the algorithm, but because they never explain their thinking, skip edge cases, or panic when stuck.
 
 ---
 
-## How Google Actually Scores You `🔥 Google`
+## How Google Actually Scores You
 
 Google uses a **structured hiring rubric** evaluated across these axes:
 
@@ -33,7 +36,7 @@ Google uses a **structured hiring rubric** evaluated across these axes:
 
 ---
 
-## The 35-Minute Session Blueprint `🔥 Google`
+## The 35-Minute Session Blueprint
 
 ### Minutes 0–5: Clarify & Explore
 
@@ -98,7 +101,7 @@ Google uses a **structured hiring rubric** evaluated across these axes:
 
 ---
 
-## Communication Scripts `🔥 Google`
+## Communication Scripts
 
 These are **exact phrases** to use in common situations:
 
@@ -122,7 +125,7 @@ These are **exact phrases** to use in common situations:
 
 ---
 
-## How Google SDE 2 vs SDE 3 Is Different `🔥 Google`
+## How Google SDE 2 vs SDE 3 Is Different
 
 | Dimension | SDE 2 (L4) | SDE 3 (L5) |
 |-----------|-----------|-----------|
@@ -135,7 +138,7 @@ These are **exact phrases** to use in common situations:
 
 ---
 
-## Google's Actual Rubric (Leaked / Documented) `🔥 Google`
+## Google's Actual Rubric (Leaked / Documented)
 
 ### "Strongly Hire" signals:
 - Solved the problem correctly AND optimally without hints
@@ -167,7 +170,7 @@ These are **exact phrases** to use in common situations:
 
 ---
 
-## Edge Cases to Always Check `🔥 Google`
+## Edge Cases to Always Check
 
 Mention these proactively — it signals experience:
 
@@ -207,7 +210,7 @@ Numbers:
 
 ---
 
-## Common Mistakes That Get SDE 2/3 Candidates Rejected `🔥 Google`
+## Common Mistakes That Get SDE 2/3 Candidates Rejected
 
 1. **Not clarifying input constraints** — Writing O(n²) when n=10⁵ is guaranteed TLE
 2. **Coding without a plan** — Jumping to code before thinking = red flag
@@ -222,7 +225,7 @@ Numbers:
 
 ---
 
-## Topic Frequency at Google (Real Data) `🔥 Google`
+## Topic Frequency at Google (Real Data)
 
 Based on aggregated Google interview reports (2021–2024):
 
@@ -247,7 +250,7 @@ Based on aggregated Google interview reports (2021–2024):
 
 ---
 
-## The Day Before & Day-Of Checklist `🔥 Google`
+## The Day Before & Day-Of Checklist
 
 ### Day Before:
 - [ ] Review your 3 weakest topics (not your strongest)
@@ -272,7 +275,7 @@ Based on aggregated Google interview reports (2021–2024):
 
 ---
 
-## If You're Given a System Design Question `⭐ Google`
+## If You're Given a System Design Question
 
 Use this exact structure (35–45 min):
 

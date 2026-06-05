@@ -9,6 +9,12 @@ tags: [data-structures, array]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ```
 WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to use → WHAT can go wrong
        │                      │                        │                 │               │
@@ -81,10 +87,7 @@ WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to u
 Fixed-size sequential collection in contiguous memory. Mastery at SDE-3 means choosing the right technique, proving it correct, knowing when sliding window fails (negatives), and handling range updates at scale.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -186,13 +189,13 @@ def three_sum(nums: list[int]) -> list[list[int]]:
 > **3Sum duplicate skipping has three sites**: skip duplicate `i` at the outer loop, and skip duplicate `left`/`right` after recording a valid triplet. Missing any one of the three causes duplicate results.
 
 #### Common Variants & Twists
-1. **3Sum Closest `🔥 Google`**: 
+1. **3Sum Closest `⚡ T1`**: 
    - **What (The Problem & Goal):** Find three integers in the array that sum closest to a given target, returning the sum rather than the exact match.
    - **How (Intuition & Mental Model):** Instead of checking for an exact target, maintain a `min_diff` variable to track the closest sum seen so far. After calculating the current sum, advance the `left` or `right` pointers based on whether the current sum is `< target` or `> target` to pull the sum closer.
-2. **4Sum `⭐ Google`**:
+2. **4Sum `⚡ T1`**:
    - **What (The Problem & Goal):** Find all unique quadruplets that sum to a target.
    - **How (Intuition & Mental Model):** Wrap the standard Two-Pointer 3Sum logic inside another outer loop. This fixes the first two elements (`i` and `j`), allowing you to use two pointers (`left` and `right`) for the remaining two elements. Sort first and skip duplicates at all 4 levels. Time complexity is O(N³).
-3. **Container With Most Water `🔥 Google`**:
+3. **Container With Most Water `⚡ T1`**:
    - **What (The Problem & Goal):** Given an array of heights, find two lines that together form a container holding the most water.
    - **How (Intuition & Mental Model):** Place two pointers at opposite ends. The area is bounded by the shorter line (`min(h[l], h[r]) * width`). To maximize area, always advance the pointer pointing to the shorter line inward, as moving the taller line can never increase the height bound.
 
@@ -242,13 +245,13 @@ def min_window_substring(s: str, t: str) -> str:
 ```
 
 #### Common Variants & Twists
-1. **Max Consecutive Ones III (Math Constraint)**:
+1. **Max Consecutive Ones III (Math Constraint) `⚡ T1`**:
    - **What (The Problem & Goal):** Given a binary array, flip at most `K` zeros to ones to get the longest contiguous subarray of ones.
    - **How (Intuition & Mental Model):** Instead of distinct characters, track the count of `0`s in your window. The valid condition is `zeros <= K`. Expand right; if `zeros > K`, shrink left until `zeros` drops back down to `K` or below.
-2. **Longest Repeating Character Replacement (Dynamic Target) `🔥 Google`**:
+2. **Longest Repeating Character Replacement (Dynamic Target) `⚡ T1`**:
    - **What (The Problem & Goal):** Replace at most `k` characters to find the longest substring of a single repeating character.
    - **How (Intuition & Mental Model):** The valid condition is `window_len - max_freq_char <= k`. Maintain a frequency map. If the condition is violated, shrink left. You don't even need to accurately decrement `max_freq_char` strictly when shrinking, because a smaller frequency cannot possibly create a larger valid window!
-3. **Subarrays with K Different Integers (Exact K Twist)**:
+3. **Subarrays with K Different Integers (Exact K Twist) `⚡ T1`**:
    - **What (The Problem & Goal):** Count the number of subarrays with *exactly* `K` different integers.
    - **How (Intuition & Mental Model):** Counting exact `K` directly with a sliding window is extremely difficult because shrinking the window doesn't necessarily change the number of distinct elements immediately. Instead, write a helper function `atMost(K)` and return `atMost(K) - atMost(K - 1)`.
 
@@ -257,7 +260,7 @@ def min_window_substring(s: str, t: str) -> str:
 ### Prefix Sum — Range Queries
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Subarray sum equals K `🔥 Google`**" — OR — "**range sum** query" — OR — "how many subarrays have sum divisible by K". Once you build the prefix array, any range sum is O(1). Combined with a hash map, it enables counting subarrays with any target sum in O(N).
+> **The Click Moment**: "**Subarray sum equals K `⚡ T1`**" — OR — "**range sum `💤 T3`** query" — OR — "how many subarrays have sum divisible by K". Once you build the prefix array, any range sum is O(1). Combined with a hash map, it enables counting subarrays with any target sum in O(N).
 
 ```python
 def subarray_sum_equals_k(nums: list[int], k: int) -> int:
@@ -324,7 +327,7 @@ def max_subarray_with_indices(nums: list[int]) -> tuple[int, int, int]:
 > Initializing `cur = best = 0` is wrong when all elements are negative — it returns 0 instead of the least-negative element. Always initialize to `nums[0]` and start the loop from index 1.
 
 #### Common Variants & Twists
-1. **Maximum Product Subarray `🔥 Google`**:
+1. **Maximum Product Subarray `🎯 T2`**:
    - **What (The Problem & Goal):** Find a contiguous subarray that has the largest product.
    - **How (Intuition & Mental Model):** Negative numbers complicate things because two negatives multiply to a large positive. Therefore, Kadane's must track *both* `max_prod` and `min_prod` (the largest negative) at each step. If the current number is negative, swapping `max_prod` and `min_prod` before multiplying solves it.
 2. **Maximum Circular Subarray**:
@@ -380,7 +383,7 @@ def sort_colors(nums: list[int]) -> None:
 ### Boyer-Moore Majority Vote — O(1) Space
 
 > [!IMPORTANT]
-> **The Click Moment**: "Find the **majority element `⭐ Google`** (appears > N/2 times)" — AND — "must use **O(1) space**". Hash map is O(N) space. Sorting is O(N log N) time. Boyer-Moore pairs up different elements and cancels them out; the majority element will survive because it outnumbers all other elements combined.
+> **The Click Moment**: "Find the **majority element `🎯 T2`** (appears > N/2 times)" — AND — "must use **O(1) space**". Hash map is O(N) space. Sorting is O(N log N) time. Boyer-Moore pairs up different elements and cancels them out; the majority element will survive because it outnumbers all other elements combined.
 
 ```python
 def majority_element(nums: list[int]) -> int:
@@ -483,24 +486,24 @@ def reservoir_sample(stream, k: int) -> list:
 ## 4. Common Interview Problems
 
 ### Easy
-- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) `🔥 Google` — Hash map for complement; or two pointers if sorted.
+- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) — Hash map for complement; or two pointers if sorted.
 - **Best Time to Buy/Sell Stock** — Track min so far; `profit = max(profit, price - min_price)`.
 - **Move Zeros** — Two-pointer: maintain `write_idx` for non-zeros.
 
 ### Medium
-- [3Sum](../02-algorithms/problem-deep-dives.md#3sum) `🔥 Google` — Sort + fix one + two pointers; skip duplicates at all three sites.
-- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) `🔥 Google` — Prefix sum + count map; `seen[0] = 1`.
+- [3Sum](../02-algorithms/problem-deep-dives.md#3sum) — Sort + fix one + two pointers; skip duplicates at all three sites.
+- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen[0] = 1`.
 - **Longest Subarray with K Distinct** — Sliding window + frequency map.
-- **Product of Array Except Self `🔥 Google`** — Prefix product from left × suffix product from right; O(1) extra space.
-- **Container with Most Water `🔥 Google`** — Two pointers; advance the side with shorter height.
-- **Next Permutation `⭐ Google`** — Find rightmost descent, swap with next larger, reverse suffix.
-- **Jump Game `🔥 Google`** — Track `farthest` reachable; unreachable if `i > farthest`.
+- **Product of Array Except Self** — Prefix product from left × suffix product from right; O(1) extra space.
+- **Container with Most Water `⚡ T1`** — Two pointers; advance the side with shorter height.
+- **Next Permutation** — Find rightmost descent, swap with next larger, reverse suffix.
+- **Jump Game `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
 
 ### Hard
-- [Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) `🔥 Google` — Two pointers `l_max, r_max`; advance side with smaller max.
-- [Median of Two Sorted Arrays](../02-algorithms/problem-deep-dives.md#median-of-two-sorted-arrays) `🔥 Google` — Binary search on partition of shorter array.
-- **Sliding Window Maximum `🔥 Google`** — Monotonic deque; O(N).
-- **Count of Smaller Numbers After Self `⭐ Google`** — Merge sort augmentation or BIT.
+- [Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) — Two pointers `l_max, r_max`; advance side with smaller max.
+- [Median of Two Sorted Arrays](../02-algorithms/problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition of shorter array.
+- **Sliding Window Maximum `⚡ T1`** — Monotonic deque; O(N).
+- **Count of Smaller Numbers After Self `💤 T3`** — Merge sort augmentation or BIT.
 
 ---
 
@@ -508,28 +511,28 @@ def reservoir_sample(stream, k: int) -> list:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) `🔥 Google`** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
-| **[3Sum](../02-algorithms/problem-deep-dives.md#3sum) `🔥 Google`** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
-| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) `🔥 Google`** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
+| **[Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) `⚡ T1`** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
+| **[3Sum](../02-algorithms/problem-deep-dives.md#3sum) `⚡ T1`** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
+| **[Trapping Rain Water](../02-algorithms/problem-deep-dives.md#trapping-rain-water) `⚡ T1`** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
 | **[Subarray Sum = K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
 | **Product Except Self** | "Product of all but self, no division" | Left-pass product × right-pass product | Division approach fails on zeros; two-pass achieves O(1) extra space. |
-| **Container with Most Water `🔥 Google`** | "Max area between two lines" | Two pointers; advance shorter side | Area = `min(h[l], h[r]) * (r - l)`; advancing taller side never improves. |
-| **Next Permutation `⭐ Google`** | "Lexicographic next arrangement" | Find rightmost descent; swap with next larger; reverse suffix | Rightmost **ascending** pair from the right = descent point; edge case: fully descending → reverse all. |
-| **Jump Game II `🔥 Google`** | "Minimum jumps to reach end" | Greedy BFS levels; extend `current_end` | Track `farthest` in current level; when `i == current_end`, increment jumps. |
-| **Sliding Window Maximum `🔥 Google`** | "Max in each window of size K" | Monotonic deque (decreasing); front = max of window | Remove from front if out of window `deque[0] <= i - k`; remove from back if smaller than current. |
+| **Container with Most Water `⚡ T1`** | "Max area between two lines" | Two pointers; advance shorter side | Area = `min(h[l], h[r]) * (r - l)`; advancing taller side never improves. |
+| **Next Permutation** | "Lexicographic next arrangement" | Find rightmost descent; swap with next larger; reverse suffix | Rightmost **ascending** pair from the right = descent point; edge case: fully descending → reverse all. |
+| **Jump Game II `🎯 T2`** | "Minimum jumps to reach end" | Greedy BFS levels; extend `current_end` | Track `farthest` in current level; when `i == current_end`, increment jumps. |
+| **Sliding Window Maximum `⚡ T1`** | "Max in each window of size K" | Monotonic deque (decreasing); front = max of window | Remove from front if out of window `deque[0] <= i - k`; remove from back if smaller than current. |
 | **Median of Two Arrays** | "Median without merging" | Binary search partition on shorter array | Partition so `len(left_half) == len(right_half)±1`; compare `max_left <= min_right`. |
-| **Best Time to Buy and Sell Stock `🔥 Google`** [E] | "One transaction, maximize profit" | Single pass: track `min_price` so far; `max_profit = max(max_profit, price - min_price)` | Only one buy before one sell — not two-pointer; `min_price` resets naturally. |
-| **Remove Duplicates from Sorted Array** [E] | "In-place, return new length" | Two pointers: `slow` marks write position; `slow` advances only on new value | Write `nums[slow] = nums[fast]`; return `slow + 1`; array is modified in-place. |
+| **Best Time to Buy and Sell Stock `🎯 T2`** [E] | "One transaction, maximize profit" | Single pass: track `min_price` so far; `max_profit = max(max_profit, price - min_price)` | Only one buy before one sell — not two-pointer; `min_price` resets naturally. |
+| **Remove Duplicates from Sorted Array `⚡ T1`** [E] | "In-place, return new length" | Two pointers: `slow` marks write position; `slow` advances only on new value | Write `nums[slow] = nums[fast]`; return `slow + 1`; array is modified in-place. |
 | **Find All Disappearing Numbers** [E] | "Numbers in [1,N] absent from array" | Negate `nums[abs(val)-1]`; collect indices still positive | O(1) space trick: use the array itself as a visited marker via sign flipping. |
-| **Maximum Subarray `🔥 Google`** [M] | "Contiguous subarray with max sum" | Kadane: `cur = max(nums[i], cur + nums[i])`; update global max | Don't reset `cur` to 0 — that misses all-negative arrays; reset to `nums[i]`. |
+| **Maximum Subarray `🎯 T2`** [M] | "Contiguous subarray with max sum" | Kadane: `cur = max(nums[i], cur + nums[i])`; update global max | Don't reset `cur` to 0 — that misses all-negative arrays; reset to `nums[i]`. |
 | **Rotate Array** [M] | "Rotate right by K steps in-place" | Reverse all; reverse `[0:k]`; reverse `[k:]` | Normalize `k = k % n` first; forgetting this causes wrong answers for k > n. |
-| **Find the Duplicate Number `⭐ Google`** [M] | "One duplicate in [1,N], O(1) space" | Floyd's cycle detection: treat array as linked list with `next = nums[i]` | Requires O(1) space — XOR or sum tricks fail when duplicates appear more than twice. |
-| **Spiral Matrix `🔥 Google`** [M] | "Traverse matrix in spiral order" | Shrink boundaries: `top`, `bottom`, `left`, `right`; advance after each direction | After each row/col traversal, check `top <= bottom` and `left <= right` before next direction. |
-| **Set Matrix Zeroes `🔥 Google`** [M] | "Zero out row and col for each zero cell" | First pass: record zeroed rows/cols; second pass: apply | O(1) space: use first row and col as markers; handle them last with a separate `first_row_zero` flag. |
-| **Longest Consecutive Sequence `🔥 Google`** [H] | "Longest run, O(N) time" | Hash set; only start counting from `n` if `n-1` not in set | Starting only from sequence beginnings avoids O(N²) — each element processed once. |
-| **Minimum Window Substring `🔥 Google`** [H] | "Smallest window containing all of T" | Sliding window; `have` tracks satisfied char counts | `have` tracks characters meeting their target count — not just counts; `have == need` means window is valid. |
+| **Find the Duplicate Number** [M] | "One duplicate in [1,N], O(1) space" | Floyd's cycle detection: treat array as linked list with `next = nums[i]` | Requires O(1) space — XOR or sum tricks fail when duplicates appear more than twice. |
+| **Spiral Matrix** [M] | "Traverse matrix in spiral order" | Shrink boundaries: `top`, `bottom`, `left`, `right`; advance after each direction | After each row/col traversal, check `top <= bottom` and `left <= right` before next direction. |
+| **Set Matrix Zeroes** [M] | "Zero out row and col for each zero cell" | First pass: record zeroed rows/cols; second pass: apply | O(1) space: use first row and col as markers; handle them last with a separate `first_row_zero` flag. |
+| **Longest Consecutive Sequence `⚡ T1`** [H] | "Longest run, O(N) time" | Hash set; only start counting from `n` if `n-1` not in set | Starting only from sequence beginnings avoids O(N²) — each element processed once. |
+| **Minimum Window Substring `⚡ T1`** [H] | "Smallest window containing all of T" | Sliding window; `have` tracks satisfied char counts | `have` tracks characters meeting their target count — not just counts; `have == need` means window is valid. |
 | **Subarray Sums Divisible by K** [M] | Prefix Sum Modulo | "Count subarrays whose sum is divisible by K" | Track running prefix sum modulo K; `(prefix_sum % k + k) % k` to handle negatives; add count of seen remainders | Python modulo is always positive; Java/C++ can be negative. Normalize: `(pref % k + k) % k`. `seen[0]=1` for subarray from index 0. |
-| **Subarrays with K Different Integers** [H] | Sliding Window | "Count subarrays with exactly K distinct integers" | Exactly K = At Most K - At Most K-1; write helper `atMost(K)` and subtract | Exactly K is non-monotonic (growing window can make it invalid, shrinking can also make it invalid). At Most K is monotonic (expanding always preserves or increases distinct counts). |
+| **Subarrays with K Different Integers `⚡ T1`** [H] | Sliding Window | "Count subarrays with exactly K distinct integers" | Exactly K = At Most K - At Most K-1; write helper `atMost(K)` and subtract | Exactly K is non-monotonic (growing window can make it invalid, shrinking can also make it invalid). At Most K is monotonic (expanding always preserves or increases distinct counts). |
 
 ---
 

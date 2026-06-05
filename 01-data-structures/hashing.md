@@ -9,6 +9,12 @@ tags: [data-structures, hashing]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ```
 WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
        │                  │               │               │               │
@@ -98,10 +104,7 @@ WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE-3: collision strategies, load factor tuning, consistent hashing for distributed systems, and bloom filters.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -154,7 +157,7 @@ Map keys to indices via hash function for O(1) average lookup/insert/delete. SDE
 ### Complement Map — Two Sum Pattern
 
 > [!IMPORTANT]
-> **The Click Moment**: "Find a **pair** with a given sum" — OR — "check if a **complement exists**" — OR — "**two sum / 3-sum / k-sum `🔥 Google`**". For each element, check if `target - element` is already in the map. This converts O(N²) brute force to O(N).
+> **The Click Moment**: "Find a **pair** with a given sum" — OR — "check if a **complement exists**" — OR — "**two sum / 3-sum / k-sum `⚡ T1`**". For each element, check if `target - element` is already in the map. This converts O(N²) brute force to O(N).
 
 ```python
 def two_sum(nums: list[int], target: int) -> list[int]:
@@ -175,7 +178,7 @@ def four_sum_count(A: list[int], B: list[int], C: list[int], D: list[int]) -> in
 ```
 
 #### Common Variants & Twists
-1. **3Sum / 4Sum `🔥 Google`**:
+1. **3Sum / 4Sum `⚡ T1`**:
    - **What (The Problem & Goal):** Find unique triplets (or quadruplets) that sum to zero (or a target).
    - **How (Intuition & Mental Model):** Use the Two-Sum map logic as the inner loop, reducing the complexity by one degree of `N` compared to brute force. For 4Sum Count (where you just need the number of tuples from 4 different arrays), hash all sums of `A + B`, then for every `c` and `d`, look up `-(c + d)` in the hash map.
 2. **Max Number of K-Sum Pairs**:
@@ -217,13 +220,13 @@ def top_k_frequent(nums: list[int], k: int) -> list[int]:
 > **Anagram key choice**: `tuple(sorted(s))` is O(K log K) per word where K is word length. For very long words, use a 26-integer count tuple: `tuple(Counter(s).get(c, 0) for c in 'abcdefghijklmnopqrstuvwxyz')`. For Unicode strings, the 26-array assumption fails — use `Counter` directly as the key (but `Counter` is not hashable; convert to `tuple(sorted(Counter(s).items()))`).
 
 #### Common Variants & Twists
-1. **Find All Anagrams in a String `⭐ Google`**:
+1. **Find All Anagrams in a String `⚡ T1`**:
    - **What (The Problem & Goal):** Find all starting indices of substrings in `s` that are anagrams of `p`.
    - **How (Intuition & Mental Model):** Sliding window + frequency map. Maintain a frequency map of the target string `p`. Slide a window of size `len(p)` across `s`, maintaining a running frequency map of the window. If the window's map equals `p`'s map, record the start index.
 2. **Sort Characters By Frequency**:
    - **What (The Problem & Goal):** Sort a string in decreasing order based on the frequency of its characters.
    - **How (Intuition & Mental Model):** Count characters into a frequency map, then sort the characters based on their count (or use bucket sort where the index is the frequency). Rebuild the result string by appending `char * count`.
-3. **Minimum Window Substring `🔥 Google`**:
+3. **Minimum Window Substring `⚡ T1`**:
    - **What (The Problem & Goal):** Find the shortest substring containing all characters of a target string.
    - **How (Intuition & Mental Model):** You need a frequency map of the target string, and a running frequency map of the current sliding window. The critical condition is maintaining a `have` counter vs `required_unique_chars`. Only increment `have` when the window's count for a char matches the target's exact requirement.
 
@@ -354,7 +357,7 @@ class RandomizedSet:
 ### Scalability: Consistent Hashing
 
 > [!TIP]
-> In a distributed cache (N nodes), naive `key % N` routing breaks when a node is added or removed — nearly all keys remap. **Consistent hashing** places both nodes and keys on a logical ring (hash → position on [0, 2^32)). Each key routes to the **first node clockwise** from its hash.
+> In a distributed cache (N nodes), naive `key % N` routing breaks when a node is added or removed — nearly all keys remap. **Consistent hashing `💤 T3`** places both nodes and keys on a logical ring (hash → position on [0, 2^32)). Each key routes to the **first node clockwise** from its hash.
 >
 > Adding/removing one node only remaps `1/N` of the keys on average — vs `(N-1)/N` for naive hashing. Used in: Amazon DynamoDB, Apache Cassandra, Memcached (ketama), Redis Cluster.
 >
@@ -443,23 +446,23 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 ## 4. Common Interview Problems
 
 ### Easy
-- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) `🔥 Google` — Complement map; single pass.
-- **Valid Anagram `🔥 Google`** — `Counter(s) == Counter(t)`.
+- [Two Sum](../02-algorithms/problem-deep-dives.md#two-sum) — Complement map; single pass.
+- **Valid Anagram `🎯 T2`** — `Counter(s) == Counter(t)`.
 - **First Unique Character** — `Counter`; find first with count 1.
 
 ### Medium
-- [Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams) `🔥 Google` — `sorted(word)` or count-tuple as key.
-- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) `🔥 Google` — Prefix sum + count map; `seen = {0:1}`.
-- [Longest Consecutive Sequence](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence) `🔥 Google` — Set lookup; only start chain from `x` if `x-1` not in set.
-- [LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) `🔥 Google` — Map + DLL; dummy head/tail.
-- **Insert Delete GetRandom O(1) `🔥 Google`** — Map + array; swap-with-last on delete.
+- [Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams) — `sorted(word)` or count-tuple as key.
+- [Subarray Sum Equals K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen = {0:1}`.
+- [Longest Consecutive Sequence](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence) — Set lookup; only start chain from `x` if `x-1` not in set.
+- [LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) — Map + DLL; dummy head/tail.
+- **Insert Delete GetRandom O(1) `⚡ T1`** — Map + array; swap-with-last on delete.
 - **Contiguous Array (equal 0/1)** — Map `0→-1`; prefix sum + first-seen map.
 
 ### Hard
-- **Minimum Window Substring `🔥 Google`** — Sliding window + need/have count maps.
+- **Minimum Window Substring `⚡ T1`** — Sliding window + need/have count maps.
 - **Substring with Concatenation of All Words** — Fixed word-length window; multiset comparison.
 - **Max Points on a Line** — Slope map with `gcd` normalization; handle vertical lines.
-- **Design HashMap `⭐ Google`** — Chaining with prime-sized bucket array; handle resize.
+- **Design HashMap** — Chaining with prime-sized bucket array; handle resize.
 
 ---
 
@@ -467,27 +470,27 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams) `🔥 Google`** | Hash by Canonical Key | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
-| **[Longest Consecutive](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence) `🔥 Google`** | "Longest streak, unsorted" | Set; only start chain if `x-1` not in set | Without the "start only" guard: O(N²); with it: amortized O(N). |
-| **[LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) `🔥 Google`** | "O(1) get/put with eviction" | Map `key→DLL node`; move on access; evict tail | Dummy head/tail eliminate all null-check edge cases in `_remove`. |
+| **[Group Anagrams](../02-algorithms/problem-deep-dives.md#group-anagrams) `⚡ T1`** | Hash by Canonical Key | "Same letters, group together" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count. |
+| **[Longest Consecutive](../02-algorithms/problem-deep-dives.md#longest-consecutive-sequence) `⚡ T1`** | "Longest streak, unsorted" | Set; only start chain if `x-1` not in set | Without the "start only" guard: O(N²); with it: amortized O(N). |
+| **[LRU Cache](../02-algorithms/problem-deep-dives.md#lru-cache) `🎯 T2`** | "O(1) get/put with eviction" | Map `key→DLL node`; move on access; evict tail | Dummy head/tail eliminate all null-check edge cases in `_remove`. |
 | **[Subarray Sum = K](../02-algorithms/problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum" | `seen={0:1}`; `count += seen[prefix-K]` | Works with negatives; sliding window doesn't. `seen[0]=1` is critical. |
 | **Contiguous Array** | "Equal 0s and 1s in subarray" | Map `0→-1`; find longest zero-sum subarray | Reduces to "longest subarray with sum 0" — recognize the transformation. |
-| **[Minimum Window](../02-algorithms/problem-deep-dives.md#minimum-window-substring) `🔥 Google`** | "Smallest window containing all of T" | Expand right until valid; shrink left while valid | `have == required` condition based on frequency saturation, not total count. |
-| **Insert Delete GetRandom `🔥 Google`** | "O(1) all three operations" | Map + array; swap-with-last on delete | Update `_idx_map[last] = idx` before deleting the target's entry. |
-| **Design HashMap `⭐ Google`** | "Hash map from scratch" | Array of buckets; chaining with linear scan | Prime capacity; handle `equals` by value; tombstone for open addressing delete. |
-| **4Sum Count `⭐ Google`** | "Count quadruples summing to 0" | Hash sums of `A+B`; count complements in `C+D` | O(N²) space and time — better than O(N⁴) brute force. |
+| **[Minimum Window](../02-algorithms/problem-deep-dives.md#minimum-window-substring) `⚡ T1`** | "Smallest window containing all of T" | Expand right until valid; shrink left while valid | `have == required` condition based on frequency saturation, not total count. |
+| **Insert Delete GetRandom `⚡ T1`** | "O(1) all three operations" | Map + array; swap-with-last on delete | Update `_idx_map[last] = idx` before deleting the target's entry. |
+| **Design HashMap** | "Hash map from scratch" | Array of buckets; chaining with linear scan | Prime capacity; handle `equals` by value; tombstone for open addressing delete. |
+| **4Sum Count `⚡ T1`** | "Count quadruples summing to 0" | Hash sums of `A+B`; count complements in `C+D` | O(N²) space and time — better than O(N⁴) brute force. |
 | **Max Points on a Line** | "Max collinear points" | Slope map per anchor; `gcd` normalize slope fraction | Vertical line (`dx=0`); same point (`dy=dx=0`); negative slopes in fraction. |
-| **Two Sum `🔥 Google`** [E] | "Find two indices summing to target" | Complement map: store `val → index`; look up `target - val` | Return indices, not values — clarify. Handle same index: check before inserting. |
-| **Valid Anagram `🔥 Google`** [E] | "Do two strings use same characters?" | Frequency count: increment for s, decrement for t; all zeros = anagram | `Counter(s) == Counter(t)` is clean; for follow-up (Unicode), same approach applies. |
+| **Two Sum `⚡ T1`** [E] | "Find two indices summing to target" | Complement map: store `val → index`; look up `target - val` | Return indices, not values — clarify. Handle same index: check before inserting. |
+| **Valid Anagram `🎯 T2`** [E] | "Do two strings use same characters?" | Frequency count: increment for s, decrement for t; all zeros = anagram | `Counter(s) == Counter(t)` is clean; for follow-up (Unicode), same approach applies. |
 | **Word Pattern** [E] | "Bijection between pattern chars and words" | Two maps: `char→word` and `word→char`; check both directions | Bijection requires both maps — `a→dog` and `b→dog` is invalid even if one map is fine. |
 | **Longest Subarray with At Most K Distinct** [M] | "Sliding window, count distinct ≤ K" | Sliding window; map counts elements in window; shrink left when distinct > K | Decrement count and delete key only when count reaches 0 — not just on any shrink. |
-| **Top K Frequent Words `🔥 Google`** [M] | "K most frequent strings, ties alphabetical" | Count frequencies; sort by `(-freq, word)`; take first K | Heap alternative: `heapq.nsmallest(k, ...)` with `(-freq, word)` avoids full sort. |
+| **Top K Frequent Words `⚡ T1`** [M] | "K most frequent strings, ties alphabetical" | Count frequencies; sort by `(-freq, word)`; take first K | Heap alternative: `heapq.nsmallest(k, ...)` with `(-freq, word)` avoids full sort. |
 | **Ransom Note** [E] | "Can you build ransom string from magazine?" | Count magazine letters; check ransom has no unsatisfied letter | `Counter(ransomNote) - Counter(magazine)` — if any key remains, return False. |
 | **Find Duplicate File in System** [M] | "Group files by content" | Map `content → [path/file]`; collect groups with ≥ 2 | Parse path+content from each entry; content is key, list of full paths is value. |
 | **Longest Palindrome** [M] | "Longest palindrome buildable from letters" | Count frequencies; all even-count chars contribute fully; one odd-count char can be center | Add 1 if any odd-frequency char exists (it becomes the center). |
 | **Isomorphic Strings** [E] | "Bijection between characters of s and t" | Map `s[i]→t[i]` and `t[i]→s[i]`; conflict = not isomorphic | Same structure as Word Pattern bijection — need both maps for correctness. |
-| **Subarray Sum Equals K `🔥 Google`** [M] | "Count subarrays with exact sum K" | Prefix sum + map; `count += prefix_map[running_sum - K]`; init `prefix_map[0] = 1` | Sliding window fails with negatives — prefix map handles all cases. |
-| **Longest Increasing Subsequence (via hash) `🔥 Google`** [M] | "LIS via patience sort + bisect" | Maintain `tails` list; `bisect_left` for replacement index | `tails` is not the LIS itself — only its length. Reconstruct via parent tracking if sequence needed. |
+| **Subarray Sum Equals K `⚡ T1`** [M] | "Count subarrays with exact sum K" | Prefix sum + map; `count += prefix_map[running_sum - K]`; init `prefix_map[0] = 1` | Sliding window fails with negatives — prefix map handles all cases. |
+| **Longest Increasing Subsequence (via hash) `⚡ T1`** [M] | "LIS via patience sort + bisect" | Maintain `tails` list; `bisect_left` for replacement index | `tails` is not the LIS itself — only its length. Reconstruct via parent tracking if sequence needed. |
 
 ---
 
@@ -505,14 +508,14 @@ def rabin_karp_search(text: str, pattern: str) -> list[int]:
 
 - [Array](array.md) — prefix sum + map for subarray problems
 - [String](../02-algorithms/string.md) — anagram key design; rolling hash (Rabin-Karp)
-- [Linked List](linked-list.md) `🔥 Google` — LRU cache DLL component
+- [Linked List](linked-list.md) — LRU cache DLL component
 - [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers
 
 ## Flashcards
 
 **Explain the Swap-with-Last optimization used to support O(1) getRandom alongside O(1) insert and delete.** #flashcard
 Combine a dynamic array `list` and a hash map `val_to_idx` mapping values to their array index:
-- **Insert**: Append value to `list`, record its index in `val_to_idx`.
+- **Insert `🎯 T2`**: Append value to `list`, record its index in `val_to_idx`.
 - **Delete**: Retrieve the target index `idx` from `val_to_idx`. Swap the element at `idx` with the last element of `list` in $O(1)$. Update the index of the swapped element in `val_to_idx`, delete the target from the map, and pop the last element from `list`.
 - **GetRandom**: Return a random element from `list` in $O(1)$ by generating an index in range.
 

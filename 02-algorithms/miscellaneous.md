@@ -9,6 +9,12 @@ tags: [algorithms, miscellaneous]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```
 WHY Miscellaneous Algorithms exist
 ├── Real problems don't always map cleanly to one paradigm
@@ -82,10 +88,7 @@ Decision tree
 - **Where it breaks:** Boyer-Moore gives a wrong answer (not just incorrect candidate) if you skip the verification pass when majority existence is not guaranteed; Fisher-Yates is subtly biased if the random index is drawn from [0, n-1] instead of [0, i] at each step — a mistake that produces non-uniform shuffles even though the code "looks right."
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -173,10 +176,10 @@ def count_inversions_fenwick(nums: list[int]) -> int:
     return inversions
 
 #### Common Variants & Twists
-1. **Count of Smaller Numbers After Self `⭐ Google`**:
+1. **Count of Smaller Numbers After Self**:
    - **What (The Problem & Goal):** For each element in an array, count how many numbers to its right are smaller than it.
    - **How (Intuition & Mental Model):** Use coordinate compression to map large numbers to a small range `[1, K]`. Iterate from right to left. For each number, query the Fenwick tree for the prefix sum up to its rank (this gives the count of numbers already seen that are smaller). Then, update the Fenwick tree at its rank by `+1`.
-2. **Reverse Pairs (Fenwick approach) `⭐ Google`**:
+2. **Reverse Pairs (Fenwick approach)**:
    - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
    - **How (Intuition & Mental Model):** Similar to counting smaller numbers. Coordinate compress all `nums[i]` and `2 * nums[i]`. Iterate right to left, query the tree for prefix sum up to `(nums[i] - 1) // 2` rank, then update the tree at `nums[i]` rank.
 ```
@@ -269,7 +272,7 @@ def rmq(table: list[list[int]], l: int, r: int) -> int:
 1. **Range GCD Query**:
    - **What (The Problem & Goal):** Static array, many queries for the GCD of a subarray.
    - **How (Intuition & Mental Model):** GCD is idempotent (`gcd(x, x) = x`) and associative. A sparse table can be built for GCD in O(N log N) and answered in O(1).
-2. **Lowest Common Ancestor (LCA) `🔥 Google`**:
+2. **Lowest Common Ancestor (LCA)**:
    - **What (The Problem & Goal):** Find the LCA of two nodes in a static tree.
    - **How (Intuition & Mental Model):** Perform an Euler Tour of the tree, recording the depth of each node visited. The LCA of nodes `u` and `v` corresponds to the node with the minimum depth in the Euler tour array between the first occurrences of `u` and `v`. Use a sparse table on the depth array for O(1) RMQ.
 ```
@@ -337,7 +340,7 @@ class LRUCache:
             del self.cache[lru.key]
 
 #### Common Variants & Twists
-1. **LFU Cache (Least Frequently Used) `⭐ Google`**:
+1. **LFU Cache (Least Frequently Used)**:
    - **What (The Problem & Goal):** Similar to LRU, but evict the item with the lowest frequency. On tie, use LRU.
    - **How (Intuition & Mental Model):** Maintain two maps: `key_to_node` and `freq_to_dll`. Each frequency `f` points to a doubly linked list of nodes with that frequency. Also track `min_freq`. When a key is accessed, move it from `freq_to_dll[f]` to `freq_to_dll[f+1]`.
 2. **LRU with Expiration (TTL)**:
@@ -412,16 +415,16 @@ class LRUCache:
 ## 4. Common Interview Problems
 
 ### Medium (High Frequency)
-- **Merge Intervals `🔥 Google`** — Sort by start; extend `end = max(end, interval[1])` while overlapping.
+- **Merge Intervals `🎯 T2`** — Sort by start; extend `end = max(end, interval[1])` while overlapping.
 - **Meeting Rooms II** — Min-heap of end times; count concurrent meetings = heap size.
-- **Task Scheduler `🔥 Google`** — Greedy: arrange most-frequent tasks with cooldown gaps; `ceil((max_count-1) * (n+1) + count_max)`.
+- **Task Scheduler `⚡ T1`** — Greedy: arrange most-frequent tasks with cooldown gaps; `ceil((max_count-1) * (n+1) + count_max)`.
 - **Design LRU Cache** — HashMap + doubly linked list; O(1) get/put.
-- **Range Sum Query (Mutable)** — Fenwick tree; O(log N) update and prefix query.
+- **Range Sum Query (Mutable) `💤 T3`** — Fenwick tree; O(log N) update and prefix query.
 
 ### Hard
-- **Count of Smaller Numbers After Self `⭐ Google`** — Fenwick tree on coordinate-compressed values; or merge sort augmented.
-- **Count of Range Sum `⭐ Google`** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
-- **The Skyline Problem `⭐ Google`** — Sweep line on building start/end events; max-heap of active heights.
+- **Count of Smaller Numbers After Self `💤 T3`** — Fenwick tree on coordinate-compressed values; or merge sort augmented.
+- **Count of Range Sum** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
+- **The Skyline Problem** — Sweep line on building start/end events; max-heap of active heights.
 - **Data Stream as Disjoint Intervals** — `SortedList` + binary search; merge left/right neighbors on insert.
 - **Design LFU Cache** — Three maps: `key→val`, `key→freq`, `freq→OrderedDict`; track `min_freq`; O(1) all ops.
 
@@ -431,22 +434,22 @@ class LRUCache:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Merge Intervals `🔥 Google`** | Sort + Greedy Merge | "Combine overlapping [l, r] ranges" | Sort by start; extend `end` greedily while `interval[0] <= end` | Touching intervals `[1,2]` and `[2,3]` — confirm merging rule. Sort by start, not end. |
+| **Merge Intervals `🎯 T2`** | Sort + Greedy Merge | "Combine overlapping [l, r] ranges" | Sort by start; extend `end` greedily while `interval[0] <= end` | Touching intervals `[1,2]` and `[2,3]` — confirm merging rule. Sort by start, not end. |
 | **Meeting Rooms II** | "Minimum rooms for N meetings" | Min-heap of end times; if `heap[0] <= start`, reuse room (pop + push new end) | Heap size at any moment = answer (max concurrent meetings). Sort by start first. |
-| **Range Sum Query Mutable** | "Prefix sum with point updates" | Fenwick tree; `update(i, delta)` and `prefix_sum(i)` each O(log N) | 1-indexed; `i += i & (-i)` for update; `i -= i & (-i)` for query — opposite directions. |
+| **Range Sum Query Mutable `💤 T3`** | "Prefix sum with point updates" | Fenwick tree; `update(i, delta)` and `prefix_sum(i)` each O(log N) | 1-indexed; `i += i & (-i)` for update; `i -= i & (-i)` for query — opposite directions. |
 | **Count Smaller After Self** | "For each i, count j>i where nums[j]<nums[i]" | Fenwick on coordinate-compressed values (right-to-left); or merge sort counting right-picks | Merge sort: pass `(value, original_index)` pairs to track positions through sorting. |
-| **The Skyline Problem `⭐ Google`** | "Height profile of buildings as events" | Sweep line on start/end events; max-heap of `(-height, end)` for active buildings | Lazy deletion from heap (check if top is still active). Critical point = when max height changes. |
+| **The Skyline Problem** | "Height profile of buildings as events" | Sweep line on start/end events; max-heap of `(-height, end)` for active buildings | Lazy deletion from heap (check if top is still active). Critical point = when max height changes. |
 | **Design LFU Cache** | "Evict least-frequently used; ties → LRU" | `key→val`, `key→freq`, `freq→OrderedDict`; track global `min_freq` | Reset `min_freq = 1` on every `put` of a new key. Increment `min_freq` in `get` only when `freq_map[min_freq]` becomes empty. |
-| **Non-Overlapping Intervals** | "Min removals to make disjoint" | Sort by **end**; greedily keep interval with earliest end; count removals | Sort by end (not start): earliest end leaves max room for future intervals. |
+| **Non-Overlapping Intervals `🎯 T2`** | "Min removals to make disjoint" | Sort by **end**; greedily keep interval with earliest end; count removals | Sort by end (not start): earliest end leaves max room for future intervals. |
 | **Data Stream Intervals** | "Maintain disjoint intervals dynamically" | Binary search for left/right overlap; merge on insert | Handle both neighbors: merge left if `new.start <= left.end + 1`; merge right if `new.end >= right.start - 1`. |
 | **Design HashSet [E]** | "Implement a hash set without built-in hash" | Array of buckets (chaining); `hash(key) = key % size`; linked list per bucket | Choose bucket count as a prime (e.g., 1009) to reduce collisions. Handle remove in chained list carefully. |
-| **Design Hit Counter [E] `⭐ Google`** | "Count hits in the past 5 minutes" | Circular array of 300 slots (seconds); slot = `(timestamp, count)`; reset stale slot on write | `timestamp % 300` gives slot index. Reading: sum all slots where `timestamp - slot_time < 300`. |
-| **LRU Cache [M] `🔥 Google`** | "O(1) get/put with eviction of least recently used" | `OrderedDict` or HashMap + doubly linked list; move to head on access; evict tail on overflow | Python `OrderedDict.move_to_end(key)` + `popitem(last=False)` gives O(1). Hand-roll DLL for interviews expecting lower-level answer. |
-| **Design Twitter [M] `🔥 Google`** | "In-memory Twitter: post tweet, follow, getNewsFeed" | Per-user tweet list (most recent first); `getNewsFeed` = K-way merge of followees' lists via min-heap | K-way merge with heap: push `(timestamp, user, tweet_idx)`; pop 10 times. Follow/unfollow update a set. |
-| **Range Sum Query — Immutable [E]** | "Precompute prefix sums for O(1) range queries" | `prefix[i] = prefix[i-1] + nums[i-1]`; `query(l,r) = prefix[r+1] - prefix[l]` | 1-indexed prefix array avoids boundary check. `prefix[0] = 0` sentinel. |
+| **Design Hit Counter [E]** | "Count hits in the past 5 minutes" | Circular array of 300 slots (seconds); slot = `(timestamp, count)`; reset stale slot on write | `timestamp % 300` gives slot index. Reading: sum all slots where `timestamp - slot_time < 300`. |
+| **LRU Cache [M] `🎯 T2`** | "O(1) get/put with eviction of least recently used" | `OrderedDict` or HashMap + doubly linked list; move to head on access; evict tail on overflow | Python `OrderedDict.move_to_end(key)` + `popitem(last=False)` gives O(1). Hand-roll DLL for interviews expecting lower-level answer. |
+| **Design Twitter [M] `⚡ T1`** | "In-memory Twitter: post tweet, follow, getNewsFeed" | Per-user tweet list (most recent first); `getNewsFeed` = K-way merge of followees' lists via min-heap | K-way merge with heap: push `(timestamp, user, tweet_idx)`; pop 10 times. Follow/unfollow update a set. |
+| **Range Sum Query — Immutable [E] `💤 T3`** | "Precompute prefix sums for O(1) range queries" | `prefix[i] = prefix[i-1] + nums[i-1]`; `query(l,r) = prefix[r+1] - prefix[l]` | 1-indexed prefix array avoids boundary check. `prefix[0] = 0` sentinel. |
 | **Snapshot Array [M]** | "Array with snapshot: get value at past snapshot" | Per-index list of `(snap_id, val)`; binary search on snap_id for reads | Store only changed values (copy-on-write). Binary search via `bisect_right(snaps, snap_id) - 1`. |
-| **Find Median from Data Stream [H] `🔥 Google`** | "Maintain running median as numbers are inserted" | Two heaps: max-heap for lower half, min-heap for upper half; balance sizes | Max-heap in Python: negate values. Rebalance after every insert: sizes differ by at most 1. Median = top of larger heap or average of both tops. |
-| **The Skyline Problem [H] `⭐ Google`** | "Building silhouette as list of key (x, height) points" | Sweep line on start/end events; max-heap of `(-height, end)`; emit when max height changes | Lazy-delete from heap (check if top building has ended). Critical: emit only when height **changes**, not on every event. |
+| **Find Median from Data Stream [H] `⚡ T1`** | "Maintain running median as numbers are inserted" | Two heaps: max-heap for lower half, min-heap for upper half; balance sizes | Max-heap in Python: negate values. Rebalance after every insert: sizes differ by at most 1. Median = top of larger heap or average of both tops. |
+| **The Skyline Problem [H]** | "Building silhouette as list of key (x, height) points" | Sweep line on start/end events; max-heap of `(-height, end)`; emit when max height changes | Lazy-delete from heap (check if top building has ended). Critical: emit only when height **changes**, not on every event. |
 | **Minimum Interval to Include Each Query [H]** | "For each query point, find smallest interval containing it" | Sort queries and intervals by start; min-heap `(size, end)` of active intervals; sweep and pop expired | Offline processing: sort queries + intervals together by left endpoint. Lazy-remove intervals where `end < query`. |
 
 ---

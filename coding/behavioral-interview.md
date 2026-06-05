@@ -4,18 +4,22 @@ topic: Behavioral Interview
 difficulty: meta
 ---
 
-# Behavioral Interview Guide — Google SDE 2/3 `🔥 Google`
+# Behavioral Interview Guide — Google SDE 2/3
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!important] This Round Is Not Optional
 > Google's behavioral round (called "Googleyness & Leadership" internally) is **weighted equally** to coding rounds. Strong technical candidates are rejected every week because they bomb this round. Prepare it with the same seriousness as LeetCode Hard problems.
 
 ---
 
-## What Google Is Actually Evaluating `🔥 Google`
+## What Google Is Actually Evaluating
 
 Google uses a framework called **"Googleyness"** + **"Leadership"** with these specific attributes:
 
@@ -31,7 +35,7 @@ Google uses a framework called **"Googleyness"** + **"Leadership"** with these s
 
 ---
 
-## The STAR Framework — Done Right `🔥 Google`
+## The STAR Framework — Done Right
 
 **S**ituation → **T**ask → **A**ction → **R**esult
 
@@ -43,7 +47,7 @@ Most candidates know STAR, but they do it wrong. Here's the difference:
 ### Right STAR (what Google wants):
 > **Situation (10%)**: "We were two weeks before a major product launch. Our payment processing service was throwing intermittent 500 errors in production — affecting about 3% of transactions."
 >
-> **Task (10%)**: "I was the on-call engineer and the only backend engineer available on a Sunday. My manager was traveling internationally with no phone access."
+> **Task (10%) `⚡ T1`**: "I was the on-call engineer and the only backend engineer available on a Sunday. My manager was traveling internationally with no phone access."
 >
 > **Action (60% — this is the meat)**: "I started by pulling the error logs and noticed the failures were correlated with a specific database region. I formed a hypothesis that we were hitting connection pool exhaustion under load. I wrote a quick script to plot the error rate against DB connection count — confirmed the correlation. Rather than just restarting the service (which would have masked the root cause), I dug into the connection pool configuration and found we had inherited a default max_connections=10 from a library upgrade three versions back — previously it was 50. I patched the config, deployed to staging, ran a load test to confirm, then deployed to prod with a feature flag so I could roll back instantly. I also wrote a runbook for the on-call rotation explaining the fix and monitoring signals to watch."
 >
@@ -58,111 +62,111 @@ Most candidates know STAR, but they do it wrong. Here's the difference:
 
 ---
 
-## The 25 Most-Asked Google Behavioral Questions `🔥 Google`
+## The 25 Most-Asked Google Behavioral Questions
 
 Prepare a STAR story for each category. You don't need 25 separate stories — 8 good stories can answer all 25 with different angles.
 
 ### Category 1: Impact & Ownership
 
-**Q1. Tell me about a project you're most proud of.** `🔥 Google`
+**Q1. Tell me about a project you're most proud of.**
 > Key signals: Self-direction, scope, measurable impact, what you'd do differently
 
-**Q2. Tell me about a time you went above and beyond what was expected.** `🔥 Google`
+**Q2. Tell me about a time you went above and beyond what was expected.**
 > Key signals: Intrinsic motivation, ownership mindset, proactivity
 
-**Q3. Describe a time you identified a significant risk or problem and addressed it proactively.** `🔥 Google`
+**Q3. Describe a time you identified a significant risk or problem and addressed it proactively.**
 > Key signals: Judgment, bias toward action, risk awareness
 
-**Q4. Tell me about a time you had a significant technical impact.** `⭐ Google`
+**Q4. Tell me about a time you had a significant technical impact.**
 > Key signals: Technical depth, influence on codebase/architecture
 
-**Q5. Describe the most complex system you've designed or built.**  `⭐ Google`
+**Q5. Describe the most complex system you've designed or built.**
 > Key signals: Architecture thinking, tradeoff reasoning, scale awareness
 
 ---
 
 ### Category 2: Conflict & Disagreement
 
-**Q6. Tell me about a time you disagreed with your manager or tech lead.** `🔥 Google`
+**Q6. Tell me about a time you disagreed with your manager or tech lead.**
 > Key signals: Courage, data-driven argumentation, knowing when to concede
 
-**Q7. Describe a time you had a conflict with a teammate. How was it resolved?** `🔥 Google`
+**Q7. Describe a time you had a conflict with a teammate. How was it resolved?**
 > Key signals: Emotional intelligence, focus on the work not the person, resolution
 
-**Q8. Tell me about a time you had to push back on a product requirement.** `⭐ Google`
+**Q8. Tell me about a time you had to push back on a product requirement.**
 > Key signals: Technical judgment, ability to say no constructively
 
-**Q9. Tell me about a time you were wrong. How did you handle it?** `🔥 Google`
+**Q9. Tell me about a time you were wrong. How did you handle it?**
 > Key signals: Intellectual humility, learning orientation — this is a TRAP for people who can't admit mistakes
 
-**Q10. Tell me about a time you changed your mind after initially being certain you were right.** `⭐ Google`
+**Q10. Tell me about a time you changed your mind after initially being certain you were right.**
 > Key signals: Openness to new evidence, intellectual honesty
 
 ---
 
 ### Category 3: Ambiguity & Decisions Under Uncertainty
 
-**Q11. Tell me about a time you had to make a decision with incomplete information.** `🔥 Google`
+**Q11. Tell me about a time you had to make a decision with incomplete information.**
 > Key signals: Comfort with ambiguity, pragmatic decision making, defined a decision threshold
 
-**Q12. Describe a time you had to prioritize between multiple important competing tasks.** `🔥 Google`
+**Q12. Describe a time you had to prioritize between multiple important competing tasks.**
 > Key signals: Judgment, transparency, impact-based prioritization
 
-**Q13. Tell me about a time requirements changed significantly mid-project.** `⭐ Google`
+**Q13. Tell me about a time requirements changed significantly mid-project.**
 > Key signals: Adaptability, stakeholder management, pivot execution
 
-**Q14. Describe a time you had to make a technical decision without a clear right answer.** `⭐ Google`
+**Q14. Describe a time you had to make a technical decision without a clear right answer.**
 > Key signals: Tradeoff reasoning, framing the decision, driving to a conclusion
 
 ---
 
 ### Category 4: Leadership & Cross-Functional
 
-**Q15. Tell me about a time you led a project or initiative (even informally).** `🔥 Google`
+**Q15. Tell me about a time you led a project or initiative (even informally).**
 > Key signals: Project ownership, coordination, unblocking others
 
-**Q16. Describe a time you influenced people who didn't report to you.** `🔥 Google`
+**Q16. Describe a time you influenced people who didn't report to you.**
 > Key signals: Influence without authority — critical for SDE 3
 
-**Q17. Tell me about a time you mentored or helped a teammate grow.** `⭐ Google`
+**Q17. Tell me about a time you mentored or helped a teammate grow.**
 > Key signals: Collaborative instinct, teaching ability, patience
 
-**Q18. Tell me about a time you had to align multiple stakeholders with different priorities.** `⭐ Google`
+**Q18. Tell me about a time you had to align multiple stakeholders with different priorities.**
 > Key signals: Communication, negotiation, keeping focus on shared goal
 
-**Q19. Describe a time you drove a cross-team or cross-functional initiative.** `⭐ Google`
+**Q19. Describe a time you drove a cross-team or cross-functional initiative.**
 > Key signals: Org navigation, written communication, long-horizon thinking
 
 ---
 
 ### Category 5: Failure & Learning
 
-**Q20. Tell me about a time you failed. What happened and what did you learn?** `🔥 Google`
+**Q20. Tell me about a time you failed. What happened and what did you learn?**
 > Key signals: This is NOT a trick question — Google wants real failures with real learning. Saying "I worked too hard" is a red flag. Say something that actually went wrong.
 
-**Q21. Tell me about a bug or outage you caused. What did you do?** `🔥 Google`
+**Q21. Tell me about a bug or outage you caused. What did you do?**
 > Key signals: Accountability, systematic debugging, post-mortem mindset
 
-**Q22. Describe a project that didn't go as planned.** `⭐ Google`
+**Q22. Describe a project that didn't go as planned.**
 > Key signals: Honest retrospection, what you controlled vs didn't, what you'd change
 
 ---
 
 ### Category 6: Googleyness-Specific
 
-**Q23. Why Google? Why this team?** `🔥 Google`
+**Q23. Why Google? Why this team?**
 > Key signals: Genuine curiosity about the mission, specific knowledge of the team/product
 > Never say "compensation" or "prestige" — say "scale of impact", "technical challenges", "open culture"
 
-**Q24. What do you do when you don't know how to solve a problem?** `⭐ Google`
+**Q24. What do you do when you don't know how to solve a problem?**
 > Key signals: Learning instinct, asking for help appropriately, resourcefulness
 
-**Q25. Tell me about a time you had to learn something completely new quickly.** `⭐ Google`
+**Q25. Tell me about a time you had to learn something completely new quickly.**
 > Key signals: Growth mindset, learning efficiency, applied the learning
 
 ---
 
-## 8 Core Stories to Prepare `🔥 Google`
+## 8 Core Stories to Prepare
 
 Prepare these 8 stories. Each can flex to answer multiple questions above.
 
@@ -179,7 +183,7 @@ Prepare these 8 stories. Each can flex to answer multiple questions above.
 
 ---
 
-## Story Template (Fill This Out for Each) `🔥 Google`
+## Story Template (Fill This Out for Each)
 
 ```
 Story: [Name]
@@ -210,7 +214,7 @@ Gotcha / Tricky angle:
 
 ---
 
-## Anti-Patterns That Get You Rejected `🔥 Google`
+## Anti-Patterns That Get You Rejected
 
 | Anti-Pattern | Why It's Bad | Fix |
 |-------------|-------------|-----|
@@ -225,7 +229,7 @@ Gotcha / Tricky angle:
 
 ---
 
-## What "SDE 3 vs SDE 2" Behavioral Looks Like `⭐ Google`
+## What "SDE 3 vs SDE 2" Behavioral Looks Like
 
 The same question is evaluated differently:
 
@@ -242,7 +246,7 @@ The same question is evaluated differently:
 
 ---
 
-## Questions to Ask Your Interviewer `⭐ Google`
+## Questions to Ask Your Interviewer
 
 Always have 2–3 questions ready. Good ones show intellectual curiosity:
 

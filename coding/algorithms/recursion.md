@@ -6,14 +6,17 @@ difficulty: mixed
 
 # Recursion & Backtracking — Problem Reference by Pattern
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 > [!info] First Principles
 > Recursion reduces a problem to a smaller identical subproblem; the call stack manages state across levels. Backtracking = DFS over a decision tree — "make choice → recurse → undo choice". The invariant at every recursive call: the partial solution satisfies all constraints imposed so far. Complexity: subsets O(2^n · n), permutations O(n! · n), combinations O(C(n,k) · k).
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -73,7 +76,7 @@ difficulty: mixed
 
 ## Divide and Conquer (via Recursion)
 
-### Merge Sort
+### Merge Sort `🎯 T2`
 
 > [!example] Problem
 > Sort an array in O(n log n) using divide and conquer.
@@ -158,7 +161,7 @@ difficulty: mixed
 
 ## Pruning & Constraints
 
-### Combination Sum II (No Reuse) `🔥 Google`
+### Combination Sum II (No Reuse) `🎯 T2`
 
 > [!example] Problem
 > Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
@@ -226,7 +229,7 @@ difficulty: mixed
 
 ---
 
-### Word Search (Grid Backtracking) `🔥 Google`
+### Word Search (Grid Backtracking) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -298,7 +301,7 @@ difficulty: mixed
 
 ---
 
-### Word Search II (Trie + Backtracking) `🔥 Google`
+### Word Search II (Trie + Backtracking) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n board of characters and a list of strings words, return all words on the board.
@@ -632,7 +635,7 @@ difficulty: mixed
 
 ## Foundation — Recursion Fundamentals
 
-### Binary Search (Recursive) `🔥 Google`
+### Binary Search (Recursive)
 
 > [!example] Problem
 > Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, then return its index. Otherwise, return -1.
@@ -788,7 +791,7 @@ difficulty: mixed
 
 ## Graph — Recursive Traversal
 
-### Decode String (Recursive) `⭐ Google`
+### Decode String (Recursive)
 
 > [!example] Problem
 > Given an encoded string, return its decoded string.
@@ -1021,7 +1024,7 @@ difficulty: mixed
 
 ## Dynamic Programming Foundations (Recursive + Memo)
 
-### Climbing Stairs (Memoized Recursion) `🔥 Google`
+### Climbing Stairs (Memoized Recursion) `🎯 T2`
 
 > [!example] Problem
 > You are climbing a staircase. It takes n steps to reach the top.
@@ -1092,7 +1095,7 @@ difficulty: mixed
 
 ---
 
-### Construct Binary Tree from Preorder and Inorder Traversal (LC 105) `🔥 Google`
+### Construct Binary Tree from Preorder and Inorder Traversal (LC 105) `🎯 T2`
 
 > [!example] Problem
 > Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
@@ -1150,7 +1153,7 @@ difficulty: mixed
 
 ---
 
-### Serialize and Deserialize Binary Tree (LC 297) `🔥 Google`
+### Serialize and Deserialize Binary Tree (LC 297) `🎯 T2`
 
 > [!example] Problem
 > Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
@@ -1214,7 +1217,7 @@ difficulty: mixed
 
 ---
 
-### Permutations II (LC 47) `🔥 Google`
+### Permutations II (LC 47) `🎯 T2`
 
 > [!example] Problem
 > Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
@@ -1274,7 +1277,7 @@ difficulty: mixed
 
 ---
 
-### Subsets II (LC 90) `🔥 Google`
+### Subsets II (LC 90) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
@@ -1326,7 +1329,7 @@ difficulty: mixed
 
 ---
 
-### Combinations (LC 77) `🔥 Google`
+### Combinations (LC 77) `🎯 T2`
 
 > [!example] Problem
 > Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
@@ -1384,7 +1387,7 @@ difficulty: mixed
 
 ## Divide and Conquer — Advanced
 
-### Maximum Subarray — D&C (O(n log n)) `🔥 Google`
+### Maximum Subarray — D&C (O(n log n)) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -1447,7 +1450,7 @@ difficulty: mixed
 
 ---
 
-### Pow(x, n) — Fast Exponentiation `🔥 Google`
+### Pow(x, n) — Fast Exponentiation
 
 > [!example] Problem
 > Implement `pow(x, n)` for real `x` and integer `n` (including negative `n`).
@@ -1520,7 +1523,7 @@ difficulty: mixed
 
 ## Recursion on Graphs
 
-### Clone Graph (LC 133) `🔥 Google`
+### Clone Graph (LC 133) `⚡ T1`
 
 > [!example] Problem
 > Given a reference of a node in a connected undirected graph.
@@ -1601,7 +1604,7 @@ difficulty: mixed
 
 ---
 
-### Number of Islands (LC 200) `🔥 Google`
+### Number of Islands (LC 200) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -1673,7 +1676,7 @@ difficulty: mixed
 
 ## Recursive Parsing / Evaluation
 
-### Basic Calculator II (LC 227) `🔥 Google`
+### Basic Calculator II (LC 227)
 
 > [!example] Problem
 > Given a string s which represents an expression, evaluate this expression and return its value.
@@ -1784,7 +1787,7 @@ difficulty: mixed
 
 ## Recursion — More Problems
 
-### Predict the Winner (LC 486) `⭐ Google`
+### Predict the Winner (LC 486)
 
 > [!example] Problem
 > You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.

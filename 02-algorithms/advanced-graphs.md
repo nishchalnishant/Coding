@@ -9,6 +9,12 @@ tags: [algorithms, advanced-graphs]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ```
 WHY advanced graph algos → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                         │                │               │               │
@@ -116,7 +122,7 @@ Used to find all strongly connected components in a directed graph.
 
 
 > [!TIP]
-> **Tarjan's intuition**: Think of DFS as exploring a cave system. Each cave (node) gets a discovery timestamp (`disc`). The `low` value tracks the earliest-discovered cave reachable from this subtree via back-edges. When `low[u] == disc[u]`, node `u` is the "root" of a strongly connected component — nothing in its subtree can reach back further than `u` itself. Pop everything on the stack down to `u`: that's one SCC.
+> **Tarjan's intuition `💤 T3`**: Think of DFS as exploring a cave system. Each cave (node) gets a discovery timestamp (`disc`). The `low` value tracks the earliest-discovered cave reachable from this subtree via back-edges. When `low[u] == disc[u]`, node `u` is the "root" of a strongly connected component — nothing in its subtree can reach back further than `u` itself. Pop everything on the stack down to `u`: that's one SCC.
 
 ```python
 class Graph:
@@ -219,11 +225,11 @@ class BridgeGraph:
 
 **Rules (undirected graph):**
 - Eulerian **circuit** exists iff: graph is connected AND every vertex has even degree.
-- Eulerian **path `⭐ Google`** exists iff: graph is connected AND exactly 2 vertices have odd degree (they are start and end).
+- Eulerian **path `🎯 T2`** exists iff: graph is connected AND exactly 2 vertices have odd degree (they are start and end).
 
 **Rules (directed graph):**
 - Eulerian **circuit**: every vertex has in-degree == out-degree.
-- Eulerian **path `⭐ Google`**: exactly one vertex has out-degree - in-degree = 1 (start), one has in-degree - out-degree = 1 (end).
+- Eulerian **path `🎯 T2`**: exactly one vertex has out-degree - in-degree = 1 (start), one has in-degree - out-degree = 1 (end).
 
 **Hierholzer's Algorithm** (O(E)):
 ```python
@@ -284,10 +290,10 @@ class DSU:
 ## 5. Other Advanced Graph Concepts
 
 - **A* Search**: Heuristic search for shortest paths (good for maze/grid problems in interviews where Euclidean distance matters).
-- **Bellman-Ford `⭐ Google`**:
+- **Bellman-Ford `💤 T3`**:
   > [!IMPORTANT]
   > **The Click Moment**: "Shortest path with **negative edge weights**" — OR — "detect **negative cycles**".
-- **Floyd-Warshall `⭐ Google`**:
+- **Floyd-Warshall `💤 T3`**:
   > [!IMPORTANT]
   > **The Click Moment**: "**All-pairs** shortest paths" — OR — "transitive closure of a graph".
 - **Hierholzer's Algorithm**:
@@ -295,10 +301,7 @@ class DSU:
   > **The Click Moment**: "Visit every **edge** exactly once" — OR — "reconstruct itinerary".
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -306,21 +309,21 @@ class DSU:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Critical Connections [H] `⭐ Google`** | Tarjan's Bridges | "Remove one edge, network splits" | DFS with `disc[]` and `low[]`; bridge when `low[v] > disc[u]` | Undirected graph — must not back-track through parent; multi-edges require tracking parent edge index, not node |
-| **Reconstruct Itinerary [H] `⭐ Google`** | Hierholzer's (Eulerian Path) | "Use every ticket exactly once" | Sort adjacency lists; post-order DFS — add node to result only when no edges remain | Sort in reverse + `.pop()` for lexicographic order; result needs reversal at end |
-| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary) [H] `⭐ Google`** | Topological Sort (implicit graph) | "Derive character ordering from sorted word list" | Compare adjacent words char-by-char; first diff → directed edge; run Kahn's BFS | If word A is a prefix of word B and A comes after B in input → invalid (return `""`) |
-| **Cheapest Flights Within K Stops [M] `⭐ Google`** | Bellman-Ford (bounded) | "Shortest path with at most K hops" | Run K+1 relaxation rounds; use snapshot of previous round to prevent cascading updates | Dijkstra fails here — greedily expanding cheapest node doesn't respect hop limit |
-| **Network Delay Time [M] `🔥 Google`** | Dijkstra | "Min time for signal to reach all nodes" | Standard Dijkstra from source; answer is `max(dist.values())`; return -1 if any node unreachable | Unreachable nodes — check `len(dist) == n`, not just final max |
+| **Critical Connections [H]** | Tarjan's Bridges | "Remove one edge, network splits" | DFS with `disc[]` and `low[]`; bridge when `low[v] > disc[u]` | Undirected graph — must not back-track through parent; multi-edges require tracking parent edge index, not node |
+| **Reconstruct Itinerary [H]** | Hierholzer's (Eulerian Path) | "Use every ticket exactly once" | Sort adjacency lists; post-order DFS — add node to result only when no edges remain | Sort in reverse + `.pop()` for lexicographic order; result needs reversal at end |
+| **[Alien Dictionary](problem-deep-dives.md#alien-dictionary) [H] `⚡ T1`** | Topological Sort (implicit graph) | "Derive character ordering from sorted word list" | Compare adjacent words char-by-char; first diff → directed edge; run Kahn's BFS | If word A is a prefix of word B and A comes after B in input → invalid (return `""`) |
+| **Cheapest Flights Within K Stops [M]** | Bellman-Ford (bounded) | "Shortest path with at most K hops" | Run K+1 relaxation rounds; use snapshot of previous round to prevent cascading updates | Dijkstra fails here — greedily expanding cheapest node doesn't respect hop limit |
+| **Network Delay Time [M]** | Dijkstra | "Min time for signal to reach all nodes" | Standard Dijkstra from source; answer is `max(dist.values())`; return -1 if any node unreachable | Unreachable nodes — check `len(dist) == n`, not just final max |
 | **Path With Minimum Effort [M]** | Binary Search + BFS/DFS OR Dijkstra | "Minimize the maximum single-step difference" | Dijkstra where `dist[node]` = min effort to reach it; weight = `abs(h1 - h2)` | Binary search on answer + BFS also works; Dijkstra is cleaner and O((V+E) log V) |
-| **Swim in Rising Water [H] `⭐ Google`** | Dijkstra OR Binary Search + BFS | "Minimize the maximum elevation traversed" | Dijkstra with `dist[i][j]` = max elevation seen on path to `(i,j)` | Looks like water-fill BFS but requires minimizing a max — standard BFS gives wrong answer |
+| **Swim in Rising Water [H]** | Dijkstra OR Binary Search + BFS | "Minimize the maximum elevation traversed" | Dijkstra with `dist[i][j]` = max elevation seen on path to `(i,j)` | Looks like water-fill BFS but requires minimizing a max — standard BFS gives wrong answer |
 | **Find the City With Smallest Reachable Count [M]** | Floyd-Warshall | "All-pairs shortest paths + count reachable under threshold" | Floyd-Warshall → for each city count neighbors with `dist ≤ threshold` | O(V³) acceptable for small N (≤ 100); prefer Floyd-Warshall for all-pairs over V×Dijkstra |
 | **Minimum Cost to Reach Destination (Floyd-Warshall) [M]** | Floyd-Warshall | "All-pairs shortest path in dense small graph" | `dp[i][j] = min over k of dp[i][k] + dp[k][j]`; initialize diagonal to 0 | Initialization: `dp[i][j] = inf` unless direct edge exists; loop order must be `k` outermost |
-| **Course Schedule II [M] `🔥 Google`** | Topological Sort (Kahn's) | "Find valid task ordering with dependencies" | In-degree array + BFS queue of zero-in-degree nodes | If result length < N → cycle exists; return empty array |
-| **Minimum Spanning Tree — Kruskal's [M] `⭐ Google`** | Union-Find + sort edges | "Minimum cost to connect all nodes" | Sort edges by weight; union each edge if endpoints not yet connected | Greedy correctness relies on cycle property — adding next cheapest edge never violates optimality if no cycle formed |
-| **Minimum Spanning Tree — Prim's [M] `⭐ Google`** | Min-Heap (greedy) | "MST from a source node outward" | Min-heap of `(weight, node)`; greedily add cheapest edge to a non-visited node | Better than Kruskal on dense graphs (O(E log V) vs O(E log E)); need visited set to avoid re-adding nodes |
+| **Course Schedule II [M] `⚡ T1`** | Topological Sort (Kahn's) | "Find valid task ordering with dependencies" | In-degree array + BFS queue of zero-in-degree nodes | If result length < N → cycle exists; return empty array |
+| **Minimum Spanning Tree — Kruskal's [M] `⚡ T1`** | Union-Find + sort edges | "Minimum cost to connect all nodes" | Sort edges by weight; union each edge if endpoints not yet connected | Greedy correctness relies on cycle property — adding next cheapest edge never violates optimality if no cycle formed |
+| **Minimum Spanning Tree — Prim's [M] `⚡ T1`** | Min-Heap (greedy) | "MST from a source node outward" | Min-heap of `(weight, node)`; greedily add cheapest edge to a non-visited node | Better than Kruskal on dense graphs (O(E log V) vs O(E log E)); need visited set to avoid re-adding nodes |
 | **Evaluate Division [M]** | Weighted graph + BFS/DFS | "Chain of ratio queries — can you go A→B?" | Build directed graph with edge weight = ratio; query = DFS/BFS product along path | If query nodes not in graph → return -1; same-node query (A/A) should return 1.0 unless A unknown |
-| **Strongly Connected Components — Kosaraju's [H] `⭐ Google`** | Two-pass DFS | "Find all groups where every node reaches every other" | Pass 1: DFS on original graph, push to stack by finish time; Pass 2: DFS on reversed graph in stack order | Two full DFS passes; Tarjan's SCC is single-pass but harder to implement — know both |
-| **Word Ladder II [H] `🔥 Google`** | BFS (layered) + backtracking | "All shortest transformation sequences" | BFS to build `parent` map (layer by layer); backtrack from target to source to reconstruct paths | BFS must process entire layer before removing words from `wordSet` — removing mid-layer causes missed paths |
+| **Strongly Connected Components — Kosaraju's [H] `💤 T3`** | Two-pass DFS | "Find all groups where every node reaches every other" | Pass 1: DFS on original graph, push to stack by finish time; Pass 2: DFS on reversed graph in stack order | Two full DFS passes; Tarjan's SCC is single-pass but harder to implement — know both |
+| **Word Ladder II [H] `⚡ T1`** | BFS (layered) + backtracking | "All shortest transformation sequences" | BFS to build `parent` map (layer by layer); backtrack from target to source to reconstruct paths | BFS must process entire layer before removing words from `wordSet` — removing mid-layer causes missed paths |
 | **Detect Negative Cycle (Bellman-Ford) [M]** | Bellman-Ford | "Does a path get cheaper indefinitely?" | Run N-1 relaxation rounds; if Nth round still relaxes → negative cycle exists | Check `dist[v] > dist[u] + w` on the Nth iteration; Dijkstra cannot detect negative cycles at all |
 
 ---

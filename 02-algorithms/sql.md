@@ -9,6 +9,12 @@ tags: [algorithms, sql]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```text
 WHY SQL exists
 ├── Structured data lives in relations (tables) — need declarative retrieval

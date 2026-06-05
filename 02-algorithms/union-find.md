@@ -9,6 +9,12 @@ tags: [algorithms, union-find]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ```
 WHY Union-Find exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
        │                     │               │               │               │
@@ -78,10 +84,7 @@ WHY Union-Find exists → WHAT it is → HOW it works → WHEN to use → WHAT c
 Near-O(1) amortized connectivity. SDE-3 focus: correct optimizations (path compression + union by rank), DSU variants (weighted ratios, rollback), Kruskal's MST, and distributed dynamic connectivity.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -126,7 +129,7 @@ Near-O(1) amortized connectivity. SDE-3 focus: correct optimizations (path compr
 ## 1. Representation Choice
 
 > [!IMPORTANT]
-> **The Click Moment**: "Merge **groups**" — OR — "are two elements in the **same set**?" — OR — "**add edge, query connectivity** repeatedly" — OR — "**minimum spanning tree `⭐ Google`** (Kruskal)" — OR — "detect **cycle in undirected graph** without BFS/DFS". DSU is the choice when you need many union/find operations incrementally. Prefer DFS only for one-shot component counting with no subsequent updates.
+> **The Click Moment**: "Merge **groups**" — OR — "are two elements in the **same set**?" — OR — "**add edge, query connectivity** repeatedly" — OR — "**minimum spanning tree `⚡ T1`** (Kruskal)" — OR — "detect **cycle in undirected graph** without BFS/DFS". DSU is the choice when you need many union/find operations incrementally. Prefer DFS only for one-shot component counting with no subsequent updates.
 
 | Approach | Find | Union | Best For |
 | :--- | :--- | :--- | :--- |
@@ -169,10 +172,10 @@ class DSU:
         return self.size[self.find(x)]
 
 #### Common Variants & Twists
-1. **Longest Consecutive Sequence `🔥 Google`**:
+1. **Longest Consecutive Sequence**:
    - **What (The Problem & Goal):** Given an unsorted array, find the length of the longest consecutive elements sequence.
    - **How (Intuition & Mental Model):** For each `x` in the array, if `x+1` exists, `union(x, x+1)`. After processing all elements, the size of the largest component is the answer. (Note: Hash Set is the standard O(N) approach, but DSU is a valid alternative).
-2. **Number of Provinces `⭐ Google`**:
+2. **Number of Provinces**:
    - **What (The Problem & Goal):** Given an adjacency matrix, find the total number of connected components.
    - **How (Intuition & Mental Model):** Iterate through the upper triangle of the matrix. If `matrix[i][j] == 1`, `union(i, j)`. The number of components remaining in the DSU is the answer.
 ```
@@ -304,7 +307,7 @@ class RollbackDSU:
             self.rank[rx] = old_rank
 
 #### Common Variants & Twists
-1. **Number of Islands II `🔥 Google`**:
+1. **Number of Islands II**:
    - **What (The Problem & Goal):** Dynamic land additions in a grid; return component count after each.
    - **How (Intuition & Mental Model):** Standard DSU on `r * cols + c`. On each `addLand(r, c)`, check 4-neighbors. If a neighbor is land, `union(current, neighbor)`. This handles the dynamic component counting as the grid evolves.
 ```
@@ -347,13 +350,13 @@ class RollbackDSU:
 
 ### Medium (High Frequency)
 - **Number of Connected Components** — DSU; initialize `components = n`; decrement on successful union.
-- **[Redundant Connection](problem-deep-dives.md#redundant-connection) `🔥 Google`** — Process edges; return the first where `find(u) == find(v)` before union.
-- **[Accounts Merge](problem-deep-dives.md#accounts-merge) `🔥 Google`** — Union emails within each account; group by DSU root; sort emails per group.
-- **Graph Valid Tree `⭐ Google`** — n nodes, n-1 edges, single component ↔ tree.
+- **[Redundant Connection](problem-deep-dives.md#redundant-connection) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
+- **[Accounts Merge](problem-deep-dives.md#accounts-merge) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
+- **Graph Valid Tree `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
 - **Satisfiability of Equations** — Union all `==` pairs first; then check all `!=` pairs.
 
 ### Hard
-- **Number of Islands II `🔥 Google`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
+- **Number of Islands II `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
 - **Minimize Malware Spread** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
 - **[Evaluate Division](problem-deep-dives.md#evaluate-division)** — Weighted DSU; ratios as edge weights; query accumulates product path.
 - **Smallest String With Swaps** — DSU on index pairs; sort characters lexicographically within each component.
@@ -364,21 +367,21 @@ class RollbackDSU:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Redundant Connection](problem-deep-dives.md#redundant-connection) `🔥 Google`** | DSU Cycle Detection | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
-| **Number of Islands II `🔥 Google`** | "Dynamic land additions; track component count" | DSU over 2D grid → 1D index `r*cols+c`; union 4-neighbors each add | Check bounds before union. Duplicate queries (same cell added twice) must not double-decrement count. |
-| **Accounts Merge `🔥 Google`** | "Same email = same person across accounts" | Union all emails within each account; group by DSU root; sort | Email is the DSU element (not account name). Map `email → integer index` first. |
-| **Kruskal MST** | "Min cost to connect all nodes" | Sort edges by weight; add edge if `union(u,v)` succeeds; stop at n-1 edges | Disconnected graph → return -1. Parallel edges → take cheapest; DSU handles duplicates naturally. |
+| **[Redundant Connection](problem-deep-dives.md#redundant-connection) `⚡ T1`** | DSU Cycle Detection | "Undirected tree + one extra edge = cycle" | Process edges; first where `find(u)==find(v)` before union is the answer | Return **last** such edge in input order; directed variant (Course Schedule) uses topo sort. |
+| **Number of Islands II `⚡ T1`** | "Dynamic land additions; track component count" | DSU over 2D grid → 1D index `r*cols+c`; union 4-neighbors each add | Check bounds before union. Duplicate queries (same cell added twice) must not double-decrement count. |
+| **Accounts Merge `⚡ T1`** | "Same email = same person across accounts" | Union all emails within each account; group by DSU root; sort | Email is the DSU element (not account name). Map `email → integer index` first. |
+| **Kruskal MST `⚡ T1`** | "Min cost to connect all nodes" | Sort edges by weight; add edge if `union(u,v)` succeeds; stop at n-1 edges | Disconnected graph → return -1. Parallel edges → take cheapest; DSU handles duplicates naturally. |
 | **Satisfiability of Equations** | "Equality constraints + inequality checks" | Union all `==` pairs; then verify no `!=` pair shares a root | **Two-pass is mandatory**: process all `==` before any `!=`. Single-pass fails on ordering. |
 | **Largest Component by Common Factor** | "Numbers sharing a prime factor → same group" | Sieve + DSU: for each prime factor, union all indices divisible by it | `value=1` has no prime factors — isolated node. Sieve factorization O(N log log N). |
 | **Smallest String With Swaps** | "Swap any indices in a given pair repeatedly" | DSU on index pairs; sort chars within each connected component lexicographically | Transitivity: if (0,1) and (1,2) are pairs, indices 0,1,2 are all in the same component. |
-| **Graph Valid Tree `⭐ Google`** | "Is this graph a tree?" | DSU: n nodes, n-1 edges, no cycle ↔ tree | Check **both**: no cycle (n-1 successful unions) **and** connected (`components == 1`). |
-| **Find if Path Exists [E]** | "Is there any path between source and destination?" | DSU: union all edges; check `find(src) == find(dst)` | BFS/DFS also works; DSU is one-liner if already built. |
-| **Number of Provinces [E] `⭐ Google`** | "Count connected components in adjacency matrix" | DSU or DFS; union all `isConnected[i][j]==1` pairs | Adjacency matrix input — iterate upper triangle only to avoid double-unioning. |
+| **Graph Valid Tree `⚡ T1`** | "Is this graph a tree?" | DSU: n nodes, n-1 edges, no cycle ↔ tree | Check **both**: no cycle (n-1 successful unions) **and** connected (`components == 1`). |
+| **Find if Path Exists [E] `⚡ T1`** | "Is there any path between source and destination?" | DSU: union all edges; check `find(src) == find(dst)` | BFS/DFS also works; DSU is one-liner if already built. |
+| **Number of Provinces [E] `⚡ T1`** | "Count connected components in adjacency matrix" | DSU or DFS; union all `isConnected[i][j]==1` pairs | Adjacency matrix input — iterate upper triangle only to avoid double-unioning. |
 | **Largest Component Size by Common Factor [M]** | "Numbers sharing a prime factor belong to same group" | Sieve factorization; DSU union index with each prime factor node | `value=1` has no prime factors — isolated. Map prime factors to a synthetic node range above n. |
 | **Regions Cut by Slashes [M]** | "Count regions in grid divided by '/' and '\\' slashes" | Divide each cell into 4 triangles; union based on slash type and adjacency | Expand each cell into 4 sub-cells (top, right, bottom, left); '/' splits top-right from bottom-left. |
 | **Number of Operations to Make Network Connected [M]** | "Minimum cable moves to connect all computers" | Count components C and extra edges E; answer = C-1 if E >= C-1 | Need at least n-1 edges total. Extra edges = edges beyond n-1 MST edges. Return -1 if extras < components-1. |
 | **Minimize Malware Spread [H]** | "Remove one initial malware node to minimize spread" | DSU for component sizes; pick node whose removal saves the largest component | Only nodes that are the **sole** malware source in their component help. Multiple malware nodes in one component = no savings from removing one. |
-| **Swim in Rising Water [H] `⭐ Google`** | "Minimum time to reach bottom-right as water rises" | Binary search on time + DSU/BFS; or Dijkstra with `max(path)` as cost | Union-Find: at time T, union all cells with elevation ≤ T; check if (0,0) and (n-1,n-1) are connected. |
+| **Swim in Rising Water [H]** | "Minimum time to reach bottom-right as water rises" | Binary search on time + DSU/BFS; or Dijkstra with `max(path)` as cost | Union-Find: at time T, union all cells with elevation ≤ T; check if (0,0) and (n-1,n-1) are connected. |
 
 ---
 

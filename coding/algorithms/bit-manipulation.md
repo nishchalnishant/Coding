@@ -6,17 +6,20 @@ difficulty: mixed
 
 # Bit Manipulation — Problem Deep Dives
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
 ## XOR Properties
 
-### Single Number `🔥 Google`
+### Single Number `💤 T3`
 
 > [!example] Problem
 > Given a non-empty array of integers nums, every element appears twice except for one. Find that single one.
@@ -65,7 +68,7 @@ difficulty: mixed
 
 ---
 
-### Single Number II (Three Copies — Bit Counting) `🔥 Google`
+### Single Number II (Three Copies — Bit Counting) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums where every element appears three times except for one, which appears exactly once. Find the single element and return it.
@@ -112,7 +115,7 @@ difficulty: mixed
 
 ---
 
-### Single Number III (Two Unique — XOR Split) `🔥 Google`
+### Single Number III (Two Unique — XOR Split) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, in which exactly two elements appear only once and all the other elements appear exactly twice. Find the two elements that appear only once. You can return the answer in any order.
@@ -172,7 +175,7 @@ difficulty: mixed
 
 ---
 
-### Missing Number `🔥 Google`
+### Missing Number
 
 > [!example] Problem
 > Given an array nums containing n distinct numbers in the range [0, n], return the only number in the range that is missing from the array.
@@ -228,7 +231,7 @@ difficulty: mixed
 
 ---
 
-### Find the Difference `⭐ Google`
+### Find the Difference
 
 > [!example] Problem
 > You are given two strings s and t.
@@ -276,7 +279,7 @@ difficulty: mixed
 
 ## Bit Counting
 
-### Number of 1 Bits (Hamming Weight) `🔥 Google`
+### Number of 1 Bits (Hamming Weight)
 
 > [!example] Problem
 > Given a positive integer n, write a function that returns the number of set bits in its binary representation (also known as the Hamming weight).
@@ -378,7 +381,7 @@ difficulty: mixed
 
 ---
 
-### Counting Bits (DP Approach) `⭐ Google`
+### Counting Bits (DP Approach)
 
 > [!example] Problem
 > Given an integer n, return an array ans of length n + 1 such that for each i (0 <= i <= n), ans[i] is the number of 1's in the binary representation of i.
@@ -429,7 +432,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Bits `🔥 Google`
+### Reverse Bits
 
 > [!example] Problem
 > Reverse bits of a given 32 bits unsigned integer.
@@ -476,7 +479,7 @@ difficulty: mixed
 
 ## Bit Tricks
 
-### Power of Two `🔥 Google`
+### Power of Two
 
 > [!example] Problem
 > Given an integer n, return true if it is a power of two. Otherwise, return false.
@@ -522,7 +525,7 @@ difficulty: mixed
 
 ---
 
-### Power of Four `🔥 Google`
+### Power of Four
 
 > [!example] Problem
 > Given an integer n, return true if it is a power of four. Otherwise, return false.
@@ -566,7 +569,7 @@ difficulty: mixed
 
 ---
 
-### Bitwise AND of Numbers Range
+### Bitwise AND of Numbers Range `💤 T3`
 
 > [!example] Problem
 > Given two integers left and right that represent the range [left, right], return the bitwise AND of all numbers in this range, inclusive.
@@ -661,7 +664,7 @@ difficulty: mixed
 
 ## Bitmask DP
 
-### Subsets via Bitmask
+### Subsets via Bitmask `🎯 T2`
 
 > [!example] Problem
 > Given a set of `n` elements, enumerate all 2^n subsets.
@@ -688,7 +691,7 @@ difficulty: mixed
 
 ---
 
-### Shortest Path Visiting All Nodes (BFS + Bitmask) `⭐ Google`
+### Shortest Path Visiting All Nodes (BFS + Bitmask) `💤 T3`
 
 > [!example] Problem
 > You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
@@ -753,7 +756,7 @@ difficulty: mixed
 
 ---
 
-### Smallest Sufficient Team (Bitmask DP)
+### Smallest Sufficient Team (Bitmask DP) `💤 T3`
 
 > [!example] Problem
 > In a project, you have a list of required skills req_skills, and a list of people. The ith person people[i] contains a list of skills that the person has.
@@ -823,7 +826,7 @@ difficulty: mixed
 
 ---
 
-### Travelling Salesman Problem (TSP) — N ≤ 20 (LC-style / classic)
+### Travelling Salesman Problem (TSP) — N ≤ 20 (LC-style / classic) `💤 T3`
 
 > [!example] Problem
 > Given `n` cities and a cost matrix, find the minimum cost to visit all cities exactly once and return to the start.
@@ -1025,7 +1028,7 @@ difficulty: mixed
 
 ## Encoding / Decoding with Bits
 
-### UTF-8 Validation
+### UTF-8 Validation `💤 T3`
 
 > [!example] Problem
 > Given an integer array data representing the data, return whether it is a valid UTF-8 encoding (i.e. it translates to a sequence of valid UTF-8 encoded characters).
@@ -1101,7 +1104,7 @@ difficulty: mixed
 
 ---
 
-### Gray Code
+### Gray Code `💤 T3`
 
 > [!example] Problem
 > An n-bit gray code sequence is a sequence of 2n integers where:
@@ -1150,7 +1153,7 @@ difficulty: mixed
 
 ---
 
-### Decode XORed Array
+### Decode XORed Array `💤 T3`
 
 > [!example] Problem
 > There is a hidden integer array arr that consists of n non-negative integers.
@@ -1197,7 +1200,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number (Bit Approach) `⭐ Google`
+### Find the Duplicate Number (Bit Approach) `🎯 T2`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -1255,7 +1258,7 @@ difficulty: mixed
 ## See Also
 
 [[dynamic-programming]] | [[graph-algorithms]] | [[trie]]
-### Minimum XOR Sum of Two Arrays
+### Minimum XOR Sum of Two Arrays `💤 T3`
 
 > [!example] Problem
 > You are given two integer arrays nums1 and nums2 of length n.

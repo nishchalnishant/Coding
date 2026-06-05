@@ -6,17 +6,20 @@ difficulty: mixed
 
 # Array Problems — Deep Dive
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
 ## Two Pointers
 
-### Two Sum (sorted variant) `🔥 Google`
+### Two Sum (sorted variant) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -79,7 +82,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum `🔥 Google`
+### 3Sum `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -161,7 +164,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum Closest `🔥 Google`
+### 3Sum Closest `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
@@ -222,7 +225,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum `⭐ Google`
+### 4Sum `⚡ T1`
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -290,7 +293,7 @@ difficulty: mixed
 
 ---
 
-### Container with Most Water `🔥 Google`
+### Container with Most Water `⚡ T1`
 
 > [!example] Problem
 > You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
@@ -343,7 +346,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water `🔥 Google`
+### Trapping Rain Water `⚡ T1`
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -400,7 +403,7 @@ difficulty: mixed
 
 ---
 
-### Remove Duplicates from Sorted Array
+### Remove Duplicates from Sorted Array `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
@@ -468,7 +471,7 @@ difficulty: mixed
 
 ---
 
-### Next Permutation `⭐ Google`
+### Next Permutation `🎯 T2`
 
 > [!example] Problem
 > A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
@@ -537,7 +540,7 @@ difficulty: mixed
 
 ## Sliding Window
 
-### Max Consecutive Ones III
+### Max Consecutive Ones III `⚡ T1`
 
 > [!example] Problem
 > Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
@@ -590,7 +593,7 @@ difficulty: mixed
 
 ---
 
-### Subarrays with K Different Integers
+### Subarrays with K Different Integers `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the number of good subarrays of nums.
@@ -707,7 +710,7 @@ difficulty: mixed
 
 ---
 
-### Product of Array Except Self `🔥 Google`
+### Product of Array Except Self
 
 > [!example] Problem
 > Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
@@ -761,7 +764,7 @@ difficulty: mixed
 
 ## Kadane's Algorithm
 
-### Maximum Subarray `🔥 Google`
+### Maximum Subarray `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -852,7 +855,7 @@ difficulty: mixed
 
 ## Dutch National Flag / Partitioning
 
-### Sort Colors `⭐ Google`
+### Sort Colors `⚡ T1`
 
 > [!example] Problem
 > Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
@@ -952,7 +955,7 @@ difficulty: mixed
 
 ## Boyer-Moore Voting
 
-### Majority Element `⭐ Google`
+### Majority Element `🎯 T2`
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -1004,7 +1007,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number `⭐ Google`
+### Find the Duplicate Number `🎯 T2`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -1264,7 +1267,7 @@ difficulty: mixed
 
 ## Miscellaneous Array Techniques
 
-### Best Time to Buy and Sell Stock `🔥 Google`
+### Best Time to Buy and Sell Stock `🎯 T2`
 
 > [!example] Problem
 > You are given an array prices where prices[i] is the price of a given stock on the ith day.
@@ -1314,7 +1317,7 @@ difficulty: mixed
 
 ---
 
-### Move Zeroes `🔥 Google`
+### Move Zeroes `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
@@ -1360,7 +1363,7 @@ difficulty: mixed
 
 ---
 
-### Two Sum (hash map variant) `🔥 Google`
+### Two Sum (hash map variant) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -1416,7 +1419,7 @@ difficulty: mixed
 
 ---
 
-### Spiral Matrix `🔥 Google`
+### Spiral Matrix
 
 > [!example] Problem
 > Given an m x n matrix, return all elements of the matrix in spiral order.
@@ -1475,7 +1478,7 @@ difficulty: mixed
 
 ---
 
-### Set Matrix Zeroes `🔥 Google`
+### Set Matrix Zeroes
 
 > [!example] Problem
 > Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
@@ -1604,7 +1607,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query — Immutable (LC 303) `⭐ Google`
+### Range Sum Query — Immutable (LC 303) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following type:
@@ -1655,7 +1658,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query 2D — Immutable (LC 304) `⭐ Google`
+### Range Sum Query 2D — Immutable (LC 304) `💤 T3`
 
 > [!example] Problem
 > Given a 2D matrix matrix, handle multiple queries of the following type:
@@ -1719,7 +1722,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game (LC 55) `🔥 Google`
+### Jump Game (LC 55) `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -1766,7 +1769,7 @@ difficulty: mixed
 
 ---
 
-### Gas Station (LC 134)
+### Gas Station (LC 134) `🎯 T2`
 
 > [!example] Problem
 > There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
@@ -1834,7 +1837,7 @@ difficulty: mixed
 
 ## Matrix
 
-### Rotate Image (LC 48) `🔥 Google`
+### Rotate Image (LC 48)
 
 > [!example] Problem
 > You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
@@ -1883,7 +1886,7 @@ difficulty: mixed
 
 ---
 
-### Merge Intervals (LC 56) `🔥 Google`
+### Merge Intervals (LC 56) `🎯 T2`
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -1932,7 +1935,7 @@ difficulty: mixed
 
 ---
 
-### Insert Interval (LC 57)
+### Insert Interval (LC 57) `🎯 T2`
 
 > [!example] Problem
 > You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
@@ -1996,7 +1999,7 @@ difficulty: mixed
 
 ---
 
-### Non-overlapping Intervals (LC 435) `🔥 Google`
+### Non-overlapping Intervals (LC 435) `🎯 T2`
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -2056,7 +2059,7 @@ difficulty: mixed
 
 ## Miscellaneous (Continued)
 
-### First Missing Positive (LC 41) `⭐ Google`
+### First Missing Positive (LC 41)
 
 > [!example] Problem
 > Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
@@ -2119,7 +2122,7 @@ difficulty: mixed
 ## See Also
 
 [[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]
-### First Missing Positive `⭐ Google`
+### First Missing Positive
 
 > [!example] Problem
 > Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
@@ -2180,7 +2183,7 @@ difficulty: mixed
 
 ## Prefix Sum
 
-### Subarray Sum Equals K (with negative numbers) `🔥 Google`
+### Subarray Sum Equals K (with negative numbers) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -2230,7 +2233,7 @@ difficulty: mixed
 
 ---
 
-### Contiguous Array (Equal 0s and 1s)
+### Contiguous Array (Equal 0s and 1s) `⚡ T1`
 
 > [!example] Problem
 > Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
@@ -2287,7 +2290,7 @@ difficulty: mixed
 
 ---
 
-### Product of Array Except Self (no division) `🔥 Google`
+### Product of Array Except Self (no division)
 
 > [!example] Problem
 > Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].

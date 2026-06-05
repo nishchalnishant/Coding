@@ -6,21 +6,24 @@ difficulty: mixed
 
 # Backtracking — Problem Compendium
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 Backtracking is DFS over choices: pick something, go deeper, undo if it doesn't work. You explore every valid path unless you can prune early. The easy bug is forgetting to undo — always pop/unmark after the recursive call.
 
 Prune when: the partial answer is already invalid, not enough room left to finish, or you'd repeat the same choice at the same depth (sort + skip duplicates).
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Subsets / Combinations
 
-### Subsets (Power Set) `🔥 Google`
+### Subsets (Power Set) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums of unique elements, return all possible subsets (the power set).
@@ -71,7 +74,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Subsets II (with duplicates) `🔥 Google`
+### Subsets II (with duplicates) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums that may contain duplicates, return all possible subsets (the power set).
@@ -124,7 +127,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combination Sum (unbounded) `🔥 Google`
+### Combination Sum (unbounded) `🎯 T2`
 
 > [!example] Problem
 > Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
@@ -191,7 +194,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combination Sum II (0/1 — no reuse) `🔥 Google`
+### Combination Sum II (0/1 — no reuse) `🎯 T2`
 
 > [!example] Problem
 > Given a collection of candidate numbers (candidates) and a target number (target), find all unique combinations in candidates where the candidate numbers sum to target.
@@ -260,7 +263,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Combinations `🔥 Google`
+### Combinations `🎯 T2`
 
 > [!example] Problem
 > Given two integers n and k, return all possible combinations of k numbers chosen from the range [1, n].
@@ -317,7 +320,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Letter Combinations of a Phone Number `⭐ Google`
+### Letter Combinations of a Phone Number `🎯 T2`
 
 > [!example] Problem
 > Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
@@ -383,7 +386,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Permutations
 
-### Permutations `🔥 Google`
+### Permutations `🎯 T2`
 
 > [!example] Problem
 > Given an array nums of distinct integers, return all the possible permutations. You can return the answer in any order.
@@ -446,7 +449,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Permutations II (with duplicates) `🔥 Google`
+### Permutations II (with duplicates) `🎯 T2`
 
 > [!example] Problem
 > Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
@@ -508,7 +511,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Next Permutation (iterative approach) `⭐ Google`
+### Next Permutation (iterative approach) `🎯 T2`
 
 > [!example] Problem
 > A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
@@ -567,7 +570,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Letter Case Permutation
+### Letter Case Permutation `🎯 T2`
 
 > [!example] Problem
 > Given a string s, you can transform every letter individually to be lowercase or uppercase to create another string.
@@ -622,7 +625,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## String Backtracking
 
-### Generate Parentheses `⭐ Google`
+### Generate Parentheses `🎯 T2`
 
 > [!example] Problem
 > Given n pairs of parentheses, write a function to generate all combinations of well-formed parentheses.
@@ -671,7 +674,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Palindrome Partitioning `🔥 Google`
+### Palindrome Partitioning `🎯 T2`
 
 > [!example] Problem
 > Given a string s, partition s such that every substring of the partition is a palindrome. Return all possible palindrome partitioning of s.
@@ -810,7 +813,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Search `🔥 Google`
+### Word Search `⚡ T1`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -969,7 +972,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Board / Matrix Backtracking
 
-### N-Queens `🔥 Google`
+### N-Queens `🎯 T2`
 
 > [!example] Problem
 > The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
@@ -1034,7 +1037,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Sudoku Solver `⭐ Google`
+### Sudoku Solver `🎯 T2`
 
 > [!example] Problem
 > Write a program to solve a Sudoku puzzle by filling the empty cells.
@@ -1101,7 +1104,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Unique Paths III `🔥 Google`
+### Unique Paths III `🎯 T2`
 
 > [!example] Problem
 > You are given an m x n integer array grid where grid[i][j] could be:
@@ -1190,7 +1193,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Trie + Backtracking
 
-### Combination Sum III `🔥 Google`
+### Combination Sum III `🎯 T2`
 
 > [!example] Problem
 > Find all valid combinations of k numbers that sum up to n such that the following conditions are true:
@@ -1269,7 +1272,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Target Sum `⭐ Google`
+### Target Sum `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array nums and an integer target.
@@ -1340,7 +1343,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Beautiful Arrangement
+### Beautiful Arrangement `🎯 T2`
 
 > [!example] Problem
 > Suppose you have n integers labeled 1 through n. A permutation of those n integers perm (1-indexed) is considered a beautiful arrangement if for every i (1 <= i <= n), either of the following is true:
@@ -1400,7 +1403,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Restore IP Addresses `⭐ Google`
+### Restore IP Addresses `🎯 T2`
 
 > [!example] Problem
 > A valid IP address consists of exactly four integers separated by single dots. Each integer is between 0 and 255 (inclusive) and cannot have leading zeros.
@@ -1474,7 +1477,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## String Backtracking (continued)
 
-### Word Break II `🔥 Google`
+### Word Break II `🎯 T2`
 
 > [!example] Problem
 > Given a string s and a dictionary of strings wordDict, add spaces in s to construct a sentence where each word is a valid dictionary word. Return all such possible sentences in any order.
@@ -1544,7 +1547,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Palindrome Partitioning II (Minimum Cuts) `🔥 Google`
+### Palindrome Partitioning II (Minimum Cuts) `🎯 T2`
 
 > [!example] Problem
 > Given a string s, partition s such that every substring of the partition is a palindrome.
@@ -1609,7 +1612,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Grid Traversal
 
-### Rat in a Maze
+### Rat in a Maze `🎯 T2`
 
 > [!example] Problem
 > Find all paths for a rat from top-left (0,0) to bottom-right (n-1,n-1) in an n×n binary maze (1=open, 0=blocked), moving in 4 directions without revisiting.
@@ -1653,7 +1656,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Search (All Occurrences) `🔥 Google`
+### Word Search (All Occurrences) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n grid of characters board and a string word, return true if word exists in the grid.
@@ -1728,7 +1731,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ## Advanced Backtracking
 
-### N-Queens II (Count Only) `🔥 Google`
+### N-Queens II (Count Only) `🎯 T2`
 
 > [!example] Problem
 > The n-queens puzzle is the problem of placing n queens on an n x n chessboard such that no two queens attack each other.
@@ -1784,7 +1787,7 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
-### Word Break (Decision — Backtracking + Memo) `🔥 Google`
+### Word Break (Decision — Backtracking + Memo) `🎯 T2`
 
 > [!example] Problem
 > Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.

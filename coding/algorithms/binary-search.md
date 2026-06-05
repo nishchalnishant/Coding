@@ -6,11 +6,14 @@ difficulty: mixed
 
 # Binary Search — Problem Set
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
@@ -21,7 +24,7 @@ difficulty: mixed
 
 ---
 
-### Search Insert Position (LC 35)
+### Search Insert Position (LC 35) `⚡ T1`
 
 > [!example] Problem
 > Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
@@ -75,7 +78,7 @@ difficulty: mixed
 
 ---
 
-### First Bad Version (LC 278)
+### First Bad Version (LC 278) `⚡ T1`
 
 > [!example] Problem
 > You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all the versions after a bad version are also bad.
@@ -127,7 +130,7 @@ difficulty: mixed
 
 ---
 
-### Find Smallest Letter Greater Than Target (LC 744)
+### Find Smallest Letter Greater Than Target (LC 744) `⚡ T1`
 
 > [!example] Problem
 > You are given an array of characters letters that is sorted in non-decreasing order, and a character target. There are at least two different characters in letters.
@@ -185,7 +188,7 @@ difficulty: mixed
 
 ---
 
-### H-Index II (LC 275)
+### H-Index II (LC 275) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper and citations is sorted in non-descending order, return the researcher's h-index.
@@ -244,7 +247,7 @@ difficulty: mixed
 
 ---
 
-### Koko Eating Bananas (LC 875) `🔥 Google`
+### Koko Eating Bananas (LC 875) `⚡ T1`
 
 > [!example] Problem
 > Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.
@@ -302,7 +305,7 @@ difficulty: mixed
 
 ---
 
-### Capacity To Ship Packages Within D Days (LC 1011) `⭐ Google`
+### Capacity To Ship Packages Within D Days (LC 1011) `⚡ T1`
 
 > [!example] Problem
 > A conveyor belt has packages that must be shipped from one port to another within days days.
@@ -381,7 +384,7 @@ difficulty: mixed
 
 ---
 
-### Split Array Largest Sum (LC 410) `⭐ Google`
+### Split Array Largest Sum (LC 410) `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, split nums into k non-empty subarrays such that the largest sum of any subarray is minimized.
@@ -442,7 +445,7 @@ difficulty: mixed
 
 ---
 
-### Minimize Max Distance to Gas Station (LC 774)
+### Minimize Max Distance to Gas Station (LC 774) `⚡ T1`
 
 > [!example] Problem
 > You are given an integer array `stations` that represents the positions of the gas stations on the **x-axis**. You are also given an integer `k`.
@@ -512,7 +515,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Speed to Arrive on Time (LC 1870)
+### Minimum Speed to Arrive on Time (LC 1870) `⚡ T1`
 
 > [!example] Problem
 > You are given a floating-point number hour, representing the amount of time you have to reach the office. To commute to the office, you must take n trains in sequential order. You are also given an integer array dist of length n, where dist[i] describes the distance (in kilometers) of the ith train ride.
@@ -598,7 +601,7 @@ difficulty: mixed
 
 ---
 
-### Search in Rotated Sorted Array (LC 33) `🔥 Google`
+### Search in Rotated Sorted Array (LC 33) `⚡ T1`
 
 > [!example] Problem
 > There is an integer array nums sorted in ascending order (with distinct values).
@@ -663,7 +666,7 @@ difficulty: mixed
 
 ---
 
-### Find Minimum in Rotated Sorted Array (LC 153) `🔥 Google`
+### Find Minimum in Rotated Sorted Array (LC 153) `⚡ T1`
 
 > [!example] Problem
 > Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
@@ -723,7 +726,7 @@ difficulty: mixed
 
 ---
 
-### Search in Rotated Sorted Array II (LC 81) `🔥 Google`
+### Search in Rotated Sorted Array II (LC 81) `⚡ T1`
 
 > [!example] Problem
 > There is an integer array nums sorted in non-decreasing order (not necessarily with distinct values).
@@ -781,7 +784,7 @@ difficulty: mixed
 
 ---
 
-### Find Minimum in Rotated Sorted Array II (LC 154) `🔥 Google`
+### Find Minimum in Rotated Sorted Array II (LC 154) `⚡ T1`
 
 > [!example] Problem
 > Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,4,4,5,6,7] might become:
@@ -837,7 +840,7 @@ difficulty: mixed
 
 ---
 
-### Find Peak Element (LC 162) `⭐ Google`
+### Find Peak Element (LC 162) `⚡ T1`
 
 > [!example] Problem
 > A peak element is an element that is strictly greater than its neighbors.
@@ -888,7 +891,7 @@ difficulty: mixed
 
 ---
 
-### Peak Index in a Mountain Array (LC 852)
+### Peak Index in a Mountain Array (LC 852) `⚡ T1`
 
 > [!example] Problem
 > You are given an integer mountain array arr of length n where the values increase to a peak element and then decrease.
@@ -942,7 +945,7 @@ difficulty: mixed
 
 ---
 
-### Find a Peak Element in a 2D Grid (LC 1901)
+### Find a Peak Element in a 2D Grid (LC 1901) `⚡ T1`
 
 > [!example] Problem
 > A peak element in a 2D grid is an element that is strictly greater than all of its adjacent neighbors to the left, right, top, and bottom.
@@ -1007,7 +1010,7 @@ difficulty: mixed
 
 ---
 
-### Median of Two Sorted Arrays (LC 4) `🔥 Google`
+### Median of Two Sorted Arrays (LC 4) `⚡ T1`
 
 > [!example] Problem
 > Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
@@ -1075,7 +1078,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a Sorted Matrix (LC 378) `⭐ Google`
+### Kth Smallest Element in a Sorted Matrix (LC 378) `⚡ T1`
 
 > [!example] Problem
 > Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
@@ -1138,7 +1141,7 @@ difficulty: mixed
 
 ---
 
-### Search a 2D Matrix II (LC 240) `⭐ Google`
+### Search a 2D Matrix II (LC 240)
 
 > [!example] Problem
 > Write an efficient algorithm that searches for a value target in an m x n integer matrix matrix. This matrix has the following properties
@@ -1197,7 +1200,7 @@ difficulty: mixed
 
 ---
 
-### Guess Number Higher or Lower (LC 374)
+### Guess Number Higher or Lower (LC 374) `⚡ T1`
 
 > [!example] Problem
 > We are playing the Guess Game. The game is as follows:
@@ -1255,7 +1258,7 @@ difficulty: mixed
 
 ---
 
-### Find First and Last Position (LC 34)
+### Find First and Last Position (LC 34) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
@@ -1317,7 +1320,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Number of Days to Make m Bouquets (LC 1482)
+### Minimum Number of Days to Make m Bouquets (LC 1482) `⚡ T1`
 
 > [!example] Problem
 > You are given an integer array bloomDay, an integer m and an integer k.
@@ -1402,7 +1405,7 @@ difficulty: mixed
 
 ---
 
-### Find K Closest Elements (LC 658)
+### Find K Closest Elements (LC 658) `⚡ T1`
 
 > [!example] Problem
 > Given a sorted integer array arr, two integers k and x, return the k closest integers to x in the array. The result should also be sorted in ascending order.
@@ -1450,7 +1453,7 @@ difficulty: mixed
 
 ---
 
-### Search a 2D Matrix — Row + Column BS (LC 74 variant note) `⭐ Google`
+### Search a 2D Matrix — Row + Column BS (LC 74 variant note)
 
 > [!example] Problem
 > You are given an m x n integer matrix matrix with the following two properties:
@@ -1512,7 +1515,7 @@ difficulty: mixed
 
 ---
 
-### Longest Increasing Subsequence — Length via BS (LC 300) `🔥 Google`
+### Longest Increasing Subsequence — Length via BS (LC 300) `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums, return the length of the longest strictly increasing subsequence.
@@ -1613,7 +1616,7 @@ difficulty: mixed
 
 ## Binary Search on Answer — More Problems
 
-### Find K-th Smallest Pair Distance (LC 719)
+### Find K-th Smallest Pair Distance (LC 719) `⚡ T1`
 
 > [!example] Problem
 > The distance of a pair of integers a and b is defined as the absolute difference between a and b.
@@ -1687,7 +1690,7 @@ difficulty: mixed
 
 ---
 
-### Sqrt(x) — Integer Square Root (LC 69) `🔥 Google`
+### Sqrt(x) — Integer Square Root (LC 69) `⚡ T1`
 
 > [!example] Problem
 > Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.

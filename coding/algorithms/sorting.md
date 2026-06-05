@@ -6,20 +6,23 @@ difficulty: mixed
 
 # Sorting — Problem Compendium
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 > [!info] Approach
 > Identify what property sorting exposes (adjacency, rank, monotone structure), then apply the right sort variant. Non-comparison sorts (counting/radix/bucket) bypass O(n log n) when keys are bounded integers. QuickSelect gets rank-k in O(n) avg. Merge sort naturally counts cross-half inversions.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Merge Sort Variants
 
-### Count Inversions (Merge Sort)
+### Count Inversions (Merge Sort) `💤 T3`
 
 > [!example] Problem
 > Given array, count pairs (i,j) where i < j but arr[i] > arr[j].
@@ -356,7 +359,7 @@ difficulty: mixed
 
 ## Interview Classics
 
-### H-Index (LC 274)
+### H-Index (LC 274) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher's h-index.
@@ -467,7 +470,7 @@ difficulty: mixed
 
 ## Classic Merge Variants
 
-### Majority Element (Boyer-Moore) `⭐ Google`
+### Majority Element (Boyer-Moore) `🎯 T2`
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -824,7 +827,7 @@ difficulty: mixed
 
 ## Topological Sort
 
-### Course Schedule II (LC 210) `🔥 Google`
+### Course Schedule II (LC 210) `⚡ T1`
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -891,7 +894,7 @@ difficulty: mixed
 
 ---
 
-### Alien Dictionary (LC 269) `⭐ Google`
+### Alien Dictionary (LC 269) `⚡ T1`
 
 > [!example] Problem
 > There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
@@ -985,7 +988,7 @@ difficulty: mixed
 
 ## External Sort / K-way Merge
 
-### Find K Pairs with Smallest Sums (LC 373)
+### Find K Pairs with Smallest Sums (LC 373) `⚡ T1`
 
 > [!example] Problem
 > You are given two integer arrays nums1 and nums2 sorted in non-decreasing order and an integer k.
@@ -1041,7 +1044,7 @@ difficulty: mixed
 
 ---
 
-### Kth Largest Element in a Stream (LC 703)
+### Kth Largest Element in a Stream (LC 703) `⚡ T1`
 
 > [!example] Problem
 > You are part of a university admissions office and need to keep track of the kth highest test score from applicants in real-time. This helps to determine cut-off marks for interviews and admissions dynamically as new applicants submit their scores.
@@ -1098,7 +1101,7 @@ difficulty: mixed
 
 ---
 
-### Find Median from Data Stream (LC 295) `🔥 Google`
+### Find Median from Data Stream (LC 295) `⚡ T1`
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.

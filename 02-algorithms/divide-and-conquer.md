@@ -9,6 +9,12 @@ tags: [algorithms, divide-and-conquer]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```
 WHY Divide & Conquer exists
 ├── Problems with overlapping or independent sub-structure grow too slow naively
@@ -76,10 +82,7 @@ Decision tree
 - **Where it breaks:** Unbalanced splits (pivot = min/max in quicksort) degrade depth to O(n), making total work O(n²); also fails when subproblems are not independent — if merging requires re-solving shared subproblems, DP is required instead.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -130,9 +133,9 @@ Break a problem into **independent subproblems**, solve recursively, and **combi
 ## 1. The Three Steps
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Split** into equal halves, solve each independently, **merge `🔥 Google`**" — OR — "recurrence T(n) = aT(n/b) + O(n^k)" — OR — "the combine step reveals global information not visible in either half" (e.g., cross-midpoint subarray, cross-half inversions). D&C is the choice when subproblems are **independent** (no overlap) and the combine step is tractable.
+> **The Click Moment**: "**Split** into equal halves, solve each independently, **merge `⚡ T1`**" — OR — "recurrence T(n) = aT(n/b) + O(n^k)" — OR — "the combine step reveals global information not visible in either half" (e.g., cross-midpoint subarray, cross-half inversions). D&C is the choice when subproblems are **independent** (no overlap) and the combine step is tractable.
 
-1. **Divide `⭐ Google`**: Break the problem at a natural boundary (midpoint, pivot, median).
+1. **Divide**: Break the problem at a natural boundary (midpoint, pivot, median).
 2. **Conquer**: Solve each part recursively. Base case = direct computation.
 3. **Combine**: Merge results — this step often holds the insight (cross-half inversions, cross-midpoint subarray).
 
@@ -143,7 +146,7 @@ Break a problem into **independent subproblems**, solve recursively, and **combi
 ### Merge Sort — Guaranteed O(N log N)
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Count inversions**" — OR — "**sort a linked list**" — OR — "stable sort with **guaranteed O(N log N)** worst case". The merge step is where cross-half inversions are counted for free.
+> **The Click Moment**: "**Count inversions `💤 T3`**" — OR — "**sort a linked list**" — OR — "stable sort with **guaranteed O(N log N)** worst case". The merge step is where cross-half inversions are counted for free.
 
 ```python
 def merge_sort_count_inversions(nums: list[int]) -> tuple[list[int], int]:
@@ -173,7 +176,7 @@ def merge_count(left: list[int], right: list[int]) -> tuple[list[int], int]:
 1. **Count Smaller Numbers After Self**:
    - **What (The Problem & Goal):** For each element in an array, count how many numbers to its right are smaller than it.
    - **How (Intuition & Mental Model):** Use merge sort on an array of `(value, original_index)`. During the merge step, when you pull an element from the `right` half into the result, it means all remaining elements in the `left` half have "jumped over" this smaller right element. For each element in the `left` half, increment its "smaller after" count by the number of elements already taken from the `right` half.
-2. **Reverse Pairs `⭐ Google`**:
+2. **Reverse Pairs**:
    - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
    - **How (Intuition & Mental Model):** Similar to counting inversions, but the condition is different. Before merging the two sorted halves, use two pointers to count the pairs: for each `i` in the left half, move the right pointer `j` as far as `nums[i] > 2 * nums[j]` holds. Add the count to the total, then proceed with the standard merge.
 ```
@@ -183,7 +186,7 @@ def merge_count(left: list[int], right: list[int]) -> tuple[list[int], int]:
 ### QuickSelect — O(N) Kth Element
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Kth largest/smallest `🔥 Google`** element without full sort" — OR — "find the **median** in O(N) average". QuickSelect uses the partition step of QuickSort but only recurses into the half containing the target rank.
+> **The Click Moment**: "**Kth largest/smallest** element without full sort" — OR — "find the **median** in O(N) average". QuickSelect uses the partition step of QuickSort but only recurses into the half containing the target rank.
 
 ```python
 import random
@@ -215,10 +218,10 @@ def _qs(nums: list[int], lo: int, hi: int, target: int) -> int:
         return _qs(nums, lo, p - 1, target)
 
 #### Common Variants & Twists
-1. **Top K Frequent Elements `🔥 Google`**:
+1. **Top K Frequent Elements**:
    - **What (The Problem & Goal):** Find the `k` most frequent elements in an array.
    - **How (Intuition & Mental Model):** First, count frequencies using a hash map. Then, run QuickSelect on the unique elements based on their frequencies. Once the `(n-k)`-th smallest frequency position is found, all elements to its right are the top `k` most frequent.
-2. **K Closest Points to Origin `🔥 Google`**:
+2. **K Closest Points to Origin**:
    - **What (The Problem & Goal):** Given a list of points, find the `k` points closest to `(0,0)`.
    - **How (Intuition & Mental Model):** Calculate the squared Euclidean distance for each point. Use QuickSelect on the distances to find the `k`-th smallest distance. All points partitioned to the left of this pivot are your answer.
 ```
@@ -228,7 +231,7 @@ def _qs(nums: list[int], lo: int, hi: int, target: int) -> int:
 ### Fast Exponentiation — O(log N)
 
 > [!IMPORTANT]
-> **The Click Moment**: "Compute **x^n** efficiently" — OR — "matrix exponentiation for **Fibonacci in O(log N) `🔥 Google`**" — OR — any problem that reduces to repeated squaring. Halving the exponent at each step gives O(log N).
+> **The Click Moment**: "Compute **x^n** efficiently" — OR — "matrix exponentiation for **Fibonacci in O(log N)**" — OR — any problem that reduces to repeated squaring. Halving the exponent at each step gives O(log N).
 
 ```python
 def fast_pow(x: float, n: int) -> float:
@@ -243,7 +246,7 @@ def fast_pow(x: float, n: int) -> float:
     return result
 
 #### Common Variants & Twists
-1. **Matrix Exponentiation `⭐ Google`**:
+1. **Matrix Exponentiation**:
    - **What (The Problem & Goal):** Compute the `n`-th term of a linear recurrence (like Fibonacci) in O(log N) time.
    - **How (Intuition & Mental Model):** Represent the recurrence as a matrix multiplication: `[F(n), F(n-1)] = [1, 1; 1, 0] * [F(n-1), F(n-2)]`. To find the `n`-th term, compute `M^n` using the fast power algorithm, then multiply by the base case vector.
 2. **Super Pow**:
@@ -259,7 +262,7 @@ def fast_pow(x: float, n: int) -> float:
 ### Maximum Subarray — Cross-Midpoint Combine
 
 > [!IMPORTANT]
-> **The Click Moment**: "Explain how **Kadane's `🔥 Google`** relates to D&C" — OR — when an interviewer asks for the D&C approach to maximum subarray (O(N log N)). The insight: the maximum subarray either lies entirely in the left half, entirely in the right half, or **crosses the midpoint**. Compute the cross-midpoint case in O(N) by expanding outward from mid.
+> **The Click Moment**: "Explain how **Kadane's** relates to D&C" — OR — when an interviewer asks for the D&C approach to maximum subarray (O(N log N)). The insight: the maximum subarray either lies entirely in the left half, entirely in the right half, or **crosses the midpoint**. Compute the cross-midpoint case in O(N) by expanding outward from mid.
 
 ```python
 def max_subarray_dc(nums: list[int], lo: int, hi: int) -> int:
@@ -284,7 +287,7 @@ def max_subarray_dc(nums: list[int], lo: int, hi: int) -> int:
 1. **Max Subarray Sum in 2D (Matrix)**:
    - **What (The Problem & Goal):** Find the rectangular submatrix with the maximum sum.
    - **How (Intuition & Mental Model):** Reduce this to 1D by fixing the top and bottom row boundaries. Sum the columns between these rows into a 1D array. Run Kadane's (or D&C Max Subarray) on this 1D array. Repeat for all O(N^2) row pairs.
-2. **Maximum Product Subarray `🔥 Google`**:
+2. **Maximum Product Subarray**:
    - **What (The Problem & Goal):** Find the contiguous subarray with the maximum product.
    - **How (Intuition & Mental Model):** While usually DP (tracking `min` and `max` due to negatives), the D&C approach involves tracking four values from each half: `max_prod`, `min_prod`, and the products starting/ending at the boundaries. The cross-midpoint combine step is significantly more complex than the sum case.
 ```
@@ -393,21 +396,21 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 ## 5. Common Interview Problems
 
 ### Easy
-- **Merge Two Sorted Lists `🔥 Google`** — Building block for merge sort combine step.
-- **Majority Element `⭐ Google`** — Boyer-Moore O(N) or D&C: majority of whole = majority of a half (then verify).
-- **Pow(x, n) `🔥 Google`** — Fast exponentiation; handle `n < 0`.
+- **Merge Two Sorted Lists `🎯 T2`** — Building block for merge sort combine step.
+- **Majority Element `🎯 T2`** — Boyer-Moore O(N) or D&C: majority of whole = majority of a half (then verify).
+- **Pow(x, n)** — Fast exponentiation; handle `n < 0`.
 
 ### Medium
-- **Sort List `⭐ Google`** — Merge sort on linked list; O(N log N) time, O(log N) stack.
-- **Kth Largest Element `🔥 Google`** — QuickSelect; O(N) average.
-- **Majority Element II `⭐ Google`** (n/3) — Boyer-Moore extended; two candidates.
-- **Count of Range Sum `⭐ Google`** — Merge sort augmented; count cross-half pairs in range [lower, upper].
+- **Sort List** — Merge sort on linked list; O(N log N) time, O(log N) stack.
+- **Kth Largest Element `⚡ T1`** — QuickSelect; O(N) average.
+- **Majority Element II `🎯 T2`** (n/3) — Boyer-Moore extended; two candidates.
+- **Count of Range Sum** — Merge sort augmented; count cross-half pairs in range [lower, upper].
 
 ### Hard
-- **[Merge K Sorted Lists](problem-deep-dives.md#merge-k-sorted-lists) `🔥 Google`** — D&C pairwise merge: O(N log K) time.
-- **[Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) `🔥 Google`** — Binary search on partition; O(log(min(m,n))).
-- **Count of Smaller Numbers After Self `⭐ Google`** — Merge sort augmented; count right-picks during merge.
-- **Reverse Pairs `⭐ Google`** — Merge sort; count pairs `nums[i] > 2 × nums[j]` across halves.
+- **[Merge K Sorted Lists](problem-deep-dives.md#merge-k-sorted-lists) `⚡ T1`** — D&C pairwise merge: O(N log K) time.
+- **[Median of Two Sorted Arrays](problem-deep-dives.md#median-of-two-sorted-arrays) `⚡ T1`** — Binary search on partition; O(log(min(m,n))).
+- **Count of Smaller Numbers After Self `💤 T3`** — Merge sort augmented; count right-picks during merge.
+- **Reverse Pairs `💤 T3`** — Merge sort; count pairs `nums[i] > 2 × nums[j]` across halves.
 - **Closest Pair of Points** — O(N log N) D&C; strip scanning.
 
 ---
@@ -416,21 +419,21 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Merge Sort** | Divide → Merge | "Stable sort, guaranteed O(N log N)" | Divide at mid; merge sorted halves | Combine step is O(N) — include in recurrence T(n)=2T(n/2)+O(n). |
-| **Count Inversions** | "Pairs where i<j but nums[i]>nums[j]" | Merge sort; count right-picks during merge (`len(left)-i`) | Requires a copy of left array; in-place merge loses position info. |
-| **QuickSelect** | "Kth largest in O(N) average" | Partition; recurse only into side with target | Mutates array; randomize pivot to avoid O(N²). Median-of-medians gives O(N) worst. |
+| **Merge Sort `🎯 T2`** | Divide → Merge | "Stable sort, guaranteed O(N log N)" | Divide at mid; merge sorted halves | Combine step is O(N) — include in recurrence T(n)=2T(n/2)+O(n). |
+| **Count Inversions `💤 T3`** | "Pairs where i<j but nums[i]>nums[j]" | Merge sort; count right-picks during merge (`len(left)-i`) | Requires a copy of left array; in-place merge loses position info. |
+| **QuickSelect `🎯 T2`** | "Kth largest in O(N) average" | Partition; recurse only into side with target | Mutates array; randomize pivot to avoid O(N²). Median-of-medians gives O(N) worst. |
 | **Pow(x,n)** | "Fast exponentiation" | `x^n = (x^(n/2))²`; odd: multiply by x once | Negative n: `x = 1/x, n = -n`; INT_MIN overflow in Java/C++. |
-| **Maximum Subarray (D&C) `🔥 Google`** | "Explain subarray beyond Kadane's" | Cross-midpoint expansion + max of three cases | O(N log N) — always mention Kadane is O(N) and preferred; D&C demonstrates recurrence thinking. |
-| **[Majority Element](problem-deep-dives.md#majority-element) `⭐ Google`** | "Element appearing >n/2 times" | Boyer-Moore O(N)/O(1) or D&C — majority of whole must be majority of some half | D&C: majority of neither half → no majority. Must verify in O(N) second pass. |
-| **Merge K Sorted Lists `🔥 Google`** | "Merge K into one sorted list" | D&C pairwise merge: merge pairs in O(N log K) | K-way heap is also O(N log K) — D&C has better cache locality. |
-| **Reverse Pairs `⭐ Google`** | "Pairs where nums[i] > 2×nums[j], i<j" | Modified merge sort; count cross-half pairs | Different from standard inversions — inequality is strict and scaled. Use two pointers in combine. |
+| **Maximum Subarray (D&C) `🎯 T2`** | "Explain subarray beyond Kadane's" | Cross-midpoint expansion + max of three cases | O(N log N) — always mention Kadane is O(N) and preferred; D&C demonstrates recurrence thinking. |
+| **[Majority Element](problem-deep-dives.md#majority-element) `🎯 T2`** | "Element appearing >n/2 times" | Boyer-Moore O(N)/O(1) or D&C — majority of whole must be majority of some half | D&C: majority of neither half → no majority. Must verify in O(N) second pass. |
+| **Merge K Sorted Lists `⚡ T1`** | "Merge K into one sorted list" | D&C pairwise merge: merge pairs in O(N log K) | K-way heap is also O(N log K) — D&C has better cache locality. |
+| **Reverse Pairs `💤 T3`** | "Pairs where nums[i] > 2×nums[j], i<j" | Modified merge sort; count cross-half pairs | Different from standard inversions — inequality is strict and scaled. Use two pointers in combine. |
 | **Closest Pair of Points** | "Min distance in 2D plane, O(N log N)" | D&C with strip of width 2δ; sort strip by y; check 7 candidates | 6-point packing argument ensures at most 7 comparisons per strip point. |
-| **Majority Element [E] `⭐ Google`** | "Element appearing > n/2 times guaranteed to exist" | Boyer-Moore: candidate + count; or D&C — majority of whole must be majority of some half | D&C: if both halves agree → that's majority. If they differ → count each in full array. One scan for Boyer-Moore; two scans for D&C. |
-| **Sort List [M] `⭐ Google`** | "Sort a linked list in O(N log N) time and O(log N) space" | Merge sort: slow/fast pointers to find mid; split; merge | Splitting at mid requires setting `slow.next = None`. Bottom-up merge sort avoids O(log N) recursion stack entirely. |
+| **Majority Element [E] `🎯 T2`** | "Element appearing > n/2 times guaranteed to exist" | Boyer-Moore: candidate + count; or D&C — majority of whole must be majority of some half | D&C: if both halves agree → that's majority. If they differ → count each in full array. One scan for Boyer-Moore; two scans for D&C. |
+| **Sort List [M]** | "Sort a linked list in O(N log N) time and O(log N) space" | Merge sort: slow/fast pointers to find mid; split; merge | Splitting at mid requires setting `slow.next = None`. Bottom-up merge sort avoids O(log N) recursion stack entirely. |
 | **Beautiful Array [M]** | "Construct array where no A[k]*2 == A[i]+A[j] for i<k<j" | D&C: split into odd and even halves recursively; beautiful property is preserved | `1` is trivially beautiful. Odd positions preserve the property after transformation `2x-1`; even after `2x`. |
 | **Different Ways to Add Parentheses [M]** | "All possible results from parenthesizing expression" | D&C on each operator: split left/right, combine all pairs of results | Memoize on `(lo, hi)` substring to avoid recomputing subexpressions. Return `[num]` for pure numeric substrings. |
-| **Count of Range Sum [H] `⭐ Google`** | "Count subarrays with sum in [lower, upper]" | Prefix sums + modified merge sort; count pairs `(i,j)` where `lower <= prefix[j]-prefix[i] <= upper` | During merge: for each left element, slide two pointers on right to count valid window. Do NOT forget to merge after counting. |
-| **Reverse Pairs [H] `⭐ Google`** | "Count pairs where nums[i] > 2*nums[j] for i < j" | Modified merge sort; count cross-half pairs before merging | Counting step and merge step are separate — count with two pointers first, then do the actual merge. Inequality `>2*` differs from standard inversions. |
+| **Count of Range Sum [H]** | "Count subarrays with sum in [lower, upper]" | Prefix sums + modified merge sort; count pairs `(i,j)` where `lower <= prefix[j]-prefix[i] <= upper` | During merge: for each left element, slide two pointers on right to count valid window. Do NOT forget to merge after counting. |
+| **Reverse Pairs [H] `💤 T3`** | "Count pairs where nums[i] > 2*nums[j] for i < j" | Modified merge sort; count cross-half pairs before merging | Counting step and merge step are separate — count with two pointers first, then do the actual merge. Inequality `>2*` differs from standard inversions. |
 
 ---
 

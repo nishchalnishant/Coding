@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Heap Problems
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ## Heap Interview Checklist
 
 - `heapq` in Python is a **min-heap**; negate keys when you need max-heap behavior.
@@ -15,16 +21,13 @@ difficulty: mixed
 - Tie-break rules matter; many heap bugs come from the secondary key, not the heap itself.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Top-K Pattern
 
-### Kth Largest Element in a Stream
+### Kth Largest Element in a Stream `⚡ T1`
 
 > [!example] Problem
 > You are part of a university admissions office and need to keep track of the kth highest test score from applicants in real-time. This helps to determine cut-off marks for interviews and admissions dynamically as new applicants submit their scores.
@@ -82,7 +85,7 @@ difficulty: mixed
 
 ---
 
-### Last Stone Weight
+### Last Stone Weight `⚡ T1`
 
 > [!example] Problem
 > You are given an array of integers stones where stones[i] is the weight of the ith stone.
@@ -137,7 +140,7 @@ difficulty: mixed
 
 ---
 
-### K Closest Points to Origin `🔥 Google`
+### K Closest Points to Origin `⚡ T1`
 
 > [!example] Problem
 > Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane and an integer k, return the k closest points to the origin (0, 0).
@@ -191,7 +194,7 @@ difficulty: mixed
 
 ---
 
-### Furthest Building You Can Reach `⭐ Google`
+### Furthest Building You Can Reach `⚡ T1`
 
 > [!example] Problem
 > You are given an integer array heights representing the heights of buildings, some bricks, and some ladders.
@@ -258,7 +261,7 @@ difficulty: mixed
 
 ---
 
-### Kth Largest Element in an Array `🔥 Google`
+### Kth Largest Element in an Array `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the kth largest element in the array.
@@ -305,7 +308,7 @@ difficulty: mixed
 
 ---
 
-### Top K Frequent Words `🔥 Google`
+### Top K Frequent Words `⚡ T1`
 
 > [!example] Problem
 > Given an array of strings words and an integer k, return the k most frequent strings.
@@ -360,7 +363,7 @@ difficulty: mixed
 
 ## Scheduling / Reorganization
 
-### Sliding Window Median `⭐ Google`
+### Sliding Window Median `⚡ T1`
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
@@ -472,7 +475,7 @@ difficulty: mixed
 
 ---
 
-### IPO (Maximize Capital) `⭐ Google`
+### IPO (Maximize Capital) `⚡ T1`
 
 > [!example] Problem
 > Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
@@ -538,7 +541,7 @@ difficulty: mixed
 
 ## K-Way Merge
 
-### Merge K Sorted Lists `🔥 Google`
+### Merge K Sorted Lists `⚡ T1`
 
 > [!example] Problem
 > You are given an array of k linked-lists lists, each linked-list is sorted in ascending order.
@@ -615,7 +618,7 @@ difficulty: mixed
 
 ---
 
-### Find K Pairs with Smallest Sums
+### Find K Pairs with Smallest Sums `⚡ T1`
 
 > [!example] Problem
 > You are given two integer arrays nums1 and nums2 sorted in non-decreasing order and an integer k.
@@ -673,7 +676,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a Sorted Matrix `⭐ Google`
+### Kth Smallest Element in a Sorted Matrix `⚡ T1`
 
 > [!example] Problem
 > Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
@@ -727,7 +730,7 @@ difficulty: mixed
 
 ---
 
-### Smallest Range Covering Elements from K Lists (Heap Variant) `⭐ Google`
+### Smallest Range Covering Elements from K Lists (Heap Variant) `⚡ T1`
 
 > [!example] Problem
 > You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
@@ -791,7 +794,7 @@ difficulty: mixed
 
 ---
 
-### K-th Smallest in M Sorted Arrays
+### K-th Smallest in M Sorted Arrays `⚡ T1`
 
 > [!example] Problem
 > Given `m` sorted arrays of total `n` elements, find the `k`th smallest element across all arrays.
@@ -824,7 +827,7 @@ difficulty: mixed
 
 ---
 
-### Maximum CPU Load
+### Maximum CPU Load `⚡ T1`
 
 > [!example] Problem
 > Given a list of jobs `[start, end, load]`, find the maximum CPU load at any point in time (jobs can overlap).
@@ -862,7 +865,7 @@ difficulty: mixed
 
 ## Dijkstra / Graph
 
-### Path with Minimum Effort `⭐ Google`
+### Path with Minimum Effort `⚡ T1`
 
 > [!example] Problem
 > You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
@@ -934,7 +937,7 @@ difficulty: mixed
 
 ---
 
-### Design Twitter `🔥 Google`
+### Design Twitter `⚡ T1`
 
 > [!example] Problem
 > Design a simplified version of Twitter where users can post tweets, follow/unfollow another user, and is able to see the 10 most recent tweets in the user's news feed.
@@ -1017,7 +1020,7 @@ difficulty: mixed
 
 ---
 
-### Ugly Number II `⭐ Google`
+### Ugly Number II `⚡ T1`
 
 > [!example] Problem
 > An ugly number is a positive integer whose prime factors are limited to 2, 3, and 5.
@@ -1072,7 +1075,7 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[graph-algorithms]] | [[sliding-window]] | [[two-pointers]]
-### Smallest Range Covering Elements from K Lists `⭐ Google`
+### Smallest Range Covering Elements from K Lists `⚡ T1`
 
 > [!example] Problem
 > You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
@@ -1137,7 +1140,7 @@ difficulty: mixed
 
 ## Heap Applications
 
-### Reorganize String (LC 767) `🔥 Google`
+### Reorganize String (LC 767) `⚡ T1`
 
 > [!example] Problem
 > Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
@@ -1196,7 +1199,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Refueling Stops (LC 871)
+### Minimum Refueling Stops (LC 871) `⚡ T1`
 
 > [!example] Problem
 > A car travels from a starting position to a destination which is target miles east of the starting position.

@@ -6,20 +6,23 @@ difficulty: mixed
 
 # Dynamic Programming — Problem Reference by Pattern
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 > [!info] First Principles
 > Use DP when the same subproblem shows up again and the best overall answer is built from best sub-answers. Write the recurrence first, set base cases, fill the table in an order where dependencies are ready, then shrink space if you only need the last row or two.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Linear DP (1-D)
 
-### Climbing Stairs `🔥 Google`
+### Climbing Stairs `🎯 T2`
 
 > [!example] Problem
 > You are climbing a staircase. It takes n steps to reach the top.
@@ -69,7 +72,7 @@ difficulty: mixed
 
 ---
 
-### Min Cost Climbing Stairs
+### Min Cost Climbing Stairs `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array cost where cost[i] is the cost of ith step on a staircase. Once you pay the cost, you can either climb one or two steps.
@@ -124,7 +127,7 @@ difficulty: mixed
 
 ---
 
-### House Robber `🔥 Google`
+### House Robber `🎯 T2`
 
 > [!example] Problem
 > You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed, the only constraint stopping you from robbing each of them is that adjacent houses have security systems connected and it will automatically contact the police if two adjacent houses were broken into on the same night.
@@ -170,7 +173,7 @@ difficulty: mixed
 
 ---
 
-### House Robber II (Circular) `🔥 Google`
+### House Robber II (Circular) `🎯 T2`
 
 > [!example] Problem
 > You are a professional robber planning to rob houses along a street. Each house has a certain amount of money stashed. All houses at this place are arranged in a circle. That means the first house is the neighbor of the last one. Meanwhile, adjacent houses have a security system connected, and it will automatically contact the police if two adjacent houses were broken into on the same night.
@@ -226,7 +229,7 @@ difficulty: mixed
 
 ---
 
-### Maximum Subarray (Kadane's — DP view) `🔥 Google`
+### Maximum Subarray (Kadane's — DP view) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -277,7 +280,7 @@ difficulty: mixed
 
 ---
 
-### Word Break `🔥 Google`
+### Word Break `🎯 T2`
 
 > [!example] Problem
 > Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated sequence of one or more dictionary words.
@@ -338,7 +341,7 @@ difficulty: mixed
 
 ---
 
-### Decode Ways `🔥 Google`
+### Decode Ways `🎯 T2`
 
 > [!example] Problem
 > You have intercepted a secret message encoded as a string of numbers. The message is decoded via the following mapping:
@@ -409,7 +412,7 @@ difficulty: mixed
 
 ## 0/1 Knapsack
 
-### Subset Sum Problem
+### Subset Sum Problem `🎯 T2`
 
 > [!example] Problem
 > Given integers and target `T`, can any subset sum to `T`?
@@ -436,7 +439,7 @@ difficulty: mixed
 
 ---
 
-### Partition Equal Subset Sum `🔥 Google`
+### Partition Equal Subset Sum `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal or false otherwise.
@@ -485,7 +488,7 @@ difficulty: mixed
 
 ---
 
-### Last Stone Weight II
+### Last Stone Weight II `⚡ T1`
 
 > [!example] Problem
 > You are given an array of integers stones where stones[i] is the weight of the ith stone.
@@ -541,7 +544,7 @@ difficulty: mixed
 
 ## Unbounded Knapsack
 
-### Coin Change (Min Coins) `🔥 Google`
+### Coin Change (Min Coins) `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
@@ -595,7 +598,7 @@ difficulty: mixed
 
 ---
 
-### Coin Change II (Total Ways) `🔥 Google`
+### Coin Change II (Total Ways) `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array coins representing coins of different denominations and an integer amount representing a total amount of money.
@@ -655,7 +658,7 @@ difficulty: mixed
 
 ---
 
-### Perfect Squares
+### Perfect Squares `🎯 T2`
 
 > [!example] Problem
 > Given an integer n, return the least number of perfect square numbers that sum to n.
@@ -705,7 +708,7 @@ difficulty: mixed
 
 ## LCS Family
 
-### Longest Common Subsequence `🔥 Google`
+### Longest Common Subsequence `🎯 T2`
 
 > [!example] Problem
 > Given two strings text1 and text2, return the length of their longest common subsequence. If there is no common subsequence, return 0.
@@ -762,7 +765,7 @@ difficulty: mixed
 
 ---
 
-### Edit Distance `🔥 Google`
+### Edit Distance `🎯 T2`
 
 > [!example] Problem
 > Given two strings word1 and word2, return the minimum number of operations required to convert word1 to word2.
@@ -821,7 +824,7 @@ difficulty: mixed
 
 ---
 
-### Longest Palindromic Subsequence `⭐ Google`
+### Longest Palindromic Subsequence `🎯 T2`
 
 > [!example] Problem
 > Given a string s, find the longest palindromic subsequence's length in s.
@@ -873,7 +876,7 @@ difficulty: mixed
 
 ---
 
-### Minimum ASCII Delete Sum for Two Strings `⭐ Google`
+### Minimum ASCII Delete Sum for Two Strings `🎯 T2`
 
 > [!example] Problem
 > Given two strings s1 and s2, return the lowest ASCII sum of deleted characters to make two strings equal.
@@ -929,7 +932,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Window Subsequence (LC 727) `⭐ Google`
+### Minimum Window Subsequence (LC 727) `🎯 T2`
 
 > [!example] Problem
 > Given strings `s1` and `s2`, return *the minimum contiguous substring part of *`s1`*, so that *`s2`* is a subsequence of the part*.
@@ -1013,7 +1016,7 @@ difficulty: mixed
 
 ## Grid DP
 
-### Unique Paths `🔥 Google`
+### Unique Paths `🎯 T2`
 
 > [!example] Problem
 > There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
@@ -1060,7 +1063,7 @@ difficulty: mixed
 
 ---
 
-### Unique Paths II (With Obstacles) `🔥 Google`
+### Unique Paths II (With Obstacles) `🎯 T2`
 
 > [!example] Problem
 > You are given an m x n integer array grid. There is a robot initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
@@ -1116,7 +1119,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Path Sum `⭐ Google`
+### Minimum Path Sum `🎯 T2`
 
 > [!example] Problem
 > Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
@@ -1166,7 +1169,7 @@ difficulty: mixed
 
 ---
 
-### Maximal Square `⭐ Google`
+### Maximal Square `🎯 T2`
 
 > [!example] Problem
 > Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
@@ -1222,7 +1225,7 @@ difficulty: mixed
 
 ## Interval DP
 
-### Burst Balloons `⭐ Google`
+### Burst Balloons `💤 T3`
 
 > [!example] Problem
 > You are given n balloons, indexed from 0 to n - 1. Each balloon is painted with a number on it represented by an array nums. You are asked to burst all the balloons.
@@ -1361,7 +1364,7 @@ difficulty: mixed
 
 ## Tree DP
 
-### Best Time to Buy and Sell Stock (All Variants) `🔥 Google`
+### Best Time to Buy and Sell Stock (All Variants) `🎯 T2`
 
 > [!example] Problem
 > You are given an array prices where prices[i] is the price of a given stock on the ith day.
@@ -1494,7 +1497,7 @@ difficulty: mixed
 
 ## Bitmask / Digit DP
 
-### Shortest Path Visiting All Nodes `⭐ Google`
+### Shortest Path Visiting All Nodes `💤 T3`
 
 > [!example] Problem
 > You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
@@ -1629,7 +1632,7 @@ difficulty: mixed
 
 ---
 
-### Super Egg Drop `⭐ Google`
+### Super Egg Drop `💤 T3`
 
 > [!example] Problem
 > You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
@@ -1691,7 +1694,7 @@ difficulty: mixed
 
 ## Longest Increasing Subsequence (LIS) Family
 
-### Longest Increasing Subsequence `🔥 Google`
+### Longest Increasing Subsequence `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums, return the length of the longest strictly increasing subsequence.
@@ -1744,7 +1747,7 @@ difficulty: mixed
 
 ---
 
-### Number of LIS `⭐ Google`
+### Number of LIS
 
 > [!example] Problem
 > Given `nums`, return the number of longest increasing subsequences (LC 673).
@@ -1813,7 +1816,7 @@ difficulty: mixed
 
 ## String DP
 
-### Distinct Subsequences `⭐ Google`
+### Distinct Subsequences `🎯 T2`
 
 > [!example] Problem
 > Given two strings s and t, return the number of distinct subsequences of s which equals t.
@@ -1871,7 +1874,7 @@ difficulty: mixed
 
 ---
 
-### Interleaving String `⭐ Google`
+### Interleaving String `🎯 T2`
 
 > [!example] Problem
 > Given strings s1, s2, and s3, find whether s3 is formed by an interleaving of s1 and s2.
@@ -1935,7 +1938,7 @@ difficulty: mixed
 
 ---
 
-### Regular Expression Matching `🔥 Google`
+### Regular Expression Matching
 
 > [!example] Problem
 > Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
@@ -2001,7 +2004,7 @@ difficulty: mixed
 
 ## Probability / Expected Value DP
 
-### Knight Probability in Chessboard `⭐ Google`
+### Knight Probability in Chessboard
 
 > [!example] Problem
 > On an n x n chessboard, a knight starts at the cell (row, column) and attempts to make exactly k moves. The rows and columns are 0-indexed, so the top-left cell is (0, 0), and the bottom-right cell is (n - 1, n - 1).
@@ -2060,7 +2063,7 @@ difficulty: mixed
 
 ---
 
-### New 21 Game `🔥 Google`
+### New 21 Game
 
 > [!example] Problem
 > Alice plays the following game, loosely based on the card game "21".
@@ -2124,7 +2127,7 @@ difficulty: mixed
 
 ## Bitmask DP
 
-### Shortest Path Visiting All Nodes (TSP Bitmask DP) `⭐ Google`
+### Shortest Path Visiting All Nodes (TSP Bitmask DP) `💤 T3`
 
 > [!example] Problem
 > You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
@@ -2186,7 +2189,7 @@ difficulty: mixed
 
 ---
 
-### Partition to K Equal Subset Sums `⭐ Google`
+### Partition to K Equal Subset Sums `🎯 T2`
 
 > [!example] Problem
 > Given `nums` and integer `k`, return true if the array can be partitioned into `k` subsets each with equal sum (LC 698).
@@ -2277,7 +2280,7 @@ difficulty: mixed
 
 ---
 
-### Digit DP Template `⭐ Google`
+### Digit DP Template `💤 T3`
 
 > [!example] Problem
 > Count integers in `[1, n]` satisfying an arbitrary digit constraint (e.g., digit sum divisible by `k`, no two adjacent equal digits). General template with tight/free flag.
@@ -2320,7 +2323,7 @@ difficulty: mixed
 
 ## Game Theory DP
 
-### Stone Game `⭐ Google`
+### Stone Game
 
 > [!example] Problem
 > Alice and Bob play a game with piles of stones. There are an even number of piles arranged in a row, and each pile has a positive integer number of stones piles[i].
@@ -2384,7 +2387,7 @@ difficulty: mixed
 
 ---
 
-### Stone Game II `⭐ Google`
+### Stone Game II
 
 > [!example] Problem
 > Alice and Bob continue their games with piles of stones. There are a number of piles arranged in a row, and each pile has a positive integer number of stones piles[i]. The objective of the game is to end with the most stones.
@@ -2443,7 +2446,7 @@ difficulty: mixed
 
 ---
 
-### Predict the Winner `⭐ Google`
+### Predict the Winner
 
 > [!example] Problem
 > You are given an integer array nums. Two players are playing a game with this array: player 1 and player 2.
@@ -2499,7 +2502,7 @@ difficulty: mixed
 
 ## DP on Sequences
 
-### Jump Game II `🔥 Google`
+### Jump Game II `🎯 T2`
 
 > [!example] Problem
 > You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
@@ -2547,7 +2550,7 @@ difficulty: mixed
 
 ---
 
-### Maximum Product Subarray `🔥 Google`
+### Maximum Product Subarray `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, find a subarray that has the largest product, and return the product.
@@ -2594,7 +2597,7 @@ difficulty: mixed
 
 ---
 
-### Arithmetic Slices II — Subsequence `⭐ Google`
+### Arithmetic Slices II — Subsequence
 
 > [!example] Problem
 > Given an integer array nums, return the number of all the arithmetic subsequences of nums.
@@ -2723,7 +2726,7 @@ difficulty: mixed
 
 ---
 
-### Super Egg Drop (LC 887) `⭐ Google`
+### Super Egg Drop (LC 887) `💤 T3`
 
 > [!example] Problem
 > You are given k identical eggs and you have access to a building with n floors labeled from 1 to n.
@@ -2784,7 +2787,7 @@ difficulty: mixed
 
 ---
 
-### Russian Doll Envelopes (LC 354) `⭐ Google`
+### Russian Doll Envelopes (LC 354)
 
 > [!example] Problem
 > You are given a 2D array of integers envelopes where envelopes[i] = [wi, hi] represents the width and the height of an envelope.

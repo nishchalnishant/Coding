@@ -6,20 +6,23 @@ difficulty: mixed
 
 # Divide and Conquer — Problem Reference by Pattern
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 > [!info] First Principles
 > D&C = split into *independent* subproblems of the same type, solve each recursively, combine results. Complexity is governed by the Master Theorem: T(n) = aT(n/b) + f(n). The key invariant: subproblems share *no* state — solving the left half never influences the right half. When subproblems overlap, use DP instead.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Classic D&C
 
-### Merge Sort (Implementation)
+### Merge Sort (Implementation) `🎯 T2`
 
 > [!example] Problem
 > Sort an array in guaranteed O(n log n).
@@ -60,7 +63,7 @@ difficulty: mixed
 
 ---
 
-### Median of Two Sorted Arrays `🔥 Google`
+### Median of Two Sorted Arrays `⚡ T1`
 
 > [!example] Problem
 > Given two sorted arrays nums1 and nums2 of size m and n respectively, return the median of the two sorted arrays.
@@ -127,7 +130,7 @@ difficulty: mixed
 
 ---
 
-### Majority Element (D&C Approach) `⭐ Google`
+### Majority Element (D&C Approach) `🎯 T2`
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -179,7 +182,7 @@ difficulty: mixed
 
 ---
 
-### Majority Element II `⭐ Google`
+### Majority Element II `🎯 T2`
 
 > [!example] Problem
 > Given an integer array of size n, find all elements that appear more than ⌊ n/3 ⌋ times.
@@ -304,7 +307,7 @@ difficulty: mixed
 
 ---
 
-### Super Pow (Modular Exponentiation)
+### Super Pow (Modular Exponentiation) `💤 T3`
 
 > [!example] Problem
 > Your task is to calculate ab mod 1337 where a is a positive integer and b is an extremely large positive integer given in the form of an array.
@@ -365,7 +368,7 @@ difficulty: mixed
 
 ---
 
-### Closest Pair of Points
+### Closest Pair of Points `💤 T3`
 
 > [!example] Problem
 > Find the minimum Euclidean distance between any two points in a 2D set. Achieve better than O(n²).
@@ -415,7 +418,7 @@ difficulty: mixed
 
 ## Binary Search D&C
 
-### Search in Rotated Sorted Array `🔥 Google`
+### Search in Rotated Sorted Array `⚡ T1`
 
 > [!example] Problem
 > There is an integer array nums sorted in ascending order (with distinct values).
@@ -480,7 +483,7 @@ difficulty: mixed
 
 ---
 
-### Find Minimum in Rotated Sorted Array `🔥 Google`
+### Find Minimum in Rotated Sorted Array `⚡ T1`
 
 > [!example] Problem
 > Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example, the array nums = [0,1,2,4,5,6,7] might become:
@@ -542,7 +545,7 @@ difficulty: mixed
 
 ## Tree Construction D&C
 
-### Construct Binary Tree from Preorder and Inorder
+### Construct Binary Tree from Preorder and Inorder `🎯 T2`
 
 > [!example] Problem
 > Given preorder and inorder traversal arrays, reconstruct the binary tree.
@@ -587,7 +590,7 @@ difficulty: mixed
 
 ## Maximum Subarray D&C
 
-### Maximum Subarray (Divide and Conquer) `🔥 Google`
+### Maximum Subarray (Divide and Conquer) `🎯 T2`
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -765,7 +768,7 @@ difficulty: mixed
 ## See Also
 
 [[sorting]] | [[recursion]] | [[binary-search]] | [[heap]]
-### Construct Quad Tree
+### Construct Quad Tree `💤 T3`
 
 > [!example] Problem
 > Given a n * n matrix grid of 0's and 1's only. We want to represent grid with a Quad-Tree.

@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Linked List — Problem Deep Dives
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 **Core invariants to internalize:**
 - Singly linked: each node holds `val` + `next`. No backward traversal.
 - Doubly linked: each node holds `val` + `next` + `prev`.
@@ -28,16 +34,13 @@ difficulty: mixed
 - Cycles absent vs present; duplicate values vs duplicate nodes.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## In-Place Reversal
 
-### ==Reverse Linked List `🔥 Google`
+### ==Reverse Linked List `🎯 T2`
 
 > [!example] Problem
 > Given the head of a singly linked list, reverse the list, and return the reversed list.
@@ -93,7 +96,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Linked List II `🔥 Google`
+### Reverse Linked List II `🎯 T2`
 
 > [!example] Problem
 > Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
@@ -144,7 +147,7 @@ difficulty: mixed
 
 ---
 
-### Palindrome Linked List `⭐ Google`
+### Palindrome Linked List `🎯 T2`
 
 > [!example] Problem
 > Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
@@ -205,7 +208,7 @@ difficulty: mixed
 
 ---
 
-### ==Reorder List `🔥 Google`
+### ==Reorder List `🎯 T2`
 
 > [!example] Problem
 > You are given the head of a singly linked-list. The list can be represented as:
@@ -275,7 +278,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Nodes in K-Group `⭐ Google`
+### Reverse Nodes in K-Group `🎯 T2`
 
 > [!example] Problem
 > Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
@@ -334,7 +337,7 @@ difficulty: mixed
 
 ## Fast / Slow Pointers
 
-### Linked List Cycle `🔥 Google`
+### Linked List Cycle `🎯 T2`
 
 > [!example] Problem
 > Given head, the head of a linked list, determine if the linked list has a cycle in it.
@@ -437,7 +440,7 @@ difficulty: mixed
 
 ---
 
-### Remove Nth Node From End of List `🔥 Google`
+### Remove Nth Node From End of List `🎯 T2`
 
 > [!example] Problem
 > Given the head of a linked list, remove the nth node from the end of the list and return its head.
@@ -555,7 +558,7 @@ difficulty: mixed
 
 ---
 
-### Happy Number `🔥 Google`
+### Happy Number
 
 > [!example] Problem
 > Write an algorithm to determine if a number n is happy.
@@ -613,7 +616,7 @@ difficulty: mixed
 
 ## Floyd's Cycle Detection
 
-### Linked List Cycle II `🔥 Google`
+### Linked List Cycle II `🎯 T2`
 
 > [!example] Problem
 > Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
@@ -676,7 +679,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number (Floyd's variant) `⭐ Google`
+### Find the Duplicate Number (Floyd's variant) `🎯 T2`
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -739,7 +742,7 @@ difficulty: mixed
 
 ## Merge / Sorting
 
-### Merge Two Sorted Lists `🔥 Google`
+### Merge Two Sorted Lists `🎯 T2`
 
 > [!example] Problem
 > You are given the heads of two sorted linked lists list1 and list2.
@@ -798,7 +801,7 @@ difficulty: mixed
 
 ---
 
-### Sort List `⭐ Google`
+### Sort List `🎯 T2`
 
 > [!example] Problem
 > Given the head of a linked list, return the list after sorting it in ascending order.
@@ -946,7 +949,7 @@ difficulty: mixed
 
 ## Copy / Design
 
-### Copy List with Random Pointer `🔥 Google`
+### Copy List with Random Pointer `🎯 T2`
 
 > [!example] Problem
 > A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null.
@@ -1014,7 +1017,7 @@ difficulty: mixed
 
 ---
 
-### LRU Cache `🔥 Google`
+### LRU Cache `🎯 T2`
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
@@ -1171,7 +1174,7 @@ difficulty: mixed
 
 ---
 
-### Swap Nodes in Pairs `⭐ Google`
+### Swap Nodes in Pairs
 
 > [!example] Problem
 > Given a linked list, swap every two adjacent nodes and return its head. You must solve the problem without modifying the values in the list's nodes (i.e., only nodes themselves may be changed.)
@@ -1513,7 +1516,7 @@ difficulty: mixed
 
 ---
 
-### Flatten a Multilevel Doubly Linked List `⭐ Google`
+### Flatten a Multilevel Doubly Linked List
 
 > [!example] Problem
 > You are given a doubly linked list, which contains nodes that have a next pointer, a previous pointer, and an additional child pointer. This child pointer may or may not point to a separate doubly linked list, also containing these special nodes. These child lists may have one or more children of their own, and so on, to produce a multilevel data structure as shown in the example below.
@@ -1677,7 +1680,7 @@ difficulty: mixed
 
 ## Design
 
-### ==LRU Cache (Doubly Linked List + Hash Map) `🔥 Google`
+### ==LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.

@@ -9,6 +9,12 @@ tags: [data-structures, tree]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```
 WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                │                │               │               │
@@ -89,10 +95,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -196,7 +199,7 @@ def lca_bst(root, p, q):
 ### Tree DP — Bottom-Up with Multiple Return Values
 
 > [!IMPORTANT]
-> **The Click Moment**: "Maximum/minimum **path sum `⭐ Google`** from any node to any node" — OR — "**diameter `🔥 Google`** of a tree" — OR — "**camera** coverage" — OR — any problem where the optimal solution through a node depends on both subtrees. The pattern: return a **tuple** of values from each DFS call instead of relying on a global variable per call.
+> **The Click Moment**: "Maximum/minimum **path sum `🎯 T2`** from any node to any node" — OR — "**diameter `🎯 T2`** of a tree" — OR — "**camera** coverage" — OR — any problem where the optimal solution through a node depends on both subtrees. The pattern: return a **tuple** of values from each DFS call instead of relying on a global variable per call.
 
 ```python
 def max_path_sum(root) -> int:
@@ -247,13 +250,13 @@ def rob_house_tree(root) -> int:
 ```
 
 #### Common Variants & Twists
-1. **Diameter of Binary Tree `🔥 Google`**:
+1. **Diameter of Binary Tree `🎯 T2`**:
    - **What (The Problem & Goal):** Find the length of the longest path between any two nodes in a tree (path may or may not pass through the root).
    - **How (Intuition & Mental Model):** The "edge-count" twist on path sum. Instead of values, you count edges. Return the height of a subtree to its parent (`1 + max(left, right)`). Update the global diameter variable with the path passing through the current node (`left + right`).
-2. **Binary Tree Maximum Path Sum `🔥 Google`**:
+2. **Binary Tree Maximum Path Sum `🎯 T2`**:
    - **What (The Problem & Goal):** Find the maximum path sum between any two nodes. Values can be negative.
    - **How (Intuition & Mental Model):** The "negative value" twist. A path can stop at any point. You use `max(0, dfs(child))` to drop negative branches entirely. A node's contribution to its parent is `node.val + max(left_gain, right_gain)`, but the global maximum path sum passing *through* the node is `node.val + left_gain + right_gain`.
-3. **Binary Tree Cameras `⭐ Google`**:
+3. **Binary Tree Cameras `🎯 T2`**:
    - **What (The Problem & Goal):** Place the minimum number of cameras to monitor all nodes (a camera monitors itself, its parent, and its children).
    - **How (Intuition & Mental Model):** The "state machine" twist. Run a postorder traversal returning states from children to parents: 0 (needs camera), 1 (has camera), 2 (covered). Install cameras greedily at the parents of uncovered leaves.
 
@@ -262,7 +265,7 @@ def rob_house_tree(root) -> int:
 ### BST Operations — Validate, Kth Smallest, Range Sum
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Validate BST `🔥 Google`**" — OR — "Kth **smallest/largest** in BST" — OR — "**Range sum** of BST values". The BST invariant (all left < node < all right, not just immediate children) is the source of most bugs.
+> **The Click Moment**: "**Validate BST `🎯 T2`**" — OR — "Kth **smallest/largest** in BST" — OR — "**Range sum `💤 T3`** of BST values". The BST invariant (all left < node < all right, not just immediate children) is the source of most bugs.
 
 ```python
 def is_valid_bst(root, lo=float('-inf'), hi=float('inf')) -> bool:
@@ -395,7 +398,7 @@ def iterative_postorder(root) -> list[int]:
 > A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, SDE-3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
 
 #### Common Variants & Twists
-1. **Binary Tree Right Side View `🔥 Google`**:
+1. **Binary Tree Right Side View `🎯 T2`**:
    - **What (The Problem & Goal):** Return the values of the nodes you can see if you look at the tree from the right side.
    - **How (Intuition & Mental Model):** Not strictly postorder, but relies on traversal order twists. You can use Level-Order (BFS) and grab the last element of each level. Alternatively, use a Preorder DFS but intentionally traverse `Right` before `Left`, keeping track of the `depth` and appending to the result list only the first time you visit a new depth.
 
@@ -464,25 +467,25 @@ def deserialize(data: str):
 ## 4. Common Interview Problems
 
 ### Easy
-- [Invert Binary Tree](../02-algorithms/problem-deep-dives.md#invert-binary-tree) `🔥 Google` — Swap children at each node; recursive or BFS.
-- **Symmetric Tree `⭐ Google`** — Mirror check: `left.val == right.val` and recurse cross-ways.
-- **Maximum Depth `🔥 Google`** — `1 + max(depth(left), depth(right))`.
+- [Invert Binary Tree](../02-algorithms/problem-deep-dives.md#invert-binary-tree) — Swap children at each node; recursive or BFS.
+- **Symmetric Tree `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
+- **Maximum Depth `🎯 T2`** — `1 + max(depth(left), depth(right))`.
 
 ### Medium
-- [Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst) `🔥 Google` — Pass `(min, max)` bounds down.
-- [LCA of Binary Tree](../02-algorithms/problem-deep-dives.md#lca) `🔥 Google` — "Both sides non-null" = LCA found.
-- [Kth Smallest in BST](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst) `🔥 Google` — Iterative inorder; stop at K.
-- **Binary Tree Level Order `🔥 Google`** — BFS; separate levels by queue-size snapshot.
-- **Diameter of Binary Tree `🔥 Google`** — Postorder height; update global `left + right`.
-- **House Robber III `⭐ Google`** — Tree DP; return `(rob, skip)` pair.
-- **Flatten Binary Tree to Linked List `⭐ Google`** — Morris-like threading; preorder rewiring.
+- [Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst) — Pass `(min, max)` bounds down.
+- [LCA of Binary Tree](../02-algorithms/problem-deep-dives.md#lca) — "Both sides non-null" = LCA found.
+- [Kth Smallest in BST](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst) — Iterative inorder; stop at K.
+- **Binary Tree Level Order `🎯 T2`** — BFS; separate levels by queue-size snapshot.
+- **Diameter of Binary Tree `🎯 T2`** — Postorder height; update global `left + right`.
+- **House Robber III `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
+- **Flatten Binary Tree to Linked List `🎯 T2`** — Morris-like threading; preorder rewiring.
 
 ### Hard
-- [Serialize and Deserialize](../02-algorithms/problem-deep-dives.md#serialize-and-deserialize-binary-tree) `🔥 Google` — Preorder with `N` markers.
+- [Serialize and Deserialize](../02-algorithms/problem-deep-dives.md#serialize-and-deserialize-binary-tree) — Preorder with `N` markers.
 - [Binary Tree Max Path Sum](../02-algorithms/problem-deep-dives.md#binary-tree-maximum-path-sum) — Tree DP; `max(0, child)` to drop negatives.
-- **Binary Tree Cameras `⭐ Google`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
-- **Recover BST `⭐ Google`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
-- **Vertical Order Traversal `⭐ Google`** — BFS with `(col, row, val)`; sort by col then row then val.
+- **Binary Tree Cameras `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
+- **Recover BST `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
+- **Vertical Order Traversal `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
 
 ---
 
@@ -490,29 +493,29 @@ def deserialize(data: str):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst) `🔥 Google`** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
-| **[Max Path Sum](../02-algorithms/problem-deep-dives.md#binary-tree-maximum-path-sum) `🔥 Google`** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
-| **[LCA](../02-algorithms/problem-deep-dives.md#lca) `🔥 Google`** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
-| **[Kth Smallest](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst) `🔥 Google`** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
-| **Diameter `🔥 Google`** | "Longest path between any two nodes" | `height(left) + height(right)` at each node | Diameter doesn't have to pass through root; track global max. |
-| **House Robber III `🔥 Google`** | "No adjacent nodes (parent-child), max sum" | Return `(rob_this, skip_this)` per node | Two values per node, not one — the novelty of tree DP. |
-| **Serialize/Deserialize `🔥 Google`** | "Lossless tree → string → tree" | Preorder + `N` markers; use iterator for deserialize | Why preorder works: root first unambiguously determines left vs right subtrees. |
-| **Morris Inorder `⭐ Google`** | "Inorder traversal without O(N) stack" | Thread predecessor.right → current; unthread on second visit | Temporarily mutates tree; restores on second pass — explain this explicitly. |
-| **Recover BST `⭐ Google`** | "Two nodes swapped — find and fix" | Inorder gives one or two inversions | One inversion: adjacent swap (`first = prev, second = curr`); two inversions: `first` from first, `second` from second. |
-| **Binary Tree Cameras `⭐ Google`** | "Minimum cameras to monitor all nodes" | Tree DP: 3 states — needs coverage, has camera, is covered | Greedy: install camera at parent of unmonitored leaf; process bottom-up. |
-| **Invert Binary Tree `🔥 Google`** [E] | "Mirror the tree" | Swap left/right at every node (preorder) | Recursive one-liner; iterative uses a queue — BFS or DFS both work identically. |
-| **Symmetric Tree `⭐ Google`** [E] | "Is tree a mirror of itself?" | Compare left-subtree and right-subtree simultaneously (two-pointer recursion) | Check `left.val == right.val` AND recurse `(left.left, right.right)` AND `(left.right, right.left)`. |
-| **Path Sum `⭐ Google`** [E] | "Root-to-leaf path summing to target" | DFS; subtract node value from target; return True at leaf when target == 0 | Leaf check: `not node.left and not node.right` — not just `target == 0` (could be mid-path). |
-| **Count Good Nodes `⭐ Google`** [M] | "Nodes ≥ all ancestors on its root path" | DFS with `max_so_far`; increment count at each node ≥ max | Pass updated max downward; root is always good. |
-| **Binary Tree Level Order Traversal `🔥 Google`** [M] | "BFS layer by layer" | Deque; snapshot `len(queue)` at start of each level; process exactly that many | Snapshot length before inner loop — queue grows during processing. |
-| **Construct Binary Tree from Preorder and Inorder `🔥 Google`** [M] | "Rebuild tree from two traversals" | Root = preorder[0]; split inorder at root index; recurse left/right | Hash `inorder` values → index for O(1) split. Preorder index advances globally via nonlocal/outer variable. |
-| **Populating Next Right Pointers `⭐ Google`** [M] | "Connect level nodes with next pointer" | BFS or O(1) space: use already-connected `next` pointers of the level above | O(1) space trick: process level N using the `next` chain of level N-1 — no queue needed. |
-| **Flatten Binary Tree to Linked List `⭐ Google`** [M] | "In-place preorder flattening" | Morris-like: connect right subtree after leftmost rightmost; move left to right | O(1) space: for each node, thread its right subtree to end of left subtree's rightmost chain. |
-| **All Nodes Distance K in Binary Tree `⭐ Google`** [M] | "All nodes exactly K edges from target" | Build parent map (BFS); then BFS from target with visited set | Convert tree to undirected graph via parent map — enables upward traversal. |
-| **Vertical Order Traversal `⭐ Google`** [H] | "Nodes grouped by column, sorted by row then value" | BFS/DFS with `(col, row, val)`; sort globally or per-column | Multiple nodes at same `(col, row)` must be sorted by value — a common missed case. |
-| **Binary Tree Maximum Path Sum `🔥 Google`** [H] | "Max sum path (any node to any node)" | Post-order; at each node compute max one-arm gain; update global with both arms | Return single-arm to parent (max of left/right arm + node); update global with `node + left + right`. Drop negative arms (use 0 instead). |
-| **Step-By-Step Directions `⭐ Google`** [M] | LCA Path Generation | "Shortest path from start node to dest node" | Find LCA. Generate path LCA → start (convert all to 'U') and LCA → dest ('L'/'R'); concatenate | Both paths go through LCA; generating full paths from root and trimming common prefix is simpler than post-order traversal. |
-| **Path Sum III `⭐ Google`** [M] | DFS Prefix Sum Map | "Paths summing to target, not starting at root" | Running prefix sum DFS; look up `curr_sum - target` in complement count map; backtrack map on return | Must decrement `prefix_sum` count in map after child recursion to prevent leak into other branches. |
+| **[Validate BST](../02-algorithms/problem-deep-dives.md#validate-bst) `🎯 T2`** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
+| **[Max Path Sum](../02-algorithms/problem-deep-dives.md#binary-tree-maximum-path-sum) `🎯 T2`** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
+| **[LCA](../02-algorithms/problem-deep-dives.md#lca) `🎯 T2`** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
+| **[Kth Smallest](../02-algorithms/problem-deep-dives.md#kth-smallest-in-bst) `🎯 T2`** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
+| **Diameter `🎯 T2`** | "Longest path between any two nodes" | `height(left) + height(right)` at each node | Diameter doesn't have to pass through root; track global max. |
+| **House Robber III `🎯 T2`** | "No adjacent nodes (parent-child), max sum" | Return `(rob_this, skip_this)` per node | Two values per node, not one — the novelty of tree DP. |
+| **Serialize/Deserialize** | "Lossless tree → string → tree" | Preorder + `N` markers; use iterator for deserialize | Why preorder works: root first unambiguously determines left vs right subtrees. |
+| **Morris Inorder** | "Inorder traversal without O(N) stack" | Thread predecessor.right → current; unthread on second visit | Temporarily mutates tree; restores on second pass — explain this explicitly. |
+| **Recover BST `🎯 T2`** | "Two nodes swapped — find and fix" | Inorder gives one or two inversions | One inversion: adjacent swap (`first = prev, second = curr`); two inversions: `first` from first, `second` from second. |
+| **Binary Tree Cameras `🎯 T2`** | "Minimum cameras to monitor all nodes" | Tree DP: 3 states — needs coverage, has camera, is covered | Greedy: install camera at parent of unmonitored leaf; process bottom-up. |
+| **Invert Binary Tree `🎯 T2`** [E] | "Mirror the tree" | Swap left/right at every node (preorder) | Recursive one-liner; iterative uses a queue — BFS or DFS both work identically. |
+| **Symmetric Tree `🎯 T2`** [E] | "Is tree a mirror of itself?" | Compare left-subtree and right-subtree simultaneously (two-pointer recursion) | Check `left.val == right.val` AND recurse `(left.left, right.right)` AND `(left.right, right.left)`. |
+| **Path Sum `🎯 T2`** [E] | "Root-to-leaf path summing to target" | DFS; subtract node value from target; return True at leaf when target == 0 | Leaf check: `not node.left and not node.right` — not just `target == 0` (could be mid-path). |
+| **Count Good Nodes `🎯 T2`** [M] | "Nodes ≥ all ancestors on its root path" | DFS with `max_so_far`; increment count at each node ≥ max | Pass updated max downward; root is always good. |
+| **Binary Tree Level Order Traversal `🎯 T2`** [M] | "BFS layer by layer" | Deque; snapshot `len(queue)` at start of each level; process exactly that many | Snapshot length before inner loop — queue grows during processing. |
+| **Construct Binary Tree from Preorder and Inorder `🎯 T2`** [M] | "Rebuild tree from two traversals" | Root = preorder[0]; split inorder at root index; recurse left/right | Hash `inorder` values → index for O(1) split. Preorder index advances globally via nonlocal/outer variable. |
+| **Populating Next Right Pointers `🎯 T2`** [M] | "Connect level nodes with next pointer" | BFS or O(1) space: use already-connected `next` pointers of the level above | O(1) space trick: process level N using the `next` chain of level N-1 — no queue needed. |
+| **Flatten Binary Tree to Linked List `🎯 T2`** [M] | "In-place preorder flattening" | Morris-like: connect right subtree after leftmost rightmost; move left to right | O(1) space: for each node, thread its right subtree to end of left subtree's rightmost chain. |
+| **All Nodes Distance K in Binary Tree `🎯 T2`** [M] | "All nodes exactly K edges from target" | Build parent map (BFS); then BFS from target with visited set | Convert tree to undirected graph via parent map — enables upward traversal. |
+| **Vertical Order Traversal `🎯 T2`** [H] | "Nodes grouped by column, sorted by row then value" | BFS/DFS with `(col, row, val)`; sort globally or per-column | Multiple nodes at same `(col, row)` must be sorted by value — a common missed case. |
+| **Binary Tree Maximum Path Sum `🎯 T2`** [H] | "Max sum path (any node to any node)" | Post-order; at each node compute max one-arm gain; update global with both arms | Return single-arm to parent (max of left/right arm + node); update global with `node + left + right`. Drop negative arms (use 0 instead). |
+| **Step-By-Step Directions** [M] | LCA Path Generation | "Shortest path from start node to dest node" | Find LCA. Generate path LCA → start (convert all to 'U') and LCA → dest ('L'/'R'); concatenate | Both paths go through LCA; generating full paths from root and trimming common prefix is simpler than post-order traversal. |
+| **Path Sum III `🎯 T2`** [M] | DFS Prefix Sum Map | "Paths summing to target, not starting at root" | Running prefix sum DFS; look up `curr_sum - target` in complement count map; backtrack map on return | Must decrement `prefix_sum` count in map after child recursion to prevent leak into other branches. |
 
 ---
 
@@ -528,7 +531,7 @@ def deserialize(data: str):
 
 ## See also
 
-- [Graph](../02-algorithms/graph.md) `⭐ Google` — trees are acyclic connected graphs; BFS/DFS apply
+- [Graph](../02-algorithms/graph.md) — trees are acyclic connected graphs; BFS/DFS apply
 - [Dynamic Programming](../02-algorithms/dynamic-programming/README.md) — Tree DP (postorder state propagation)
 - [Backtracking](../02-algorithms/backtracking.md) — path sum with backtracking
 - [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers

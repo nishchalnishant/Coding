@@ -9,6 +9,12 @@ tags: [algorithms, maths]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```text
 WHY Mathematics exists in DSA
 ├── Many problems reduce to number theory or combinatorics at their core
@@ -44,10 +50,7 @@ DECISION
 - **Where it breaks**: Non-prime moduli break Fermat's inverse; very large n with non-prime mod requires extended Euclidean or precomputed inverses via DP.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -146,7 +149,7 @@ Mathematical patterns that collapse O(N) loops to O(√N) or O(log N). SDE-3 exp
 ## 1. Algorithm Selection
 
 > [!IMPORTANT]
-> **The Click Moment**: "Count **primes** up to N" → Sieve. "**Divisible** / GCD / LCM" → Euclidean. "Large power **mod M**" → binary exponentiation. "Overflow in a×b before mod" → divide first: `a // gcd(a,b) * b`. "**Same line** / collinear" → cross product (no floats). "**Modular inverse**" → Fermat's little theorem when M is prime; Extended Euclidean otherwise.
+> **The Click Moment**: "Count **primes `⚡ T1`** up to N" → Sieve. "**Divisible** / GCD / LCM" → Euclidean. "Large power **mod M**" → binary exponentiation. "Overflow in a×b before mod" → divide first: `a // gcd(a,b) * b`. "**Same line** / collinear" → cross product (no floats). "**Modular inverse**" → Fermat's little theorem when M is prime; Extended Euclidean otherwise.
 
 | Goal | Algorithm | Complexity |
 | :--- | :--- | :--- |
@@ -256,7 +259,7 @@ def modular_inverse(a: int, m: int) -> int:
 ### Binary Exponentiation (Fast Power)
 
 > [!IMPORTANT]
-> **The Click Moment**: "Compute **x^n mod M**" — OR — "**Fibonacci in O(log N) `🔥 Google`** via matrix exponentiation" — OR — "**modular inverse** when M is prime" (`x^(M-2) mod M` by Fermat's little theorem). Halving the exponent at each step → O(log n).
+> **The Click Moment**: "Compute **x^n mod M**" — OR — "**Fibonacci in O(log N)** via matrix exponentiation" — OR — "**modular inverse** when M is prime" (`x^(M-2) mod M` by Fermat's little theorem). Halving the exponent at each step → O(log n).
 
 ```python
 def fast_pow(base: int, exp: int, mod: int = 0) -> int:
@@ -394,7 +397,7 @@ def max_points_on_line(points: list[list[int]]) -> int:
     return max_pts
 
 #### Common Variants & Twists
-1. **Ugly Number III `⭐ Google`**:
+1. **Ugly Number III**:
    - **What (The Problem & Goal):** Find the n-th "ugly" number which is divisible by `a`, `b`, or `c`.
    - **How (Intuition & Mental Model):** Use binary search on the answer. To count how many numbers `<= x` are divisible by `a, b, or c`, use the Principle of Inclusion-Exclusion: `count = x/a + x/b + x/c - x/lcm(a,b) - x/lcm(b,c) - x/lcm(a,c) + x/lcm(a,b,c)`.
 2. **Minimum Moves to Equal Array Elements II**:
@@ -428,7 +431,7 @@ def max_points_on_line(points: list[list[int]]) -> int:
 
 | Problem | Float approach | Integer approach | Prefer |
 | :--- | :--- | :--- | :--- |
-| Slope of two points | `dy/dx` | `(dy//g, dx//g)` tuple | **Integer `⭐ Google`** — no rounding error |
+| Slope of two points | `dy/dx` | `(dy//g, dx//g)` tuple | **Integer** — no rounding error |
 | Distance comparison | `math.hypot(dx,dy)` | `dx*dx + dy*dy` (compare squared) | Integer for comparison, float for output |
 | nCr | `math.comb(n,r)` | Precomputed factorials + modular inverse | **Modular integer** when answer is large |
 | Primality | Miller-Rabin (probabilistic) | Trial division | Trial div for N ≤ 10^7; Miller-Rabin for N ≤ 10^18 |
@@ -438,8 +441,8 @@ def max_points_on_line(points: list[list[int]]) -> int:
 ## 4. Common Interview Problems
 
 ### Easy / Medium
-- **Count Primes `⭐ Google`** — Sieve of Eratosthenes; count `True` values in `is_prime[:n]`.
-- **Pow(x, n) `🔥 Google`** — Binary exponentiation; handle `n < 0` by inverting x.
+- **Count Primes** — Sieve of Eratosthenes; count `True` values in `is_prime[:n]`.
+- **Pow(x, n)** — Binary exponentiation; handle `n < 0` by inverting x.
 - **GCD / LCM of Array** — Reduce with `math.gcd`; LCM: `a // gcd(a,b) * b`.
 - **Factorial Trailing Zeros** — Count factors of 5 via Legendre's formula.
 - **Integer Square Root** — Binary search on `[0, x]` with `mid <= x // mid`.
@@ -447,7 +450,7 @@ def max_points_on_line(points: list[list[int]]) -> int:
 ### Hard
 - **Max Points on a Line** — Per anchor: GCD-normalized slope frequency map.
 - **Super Pow** — `a^(b mod phi(mod)) mod mod` via Euler's theorem; handle non-coprime case.
-- **Count of Range Sum `⭐ Google`** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
+- **Count of Range Sum** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
 - **Nth Digit** — Determine which digit group (1-digit, 2-digit…); offset within the number.
 
 ---
@@ -457,19 +460,19 @@ def max_points_on_line(points: list[list[int]]) -> int:
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
 | **Pow(x, n)** | Exponentiation by Squaring | "Fast exponentiation; n can be negative" | Square x, halve n; if n odd multiply result by x once | `n = INT_MIN` overflow in Java/C++ — use `long`. Negative n: `base = 1/base, exp = -exp`. |
-| **Sqrt(x)** | "Integer square root without `math.sqrt`" | Binary search `[0, x]` with `mid <= x // mid` | `mid*mid` overflow — compare as `mid <= x // mid` (integer division). Floor vs ceiling. |
-| **Count Primes `⭐ Google`** | "Count primes strictly less than n" | Sieve: mark composites from each prime p starting p² | `is_prime[0] = is_prime[1] = False`. Inner loop starts at `p*p`, not `2*p`. |
+| **Sqrt(x) `⚡ T1`** | "Integer square root without `math.sqrt`" | Binary search `[0, x]` with `mid <= x // mid` | `mid*mid` overflow — compare as `mid <= x // mid` (integer division). Floor vs ceiling. |
+| **Count Primes** | "Count primes strictly less than n" | Sieve: mark composites from each prime p starting p² | `is_prime[0] = is_prime[1] = False`. Inner loop starts at `p*p`, not `2*p`. |
 | **Factorial Trailing Zeros** | "Count (2,5) factor pairs = count 5s in n!" | Sum `n//5 + n//25 + n//125 + …` until power > n | More 2s than 5s — count only 5-factors. Integer division, no floats. |
 | **Max Points on a Line** | "Group by slope; find max frequency" | Per anchor: GCD-normalize `(dy, dx)` slope; count per slope | Same point = duplicate, not a slope. Normalize sign: `dx < 0 → flip both`. |
 | **Random Pick with Weight** | "Weighted random choice" | Prefix sums + binary search on random value in `[0, total)` | `random.randint(0, total-1)` is inclusive; `random.random() * total` is `[0, total)`. Zero weights excluded. |
-| **Integer Break `⭐ Google`** | "Split n to maximize product" | Break into 3s for n≥4; avoid breaking into 1s | AM-GM: e≈2.718 → 3 is optimal integer. Handle n=2 (→1×1=1? No, must split: return 1), n=3 (→ 1×2=2). |
+| **Integer Break** | "Split n to maximize product" | Break into 3s for n≥4; avoid breaking into 1s | AM-GM: e≈2.718 → 3 is optimal integer. Handle n=2 (→1×1=1? No, must split: return 1), n=3 (→ 1×2=2). |
 | **Bulb Switcher** | "How many bulbs on after n rounds?" | Bulb i toggled by each of its divisors; odd count ↔ perfect square | Divisors pair up except for perfect squares. Answer = `int(n**0.5)`. |
 | **GCD of Array** | "Reduce via Euclidean iteratively" | `functools.reduce(math.gcd, nums)` | `gcd(0, a) = a` — handle zeros. LCM can overflow for large arrays; use Python big int. |
 | **Add Digits [E]** | "Repeat digit sum until single digit" | Digital root: `1 + (n-1) % 9`; special case n=0 | O(1) formula, not a loop. `n=0` → 0; otherwise digital root formula. |
 | **Excel Sheet Column Number [E]** | "Convert Excel column title (A, Z, AA…) to number" | Treat as base-26: `result = result * 26 + ord(ch) - ord('A') + 1` | 1-indexed not 0-indexed ('A'=1, not 0). No zero in this base-26 encoding. |
-| **Happy Number [E] `🔥 Google`** | "Does repeated digit-square-sum reach 1?" | Floyd's cycle detection or known cycle set `{4,16,37,58,89,145,42,20}` | If not happy, always cycles through `{4,...,20}`. Stop when `n==1` (happy) or `n in cycle`. |
-| **Ugly Number II [M] `⭐ Google`** | "Nth number whose only prime factors are 2, 3, 5" | Three pointers for multiples of 2, 3, 5; advance min pointer each step | Tie case: all three pointers at same value → advance all three to avoid duplicates. |
-| **Perfect Squares [M] `⭐ Google`** | "Minimum number of perfect squares summing to n" | DP: `dp[i] = min(dp[i - j*j] + 1)` for all j; or Lagrange's 4-square theorem | Lagrange theorem: answer ≤ 4. Check 1, then 2 (two-sum of squares), else answer is 3 or 4. |
+| **Happy Number [E]** | "Does repeated digit-square-sum reach 1?" | Floyd's cycle detection or known cycle set `{4,16,37,58,89,145,42,20}` | If not happy, always cycles through `{4,...,20}`. Stop when `n==1` (happy) or `n in cycle`. |
+| **Ugly Number II [M] `⚡ T1`** | "Nth number whose only prime factors are 2, 3, 5" | Three pointers for multiples of 2, 3, 5; advance min pointer each step | Tie case: all three pointers at same value → advance all three to avoid duplicates. |
+| **Perfect Squares [M]** | "Minimum number of perfect squares summing to n" | DP: `dp[i] = min(dp[i - j*j] + 1)` for all j; or Lagrange's 4-square theorem | Lagrange theorem: answer ≤ 4. Check 1, then 2 (two-sum of squares), else answer is 3 or 4. |
 | **Fraction to Recurring Decimal [M]** | "Detect repeating decimal in long division" | Map remainder → position; repeat starts when remainder seen again | Handle sign separately: XOR numerator and denominator signs. `denominator = 0` not tested but guard anyway. |
 | **Nth Digit [M]** | "Find nth digit in infinite sequence 123456789101112…" | Determine which digit group (d-digit numbers); offset within the number | d-digit numbers: count = 9×10^(d-1); total digits = count×d. Use integer division to pinpoint exact digit. |
 | **Count Different Palindromic Subsequences [H]** | "Count distinct palindromic subsequences in string" | DP: `dp[i][j]` = count in `s[i..j]`; case on `s[i]==s[j]` and inner occurrences | When `s[i]==s[j]`: add `dp[i+1][j-1]*2 + 2` if no inner match, `+1` if one inner match, `+0` if two inner matches (avoids double-count). Answer mod 10^9+7. |

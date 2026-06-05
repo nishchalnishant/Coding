@@ -6,19 +6,22 @@ difficulty: mixed
 
 # Tree Problems — Deep Dive
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 **Pattern map**: Tree problems reduce to one of five techniques — DFS traversal (preorder/inorder/postorder), level-order BFS, LCA (post-order recurse), Tree DP (post-order returning tuples), BST operations (exploit ordering). The remaining problems are construction/serialization and O(1)-space Morris traversal.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## DFS Traversal
 
-### Binary Tree Inorder Traversal `🔥 Google`
+### Binary Tree Inorder Traversal `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, return the inorder traversal of its nodes' values.
@@ -80,7 +83,7 @@ difficulty: mixed
 
 ---
 
-### Invert Binary Tree `🔥 Google`
+### Invert Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, invert the tree, and return its root.
@@ -128,7 +131,7 @@ difficulty: mixed
 
 ---
 
-### Symmetric Tree
+### Symmetric Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, check whether it is a mirror of itself (i.e., symmetric around its center).
@@ -173,7 +176,7 @@ difficulty: mixed
 
 ---
 
-### Maximum Depth of Binary Tree `🔥 Google`
+### Maximum Depth of Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, return its maximum depth.
@@ -264,7 +267,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum `⭐ Google`
+### Path Sum `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
@@ -322,7 +325,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum II `⭐ Google`
+### Path Sum II `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. Each path should be returned as a list of the node values, not node references.
@@ -384,7 +387,7 @@ difficulty: mixed
 
 ---
 
-### Sum Root to Leaf Numbers `⭐ Google`
+### Sum Root to Leaf Numbers
 
 > [!example] Problem
 > You are given the root of a binary tree containing digits from 0 to 9 only.
@@ -443,7 +446,7 @@ difficulty: mixed
 
 ---
 
-### Count Complete Tree Nodes `⭐ Google`
+### Count Complete Tree Nodes
 
 > [!example] Problem
 > Given the root of a complete binary tree, return the number of the nodes in the tree.
@@ -504,7 +507,7 @@ difficulty: mixed
 
 ---
 
-### Count Good Nodes in Binary Tree
+### Count Good Nodes in Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given a binary tree root, a node X in the tree is named good if in the path from root to X there are no nodes with a value greater than X.
@@ -615,7 +618,7 @@ difficulty: mixed
 
 ---
 
-### Subtree of Another Tree `⭐ Google`
+### Subtree of Another Tree
 
 > [!example] Problem
 > Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values of subRoot and false otherwise.
@@ -666,7 +669,7 @@ difficulty: mixed
 
 ---
 
-### Flatten Binary Tree to Linked List
+### Flatten Binary Tree to Linked List `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, flatten the tree into a "linked list"
@@ -721,7 +724,7 @@ difficulty: mixed
 
 ---
 
-### Step-By-Step Directions From a Binary Tree Node to Another `⭐ Google`
+### Step-By-Step Directions From a Binary Tree Node to Another
 
 > [!example] Problem
 > You are given the root of a binary tree with n nodes. Each node is uniquely assigned a value from 1 to n. You are also given an integer startValue representing the value of the start node s, and a different integer destValue representing the value of the destination node t.
@@ -793,7 +796,7 @@ difficulty: mixed
 
 ## Level Order BFS
 
-### Binary Tree Zigzag Level Order Traversal `⭐ Google`
+### Binary Tree Zigzag Level Order Traversal `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, return the zigzag level order traversal of its nodes' values. (i.e., from left to right, then right to left for the next level and alternate between).
@@ -856,7 +859,7 @@ difficulty: mixed
 
 ---
 
-### Populating Next Right Pointers in Each Node `⭐ Google`
+### Populating Next Right Pointers in Each Node `🎯 T2`
 
 > [!example] Problem
 > You are given a perfect binary tree where all leaves are on the same level, and every parent has two children. The binary tree has the following definition:
@@ -919,7 +922,7 @@ difficulty: mixed
 
 ---
 
-### Vertical Order Traversal of a Binary Tree `⭐ Google`
+### Vertical Order Traversal of a Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, calculate the vertical order traversal of the binary tree.
@@ -1001,7 +1004,7 @@ difficulty: mixed
 
 ---
 
-### All Nodes Distance K in Binary Tree `⭐ Google`
+### All Nodes Distance K in Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, the value of a target node target, and an integer k, return an array of the values of all nodes that have a distance k from the target node.
@@ -1072,7 +1075,7 @@ difficulty: mixed
 
 ## Lowest Common Ancestor
 
-### Lowest Common Ancestor of a Binary Tree `🔥 Google`
+### Lowest Common Ancestor of a Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given a binary tree, find the lowest common ancestor (LCA) of two given nodes in the tree.
@@ -1129,7 +1132,7 @@ difficulty: mixed
 
 ---
 
-### Lowest Common Ancestor of a BST `🔥 Google`
+### Lowest Common Ancestor of a BST `🎯 T2`
 
 > [!example] Problem
 > Same as above but the tree is a BST. Exploit the ordering property.
@@ -1160,7 +1163,7 @@ difficulty: mixed
 
 ## Tree DP
 
-### Diameter of Binary Tree `🔥 Google`
+### Diameter of Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, return the length of the diameter of the tree.
@@ -1210,7 +1213,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Maximum Path Sum `🔥 Google`
+### Binary Tree Maximum Path Sum `🎯 T2`
 
 > [!example] Problem
 > A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. Note that the path does not need to pass through the root.
@@ -1262,7 +1265,7 @@ difficulty: mixed
 
 ---
 
-### House Robber III `🔥 Google`
+### House Robber III `🎯 T2`
 
 > [!example] Problem
 > The thief has found himself a new place for his thievery again. There is only one entrance to this area, called root.
@@ -1313,7 +1316,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Cameras `⭐ Google`
+### Binary Tree Cameras `🎯 T2`
 
 > [!example] Problem
 > You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
@@ -1368,7 +1371,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum III `⭐ Google`
+### Path Sum III `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return the number of paths where the sum of the values along the path equals targetSum.
@@ -1429,7 +1432,7 @@ difficulty: mixed
 
 ## BST Operations
 
-### Validate Binary Search Tree `🔥 Google`
+### Validate Binary Search Tree `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary tree, determine if it is a valid binary search tree (BST).
@@ -1477,7 +1480,7 @@ difficulty: mixed
 
 ---
 
-### Kth Smallest Element in a BST `🔥 Google`
+### Kth Smallest Element in a BST `🎯 T2`
 
 > [!example] Problem
 > Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.
@@ -1627,7 +1630,7 @@ difficulty: mixed
 
 ---
 
-### Recover Binary Search Tree `⭐ Google`
+### Recover Binary Search Tree
 
 > [!example] Problem
 > You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.
@@ -1686,7 +1689,7 @@ difficulty: mixed
 
 ## Construction / Serialization
 
-### Serialize and Deserialize Binary Tree `🔥 Google`
+### Serialize and Deserialize Binary Tree `🎯 T2`
 
 > [!example] Problem
 > Serialization is the process of converting a data structure or object into a sequence of bits so that it can be stored in a file or memory buffer, or transmitted across a network connection link to be reconstructed later in the same or another computer environment.
@@ -1749,7 +1752,7 @@ difficulty: mixed
 
 ---
 
-### Construct Binary Tree from Preorder and Inorder Traversal `🔥 Google`
+### Construct Binary Tree from Preorder and Inorder Traversal `🎯 T2`
 
 > [!example] Problem
 > Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree and inorder is the inorder traversal of the same tree, construct and return the binary tree.
@@ -1808,7 +1811,7 @@ difficulty: mixed
 
 ---
 
-### Construct Binary Tree from Inorder and Postorder Traversal `⭐ Google`
+### Construct Binary Tree from Inorder and Postorder Traversal
 
 > [!example] Problem
 > Given two integer arrays inorder and postorder where inorder is the inorder traversal of a binary tree and postorder is the postorder traversal of the same tree, construct and return the binary tree.
@@ -1868,7 +1871,7 @@ difficulty: mixed
 
 ## Morris Traversal / Iterative Postorder
 
-### Morris Inorder Traversal (Technique) `⭐ Google`
+### Morris Inorder Traversal (Technique)
 
 > **Morris threading — O(1) space inorder via temporary right pointer threads.** Standard inorder traversal uses O(h) stack space. Morris traversal achieves O(1) auxiliary space by temporarily threading the tree — using unused right pointers of inorder predecessors to "remember" where to return after exploring a left subtree. For each node `curr`: if no left child, visit and move right. Otherwise find inorder predecessor (rightmost in left subtree). If predecessor.right is None: create thread, go left. If predecessor.right is curr: unthread, visit, go right. The tree is temporarily mutated and fully restored on completion.
 
@@ -2034,7 +2037,7 @@ difficulty: mixed
 
 ## Special Tree Problems
 
-### Count Complete Tree Nodes (LC 222) `⭐ Google`
+### Count Complete Tree Nodes (LC 222)
 
 > [!example] Problem
 > Given the root of a complete binary tree, return the number of the nodes in the tree.
@@ -2096,7 +2099,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Cameras (LC 968) `⭐ Google`
+### Binary Tree Cameras (LC 968) `🎯 T2`
 
 > [!example] Problem
 > You are given the root of a binary tree. We install cameras on the tree nodes where each camera at a node can monitor its parent, itself, and its immediate children.
@@ -2156,7 +2159,7 @@ difficulty: mixed
 
 ---
 
-### Recover Binary Search Tree (LC 99) `⭐ Google`
+### Recover Binary Search Tree (LC 99)
 
 > [!example] Problem
 > You are given the root of a binary search tree (BST), where the values of exactly two nodes of the tree were swapped by mistake. Recover the tree without changing its structure.

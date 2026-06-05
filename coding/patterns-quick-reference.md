@@ -4,18 +4,22 @@ topic: Google Patterns Quick Reference
 difficulty: reference
 ---
 
-# Google Interview — Pattern Templates & Quick Reference `🔥 Google`
+# Google Interview — Pattern Templates & Quick Reference
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!tip] How to Use This
 > These are exact code templates to internalize. In an interview, you should be able to write any of these from memory within 2 minutes. Study one pattern per day.
 
 ---
 
-## Pattern 1: Sliding Window `🔥 Google`
+## Pattern 1: Sliding Window
 
 **Trigger**: "subarray/substring of length k", "minimum/maximum window", "longest with condition"
 
@@ -68,7 +72,7 @@ def min_window(s, t):
 
 ---
 
-## Pattern 2: Two Pointers `🔥 Google`
+## Pattern 2: Two Pointers
 
 **Trigger**: sorted array, pairs summing to target, palindrome check, partition
 
@@ -111,7 +115,7 @@ def find_cycle_start(head):
 
 ---
 
-## Pattern 3: Binary Search `🔥 Google`
+## Pattern 3: Binary Search
 
 **Trigger**: sorted array, "minimum X that satisfies Y", "find boundary"
 
@@ -151,7 +155,7 @@ def min_days(piles, h):
 
 ---
 
-## Pattern 4: DFS Templates `🔥 Google`
+## Pattern 4: DFS Templates
 
 ### Graph DFS (iterative)
 ```python
@@ -194,7 +198,7 @@ def dfs_grid(grid, r, c, visited):
 
 ---
 
-## Pattern 5: BFS Templates `🔥 Google`
+## Pattern 5: BFS Templates
 
 ### Graph BFS (shortest path)
 ```python
@@ -237,7 +241,7 @@ def bfs_multi_source(grid):
 
 ---
 
-## Pattern 6: Topological Sort `🔥 Google`
+## Pattern 6: Topological Sort
 
 **Trigger**: dependencies, prerequisites, ordering constraints, DAG
 
@@ -266,7 +270,7 @@ def topo_sort_kahn(n, prerequisites):
 
 ---
 
-## Pattern 7: Dijkstra's Algorithm `🔥 Google`
+## Pattern 7: Dijkstra's Algorithm
 
 **Trigger**: weighted graph, shortest path, minimum cost
 
@@ -298,7 +302,7 @@ def dijkstra(n, edges, src):
 
 ---
 
-## Pattern 8: Union-Find `🔥 Google`
+## Pattern 8: Union-Find
 
 **Trigger**: connected components, cycle detection, Kruskal's MST
 
@@ -332,7 +336,7 @@ class UnionFind:
 
 ---
 
-## Pattern 9: Monotonic Stack `🔥 Google`
+## Pattern 9: Monotonic Stack
 
 **Trigger**: "next greater element", "largest rectangle", "daily temperatures", "stock span"
 
@@ -365,7 +369,7 @@ def largest_rectangle(heights):
 
 ---
 
-## Pattern 10: DP on Intervals `⭐ Google`
+## Pattern 10: DP on Intervals
 
 **Trigger**: "minimum cost to split/burst/merge", "score of optimal game on array"
 
@@ -389,7 +393,7 @@ def maxCoins(nums):
 
 ---
 
-## Pattern 11: Tree DP `🔥 Google`
+## Pattern 11: Tree DP
 
 **Trigger**: "optimal assignment on tree nodes", "diameter", "max path sum"
 
@@ -427,7 +431,7 @@ def rob_tree(root):
 
 ---
 
-## Pattern 12: Backtracking Template `🔥 Google`
+## Pattern 12: Backtracking Template
 
 ```python
 def backtrack(result, path, choices, start):
@@ -453,7 +457,7 @@ def backtrack(result, path, choices, start):
 
 ---
 
-## Pattern 13: LRU Cache `🔥 Google`
+## Pattern 13: LRU Cache
 
 ```python
 from collections import OrderedDict
@@ -479,7 +483,7 @@ class LRUCache:
 
 ---
 
-## Pattern 14: Trie `🔥 Google`
+## Pattern 14: Trie
 
 ```python
 class TrieNode:
@@ -518,7 +522,7 @@ class Trie:
 
 ---
 
-## Pattern 15: Heap Patterns `🔥 Google`
+## Pattern 15: Heap Patterns
 
 ```python
 import heapq
@@ -557,7 +561,7 @@ def merge_k_sorted(lists):
 
 ---
 
-## Common Google-Specific Gotchas `🔥 Google`
+## Common Google-Specific Gotchas
 
 | Gotcha | Wrong | Right |
 |--------|-------|-------|
@@ -574,7 +578,7 @@ def merge_k_sorted(lists):
 
 ---
 
-## Pattern Selector — "What do I use for this?" `🔥 Google`
+## Pattern Selector — "What do I use for this?"
 
 | Problem type | Pattern |
 |-------------|---------|

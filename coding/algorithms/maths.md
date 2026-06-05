@@ -6,20 +6,23 @@ difficulty: mixed
 
 # Mathematics — Problem Reference by Pattern
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 > [!info] First Principles
 > Mathematical patterns collapse O(n) or O(n²) simulations to O(√n) or O(log n) using number-theoretic identities. Core toolkit: (1) Sieve — all primes in O(n log log n); (2) Euclidean GCD — O(log min(a,b)); (3) Fast exponentiation — O(log n); (4) Modular arithmetic — mod at every + and ×; (5) Precomputed factorials + inverse factorials — O(n) build, O(1) query for nCr.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Number Theory — Primes / Sieve
 
-### Count Primes (Sieve of Eratosthenes) `⭐ Google`
+### Count Primes (Sieve of Eratosthenes)
 
 > [!example] Problem
 > Given an integer n, return the number of prime numbers that are strictly less than n.
@@ -276,7 +279,7 @@ difficulty: mixed
 
 ## Modular Arithmetic
 
-### Pow(x, n) (Fast Exponentiation with Mod) `🔥 Google`
+### Pow(x, n) (Fast Exponentiation with Mod)
 
 > [!example] Problem
 > Compute `x^n` efficiently; handle negative exponents.
@@ -306,7 +309,7 @@ difficulty: mixed
 
 ---
 
-### Super Pow (Modular Exponentiation, Non-Prime Mod)
+### Super Pow (Modular Exponentiation, Non-Prime Mod) `💤 T3`
 
 > [!example] Problem
 > Your task is to calculate ab mod 1337 where a is a positive integer and b is an extremely large positive integer given in the form of an array.
@@ -546,7 +549,7 @@ difficulty: mixed
 
 ---
 
-### Unique Paths (Combinatorics Approach) `🔥 Google`
+### Unique Paths (Combinatorics Approach) `🎯 T2`
 
 > [!example] Problem
 > There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
@@ -701,7 +704,7 @@ difficulty: mixed
 
 ## Digit / Sequence Math
 
-### Factorial Trailing Zeroes `⭐ Google`
+### Factorial Trailing Zeroes
 
 > [!example] Problem
 > Given an integer n, return the number of trailing zeroes in n!.
@@ -752,7 +755,7 @@ difficulty: mixed
 
 ---
 
-### Integer Square Root (Newton's Method)
+### Integer Square Root (Newton's Method) `⚡ T1`
 
 > [!example] Problem
 > Compute floor of square root of `x` without using `math.sqrt`.
@@ -792,7 +795,7 @@ difficulty: mixed
 
 ---
 
-### Nth Digit `🔥 Google`
+### Nth Digit
 
 > [!example] Problem
 > Given an integer n, return the nth digit of the infinite integer sequence [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, ...].
@@ -965,7 +968,7 @@ difficulty: mixed
 
 ## Number Encoding / Conversion
 
-### Integer to Roman `⭐ Google`
+### Integer to Roman
 
 > [!example] Problem
 > Seven different symbols represent Roman numerals with the following values:
@@ -1025,7 +1028,7 @@ difficulty: mixed
 
 ---
 
-### Roman to Integer `⭐ Google`
+### Roman to Integer
 
 > [!example] Problem
 > Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
@@ -1096,7 +1099,7 @@ difficulty: mixed
 
 ---
 
-### Excel Sheet Column Number `⭐ Google`
+### Excel Sheet Column Number
 
 > [!example] Problem
 > Given a string columnTitle that represents the column title as appears in an Excel sheet, return its corresponding column number.
@@ -1500,7 +1503,7 @@ difficulty: mixed
 
 ---
 
-### Matrix Exponentiation — Fibonacci in O(log n) `⭐ Google`
+### Matrix Exponentiation — Fibonacci in O(log n) `💤 T3`
 
 > [!example] Problem
 > Compute the n-th Fibonacci number in O(log n) time using matrix exponentiation.

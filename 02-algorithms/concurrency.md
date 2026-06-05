@@ -9,6 +9,12 @@ tags: [algorithms, concurrency]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```
 WHY concurrency exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
        │                      │               │               │               │
@@ -82,10 +88,7 @@ WHY concurrency exists → WHAT it is → HOW it works → WHEN to use → WHAT 
 Mastery of synchronization, memory models, and lock-free primitives. SDE-3 candidates are expected to go beyond "just using a lock" and discuss cache-line contention, memory barriers, and the ABA problem.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 

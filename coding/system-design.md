@@ -4,18 +4,22 @@ topic: System Design
 difficulty: sde3
 ---
 
-# System Design Guide — Google SDE 2/3 `🔥 Google`
+# System Design Guide — Google SDE 2/3
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!important] The Framework First
 > Every system design answer follows the same skeleton. Internalize this framework before studying individual designs. An imperfect answer with strong structure beats a brilliant answer with no structure.
 
 ---
 
-## The Universal System Design Framework `🔥 Google`
+## The Universal System Design Framework
 
 ```
 Total time: 45 minutes
@@ -28,7 +32,7 @@ Step 5 — Scale & Failure Handling (7 min)
 Step 6 — Wrap-up & Tradeoffs (5 min)
 ```
 
-### Step 1: Requirements Clarification `🔥 Google`
+### Step 1: Requirements Clarification
 
 Never assume. Always clarify:
 
@@ -45,7 +49,7 @@ Never assume. Always clarify:
 - Availability: 99.9% (3 nines) vs 99.99% (4 nines)?
 - Durability: can data be lost? (logs = ok, payments = never)
 
-### Step 2: Capacity Estimation `🔥 Google`
+### Step 2: Capacity Estimation
 
 ```
 Key numbers to memorize:
@@ -72,7 +76,7 @@ Example (Twitter):
   Read:Write ≈ 100:1 (heavily read-dominant)
 ```
 
-### Step 3: High-Level Architecture `🔥 Google`
+### Step 3: High-Level Architecture
 
 Start with this template for every system:
 
@@ -94,7 +98,7 @@ Start with this template for every system:
 
 ---
 
-## Core Building Blocks (Memorize These) `🔥 Google`
+## Core Building Blocks (Memorize These)
 
 ### Databases
 
@@ -109,7 +113,7 @@ Start with this template for every system:
 
 **Rule**: Default to PostgreSQL unless you have a specific reason not to. Explain the reason.
 
-### Caching `🔥 Google`
+### Caching
 
 ```
 Cache Hierarchy:
@@ -141,7 +145,7 @@ Cache Invalidation Strategies:
   Write-through: always consistent but higher write cost
 ```
 
-### Message Queues `🔥 Google`
+### Message Queues
 
 ```
 When to use: decouple producers from consumers, async processing, fan-out
@@ -167,7 +171,7 @@ Fan-out pattern (Twitter notifications):
     Consumer 3: Update search index
 ```
 
-### Load Balancing `⭐ Google`
+### Load Balancing
 
 ```
 Algorithms:
@@ -181,7 +185,7 @@ Layer 4 (Transport) vs Layer 7 (Application):
   L7: Routes by URL, headers, cookies — can do smart routing, SSL termination
 ```
 
-### Sharding (Horizontal Partitioning) `⭐ Google`
+### Sharding (Horizontal Partitioning)
 
 ```
 Why: Single DB can't handle scale → split data across multiple DBs (shards)
@@ -206,7 +210,7 @@ Consistent Hashing (best for dynamic cluster):
 
 ---
 
-## Design 1: URL Shortener (bit.ly) `🔥 Google`
+## Design 1: URL Shortener (bit.ly)
 
 **Functional**: Shorten URL, redirect to original, (optional) analytics
 
@@ -254,7 +258,7 @@ Client → Load Balancer → URL Service (stateless, horizontally scalable)
 
 ---
 
-## Design 2: Rate Limiter `🔥 Google`
+## Design 2: Rate Limiter
 
 **Functional**: Limit each user to N requests per time window
 
@@ -298,7 +302,7 @@ At scale (10M req/sec):
 
 ---
 
-## Design 3: Twitter/News Feed `🔥 Google`
+## Design 3: Twitter/News Feed
 
 **Functional**: Post tweets, follow users, see personalized feed
 
@@ -347,7 +351,7 @@ Read path:
 
 ---
 
-## Design 4: Google Drive / Dropbox `🔥 Google`
+## Design 4: Google Drive / Dropbox
 
 **Functional**: Upload/download files, sync across devices, share with others
 
@@ -384,7 +388,7 @@ Conflict Resolution:
 
 ---
 
-## Design 5: YouTube / Video Streaming `⭐ Google`
+## Design 5: YouTube / Video Streaming
 
 **Functional**: Upload videos, stream videos at adaptive quality
 
@@ -421,7 +425,7 @@ Storage estimation:
 
 ---
 
-## Design 6: Distributed Cache (Redis at Scale) `⭐ Google`
+## Design 6: Distributed Cache (Redis at Scale)
 
 **The Core Challenge**: When cache itself needs to scale beyond one node
 
@@ -454,7 +458,7 @@ Cache Stampede (Thundering Herd):
 
 ---
 
-## Design 7: Chat System (WhatsApp / Slack) `⭐ Google`
+## Design 7: Chat System (WhatsApp / Slack)
 
 **Functional**: 1:1 messaging, group chats, online presence, message history
 
@@ -498,7 +502,7 @@ Presence:
 
 ---
 
-## Design 8: Search Autocomplete `🔥 Google`
+## Design 8: Search Autocomplete
 
 **Functional**: As user types, show top 5 search suggestions in real-time
 
@@ -536,7 +540,7 @@ Personalization (advanced):
 
 ---
 
-## Numbers Every Candidate Should Know `🔥 Google`
+## Numbers Every Candidate Should Know
 
 ```
 Latency reference (L1 cache → disk → network):
@@ -569,7 +573,7 @@ Storage reference:
 
 ---
 
-## CAP Theorem (Must Know Cold) `🔥 Google`
+## CAP Theorem (Must Know Cold)
 
 ```
 CAP: In a distributed system, you can only guarantee 2 of 3:
@@ -593,7 +597,7 @@ PACELC (more practical than CAP):
 
 ---
 
-## Common System Design Mistakes `🔥 Google`
+## Common System Design Mistakes
 
 1. **Jumping to components before requirements** — Always clarify scale and constraints first
 2. **Over-engineering** — Don't design for 1 billion users if the question says 1 million

@@ -9,6 +9,12 @@ tags: [algorithms, two-pointers]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 ```text
 WHY Two Pointers exists
 ├── Brute-force pair enumeration is O(n²) — too slow for n ≥ 10⁵
@@ -47,10 +53,7 @@ DECISION
 - **Where it breaks**: Unsorted data (sort first, adding O(n log n)); problems requiring non-contiguous or multi-pass pairing where pointer convergence doesn't cover all candidates.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -125,7 +128,7 @@ def converging(arr, target):
     return (-1, -1)
 ```
 
-**3Sum template: `🔥 Google`**
+**3Sum template: `⚡ T1`**
 ```python
 def three_sum(nums):
     nums.sort()
@@ -279,14 +282,14 @@ def sort_colors(nums):
 
 | Question | Variant | Click moment | Core logic | Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Two Sum II (sorted) `🔥 Google`** | Converging | Complement from both ends | If sum too small → `lo++`; too big → `hi--` | Input must be **sorted**; 1-indexed return in some problems. |
-| **3Sum `🔥 Google`** | Converging + skip | Fix i; two-pointer on rest | Skip duplicates at i, lo, hi | Sort first; skip **all** equal values at each level. |
-| **Container With Most Water `🔥 Google`** | Converging | Move shorter side | `area = min(h[lo], h[hi]) * (hi-lo)` | Moving taller side never increases min height. |
-| **Trapping Rain Water `🔥 Google`** | Converging | Advance smaller `l_max`/`r_max` side | Water at i from min of max heights | Two-pointer O(n) O(1); differs from stack solution. |
-| **Linked List Cycle `🔥 Google`** | Fast/slow | Floyd; meet proves cycle | Fast 2 steps, slow 1 | Check `fast` and `fast.next` before advancing. |
+| **Two Sum II (sorted) `⚡ T1`** | Converging | Complement from both ends | If sum too small → `lo++`; too big → `hi--` | Input must be **sorted**; 1-indexed return in some problems. |
+| **3Sum `⚡ T1`** | Converging + skip | Fix i; two-pointer on rest | Skip duplicates at i, lo, hi | Sort first; skip **all** equal values at each level. |
+| **Container With Most Water `⚡ T1`** | Converging | Move shorter side | `area = min(h[lo], h[hi]) * (hi-lo)` | Moving taller side never increases min height. |
+| **Trapping Rain Water `⚡ T1`** | Converging | Advance smaller `l_max`/`r_max` side | Water at i from min of max heights | Two-pointer O(n) O(1); differs from stack solution. |
+| **Linked List Cycle `🎯 T2`** | Fast/slow | Floyd; meet proves cycle | Fast 2 steps, slow 1 | Check `fast` and `fast.next` before advancing. |
 | **Cycle Entry** | Fast/slow | Reset one ptr to head after meet | Both move 1 step until meet | Entry distance equals steps from head to meet. |
 | **Remove Duplicates (sorted)** | Same-direction | `write` only on new value | `if nums[fast] != nums[write]: write++` | Return `write+1` as new length. |
-| **Sort Colors (Dutch flag) `⭐ Google`** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
+| **Sort Colors (Dutch flag) `⚡ T1`** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
 
 Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/linked-list.md).
 
@@ -304,9 +307,9 @@ Walkthroughs: [problem-deep-dives.md](./problem-deep-dives.md). Linked lists: [l
 ## See also
 
 - [sliding-window.md](./sliding-window.md) — contiguous substring/subarray (often on strings)
-- [binary-search.md](./binary-search.md) `🔥 Google` — when monotonic predicate replaces scanning
-- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) `⭐ Google` — fast/slow canonical problems
-- [01-data-structures/array.md](../01-data-structures/array.md) `⭐ Google` — array two-pointer variants
+- [binary-search.md](./binary-search.md) — when monotonic predicate replaces scanning
+- [01-data-structures/linked-list.md](../01-data-structures/linked-list.md) — fast/slow canonical problems
+- [01-data-structures/array.md](../01-data-structures/array.md) — array two-pointer variants
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — two-pointer triggers
 
 ---

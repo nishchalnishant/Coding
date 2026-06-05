@@ -6,11 +6,14 @@ difficulty: mixed
 
 # String Algorithms
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
@@ -202,7 +205,7 @@ difficulty: mixed
 
 ---
 
-### Longest Duplicate Substring
+### Longest Duplicate Substring `⚡ T1`
 
 > [!example] Problem
 > Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
@@ -414,7 +417,7 @@ difficulty: mixed
 
 ---
 
-### Longest Palindromic Substring — Expand Around Center `🔥 Google`
+### Longest Palindromic Substring — Expand Around Center `🎯 T2`
 
 > [!example] Problem
 > Given a string s, return the longest palindromic substring in s.
@@ -697,7 +700,7 @@ difficulty: mixed
 
 ---
 
-### Permutation in String `⭐ Google`
+### Permutation in String `⚡ T1`
 
 > [!example] Problem
 > Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
@@ -769,7 +772,7 @@ difficulty: mixed
 
 ---
 
-### Regular Expression Matching (LC 10) `🔥 Google`
+### Regular Expression Matching (LC 10)
 
 > [!example] Problem
 > Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
@@ -910,7 +913,7 @@ difficulty: mixed
 
 ---
 
-### Distinct Subsequences (LC 115) `⭐ Google`
+### Distinct Subsequences (LC 115) `🎯 T2`
 
 > [!example] Problem
 > Given two strings s and t, return the number of distinct subsequences of s which equals t.

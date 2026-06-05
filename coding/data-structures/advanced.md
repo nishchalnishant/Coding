@@ -6,11 +6,14 @@ difficulty: mixed
 
 # Advanced Data Structures
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
@@ -188,7 +191,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ## LFU Cache — O(1) Implementation
 
-### LFU Cache `⭐ Google`
+### LFU Cache
 
 > [!example] Problem
 > Design and implement a data structure for a Least Frequently Used (LFU) cache.
@@ -307,7 +310,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Range Sum Query — Mutable (LC 307) `⭐ Google`
+### Range Sum Query — Mutable (LC 307) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -391,7 +394,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Range Minimum Query (Segment Tree)
+### Range Minimum Query (Segment Tree) `💤 T3`
 
 > [!example] Problem
 > Given array `nums`, support point updates and range minimum queries `queryMin(l, r)` in O(log n).
@@ -511,7 +514,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Count of Smaller Numbers After Self (LC 315) `⭐ Google`
+### Count of Smaller Numbers After Self (LC 315) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
@@ -585,7 +588,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Number of Longest Increasing Subsequences (LC 673)
+### Number of Longest Increasing Subsequences (LC 673) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return the number of longest increasing subsequences.
@@ -687,7 +690,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### My Calendar I / II / III (LC 729 / 731 / 732)
+### My Calendar I / II / III (LC 729 / 731 / 732) `💤 T3`
 
 > [!example] Problem
 > You are implementing a program to use as your calendar. We can add a new event if adding the event will not cause a double booking.
@@ -795,7 +798,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Range Sum Query — Mutable (BIT version) `⭐ Google`
+### Range Sum Query — Mutable (BIT version) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -866,7 +869,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Count Inversions (Fenwick Tree)
+### Count Inversions (Fenwick Tree) `💤 T3`
 
 > [!example] Problem
 > Count the number of inversions in array `nums` — pairs `(i, j)` where `i < j` and `nums[i] > nums[j]`.
@@ -910,7 +913,7 @@ Level 0: head ──> 10 ──> 20 ──> 30 ──> 40 ──> 50 ──> tai
 
 ---
 
-### Reverse Pairs (LC 493) `⭐ Google`
+### Reverse Pairs (LC 493) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return the number of reverse pairs in the array.

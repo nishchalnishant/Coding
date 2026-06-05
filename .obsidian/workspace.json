@@ -211,6 +211,7 @@
   },
   "active": "79517f002ff5d45f",
   "lastOpenFiles": [
+    "coding/l3-google-roadmap.md",
     "coding/patterns-quick-reference.md",
     "coding/oop-design-patterns.md",
     "coding/complexity-cheatsheet.md",
@@ -245,7 +246,6 @@
     "questions.md",
     "coding/data-structures/advanced.md",
     "03-patterns/leetcode-variants.md",
-    "01-data-structures/array.md",
-    "coding/data-structures/heap.md"
+    "01-data-structures/array.md"
   ]
 }

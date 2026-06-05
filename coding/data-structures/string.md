@@ -6,19 +6,22 @@ difficulty: mixed
 
 # String Problems — Deep Dive
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Frequency Map / Anagram
 
-### Valid Anagram `🔥 Google`
+### Valid Anagram `🎯 T2`
 
 > [!example] Problem
 > Given two strings s and t, return true if t is an anagram of s, and false otherwise.
@@ -76,7 +79,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Group Anagrams `🔥 Google`
+### Group Anagrams `⚡ T1`
 
 > [!example] Problem
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order.
@@ -132,7 +135,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Find All Anagrams in a String `⭐ Google`
+### Find All Anagrams in a String `⚡ T1`
 
 > [!example] Problem
 > Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
@@ -209,7 +212,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Two Pointers — Palindrome
 
-### Valid Palindrome `🔥 Google`
+### Valid Palindrome `🎯 T2`
 
 > [!example] Problem
 > A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
@@ -270,7 +273,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Longest Palindromic Substring `🔥 Google`
+### Longest Palindromic Substring `🎯 T2`
 
 > [!example] Problem
 > Given a string s, return the longest palindromic substring in s.
@@ -381,7 +384,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Sliding Window
 
-### Longest Substring Without Repeating Characters `🔥 Google`
+### Longest Substring Without Repeating Characters `⚡ T1`
 
 > [!example] Problem
 > Given a string s, find the length of the longest substring without duplicate characters.
@@ -440,7 +443,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Minimum Window Substring `🔥 Google`
+### Minimum Window Substring `⚡ T1`
 
 > [!example] Problem
 > Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
@@ -517,7 +520,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Longest Repeating Character Replacement `🔥 Google`
+### Longest Repeating Character Replacement `⚡ T1`
 
 > [!example] Problem
 > You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
@@ -766,7 +769,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Subarray Sum Equals K (character version) `🔥 Google`
+### Subarray Sum Equals K (character version) `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -817,7 +820,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Encoding / Hashing
 
-### Encode and Decode Strings `🔥 Google`
+### Encode and Decode Strings `🎯 T2`
 
 > [!example] Problem
 > Design an algorithm to encode **a list of strings** to **a string**. The encoded string is then sent over the network and is decoded back to the original list of strings.
@@ -1267,7 +1270,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Parsing / Simulation (Extended)
 
-### Decode String `⭐ Google`
+### Decode String
 
 > [!example] Problem
 > Given an encoded string, return its decoded string.
@@ -1535,7 +1538,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Repeated Substring Pattern `⭐ Google`
+### Repeated Substring Pattern
 
 > [!example] Problem
 > Given a string s, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
@@ -1599,7 +1602,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Longest Happy Prefix `⭐ Google`
+### Longest Happy Prefix
 
 > [!example] Problem
 > A string is called a happy prefix if is a non-empty prefix which is also a suffix (excluding itself).
@@ -1721,7 +1724,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Zigzag Conversion (LC 6) `⭐ Google`
+### Zigzag Conversion (LC 6)
 
 > [!example] Problem
 > The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
@@ -1796,7 +1799,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Valid Palindrome II (LC 680) `🔥 Google`
+### Valid Palindrome II (LC 680) `🎯 T2`
 
 > [!example] Problem
 > Given a string s, return true if the s can be palindrome after deleting at most one character from it.

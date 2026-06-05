@@ -9,6 +9,12 @@ tags: [algorithms, bit-manipulation]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```text
 WHY Bit Manipulation exists
 ├── Integer arithmetic at word-level is 1 CPU cycle vs O(n) loop
@@ -45,10 +51,7 @@ DECISION
 - **Where it breaks**: Readability suffers at scale; bitmask DP explodes past n ≈ 20–25 due to 2^n state space.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -177,7 +180,7 @@ Use binary representation and bitwise operators for compact state and O(1) const
 ### Single Number — XOR Cancellation
 
 > [!IMPORTANT]
-> **The Click Moment**: "Every element appears **exactly twice** except one" — OR — "find the **unpaired** element" — OR — "one number is **missing `🔥 Google`** from a complete sequence 1..N" — AND — the constraint is O(1) space. If you see those words together, XOR is the answer before you finish reading the problem.
+> **The Click Moment**: "Every element appears **exactly twice** except one" — OR — "find the **unpaired** element" — OR — "one number is **missing** from a complete sequence 1..N" — AND — the constraint is O(1) space. If you see those words together, XOR is the answer before you finish reading the problem.
 
 - **Idea**: XOR all elements. Paired values cancel (`a ^ a = 0`); the unique value survives (`x ^ 0 = x`).
 - **Complexity**: O(N) time, O(1) space.
@@ -215,10 +218,10 @@ def single_number_iii(nums: list[int]) -> list[int]:
     return [x, y]
 
 #### Common Variants & Twists
-1. **Single Number II `🔥 Google`**:
+1. **Single Number II**:
    - **What (The Problem & Goal):** Every element appears three times except for one which appears exactly once.
    - **How (Intuition & Mental Model):** XOR cancellation fails here because `x ^ x ^ x = x`. Instead, count the number of set bits at each of the 32 bit positions across all numbers. The remainder of each count when divided by 3 (`count % 3`) will be the bits of the unique number.
-2. **Single Number III `🔥 Google`**:
+2. **Single Number III**:
    - **What (The Problem & Goal):** Two elements appear once, and all other elements appear twice.
    - **How (Intuition & Mental Model):** XORing all numbers gives `xor_sum = x ^ y`. Since `x` and `y` are distinct, `xor_sum` must have at least one set bit. Find the lowest set bit using `diff = xor_sum & (-xor_sum)`. This bit exists in either `x` or `y`, but not both. Partition the array into two groups based on this bit and XOR each group separately to find the two unique numbers.
 ```
@@ -235,7 +238,7 @@ def single_number_iii(nums: list[int]) -> list[int]:
 
 Key patterns:
 - **Single number in array of pairs**: XOR all elements → pairs cancel, lone element survives.
-- **Missing number in [0..N] `🔥 Google`**: XOR all indices 0..N with all array elements → answer is what's left.
+- **Missing number in [0..N]**: XOR all indices 0..N with all array elements → answer is what's left.
 - **Two unique numbers**: XOR all → get `x ^ y`. Find any set bit (the rightmost: `diff & -diff`). Partition array on that bit → XOR each partition separately → get x and y.
 - **Power of 2 check**: `n > 0 and (n & (n-1)) == 0` — a power of 2 has exactly one set bit; subtracting 1 flips all lower bits.
 - **Count set bits (Brian Kernighan)**: `while n: n &= n-1; count += 1` — each iteration strips the lowest set bit.
@@ -266,7 +269,7 @@ def hamming_distance(x: int, y: int) -> int:
     return count_set_bits(x ^ y)
 
 #### Common Variants & Twists
-1. **Counting Bits (DP) `⭐ Google`**:
+1. **Counting Bits (DP)**:
    - **What (The Problem & Goal):** For every number `i` in the range `[0, n]`, return an array of the number of 1-bits in their binary representation.
    - **How (Intuition & Mental Model):** This is a DP twist. Notice that `i >> 1` is a number we've already processed. The number of bits in `i` is the number of bits in `i >> 1` plus 1 if `i` is odd (`i & 1`). `dp[i] = dp[i >> 1] + (i & 1)`.
 2. **Hamming Distance**:
@@ -282,7 +285,7 @@ def hamming_distance(x: int, y: int) -> int:
 ### Bitmask Subset Enumeration
 
 > [!IMPORTANT]
-> **The Click Moment**: "All possible **subsets `🔥 Google`**" — OR — "**power set**" — OR — **N ≤ 20** with exponential state. Also: "try all combinations of N items" — if N is small, bitmask enumeration replaces backtracking and is cleaner in DP transitions.
+> **The Click Moment**: "All possible **subsets `🎯 T2`**" — OR — "**power set**" — OR — **N ≤ 20** with exponential state. Also: "try all combinations of N items" — if N is small, bitmask enumeration replaces backtracking and is cleaner in DP transitions.
 
 - **Idea**: Integers 0 to 2^N−1 biject to subsets. Bit k of integer `mask` = is element k included?
 
@@ -307,7 +310,7 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
 ### O(3^N) Submask Enumeration (Advanced DP)
 
 > [!IMPORTANT]
-> **The Click Moment**: You are doing Bitmask DP, but instead of adding one element at a time, you need to transition by choosing an entire **subset `🔥 Google`** of the available elements (e.g., assigning a subset of tasks to one worker). 
+> **The Click Moment**: You are doing Bitmask DP, but instead of adding one element at a time, you need to transition by choosing an entire **subset `🎯 T2`** of the available elements (e.g., assigning a subset of tasks to one worker). 
 
 If you iterate `0` to `mask` checking `(sub & mask) == sub`, that's O(4^N). The SDE-3 trick is to generate *only* the valid submasks directly.
 
@@ -522,19 +525,19 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 ## 4. Common Interview Problems
 
 ### Easy
-- [Number of 1 Bits](problem-deep-dives.md#number-of-1-bits) `🔥 Google` — Brian Kernighan's or `n.bit_count()`.
+- [Number of 1 Bits](problem-deep-dives.md#number-of-1-bits) — Brian Kernighan's or `n.bit_count()`.
 - **Power of Two** — `n > 0 and (n & (n-1)) == 0`.
-- **Reverse Bits `🔥 Google`** — Swap bit `i` with bit `31-i` using masks.
+- **Reverse Bits** — Swap bit `i` with bit `31-i` using masks.
 
 ### Medium
-- [Single Number II](problem-deep-dives.md#single-number-ii) `🔥 Google` — Others appear 3×; bit count mod 3.
-- **Maximum XOR of Two Numbers `⭐ Google`** — XOR Trie; O(N×32).
-- **Counting Bits `⭐ Google`** — 1D DP: `dp[i] = dp[i >> 1] + (i & 1)`.
-- **Sum of Two Integers (without +) `⭐ Google`** — Carry simulation with XOR and AND.
+- [Single Number II](problem-deep-dives.md#single-number-ii) — Others appear 3×; bit count mod 3.
+- **Maximum XOR of Two Numbers `⚡ T1`** — XOR Trie; O(N×32).
+- **Counting Bits** — 1D DP: `dp[i] = dp[i >> 1] + (i & 1)`.
+- **Sum of Two Integers (without +)** — Carry simulation with XOR and AND.
 
 ### Hard
 - **Maximum XOR with Element from Array** — Offline queries + sorted XOR Trie.
-- **Smallest Sufficient Team** — Bitmask DP on skill coverage; `dp[mask | skill_mask]`.
+- **Smallest Sufficient Team `💤 T3`** — Bitmask DP on skill coverage; `dp[mask | skill_mask]`.
 - **Travelling Salesman (N ≤ 20)** — Bitmask DP as above.
 
 ---
@@ -543,26 +546,26 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Single Number](problem-deep-dives.md#single-number) `🔥 Google`** | XOR Cancellation | "Pairs cancel" | `reduce(xor, nums)` | Only works when all others appear **exactly twice**. |
-| **[Single Number II](problem-deep-dives.md#single-number-ii) `🔥 Google`** | "Appear 3× except one" | Count each bit mod 3 across all nums | XOR alone doesn't work; need separate mod-3 bit counter. |
+| **[Single Number](problem-deep-dives.md#single-number)** | XOR Cancellation | "Pairs cancel" | `reduce(xor, nums)` | Only works when all others appear **exactly twice**. |
+| **[Single Number II](problem-deep-dives.md#single-number-ii)** | "Appear 3× except one" | Count each bit mod 3 across all nums | XOR alone doesn't work; need separate mod-3 bit counter. |
 | **Power of Two** | "Single bit set" | `n > 0 and n & (n-1) == 0` | `n = 0` satisfies `n & (n-1) == 0` but is not a power of 2. |
-| **Reverse Bits `🔥 Google`** | "Bit symmetry" | Shift and OR, 32 iterations | Must pad to exactly 32 bits; Python needs `& 0xFFFFFFFF`. |
+| **Reverse Bits** | "Bit symmetry" | Shift and OR, 32 iterations | Must pad to exactly 32 bits; Python needs `& 0xFFFFFFFF`. |
 | **Hamming Distance** | "Differing bits between x and y" | `count_set_bits(x ^ y)` | Watch for signed integer representation in Java/C++. |
-| **Counting Bits `⭐ Google`** | "Reuse sub-results" | `dp[i] = dp[i >> 1] + (i & 1)` | Recognize as 1D DP, not just a loop with bit tricks. |
+| **Counting Bits** | "Reuse sub-results" | `dp[i] = dp[i >> 1] + (i & 1)` | Recognize as 1D DP, not just a loop with bit tricks. |
 | **Find Missing Number** | "One missing from 0..N" | `xor(0..N) ^ xor(nums)` | Only works when **exactly one** number is missing. |
 | **Sum Without `+`** | "Add using bits" | XOR for sum, AND<<1 for carry, loop until carry=0 | Python needs `& 0xFFFFFFFF` mask; infinite loop risk without it. |
-| **Smallest Sufficient Team** | "Cover all skills, min people" | Bitmask DP on skill union | Model each person's skills as a bitmask; 2^N states. |
-| **Number of 1 Bits `🔥 Google`** [E] | "Count set bits (popcount)" | Brian Kernighan: `n &= (n-1)` clears lowest set bit; repeat until 0 | Alternative: `bin(n).count('1')` in Python; Brian Kernighan is language-agnostic. |
-| **Reverse Bits `🔥 Google`** [E] | "Reverse all 32 bits" | Shift result left and OR in LSB of n; shift n right; repeat 32 times | Caching 8-bit chunks speeds repeated calls — mention as follow-up. |
-| **Missing Number `🔥 Google`** [E] | "Find missing in [0,N]" | `XOR(0..N) ^ XOR(nums)` cancels all present values | Sum approach also O(N) O(1) but risks overflow for large N in non-Python languages. |
+| **Smallest Sufficient Team `💤 T3`** | "Cover all skills, min people" | Bitmask DP on skill union | Model each person's skills as a bitmask; 2^N states. |
+| **Number of 1 Bits** [E] | "Count set bits (popcount)" | Brian Kernighan: `n &= (n-1)` clears lowest set bit; repeat until 0 | Alternative: `bin(n).count('1')` in Python; Brian Kernighan is language-agnostic. |
+| **Reverse Bits** [E] | "Reverse all 32 bits" | Shift result left and OR in LSB of n; shift n right; repeat 32 times | Caching 8-bit chunks speeds repeated calls — mention as follow-up. |
+| **Missing Number** [E] | "Find missing in [0,N]" | `XOR(0..N) ^ XOR(nums)` cancels all present values | Sum approach also O(N) O(1) but risks overflow for large N in non-Python languages. |
 | **Number Complement** [E] | "Flip all bits of number's binary representation" | Create mask of all 1s with same bit length; XOR with mask | `mask = (1 << num.bit_length()) - 1`; XOR flips all bits within that width. |
 | **Bitwise AND of Numbers Range** [M] | "AND of all numbers in [left, right]" | Right-shift both until equal; that common prefix is the answer | The differing suffix bits all become 0 due to a number in the range having 0 in that position. |
 | **Decode XORed Array** [M] | "Recover original array from XOR differences" | `a[0]` is given; `a[i] = encoded[i-1] ^ a[i-1]` | Straightforward once you know `a XOR b = c → b = a XOR c`. |
-| **Divide Two Integers `⭐ Google`** [M] | "Divide without `*`, `/`, `%`" | Bit-shift divisor left until it exceeds dividend; subtract and accumulate | Handle overflow: `INT_MIN / -1 = INT_MAX + 1` → clamp. Work in negatives to avoid unsigned issue. |
-| **UTF-8 Validation** [M] | "Check if byte sequence is valid UTF-8" | Check leading bits per byte; count continuation bytes | Continuation bytes must start with `10`; count how many follow-bytes expected from first byte. |
-| **Maximum XOR of Two Numbers `⭐ Google`** [M] | "Largest XOR of any pair" | Build XOR Trie or use prefix greedy with set | Trie approach: insert all numbers; for each number greedily pick opposite bit. O(32N). |
+| **Divide Two Integers** [M] | "Divide without `*`, `/`, `%`" | Bit-shift divisor left until it exceeds dividend; subtract and accumulate | Handle overflow: `INT_MIN / -1 = INT_MAX + 1` → clamp. Work in negatives to avoid unsigned issue. |
+| **UTF-8 Validation `💤 T3`** [M] | "Check if byte sequence is valid UTF-8" | Check leading bits per byte; count continuation bytes | Continuation bytes must start with `10`; count how many follow-bytes expected from first byte. |
+| **Maximum XOR of Two Numbers `⚡ T1`** [M] | "Largest XOR of any pair" | Build XOR Trie or use prefix greedy with set | Trie approach: insert all numbers; for each number greedily pick opposite bit. O(32N). |
 | **Find Two Non-Repeating Numbers** [H] | "Two numbers appear once, rest twice" | `diff = xor_sum & (-xor_sum)`; partition array | The set bit distinguishes x and y — any set bit works; use lowest for simplicity: `diff & (-diff)`. |
-| **Shortest Path Visiting All Nodes `⭐ Google`** [H] | "Shortest path touching all nodes, revisits allowed" | BFS with state `(node, visited_mask)` | Standard BFS fails when revisits are needed. Bitmask captures the "history" to prevent infinite loops while allowing necessary revisits. |
+| **Shortest Path Visiting All Nodes `💤 T3`** [H] | "Shortest path touching all nodes, revisits allowed" | BFS with state `(node, visited_mask)` | Standard BFS fails when revisits are needed. Bitmask captures the "history" to prevent infinite loops while allowing necessary revisits. |
 
 ---
 

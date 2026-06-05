@@ -6,17 +6,20 @@ difficulty: mixed
 
 # Graph Algorithms — Problem Deep Dives
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
 ## Dijkstra's Algorithm
 
-### Network Delay Time `🔥 Google`
+### Network Delay Time
 
 > [!example] Problem
 > You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
@@ -252,7 +255,7 @@ difficulty: mixed
 
 ---
 
-### Cheapest Flights Within K Stops (Dijkstra variant) `⭐ Google`
+### Cheapest Flights Within K Stops (Dijkstra variant)
 
 > [!info] Approach
 > Bellman-Ford (next section) is the usual answer. Dijkstra also works if state is `(cost, node, stops_used)` — you can't ignore stop count. Push `(cost, node, stops)` on a heap, skip when stops exceed K, and mark visited per `(node, stops)` pair.
@@ -418,7 +421,7 @@ See full Bellman-Ford solution in the next section.
 > 	
 > - `1 <= sequences[i][j] <= n`
 > 	
-> - All the arrays of `sequences` are **unique**.
+> - All the arrays of `sequences` are **unique `🎯 T2`**.
 > 	
 > - `sequences[i]` is a subsequence of `nums`.
 
@@ -553,7 +556,7 @@ See full Bellman-Ford solution in the next section.
 
 ## Strongly Connected Components / Bridges
 
-### Critical Connections in a Network (Tarjan's Bridges) `⭐ Google`
+### Critical Connections in a Network (Tarjan's Bridges) `💤 T3`
 
 > [!example] Problem
 > There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
@@ -624,7 +627,7 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-### Find Eventual Safe States (Reverse Graph / Kahn's)
+### Find Eventual Safe States (Reverse Graph / Kahn's) `⚡ T1`
 
 > [!example] Problem
 > There is a directed graph of n nodes with each node labeled from 0 to n - 1. The graph is represented by a 0-indexed 2D integer array graph where graph[i] is an integer array of nodes adjacent to node i, meaning there is an edge from node i to each node in graph[i].
@@ -744,7 +747,7 @@ See full Bellman-Ford solution in the next section.
 
 ## Eulerian Path
 
-### Reconstruct Itinerary (Hierholzer's) `⭐ Google`
+### Reconstruct Itinerary (Hierholzer's)
 
 > [!example] Problem
 > You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
@@ -807,7 +810,7 @@ See full Bellman-Ford solution in the next section.
 
 ## 0-1 BFS
 
-### Open the Lock (Unweighted BFS Variant)
+### Open the Lock (Unweighted BFS Variant) `⚡ T1`
 
 > [!example] Problem
 > You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'. The wheels can rotate freely and wrap around: for example we can turn '9' to be '0', or '0' to be '9'. Each move consists of turning one wheel one slot.
@@ -889,7 +892,7 @@ See full Bellman-Ford solution in the next section.
 
 ## Multi-source BFS / Special BFS
 
-### Word Ladder (BFS on Implicit Graph) `🔥 Google`
+### Word Ladder (BFS on Implicit Graph) `⚡ T1`
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -955,7 +958,7 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-### Word Ladder II (All Shortest Transformation Sequences) `🔥 Google`
+### Word Ladder II (All Shortest Transformation Sequences) `⚡ T1`
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -1181,7 +1184,7 @@ See full Bellman-Ford solution in the next section.
 
 ## Graph Coloring
 
-### M-Coloring Problem (Backtracking) `🔥 Google`
+### M-Coloring Problem (Backtracking)
 
 > [!example] Problem
 > Given an undirected graph and `m` colors, determine whether the graph can be colored using at most `m` colors such that no two adjacent nodes share the same color.
@@ -1256,7 +1259,7 @@ See full Bellman-Ford solution in the next section.
 ## See Also
 
 [[graph]] | [[union-find]] | [[dynamic-programming]] | [[binary-search]]
-### Bellman-Ford (Negative Weights) `⭐ Google`
+### Bellman-Ford (Negative Weights)
 
 > [!example] Problem
 > Given a directed weighted graph that may contain negative edges, find shortest paths from a source and detect negative cycles reachable from it.
@@ -1295,7 +1298,7 @@ See full Bellman-Ford solution in the next section.
 
 ## Graph Algorithms — More Problems
 
-### Shortest Path Visiting All Nodes (LC 847) `⭐ Google`
+### Shortest Path Visiting All Nodes (LC 847) `💤 T3`
 
 > [!example] Problem
 > You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
@@ -1361,7 +1364,7 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-### Word Ladder II (LC 126) `🔥 Google`
+### Word Ladder II (LC 126) `⚡ T1`
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -1444,7 +1447,7 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-### Travelling Salesman Problem — Bitmask DP
+### Travelling Salesman Problem — Bitmask DP `💤 T3`
 
 > [!example] Problem
 > Given `n` cities and a distance matrix, find the shortest route that visits every city exactly once and returns to the starting city. Classic TSP.

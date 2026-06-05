@@ -4,18 +4,22 @@ topic: OOP & Design Patterns
 difficulty: sde2-sde3
 ---
 
-# OOP & Design Patterns — Google Interview Guide `🔥 Google`
+# OOP & Design Patterns — Google Interview Guide
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
+
 
 > [!note] When This Gets Asked
 > Google may ask "design a parking lot" or "design a chess game" in a coding round. More often, OOP concepts come up in system design ("how would you model this?") and behavioral rounds ("how do you approach code organization?"). SOLID principles frequently appear in code review discussions.
 
 ---
 
-## SOLID Principles `🔥 Google`
+## SOLID Principles
 
 ### S — Single Responsibility Principle
 > **One class, one reason to change.**
@@ -159,9 +163,9 @@ service = NotificationService(SmsSender())   # swap without touching Notificatio
 
 ---
 
-## The 8 Must-Know Design Patterns `🔥 Google`
+## The 8 Must-Know Design Patterns
 
-### 1. Singleton `🔥 Google`
+### 1. Singleton
 > Ensure only one instance of a class exists.
 
 ```python
@@ -201,7 +205,7 @@ class ThreadSafeSingleton:
 
 ---
 
-### 2. Factory Method `🔥 Google`
+### 2. Factory Method
 > Let subclasses decide which class to instantiate.
 
 ```python
@@ -238,7 +242,7 @@ notif.send()
 
 ---
 
-### 3. Observer `🔥 Google`
+### 3. Observer
 > One object changes → all dependents automatically notified.
 
 ```python
@@ -273,7 +277,7 @@ emitter.emit('user.created', {'id': 1, 'email': 'a@b.com'})
 
 ---
 
-### 4. Strategy `🔥 Google`
+### 4. Strategy
 > Define a family of algorithms; make them interchangeable at runtime.
 
 ```python
@@ -310,7 +314,7 @@ sorter.sort([3,1,2])
 
 ---
 
-### 5. Decorator `⭐ Google`
+### 5. Decorator
 > Add behavior to objects dynamically without modifying their class.
 
 ```python
@@ -341,7 +345,7 @@ processor.process("  hello world  ")  # → "HELLO WORLD"
 
 ---
 
-### 6. Builder `⭐ Google`
+### 6. Builder
 > Construct complex objects step by step.
 
 ```python
@@ -383,7 +387,7 @@ pizza = (PizzaBuilder()
 
 ---
 
-### 7. Command `⭐ Google`
+### 7. Command
 > Encapsulate a request as an object (supports undo/redo, queuing).
 
 ```python
@@ -424,7 +428,7 @@ class InsertCommand(Command):
 
 ---
 
-### 8. Adapter `⭐ Google`
+### 8. Adapter
 > Make incompatible interfaces work together.
 
 ```python
@@ -453,9 +457,9 @@ appliance.charge(adapter)   # works without modifying either class
 
 ---
 
-## OOP Interview Problems `🔥 Google`
+## OOP Interview Problems
 
-### Design a Parking Lot `🔥 Google`
+### Design a Parking Lot
 
 ```python
 from enum import Enum
@@ -540,7 +544,7 @@ class ParkingLot:
 
 ---
 
-### Design a Library Management System `⭐ Google`
+### Design a Library Management System
 
 ```python
 from enum import Enum
@@ -632,7 +636,7 @@ class Library:
 
 ---
 
-### Design a Chess Game `⭐ Google`
+### Design a Chess Game
 
 ```python
 from enum import Enum
@@ -707,7 +711,7 @@ class ChessGame:
 
 ---
 
-## Key OOP Interview Talking Points `🔥 Google`
+## Key OOP Interview Talking Points
 
 When the interviewer asks "how would you improve this?", say:
 

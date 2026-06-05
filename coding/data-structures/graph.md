@@ -6,6 +6,12 @@ difficulty: mixed
 
 # Graph Problems — Deep Dive
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+
+
 **Pattern map**: Graph problems collapse into five patterns — BFS (shortest path, multi-source spread), DFS (connectivity, flood fill, cycle detection), Topological Sort (dependency ordering on DAGs), Shortest Path / Weighted (Dijkstra, modified BFS), Bipartite coloring, and Advanced (Union-Find / MST / DAG DP). Pick BFS when you need minimum steps; DFS when you need reachability or ordering; Union-Find when you need dynamic connectivity with no full traversal needed.
 
 **Interview checklist**: First classify the graph — directed or undirected, weighted or unweighted, connected or disconnected, and whether you need a path, ordering, component count, or just a yes/no query. Then look for the standard lever: multi-source BFS for simultaneous spread, DFS for flood-fill and cycle detection, Kahn's for DAG ordering, Dijkstra for non-negative weights, Bellman-Ford for hop-limited or negative-weight cases, Union-Find for connectivity, and two-coloring for bipartite checks.
@@ -13,16 +19,13 @@ difficulty: mixed
 **Edge cases worth checking**: empty graph, single node, disconnected components, duplicate edges, self-loops, cycles in a "tree" input, and recursion depth on large grids/graphs. For grid problems, confirm whether diagonals count, whether borders are included, and whether you can mutate the input to mark visited.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## BFS on Graphs
 
-### Rotting Oranges `🔥 Google`
+### Rotting Oranges `⚡ T1`
 
 > [!example] Problem
 > You are given an m x n grid where each cell can have one of three values:
@@ -102,7 +105,7 @@ difficulty: mixed
 
 ---
 
-### Number of Islands (BFS) `🔥 Google`
+### Number of Islands (BFS) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -175,7 +178,7 @@ difficulty: mixed
 
 ---
 
-### Walls and Gates (LC 286)
+### Walls and Gates (LC 286) `⚡ T1`
 
 > [!example] Problem
 > You are given an `m x n` grid `rooms` initialized with these three possible values.
@@ -259,7 +262,7 @@ difficulty: mixed
 
 ---
 
-### 01 Matrix (LC 542)
+### 01 Matrix (LC 542) `⚡ T1`
 
 > [!example] Problem
 > Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
@@ -317,7 +320,7 @@ difficulty: mixed
 
 ---
 
-### Word Ladder `🔥 Google`
+### Word Ladder `⚡ T1`
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -443,7 +446,7 @@ difficulty: mixed
 
 ---
 
-### Find if Path Exists in a Graph
+### Find if Path Exists in a Graph `⚡ T1`
 
 > [!example] Problem
 > Given n nodes, a list of bidirectional edges, source and destination, determine if a valid path exists.
@@ -537,7 +540,7 @@ difficulty: mixed
 
 ## DFS on Graphs
 
-### Number of Islands `🔥 Google`
+### Number of Islands `⚡ T1`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -609,7 +612,7 @@ difficulty: mixed
 
 ---
 
-### Flood Fill
+### Flood Fill `⚡ T1`
 
 > [!example] Problem
 > You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
@@ -675,7 +678,7 @@ difficulty: mixed
 
 ---
 
-### Max Area of Island
+### Max Area of Island `⚡ T1`
 
 > [!example] Problem
 > You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
@@ -727,7 +730,7 @@ difficulty: mixed
 
 ---
 
-### Surrounded Regions
+### Surrounded Regions `⚡ T1`
 
 > [!example] Problem
 > You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded:
@@ -794,7 +797,7 @@ difficulty: mixed
 
 ---
 
-### Pacific Atlantic Water Flow `🔥 Google`
+### Pacific Atlantic Water Flow `⚡ T1`
 
 > [!example] Problem
 > There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
@@ -876,7 +879,7 @@ difficulty: mixed
 
 ---
 
-### All Paths From Source to Target `🔥 Google`
+### All Paths From Source to Target `⚡ T1`
 
 > [!example] Problem
 > Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
@@ -934,7 +937,7 @@ difficulty: mixed
 
 ---
 
-### Number of Provinces (LC 547) `⭐ Google`
+### Number of Provinces (LC 547) `⚡ T1`
 
 > [!example] Problem
 > There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
@@ -995,7 +998,7 @@ difficulty: mixed
 
 ---
 
-### Number of Enclaves (LC 1020)
+### Number of Enclaves (LC 1020) `⚡ T1`
 
 > [!example] Problem
 > You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
@@ -1058,7 +1061,7 @@ difficulty: mixed
 
 ---
 
-### Clone Graph `🔥 Google`
+### Clone Graph `⚡ T1`
 
 > [!example] Problem
 > Given a reference of a node in a connected undirected graph.
@@ -1140,7 +1143,7 @@ difficulty: mixed
 
 ---
 
-### Find Eventual Safe States
+### Find Eventual Safe States `⚡ T1`
 
 > [!example] Problem
 > There is a directed graph of n nodes with each node labeled from 0 to n - 1. The graph is represented by a 0-indexed 2D integer array graph where graph[i] is an integer array of nodes adjacent to node i, meaning there is an edge from node i to each node in graph[i].
@@ -1206,7 +1209,7 @@ difficulty: mixed
 
 ## Topological Sort
 
-### Course Schedule II `🔥 Google`
+### Course Schedule II `⚡ T1`
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -1277,7 +1280,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Number of Vertices to Reach All Nodes
+### Minimum Number of Vertices to Reach All Nodes `⚡ T1`
 
 > [!example] Problem
 > Given a directed acyclic graph, with n vertices numbered from 0 to n-1, and an array edges where edges[i] = [fromi, toi] represents a directed edge from node fromi to node toi.
@@ -1326,7 +1329,7 @@ difficulty: mixed
 
 ## Shortest Path / Weighted
 
-### Network Delay Time (Dijkstra's) `🔥 Google`
+### Network Delay Time (Dijkstra's)
 
 > [!example] Problem
 > You are given a network of n nodes, labeled from 1 to n. You are also given times, a list of travel times as directed edges times[i] = (ui, vi, wi), where ui is the source node, vi is the target node, and wi is the time it takes for a signal to travel from source to target.
@@ -1400,7 +1403,7 @@ difficulty: mixed
 
 ---
 
-### Swim in Rising Water `⭐ Google`
+### Swim in Rising Water
 
 > [!example] Problem
 > You are given an n x n integer matrix grid where each value grid[i][j] represents the elevation at that point (i, j).
@@ -1474,7 +1477,7 @@ difficulty: mixed
 
 ---
 
-### Path with Minimum Effort (LC 1631) `⭐ Google`
+### Path with Minimum Effort (LC 1631) `⚡ T1`
 
 > [!example] Problem
 > You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
@@ -1594,7 +1597,7 @@ difficulty: mixed
 
 ## Bipartite / Coloring
 
-### Is Graph Bipartite? `🔥 Google`
+### Is Graph Bipartite? `⚡ T1`
 
 > [!example] Problem
 > There is an undirected graph with n nodes, where each node is numbered between 0 and n - 1. You are given a 2D array graph, where graph[u] is an array of nodes that node u is adjacent to. More formally, for each v in graph[u], there is an undirected edge between node u and node v. The graph has the following properties:
@@ -1729,7 +1732,7 @@ difficulty: mixed
 
 ## Advanced
 
-### Redundant Connection `🔥 Google`
+### Redundant Connection `⚡ T1`
 
 > [!example] Problem
 > In this problem, a tree is an undirected graph that is connected and has no cycles.
@@ -1798,13 +1801,13 @@ difficulty: mixed
 
 ---
 
-### Minimum Spanning Tree (Kruskal's) `⭐ Google`
+### Minimum Spanning Tree (Kruskal's)
 
 > [!example] Problem
 > Given a connected undirected weighted graph, find the minimum spanning tree — a subset of edges that connects all nodes with minimum total weight and no cycles.
 
 > [!info] Approach
-> **Kruskal's — sort edges by weight, greedily add if no cycle.** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
+> **Kruskal's — sort edges by weight, greedily add if no cycle. `⚡ T1`** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
 
 > [!note]- Python Solution
 > ```python
@@ -1852,7 +1855,7 @@ difficulty: mixed
 
 ---
 
-### Longest Path in a DAG
+### Longest Path in a DAG `⚡ T1`
 
 > [!example] Problem
 > Find the length of the longest path in a directed acyclic graph (in terms of number of edges).
@@ -1895,7 +1898,7 @@ difficulty: mixed
 
 ---
 
-### Reconstruct Itinerary (LC 332) `⭐ Google`
+### Reconstruct Itinerary (LC 332)
 
 > [!example] Problem
 > You are given a list of airline tickets where tickets[i] = [fromi, toi] represent the departure and the arrival airports of one flight. Reconstruct the itinerary in order and return it.
@@ -1954,7 +1957,7 @@ difficulty: mixed
 
 ---
 
-### Critical Connections / Bridges (LC 1192)
+### Critical Connections / Bridges (LC 1192) `💤 T3`
 
 > [!example] Problem
 > There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
@@ -2100,7 +2103,7 @@ difficulty: mixed
 
 ## Advanced Graph Algorithms
 
-### Strongly Connected Components — Kosaraju's Algorithm `⭐ Google`
+### Strongly Connected Components — Kosaraju's Algorithm `💤 T3`
 
 > [!example] Problem
 > Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.
@@ -2161,7 +2164,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Spanning Tree — Prim's Algorithm `⭐ Google`
+### Minimum Spanning Tree — Prim's Algorithm
 
 > [!example] Problem
 > Given a weighted undirected connected graph, find the minimum spanning tree (MST) — the subset of edges that connects all vertices with minimum total weight.

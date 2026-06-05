@@ -6,11 +6,14 @@ difficulty: mixed
 
 # Union-Find — Problem Deep Dives
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
@@ -58,7 +61,7 @@ difficulty: mixed
 
 ## Basic Union-Find
 
-### Number of Connected Components in an Undirected Graph `🔥 Google`
+### Number of Connected Components in an Undirected Graph
 
 > [!example] Problem
 > You have a graph of `n` nodes. You are given an integer `n` and an array `edges` where `edges[i] = [a_i, b_i]` indicates that there is an edge between `a_i` and `b_i` in the graph.
@@ -122,7 +125,7 @@ difficulty: mixed
 
 ---
 
-### Number of Provinces (Matrix Form) `⭐ Google`
+### Number of Provinces (Matrix Form) `⚡ T1`
 
 > [!example] Problem
 > There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
@@ -173,7 +176,7 @@ difficulty: mixed
 
 ---
 
-### Graph Valid Tree `⭐ Google`
+### Graph Valid Tree `⚡ T1`
 
 > [!example] Problem
 > You have a graph of `n` nodes labeled from `0` to `n - 1`. You are given an integer n and a list of `edges` where `edges[i] = [a_i, b_i]` indicates that there is an undirected edge between nodes `a_i` and `b_i` in the graph.
@@ -240,7 +243,7 @@ difficulty: mixed
 
 ---
 
-### Satisfiability of Equality Equations `⭐ Google`
+### Satisfiability of Equality Equations `⚡ T1`
 
 > [!example] Problem
 > You are given an array of strings equations that represent relationships between variables where each string equations[i] is of length 4 and takes one of two different forms: "xi==yi" or "xi!=yi".Here, xi and yi are lowercase letters (not necessarily different) that represent one-letter variable names.
@@ -299,7 +302,7 @@ difficulty: mixed
 
 ## Weighted / Ranked Union-Find
 
-### Accounts Merge (Email Graph) `🔥 Google`
+### Accounts Merge (Email Graph) `⚡ T1`
 
 > [!example] Problem
 > Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
@@ -665,7 +668,7 @@ difficulty: mixed
 
 ## Dynamic / Offline Union-Find
 
-### Number of Islands II `🔥 Google`
+### Number of Islands II `⚡ T1`
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -817,7 +820,7 @@ difficulty: mixed
 
 ## DSU for Other Problems
 
-### Longest Consecutive Sequence (DSU Approach) `🔥 Google`
+### Longest Consecutive Sequence (DSU Approach) `⚡ T1`
 
 > [!example] Problem
 > Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
@@ -950,7 +953,7 @@ difficulty: mixed
 
 ## Directed Graph Union-Find
 
-### Redundant Connection II `🔥 Google`
+### Redundant Connection II `⚡ T1`
 
 > [!example] Problem
 > In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -1185,7 +1188,7 @@ difficulty: mixed
 
 ## Connectivity With Constraints
 
-### Minimum Cost to Make at Least One Valid Path in a Grid `⭐ Google`
+### Minimum Cost to Make at Least One Valid Path in a Grid
 
 > [!example] Problem
 > Given an m x n grid. Each cell of the grid has a sign pointing to the next cell you should visit if you are currently in this cell. The sign of grid[i][j] can be:
@@ -1339,7 +1342,7 @@ difficulty: mixed
 
 ---
 
-### Making a Large Island `⭐ Google`
+### Making a Large Island `⚡ T1`
 
 > [!example] Problem
 > You are given an n x n binary matrix grid. You are allowed to change at most one 0 to be 1.
@@ -1516,7 +1519,7 @@ difficulty: mixed
 
 ---
 
-### Largest Component Size by Common Factor `⭐ Google`
+### Largest Component Size by Common Factor
 
 > [!example] Problem
 > You are given an integer array of unique positive integers nums. Consider the following graph:
@@ -1602,7 +1605,7 @@ difficulty: mixed
 ## See Also
 
 [[graph]] | [[graph-algorithms]] | [[sorting]]
-### Accounts Merge `🔥 Google`
+### Accounts Merge `⚡ T1`
 
 > [!example] Problem
 > Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
@@ -1677,7 +1680,7 @@ difficulty: mixed
 
 ## Union-Find — More Problems
 
-### Redundant Connection II (LC 685, Directed Graph) `🔥 Google`
+### Redundant Connection II (LC 685, Directed Graph) `⚡ T1`
 
 > [!example] Problem
 > In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.

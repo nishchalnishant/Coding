@@ -9,6 +9,12 @@ tags: [data-structures, advanced-structures]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```
 WHY advanced structures exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                              │                │               │               │
@@ -137,14 +143,11 @@ class Trie:
 ```
 
 ### Common SDE 3 Trie Problems:
-1.  **Word Search II `🔥 Google`**: Use a Trie to store words, then perform backtracking on the grid to search for them efficiently.
-2.  **Maximum XOR of Two Numbers `⭐ Google`**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
+1.  **Word Search II `⚡ T1`**: Use a Trie to store words, then perform backtracking on the grid to search for them efficiently.
+2.  **Maximum XOR of Two Numbers `⚡ T1`**: Use a Binary Trie. Insert numbers into the Trie, and for each number, try to greedily find the path corresponding to its bitwise complement.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -183,10 +186,10 @@ class FenwickTree:
 ## Pattern Recognition
 
 - **Trie**: Prefix match, autocomplete, word search in grid (store words, backtrack). Binary Trie: max XOR (prefer opposite bit).
-- **Segment Tree**: Range sum/min/max with point or range updates; O(log N) query/update. Lazy propagation for range add/update.
-- **Fenwick**: Range sum + point update; simpler than segment tree; O(N) space.
-- **LRU Cache `🔥 Google`**: O(1) get/put → HashMap + Doubly Linked List.
-- **LFU Cache `⭐ Google`**: O(1) get/put → HashMap of key→node + HashMap of freq→DLL + min_freq tracker.
+- **Segment Tree `💤 T3`**: Range sum/min/max with point or range updates; O(log N) query/update. Lazy propagation for range add/update.
+- **Fenwick `💤 T3`**: Range sum + point update; simpler than segment tree; O(N) space.
+- **LRU Cache `🎯 T2`**: O(1) get/put → HashMap + Doubly Linked List.
+- **LFU Cache**: O(1) get/put → HashMap of key→node + HashMap of freq→DLL + min_freq tracker.
 
 ## Interview Strategy
 
@@ -196,8 +199,8 @@ class FenwickTree:
 ## Quick Revision
 
 - **Trie**: insert/search/startsWith O(L). Binary trie for max XOR. Word Search II: Trie + backtrack.
-- **Segment tree**: 4*N nodes; build O(N); query/update O(log N). Lazy for range update.
-- **Fenwick**: update(i, delta), query(i) prefix sum; i += i&-i / i -= i&-i.
+- **Segment tree `💤 T3`**: 4*N nodes; build O(N); query/update O(log N). Lazy for range update.
+- **Fenwick `💤 T3`**: update(i, delta), query(i) prefix sum; i += i&-i / i -= i&-i.
 
 ---
 

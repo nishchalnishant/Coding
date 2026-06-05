@@ -6,19 +6,22 @@ difficulty: mixed
 
 # Greedy Algorithms — Problem Compendium
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 Greedy works when a locally optimal choice at each step provably leads to a globally optimal solution (greedy-choice property + optimal substructure). Proof strategy: exchange argument — show any solution deviating from the greedy choice can be transformed into the greedy solution without worsening it. If no such argument holds, use DP.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
 ## Interval Greedy
 
-### Merge Intervals `🔥 Google`
+### Merge Intervals `🎯 T2`
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -66,7 +69,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Non-overlapping Intervals (Minimum number to remove) `🔥 Google`
+### Non-overlapping Intervals (Minimum number to remove) `🎯 T2`
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -482,7 +485,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Jump / Coverage Greedy
 
-### Jump Game (can reach?) `🔥 Google`
+### Jump Game (can reach?) `🎯 T2`
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -528,7 +531,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game II (minimum jumps) `🔥 Google`
+### Jump Game II (minimum jumps) `🎯 T2`
 
 > [!example] Problem
 > You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
@@ -576,7 +579,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game VI (DP + Deque) `🔥 Google`
+### Jump Game VI (DP + Deque) `🎯 T2`
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -640,7 +643,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Candy (LC 135) `🔥 Google`
+### Candy (LC 135) `🎯 T2`
 
 > [!example] Problem
 > There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
@@ -697,7 +700,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Reorganize String `🔥 Google`
+### Reorganize String `⚡ T1`
 
 > [!example] Problem
 > Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
@@ -850,7 +853,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## String / Array Greedy
 
-### Gas Station
+### Gas Station `🎯 T2`
 
 > [!example] Problem
 > There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
@@ -915,7 +918,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Trapping Rain Water (greedy view) `🔥 Google`
+### Trapping Rain Water (greedy view) `⚡ T1`
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -1107,7 +1110,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Sorting-Based Greedy
 
-### Queue Reconstruction by Height (LC 406) `⭐ Google`
+### Queue Reconstruction by Height (LC 406)
 
 > [!example] Problem
 > You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
@@ -1161,7 +1164,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### IPO (Maximize Capital, LC 502) `⭐ Google`
+### IPO (Maximize Capital, LC 502) `⚡ T1`
 
 > [!example] Problem
 > Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.

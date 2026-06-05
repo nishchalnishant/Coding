@@ -9,6 +9,12 @@ tags: [algorithms, backtracking]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```text
 WHY Backtracking exists
 ├── Need to explore combinatorial search spaces exhaustively
@@ -44,10 +50,7 @@ DECISION
 - **Where it breaks**: Overlapping subproblems (use DP); pure enumeration with no pruning degenerates to brute-force O(n!).
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -134,7 +137,7 @@ Build solutions incrementally; **backtrack** when constraints fail. DFS over the
 ## 2. The Universal Template
 
 > [!IMPORTANT]
-> **The Click Moment**: "Generate **all** X" — OR — "find **one `⭐ Google`** valid assignment" — OR — "place N items with constraints". Any problem where you try choices, undo them, and try the next one maps to this template. The shape of the decision tree determines complexity before you write a line.
+> **The Click Moment**: "Generate **all** X" — OR — "find **one** valid assignment" — OR — "place N items with constraints". Any problem where you try choices, undo them, and try the next one maps to this template. The shape of the decision tree determines complexity before you write a line.
 
 > [!TIP]
 > Backtracking is like trying to solve a Sudoku by penciling in a guess, continuing until you get stuck, then erasing back to the last guess and trying the next number. The `apply → recurse → undo` cycle in code is exactly that pencil-and-eraser motion. Every recursive call is "go deeper with this guess"; the undo after the call is "erase and try the next digit".
@@ -195,10 +198,10 @@ def combine(n: int, k: int) -> list[list[int]]:
 > **Key pruning for combinations**: In `combine`, the loop upper bound is `n - (k - len(path)) + 2`, not `n + 1`. This prunes branches where there aren't enough remaining elements to reach size K — reduces constant factor significantly.
 
 #### Common Variants & Twists
-1. **Combination Sum `🔥 Google`**:
+1. **Combination Sum `🎯 T2`**:
    - **What (The Problem & Goal):** Find all unique combinations in an array that sum to a target value. Numbers can be reused multiple times.
    - **How (Intuition & Mental Model):** Use the standard combination template, but when recursing, instead of passing `i + 1` to skip the current element, pass `i` to allow it to be picked again. Prune the branch immediately if the current sum exceeds the target.
-2. **Combination Sum II `🔥 Google`**:
+2. **Combination Sum II `🎯 T2`**:
    - **What (The Problem & Goal):** Find all unique combinations that sum to a target, but each number can only be used *once*, and the input array contains *duplicates*.
    - **How (Intuition & Mental Model):** Sort the array first. In the loop, skip duplicates at the *same level* of recursion using `if i > start and nums[i] == nums[i-1]: continue`. This ensures we pick the same value across different levels (for different positions in the combination) but not for the same position.
 
@@ -252,7 +255,7 @@ def permute_unique(nums: list[int]) -> list[list[int]]:
 1. **Letter Case Permutation**:
    - **What (The Problem & Goal):** Given a string, return all possible strings by transforming every letter to lowercase or uppercase.
    - **How (Intuition & Mental Model):** At each character, you have two choices if it's a letter (upper or lower). If it's a digit, you have only one choice. This is a binary decision tree.
-2. **Next Permutation `⭐ Google`**:
+2. **Next Permutation**:
    - **What (The Problem & Goal):** Find the lexicographically next greater permutation of numbers.
    - **How (Intuition & Mental Model):** Not strictly backtracking, but related to permutation logic. (1) Find the first decreasing element from the right (`i`). (2) Find the smallest element to the right of `i` that is larger than `nums[i]` (`j`). (3) Swap them. (4) Reverse everything to the right of `i`.
 
@@ -335,10 +338,10 @@ def solve_sudoku(board: list[list[str]]) -> None:
 > **MRV Optimization**: Instead of passing `empty` as a fixed list, dynamically pick the empty cell with the fewest valid options remaining (Minimum Remaining Values heuristic). This radically prunes the search space.
 
 #### Common Variants & Twists
-1. **Sudoku Solver (optimized) `⭐ Google`**:
+1. **Sudoku Solver (optimized) `🎯 T2`**:
    - **What (The Problem & Goal):** Solve a Sudoku board faster than naive trial-and-error.
    - **How (Intuition & Mental Model):** Use the **Minimum Remaining Values (MRV)** heuristic. Instead of filling cells in order, always pick the empty cell with the *fewest* possible valid digits. This prunes the search space dramatically.
-2. **Unique Paths III `🔥 Google`**:
+2. **Unique Paths III `🎯 T2`**:
    - **What (The Problem & Goal):** Find the number of paths from start to end that visit every non-obstacle square exactly once.
    - **How (Intuition & Mental Model):** Standard grid backtracking, but add a counter for `empty_squares`. Only increment the result if you reach the target square and `empty_squares == 0`.
 
@@ -366,10 +369,10 @@ def exist(board: list[list[str]], word: str) -> bool:
     return any(dfs(r, c, 0) for r in range(rows) for c in range(cols))
 
 #### Common Variants & Twists
-1. **Word Search II (Trie Optimization) `🔥 Google`**:
+1. **Word Search II (Trie Optimization)**:
    - **What (The Problem & Goal):** Search for multiple words in the grid simultaneously.
    - **How (Intuition & Mental Model):** Instead of running DFS for each word, build a Trie of all words. As you move through the grid, move through the Trie nodes as well. If the Trie node has no child for the current character, prune the search.
-2. **Remove Invalid Parentheses `⭐ Google`**:
+2. **Remove Invalid Parentheses**:
    - **What (The Problem & Goal):** Remove the minimum number of invalid parentheses to make the input string valid. Return all possible results.
    - **How (Intuition & Mental Model):** First, calculate the minimum number of open and closed parentheses that must be removed. Then use backtracking to try removing them at different positions, checking for validity at each step.
 ```
@@ -404,7 +407,7 @@ def partition(s: str) -> list[list[str]]:
     return results
 
 #### Common Variants & Twists
-1. **Palindrome Partitioning II (Min Cuts) `🔥 Google`**:
+1. **Palindrome Partitioning II (Min Cuts)**:
    - **What (The Problem & Goal):** Find the minimum number of cuts needed for a palindrome partitioning of a string.
    - **How (Intuition & Mental Model):** This is the DP version of the problem. While backtracking generates *all* partitions, DP tracks the minimum cuts for each prefix `s[:i]`. If `s[j:i]` is a palindrome, `cuts[i] = min(cuts[i], cuts[j] + 1)`.
 ```
@@ -543,22 +546,22 @@ def dfs_iterative(start, choices):
 ## 6. Common Interview Problems
 
 ### Easy
-- **Subsets `🔥 Google`** — Include/exclude each index; `start` index prevents duplicates.
+- **Subsets** — Include/exclude each index; `start` index prevents duplicates.
 - **Letter Combinations of Phone Number** — Cartesian product via DFS.
 
 ### Medium
 - **Permutations / Permutations II** — Unused set; sort + skip for duplicates.
-- **Combination Sum / II `🔥 Google`** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
-- **Word Search `🔥 Google`** — Grid DFS with in-place marking.
-- **Palindrome Partitioning `🔥 Google`** — Precompute palindrome table; O(1) check per partition.
-- **Generate Parentheses `🔥 Google`** — Track open/close counts; prune when `close > open`.
+- **Combination Sum / II** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
+- **Word Search** — Grid DFS with in-place marking.
+- **Palindrome Partitioning** — Precompute palindrome table; O(1) check per partition.
+- **Generate Parentheses** — Track open/close counts; prune when `close > open`.
 
 ### Hard
-- **N-Queens `🔥 Google`** — Column + diagonal sets; bitmask variant for speed.
-- **Sudoku Solver `⭐ Google`** — MRV heuristic (cell with fewest valid digits first).
-- **Word Search II `🔥 Google`** — Trie of all words + backtracking; prune when no trie prefix matches.
-- **Remove Invalid Parentheses `⭐ Google`** — BFS by removal count; or backtracking with min-removal pruning.
-- **Expression Add Operators `⭐ Google`** — Backtrack with last-operand tracking for `*` precedence.
+- **N-Queens** — Column + diagonal sets; bitmask variant for speed.
+- **Sudoku Solver** — MRV heuristic (cell with fewest valid digits first).
+- **Word Search II** — Trie of all words + backtracking; prune when no trie prefix matches.
+- **Remove Invalid Parentheses** — BFS by removal count; or backtracking with min-removal pruning.
+- **Expression Add Operators** — Backtrack with last-operand tracking for `*` precedence.
 
 ---
 
@@ -566,25 +569,25 @@ def dfs_iterative(start, choices):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Subsets `🔥 Google`** | Include/Exclude | "All possible subsets" | Include/exclude; `start` index | Deep copy path: `results.append(path[:])`, not `path`. |
-| **Permutations `🔥 Google`** | Swap / Used-array | "All orderings of N elements" | Swap-in-place or unused set | Permutations II: sort first; skip `nums[i]==nums[i-1] and not used[i-1]`. |
-| **Combination Sum `🔥 Google`** | Include/Exclude + Target | "Target sum, reuse allowed" | Advance same `i` (unbounded) | Sum II: advance `i+1`; skip duplicate values at same level. |
-| **N-Queens `🔥 Google`** | Constraint Satisfaction | "Place N non-attacking queens" | `cols`, `diag r+c`, `diag r-c` sets | Diagonals use `r+c` and `r-c` as keys — derive from first principles. |
-| **Word Search `🔥 Google`** | Grid DFS + Backtrack | "Path spelling word in grid" | Mark `#` in-place; restore after | Word Search II: Trie prunes branches with no matching prefix. |
-| **Sudoku Solver `⭐ Google`** | Constraint Satisfaction | "Fill grid satisfying constraints" | Try 1-9; check row/col/box | MRV heuristic: pick cell with fewest valid candidates first. |
-| **Palindrome Partitioning `🔥 Google`** | Include/Exclude + Validity Guard | "All palindrome splits" | Precompute `is_pal[i][j]` | Without precompute: O(N³); with: O(N²) — always precompute. |
-| **Generate Parentheses `🔥 Google`** | IP/OP Validity Guard | "All valid bracket sequences of N pairs" | Track open/close count | Prune: `open < n` to add `(`; `close < open` to add `)`. |
-| **Remove Invalid Parentheses `⭐ Google`** | BFS by Level | "Remove min to make valid" | BFS by removal count | Generate all possible removals of length `k`; check validity. |
+| **Subsets** | Include/Exclude | "All possible subsets" | Include/exclude; `start` index | Deep copy path: `results.append(path[:])`, not `path`. |
+| **Permutations** | Swap / Used-array | "All orderings of N elements" | Swap-in-place or unused set | Permutations II: sort first; skip `nums[i]==nums[i-1] and not used[i-1]`. |
+| **Combination Sum** | Include/Exclude + Target | "Target sum, reuse allowed" | Advance same `i` (unbounded) | Sum II: advance `i+1`; skip duplicate values at same level. |
+| **N-Queens** | Constraint Satisfaction | "Place N non-attacking queens" | `cols`, `diag r+c`, `diag r-c` sets | Diagonals use `r+c` and `r-c` as keys — derive from first principles. |
+| **Word Search** | Grid DFS + Backtrack | "Path spelling word in grid" | Mark `#` in-place; restore after | Word Search II: Trie prunes branches with no matching prefix. |
+| **Sudoku Solver** | Constraint Satisfaction | "Fill grid satisfying constraints" | Try 1-9; check row/col/box | MRV heuristic: pick cell with fewest valid candidates first. |
+| **Palindrome Partitioning** | Include/Exclude + Validity Guard | "All palindrome splits" | Precompute `is_pal[i][j]` | Without precompute: O(N³); with: O(N²) — always precompute. |
+| **Generate Parentheses** | IP/OP Validity Guard | "All valid bracket sequences of N pairs" | Track open/close count | Prune: `open < n` to add `(`; `close < open` to add `)`. |
+| **Remove Invalid Parentheses** | BFS by Level | "Remove min to make valid" | BFS by removal count | Generate all possible removals of length `k`; check validity. |
 | **Letter Combinations** | Cartesian Product DFS | "Phone keypad, all combos" | Cartesian product via DFS | Empty `digits` input → return `[]`, not `[""]`. |
-| **Expression Add Operators `⭐ Google`** | Backtrack + Running State | "Insert +,-,* to reach target" | Backtrack with `last_operand` | `*` needs to undo `last_operand` from running sum before re-multiplying. |
+| **Expression Add Operators** | Backtrack + Running State | "Insert +,-,* to reach target" | Backtrack with `last_operand` | `*` needs to undo `last_operand` from running sum before re-multiplying. |
 | **Binary Watch** [E] | Include/Exclude + Pruning | "Generate all times readable on binary watch" | Backtrack placing lit LEDs; check hours < 12, minutes < 60 | Enumerate bit counts, not time values — easier to prune invalid combos. |
-| **Find All Anagrams in a String `⭐ Google`** [E] | Sliding Window (not backtracking) | "All start indices of anagrams of p in s" | Sliding window with frequency map — not backtracking | Click moment: fixed window size = backtracking becomes sliding window here. |
-| **Restore IP Addresses `🔥 Google`** [M] | Backtrack + Validity Guard | "Generate all valid IP addresses from digit string" | Backtrack with 4 parts; each part 0-255, no leading zeros | Leading zero check: `part[0] == '0' and len(part) > 1` is invalid. Exactly 4 parts required. |
-| **Combinations `🔥 Google`** [M] | Include/Exclude + Start Index | "All K-element subsets of [1,N]" | Backtrack with `start` index; stop when path length == K | Prune: if `n - start + 1 < k - len(path)`, not enough elements left — prune early. |
-| **Target Sum `🔥 Google`** [M] | Include/Exclude → 0/1 Knapsack | "Assign + or - to reach target" | Backtrack each element; or reframe as subset sum (partition into two groups) | `(sum + target) % 2 != 0` or `sum + target < 0` → impossible; converts to count-subsets problem. |
-| **Partition to K Equal Subsets `⭐ Google`** [M] | Backtrack + Bucket Pruning | "Can array be split into K equal-sum subsets?" | Backtrack assigning elements to buckets; prune if bucket overflows | Sort descending first — places large elements first and prunes faster. Skip identical-value buckets at same depth. |
-| **Word Break II `🔥 Google`** [M] | DFS + Memoization | "All sentences from word dictionary covering s" | DFS with memoization; memo maps `start_index → [sentences]` | Memoize the list of valid sentences from each index — avoids exponential re-expansion. |
-| **Unique Paths III `🔥 Google`** [H] | Grid Backtrack + Bitmask | "Count paths visiting all non-obstacle squares exactly once" | Backtrack on grid; mark visited; only count path reaching end when all squares visited | Track remaining empty squares counter to know when path is complete — no need to re-scan. |
+| **Find All Anagrams in a String** [E] | Sliding Window (not backtracking) | "All start indices of anagrams of p in s" | Sliding window with frequency map — not backtracking | Click moment: fixed window size = backtracking becomes sliding window here. |
+| **Restore IP Addresses** [M] | Backtrack + Validity Guard | "Generate all valid IP addresses from digit string" | Backtrack with 4 parts; each part 0-255, no leading zeros | Leading zero check: `part[0] == '0' and len(part) > 1` is invalid. Exactly 4 parts required. |
+| **Combinations** [M] | Include/Exclude + Start Index | "All K-element subsets of [1,N]" | Backtrack with `start` index; stop when path length == K | Prune: if `n - start + 1 < k - len(path)`, not enough elements left — prune early. |
+| **Target Sum** [M] | Include/Exclude → 0/1 Knapsack | "Assign + or - to reach target" | Backtrack each element; or reframe as subset sum (partition into two groups) | `(sum + target) % 2 != 0` or `sum + target < 0` → impossible; converts to count-subsets problem. |
+| **Partition to K Equal Subsets** [M] | Backtrack + Bucket Pruning | "Can array be split into K equal-sum subsets?" | Backtrack assigning elements to buckets; prune if bucket overflows | Sort descending first — places large elements first and prunes faster. Skip identical-value buckets at same depth. |
+| **Word Break II** [M] | DFS + Memoization | "All sentences from word dictionary covering s" | DFS with memoization; memo maps `start_index → [sentences]` | Memoize the list of valid sentences from each index — avoids exponential re-expansion. |
+| **Unique Paths III** [H] | Grid Backtrack + Bitmask | "Count paths visiting all non-obstacle squares exactly once" | Backtrack on grid; mark visited; only count path reaching end when all squares visited | Track remaining empty squares counter to know when path is complete — no need to re-scan. |
 | **Zuma Game** [H] | Interval DP / Memoized Backtrack | "Min insertions to clear all groups" | Interval DP or memoized backtracking on remaining groups | Group consecutive same-color balls; state = current group string. Handle groups merging after removal. |
 | **Stickers to Spell Word** [H] | Bitmask DP / BFS | "Min stickers to spell target (unlimited reuse)" | Bitmask BFS/DP on covered chars; each state = bitmask of covered target chars | Always fill leftmost uncovered char first to reduce duplicate states. |
 

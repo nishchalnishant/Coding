@@ -9,6 +9,12 @@ tags: [data-structures, queue]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```
 WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                │                │               │               │
@@ -85,10 +91,7 @@ WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 FIFO ordered processing. SDE-3 focus: BFS shortest path, monotonic deque for sliding-window max, two-stack queue, circular ring buffer, and lock-free queue design for production systems.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -235,13 +238,13 @@ def multi_source_bfs(grid: list[list[int]], sources: list[tuple[int, int]]) -> l
 ```
 
 #### Common Variants & Twists
-1. **Walls and Gates `⭐ Google`**:
+1. **Walls and Gates `⚡ T1`**:
    - **What (The Problem & Goal):** Fill each empty room in a 2D grid with its distance to its nearest gate.
    - **How (Intuition & Mental Model):** Instead of starting a BFS from each empty room (which would be too slow), start the BFS from *all* gates (0s) simultaneously. The distance naturally propagates outwards, filling the empty rooms with their shortest distance.
 2. **As Far from Land as Possible**:
    - **What (The Problem & Goal):** Find a water cell (0) that is furthest away from any land cell (1).
    - **How (Intuition & Mental Model):** Start a multi-source BFS from all land cells (1s). As the BFS expands outward level by level, the water cell that is reached *last* is the one furthest from all land. Track and return the maximum distance encountered in the BFS.
-3. **Shortest Path in Binary Matrix `🔥 Google`**:
+3. **Shortest Path in Binary Matrix `⚡ T1`**:
    - **What (The Problem & Goal):** Find the shortest clear path from the top-left to the bottom-right of a grid.
    - **How (Intuition & Mental Model):** A classic single-source BFS from `(0, 0)`. The twist is that movement is 8-directional instead of 4-directional, so your direction array must include diagonals: `[(1,0), (-1,0), (0,1), (0,-1), (1,1), (-1,-1), (1,-1), (-1,1)]`.
 
@@ -397,17 +400,17 @@ class CircularQueue:
 
 ### Easy / Medium
 - **Rotten Oranges** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
-- **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `🔥 Google`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
-- **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `🔥 Google`** — Monotonic deque of indices; decreasing values; front = max.
-- **Design Circular Queue `⭐ Google`** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
-- **Moving Average from Data Stream `⭐ Google`** — Fixed-size deque + running sum; evict front when over capacity.
-- **01 Matrix `⭐ Google`** — Multi-source BFS from all `0` cells; distances expand outward.
+- **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
+- **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
+- **Design Circular Queue** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
+- **Moving Average from Data Stream** — Fixed-size deque + running sum; evict front when over capacity.
+- **01 Matrix `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
 
 ### Hard
 - **Sliding Window Minimum** — Same deque pattern; maintain increasing order (flip comparison).
 - **Maximum of Minimums of Every Window Size** — Monotonic stack for prev/next smaller element; fill answer array.
-- **[Cheapest Flights Within K Stops](../02-algorithms/problem-deep-dives.md#cheapest-flights-within-k-stops) `⭐ Google`** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
-- **Shortest Path in Binary Matrix `🔥 Google`** — BFS on 8-neighbor open (0) cells; return step count.
+- **[Cheapest Flights Within K Stops](../02-algorithms/problem-deep-dives.md#cheapest-flights-within-k-stops)** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
+- **Shortest Path in Binary Matrix `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
 
 ---
 
@@ -416,21 +419,21 @@ class CircularQueue:
 | Question | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- |
 | **Rotten Oranges** | "Simultaneous spread; minimum time" | Multi-source BFS from all rotten cells at t=0; count fresh | If `fresh > 0` after BFS → return -1 (blocked fresh cells). All-rotten or no-fresh are instant-return edge cases. |
-| **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `🔥 Google`** | "Minimum transformation steps" | BFS; each word's neighbors = one-letter edits in word set | Remove word from set when visited — prevents revisit and cycles. Bidirectional BFS halves explored nodes for follow-up. |
-| **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `🔥 Google`** | "Max in every k-window in O(N)" | Deque of indices; pop back while `nums[back] < nums[i]`; pop front if expired | Each index enqueued/dequeued once → O(N). Store indices, not values, for window expiry check. |
-| **Shortest Path in Binary Matrix `🔥 Google`** | "Min path in 0-grid, 8 directions" | BFS on open (0) cells; 8-directional neighbors; return steps | Return -1 if `grid[0][0]` or `grid[n-1][n-1]` is 1. Mark visited before enqueue (not after dequeue) to avoid TLE. |
-| **01 Matrix `⭐ Google`** | "Distance to nearest 0 for every cell" | Multi-source BFS from all 0s; single pass O(RC) | BFS from targets (0s), not from each 1 individually — avoids O(R²C²). Initialize 1-cells to inf, 0-cells to 0. |
-| **Design Circular Queue `⭐ Google`** | "Bounded FIFO with O(1) all ops" | Array + `front`/`size`/`cap`; `rear = (front+size)%cap` | Use `size` counter over wasted-slot trick — cleaner. Thread-safety follow-up: add a mutex around enqueue/dequeue. |
-| **Moving Average from Data Stream `⭐ Google`** | "Average of last k values in O(1)" | Deque + running sum; evict front when `len > k` | Float division. Python `deque(maxlen=k)` auto-evicts but you still need the running sum — don't recompute. |
+| **[Word Ladder](../02-algorithms/problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; each word's neighbors = one-letter edits in word set | Remove word from set when visited — prevents revisit and cycles. Bidirectional BFS halves explored nodes for follow-up. |
+| **[Sliding Window Maximum](../02-algorithms/problem-deep-dives.md#sliding-window-maximum) `⚡ T1`** | "Max in every k-window in O(N)" | Deque of indices; pop back while `nums[back] < nums[i]`; pop front if expired | Each index enqueued/dequeued once → O(N). Store indices, not values, for window expiry check. |
+| **Shortest Path in Binary Matrix `⚡ T1`** | "Min path in 0-grid, 8 directions" | BFS on open (0) cells; 8-directional neighbors; return steps | Return -1 if `grid[0][0]` or `grid[n-1][n-1]` is 1. Mark visited before enqueue (not after dequeue) to avoid TLE. |
+| **01 Matrix `⚡ T1`** | "Distance to nearest 0 for every cell" | Multi-source BFS from all 0s; single pass O(RC) | BFS from targets (0s), not from each 1 individually — avoids O(R²C²). Initialize 1-cells to inf, 0-cells to 0. |
+| **Design Circular Queue** | "Bounded FIFO with O(1) all ops" | Array + `front`/`size`/`cap`; `rear = (front+size)%cap` | Use `size` counter over wasted-slot trick — cleaner. Thread-safety follow-up: add a mutex around enqueue/dequeue. |
+| **Moving Average from Data Stream** | "Average of last k values in O(1)" | Deque + running sum; evict front when `len > k` | Float division. Python `deque(maxlen=k)` auto-evicts but you still need the running sum — don't recompute. |
 | **[Cheapest Flights K Stops](../02-algorithms/problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | BFS level = stops; or Bellman-Ford K+1 rounds | Standard Dijkstra doesn't bound stops. Need state `(cost, node, stops)` and prune when `stops > K`. |
 | **Number of Recent Calls** [E] | "Count requests in last 3000ms window" | Deque; add timestamp; pop front while `front < t - 3000` | Deque size = answer; no need to count separately. |
 | **Implement Queue Using Stacks** [E] | "FIFO from two LIFOs" | Two stacks; lazy transfer: pour `s1 → s2` only when `s2` is empty | Amortized O(1) per operation — each element moves from s1 to s2 at most once. |
 | **Implement Stack Using Queues** [E] | "LIFO from one FIFO" | Enqueue then rotate: after each push, cycle all older elements behind the new one | `push` is O(N); `pop` and `top` are O(1) — opposite of stack-from-queues. |
-| **Jump Game III `🔥 Google`** [M] | "Reach any index with value 0 via jumps ±arr[i]" | BFS from start; add `i + arr[i]` and `i - arr[i]` if in bounds and unvisited | DFS also works but BFS gives shortest path to zero if needed as follow-up. |
+| **Jump Game III `🎯 T2`** [M] | "Reach any index with value 0 via jumps ±arr[i]" | BFS from start; add `i + arr[i]` and `i - arr[i]` if in bounds and unvisited | DFS also works but BFS gives shortest path to zero if needed as follow-up. |
 | **Bus Routes** [M] | "Min buses to travel from source to target" | BFS on buses (not stops): expand all stops of current bus; add unvisited buses | Build stop→bus map; BFS over buses, not stops — avoids revisiting the same bus. |
-| **Open the Lock** [M] | "Min turns to reach target combination from 0000" | BFS; each state = 4-digit string; neighbors = ±1 on each wheel | Bidirectional BFS reduces search space dramatically for this problem. |
-| **Walls and Gates `⭐ Google`** [M] | "Distance from each empty room to nearest gate" | Multi-source BFS from all gates simultaneously | Push all gates first; BFS naturally computes minimum distances without per-gate passes. |
-| **Minimum Knight Moves `⭐ Google`** [M] | "Min knight moves in infinite chessboard" | BFS from (0,0) to (x,y); 8 knight move directions | Symmetry: work in first quadrant `(abs(x), abs(y))` — 4x fewer states to explore. |
+| **Open the Lock `⚡ T1`** [M] | "Min turns to reach target combination from 0000" | BFS; each state = 4-digit string; neighbors = ±1 on each wheel | Bidirectional BFS reduces search space dramatically for this problem. |
+| **Walls and Gates `⚡ T1`** [M] | "Distance from each empty room to nearest gate" | Multi-source BFS from all gates simultaneously | Push all gates first; BFS naturally computes minimum distances without per-gate passes. |
+| **Minimum Knight Moves `⚡ T1`** [M] | "Min knight moves in infinite chessboard" | BFS from (0,0) to (x,y); 8 knight move directions | Symmetry: work in first quadrant `(abs(x), abs(y))` — 4x fewer states to explore. |
 | **Shortest Path in Grid with Obstacles Elimination** [H] | "Min steps allowing K obstacle removals" | BFS with state `(row, col, remaining_k)` | State space is `R × C × (K+1)` — mark visited per `(r, c, k)` not just `(r, c)`. |
 | **Find Shortest Path in Directed Weighted Graph** [H] | "Shortest path with state (node, extra constraint)" | Dijkstra with state `(cost, node, extra)`; revisit allowed if state differs | Classic Dijkstra revisit guard only on node — add the extra dimension when constraints exist. |
 

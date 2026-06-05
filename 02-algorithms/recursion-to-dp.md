@@ -1,5 +1,11 @@
 # Recursion → DP — The Conversion Bridge
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 **Companion files:** [recursion.md](./recursion.md) (write the recurrence) · [dynamic-programming.md](./dynamic-programming.md) (pattern catalog + bugs)
 
 Use this file when you can write recursion but suspect repeated subproblems. The interview workflow:
@@ -12,10 +18,7 @@ Recursive brute force  →  memo (top-down)  →  tabulate (bottom-up)  →  com
 If you can execute those four moves on demand, most classic DP questions become engineering — not memorization.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -64,8 +67,8 @@ WHAT breaks the conversion
 | **Tabulate** | Reverse the recursion direction: if `f(i)` calls `f(i+1)`, fill `i` from high → low |
 | **1D space** | Transition uses only `dp[i-1]` / `dp[i-2]` → two variables |
 | **2D → 1 row** | Transition uses only row `i+1` → rolling array |
-| **0/1 knapsack `🔥 Google`** | Loop `w` **backward** (high → low) |
-| **Unbounded `⭐ Google`** | Loop `w` **forward** (low → high) |
+| **0/1 knapsack** | Loop `w` **backward** (high → low) |
+| **Unbounded** | Loop `w` **forward** (low → high) |
 | **Interval DP** | Outer loop = interval **length**; inner = left endpoint |
 
 ---

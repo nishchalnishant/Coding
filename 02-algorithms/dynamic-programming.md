@@ -1,10 +1,13 @@
 # Dynamic Programming — Complete Guide
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
@@ -111,16 +114,16 @@ DP
 
 | What the problem asks | Pattern |
 | :--- | :--- |
-| Pick items (each once) to hit capacity / sum | **0/1 Knapsack `🔥 Google`** |
-| Pick items (unlimited copies) to hit capacity | **Unbounded Knapsack `⭐ Google`** |
-| `dp[i]` depends on `dp[i-1]`, `dp[i-2]` | **Fibonacci / Linear `🔥 Google`** |
+| Pick items (each once) to hit capacity / sum | **0/1 Knapsack** |
+| Pick items (unlimited copies) to hit capacity | **Unbounded Knapsack** |
+| `dp[i]` depends on `dp[i-1]`, `dp[i-2]` | **Fibonacci / Linear** |
 | Two sequences — align and match | **LCS family** |
-| One sequence — longest increasing / longest chain | **LIS `🔥 Google`** |
-| Best subarray ending at `i` | **Kadane `🔥 Google`** |
+| One sequence — longest increasing / longest chain | **LIS `🎯 T2`** |
+| Best subarray ending at `i` | **Kadane** |
 | Split interval `[i,j]` at every `k` | **MCM / Interval DP** |
 | Subtree answers combined at root | **DP on Trees** |
 | Node + extra state (mask, moves) | **DP on Graphs / Bitmask** |
-| Count integers in range with digit property | **Digit DP** |
+| Count integers in range with digit property | **Digit DP `💤 T3`** |
 | Count strings / sequences with constraints | **Counting / Probability DP** |
 
 ---
@@ -196,17 +199,17 @@ def decode_ways(s: str) -> int:
 ```
 
 > [!TIP]
-> **House Robber II (circle): `🔥 Google`** Run the linear robber twice — once on `nums[:-1]` and once on `nums[1:]`. Take the max. The circle constraint means you can't rob both first and last house.
+> **House Robber II (circle): `🎯 T2`** Run the linear robber twice — once on `nums[:-1]` and once on `nums[1:]`. Take the max. The circle constraint means you can't rob both first and last house.
 
 ## Variations
 
 | Problem | Recurrence | Note |
 | :--- | :--- | :--- |
-| **Climbing Stairs `🔥 Google`** | `dp[i] = dp[i-1] + dp[i-2]` | Fibonacci exactly |
+| **Climbing Stairs `🎯 T2`** | `dp[i] = dp[i-1] + dp[i-2]` | Fibonacci exactly |
 | **Min Cost Climbing Stairs** | `dp[i] = cost[i] + min(dp[i-1], dp[i-2])` | Can start at step 0 or 1 |
-| **Decode Ways `🔥 Google`** | One + two digit branches | `'0'` as first digit kills branch |
-| **House Robber I `🔥 Google`** | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])` | — |
-| **House Robber II `🔥 Google`** | Two linear passes, exclude ends | Classic circle trick |
+| **Decode Ways `🎯 T2`** | One + two digit branches | `'0'` as first digit kills branch |
+| **House Robber I `🎯 T2`** | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])` | — |
+| **House Robber II `🎯 T2`** | Two linear passes, exclude ends | Classic circle trick |
 
 ---
 
@@ -277,12 +280,12 @@ def knapsack_reconstruct(weights, values, W):
 
 | Problem | Transform | Key Insight |
 | :--- | :--- | :--- |
-| **Subset Sum `🔥 Google`** | Boolean knapsack; `dp[sum]` = True/False | `dp[0] = True`; iterate sum descending |
-| **Partition Equal Subset Sum `🔥 Google`** | Subset sum to `total // 2` | Odd total → impossible immediately |
-| **Target Sum (±assign) `🔥 Google`** | Count subsets with sum `(total + target) / 2` | Parity check first; count, not max |
+| **Subset Sum `🎯 T2`** | Boolean knapsack; `dp[sum]` = True/False | `dp[0] = True`; iterate sum descending |
+| **Partition Equal Subset Sum `🎯 T2`** | Subset sum to `total // 2` | Odd total → impossible immediately |
+| **Target Sum (±assign) `🎯 T2`** | Count subsets with sum `(total + target) / 2` | Parity check first; count, not max |
 | **Count Subsets with Given Sum** | Add ways: `dp[w] += dp[w - weight]` | `dp[0] = 1` (empty subset = one way) |
-| **Last Stone Weight II `⭐ Google`** | Partition to minimize `\|S1 - S2\|` | Subset sum variant |
-| **Ones and Zeroes `⭐ Google`** | 2D knapsack: capacity is `(m zeros, n ones)` | `dp[i][j]` = max strings using ≤ i zeros, ≤ j ones |
+| **Last Stone Weight II** | Partition to minimize `\|S1 - S2\|` | Subset sum variant |
+| **Ones and Zeroes** | 2D knapsack: capacity is `(m zeros, n ones)` | `dp[i][j]` = max strings using ≤ i zeros, ≤ j ones |
 
 ---
 
@@ -328,11 +331,11 @@ def coin_change_ways(coins: list[int], amount: int) -> int:
 
 | Problem | Loop Order | Key Insight |
 | :--- | :--- | :--- |
-| **Coin Change I `🔥 Google`** (min coins) | Coins outer, amount forward | `dp[0]=0`, rest `inf`; take `min` |
-| **Coin Change II `🔥 Google`** (count ways) | Coins outer, amount forward | `dp[0]=1`; takes `+=` not `max` |
-| **Rod Cutting `⭐ Google`** (max value) | Lengths outer, capacity forward | Identical to unbounded knapsack |
-| **Integer Break `⭐ Google`** (max product) | Split 1…n; `dp[i] = max(j*(i-j), j*dp[i-j])` | Greedy: break into 3s (AM-GM) |
-| **Perfect Squares `⭐ Google`** (min count) | Squares outer, amount forward | Same as coin change with coins = 1,4,9,16… |
+| **Coin Change I `🎯 T2`** (min coins) | Coins outer, amount forward | `dp[0]=0`, rest `inf`; take `min` |
+| **Coin Change II `🎯 T2`** (count ways) | Coins outer, amount forward | `dp[0]=1`; takes `+=` not `max` |
+| **Rod Cutting** (max value) | Lengths outer, capacity forward | Identical to unbounded knapsack |
+| **Integer Break** (max product) | Split 1…n; `dp[i] = max(j*(i-j), j*dp[i-j])` | Greedy: break into 3s (AM-GM) |
+| **Perfect Squares** (min count) | Squares outer, amount forward | Same as coin change with coins = 1,4,9,16… |
 
 ---
 
@@ -429,13 +432,13 @@ def is_interleave(s1: str, s2: str, s3: str) -> bool:
 | :--- | :--- |
 | **LCS length** | `dp[i][j]` directly |
 | **Print LCS** | Traceback: match → diagonal; else → max of up/left |
-| **Shortest Common Supersequence `⭐ Google`** | Length = `m + n - LCS`; reconstruct by merging |
+| **Shortest Common Supersequence** | Length = `m + n - LCS`; reconstruct by merging |
 | **Min insertions to make palindrome** | `len(s) - LPS(s)` |
 | **Min deletions to make palindrome** | `len(s) - LPS(s)` |
-| **Edit distance `🔥 Google`** | Replace = diagonal + 1; insert/delete = +1 on axis |
-| **Distinct subsequences `⭐ Google`** | Count ways `s` contains `t` as subseq: add, don't max |
+| **Edit distance `🎯 T2`** | Replace = diagonal + 1; insert/delete = +1 on axis |
+| **Distinct subsequences `🎯 T2`** | Count ways `s` contains `t` as subseq: add, don't max |
 | **Longest Common Substring** | Reset to 0 on mismatch; track global max |
-| **Interleaving Strings `⭐ Google`** | `dp[i][j]` = can `s1[:i]+s2[:j]` form `s3[:i+j]` |
+| **Interleaving Strings `🎯 T2`** | `dp[i][j]` = can `s1[:i]+s2[:j]` form `s3[:i+j]` |
 
 ## Key Differences: Substring vs Subsequence
 
@@ -494,17 +497,17 @@ def lis_nlogn_non_decreasing(nums: list[int]) -> int:
 > `tails` is NOT the actual LIS — it's a bookkeeping structure for length only. To reconstruct the actual subsequence, store `parent[]` pointers in the O(N²) approach.
 
 > [!TIP]
-> **Russian Doll Envelopes = 2D LIS: `⭐ Google`** Sort by width ascending; for ties sort height **descending**. Then run LIS on heights only. Descending height on ties prevents picking two envelopes with the same width.
+> **Russian Doll Envelopes = 2D LIS:** Sort by width ascending; for ties sort height **descending**. Then run LIS on heights only. Descending height on ties prevents picking two envelopes with the same width.
 
 ## LIS-Family Problems
 
 | Problem | Key Transform |
 | :--- | :--- |
-| **LIS (strict) `🔥 Google`** | `bisect_left` in patience sort |
-| **LIS (non-decreasing) `🔥 Google`** | `bisect_right` in patience sort |
+| **LIS (strict) `🎯 T2`** | `bisect_left` in patience sort |
+| **LIS (non-decreasing) `🎯 T2`** | `bisect_right` in patience sort |
 | **Count LIS** | O(N²): track both `dp[i]` (length) and `cnt[i]` (count) |
 | **Longest Chain of Pairs** | Sort by second element; LIS on first where pairs don't overlap |
-| **Russian Doll Envelopes `⭐ Google`** | Sort (w asc, h desc); LIS on h |
+| **Russian Doll Envelopes** | Sort (w asc, h desc); LIS on h |
 
 ---
 
@@ -625,15 +628,15 @@ def palindrome_partition_min_cuts(s: str) -> int:
 ```
 
 > [!CAUTION]
-> **Burst Balloons gotcha: `⭐ Google`** `k` is the **last** balloon to burst within `(i, j)`, not the first. When `k` bursts, `nums[i]` and `nums[j]` are still present (boundaries), so the coins = `nums[i] * nums[k] * nums[j]`.
+> **Burst Balloons gotcha: `💤 T3`** `k` is the **last** balloon to burst within `(i, j)`, not the first. When `k` bursts, `nums[i]` and `nums[j]` are still present (boundaries), so the coins = `nums[i] * nums[k] * nums[j]`.
 
 ## Interval DP Variations
 
 | Problem | Cost at split | State |
 | :--- | :--- | :--- |
 | **Matrix Chain Multiplication** | `dims[i-1]*dims[k]*dims[j]` | `dp[i][j]` = min multiplications |
-| **Burst Balloons `⭐ Google`** | `nums[i]*nums[k]*nums[j]` | `k` = last to burst in open interval `(i,j)` |
-| **Palindrome Partitioning II `🔥 Google`** | `1` if `s[j..i]` is palindrome | `dp[i]` = min cuts for prefix |
+| **Burst Balloons `💤 T3`** | `nums[i]*nums[k]*nums[j]` | `k` = last to burst in open interval `(i,j)` |
+| **Palindrome Partitioning II `🎯 T2`** | `1` if `s[j..i]` is palindrome | `dp[i]` = min cuts for prefix |
 | **Strange Printer** | Reuse or overwrite | `dp[i][j]` = min turns to print `s[i..j]` |
 | **Optimal BST** | Key search probabilities | `dp[i][j]` = min expected search cost |
 
@@ -763,12 +766,12 @@ def find_paths(m: int, n: int, max_move: int, start_row: int, start_col: int) ->
 
 | Problem | LC # | Pattern | Click Moment | Gotcha |
 | :--- | :--- | :--- | :--- | :--- |
-| **Unique Paths `🔥 Google`** | 62 | Forward DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Base row/col = all 1s |
-| **Unique Paths II `🔥 Google`** | 63 | Forward DP with obstacles | Set `dp[r][c] = 0` when obstacle | Re-check first row/col early |
+| **Unique Paths `🎯 T2`** | 62 | Forward DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Base row/col = all 1s |
+| **Unique Paths II `🎯 T2`** | 63 | Forward DP with obstacles | Set `dp[r][c] = 0` when obstacle | Re-check first row/col early |
 | **Min Path Sum** | 64 | Forward DP | Grid values as cost; minimize | Init top row and left col first |
 | **Triangle** | 120 | Bottom-up reverse | Start from last row, merge upward | Can reuse last row as `dp` |
 | **Dungeon Game** | 174 | **Reverse DP** | Min HP needed works backward only | Forward DP is impossible here |
-| **Maximal Square `⭐ Google`** | 221 | `min(3 neighbors)+1` | Extend bottom-right corner | `matrix` is `str`, cast to int |
+| **Maximal Square `🎯 T2`** | 221 | `min(3 neighbors)+1` | Extend bottom-right corner | `matrix` is `str`, cast to int |
 | **Cherry Pickup II** | 1463 | Two travelers 3D→2D | Both start top; symmetric start helps | c1 ≤ c2 invariant halves states |
 | **Out of Boundary Paths** | 576 | Forward probability | Count steps exiting the grid | Don't re-enter; mod at every step |
 
@@ -858,10 +861,10 @@ def rob_house_tree(root: Optional[TreeNode]) -> int:
 
 | Problem | States returned | Combination |
 | :--- | :--- | :--- |
-| **House Robber III `🔥 Google`** | `(rob, skip)` | `rob=val+l_skip+r_skip`; `skip=max(l)+max(r)` |
-| **Max Path Sum `🔥 Google`** | Best downward chain | Global max updated through node |
-| **Diameter `🔥 Google`** | Depth | `diameter = max(l_depth + r_depth)` |
-| **Binary Tree Cameras `⭐ Google`** | `covered/has_camera/not_covered` | Greedy from leaves; place camera if child uncovered |
+| **House Robber III `🎯 T2`** | `(rob, skip)` | `rob=val+l_skip+r_skip`; `skip=max(l)+max(r)` |
+| **Max Path Sum `🎯 T2`** | Best downward chain | Global max updated through node |
+| **Diameter `🎯 T2`** | Depth | `diameter = max(l_depth + r_depth)` |
+| **Binary Tree Cameras `🎯 T2`** | `covered/has_camera/not_covered` | Greedy from leaves; place camera if child uncovered |
 | **Largest BST Subtree** | `(min, max, size, is_bst)` | Check BST property at each node |
 
 ---
@@ -939,9 +942,9 @@ def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
 | Problem | State | N limit |
 | :--- | :--- | :--- |
 | **Travelling Salesman** | `dp[mask][city]` | N ≤ 20 |
-| **Shortest Path Visiting All Nodes `⭐ Google`** | BFS with `(node, visited_mask)` | N ≤ 12 |
+| **Shortest Path Visiting All Nodes `💤 T3`** | BFS with `(node, visited_mask)` | N ≤ 12 |
 | **Minimum XOR Sum (assignment)** | `dp[mask]` = cost assigning first `popcount(mask)` | N ≤ 14 |
-| **Smallest Sufficient Team** | `dp[skill_mask]` = min team to cover skills | skills ≤ 26 |
+| **Smallest Sufficient Team `💤 T3`** | `dp[skill_mask]` = min team to cover skills | skills ≤ 26 |
 | **Stickers to Spell Word** | `dp[mask]` = min stickers to cover chars in mask | word ≤ 15 |
 
 ---
@@ -1165,16 +1168,16 @@ def is_match_wildcard(s: str, p: str) -> bool:
 
 | Problem | LC # | Pattern | Click Moment | Gotcha |
 | :--- | :--- | :--- | :--- | :--- |
-| **Longest Palindromic Substring `🔥 Google`** | 5 | Expand center | `is_pal[i][j]` filled by length | Expand-around-center is O(1) space |
-| **Longest Palindromic Subsequence `⭐ Google`** | 516 | Interval DP | `LCS(s, rev(s))` shortcut | Single chars: `dp[i][i] = 1` base case |
+| **Longest Palindromic Substring `🎯 T2`** | 5 | Expand center | `is_pal[i][j]` filled by length | Expand-around-center is O(1) space |
+| **Longest Palindromic Subsequence `🎯 T2`** | 516 | Interval DP | `LCS(s, rev(s))` shortcut | Single chars: `dp[i][i] = 1` base case |
 | **Min Insertions for Palindrome** | 1312 | LPS reduction | `len - LPS` | Equivalent to min deletions |
 | **Count Palindromic Substrings** | 647 | Expand-center | Count from each center | 2n-1 centers |
-| **Palindrome Partitioning II `🔥 Google`** | 132 | Interval + linear | Precompute `is_pal`; linear `cut[]` | If `is_pal[0][i]`, no cut needed |
-| **Palindrome Partitioning III `🔥 Google`** | 1278 | 2D DP + cost | `cost(l, r)` = chars to fix | `cost` function is O(N) per call; memoize |
-| **Regular Expression Matching `🔥 Google`** | 10 | 2D string DP | `*` = zero-or-more of PRECEDING char | Base case: leading `a*b*` matches `""` |
+| **Palindrome Partitioning II `🎯 T2`** | 132 | Interval + linear | Precompute `is_pal`; linear `cut[]` | If `is_pal[0][i]`, no cut needed |
+| **Palindrome Partitioning III `🎯 T2`** | 1278 | 2D DP + cost | `cost(l, r)` = chars to fix | `cost` function is O(N) per call; memoize |
+| **Regular Expression Matching** | 10 | 2D string DP | `*` = zero-or-more of PRECEDING char | Base case: leading `a*b*` matches `""` |
 | **Wildcard Matching** | 44 | 2D string DP | `*` = any sequence | `dp[i-1][j]`: `*` matches s[i]; `dp[i][j-1]`: `*` empty |
-| **Distinct Subsequences `⭐ Google`** | 115 | 2D DP, counting | Add ways when chars match | `dp[i][0] = 1` (empty t always subseq) |
-| **Interleaving String `⭐ Google`** | 97 | 2D DP, bool | Two sources for each `s3` char | Check `m+n == len(s3)` first |
+| **Distinct Subsequences `🎯 T2`** | 115 | 2D DP, counting | Add ways when chars match | `dp[i][0] = 1` (empty t always subseq) |
+| **Interleaving String `🎯 T2`** | 97 | 2D DP, bool | Two sources for each `s3` char | Check `m+n == len(s3)` first |
 
 ---
 
@@ -1417,11 +1420,11 @@ def num_trees(n: int) -> int:
 
 | Problem | LC # | Type | Click Moment | Gotcha |
 | :--- | :--- | :--- | :--- | :--- |
-| **Knight Probability `⭐ Google`** | 688 | Expected value | Propagate probability forward | Off-board transitions just disappear |
+| **Knight Probability** | 688 | Expected value | Propagate probability forward | Off-board transitions just disappear |
 | **Soup Servings** | 808 | Probability DP | Return 1.0 for N ≥ 4800 | Scale N down by 25 first |
 | **New 21 Game** | 837 | Probability + sliding window | `window_sum` avoids O(N·maxPts) | Sliding window is the key optimization |
-| **Stone Game I `⭐ Google`** | 877 | Game theory | Math: Alice always wins | DP insight: difference state |
-| **Stone Game III `⭐ Google`** | 1406 | Minimax DP | `dp[i]` = score advantage from position i | Take 1,2, or 3; score = take - opponent |
+| **Stone Game I** | 877 | Game theory | Math: Alice always wins | DP insight: difference state |
+| **Stone Game III** | 1406 | Minimax DP | `dp[i]` = score advantage from position i | Take 1,2, or 3; score = take - opponent |
 | **Egg Drop** | 887 | Inverted DP | Invert: "max floors with m moves and k eggs" | Standard DP is O(KN²); inverted O(K log N) |
 | **Unique BSTs** | 96 | Catalan DP | Root = i splits into left (i-1) and right (n-i) | Answer = Catalan(n) |
 | **Nim Game** | 292 | Sprague-Grundy | Win iff XOR of all piles ≠ 0 | Generalizes with Grundy for multi-pile |
@@ -1658,7 +1661,7 @@ Exactly-K decisions, concave/convex in K?
 5. **Wrong interval DP fill order** — Always fill by increasing interval length, not by row.
 6. **Burst Balloons: k is last not first** — `k` = last balloon to burst; boundaries `i,j` still present when k pops.
 7. **Regex `*` zero-occurrence** — `dp[i][j-2]` skips both `*` and the preceding element.
-8. **Edit distance base cases `🔥 Google`** — `dp[0][j] = j` and `dp[i][0] = i` (full insert/delete cost).
+8. **Edit distance base cases `🎯 T2`** — `dp[0][j] = j` and `dp[i][0] = i` (full insert/delete cost).
 9. **Digit DP cache not cleared between calls** — `dp.cache_clear()` after every `f(x)` call.
 10. **Dungeon forward DP is impossible** — Forward doesn't know minimum HP required; must fill backwards.
 11. **Stock cooldown uses prev_sold** — Save `prev_sold = sold` before updating `sold`; else uses same-day value.
@@ -1747,44 +1750,44 @@ When given a DP problem in an interview:
 
 | Problem | Pattern | Key Insight |
 | :--- | :--- | :--- |
-| **Climbing Stairs `🔥 Google`** | Linear DP | Fibonacci: `dp[i] = dp[i-1] + dp[i-2]` |
+| **Climbing Stairs `🎯 T2`** | Linear DP | Fibonacci: `dp[i] = dp[i-1] + dp[i-2]` |
 | **Min Cost Climbing Stairs** | Linear DP | `dp[i] = cost[i] + min(dp[i-1], dp[i-2])` |
-| **Subset Sum Problem `🔥 Google`** | 0/1 Knapsack | `dp[i][j]` = is sum `j` possible with first `i` items? |
-| **Coin Change (Min Coins) `🔥 Google`** | Unbounded Knapsack | `dp[i] = 1 + min(dp[i - coin])` |
-| **Longest Common Subsequence `🔥 Google`** | LCS | `s1[i] == s2[j] ? 1 + diag : max(top, left)` |
-| **Maximum Subarray (Kadane) `🔥 Google`** | Kadane | `best = max(x, best + x)` |
+| **Subset Sum Problem `🎯 T2`** | 0/1 Knapsack | `dp[i][j]` = is sum `j` possible with first `i` items? |
+| **Coin Change (Min Coins) `🎯 T2`** | Unbounded Knapsack | `dp[i] = 1 + min(dp[i - coin])` |
+| **Longest Common Subsequence `🎯 T2`** | LCS | `s1[i] == s2[j] ? 1 + diag : max(top, left)` |
+| **Maximum Subarray (Kadane) `🎯 T2`** | Kadane | `best = max(x, best + x)` |
 
 ### Level 2 — SDE-2 Standard
 
 | Problem | Pattern | The Twist |
 | :--- | :--- | :--- |
-| **Partition Equal Subset Sum `🔥 Google`** | 0/1 Knapsack | Target = `total_sum / 2` |
-| **Target Sum `🔥 Google`** | 0/1 Knapsack | Math: `P - N = target` → `2P = target + total` |
-| **Coin Change II (Total Ways) `🔥 Google`** | Unbounded Knapsack | `dp[i] += dp[i - coin]` (coins outer = combinations) |
-| **Edit Distance `🔥 Google`** | LCS Family | Three choices: insert, delete, replace |
-| **Longest Palindromic Subsequence `⭐ Google`** | LCS Family | `LCS(s, reverse(s))` |
-| **House Robber II `🔥 Google`** | Linear DP | Circular constraint: two passes exclude ends |
-| **Maximal Square `⭐ Google`** | Grid DP | `min(3 neighbors) + 1` |
-| **Word Break `🔥 Google`** | Linear DP | `dp[i] = any(dp[j] and s[j:i] in dict)` |
-| **LIS `🔥 Google`** | LIS | O(N log N) with patience sort |
-| **Russian Doll Envelopes `⭐ Google`** | LIS | Sort (w asc, h desc); LIS on h |
+| **Partition Equal Subset Sum `🎯 T2`** | 0/1 Knapsack | Target = `total_sum / 2` |
+| **Target Sum `🎯 T2`** | 0/1 Knapsack | Math: `P - N = target` → `2P = target + total` |
+| **Coin Change II (Total Ways) `🎯 T2`** | Unbounded Knapsack | `dp[i] += dp[i - coin]` (coins outer = combinations) |
+| **Edit Distance `🎯 T2`** | LCS Family | Three choices: insert, delete, replace |
+| **Longest Palindromic Subsequence `🎯 T2`** | LCS Family | `LCS(s, reverse(s))` |
+| **House Robber II `🎯 T2`** | Linear DP | Circular constraint: two passes exclude ends |
+| **Maximal Square `🎯 T2`** | Grid DP | `min(3 neighbors) + 1` |
+| **Word Break `🎯 T2`** | Linear DP | `dp[i] = any(dp[j] and s[j:i] in dict)` |
+| **LIS `🎯 T2`** | LIS | O(N log N) with patience sort |
+| **Russian Doll Envelopes** | LIS | Sort (w asc, h desc); LIS on h |
 
 ### Level 3 — SDE-3 / Staff Level
 
 | Problem | Pattern | Complexity / Optimization |
 | :--- | :--- | :--- |
-| **Burst Balloons `⭐ Google`** | Interval DP | `k` is the **last** balloon to burst |
-| **Super Egg Drop `⭐ Google`** | Inverted DP | Invert to `dp[moves][eggs]`; O(K log N) |
-| **Shortest Path Visiting All Nodes `⭐ Google`** | Bitmask DP | `(mask, last_node)` state in BFS |
+| **Burst Balloons `💤 T3`** | Interval DP | `k` is the **last** balloon to burst |
+| **Super Egg Drop `💤 T3`** | Inverted DP | Invert to `dp[moves][eggs]`; O(K log N) |
+| **Shortest Path Visiting All Nodes `💤 T3`** | Bitmask DP | `(mask, last_node)` state in BFS |
 | **Numbers At Most N Given Digit Set** | Digit DP | `tight` constraint tracking |
-| **Binary Tree Maximum Path Sum `🔥 Google`** | Tree DP | Single-arm gain vs full-path through node |
-| **Stock with Cooldown `⭐ Google`** | State Machine | 3 states: `hold`, `sold`, `rest` |
+| **Binary Tree Maximum Path Sum `🎯 T2`** | Tree DP | Single-arm gain vs full-path through node |
+| **Stock with Cooldown** | State Machine | 3 states: `hold`, `sold`, `rest` |
 | **Cherry Pickup II** | Grid DP | Two travelers 3D→2D compression |
-| **Palindrome Partitioning III `🔥 Google`** | 2D DP + cost | Cost function `cost(l,r)` memoized |
+| **Palindrome Partitioning III `🎯 T2`** | 2D DP + cost | Cost function `cost(l,r)` memoized |
 | **TSP / Hamiltonian Path** | Bitmask DP | `dp[mask][node]`; O(2^N × N²) |
-| **Stone Game III `⭐ Google`** | Minimax DP | `dp[i]` = score advantage; Alice/Bob generalized |
-| **Jump Game VI `🔥 Google`** | Deque Optimization | Monotonic deque; O(N) |
-| **Smallest Sufficient Team** | Bitmask + SOS | `dp[skill_mask]` = min team |
+| **Stone Game III** | Minimax DP | `dp[i]` = score advantage; Alice/Bob generalized |
+| **Jump Game VI `🎯 T2`** | Deque Optimization | Monotonic deque; O(N) |
+| **Smallest Sufficient Team `💤 T3`** | Bitmask + SOS | `dp[skill_mask]` = min team |
 
 ---
 
@@ -1792,43 +1795,43 @@ When given a DP problem in an interview:
 
 | Question | Pattern | Core Logic | Trickiness |
 | :--- | :--- | :--- | :--- |
-| **0/1 Knapsack `🔥 Google`** | 0/1 Knapsack | `dp[i][w] = max(skip, take)` | Backward inner loop in 1D |
-| **Subset Sum `🔥 Google`** | 0/1 Knapsack | Boolean `dp[sum]` | `dp[0] = True`; empty subset valid |
-| **Partition Equal Subset `🔥 Google`** | 0/1 Knapsack | Subset sum to `total//2` | Odd total → False immediately |
-| **Target Sum (±) `🔥 Google`** | 0/1 Knapsack | Count subsets to `(total+target)//2` | Parity + impossibility check |
-| **Coin Change I `🔥 Google`** | Unbounded | `dp[w] = min(dp[w], 1 + dp[w-c])` | Forward loop; init rest to `inf` |
-| **Coin Change II `🔥 Google`** | Unbounded | `dp[w] += dp[w-c]`; coins outer | Coin outer = combinations |
-| **Climbing Stairs `🔥 Google`** | Fibonacci | `dp[i] = dp[i-1] + dp[i-2]` | Base: `dp[1]=1, dp[2]=2` |
-| **House Robber `🔥 Google`** | Fibonacci | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])` | Two-variable rolling |
-| **House Robber II `🔥 Google`** | Fibonacci | Two passes: exclude first or last | Only one of first/last can be robbed |
-| **Decode Ways `🔥 Google`** | Fibonacci | One-digit + two-digit branches | `'0'` alone invalid |
-| **LCS `🔥 Google`** | LCS | Match → `dp[i-1][j-1]+1`; else `max` | 1-indexed table |
-| **Edit Distance `🔥 Google`** | LCS | Replace=diagonal+1; insert/delete=axis+1 | All three ops; full base case |
+| **0/1 Knapsack** | 0/1 Knapsack | `dp[i][w] = max(skip, take)` | Backward inner loop in 1D |
+| **Subset Sum `🎯 T2`** | 0/1 Knapsack | Boolean `dp[sum]` | `dp[0] = True`; empty subset valid |
+| **Partition Equal Subset `🎯 T2`** | 0/1 Knapsack | Subset sum to `total//2` | Odd total → False immediately |
+| **Target Sum (±) `🎯 T2`** | 0/1 Knapsack | Count subsets to `(total+target)//2` | Parity + impossibility check |
+| **Coin Change I `🎯 T2`** | Unbounded | `dp[w] = min(dp[w], 1 + dp[w-c])` | Forward loop; init rest to `inf` |
+| **Coin Change II `🎯 T2`** | Unbounded | `dp[w] += dp[w-c]`; coins outer | Coin outer = combinations |
+| **Climbing Stairs `🎯 T2`** | Fibonacci | `dp[i] = dp[i-1] + dp[i-2]` | Base: `dp[1]=1, dp[2]=2` |
+| **House Robber `🎯 T2`** | Fibonacci | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])` | Two-variable rolling |
+| **House Robber II `🎯 T2`** | Fibonacci | Two passes: exclude first or last | Only one of first/last can be robbed |
+| **Decode Ways `🎯 T2`** | Fibonacci | One-digit + two-digit branches | `'0'` alone invalid |
+| **LCS `🎯 T2`** | LCS | Match → `dp[i-1][j-1]+1`; else `max` | 1-indexed table |
+| **Edit Distance `🎯 T2`** | LCS | Replace=diagonal+1; insert/delete=axis+1 | All three ops; full base case |
 | **LPS** | LCS | `LCS(s, reversed(s))` | Elegant reduction |
 | **LIS O(N²)** | LIS | `dp[i] = 1 + max(dp[j])` | Answer = `max(dp)` not `dp[n-1]` |
 | **LIS O(N log N)** | LIS (patience) | `bisect_left` on `tails` | `tails` ≠ actual LIS |
-| **Russian Doll Envelopes `⭐ Google`** | LIS | Sort (w asc, h desc); LIS on h | Descending h prevents same-width |
+| **Russian Doll Envelopes** | LIS | Sort (w asc, h desc); LIS on h | Descending h prevents same-width |
 | **Max Subarray (Kadane)** | Kadane | `end_here = max(x, end_here+x)` | Start fresh when extending worse |
 | **Max Product Subarray** | Kadane | Track `cur_max` and `cur_min` | Negative × negative = positive |
 | **Circular Subarray Max** | Kadane | `max(straight, total - min_subarray)` | All-negative edge case |
-| **Burst Balloons `⭐ Google`** | Interval DP | `k` = last burst; boundaries still present | `k` is last, not first |
+| **Burst Balloons `💤 T3`** | Interval DP | `k` = last burst; boundaries still present | `k` is last, not first |
 | **Matrix Chain Multiplication** | Interval DP | `dp[i][j] = min over k of cost` | Fill by increasing length |
-| **Palindrome Partitioning II `🔥 Google`** | Interval DP | Precompute palindrome table first | `is_pal[0][i]` → no cut needed |
-| **Unique Paths `🔥 Google`** | Grid DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Init row 0 and col 0 to 1 |
+| **Palindrome Partitioning II `🎯 T2`** | Interval DP | Precompute palindrome table first | `is_pal[0][i]` → no cut needed |
+| **Unique Paths `🎯 T2`** | Grid DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Init row 0 and col 0 to 1 |
 | **Min Path Sum** | Grid DP | Accumulate costs | Init first row/col explicitly |
 | **Dungeon Game** | Grid DP | Reverse fill: need successor values | Forward is impossible |
-| **Maximal Square `⭐ Google`** | Grid DP | `min(left, top, diag) + 1` | Entry is a string; cast to int |
-| **House Robber III `🔥 Google`** | Tree DP | `dfs → (rob, skip)` | Return pair from DFS |
-| **Max Path Sum `🔥 Google`** | Tree DP | Ignore negative subtrees | Global max updated per node |
-| **Binary Tree Cameras `⭐ Google`** | Tree DP | 3 states: covered/has_camera/not_covered | Root NOT_COVERED needs +1 |
-| **TSP** | Bitmask DP | `dp[mask][node]`; BFS pairwise first | `FULL = (1<<n)-1` is goal |
-| **Smallest Sufficient Team** | Bitmask DP | `dp[skill_mask]` = min team | OR masks for coverage |
+| **Maximal Square `🎯 T2`** | Grid DP | `min(left, top, diag) + 1` | Entry is a string; cast to int |
+| **House Robber III `🎯 T2`** | Tree DP | `dfs → (rob, skip)` | Return pair from DFS |
+| **Max Path Sum `🎯 T2`** | Tree DP | Ignore negative subtrees | Global max updated per node |
+| **Binary Tree Cameras `🎯 T2`** | Tree DP | 3 states: covered/has_camera/not_covered | Root NOT_COVERED needs +1 |
+| **TSP `💤 T3`** | Bitmask DP | `dp[mask][node]`; BFS pairwise first | `FULL = (1<<n)-1` is goal |
+| **Smallest Sufficient Team `💤 T3`** | Bitmask DP | `dp[skill_mask]` = min team | OR masks for coverage |
 | **Stock I** | State Machine | Greedy: track min price | Edge case: empty array |
 | **Stock II** | State Machine | `hold, free` two states | Unlimited transactions |
 | **Stock III** | State Machine | `buy1, sell1, buy2, sell2` | Chain sell1 into buy2 |
 | **Stock IV** | State Machine | `dp[k][0/1]` backward k-loop | Forward k causes reuse |
 | **Stock Cooldown** | State Machine | 3 states; save `prev_sold` | Same-iteration update bug |
 | **Egg Drop** | Inverted DP | `dp[m][k] = dp[m-1][k-1]+1+dp[m-1][k]` | Invert: max floors per moves |
-| **Knight Probability `⭐ Google`** | Probability DP | Propagate forward | Off-board just discarded |
-| **Stone Game III `⭐ Google`** | Game / Minimax | Advantage DP | Take 1/2/3; score − opponent |
-| **Jump Game VI `🔥 Google`** | Deque Opt | Monotonic deque for window max | Pop front when expired |
+| **Knight Probability** | Probability DP | Propagate forward | Off-board just discarded |
+| **Stone Game III** | Game / Minimax | Advantage DP | Take 1/2/3; score − opponent |
+| **Jump Game VI `🎯 T2`** | Deque Opt | Monotonic deque for window max | Pop front when expired |

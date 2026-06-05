@@ -9,6 +9,12 @@ tags: [algorithms, problem-deep-dives]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md) · [↑ TOC / problem index](#jump-to-section)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```text
 WHY deep-dive walkthroughs exist
 ├── Knowing an algorithm name is not enough for SDE-2/3 interviews
@@ -47,10 +53,7 @@ DECISION
 - **Where it breaks**: Pattern mismatch — forcing a sliding-window template onto a problem with negative numbers, or greedy onto a problem with non-monotone payoffs.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -76,12 +79,12 @@ Notes: pseudocode uses generic `HashMap`, `Deque`, `Heap`, `DSU`. Duplicate head
 |---------|------------|
 | [Arrays / prefix / hashing](#section-arrays) | [array.md](../01-data-structures/array.md), [hashing.md](../01-data-structures/hashing.md) |
 | [Design-heavy DS](#section-design-ds) | [advanced-structures.md](../01-data-structures/advanced-structures.md) |
-| [Two pointers](#section-two-pointers) | [two-pointers.md](./two-pointers.md) `🔥 Google` |
-| [Sliding window](#section-sliding-window) `🔥 Google` | [sliding-window.md](./sliding-window.md) |
+| [Two pointers](#section-two-pointers) | [two-pointers.md](./two-pointers.md) |
+| [Sliding window](#section-sliding-window) `⚡ T1` | [sliding-window.md](./sliding-window.md) |
 | [Strings / KMP](#section-strings) | [string.md](./string.md) |
-| [Binary search](#section-binary-search) | [binary-search.md](./binary-search.md) `🔥 Google`, [searching.md](./searching.md) |
+| [Binary search](#section-binary-search) | [binary-search.md](./binary-search.md), [searching.md](./searching.md) |
 | [Stack / queue](#section-stack-queue) | [stack.md](../01-data-structures/stack.md), [queue.md](../01-data-structures/queue.md) |
-| [Linked list](#section-linked-list) | [linked-list.md](../01-data-structures/linked-list.md) `🔥 Google` |
+| [Linked list](#section-linked-list) `🎯 T2` | [linked-list.md](../01-data-structures/linked-list.md) |
 | [Trees / BST](#section-trees) | [tree.md](../01-data-structures/tree.md) |
 | [Graphs BFS/DFS/topo](#section-graphs) | [graphs.md](../01-data-structures/graphs.md), [graph.md](./graph.md) |
 | [Advanced graphs](#section-advanced-graphs) | [advanced-graphs.md](./advanced-graphs.md) |
@@ -94,7 +97,7 @@ Notes: pseudocode uses generic `HashMap`, `Deque`, `Heap`, `DSU`. Duplicate head
 | [Greedy](#section-greedy) | [greedy.md](./greedy.md) |
 | [Maths](#section-maths) | [maths.md](./maths.md) |
 | [Sorting / select](#section-sorting) | [sorting.md](./sorting.md) |
-| [Concurrency](#section-concurrency) | [concurrency.md](./concurrency.md) `⭐ Google` |
+| [Concurrency](#section-concurrency) | [concurrency.md](./concurrency.md) |
 | [Graph path construction](#section-graph-path) | [graph.md](./graph.md) |
 | [SDE-3 supplementary variants](#section-supplementary) | stretch |
 | [Quick reference table](#section-quick-ref) | pattern → variant map |
@@ -106,7 +109,7 @@ Notes: pseudocode uses generic `HashMap`, `Deque`, `Heap`, `DSU`. Duplicate head
 
 High-frequency Google SDE-2 — start here if time is short:
 
-[Two Sum](#two-sum) `🔥 Google` · [Subarray Sum = K](#subarray-sum-equals-k) · [3Sum](#3sum) · [Longest Substring Without Repeat](#longest-substring-without-repeating-characters) · [Minimum Window](#minimum-window-substring) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Koko / BS on answer](#koko-eating-bananas) · [Daily Temperatures](#daily-temperatures) · [LRU Cache](#lru-cache) · [Reverse List](#reverse-linked-list) · [LCA](#lowest-common-ancestor-bst-general) · [Validate BST](#validate-bst) · [Number of Islands](#number-of-islands) · [Course Schedule](#course-schedule) · [Word Ladder](#word-ladder) · [Merge K Lists](#merge-k-sorted-lists) · [Top K Frequent](#top-k-frequent-elements) · [House Robber](#house-robber) · [Coin Change](#coin-change) · [Word Break](#word-break) · [Permutations](#permutations) · [Combination Sum](#combination-sum)
+[Two Sum](#two-sum) `⚡ T1` · [Subarray Sum = K](#subarray-sum-equals-k) · [3Sum](#3sum) · [Longest Substring Without Repeat](#longest-substring-without-repeating-characters) · [Minimum Window](#minimum-window-substring) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Koko / BS on answer](#koko-eating-bananas) · [Daily Temperatures](#daily-temperatures) · [LRU Cache](#lru-cache) · [Reverse List](#reverse-linked-list) · [LCA](#lowest-common-ancestor-bst-general) · [Validate BST](#validate-bst) · [Number of Islands](#number-of-islands) · [Course Schedule](#course-schedule) · [Word Ladder](#word-ladder) · [Merge K Lists](#merge-k-sorted-lists) · [Top K Frequent](#top-k-frequent-elements) · [House Robber](#house-robber) · [Coin Change](#coin-change) · [Word Break](#word-break) · [Permutations](#permutations) · [Combination Sum](#combination-sum)
 
 ---
 
@@ -118,15 +121,15 @@ High-frequency Google SDE-2 — start here if time is short:
 
 **Two pointers** — [3Sum](#3sum) · [Container With Most Water](#container-with-most-water) · [Trapping Rain Water](#trapping-rain-water) · [Remove Duplicates](#remove-duplicates-from-sorted-array) · [Sort Colors](#sort-colors-dutch-flag)
 
-**Sliding window `🔥 Google`** — [Longest Substring No Repeat](#longest-substring-without-repeating-characters) · [Longest Repeating Char Replacement](#longest-repeating-character-replacement) · [Minimum Window](#minimum-window-substring) · [Find All Anagrams](#find-all-anagrams-in-a-string) · [Sliding Window Maximum](#sliding-window-maximum)
+**Sliding window `⚡ T1`** — [Longest Substring No Repeat](#longest-substring-without-repeating-characters) · [Longest Repeating Char Replacement](#longest-repeating-character-replacement) · [Minimum Window](#minimum-window-substring) · [Find All Anagrams](#find-all-anagrams-in-a-string) · [Sliding Window Maximum](#sliding-window-maximum)
 
 **Strings** — [KMP / strStr](#implement-strstr-kmp)
 
-**Binary search `🔥 Google`** — [First/Last Position](#find-first-and-last-position-of-element) · [Lower/Upper Bound](#lower-upper-bound) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Min in Rotated Array](#find-minimum-in-rotated-sorted-array) · [Koko Eating Bananas](#koko-eating-bananas) · [Split Array Largest Sum](#split-array-largest-sum) · [Median Two Sorted Arrays](#median-of-two-sorted-arrays)
+**Binary search** — [First/Last Position](#find-first-and-last-position-of-element) · [Lower/Upper Bound](#lower-upper-bound) · [Search Rotated Array](#search-in-rotated-sorted-array) · [Min in Rotated Array](#find-minimum-in-rotated-sorted-array) · [Koko Eating Bananas](#koko-eating-bananas) · [Split Array Largest Sum](#split-array-largest-sum) · [Median Two Sorted Arrays](#median-of-two-sorted-arrays)
 
 **Stack / queue** — [Valid Parentheses](#valid-parentheses) · [Decode String](#decode-string) · [Daily Temperatures](#daily-temperatures) · [Largest Rectangle Histogram](#largest-rectangle-in-histogram) · [Eval RPN](#evaluate-reverse-polish-notation)
 
-**Linked list `🔥 Google`** — [Reverse List](#reverse-linked-list) · [Cycle II](#linked-list-cycle-ii) · [Copy Random Pointer](#copy-list-with-random-pointer) · [Merge Two Sorted](#merge-two-sorted-lists) · [Remove Nth From End](#remove-nth-from-end)
+**Linked list `🎯 T2`** — [Reverse List](#reverse-linked-list) · [Cycle II](#linked-list-cycle-ii) · [Copy Random Pointer](#copy-list-with-random-pointer) · [Merge Two Sorted](#merge-two-sorted-lists) · [Remove Nth From End](#remove-nth-from-end)
 
 **Trees / BST** — [Max Depth](#maximum-depth-of-binary-tree) · [Validate BST](#validate-bst) · [LCA](#lowest-common-ancestor-bst-general) · [Level Order](#binary-tree-level-order-traversal) · [Kth Smallest BST](#kth-smallest-in-bst) · [Max Path Sum](#binary-tree-maximum-path-sum) · [Serialize Tree](#serialize-and-deserialize-binary-tree)
 
@@ -2534,9 +2537,9 @@ return dp[(1 << num_skills) - 1]
 | :--- | :--- | :--- | :--- |
 | **Arrays** | Two Sum | Subarray Sum = K | Prefix Sum + Hash Map |
 | **Strings** | strStr() | Shortest Palindrome | LPS Table (KMP) |
-| **BFS `🔥 Google`** | BFS (Tree) | Rotting Oranges | Multi-source BFS |
-| **DFS `🔥 Google`** | DFS (Tree) | All Nodes Dist K | Parent Pointers |
-| **Binary Search `🔥 Google`** | Exact Match | Koko Eating Bananas | Search on Answer (Predicate) |
+| **BFS** | BFS (Tree) | Rotting Oranges | Multi-source BFS |
+| **DFS** | DFS (Tree) | All Nodes Dist K | Parent Pointers |
+| **Binary Search** | Exact Match | Koko Eating Bananas | Search on Answer (Predicate) |
 | **DP** | House Robber | House Robber II | Circle = Two Linear Passes |
 | **Backtracking** | Permutations | Word Search II | Trie Optimization |
 | **Greedy** | Intervals | Task Scheduler | Math Formula or Heap |

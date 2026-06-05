@@ -9,6 +9,12 @@ tags: [algorithms, string]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```text
 WHY string algorithms exist
 ├── Naive substring search is O(n·m) — too slow for large text corpora and bioinformatics
@@ -56,10 +62,7 @@ DECISION
 - **Where it breaks**: Hash collisions (Rabin-Karp), incorrect LPS fallback (KMP), and off-by-one in suffix array LCP bounds are the dominant failure modes.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -225,7 +228,7 @@ def kmp_search(text: str, pattern: str) -> list[int]:
 1. **Shortest Palindrome**:
    - **What (The Problem & Goal):** Add minimum characters to the front of a string to make it a palindrome.
    - **How (Intuition & Mental Model):** Create a new string `s + '#' + reverse(s)`. Find the LPS value of the last character. This value is the length of the longest palindromic prefix of the original string. The characters to add are the remaining suffix of the reversed string.
-2. **Repeated Substring Pattern `⭐ Google`**:
+2. **Repeated Substring Pattern**:
    - **What (The Problem & Goal):** Check if a string can be constructed by repeating a substring.
    - **How (Intuition & Mental Model):** If a string `s` of length `n` has a repeated pattern, then `n % (n - lps[n-1]) == 0` and `lps[n-1] > 0`. Alternatively, check if `s` is in `(s + s)[1:-1]`.
 ```
@@ -310,7 +313,7 @@ def longest_palindromic_substring(s: str) -> str:
     return s[start:end+1]
 
 #### Common Variants & Twists
-1. **Palindrome Partitioning II `🔥 Google`**:
+1. **Palindrome Partitioning II**:
    - **What (The Problem & Goal):** Find the minimum cuts needed to partition a string into palindromes.
    - **How (Intuition & Mental Model):** Use DP where `dp[i]` is the min cuts for `s[:i]`. To optimize, use the "Expand from Center" idea to find all palindromes and update `dp[right+1] = min(dp[right+1], dp[left] + 1)`.
 2. **Count Palindromic Substrings**:
@@ -359,7 +362,7 @@ def min_window_substring(s: str, t: str) -> str:
 1. **Longest Substring with At Most K Distinct Characters**:
    - **What (The Problem & Goal):** Find the length of the longest substring with `<= k` distinct characters.
    - **How (Intuition & Mental Model):** Sliding window with a frequency map. Expand `right`. If `len(map) > k`, shrink `left` until `len(map) == k`.
-2. **Permutation in String `⭐ Google`**:
+2. **Permutation in String**:
    - **What (The Problem & Goal):** Check if `s2` contains a permutation of `s1`.
    - **How (Intuition & Mental Model):** This is a fixed-size sliding window of length `len(s1)`. Compare the character frequency map of the window with that of `s1`.
 ```
@@ -535,7 +538,7 @@ class AhoCorasick:
 
 > [!TIP]
 > For **longest repeated substring**, **substring search across multiple queries**, or **text compression**:
-> - **Suffix array** + **LCP array** gives O(N log N) build, O(log N) per query.
+> - **Suffix array `💤 T3`** + **LCP array** gives O(N log N) build, O(log N) per query.
 > - **Suffix automaton** gives O(N) build and O(N) total size for all suffixes — used in Google's text indexing.
 >
 > In competitive programming: longest duplicate substring = binary search on length + rolling hash (O(N log N)); suffix array gives exact O(N log N) or O(N) with SA-IS.
@@ -566,25 +569,25 @@ class AhoCorasick:
 ## 4. Common Interview Problems
 
 ### Easy
-- **Valid Palindrome `🔥 Google`** — Two pointers; skip non-alphanumeric; compare `lower()`.
-- **Valid Anagram `🔥 Google`** — `Counter(s) == Counter(t)` or sort both.
+- **Valid Palindrome `🎯 T2`** — Two pointers; skip non-alphanumeric; compare `lower()`.
+- **Valid Anagram `🎯 T2`** — `Counter(s) == Counter(t)` or sort both.
 - **Longest Common Prefix** — Vertical scan or binary search on length.
 
 ### Medium
 - **Longest Substring Without Repeating Chars** — Sliding window + last-seen index map.
-- **Longest Palindromic Substring `🔥 Google`** — Expand from center; O(N²).
-- [Group Anagrams](problem-deep-dives.md#group-anagrams) `🔥 Google` — `sorted(word)` or 26-count tuple as key.
+- **Longest Palindromic Substring `🎯 T2`** — Expand from center; O(N²).
+- [Group Anagrams](problem-deep-dives.md#group-anagrams) — `sorted(word)` or 26-count tuple as key.
 - **Find All Anagrams in String** — Fixed-size sliding window + counter comparison.
-- **Encode and Decode Strings `🔥 Google`** — Length-prefixed encoding: `f"{len(s)}#{s}"`.
-- **Longest Palindromic Subsequence `⭐ Google`** — DP or LCS with `reversed(s)`.
+- **Encode and Decode Strings `🎯 T2`** — Length-prefixed encoding: `f"{len(s)}#{s}"`.
+- **Longest Palindromic Subsequence `🎯 T2`** — DP or LCS with `reversed(s)`.
 
 ### Hard
-- [Minimum Window Substring](problem-deep-dives.md#minimum-window-substring) `🔥 Google` — Sliding window + `have`/`required` count logic.
-- **Edit Distance `🔥 Google`** — 2D DP; space-optimize to 1D rolling array.
+- [Minimum Window Substring](problem-deep-dives.md#minimum-window-substring) — Sliding window + `have`/`required` count logic.
+- **Edit Distance `🎯 T2`** — 2D DP; space-optimize to 1D rolling array.
 - **Implement strStr() (KMP)** — Build LPS; scan without backtracking text pointer.
-- **Regular Expression Matching `🔥 Google`** — 2D DP; handle `*` = zero or more of preceding.
+- **Regular Expression Matching** — 2D DP; handle `*` = zero or more of preceding.
 - **Wildcard Matching** — DP; `*` matches any sequence including empty.
-- **Distinct Subsequences `⭐ Google`** — Count ways to form T as subsequence of S.
+- **Distinct Subsequences `🎯 T2`** — Count ways to form T as subsequence of S.
 
 ---
 
@@ -592,29 +595,29 @@ class AhoCorasick:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Longest Palindromic Substring `🔥 Google`** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
-| **Longest Palindromic Subsequence `⭐ Google`** | "Longest non-contiguous palindrome" | DP or `LCS(s, reversed(s))` | Subsequence ≠ substring; LCS reduction is the cleanest approach. |
+| **Longest Palindromic Substring `🎯 T2`** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
+| **Longest Palindromic Subsequence `🎯 T2`** | "Longest non-contiguous palindrome" | DP or `LCS(s, reversed(s))` | Subsequence ≠ substring; LCS reduction is the cleanest approach. |
 | **[Min Window Substring](problem-deep-dives.md#minimum-window-substring)** | "Smallest window containing all of T" | Expand right; shrink left while `have==required` | `have` tracks saturation (== need[ch]), not total count. Unicode: use full Counter, not 26-char array. |
 | **Substring with Concatenation** | "Window containing all words exactly once" | Fixed word-length window; multiset word comparison | Multiple occurrences of same word require multiset, not set. O(N×W×K) with rolling word-hash. |
-| **[Group Anagrams](problem-deep-dives.md#group-anagrams) `🔥 Google`** | "Same letters, different order" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` O(K log K) vs count O(K). |
+| **[Group Anagrams](problem-deep-dives.md#group-anagrams) `⚡ T1`** | "Same letters, different order" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` O(K log K) vs count O(K). |
 | **Valid Parenthesis String** | "`*` can be `(`, `)`, or empty" | Greedy range `[lo, hi]` of possible open-count | `lo = max(0, lo-1)` (can't go negative); `hi` increases on `*`. |
 | **KMP strStr** | "First occurrence of needle in haystack" | Build LPS; scan text without backtracking text pointer | LPS `length = lps[length-1]` on mismatch — not `length -= 1`. |
 | **Repeated String Match** | "Minimum copies of A to contain B" | Build `A * ceil(len(B)/len(A)) + 1`; KMP/find | At most `ceil(len(B)/len(A)) + 1` copies suffice — prove bound. |
-| **[Edit Distance](problem-deep-dives.md#edit-distance) `🔥 Google`** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
-| **Distinct Subsequences `⭐ Google`** | "Ways to form T as subsequence of S" | `dp[i][j]` = count ways for `s[:i]` containing `t[:j]` | Mod by large prime for large inputs; base case `dp[i][0]=1` (empty T always 1 way). |
-| **Valid Palindrome `🔥 Google`** [E] | "Ignore non-alphanumeric; check palindrome" | Two pointers; `isalnum()` skip; compare `lower()` | `''.join(c.lower() for c in s if c.isalnum())` then `== reversed` is also clean. |
+| **[Edit Distance](problem-deep-dives.md#edit-distance) `🎯 T2`** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
+| **Distinct Subsequences `🎯 T2`** | "Ways to form T as subsequence of S" | `dp[i][j]` = count ways for `s[:i]` containing `t[:j]` | Mod by large prime for large inputs; base case `dp[i][0]=1` (empty T always 1 way). |
+| **Valid Palindrome `🎯 T2`** [E] | "Ignore non-alphanumeric; check palindrome" | Two pointers; `isalnum()` skip; compare `lower()` | `''.join(c.lower() for c in s if c.isalnum())` then `== reversed` is also clean. |
 | **Reverse Words in a String** [E] | "Reverse word order, single spaces, no leading/trailing" | `' '.join(reversed(s.split()))` in Python | In-place without split: reverse entire string, then reverse each word. |
 | **Longest Common Prefix** [E] | "Prefix shared by all strings" | Sort lexicographically; compare only first and last | Only need to compare extremes after sort — all others are bounded by these two. |
 | **String to Integer (atoi)** [M] | "Parse integer with sign, overflow, invalid chars" | Skip whitespace; read sign; accumulate digits; stop on non-digit; clamp to [INT_MIN, INT_MAX] | Test: leading spaces, sign-only, overflow, empty string, non-digit prefix. |
 | **Count and Say** [M] | "RLE encoding applied iteratively" | Expand each sequence by counting consecutive runs | Use `itertools.groupby` or two-pointer; off-by-one when counting final group. |
-| **Longest Repeating Character Replacement `🔥 Google`** [M] | "Max window where replacing ≤ K chars makes it uniform" | Sliding window; track `max_freq` in window; `window_size - max_freq > K` → shrink | `max_freq` never decreases — we only care about windows larger than current best. |
+| **Longest Repeating Character Replacement `⚡ T1`** [M] | "Max window where replacing ≤ K chars makes it uniform" | Sliding window; track `max_freq` in window; `window_size - max_freq > K` → shrink | `max_freq` never decreases — we only care about windows larger than current best. |
 | **Minimum Remove to Make Valid Parentheses** [M] | "Remove min chars to balance parentheses" | Stack of unmatched `(` indices; set of unmatched `)` indices; remove both | Convert string to list; remove indices from set; join remainder. |
-| **Longest Substring Without Repeating Characters `🔥 Google`** [M] | "Max length window with all unique chars" | Sliding window with set or last-seen map; shrink `left` on duplicate | Map approach: `left = max(left, last_seen[c] + 1)` — jump past duplicate directly. |
-| **Find All Anagrams in a String `⭐ Google`** [M] | "All start indices where substring is anagram of p" | Fixed-size sliding window; frequency array comparison | Compare full frequency arrays each step is O(26) = O(1) — not O(N). |
+| **Longest Substring Without Repeating Characters `⚡ T1`** [M] | "Max length window with all unique chars" | Sliding window with set or last-seen map; shrink `left` on duplicate | Map approach: `left = max(left, last_seen[c] + 1)` — jump past duplicate directly. |
+| **Find All Anagrams in a String `⚡ T1`** [M] | "All start indices where substring is anagram of p" | Fixed-size sliding window; frequency array comparison | Compare full frequency arrays each step is O(26) = O(1) — not O(N). |
 | **Palindromic Substrings** [M] | "Count all palindromic substrings" | Expand around every center (N single + N-1 double centers) | Total O(N²) centers; Manacher's O(N) for follow-up — know it exists. |
-| **Word Search `🔥 Google`** [M] | "Find word in 2D board via adjacent cells" | DFS with in-place visited marking (replace with `#`); restore after | Mark before recursing — not after; otherwise you might revisit within one DFS path. |
+| **Word Search `⚡ T1`** [M] | "Find word in 2D board via adjacent cells" | DFS with in-place visited marking (replace with `#`); restore after | Mark before recursing — not after; otherwise you might revisit within one DFS path. |
 | **Wildcard Matching** [H] | "Pattern match with `?` (any char) and `*` (any sequence)" | 2D DP; `*` can match zero (`dp[i][j-1]`) or one-more (`dp[i-1][j]`) | Unlike regex, `*` here matches any sequence directly (not "zero or more of preceding"). |
-| **Regular Expression Matching `🔥 Google`** [H] | "Match with `.` and `*`; `*` means zero-or-more of preceding" | `dp[i][j]`: match char/dot; `*` = zero occurrences `dp[i][j-2]` or consume one `dp[i-1][j]` | `*` zero occurrences is the tricky case: skip pattern char + `*` with `dp[i][j-2]`. |
+| **Regular Expression Matching** [H] | "Match with `.` and `*`; `*` means zero-or-more of preceding" | `dp[i][j]`: match char/dot; `*` = zero occurrences `dp[i][j-2]` or consume one `dp[i-1][j]` | `*` zero occurrences is the tricky case: skip pattern char + `*` with `dp[i][j-2]`. |
 
 ---
 

@@ -6,13 +6,16 @@ difficulty: mixed
 
 # Segment Tree & Binary Indexed Tree
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 Use a segment tree when you need fast range queries and fast updates on the same array, and the operation is associative (`sum`, `min`, `max`, `gcd`, etc.). For many prefix-sum-style problems, a BIT/Fenwick tree is simpler; for static queries, sparse table or prefix sums can be better.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -25,7 +28,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Core Segment Tree
 
-### Range Sum Query — Mutable (Point Update, Range Query) `⭐ Google`
+### Range Sum Query — Mutable (Point Update, Range Query) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -286,7 +289,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Segment Tree Applications
 
-### Count of Range Sum `⭐ Google`
+### Count of Range Sum `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums and two integers lower and upper, return the number of range sums that lie in [lower, upper] inclusive.
@@ -372,7 +375,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Number of Longest Increasing Subsequence
+### Number of Longest Increasing Subsequence `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return the number of longest increasing subsequences.
@@ -430,7 +433,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Queue Reconstruction by Height `⭐ Google`
+### Queue Reconstruction by Height
 
 > [!example] Problem
 > You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
@@ -488,7 +491,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Binary Indexed Tree (Fenwick Tree)
 
-### Range Sum Query — Mutable (BIT Implementation) `⭐ Google`
+### Range Sum Query — Mutable (BIT Implementation) `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following types:
@@ -570,7 +573,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Count of Smaller Numbers After Self `⭐ Google`
+### Count of Smaller Numbers After Self `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return an integer array counts where counts[i] is the number of smaller elements to the right of nums[i].
@@ -631,7 +634,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### Reverse Pairs `⭐ Google`
+### Reverse Pairs `💤 T3`
 
 > [!example] Problem
 > Given an integer array nums, return the number of reverse pairs in the array.
@@ -701,7 +704,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### My Calendar II (LC 731)
+### My Calendar II (LC 731) `💤 T3`
 
 > [!example] Problem
 > You are implementing a program to use as your calendar. We can add a new event if adding the event will not cause a triple booking.
@@ -769,7 +772,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### My Calendar III (LC 732)
+### My Calendar III (LC 732) `💤 T3`
 
 > [!example] Problem
 > A k-booking happens when k events have some non-empty intersection (i.e., there is some time that is common to all k events.)
@@ -864,7 +867,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ---
 
-### The Skyline Problem (LC 218) `⭐ Google`
+### The Skyline Problem (LC 218)
 
 > [!example] Problem
 > A city's skyline is the outer contour of the silhouette formed by all the buildings in that city when viewed from a distance. Given the locations and heights of all the buildings, return the skyline formed by these buildings collectively.
@@ -1100,7 +1103,7 @@ Use a segment tree when you need fast range queries and fast updates on the same
 
 ## Segment Tree Applications
 
-### Range Sum Query 2D — Mutable (LC 308) `⭐ Google`
+### Range Sum Query 2D — Mutable (LC 308) `💤 T3`
 
 > [!example] Problem
 > Given a 2D matrix `matrix`, handle multiple queries of the following types:

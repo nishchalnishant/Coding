@@ -9,6 +9,12 @@ tags: [algorithms, system-design-algorithms]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
+> Skim for conceptual awareness. Do NOT spend deep implementation time here.
+> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+
+
 ```
 WHY system design algos → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
        │                        │                │               │               │
@@ -116,10 +122,7 @@ System Design Algorithms — First Principles
 These are the "Big Tech" algorithms that power distributed systems. While standard DSA (DP, Graphs) tests logic, these test your ability to build scalable, resilient infrastructure.
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -286,7 +289,7 @@ class TokenBucket:
 - **Why**: Essential for "Leader Election" and "Distributed Locking". If 3/5 nodes agree, the value is committed.
 - **Interview Soundbite**: "Raft is preferred for its readability; Paxos is the original proof. Both ensure safety (no two leaders) and liveness (eventual progress)."
 
-**Raft phases:**
+**Raft phases: `💤 T3`**
 1. **Leader Election**: Nodes start as Followers. On timeout, become Candidate → broadcast `RequestVote`. Majority wins → becomes Leader.
 2. **Log Replication**: Leader sends `AppendEntries` to all followers. Committed once majority acknowledges.
 3. **Safety**: A leader can only be elected if it has the most up-to-date log (prevents overwriting committed entries).
@@ -306,9 +309,9 @@ class TokenBucket:
 **Vector Clocks**: Array of counters, one per node. `V[i]` = events node i has seen. Two events are concurrent if neither vector dominates the other. Used by Dynamo, Riak for conflict detection.
 
 ### CAP Theorem (interview must-know)
-- **C `🔥 Google`**onsistency: every read returns the most recent write.
+- **C**onsistency: every read returns the most recent write.
 - **A**vailability: every request gets a (possibly stale) response.
-- **P `⭐ Google`**artition tolerance: system continues despite network splits.
+- **P**artition tolerance: system continues despite network splits.
 - Cannot have all three. Real choice: **CP** (Zookeeper, HBase, Spanner) or **AP** (Cassandra, DynamoDB, CouchDB).
 - Modern framing: **PACELC** — during normal ops, trade-off between latency (L) and consistency (C).
 

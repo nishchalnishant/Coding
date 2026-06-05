@@ -6,17 +6,20 @@ difficulty: mixed
 
 # Hashing Problems
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
+
+
 
 ---
 
 ## Complement Map
 
-### Two Sum `🔥 Google`
+### Two Sum `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -71,7 +74,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum (hash-based) `🔥 Google`
+### 3Sum (hash-based) `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -144,7 +147,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum (hash-based) `⭐ Google`
+### 4Sum (hash-based) `⚡ T1`
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -375,7 +378,7 @@ difficulty: mixed
 
 ---
 
-### Top K Frequent Elements `🔥 Google`
+### Top K Frequent Elements `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the k most frequent elements. You may return the answer in any order.
@@ -628,7 +631,7 @@ difficulty: mixed
 
 ---
 
-### Subarray Sum Equals K `🔥 Google`
+### Subarray Sum Equals K `⚡ T1`
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -675,7 +678,7 @@ difficulty: mixed
 
 ---
 
-### Contiguous Array (Max Equal 0/1 Subarray)
+### Contiguous Array (Max Equal 0/1 Subarray) `⚡ T1`
 
 > [!example] Problem
 > Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
@@ -765,7 +768,7 @@ difficulty: mixed
 
 ---
 
-### Subarray Sums Divisible by K
+### Subarray Sums Divisible by K `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
@@ -819,7 +822,7 @@ difficulty: mixed
 
 ## Design
 
-### Insert Delete GetRandom O(1) `🔥 Google`
+### Insert Delete GetRandom O(1) `⚡ T1`
 
 > [!example] Problem
 > Implement the RandomizedSet class:
@@ -891,7 +894,7 @@ difficulty: mixed
 
 ---
 
-### Design HashMap `⭐ Google`
+### Design HashMap `⚡ T1`
 
 > [!example] Problem
 > Design a HashMap without using any built-in hash table libraries.
@@ -1056,7 +1059,7 @@ difficulty: mixed
 
 ---
 
-### Two Sum Less Than K
+### Two Sum Less Than K `⚡ T1`
 
 > [!example] Problem
 > Given an array `nums` of integers and integer `k`, return the maximum `sum` such that there exists `i < j` with `nums[i] + nums[j] = sum` and `sum < k`. If no `i`, `j` exist satisfying this equation, return `-1`.
@@ -1123,7 +1126,7 @@ difficulty: mixed
 
 ## Miscellaneous
 
-### Longest Consecutive Sequence `🔥 Google`
+### Longest Consecutive Sequence `⚡ T1`
 
 > [!example] Problem
 > Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
@@ -1329,7 +1332,7 @@ difficulty: mixed
 
 ## Rolling Hash / Dedup
 
-### Longest Duplicate Substring (Rabin-Karp)
+### Longest Duplicate Substring (Rabin-Karp) `⚡ T1`
 
 > [!example] Problem
 > Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
@@ -1455,7 +1458,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum II `⭐ Google`
+### 4Sum II `⚡ T1`
 
 > [!example] Problem
 > Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
@@ -1515,7 +1518,7 @@ difficulty: mixed
 ## See Also
 
 [[array]] | [[sliding-window]] | [[string]] | [[two-pointers]]
-### Subarray Sums Divisible by K (LC 974)
+### Subarray Sums Divisible by K (LC 974) `⚡ T1`
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
@@ -1566,7 +1569,7 @@ difficulty: mixed
 
 ---
 
-### Contiguous Array (LC 525)
+### Contiguous Array (LC 525) `⚡ T1`
 
 > [!example] Problem
 > Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
@@ -1623,7 +1626,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum II (LC 454) `⭐ Google`
+### 4Sum II (LC 454) `⚡ T1`
 
 > [!example] Problem
 > Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that

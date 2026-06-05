@@ -9,6 +9,12 @@ tags: [data-structures, string]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
+> [!abstract] L3 Google Interview — Tier Legend
+> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
+> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
+> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+
+
 ```
 WHY string algorithms exist → WHAT strings are → HOW they work → WHEN to use → WHAT can go wrong
        │                             │                  │               │               │
@@ -113,10 +119,7 @@ A string is an **immutable array of characters**. Every array technique applies 
 | Sort characters | O(n log n) | Or O(n) with counting sort |
 
 
-> [!abstract] Google Interview Legend
-> `🔥 Google` — **Core** problem: extremely high frequency at Google SDE 2/3 interviews. Cover these first.
-> `⭐ Google` — **Important** problem: medium frequency at Google SDE 2/3 level. Cover after core.
-> Problems without a marker are good practice but less Google-specific at SDE 2/3 level.
+
 
 ---
 
@@ -290,14 +293,14 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 
 | Question | Pattern | Click moment | Core logic | Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Valid Anagram `🔥 Google`** | Frequency map | Same multiset of chars | `Counter(s) == Counter(t)` or 26-count array | Unicode: use Counter, not fixed 26-array. |
-| **Group Anagrams `🔥 Google`** | Hash by canonical key | Same letters → same key | Key = `tuple(sorted(w))` or 26-count tuple | Sort key is O(k log k); count tuple is O(k). |
+| **Valid Anagram `🎯 T2`** | Frequency map | Same multiset of chars | `Counter(s) == Counter(t)` or 26-count array | Unicode: use Counter, not fixed 26-array. |
+| **Group Anagrams `⚡ T1`** | Hash by canonical key | Same letters → same key | Key = `tuple(sorted(w))` or 26-count tuple | Sort key is O(k log k); count tuple is O(k). |
 | **Longest Substring Without Repeat** | Sliding window | Shrink while duplicate | `while c in seen: left++`; update max | Store **last index** of char to jump `left` in O(1). |
-| **Minimum Window Substring `🔥 Google`** | Window + frequency | Expand until valid; shrink while valid | Track `have` vs `need` per char, not total count | Empty `t` or impossible → return `""`. |
-| **Find All Anagrams `⭐ Google`** | Fixed window | Window size = len(p) | Compare frequency maps each step | Use 26-array diff count for O(1) compare. |
-| **Longest Palindromic Substring `🔥 Google`** | Expand around center | Every center → expand | O(n²) expand; Manacher O(n) stretch | Check **odd and even** centers. |
+| **Minimum Window Substring `⚡ T1`** | Window + frequency | Expand until valid; shrink while valid | Track `have` vs `need` per char, not total count | Empty `t` or impossible → return `""`. |
+| **Find All Anagrams `⚡ T1`** | Fixed window | Window size = len(p) | Compare frequency maps each step | Use 26-array diff count for O(1) compare. |
+| **Longest Palindromic Substring `🎯 T2`** | Expand around center | Every center → expand | O(n²) expand; Manacher O(n) stretch | Check **odd and even** centers. |
 | **Longest Repeating Char Replacement** | Window + max freq | Valid if `len - max_freq <= k` | Track max frequency **in current window** | max_freq can decrease when shrinking — still correct for max **length**. |
-| **Decode String `⭐ Google`** | Stack | Push context on `[` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
+| **Decode String** | Stack | Push context on `[` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
 | **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
 
 More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.md). String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/string.md) in `02-algorithms/`.
@@ -308,7 +311,7 @@ More walkthroughs: [problem-deep-dives.md](../02-algorithms/problem-deep-dives.m
 
 - If the problem is **substring / subarray with constraint** → sliding window (variable or fixed size).
 - If the problem is **anagram or same multiset** → frequency map or sorted/canonical key.
-- If the problem is **palindrome `🔥 Google`** → expand around center (O(n²)) unless asked for O(n) (Manacher).
+- If the problem is **palindrome `🎯 T2`** → expand around center (O(n²)) unless asked for O(n) (Manacher).
 - If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → trie / Aho-Corasick ([trie.md](./trie.md)).
 - If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./array.md)).
 - If building strings in a loop → **list + join**, never `s += c` in Python.
@@ -337,7 +340,7 @@ Strings in Python are immutable. Doing `s += char` copies the entire string at e
 
 **What is the difference in sliding window state-tracking between checking for "longest substring without repeating characters" vs "minimum window substring"?** #flashcard
 - **Longest substring**: Track character indices in a map. Jump the left pointer `left = max(left, char_idx[ch] + 1)` on duplicates.
-- **Minimum window `🔥 Google`**: Maintain a frequency target `need` and current count `window`. Increment a `have` tracker when `window[ch] == need[ch]` and expand/shrink based on `have == len(need)`.
+- **Minimum window `⚡ T1`**: Maintain a frequency target `need` and current count `window`. Increment a `have` tracker when `window[ch] == need[ch]` and expand/shrink based on `have == len(need)`.
 
 **How do you find the longest palindromic substring in O(N^2) time and O(1) space, and what are the two centers to consider?** #flashcard
 Iterate through the string and treat each index as a center. Expand outward while characters match. You must expand from two distinct centers at each index $i$:
