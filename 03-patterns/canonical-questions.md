@@ -7,6 +7,11 @@ tags: [patterns, canonical-questions]
 ---
 # First-Principles Map — Canonical Interview Questions
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY Canonical Questions exist
 ├── Interviewers reuse ~80 problems across all FAANG rounds

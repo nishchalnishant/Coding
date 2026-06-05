@@ -60,6 +60,11 @@ DECISION — question type → story mapping
 
 # Behavioral — Google L4 Guide
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 Full STAR stories and templates: [`behavioral.md`](./behavioral.md)
 Googliness round deep dive: [`googliness-round.md`](./googliness-round.md)
 

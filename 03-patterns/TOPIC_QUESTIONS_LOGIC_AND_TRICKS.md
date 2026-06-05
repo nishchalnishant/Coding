@@ -46,6 +46,11 @@ WHY topic questions → WHAT they test → HOW to approach → WHEN each arises 
 
 # Topic Questions — Logic, Patterns, and Trickiness
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 [TOPIC QUESTIONS — LOGIC & TRICKINESS — MINDMAP]
 ├── WHY IT EXISTS

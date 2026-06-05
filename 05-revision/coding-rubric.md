@@ -7,6 +7,11 @@ tags: [revision, coding-rubric]
 ---
 # First-Principles Map — Coding Interview Rubric
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY a Scoring Rubric exists
 ├── Interviewers don't score "did they solve it" — they score on 4–5 axes independently

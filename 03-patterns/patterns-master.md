@@ -47,6 +47,11 @@ WHY pattern recognition → WHAT it is → HOW it works → WHEN to use → WHAT
 
 # Pattern Recognition Master Guide
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 [PATTERN RECOGNITION — MINDMAP]
 ├── WHY IT EXISTS

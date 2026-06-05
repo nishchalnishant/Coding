@@ -7,6 +7,11 @@ tags: [root, questions]
 ---
 # Data Structures and Algorithms Questions
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 This file contains a comprehensive list of all questions covered in the `01-data-structures` and `02-algorithms` sections, grouped by topic.
 
 ## Data Structures

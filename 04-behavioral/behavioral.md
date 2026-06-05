@@ -7,6 +7,11 @@ tags: [behavioral]
 ---
 # First-Principles Map — Behavioral Interview
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY Behavioral interviews exist
 ├── Past behavior is the strongest predictor of future behavior at scale

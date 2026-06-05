@@ -7,6 +7,11 @@ tags: [patterns, questions]
 ---
 # Repository Interview Questions Tracker
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 This file serves as a centralized, interactive checklist for all the canonical interview questions covered in this repository. Use it to track your progress. Each question links directly to the detailed walkthrough, logic, and gotchas inside the deep-dive files.
 
 ---

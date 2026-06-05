@@ -83,6 +83,11 @@ DECISION — signal → pattern (60-second checklist)
 
 # Patterns — Index
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 Pattern recognition is the skill that separates L4 from L3. The goal: hear a problem, identify the pattern in under 60 seconds, and begin with the right structure.
 
 ---

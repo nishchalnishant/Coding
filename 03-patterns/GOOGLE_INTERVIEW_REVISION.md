@@ -7,6 +7,11 @@ tags: [patterns, google-interview-revision]
 ---
 # First-Principles Map — Google Interview Revision
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY a structured revision plan exists
 ├── Random LeetCode grinding has diminishing returns after week 1

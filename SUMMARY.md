@@ -1,5 +1,10 @@
 # Summary
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ## Getting Started
 * [Overview](README.md)
 * [Navigation Hub](00-start-here/README.md)

@@ -1,5 +1,10 @@
 # First-Principles Map — Complexity Cheatsheet
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY a Complexity Cheatsheet exists
 ├── Under pressure, complexity is derived incorrectly → wrong complexity claim → credibility hit

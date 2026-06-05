@@ -9,6 +9,11 @@ tags: [root, mindmap]
 ← [Start here](00-start-here/README.md) · [Flowcharts (triggers)](FLOWCHARTS.md) · [coding/data-structures/](coding/data-structures/) · [coding/algorithms/](coding/algorithms/)
 
 # Mindmap — ASCII only (`coding/`)
+
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
 _E/M/H = difficulty · ★ = must-nail · → = one-line hint_
 
 ## coding/data-structures/

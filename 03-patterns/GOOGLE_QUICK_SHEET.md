@@ -7,6 +7,11 @@ tags: [patterns, google-quick-sheet]
 ---
 # First-Principles Map — Google Interview Quick Sheet
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 ```
 WHY a Google-specific Quick Sheet exists
 ├── Google's bar is calibrated to L4/L5 — pattern recognition alone is insufficient

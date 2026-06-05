@@ -1,5 +1,10 @@
 # Googliness Round: Google Behavioral Interview Prep
 
+> [!note] L3 Reference Document
+> This file is a **reference / meta document** — read it once, then use it as a lookup.
+> It is NOT a coding practice file. Do not deep-study it like a topic file.
+
+
 This guide is for the round where Google checks whether you will be effective in a team, not just correct in code. The goal is to show:
 
 - structured thinking under ambiguity
