@@ -23,7 +23,7 @@ Read constraints + examples
 │   ├── Find element / boundary         → Binary Search (02-algorithms/binary-search.md)
 │   └── Pair / triplet after sort       → Two Pointers (02-algorithms/two-pointers.md)
 ├── Tree or graph structure?
-│   ├── Shortest path (unweighted)      → BFS (01-data-structures/graphs.md)
+│   ├── Shortest path (unweighted)      → BFS (01-data-structures/graphs.md) `⚡ T1`
 │   ├── Weighted, non-negative          → Dijkstra (02-algorithms/graph.md)
 │   ├── Dependencies / ordering         → Topo sort (02-algorithms/graph.md)
 │   └── Connected components / cycles   → DFS or Union-Find
@@ -43,7 +43,7 @@ Read constraints + examples
 └── Entry point (topic-first; don't read linearly)
     ├── Have 4–6 weeks? → Follow week table in 00-start-here/README.md
     │                     DS: 01-data-structures/README.md · Algo: 02-algorithms/README.md
-    ├── Have 14 days?   → Must-nail: Arrays · Hashing · Trees · Graphs · DP · Binary Search
+    ├── Have 14 days?   → Must-nail: Arrays · Hashing · Trees · Graphs · DP `⚡ T1`· Binary Search `🎯 T2`
     │                     + 02-algorithms/problem-deep-dives.md#l4-must-nail-problems
     │                     + 03-patterns/GOOGLE_INTERVIEW_REVISION.md (Part D)
     ├── Have 7 days?    → GOOGLE_INTERVIEW_REVISION Part D + 2 timed mocks + 3 STAR stories
@@ -67,29 +67,29 @@ Read constraints + examples
 
 01-data-structures/array.md
 └── Arrays [O(1) access · O(n) insert/delete]
-    ├── Two Pointers → sorted array / linked list → target sum · remove duplicates · container with most water
-    ├── Sliding Window → subarray/substring → max sum subarray · longest substring without repeat
+    ├── Two Pointers → sorted array / linked list → target sum · remove duplicates · container with most water `⚡ T1`
+    ├── Sliding Window → subarray/substring → max sum subarray · longest substring without repeat `⚡ T1`
     ├── Prefix Sum → range sum queries → subarray sum equals K · product except self
     ├── Kadane's → max subarray → O(n) time O(1) space
     ├── Difference Array → range updates → O(1) update, O(n) query
     ├── Boyer-Moore Majority Vote → majority element (> N/2) → O(n) time O(1) space
     ├── Floyd's Cycle Detection on Arrays → duplicate number in [1, N] → O(n) time O(1) space
-    └── Sorting-based → merge intervals · meeting rooms · 3Sum
+    └── Sorting-based → merge intervals `🎯 T2`· meeting rooms `🎯 T2`· 3Sum `⚡ T1`
 
 01-data-structures/hashing.md
 └── Hash Maps [O(1) avg insert/search/delete]
     ├── Frequency Map → anagram groups · top-K elements · first unique char
     ├── Two Sum pattern → one-pass O(n) · complement lookup
-    ├── Grouping → group anagrams · isomorphic strings
+    ├── Grouping → group anagrams `⚡ T1`· isomorphic strings
     ├── Swap-with-Last → O(1) insert, delete, getRandom (map + dynamic array)
     └── Rolling Hash → Rabin-Karp substring search · repeated DNA sequences
 
 01-data-structures/string.md
 └── Strings [immutable char array · O(k) substring · O(n²) concat in loop]
-    ├── Frequency Map → anagram check · group anagrams · find all anagrams in string
+    ├── Frequency Map → anagram check · group anagrams `⚡ T1`· find all anagrams in string
     ├── Two Pointers → palindrome check · longest palindromic substring (expand around center)
-    ├── Sliding Window (variable) → longest substring without repeat · min window substring · at-most-K distinct
-    ├── Sliding Window (fixed) → find all anagrams · permutation in string
+    ├── Sliding Window (variable) → longest substring without repeat · min window substring · at-most-K distinct `⚡ T1`
+    ├── Sliding Window (fixed) → find all anagrams · permutation in string `⚡ T1`
     ├── Prefix Sum on chars → count substrings with exactly K vowels / specific char counts
     └── String Hashing → detect duplicate substrings · repeated DNA sequences
 
@@ -97,59 +97,59 @@ Read constraints + examples
 └── Linked Lists [O(n) access · O(1) insert at pointer]
     ├── Fast/Slow Pointers → cycle detect · middle of list · cycle entry point
     ├── Dummy Node → merge sorted lists · remove Nth from end
-    ├── Reverse In-Place → reverse linked list · reverse groups of K
+    ├── Reverse In-Place → reverse linked list `🎯 T2`· reverse groups of K
     └── Two-list merge → merge K sorted lists (use heap)
 
 01-data-structures/stack.md
 └── Stacks [O(1) push/pop]
-    ├── Monotonic Stack (decreasing) → Next Greater Element · Daily Temperatures · Largest Rectangle in Histogram
-    ├── Monotonic Stack (increasing) → Next Smaller Element · Trapping Rain Water
+    ├── Monotonic Stack (decreasing) → Next Greater Element · Daily Temperatures `🎯 T2`· Largest Rectangle in Histogram `🎯 T2`
+    ├── Monotonic Stack (increasing) → Next Smaller Element · Trapping Rain Water `⚡ T1`
     ├── Bracket Matching → valid parentheses · min removes · score of brackets
     └── Expression evaluation → basic calculator · reverse Polish notation
 
 01-data-structures/queue.md
 └── Queues / Deques [O(1) enqueue/dequeue]
-    ├── BFS → shortest path unweighted · level-order tree · rotting oranges · word ladder
+    ├── BFS → shortest path unweighted · level-order tree · rotting oranges `⚡ T1`· word ladder `⚡ T1`
     ├── Monotonic Deque (max) → sliding window maximum · O(n) time
-    └── Priority Queue (heap) → Dijkstra · top-K · median maintenance
+    └── Priority Queue (heap) → Dijkstra · top-K `⚡ T1`· median maintenance
 
 01-data-structures/tree.md
 └── Trees / BST [O(log n) avg BST ops]
     ├── DFS Pre-order  → serialize/deserialize · construct from preorder
-    ├── DFS In-order   → BST sorted output · kth smallest · validate BST
-    ├── DFS Post-order → subtree problems · diameter · balanced check
-    ├── BFS (level)    → level-order · right side view · zigzag traversal
+    ├── DFS In-order   → BST sorted output · kth smallest `🎯 T2`· validate BST
+    ├── DFS Post-order → subtree problems · diameter `🎯 T2`· balanced check
+    ├── BFS (level)    → level-order · right side view `🎯 T2`· zigzag traversal
     ├── LCA            → binary lifting / recursive O(n)
-    ├── Path Sum       → root-to-leaf · any path · max path sum
+    ├── Path Sum       → root-to-leaf · any path · max path sum `🎯 T2`
     └── Morris Traversal → O(1) space inorder
 
 01-data-structures/graphs.md
 └── Graphs [V vertices · E edges]
-    ├── BFS → O(V+E) · shortest path (unweighted) · bipartite check · walls and gates
-    ├── DFS → O(V+E) · cycle detection · connected components · number of islands
-    ├── Topological Sort (Kahn's) → O(V+E) · course schedule · build order
-    ├── Union-Find → O(α·n) ≈ O(1) · dynamic connectivity · redundant connection
-    ├── Dijkstra (min-heap) → O((V+E)logV) · network delay · cheapest flights
+    ├── BFS → O(V+E) · shortest path (unweighted) · bipartite check · walls and gates `⚡ T1`
+    ├── DFS → O(V+E) · cycle detection · connected components · number of islands `⚡ T1`
+    ├── Topological Sort (Kahn's) → O(V+E) · course schedule `⚡ T1`· build order
+    ├── Union-Find → O(α·n) ≈ O(1) · dynamic connectivity · redundant connection `⚡ T1`
+    ├── Dijkstra (min-heap) → O((V+E)logV) · network delay `⚡ T1`· cheapest flights `⚡ T1`
     └── Bellman-Ford → O(VE) · negative weights · detect negative cycle
 
 01-data-structures/heap.md
 └── Heaps [O(log n) push/pop · O(n) heapify]
     ├── Top-K largest → min-heap size K → O(n log k)
     ├── Top-K smallest → max-heap size K → negate values in Python
-    ├── Merge K sorted lists → min-heap of (val, list_idx, elem_idx)
+    ├── Merge K sorted lists → min-heap of (val, list_idx, elem_idx) `⚡ T1`
     ├── Two-Heap Median → max-heap left | min-heap right → balance on insert
     └── Dijkstra → (dist, node) in min-heap → relax neighbors
 
 01-data-structures/trie.md
 └── Tries [O(m) insert/search — m = word length]
-    ├── Prefix search → autocomplete · starts-with check · implement Trie
-    ├── Word Break → DP + Trie to find valid splits
-    ├── Word Search II → Trie + DFS backtrack on grid
+    ├── Prefix search → autocomplete · starts-with check · implement Trie `⚡ T1`
+    ├── Word Break → DP + Trie to find valid splits `🎯 T2`
+    ├── Word Search II → Trie + DFS backtrack on grid `⚡ T1`
     └── XOR Maximum → binary Trie for max XOR of two numbers
 
 01-data-structures/segment-tree.md
 └── Segment Trees [O(log n) query/update · O(n) build]
-    ├── Range Sum Query → build once · point update · range query
+    ├── Range Sum Query → build once · point update · range query `🎯 T2`
     ├── Range Min/Max Query → same structure · different merge function
     └── Lazy Propagation → range update in O(log n) → range sum with add
 
@@ -180,7 +180,7 @@ Read constraints + examples
 
 02-algorithms/two-pointers.md
 └── Two Pointers [Converging vs same-direction vs multi-sequence scan]
-    ├── Converging (opposite ends) → sorted array sum · palindrome check · container with most water
+    ├── Converging (opposite ends) → sorted array sum · palindrome check · container with most water `⚡ T1`
     ├── Fast/Slow (Floyd's) → cycle detection · cycle entry point · middle of linked list
     ├── Same-direction (read/write) → in-place partition · move zeros · remove duplicates
     ├── Dutch National Flag → 3-way partition (lo, mid, hi) for 3-category sorting in O(n)
@@ -195,8 +195,8 @@ Read constraints + examples
     └── At-Most Trick → solve "Exactly K" via atMost(K) - atMost(K-1) difference
 
 02-algorithms/binary-search.md
-└── Binary Search
-    ├── Standard → O(log n) · sorted array · search insert position
+└── Binary Search `🎯 T2`
+    ├── Standard → O(log n) · sorted array `⚡ T1`· search insert position `⚡ T1`
     ├── Lower bound → first position ≥ target → bisect_left
     ├── Upper bound → first position > target → bisect_right
     ├── Rotated array → find pivot first · then binary search half
@@ -205,38 +205,38 @@ Read constraints + examples
 
 02-algorithms/sorting.md
 └── Sorting [Ordering invariants & selection tradeoffs]
-    ├── Merge Sort → O(n log n) stable · count inversions
+    ├── Merge Sort → O(n log n) stable · count inversions `🎯 T2`
     ├── Quick Sort → O(n log n) avg O(n²) worst · partition around randomized pivot
     ├── Heap Sort → O(n log n) · O(1) space · not stable
     ├── Counting & Radix Sort → O(n+k) / O(nd) · bounded integer ranges
     ├── Dutch National Flag → 3-way partition for 0s, 1s, 2s → O(n) time O(1) space
     ├── QuickSelect → O(n) average time for Kth order statistic
-    ├── External Merge Sort → split runs + K-way merge for data > RAM
+    ├── External Merge Sort → split runs + K-way merge for data > RAM `🎯 T2`
     └── Custom sort → sort by multiple keys · Schwartzian transform in Python
 
 02-algorithms/greedy.md
 └── Greedy [Irrevocable local choices for global optimum]
     ├── Interval scheduling → sort by end time · earliest finish selection
     ├── Interval merging → sort by start time · overlap merging
-    ├── Jump Game → track farthest reachable index · O(n)
+    ├── Jump Game → track farthest reachable index · O(n) `🎯 T2`
     ├── Candy Distribution → two-pass constraints (L→R, R→L) · merge via max
     ├── Partition Labels → last occurrence map · extend boundary greedily
     ├── Priority Queue Greedy / IPO → sort by constraint + max-heap of profits
-    └── Huffman & Task Scheduler → frequency-based merge/slots counting
+    └── Huffman & Task Scheduler → frequency-based merge/slots counting `⚡ T1`
 
 02-algorithms/divide-and-conquer.md
 └── Divide & Conquer
-    ├── Merge Sort → inversion count as side-effect
+    ├── Merge Sort → inversion count as side-effect `🎯 T2`
     ├── Quick Select → O(n) avg k-th largest without full sort
     └── Closest Pair of Points → O(n log n) · split + merge strip
 
 02-algorithms/backtracking.md
-└── Backtracking [O(2^n) subsets · O(n!) permutations]
-    ├── Subsets → choose/skip at each index · power set
-    ├── Permutations → swap in-place or used[] array
-    ├── Combinations → start index to avoid duplicates · k-of-n
-    ├── N-Queens → row-by-row · col+diag sets for O(1) conflict check
-    └── Sudoku Solver → try 1-9 · recurse · undo on failure
+└── Backtracking [O(2^n) subsets · O(n!) permutations] `🎯 T2`
+    ├── Subsets → choose/skip at each index · power set `🎯 T2`
+    ├── Permutations → swap in-place or used[] array `🎯 T2`
+    ├── Combinations → start index to avoid duplicates · k-of-n `🎯 T2`
+    ├── N-Queens → row-by-row · col+diag sets for O(1) conflict check `🎯 T2`
+    └── Sudoku Solver → try 1-9 · recurse · undo on failure `🎯 T2`
 
 02-algorithms/dynamic-programming.md
 └── DP complete guide → see § 02 — Dynamic Programming below
@@ -283,7 +283,7 @@ Read constraints + examples
     ├── Floyd-Warshall → O(V³) all-pairs · dp[i][j] = min(dp[i][j], dp[i][k]+dp[k][j])
     ├── Prim's MST → min-heap of (weight, node) · visited set
     ├── Bridges & Articulation Points → Tarjan's DFS · low[] and disc[] arrays
-    └── A* → heuristic-guided BFS · f = g + h
+    └── A* → heuristic-guided BFS · f = g + h `⚡ T1`
 
 02-algorithms/string.md
 └── String Algorithms
@@ -307,9 +307,9 @@ Read constraints + examples
     ├── Template 1 (Exact Match) → lo <= hi · return mid on match
     ├── Template 2 (Boundary Search) → lo < hi · find first True of monotone predicate
     ├── Binary Search on Answer → minimize max / maximize min → range guess + O(n) validate
-    ├── Rotated Sorted Array → identify sorted half first → search target or find min
-    ├── Peak Element → compare mid with mid+1 → climb gradient to local maximum
-    └── Median of Two Sorted Arrays → partition both arrays → O(log(min(M, N)))
+    ├── Rotated Sorted Array → identify sorted half first → search target or find min `⚡ T1`
+    ├── Peak Element → compare mid with mid+1 → climb gradient to local maximum `⚡ T1`
+    └── Median of Two Sorted Arrays → partition both arrays → O(log(min(M, N))) `⚡ T1`
 
 02-algorithms/concurrency.md
 └── Concurrency [SDE-3 depth; SDE-2: know the patterns]
@@ -339,7 +339,7 @@ Read constraints + examples
     ├── Sparse Table → O(n log n) build · O(1) range min/max · static only (no updates) · idempotent ops
     ├── Sweep Line → sort events by x · process with active set · O(n log n) total
     │   └── Use case: skyline problem · rectangle area union · interval overlap counting
-    ├── LRU Cache → HashMap + doubly linked list · O(1) get and put · move to head on access
+    ├── LRU Cache → HashMap + doubly linked list · O(1) get and put · move to head on access `🎯 T2`
     └── LFU Cache → 3 maps (key→val, key→freq, freq→OrderedDict) + min_freq tracker · O(1) all ops
 
 
@@ -349,7 +349,7 @@ Read constraints + examples
     ├── Searching → Binary Search variants · BS on answer · Rotated array · Median finding
     ├── Graph traversal → BFS (shortest) · DFS (paths/cycles) · Topo sort (dependencies)
     ├── Optimization → Greedy (local optimal) · DP (overlapping subproblems) · Divide & Conquer
-    └── Design patterns → Monotonic Stack/Deque · Two Pointers · Sliding Window · Union-Find
+    └── Design patterns → Monotonic Stack/Deque · Two Pointers · Sliding Window `⚡ T1`· Union-Find
 ```
 
 ## 02 — Dynamic Programming
@@ -379,24 +379,24 @@ Read constraints + examples
     │   └── Probability / optimal play       → Expected value / minimax DP
     │
     ├── 15 PATTERNS → CANONICAL PROBLEMS
-    │   ├── 1  Linear/Fibonacci    → climb stairs · house robber · decode ways · word break
-    │   ├── 2  0/1 Knapsack        → subset sum · target sum · partition equal subset
+    │   ├── 1  Linear/Fibonacci    → climb stairs · house robber `🎯 T2`· decode ways `🎯 T2`· word break `🎯 T2`
+    │   ├── 2  0/1 Knapsack        → subset sum · target sum `🎯 T2`· partition equal subset `🎯 T2`
     │   ├── 3  Unbounded Knapsack  → coin change I/II · perfect squares · combo sum IV
-    │   ├── 4  LCS family          → LCS · edit distance · interleaving · distinct subseq
+    │   ├── 4  LCS family          → LCS · edit distance `🎯 T2`· interleaving `🎯 T2`· distinct subseq `🎯 T2`
     │   ├── 5  LIS                 → LIS · Russian doll envelopes · longest string chain
     │   ├── 6  Kadane              → max subarray · max product · circular max
     │   ├── 7  Interval DP         → burst balloons · palindrome cuts · MCM · strange printer
-    │   ├── 8  Grid DP             → unique paths · min path sum · maximal square · dungeon (reverse fill)
-    │   ├── 9  Tree DP             → house robber III · max path sum · cameras · diameter
+    │   ├── 8  Grid DP             → unique paths `🎯 T2`· min path sum · maximal square `🎯 T2`· dungeon (reverse fill)
+    │   ├── 9  Tree DP             → house robber III `🎯 T2`· max path sum · cameras · diameter `🎯 T2`
     │   ├── 10 Bitmask DP          → TSP · shortest path all nodes · smallest sufficient team
     │   ├── 11 Stock machine       → buy/sell I–IV · cooldown · transaction fee · k transactions
-    │   ├── 12 String/palindrome   → LPS · palindrome partitioning · regex matching · wildcard
+    │   ├── 12 String/palindrome   → LPS · palindrome partitioning `🎯 T2`· regex matching · wildcard
     │   ├── 13 Digit DP            → numbers at most N · unique digits · digit sum = K
     │   ├── 14 Probability/game    → knight probability · new 21 game · stone game · egg drop
     │   └── 15 Advanced (stretch)  → deque opt · CHT · SOS DP · Knuth · WQS binary search
     │
     ├── L4 MUST-NAIL
-    │   └── house robber · coin change · word break · LIS · LCS · edit distance
+    │   └── house robber `🎯 T2`· coin change `🎯 T2`· word break `🎯 T2`· LIS `⚡ T1`· LCS · edit distance `🎯 T2`
     │       → full pseudocode in problem-deep-dives.md
     │
     ├── TOP BUGS (memorize these)
@@ -434,13 +434,13 @@ Read constraints + examples
     │   └── Global + local → diameter, max path sum
     │
     ├── 8 PATTERNS → SIGNAL → CANONICAL PROBLEMS
-    │   ├── 1 Include/Exclude     → "all subsets"        → subsets I/II · target sum
-    │   ├── 2 Permutations        → "all orderings"      → permutations I/II · letter case perm
-    │   ├── 3 IP/OP + guard       → "generate valid X"   → generate parentheses · phone combos · restore IP
-    │   ├── 4 Divide & combine    → "split · merge"      → merge sort · quickselect · unique BSTs II
+    │   ├── 1 Include/Exclude     → "all subsets"        → subsets I/II · target sum `🎯 T2`
+    │   ├── 2 Permutations        → "all orderings"      → permutations I/II · letter case perm `🎯 T2`
+    │   ├── 3 IP/OP + guard       → "generate valid X"   → generate parentheses · phone combos · restore IP `🎯 T2`
+    │   ├── 4 Divide & combine    → "split · merge"      → merge sort `🎯 T2`· quickselect · unique BSTs II
     │   ├── 5 Mathematical        → "recurrence formula" → fibonacci · tower of Hanoi · josephus
-    │   ├── 6 Tree/graph DFS      → "traverse / property"→ flood fill · islands · topo · validate BST · LCA
-    │   ├── 7 Constraint satisfy  → "place N with rules" → N-Queens · Sudoku · word search II (trie prune)
+    │   ├── 6 Tree/graph DFS      → "traverse / property"→ flood fill · islands `⚡ T1`· topo · validate BST · LCA
+    │   ├── 7 Constraint satisfy  → "place N with rules" → N-Queens · Sudoku `🎯 T2`· word search II (trie prune) `⚡ T1`
     │   └── 8 Memo bridge         → "TLE + overlap"      → regex/wildcard · combo sum IV → DP
     │
     ├── COMBINATION FAMILY (same file)
@@ -450,7 +450,7 @@ Read constraints + examples
     │   └── Combo sum IV  → order matters → really unbounded knapsack DP
     │
     ├── L4 MUST-NAIL
-    │   └── subsets · permutations · combination sum · generate parentheses · word search
+    │   └── subsets `🎯 T2`· permutations `🎯 T2`· combination sum `🎯 T2`· generate parentheses `🎯 T2`· word search `🎯 T2`
     │       → LC table with gotchas in recursion.md § Full Interview Questions
     │
     ├── TOP BUGS
@@ -458,9 +458,9 @@ Read constraints + examples
     │   ├── Restore state → path.pop() / unmark visited on return
     │   ├── Combo dedup → i > start (not i > 0)
     │   ├── Perm dedup → not used[i-1] when nums[i]==nums[i-1]
-    │   ├── Graph → mark visited BEFORE recurse
+    │   ├── Graph → mark visited BEFORE recurse `⚡ T1`
     │   ├── Directed cycle → 3-color (white/gray/black), not one visited set
-    │   └── @lru_cache → args must be hashable (tuple not list)
+    │   └── @lru_cache → args must be hashable (tuple not list) `🎯 T2`
     │
     └── WHEN NOT RECURSE → DP tabulation (overlap + optimal only) · iterative stack (depth > 10⁴) · BFS · greedy · union-find
 ```
@@ -473,7 +473,7 @@ Read constraints + examples
 
 03-patterns/patterns-master.md
 └── Pattern Recognition Master [READ FIRST — before drilling problems]
-    ├── Trigger: sorted + target sum → Two Pointers
+    ├── Trigger: sorted + target sum → Two Pointers `🎯 T2`
     ├── Trigger: subarray/substring + constraint → Sliding Window
     ├── Trigger: sorted search + O(log n) → Binary Search
     ├── Trigger: shortest path → BFS
@@ -503,8 +503,8 @@ Read constraints + examples
     ├── Arrays: Two Sum → check-before-store · Kadane → reset when prefix negative · Trapping Rain → min(left_max,right_max)-h[i]
     ├── Strings: Min Window → two counters (need/have) · Longest Palindrome → expand odd+even at each index
     ├── Trees: LCA any tree → return node when found; LCA = where both sides non-null
-    ├── Graphs: Word Ladder → BFS on graph where edge = 1-char difference
-    ├── DP: Coin Change → unbounded knapsack · Burst Balloons → last balloon in interval = dp[i][j]
+    ├── Graphs: Word Ladder → BFS on graph where edge = 1-char difference `⚡ T1`
+    ├── DP: Coin Change → unbounded knapsack · Burst Balloons → last balloon in interval = dp[i][j] `🎯 T2`
     └── Use: check if you know the key insight cold before opening solution
 
 03-patterns/leetcode-variants.md
@@ -563,8 +563,8 @@ Read constraints + examples
 05-revision/README.md
 └── Complexity Quick-Reference
     ├── Sorting     → Merge O(n log n) stable · Quick O(n log n) avg · Heap O(n log n) O(1) space
-    ├── DS          → Array O(1) access · HashMap O(1) avg · BST O(log n) avg · Heap O(log n) push
-    ├── Graphs      → BFS/DFS O(V+E) · Dijkstra O((V+E)logV) · Floyd O(V³) · Union-Find O(α·n)
+    ├── DS          → Array O(1) access · HashMap O(1) avg · BST O(log n) avg · Heap O(log n) push `⚡ T1`
+    ├── Graphs      → BFS/DFS O(V+E) · Dijkstra O((V+E)logV) · Floyd O(V³) · Union-Find O(α·n) `⚡ T1`
     └── Techniques  → Binary Search O(log n) · DP O(states×transition) · Backtrack O(2^n or n!)
     
 └── Python Gotchas
@@ -572,7 +572,7 @@ Read constraints + examples
     ├── list.pop(0) is O(n) → use deque.popleft() for queues
     ├── heapq is min-heap → negate for max-heap
     ├── dict.get(k, 0) → no KeyError on missing key
-    ├── arr[:] → shallow copy (arr = arr2 is a reference, not copy)
+    ├── arr[:] → shallow copy (arr = arr2 is a reference, not copy) `⚡ T1`
     └── "".join(chars) → O(n) string build (s += c is O(n²))
 
 05-revision/mock-log.md
