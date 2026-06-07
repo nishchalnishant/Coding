@@ -6,7 +6,7 @@ status: unread
 tags: [algorithms, algorithm-tree]
 ---
 
-← [Algorithms index](./README.md)
+← [Algorithms index](./README.md) · 🗺 [Master Decision Guide](../00-L3-EXECUTION-META/DECISION_GUIDE.md)
 ## First-Principles Map
 
 ```text

@@ -1,97 +1,85 @@
-# Start Here — Google SDE-3 (L5) Prep Hub
+# Start Here — Google L3 (SWE) Prep
 
-**Goal:** Crack Google SDE-3 (L5) in a 6-week sprint.  
-**Approach:** Topic-first navigation — pick a DS or algorithm category, read the deep-dive, drill problems, repeat.
-
----
-
-## How to Use This Repo
-
-1. **Don't read linearly.** Navigate by topic. Use the directory map below to jump to what you need.
-2. **Pattern recognition first.** Before drilling problems, read `03-patterns/patterns-master.md` to learn *when* to use each technique.
-3. **Dense > broad.** Spend 90 minutes going deep on one topic rather than 15 minutes skimming six.
-4. **Track mistakes.** After each session, note what tripped you — edge cases, boundary conditions, off-by-ones.
+**Goal:** Pass Google L3 coding + Googliness rounds.  
+**Approach:** Master Tier 1 patterns first, drill must-solve problems cold, mock under time pressure.
 
 ---
 
-## Directory Map
+## How to use this repo
+
+1. Read [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) for the full 4-week schedule.
+2. Use [`01-data-structures/README.md`](../01-data-structures/README.md) and [`02-algorithms/README.md`](../02-algorithms/README.md) as your study indexes.
+3. Solve problems from [`coding/`](../coding/) — one topic at a time, timed.
+4. Follow [`00-L3-EXECUTION-META/`](../00-L3-EXECUTION-META/) for interview pacing and communication.
+5. Prep 5–8 STAR stories in [`04-behavioral/`](../04-behavioral/).
+
+---
+
+## What L3 tests
+
+| Tested | Not tested |
+|--------|------------|
+| Medium DSA (graphs, windows, heaps, BS on answer, tries, basic DP) | System design |
+| Clarify → optimize → code → dry-run → Big-O | LLD / OOP patterns |
+| Googliness / behavioral (often 1 round) | SQL, concurrency |
+
+---
+
+## Directory map
 
 | Folder | Purpose |
 |--------|---------|
-| `00-start-here/` | This file. Navigation hub. |
-| `01-data-structures/` | DS deep-dives + **[README index](01-data-structures/README.md)** (study order, L4 priorities, how to read each file) |
-| `02-algorithms/` | Algorithm deep-dives + **[README index](02-algorithms/README.md)** (technique map, DP/recursion hubs) |
-| `03-patterns/` | Pattern master, cheatsheets, revision guides, LC variants, system design |
-| `04-behavioral/` | Google's 4 attributes + STAR story index |
-| `05-revision/` | Complexity tables, Python gotchas, day-before checklist, coding rubric |
-| `books/` | Algorithm design deep dives, CP3, DP book summaries |
+| `coding/l3-google-roadmap.md` | **Primary schedule** — start here |
+| `01-data-structures/` | DS deep-dives + L3 must-solve index |
+| `02-algorithms/` | Algorithm deep-dives + L3 must-solve index |
+| `coding/` | Problem bank with approaches |
+| `00-L3-EXECUTION-META/` | 45-min plan, constraint heuristics, Python cheatsheet |
+| `03-patterns/` | Pattern triggers and Google revision guides |
+| `04-behavioral/` | STAR stories and Googliness |
 
 ---
 
-## 6-Week SDE-3 Study Plan
+## 4-week plan (summary)
 
-| Week | Topics | Files |
-|------|--------|-------|
-| **Week 1** | Arrays, Strings, Hashing, Linked Lists | `01-data-structures/array.md`, `01-data-structures/hashing.md`, `01-data-structures/linked-list.md` + `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md` |
-| **Week 2** | Trees, BST, Graphs, BFS/DFS | `01-data-structures/tree.md`, `01-data-structures/graphs.md`, `02-algorithms/graph.md`, `02-algorithms/advanced-graphs.md` |
-| **Week 3** | DP, Backtracking, Greedy, Recursion | `02-algorithms/dynamic-programming.md`, `02-algorithms/recursion-to-dp.md`, `02-algorithms/backtracking.md`, `02-algorithms/greedy.md`, `02-algorithms/recursion.md` |
-| **Week 4** | Binary Search, Heap, Tries, Segment Tree, Union-Find, Bit Manipulation | `02-algorithms/binary-search.md`, `01-data-structures/heap.md`, `01-data-structures/trie.md`, `01-data-structures/segment-tree.md`, `02-algorithms/union-find.md` |
-| **Week 5** | SDE-3 Hard Problems — full checklist | `05-revision/coding-rubric.md` §SDE-3 Hard Problem Checklist; log every attempt in `05-revision/mock-log.md` |
-| **Week 6** | Mock interviews (2/week minimum), LLD round prep, behavioral polish | `03-patterns/lld.md`, `04-behavioral/behavioral.md`, `03-patterns/system-design.md` |
+| Week | Topics |
+|------|--------|
+| **1** | BFS/DFS, topo sort, arrays, hashing, two pointers, sliding window |
+| **2** | Heaps, tries, binary search on answer |
+| **3** | Trees, DP (core), backtracking, union-find, greedy |
+| **4** | Integration + mocks + behavioral |
 
-> **SDE-3 bar:** Mediums fluent, hards cold in < 25 min, system design at scale, LLD + SOLID, leadership signals in behavioral.
+Details: [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md)
 
 ---
 
-## Key Files — Quick Access
+## Key files
 
 | What | Link |
 |------|------|
-| **Repo flowcharts (visual map)** | `FLOWCHARTS.md` |
-| **Mind map (30-min DS/algo revision)** | [`MINDMAP.md`](../MINDMAP.md) |
-| **Practice problem bank** | [`coding/`](../coding/) — see GitBook sidebar **Practice Problem Bank** |
-| Pattern recognition master | `03-patterns/patterns-master.md` |
-| Interview cheatsheet | `03-patterns/interview-cheatsheet.md` |
-| Google revision guide | `03-patterns/GOOGLE_INTERVIEW_REVISION.md` |
-| Complexity + syntax quick sheet | `05-revision/README.md` |
-| Behavioral STAR stories | `04-behavioral/behavioral.md` |
-| System design guide | `03-patterns/system-design.md` |
-| LLD guide (OOP/design patterns) | `03-patterns/lld.md` |
-| Mock interview log | `05-revision/mock-log.md` |
-| SDE-3 hard checklist + annotations | `05-revision/coding-rubric.md` |
+| L3 roadmap | [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) |
+| DS cheat sheet | [`01-data-structures/README.md`](../01-data-structures/README.md) |
+| Algo cheat sheet | [`02-algorithms/README.md`](../02-algorithms/README.md) |
+| 45-min execution plan | [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) |
+| Mind map | [`MINDMAP.md`](../MINDMAP.md) |
+| Patterns | [`03-patterns/patterns-master.md`](../03-patterns/patterns-master.md) |
+| Behavioral | [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) |
+| Progress tracker | [`questions.md`](../questions.md) |
 
 ---
 
-## 48-Hour Sprint
+## 48-hour sprint
 
-If you have 48 hours before the interview:
-
-**Hour 0–8**
-- Read `03-patterns/patterns-master.md` end-to-end
-- Drill 1 easy + 1 medium per pattern (Two Pointers, Sliding Window, Binary Search, BFS/DFS, DP)
-
-**Hour 8–16**
-- `05-revision/README.md` — complexity table + Python syntax gotchas
-- `03-patterns/GOOGLE_QUICK_SHEET.md`
-- `03-patterns/system-design.md` — review key stubs
-
-**Hour 16–24**
-- 3 full mock problems (timed, 35 min each): one DP, one Graph, one free choice
-- `04-behavioral/behavioral.md` — rehearse 3 STAR stories aloud
-
-**Hour 24–48**
-- Sleep 8 hours
-- Light review: patterns cheatsheet, complexity table
-- Don't learn new topics
+**Hours 0–8:** `patterns-master.md` + 2 problems each: sliding window, BFS, binary search  
+**Hours 8–16:** `02-algorithms/README.md` + `01-data-structures/README.md` quick triggers; `GOOGLE_QUICK_SHEET.md`  
+**Hours 16–24:** 3 timed mocks (35 min); rehearse 3 STAR stories  
+**Hours 24–48:** Sleep; light review only — no new topics
 
 ---
 
-## Interview Day — Final 30 Minutes
+## Interview day (30 minutes)
 
-Read in this order (skim, don't study):
+1. [`03-patterns/interview-cheatsheet.md`](../03-patterns/interview-cheatsheet.md)
+2. Quick Pattern Triggers in both README indexes
+3. Three behavioral story titles + outcomes
 
-1. `03-patterns/interview-cheatsheet.md` — pattern triggers
-2. `05-revision/README.md` — complexity table + Python gotchas
-3. Your 3 behavioral STAR stories (just titles + outcomes)
-
-**Do NOT:** re-read DP recurrences, re-study graph algorithms, or open new files.
+**Do not** open new topics or hard DP variants.

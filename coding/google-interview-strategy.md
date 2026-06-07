@@ -1,23 +1,17 @@
 ---
-tags: [l3-google, tier3, stub]
+tags: [l3-google, meta, required]
 topic: Google Interview Strategy
-tier: T3-SKIP
 ---
 
-# Google Interview Strategy `💤 T3`
+# Google Interview Strategy — L3
 
-> [!warning] 💤 TIER 3 — Skim or Skip
-> **This topic is not required for Google L3 (SWE) interviews.**
-> Read the summary below and move on. Do NOT spend coding practice time here.
+Interview communication is part of the score. Use these instead of grinding more problems:
 
-## What it is
+| Resource | Link |
+|----------|------|
+| 45-minute pacing | [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) |
+| Constraint → Big-O | [`00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md`](../00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md) |
+| Python on whiteboard | [`00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md`](../00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md) |
+| Pattern triggers | [`03-patterns/interview-cheatsheet.md`](../03-patterns/interview-cheatsheet.md) |
 
-Interview meta-strategy (communication, timing, rubric). Read once; not a DSA study topic.
-
-## What to study instead
-
-→ [l3-google-roadmap.md](./l3-google-roadmap.md)
-
----
-
-*Full content is preserved on the `main` branch. Switch back with `git checkout main` if needed.*
+**Round flow:** clarify → brute force → optimize → get approval → code → dry-run → state complexity.

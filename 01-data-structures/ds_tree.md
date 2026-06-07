@@ -6,7 +6,7 @@ status: unread
 tags: [data-structures, ds-tree]
 ---
 
-← [Data structures index](./README.md)
+← [Data structures index](./README.md) · 🗺 [Master Decision Guide](../00-L3-EXECUTION-META/DECISION_GUIDE.md)
 ## First-Principles Map
 
 ```text
@@ -15,6 +15,7 @@ WHY tactical DS selection matters
 │   ├── Linear scan where O(1) lookup exists      → HashMap not Array
 │   ├── Sorting repeatedly where heap suffices    → Heap not Sort
 │   └── Prefix sum when segment tree overkill     → don't over-engineer
+|   |-- Segment Tree — Use when updates happen at runtime alongside queries (Updates + range sum/min/max queries)
 ├── DS choice is the first decision — made before writing a single line
 └── At SDE-3 level, interviewer expects O(1) time to name the right DS given constraints
 │

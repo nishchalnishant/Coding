@@ -88,7 +88,7 @@ def topo_sort(n, edges):
     return order if len(order) == n else []  # [] = cycle
 ```
 
-**Files:** [graph-algorithms.md](./algorithms/13-graph-algorithms.md) · [advanced-graphs.md](../02-algorithms/14-advanced-graphs.md)
+**Files:** [graph-algorithms.md](./algorithms/13-graph-algorithms.md) · [graphs.md](../01-data-structures/13-graphs.md) · [13-graph.md](../02-algorithms/13-graph.md)
 
 ---
 
@@ -483,7 +483,7 @@ Know these cold:
 - [array.md](./data-structures/01-array.md) — Two-pointer/window/prefix patterns
 - [hashing.md](./data-structures/02-hashing.md) — Hash map patterns
 - [graphs.md](../01-data-structures/13-graphs.md) — Graph deep dive
-- [advanced-graphs.md](../02-algorithms/14-advanced-graphs.md) — Dijkstra, Topo, BFS variants
+- [13-graph.md](../02-algorithms/13-graph.md) — Dijkstra, topo, BFS variants
 
 ### 🎯 TIER 2 — Study After Tier 1
 - [dynamic-programming.md](./algorithms/15-dynamic-programming.md)
@@ -496,7 +496,9 @@ Know these cold:
 - [sorting.md](./algorithms/00-sorting.md)
 - [string.md](./data-structures/02-string.md)
 
-### 💤 TIER 3 — Skim or Skip
-- [bit-manipulation.md](./algorithms/17-bit-manipulation.md)
-- [maths.md](./algorithms/17-maths.md)
-- [behavioral-interview.md](./behavioral-interview.md) — Read once; not a DSA topic
+### 💤 TIER 3 — Not in L3 navigation (skip)
+
+- [bit-manipulation.md](./algorithms/17-bit-manipulation.md) — on disk only; not linked in GitBook
+- [maths.md](./algorithms/17-maths.md) — on disk only; not linked in GitBook
+
+**Behavioral (required):** [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) · [`coding/behavioral-interview.md`](./behavioral-interview.md)

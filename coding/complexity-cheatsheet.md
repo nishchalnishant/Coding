@@ -1,23 +1,22 @@
 ---
-tags: [l3-google, tier3, stub]
+tags: [l3-google, reference, required]
 topic: Complexity Cheatsheet
-tier: T3-SKIP
 ---
 
-# Complexity Cheatsheet `💤 T3`
+# Complexity Cheatsheet — L3
 
-> [!warning] 💤 TIER 3 — Skim or Skip
-> **This topic is not required for Google L3 (SWE) interviews.**
-> Read the summary below and move on. Do NOT spend coding practice time here.
+State time and space complexity at the end of every round.
 
-## What it is
+| Pattern | Time | Space |
+| :--- | :--- | :--- |
+| BFS / DFS on graph | O(V + E) | O(V) |
+| Dijkstra (min-heap) | O((V + E) log V) | O(V) |
+| Binary search | O(log N) | O(1) |
+| Sliding window / two pointers | O(N) | O(1)–O(K) |
+| Sort | O(N log N) | O(1)–O(N) |
+| Hash map ops (avg) | O(1) | O(N) |
+| Heap push/pop | O(log N) | O(N) |
+| 0/1 Knapsack DP | O(N × W) | O(W) |
+| LCS / Edit Distance | O(M × N) | O(N) with 1 row |
 
-All Big-O complexities for quick lookup. Useful as a reference but not an active study topic.
-
-## What to study instead
-
-→ [l3-google-roadmap.md](./l3-google-roadmap.md)
-
----
-
-*Full content is preserved on the `main` branch. Switch back with `git checkout main` if needed.*
+Full constraint heuristics (if N = 10⁵ → need O(N) or O(N log N)): [`00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md`](../00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md)

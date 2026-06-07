@@ -1,23 +1,26 @@
 ---
-tags: [l3-google, tier3, stub]
+tags: [l3-google, behavioral, required]
 topic: Behavioral Interview
-tier: T3-SKIP
 ---
 
-# Behavioral Interview `💤 T3`
+# Behavioral Interview — Google L3
 
-> [!warning] 💤 TIER 3 — Skim or Skip
-> **This topic is not required for Google L3 (SWE) interviews.**
-> Read the summary below and move on. Do NOT spend coding practice time here.
+> [!important] Required at L3
+> Google evaluates **Googliness** in addition to coding. Budget 2–3 hours for STAR story prep.
 
-## What it is
+## Where to study
 
-25 Google behavioral questions and STAR framework. Read once before the loop, then focus on DSA.
+| Resource | Link |
+|----------|------|
+| STAR framework + story bank | [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) |
+| Googliness signals | [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](../04-behavioral/BEHAVIORAL_GOOGLINESS.md) |
 
-## What to study instead
+## Minimum story bank (5–8 stories)
 
-→ [l3-google-roadmap.md](./l3-google-roadmap.md)
+- 2 impact / shipped feature stories (quantified outcome)
+- 1 failure + what you changed
+- 1 conflict / disagreement resolved with data
+- 1 ambiguous problem you drove to clarity
+- 1 collaboration / helped another team
 
----
-
-*Full content is preserved on the `main` branch. Switch back with `git checkout main` if needed.*
+Use **STAR**: Situation → Task → Action → Result. Say "I" not "we" for your actions.
