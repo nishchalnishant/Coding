@@ -554,78 +554,11 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-## Strongly Connected Components / Bridges
+## Bridge Finding
 
-### Critical Connections in a Network (Tarjan's Bridges) `💤 T3`
+> [!NOTE]
+> Tarjan's SCC and bridge-finding algorithms are **L4+ topics**. For L3, focus on Cycle Detection (DFS 3-Color) and Topological Sort above.
 
-> [!example] Problem
-> There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
-> A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
-> Return all critical connections in the network in any order.
-> 
-> **Example 1:**
-> ```
-> Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
-> Output: [[1,3]]
-> Explanation: [[3,1]] is also accepted.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 2, connections = [[0,1]]
-> Output: [[0,1]]
-> ```
-> 
-> **Constraints:**
-> - 2 <= n <= 10^5
-> - n - 1 <= connections.length <= 10^5
-> - 0 <= ai, bi <= n - 1
-> - ai != bi
-> - There are no repeated connections.
-
-> [!info] Approach
-> A bridge is an edge with no alternative path — its removal increases connected components. Tarjan's bridge-finding: DFS assigns `disc[]` (discovery time) and `low[]` (earliest disc reachable from subtree). Edge `(u,v)` is a bridge iff `low[v] > disc[u]`. DFS from any node. When backtracking from child `v` to parent `u`: `low[u] = min(low[u], low[v])`. For already-visited back edges (non-parent): `low[u] = min(low[u], disc[v])`. Bridge condition: `low[v] > disc[u]`.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def critical_connections(n, connections):
->     graph = defaultdict(list)
->     for u, v in connections:
->         graph[u].append(v)
->         graph[v].append(u)
-> 
->     disc = [-1] * n
->     low = [-1] * n
->     timer = [0]
->     bridges = []
-> 
->     def dfs(u, parent):
->         disc[u] = low[u] = timer[0]
->         timer[0] += 1
->         for v in graph[u]:
->             if v == parent:
->                 continue
->             if disc[v] == -1:
->                 dfs(v, u)
->                 low[u] = min(low[u], low[v])
->                 if low[v] > disc[u]:        # bridge condition
->                     bridges.append([u, v])
->             else:
->                 low[u] = min(low[u], disc[v])
-> 
->     dfs(0, -1)
->     return bridges
-> ```
-
-> [!success] Complexity
-> Time O(V + E), Space O(V + E).
-
-> [!tip] Alternatives
-> Naive — remove each edge, check connectivity: O(E·(V+E)). Articulation-point variant for cut vertices. Multi-edge graphs: track parent edge index, not node.
-
----
 
 ### Find Eventual Safe States (Reverse Graph / Kahn's) `⚡ T1`
 
@@ -1184,78 +1117,6 @@ See full Bellman-Ford solution in the next section.
 
 ## Graph Coloring
 
-### M-Coloring Problem (Backtracking)
-
-> [!example] Problem
-> Given an undirected graph and `m` colors, determine whether the graph can be colored using at most `m` colors such that no two adjacent nodes share the same color.
-
-> [!info] Approach
-> Graph coloring is NP-complete in general; backtracking with pruning is the standard approach for exact solutions on small graphs. Assign colors 1..m to nodes one at a time; backtrack if any color assignment conflicts with an already-colored neighbor. Try each color for the current node. Before assigning, check all neighbors — if a neighbor already has that color, skip. If all m colors fail → backtrack. If all nodes assigned → return True.
-
-> [!note]- Python Solution
-> ```python
-> def graph_coloring(graph, m):
->     """
->     graph: adjacency list (0-indexed)
->     m: number of available colors
->     Returns True if m-coloring is possible.
->     """
->     n = len(graph)
->     color = [0] * n   # 0 = uncolored
-> 
->     def is_safe(node, c):
->         for nb in graph[node]:
->             if color[nb] == c:
->                 return False
->         return True
-> 
->     def backtrack(node):
->         if node == n:
->             return True
->         for c in range(1, m + 1):
->             if is_safe(node, c):
->                 color[node] = c
->                 if backtrack(node + 1):
->                     return True
->                 color[node] = 0          # undo
->         return False
-> 
->     return backtrack(0)
-> 
-> 
-> # Variant: return one valid coloring or []
-> def graph_coloring_assignment(graph, m):
->     n = len(graph)
->     color = [0] * n
-> 
->     def is_safe(node, c):
->         for nb in graph[node]:
->             if color[nb] == c:
->                 return False
->         return True
-> 
->     def backtrack(node):
->         if node == n:
->             return True
->         for c in range(1, m + 1):
->             if is_safe(node, c):
->                 color[node] = c
->                 if backtrack(node + 1):
->                     return True
->                 color[node] = 0
->         return False
-> 
->     return color if backtrack(0) else []
-> ```
-
-> [!success] Complexity
-> Time O(m^V) worst case with pruning reducing practical performance significantly. Space O(V) for color array + O(V) recursion stack.
-
-> [!tip] Alternatives
-> Greedy coloring (not optimal — can use up to Δ+1 colors where Δ = max degree). DSatur heuristic — color nodes in order of saturation (most distinct neighbor colors); often near-optimal in practice. For bipartite check (2-coloring): use BFS O(V+E).
-
----
-
 ## See Also
 
 [[graph]] | [[union-find]] | [[dynamic-programming]] | [[binary-search]]
@@ -1297,72 +1158,6 @@ See full Bellman-Ford solution in the next section.
 ---
 
 ## Graph Algorithms — More Problems
-
-### Shortest Path Visiting All Nodes (LC 847) `💤 T3`
-
-> [!example] Problem
-> You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
-> Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
-> 
-> **Example 1:**
-> ```
-> Input: graph = [[1,2,3],[0],[0],[0]]
-> Output: 4
-> Explanation: One possible path is [1,0,2,0,3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]
-> Output: 4
-> Explanation: One possible path is [0,1,4,2,3]
-> ```
-> 
-> **Constraints:**
-> - n == graph.length
-> - 1 <= n <= 12
-> - 0 <= graph[i].length < n
-> - graph[i] does not contain i.
-> - If graph[a] contains b, then graph[b] contains a.
-> - The input graph is always connected.
-
-> [!info] Approach
-> This is TSP-like. With n ≤ 12, use BFS with bitmask state: `(node, visited_mask)`. BFS gives the shortest path. There are `n * 2^n` states — manageable for small n. Initialize queue with all `(node, 1 << node)` for every node (start from any node). BFS until `mask == (1 << n) - 1` (all visited). Visited set: `{(node, mask)}`. Dequeue state, try all neighbours. Update mask with `mask | (1 << neighbour)`.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def shortest_path_length(graph):
->     n = len(graph)
->     full_mask = (1 << n) - 1
->     if n == 1:
->         return 0
->     queue = deque()
->     visited = set()
->     for i in range(n):
->         mask = 1 << i
->         queue.append((i, mask, 0))
->         visited.add((i, mask))
->     while queue:
->         node, mask, dist = queue.popleft()
->         for neighbor in graph[node]:
->             new_mask = mask | (1 << neighbor)
->             if new_mask == full_mask:
->                 return dist + 1
->             if (neighbor, new_mask) not in visited:
->                 visited.add((neighbor, new_mask))
->                 queue.append((neighbor, new_mask, dist + 1))
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(n * 2^n), Space O(n * 2^n).
-
-> [!tip] Alternatives
-> - DP with bitmask (like TSP): `dp[mask][node]` = shortest path visiting exactly the nodes in mask and ending at `node`. Fills in O(n² * 2^n). BFS is simpler for unweighted graphs.
-
----
 
 ### Word Ladder II (LC 126) `⚡ T1`
 
@@ -1444,47 +1239,6 @@ See full Bellman-Ford solution in the next section.
 > [!tip] Alternatives
 > - Bidirectional BFS: expand from both ends, meet in the middle. Halves the search depth — significant speedup in practice.
 > - Key pitfall: removing words from the set only after the entire layer is processed — otherwise words reachable from multiple same-layer words get cut prematurely.
-
----
-
-### Travelling Salesman Problem — Bitmask DP `💤 T3`
-
-> [!example] Problem
-> Given `n` cities and a distance matrix, find the shortest route that visits every city exactly once and returns to the starting city. Classic TSP.
-
-> [!info] Approach
-> Brute force is O(n!). Bitmask DP reduces to O(n² * 2^n) — tractable for n ≤ 20. `dp[mask][i]` = minimum cost to reach city `i` having visited exactly the cities in `mask`. Transition: for each unvisited city `j`, `dp[mask | (1<<j)][j] = min(..., dp[mask][i] + dist[i][j])`. Start with `dp[1][0] = 0` (started at city 0). Answer: `min(dp[full_mask][i] + dist[i][0])` for all `i`.
-
-> [!note]- Python Solution
-> ```python
-> def tsp(dist):
->     n = len(dist)
->     full_mask = (1 << n) - 1
->     INF = float('inf')
->     dp = [[INF] * n for _ in range(1 << n)]
->     dp[1][0] = 0
->     for mask in range(1 << n):
->         for i in range(n):
->             if dp[mask][i] == INF:
->                 continue
->             if not (mask >> i & 1):
->                 continue
->             for j in range(n):
->                 if mask >> j & 1:
->                     continue
->                 new_mask = mask | (1 << j)
->                 if dp[new_mask][j] > dp[mask][i] + dist[i][j]:
->                     dp[new_mask][j] = dp[mask][i] + dist[i][j]
->     return min(dp[full_mask][i] + dist[i][0] for i in range(n))
-> ```
-
-> [!success] Complexity
-> Time O(n² * 2^n), Space O(n * 2^n).
-
-> [!tip] Alternatives
-> - Held-Karp algorithm: same DP, just the classic name. O(n² * 2^n) is optimal for exact TSP.
-> - For approximate TSP: Christofides' algorithm (1.5x approximation), or 2-opt local search for large instances.
-> - Pattern shared with: Shortest Path Visiting All Nodes (LC 847), painting fence with k colors.
 
 ---
 

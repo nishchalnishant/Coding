@@ -1203,7 +1203,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > - Reverse graph + Kahn's topo sort: reverse all edges; terminal nodes become sources; run Kahn's; all nodes processed in topo sort are safe. Iterative — avoids recursion depth issues. Often faster in practice.
-> - SCC detection (Tarjan/Kosaraju): nodes not in any non-trivial SCC are safe. Overkill here.
 
 ---
 
@@ -1957,81 +1956,6 @@ difficulty: mixed
 
 ---
 
-### Critical Connections / Bridges (LC 1192) `💤 T3`
-
-> [!example] Problem
-> There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
-> A critical connection is a connection that, if removed, will make some servers unable to reach some other server.
-> Return all critical connections in the network in any order.
-> 
-> **Example 1:**
-> ```
-> Input: n = 4, connections = [[0,1],[1,2],[2,0],[1,3]]
-> Output: [[1,3]]
-> Explanation: [[3,1]] is also accepted.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 2, connections = [[0,1]]
-> Output: [[0,1]]
-> ```
-> 
-> **Constraints:**
-> - 2 <= n <= 10^5
-> - n - 1 <= connections.length <= 10^5
-> - 0 <= ai, bi <= n - 1
-> - ai != bi
-> - There are no repeated connections.
-
-> [!info] Approach
-> Bridge detection requires Tarjan's algorithm. A bridge is an edge (u, v) where no back-edge from v's subtree reaches u or any ancestor of u — detected via `low[v] > disc[u]`. DFS with two arrays: `disc[u]` = discovery time, `low[u]` = lowest discovery time reachable from u's subtree (via back edges). If `low[v] > disc[u]`, edge (u,v) is a bridge. Track parent to avoid treating the tree edge back to parent as a back-edge. Update `low[u] = min(low[u], low[v])` after recursing into v; `low[u] = min(low[u], disc[v])` for back-edges.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def critical_connections(n, connections):
->     graph = defaultdict(list)
->     for u, v in connections:
->         graph[u].append(v)
->         graph[v].append(u)
-> 
->     disc = [-1] * n
->     low  = [-1] * n
->     result = []
->     timer = [0]
-> 
->     def dfs(node, parent):
->         disc[node] = low[node] = timer[0]
->         timer[0] += 1
->         for nei in graph[node]:
->             if nei == parent:
->                 continue
->             if disc[nei] == -1:
->                 dfs(nei, node)
->                 low[node] = min(low[node], low[nei])
->                 if low[nei] > disc[node]:
->                     result.append([node, nei])
->             else:
->                 low[node] = min(low[node], disc[nei])
-> 
->     for node in range(n):
->         if disc[node] == -1:
->             dfs(node, -1)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(V+E), Space O(V+E).
-
-> [!tip] Alternatives
-> - Naive: remove each edge and run DFS to check connectivity. O(E × (V+E)) — too slow for large graphs.
-> - Articulation points (Tarjan variant): `low[v] >= disc[u]` (note: >=, not >) detects articulation points (nodes) rather than bridges (edges).
-> - Handle parallel edges: if multiple edges between u and v exist, none is a bridge; track edge index rather than parent node to handle multigraphs.
-
----
-
 ### Minimum Height Trees (LC 310)
 
 > [!example] Problem
@@ -2102,67 +2026,6 @@ difficulty: mixed
 ---
 
 ## Advanced Graph Algorithms
-
-### Strongly Connected Components — Kosaraju's Algorithm `💤 T3`
-
-> [!example] Problem
-> Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.
-
-> [!info] Approach
-> Kosaraju's runs two DFS passes. The first pass computes finish-order (equivalent to reverse topological order). The second pass on the reversed graph extracts SCCs in that finish order. Pass 1 — DFS on original graph, push nodes to a stack in finish order. Pass 2 — pop from the stack, DFS on the transposed graph; each DFS tree in pass 2 is one SCC. Build adjacency list and its transpose. DFS on original, recording finish order in a stack. Then repeatedly pop from the stack and DFS on the transposed graph — all reachable unvisited nodes form one SCC.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def kosaraju(n, edges, int]]):
->     graph = defaultdict(list)
->     rev_graph = defaultdict(list)
->     for u, v in edges:
->         graph[u].append(v)
->         rev_graph[v].append(u)
-> >
->     visited = [False] * n
->     finish_order = []
-> >
->     def dfs1(node):
->         visited[node] = True
->         for neighbour in graph[node]:
->             if not visited[neighbour]:
->                 dfs1(neighbour)
->         finish_order.append(node)
-> >
->     for i in range(n):
->         if not visited[i]:
->             dfs1(i)
-> >
->     visited = [False] * n
->     sccs = []
-> >
->     def dfs2(node, component):
->         visited[node] = True
->         component.append(node)
->         for neighbour in rev_graph[node]:
->             if not visited[neighbour]:
->                 dfs2(neighbour, component)
-> >
->     while finish_order:
->         node = finish_order.pop()
->         if not visited[node]:
->             component = []
->             dfs2(node, component)
->             sccs.append(component)
->     return sccs
-> ```
-
-> [!success] Complexity
-> Time O(V + E), Space O(V + E).
-
-> [!tip] Alternatives
-> - Tarjan's algorithm: single DFS pass using low-link values and a stack. Also O(V + E) but more complex to implement. Preferred when low-link values are needed for other purposes (bridges, articulation points).
-> - Key insight: reversing the graph "flips" the SCC connectivity — nodes reachable in the reverse graph from a root belong to the same SCC.
-
----
 
 ### Minimum Spanning Tree — Prim's Algorithm
 

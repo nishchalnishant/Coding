@@ -43,7 +43,7 @@ WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 - **Why it's fast**: Circular array means enqueue/dequeue just move a pointer modulo capacity — no memory allocation per operation.
 - **Where it breaks**: Fixed-size circular buffer overflows; non-circular array wastes O(n) space as front drifts; priority queue semantics are confused with FIFO semantics.
 
-# Queue — SDE-3 Gold Standard
+# Queue — L3 Core
 
 ```
 [QUEUE]
@@ -366,33 +366,10 @@ class CircularQueue:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: LMAX Disruptor — Lock-Free Ring Buffer
-
-> [!TIP]
-> Java's **LMAX Disruptor** is a lock-free bounded circular queue used in high-frequency trading (millions of events/second). Key insight: a single 64-bit `AtomicLong` sequence counter replaces both head and tail. Producers claim a slot via CAS on the sequence; consumers read when the slot's sequence matches expectations. Cache-line padding (`@sun.misc.Contended`) prevents false sharing between producer and consumer counters. This is 10-100× faster than `ArrayBlockingQueue` under contention.
-
-### Scalability: Persistent Queue
-
-> [!TIP]
-> A **persistent (immutable) functional queue** (Okasaki's real-time queue) supports O(1) amortized push/pop while preserving all historical versions. After each operation, both the old and new queue versions exist. Implemented with a lazy front list + a reversed rear list balanced via lazy evaluation. Used in functional languages (Haskell, Clojure) and undo-redo systems.
-
-### Concurrency: Blocking Queue for Producer-Consumer
-
-> [!TIP]
-> Python's `queue.Queue` is thread-safe via an internal `threading.Condition`. `put()` blocks when full; `get()` blocks when empty. In Java, `LinkedBlockingQueue` uses two separate locks — a **head lock** for consumers and a **tail lock** for producers. This doubles throughput vs a single lock because producers and consumers don't contend when the queue is neither full nor empty. For Python, use `asyncio.Queue` in async contexts and `multiprocessing.Queue` for multiprocessing.
-
-### Trade-offs: BFS Queue vs DFS Stack
-
-| Property | BFS (Queue) | DFS (Stack) |
-| :--- | :--- | :--- |
-| Shortest path (unweighted) | **Yes** — first reach = shortest | No |
-| Memory | O(max level width) | O(max depth) |
-| Level order output | Natural | Requires post-processing |
-| Grid problems | Better (steps = levels) | Works; Python recursion limit risk |
-| Topological sort | Kahn's algorithm | DFS postorder |
-| Multi-source spread | Natural (add all to queue at t=0) | Awkward |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 

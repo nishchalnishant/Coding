@@ -36,6 +36,7 @@
 * [Trie](01-data-structures/09-trie.md)
 * [Heap](01-data-structures/10-heap.md)
 * [Graphs](01-data-structures/13-graphs.md)
+* [DS Decision Tree](01-data-structures/ds_tree.md)
 
 ---
 
@@ -53,6 +54,8 @@
 * [Dynamic Programming](02-algorithms/15-dynamic-programming.md)
 * [Recursion](02-algorithms/15-recursion.md)
 * [Recursion → DP Bridge](02-algorithms/15-recursion-to-dp.md)
+* [Divide & Conquer](02-algorithms/18-divide-and-conquer.md)
+* [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
 
 ---
 
@@ -84,20 +87,28 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [String Algorithms](coding/algorithms/02-string-algorithms.md)
 * [Dynamic Programming](coding/algorithms/15-dynamic-programming.md)
 * [Recursion](coding/algorithms/15-recursion.md)
+* [Divide & Conquer](coding/algorithms/18-divide-and-conquer.md)
 
 ---
 
 ## Patterns & Revision
+* [Patterns Index](03-patterns/README.md)
 * [Patterns Master](03-patterns/patterns-master.md)
 * [Interview Cheatsheet](03-patterns/interview-cheatsheet.md)
+* [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
+* [Canonical Questions](03-patterns/canonical-questions.md)
+* [Leetcode Variants](03-patterns/leetcode-variants.md)
+* [Questions Bank](03-patterns/questions.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
 * [Google Quick Sheet](03-patterns/GOOGLE_QUICK_SHEET.md)
 
 ---
 
 ## Behavioral (required at L3)
+* [Behavioral Index](04-behavioral/README.md)
 * [Behavioral Stories](04-behavioral/behavioral.md)
 * [Googliness Guide](04-behavioral/BEHAVIORAL_GOOGLINESS.md)
+* [Googliness Round](04-behavioral/googliness-round.md)
 
 ## L3 Meta (coding/)
 * [Interview Strategy](coding/google-interview-strategy.md)

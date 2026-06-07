@@ -312,7 +312,7 @@ More walkthroughs: [problem-deep-dives.md](../02-algorithms/20-problem-deep-dive
 - If the problem is **substring / subarray with constraint** → sliding window (variable or fixed size).
 - If the problem is **anagram or same multiset** → frequency map or sorted/canonical key.
 - If the problem is **palindrome `🎯 T2`** → expand around center (O(n²)) unless asked for O(n) (Manacher).
-- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → trie / Aho-Corasick ([trie.md](./09-trie.md)).
+- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → Trie + DFS (L3 approach).
 - If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./01-array.md)).
 - If building strings in a loop → **list + join**, never `s += c` in Python.
 

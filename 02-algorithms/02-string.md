@@ -50,7 +50,7 @@ WHAT can go wrong
 ├── Rabin-Karp — single modulus risks collision; use double hashing for correctness guarantees
 └── Suffix Array — 0-indexed vs 1-indexed suffix boundaries cause off-by-one in LCP queries
 DECISION
-└── If m << n and single pattern → KMP; if need all pattern occurrences fast + many patterns → Aho-Corasick; if substring queries dominate → Suffix Array + LCP
+└── If m << n and single pattern → KMP; if substring queries dominate → Rolling Hash
 ```
 
 ## First-Principles Breakdown
@@ -105,23 +105,18 @@ DECISION
 │   │   ├── LCP array: longest common prefix between adjacent suffixes in sorted order
 │   │   └── Enables: longest repeated substring, number of distinct substrings, pattern search — all O(N log N)
 │   └── Trie-based Matching
-│       ├── Aho-Corasick: multi-pattern matching in O(N + total_pattern_length + matches)
 │       └── Build trie of patterns + failure links (like KMP but for a set of patterns)
 ├── COMPLEXITY SUMMARY
 │   ├── Naive pattern match: O(N·M)
 │   ├── KMP / Z / Rabin-Karp: O(N+M)
 │   ├── Manacher: O(N)
 │   ├── Suffix array build: O(N log N) or O(N)
-│   ├── Aho-Corasick build: O(Σ total pattern length)
-│   └── Aho-Corasick search: O(N + matches)
 ├── WHEN TO USE
 │   ├── Signal: "does pattern P occur in text T?" → KMP (single pattern, linear guaranteed)
-│   ├── Signal: "find any of K patterns in text" → Aho-Corasick
 │   ├── Signal: "longest palindromic substring" → Manacher or expand-around-center O(N²)
 │   ├── Signal: "repeated substring / longest common substring" → suffix array + LCP
 │   ├── Signal: "rolling / sliding window over string with hash" → Rabin-Karp
 │   ├── Signal: "anagram / permutation in string" → sliding window + freq array
-│   └── Avoid KMP when: pattern is regex or multi-pattern — use Aho-Corasick or regex engine
 └── COMMON MISTAKES / GOTCHAS
     ├── String concatenation in loop: O(N²) — always use list + join or StringBuilder
     ├── KMP lps build: off-by-one in the mismatch branch (lps[len-1], not lps[len])
@@ -156,7 +151,6 @@ Arrays of characters with immutability constraints. SDE-3 expects: KMP for O(N+M
 
 **When to reach for it.**
 - Pattern matching (single pattern, no preprocessing budget) → KMP.
-- Multiple pattern matching simultaneously → Aho-Corasick.
 - Palindrome detection (contiguous) → expand from center O(N²) or Manacher O(N).
 - Anagram grouping → sorted key or 26-count frequency tuple as hash key.
 - Minimum window containing all characters of T → sliding window with `have`/`required` counters.
@@ -456,113 +450,17 @@ class Trie:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: Streaming Pattern Matching
-
-> [!TIP]
-> For pattern matching over a **continuous data stream** (log ingestion, network packets):
-> - **KMP** is naturally streaming: maintain state `j` (position in pattern) across chunks. When a chunk arrives, continue the KMP scan from the saved `j` — no need to re-process previous data. O(chunk_size) per chunk.
-> - **Rabin-Karp** is also streaming: maintain the rolling hash across chunk boundaries. The last `m-1` characters of each chunk must be prepended to the next chunk for correct window computation.
->
-> For **multi-pattern streaming** (thousands of patterns): **Aho-Corasick automaton** — build a trie of all patterns with failure links; scan text once in O(N + M) total where M = sum of pattern lengths. Used in antivirus engines, network intrusion detection (Snort), and content moderation.
-
-```python
-from collections import deque, defaultdict
-
-class AhoCorasickNode:
-    def __init__(self):
-        self.children: dict[str, 'AhoCorasickNode'] = {}
-        self.fail: 'AhoCorasickNode' | None = None
-        self.output: list[str] = []  # Patterns ending at this state
-
-class AhoCorasick:
-    """
-    Aho-Corasick Multi-Pattern Matcher.
-    Time: O(Σ length of patterns) to build, O(Text Length + Matches) to search.
-    Space: O(Σ length of patterns) for Trie and failure/output links.
-    """
-    def __init__(self, patterns: list[str]):
-        self.root = AhoCorasickNode()
-        self._build_trie(patterns)
-        self._build_automaton()
-
-    def _build_trie(self, patterns: list[str]) -> None:
-        for pattern in patterns:
-            node = self.root
-            for ch in pattern:
-                if ch not in node.children:
-                    node.children[ch] = AhoCorasickNode()
-                node = node.children[ch]
-            node.output.append(pattern)
-
-    def _build_automaton(self) -> None:
-        queue = deque()
-        # Initialize queue with root's immediate children; their failure links point to root
-        for ch, child in self.root.children.items():
-            child.fail = self.root
-            queue.append(child)
-            
-        while queue:
-            curr = queue.popleft()
-            for ch, child in curr.children.items():
-                fail_state = curr.fail
-                while fail_state and ch not in fail_state.children:
-                    fail_state = fail_state.fail
-                
-                child.fail = fail_state.children[ch] if fail_state else self.root
-                
-                # Merge matches from the failure path to optimize output link jumping
-                child.output.extend(child.fail.output)
-                queue.append(child)
-
-    def search(self, text: str) -> dict[str, list[int]]:
-        """
-        Searches for all patterns in the input text.
-        Returns a dict mapping pattern -> list of starting indexes in text.
-        """
-        results = defaultdict(list)
-        curr = self.root
-        for idx, ch in enumerate(text):
-            while curr and ch not in curr.children:
-                curr = curr.fail
-            curr = curr.children[ch] if curr else self.root
-            
-            for pattern in curr.output:
-                start_idx = idx - len(pattern) + 1
-                results[pattern].append(start_idx)
-        return dict(results)
-```
-
-### Scalability: Suffix Arrays for Large-Scale Text
-
-> [!TIP]
-> For **longest repeated substring**, **substring search across multiple queries**, or **text compression**:
-> - **Suffix array `💤 T3`** + **LCP array** gives O(N log N) build, O(log N) per query.
-> - **Suffix automaton** gives O(N) build and O(N) total size for all suffixes — used in Google's text indexing.
->
-> In competitive programming: longest duplicate substring = binary search on length + rolling hash (O(N log N)); suffix array gives exact O(N log N) or O(N) with SA-IS.
-
-### Concurrency: String Immutability and StringBuilder
-
-> [!CAUTION]
-> **String concatenation in a loop is O(N²)** in languages where strings are immutable (Python, Java, JavaScript). Each `s += part` creates a new string object — N concatenations of total length L take O(L²) time. Use:
-> - Python: `''.join(parts)` — O(N) total.
-> - Java: `StringBuilder.append()` — amortized O(1) per append.
-> - JavaScript: `Array.join('')` — O(N) total.
->
-> This is a frequent Google interview performance trap — mention it proactively.
-
-### Trade-offs: Pattern Matching Algorithms
+## 3. Pattern Matching Quick Reference
 
 | Algorithm | Preprocessing | Search | Space | Best For |
 | :--- | :--- | :--- | :--- | :--- |
 | Naive | O(1) | O(N×M) | O(1) | Very short patterns; one-off search |
 | KMP | O(M) LPS | O(N) | O(M) | Single pattern; streaming |
 | Rabin-Karp | O(M) hash | O(N) avg | O(1) | Multiple patterns; probabilistic |
-| Aho-Corasick | O(Σ patterns) trie | O(N + matches) | O(Σ patterns) | Many patterns simultaneously |
 | Boyer-Moore | O(M + Σ) | O(N/M) best | O(M + Σ) | Long patterns; practical fastest |
-| Suffix Array | O(N log N) | O(M log N) | O(N) | Many queries on same text |
+
+> [!NOTE]
+> Aho-Corasick multi-pattern matching and Suffix Arrays are **L4+ / competitive programming** topics. Know they exist but don't spend time implementing them for L3.
 
 ---
 

@@ -20,9 +20,7 @@
 | Greedy | [Jump](#greedy) | `🎯 T2` |
 | Divide & Conquer / Math | [Jump](#divide--conquer--math) | `🎯 T2` |
 | Sorting (reference) | [Jump](#sorting-reference) | `🎯 T2` |
-| Advanced Graphs | [Jump](#advanced-graphs) | `🎯 T2` |
 | Union-Find (DSU) | [Jump](#union-find-dsu) | `🎯 T2` |
-| Bit Manipulation | [Jump](#bit-manipulation) | `🎯 T2` |
 | Intervals | [Jump](#intervals) | `🎯 T2` |
 
 ---
@@ -651,7 +649,6 @@ def find_kth_largest(nums, k):
 | All-pairs shortest paths | Floyd-Warshall | O(V³) | \"all pairs\"; N ≤ 500; transitive closure |
 | Traverse every edge exactly once | Hierholzer's (Eulerian Path) | O(V+E) | \"use every ticket once\"; \"draw without lifting pen\" |
 | Critical edges (network robustness) | Tarjan Bridges | O(V+E) | \"remove one edge, network splits\" |
-| Strongly connected components | Kosaraju / Tarjan SCC | O(V+E) | \"groups where every node reaches every other\" |
 
 ### Key Techniques
 
@@ -690,8 +687,6 @@ def find_kth_largest(nums, k):
 | **Find the City (Floyd-Warshall)** | All-pairs shortest path | N ≤ 100; count neighbors with `dist ≤ threshold`; prefer Floyd over V×Dijkstra | `🎯 T2` |
 | **Path With Minimum Effort** | Dijkstra (minimise max edge) | `dist[node]` = min effort to reach; edge weight = `abs(h1-h2)` | `🎯 T2` |
 | **Minimum Cost to Connect All Points** | Kruskal's MST | Generate all N²/2 edges sorted by Manhattan dist; DSU | `🎯 T2` |
-| **Detect Negative Cycle** | Bellman-Ford Nth round | If Nth relaxation still updates → negative cycle; Dijkstra cannot detect | `💤 T3` |
-| **SCC (Kosaraju/Tarjan)** | Two-pass DFS / disc+low | Directed graph groups where every node reaches every other | `💤 T3` |
 
 ---
 
@@ -753,7 +748,6 @@ class UnionFind:
 | **Graph Valid Tree** | DSU + edge count | Valid tree: exactly N-1 edges AND no cycle (all unions return True) | `🎯 T2` |
 | **Accounts Merge** | DSU on emails | Union all emails in same account; group by root; sort+prepend name | `🎯 T2` |
 | **Kruskal's MST** | DSU + sort edges | Sort by weight; union if not connected; stop at N-1 edges | `🎯 T2` |
-| **Smallest String With Swaps** | DSU on indices | Group indices in same component; sort characters per component; rebuild | `💤 T3` |
 
 ---
 
@@ -842,7 +836,6 @@ class UnionFind:
 | **Meeting Rooms I** | Sort by start | If any `intervals[i].start < intervals[i-1].end` → False | `🎯 T2` |
 | **Meeting Rooms II** | Sort by start + min-heap | Pop if `heap[0] <= curr.start`; heap size = min rooms | `🎯 T2` |
 | **Minimum Arrows to Burst Balloons** | Sort by end, strict `>` | Arrow at `curr_end`; new arrow only when `next_start > curr_end` | `🎯 T2` |
-| **Employee Free Time** | Merge all intervals | Collect all intervals; sort; merge; gaps between merged = free time | `💤 T3` |
 
 ---
 

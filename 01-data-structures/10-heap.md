@@ -44,7 +44,7 @@ WHY heaps exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 - **Why it's fast**: The tree height is log n (complete binary tree), so any sift operation touches at most log n nodes.
 - **Where it breaks**: Arbitrary search is O(n) — heap does not support "find element X" efficiently; no way to iterate in sorted order without O(n log n) repeated extraction.
 
-# Heap / Priority Queue — SDE-3 Gold Standard
+# Heap / Priority Queue — L3 Core
 
 ```
 [HEAP / PRIORITY QUEUE]
@@ -321,48 +321,10 @@ def ipo_maximize_capital(k: int, w: int, profits: list[int], capital: list[int])
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Distributed Top-K
-
-> [!TIP]
-> **Top-K at scale** (e.g., top 10 trending videos across 1000 shards):
-> 1. Each shard independently maintains a local top-K min-heap.
-> 2. The coordinator collects K results from each of N shards (total K×N elements).
-> 3. Run K-way merge on the K×N elements with a heap of size N.
-> 4. Total: O(K×N log N) at coordinator — independent of total dataset size.
->
-> This is the architecture behind Google Trends, Twitter trending, and leaderboards.
-
-### Scalability: Streaming Percentiles
-
-For P99 latency from a live request stream:
-- **Exact**: Two-heap median approach gives P50. For arbitrary percentile, maintain heap sizes at `p : (1-p)` ratio.
-- **Approximate**: Use a **t-digest** or **DDSketch** — merge-friendly probabilistic structures that approximate any percentile with bounded error and O(1) per insert. Used in Prometheus, Datadog.
-
-### Concurrency: Thread-Safe Priority Queues
-
-> [!TIP]
-> **Java**: `PriorityBlockingQueue` provides a thread-safe min-heap with blocking `take()` (blocks until an element is available). Used for producer-consumer systems where producers add tasks and multiple consumers extract the highest-priority one.
->
-> **Lock-free**: CAS-based skip lists (e.g., Java's `ConcurrentSkipListMap`) provide O(log N) lock-free priority queue operations — lower contention under high concurrency than mutex-based heaps.
->
-> **Python**: `heapq` is not thread-safe. Use `queue.PriorityQueue` (internally uses `heapq` with a `threading.Lock`) for multi-threaded use.
-
-> [!CAUTION]
-> **Heap instability**: Python's `heapq` is not stable — equal-priority elements don't preserve insertion order. For stable priority queues, use `(priority, counter, item)` tuples where `counter` is a monotonically increasing sequence number.
-
-### Trade-offs
-
-| Use Case | Best Structure | Why |
-| :--- | :--- | :--- |
-| Top-K from static array | QuickSelect | O(N) avg; no extra space |
-| Top-K from stream | Min-heap of size K | O(N log K); handles infinite stream |
-| All elements sorted | Full sort | O(N log N); simpler than heap |
-| Dynamic median | Two heaps | O(log N) insert, O(1) median |
-| Sliding window median | Two heaps + lazy delete | Amortized O(log N); avoids re-heapification |
-| Priority scheduling | Min-heap | O(log N) insert/extract |
-| Merge K sorted streams | K-way merge heap | O(N log K); never materializes full data |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 

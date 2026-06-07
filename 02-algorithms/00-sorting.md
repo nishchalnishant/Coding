@@ -151,7 +151,7 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 ### Merge Sort — Divide & Conquer
 
 > [!IMPORTANT]
-> **The Click Moment**: "Sort a **linked list `🎯 T2`**" — OR — "need a **stable** sort" — OR — "**count inversions `💤 T3`** in an array" — OR — "guarantee O(N log N) **regardless** of input distribution". Merge sort is the only comparison sort that achieves all four simultaneously.
+> **The Click Moment**: "Sort a **linked list `🎯 T2`**" — OR — "need a **stable** sort" — OR — "guarantee O(N log N) **regardless** of input distribution". Merge sort is the only comparison sort that achieves all three simultaneously.
 
 > [!TIP]
 > Merge sort is like splitting a deck of cards in half, sorting each half separately, then merging the two sorted halves by repeatedly picking the smaller top card. Quicksort is like picking one card as a pivot and shuffling everything smaller to the left and everything larger to the right — then repeating on each side. Merge sort uses extra space for the merge step but guarantees O(N log N); quicksort sorts in-place and is faster in practice due to cache locality, but degrades to O(N²) on sorted input unless you randomize the pivot.
@@ -475,7 +475,6 @@ For distributed sort (MapReduce model):
 - **Meeting Rooms II** — Sort starts and ends separately; two-pointer sweep for peak overlap.
 
 ### Hard
-- **Count Inversions `💤 T3`** — Merge sort modification; count right-picks during merge.
 - **Maximum Gap** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
 - **Russian Doll Envelopes** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
 
@@ -490,7 +489,6 @@ For distributed sort (MapReduce model):
 | **Largest Number** | "Lex concat order" | Custom comparator `a+b vs b+a` | Handle all-zeros: `[0,0]` → `"0"`, not `"00"`. |
 | **H-Index** | "Count vs. value crossover" | Sort desc or bucket sort | Find `i` where `citations[i] >= i+1`; off-by-one is common. |
 | **Kth Largest** | "Rank without full sort" | QuickSelect or min-heap-K | QuickSelect mutates array; min-heap is cleaner for streaming. |
-| **Count Inversions `💤 T3`** | "Out-of-order pairs" | Modified merge sort | Count `len(left) - i` inversions on each right-side pick. |
 | **Russian Doll Envelopes** | "Nested 2D increasing" | Sort w asc, h **desc**; LIS on h | Height sort is **descending** to prevent same-width stacking. |
 | **Maximum Gap** | "Largest gap in sorted form" | Bucket sort; gap spans empty bucket | Gap ≥ `(max - min) / (n-1)`; allocate `n-1` buckets. |
 | **Sort Colors (Dutch National Flag) `⚡ T1`** [M] | "Sort array of 0s, 1s, 2s in one pass" | Three pointers: `lo`, `mid`, `hi`; swap 0s left, 2s right | `mid` advances on 0 (after swap) and 1 (no swap), but NOT on 2 — element from `hi` is unknown. |

@@ -4,53 +4,20 @@
     "type": "split",
     "children": [
       {
-        "id": "5aaf87eec402107d",
+        "id": "1d99dd801df4a9f8",
         "type": "tabs",
         "children": [
           {
-            "id": "a82caa0c4cf9adee",
+            "id": "e465767a8c07aac9",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "questions.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "questions"
-            }
-          },
-          {
-            "id": "79517f002ff5d45f",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "MINDMAP.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "MINDMAP"
-            }
-          },
-          {
-            "id": "4d6418fbcc35461b",
-            "type": "leaf",
-            "state": {
-              "type": "markdown",
-              "state": {
-                "file": "coding/data-structures/advanced.md",
-                "mode": "source",
-                "source": false
-              },
-              "icon": "lucide-file",
-              "title": "advanced"
+              "title": "New tab"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -209,8 +176,10 @@
       "bases:Create new base": false
     }
   },
-  "active": "79517f002ff5d45f",
+  "active": "55abc373778b0e74",
   "lastOpenFiles": [
+    "01-data-structures/ds_tree.md",
+    "02-algorithms/algorithm_tree.md",
     "00-L3-EXECUTION-META/A4_CHEAT_SHEETS.html",
     "00-L3-EXECUTION-META/POSTER.html",
     "00-L3-EXECUTION-META/FLOWCHART_MEDIUM.html",
@@ -224,7 +193,6 @@
     "02-algorithms/_L3-SKIP-README.md",
     "practice/ll.py",
     "practice/string.py",
-    "practice",
     "00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md",
     "00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md",
     "00-L3-EXECUTION-META/01-45-minute-execution-plan.md",
@@ -245,7 +213,6 @@
     "coding/algorithms/02-string-algorithms.md",
     "coding/data-structures/13-graph.md",
     "coding/data-structures/08-tree.md",
-    "coding/data-structures/06-queue.md",
-    "coding/data-structures/07-linked-list.md"
+    "coding/data-structures/06-queue.md"
   ]
 }

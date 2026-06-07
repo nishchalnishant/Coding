@@ -45,7 +45,7 @@ WHY graphs exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 - **Why it's fast**: Adjacency list stores only existing edges — O(V+E) space instead of O(V²), critical for sparse real-world graphs.
 - **Where it breaks**: Cycle detection requires explicit visited tracking; DFS on large graphs overflows the call stack; dense graphs make adjacency lists slower than matrices for edge lookups.
 
-# Graphs (Data Structure) — SDE-3 Gold Standard
+# Graphs (Data Structure) — L3 Core
 
 ```
 [GRAPH]
@@ -342,69 +342,10 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Distributed BFS
-
-> [!TIP]
-> For graphs too large for one machine (web graph, social network with billions of nodes):
-> - **Pregel model** (Google): vertices compute and communicate via messages. Each BFS level is one superstep. Workers hold a shard of the graph; messages cross shard boundaries. O(diameter × E/P) where P = number of machines.
-> - **Bidirectional BFS**: Start BFS simultaneously from source and target. Meet in the middle. Reduces explored nodes from O(b^d) to O(b^(d/2)) where b = branching factor, d = diameter. Used in Google Maps shortest path.
-
-```python
-def bidirectional_bfs(adj: dict, start: int, target: int) -> int:
-    if start == target:
-        return 0
-        
-    # Maintain two frontiers and their distances
-    queue_start, queue_target = deque([start]), deque([target])
-    dist_start, dist_target = {start: 0}, {target: 0}
-    
-    def expand_frontier(queue, dist_this, dist_other):
-        # Process one full level of the smaller queue
-        for _ in range(len(queue)):
-            u = queue.popleft()
-            for v in adj[u]:
-                if v in dist_other:
-                    return dist_this[u] + 1 + dist_other[v]
-                if v not in dist_this:
-                    dist_this[v] = dist_this[u] + 1
-                    queue.append(v)
-        return -1
-        
-    while queue_start and queue_target:
-        # Always expand the smaller frontier to minimize branching factor impact
-        if len(queue_start) <= len(queue_target):
-            ans = expand_frontier(queue_start, dist_start, dist_target)
-        else:
-            ans = expand_frontier(queue_target, dist_target, dist_start)
-            
-        if ans != -1:
-            return ans
-            
-    return -1  # unreachable
-```
-
-### Scalability: 0-1 BFS
-
-> [!TIP]
-> When edge weights are only 0 or 1, use a **deque-based BFS**: push 0-weight neighbors to the **front** of the deque, 1-weight neighbors to the **back**. O(V+E) — faster than Dijkstra's O(E log V) for this special case. Used in problems like "minimum cost to reach destination with some free edges."
-
-### Concurrency: Parallel Graph Traversal
-
-> [!TIP]
-> BFS is **level-parallelizable**: all nodes at distance k are independent — they can be processed concurrently. Use a barrier synchronization at each level boundary. In Java: `CountDownLatch` or `Phaser` to coordinate threads at each BFS frontier. In Python: `concurrent.futures.ThreadPoolExecutor` with a `Barrier` from `threading`.
-
-### Trade-offs: BFS vs DFS
-
-| Property | BFS | DFS |
-| :--- | :--- | :--- |
-| Shortest path | **Yes** (unweighted) | No |
-| Memory | O(max level width) | O(max depth) |
-| Finds all paths | Implicit (level-by-level) | Natural with backtracking |
-| Cycle detection | Via visited set | Via recursion state (white/gray/black) |
-| Topological sort | Kahn's (in-degree) | Reverse postorder |
-| Grid problems | Better (level = steps) | Works; risk of recursion overflow |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -495,7 +436,7 @@ This keeps the deque sorted by distance without a min-heap, outperforming Dijkst
 **How does the 3-color DFS algorithm detect cycles in a directed graph?** #flashcard
 Nodes are categorized into three states:
 - **White (0)**: Unvisited.
-- **Gray (1) `💤 T3`**: Active (currently in the recursion stack).
+- **Gray (1)**: Active (currently in the recursion stack).
 - **Black (2)**: Fully processed (DFS completed for this node and all its descendants).
-A cycle is detected if a neighbor is found in the **Gray `💤 T3`** state during traversal.
+A cycle is detected if a neighbor is found in the **Gray** state during traversal.
 

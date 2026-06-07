@@ -44,7 +44,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 - **Why it's fast**: A balanced tree of n nodes has height log₂n — binary search through levels, touching only log n nodes per operation.
 - **Where it breaks**: Without balancing (AVL/RB), repeated sorted insertions produce a O(n)-height linked list; recursion depth can overflow call stack on skewed trees.
 
-# Tree — SDE-3 Gold Standard
+# Tree — L3 Core
 
 ```
 [TREE]
@@ -265,7 +265,7 @@ def rob_house_tree(root) -> int:
 ### BST Operations — Validate, Kth Smallest, Range Sum
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Validate BST `🎯 T2`**" — OR — "Kth **smallest/largest** in BST" — OR — "**Range sum `💤 T3`** of BST values". The BST invariant (all left < node < all right, not just immediate children) is the source of most bugs.
+> **The Click Moment**: "**Validate BST `🎯 T2`**" — OR — "Kth **smallest/largest** in BST" — OR — "**Range sum of BST values** (Segment Tree for dynamic: L4+)". The BST invariant (all left < node < all right, not just immediate children) is the source of most bugs.
 
 ```python
 def is_valid_bst(root, lo=float('-inf'), hi=float('inf')) -> bool:
@@ -430,37 +430,10 @@ def deserialize(data: str):
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Balanced BSTs and Self-Balancing Trees
-
-> [!TIP]
-> A plain BST degrades to O(N) in the worst case (sorted insertions = linked list). Production systems use:
-> - **AVL tree**: Strict height balance (|left - right| ≤ 1); O(log N) guaranteed; more rotations on insert.
-> - **Red-Black tree**: Relaxed balance; O(log N) amortized; fewer rotations; used in Java's `TreeMap`, Linux kernel's task scheduler.
-> - **B-tree / B+ tree**: Branching factor >> 2; optimized for disk I/O; used in all relational databases.
->
-> At Google scale: sharded B-trees underlie Bigtable's SSTable format.
-
-### Scalability: Parallel Tree Traversal
-
-> [!TIP]
-> Tree DFS is naturally parallelizable: left and right subtrees are independent. For very large trees (file systems, ASTs), use a thread pool where each task processes a subtree and submits children as new tasks. In Python, use `concurrent.futures.ThreadPoolExecutor` with a work queue seeded from the root.
-
-### Concurrency: Lock-Free BST
-
-> [!TIP]
-> Lock-free concurrent BSTs use **CAS on child pointers**. The key insight: reads of child pointers are safe without locks (pointer reads are atomic on 64-bit systems); writes use CAS to atomically update a child pointer only if it hasn't changed. Used in Java's `ConcurrentSkipListMap` (skip list ≈ probabilistic balanced BST) for lock-free ordered map.
-
-### Trade-offs
-
-| Operation | Sorted Array | Hash Map | BST | Balanced BST |
-| :--- | :--- | :--- | :--- | :--- |
-| Search | O(log N) BS | O(1) | O(log N) avg | O(log N) |
-| Insert | O(N) shift | O(1) amort | O(log N) avg | O(log N) |
-| Delete | O(N) shift | O(1) amort | O(log N) avg | O(log N) |
-| Range query | O(log N + K) | O(N) | O(log N + K) | O(log N + K) |
-| In-order iteration | O(N) | O(N) unsorted | O(N) | O(N) |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 

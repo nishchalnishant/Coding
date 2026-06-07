@@ -44,7 +44,7 @@ WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 - **Why it's fast**: With low load factor, expected chain length is ≈1 — lookup touches ~1 element regardless of table size.
 - **Where it breaks**: Adversarial inputs can force all keys to one bucket (hash DoS); ordering is lost; worst-case is O(n); non-hashable types (mutable lists) cannot be keys.
 
-# Hashing — SDE-3 Gold Standard
+# Hashing — L3 Core
 
 ```
 [HASHING — MINDMAP]
@@ -74,15 +74,9 @@ WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 │   │   ├── Map both nodes and keys onto a ring [0, 2^32)
 │   │   ├── Key goes to first node clockwise on ring — adding/removing node moves only K/N keys on average
 │   │   └── Virtual nodes: each physical node owns multiple ring positions → more uniform load
-│   └── Bloom Filter
-│       ├── Space-efficient probabilistic set: k hash functions, bit array of size m
-│       ├── Insert: set k bits; Query: check k bits — all set → probably present; any 0 → definitely absent
-│       ├── False positive rate: (1 - e^(-kn/m))^k — tunable by m and k
-│       └── No deletions (standard); Counting Bloom Filter supports deletions
 ├── COMPLEXITY SUMMARY
 │   ├── Insert / Lookup / Delete: O(1) average, O(N) worst (all collisions)
 │   ├── Resize: O(N) amortized O(1) per operation
-│   ├── Consistent hashing lookup: O(log N) with sorted ring + binary search
 │   └── Bloom filter insert/query: O(k) — constant if k is fixed
 ├── WHEN TO USE
 │   ├── Signal: "two-sum / find complement" → hash map for O(N) vs O(N log N) sort
@@ -97,7 +91,6 @@ WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
     ├── Default hash in Python: custom objects use id() — must implement __hash__ + __eq__ together
     ├── Integer overflow in rolling hash: use mod prime; Python arbitrary ints hide this in other languages
     ├── Load factor neglect: never pre-size a hash map too small in hot paths — triggers repeated rehash
-    ├── Consistent hashing: forgetting virtual nodes leads to hotspots on real hardware
     └── Bloom filter: cannot remove elements; false positives increase as n grows beyond design capacity
 ```
 
@@ -352,94 +345,10 @@ class RandomizedSet:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Consistent Hashing
-
-> [!TIP]
-> In a distributed cache (N nodes), naive `key % N` routing breaks when a node is added or removed — nearly all keys remap. **Consistent hashing `💤 T3`** places both nodes and keys on a logical ring (hash → position on [0, 2^32)). Each key routes to the **first node clockwise** from its hash.
->
-> Adding/removing one node only remaps `1/N` of the keys on average — vs `(N-1)/N` for naive hashing. Used in: Amazon DynamoDB, Apache Cassandra, Memcached (ketama), Redis Cluster.
->
-> **Virtual nodes**: Each physical node appears K times on the ring with different hashes — improves load balance and handles heterogeneous node capacities.
-
-### Scalability: Bloom Filters
-
-> [!TIP]
-> A bloom filter answers "is this element **probably** in the set?" with:
-> - **No false negatives** — if it says "not present", definitely not present.
-> - **Possible false positives** — if it says "present", it might not be.
->
-> Space: O(K) bits per element where K = number of hash functions. Deletion not supported (use counting bloom filter).
->
-> Used in: Google BigTable (avoid disk reads for missing rows), Cassandra (skip SSTables), Chrome's malware URL filter.
-
-### Scalability: Rolling Hash for Large Text
-
-> [!TIP]
-> **Rabin-Karp rolling hash**: hash of sliding window updated in O(1) using:
-> `hash(s[i+1:i+m+1]) = (hash(s[i:i+m]) - s[i] * base^(m-1)) * base + s[i+m]`
->
-> On hash match, verify with direct string comparison to handle collisions. Use double hashing (two different primes) to reduce false-positive rate to ~1/p² for billion-character text.
-
-```python
-def rabin_karp_search(text: str, pattern: str) -> list[int]:
-    n, m = len(text), len(pattern)
-    if m == 0 or n < m:
-        return []
-        
-    BASE, MOD = 256, 10**9 + 7
-    # Precompute BASE^(m-1) % MOD for removing leading character
-    base_m_minus_1 = pow(BASE, m - 1, MOD)
-    
-    pat_hash = 0
-    text_hash = 0
-    
-    # Compute initial hash for pattern and first window of text
-    for i in range(m):
-        pat_hash = (pat_hash * BASE + ord(pattern[i])) % MOD
-        text_hash = (text_hash * BASE + ord(text[i])) % MOD
-        
-    results = []
-    
-    # Slide the window
-    for i in range(n - m + 1):
-        if pat_hash == text_hash:
-            # Hash match -> verify character by character to handle collision
-            if text[i:i+m] == pattern:
-                results.append(i)
-                
-        # Calculate hash for next window (remove leading char, add trailing char)
-        if i < n - m:
-            # (current_hash - leading_char * BASE^(m-1)) * BASE + next_char
-            text_hash = (text_hash - ord(text[i]) * base_m_minus_1) % MOD
-            text_hash = (text_hash * BASE + ord(text[i + m])) % MOD
-            text_hash = (text_hash + MOD) % MOD  # Handle negative modulo in some languages
-            
-    return results
-```
-
-### Concurrency: Thread-Safe Hash Maps
-
-> [!TIP]
-> **Java**: `ConcurrentHashMap` uses **segment locking** (Java 7) or **CAS + `synchronized` per bucket** (Java 8+). Reads are lock-free; writes lock only the affected bucket. 16× better throughput than `Hashtable` under high concurrency.
->
-> **Python**: `dict` is thread-safe for single operations in CPython (GIL), but not for multi-step sequences. Use `threading.Lock` around multi-step operations (check-then-insert, read-modify-write).
->
-> **Lock-free hash map**: Use CAS on bucket head pointer for insert. Google's Abseil `flat_hash_map` and Facebook's Folly `AtomicHashMap` achieve lock-free reads and writes via open addressing with CAS probing.
-
-> [!CAUTION]
-> **Hash collision attacks**: If user-controlled input keys are hashed with a predictable hash function, attackers can craft inputs that all land in the same bucket → O(N) per lookup (hash DoS). Python randomizes `str`/`bytes` hash seeds per process (since 3.3) to mitigate this. For high-security systems, use SipHash or a HMAC-keyed hash.
-
-### Trade-offs: Collision Strategies
-
-| Strategy | Lookup | Space | Cache Efficiency | When to Prefer |
-| :--- | :--- | :--- | :--- | :--- |
-| Chaining (linked list) | O(1) avg, O(N) worst | O(N + M) | Poor (pointer chasing) | High load factor tolerated; simple implementation |
-| Open addressing (linear) | O(1) avg | O(M) | Excellent | Low load factor; cache-sensitive systems |
-| Open addressing (quadratic) | O(1) avg | O(M) | Good | Reduces primary clustering vs linear |
-| Robin Hood hashing | O(1) avg | O(M) | Good | Minimizes max probe length; predictable latency |
-| Cuckoo hashing | O(1) worst-case lookup | O(M) | Good | Guaranteed O(1) lookup critical |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -534,8 +443,6 @@ The load factor is the ratio $\alpha = \frac{\text{number of elements}}{\text{nu
 2. Iterate through all key-value pairs in the old table.
 3. Compute their new bucket indices (`hash(key) % new_size`) and insert them into the new table.
 
-**What are the key properties and trade-offs of a Bloom Filter compared to a HashSet?** #flashcard
-A Bloom Filter is a space-efficient probabilistic data structure that uses a bit array and multiple hash functions.
 - **Trade-off**: It can yield false positives (stating an element is present when it is not) but never false negatives.
 - **Limitation**: Elements cannot be easily deleted, and the actual values are not stored.
 

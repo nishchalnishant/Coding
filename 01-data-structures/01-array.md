@@ -42,7 +42,7 @@ WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to u
 - **Why it's fast**: CPU fetches cache lines (64 bytes), so iterating an array prefetches neighbors for free.
 - **Where it breaks**: Insertion/deletion at arbitrary index is O(n) due to shifting; resizing copies the whole array; sparse keys waste memory.
 
-# Arrays — SDE-3 Gold Standard
+# Arrays — L3 Core
 
 ```
 [ARRAY]
@@ -260,7 +260,7 @@ def min_window_substring(s: str, t: str) -> str:
 ### Prefix Sum — Range Queries
 
 > [!IMPORTANT]
-> **The Click Moment**: "**Subarray sum equals K `⚡ T1`**" — OR — "**range sum `💤 T3`** query" — OR — "how many subarrays have sum divisible by K". Once you build the prefix array, any range sum is O(1). Combined with a hash map, it enables counting subarrays with any target sum in O(N).
+> **The Click Moment**: "**Subarray sum equals K `⚡ T1`**" — OR — "**range sum** query" — OR — "how many subarrays have sum divisible by K". Once you build the prefix array, any range sum is O(1). Combined with a hash map, it enables counting subarrays with any target sum in O(N).
 
 ```python
 def subarray_sum_equals_k(nums: list[int], k: int) -> int:
@@ -433,53 +433,10 @@ def find_duplicate(nums: list[int]) -> int:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Streaming and Out-of-Core Arrays
-
-> [!TIP]
-> When data doesn't fit in RAM:
-> - **Top-K from stream**: min-heap of size K; O(N log K) time, O(K) space.
-> - **Streaming median**: Two heaps (max-lo + min-hi); O(log N) per element.
-> - **Count distinct in stream** (approximate): HyperLogLog — O(1) space with configurable error rate (±2% with ~1 KB memory). Used in Redis `PFCOUNT`, Google Analytics.
-> - **Reservoir sampling**: Uniform random sample of K from a stream of unknown size N — each element i has probability K/i of being included.
-
-```python
-import random
-
-def reservoir_sample(stream, k: int) -> list:
-    reservoir = []
-    for i, item in enumerate(stream):
-        if i < k:
-            reservoir.append(item)
-        else:
-            j = random.randint(0, i)
-            if j < k:
-                reservoir[j] = item
-    return reservoir
-```
-
-### Scalability: Prefix Sums in Distributed Systems
-
-> [!TIP]
-> Prefix sums parallelize via **parallel prefix scan** (Blelloch scan): O(N/P) work per processor with O(log N) parallel depth. Used in GPU prefix sums (CUDA `thrust::inclusive_scan`), SIMD vectorized scan on CPU, and MapReduce-style distributed aggregation.
-
-### Concurrency: Concurrent Array Access
-
-> [!TIP]
-> For concurrent reads with rare writes: use a **copy-on-write array** (Java's `CopyOnWriteArrayList`). Writes create a new copy; readers always see a consistent snapshot. Zero contention for reads — ideal for read-heavy access patterns like event listener lists.
->
-> For high-write concurrent counters in an array: use `AtomicIntegerArray` (Java) or `numpy` arrays with explicit locking in Python — element-level CAS avoids locking the full array.
-
-### Trade-offs: Choosing the Right Array Technique
-
-| Problem Type | Wrong Approach | Right Approach | Why |
-| :--- | :--- | :--- | :--- |
-| Subarray sum = K (with negatives) | Sliding window | Prefix sum + map | Sliding window assumes monotone sums |
-| K-th largest (streaming) | Full sort | Min-heap of K | O(N log K) vs O(N log N) |
-| Range updates + point queries | Update each element | Difference array | O(1) vs O(N) per update |
-| Many range sum queries | Linear scan each | Prefix sum | O(1) vs O(N) per query |
-| Sorted array pair-sum | Nested loop | Two pointers | O(N) vs O(N²) |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -503,7 +460,6 @@ def reservoir_sample(stream, k: int) -> list:
 - [Trapping Rain Water](../02-algorithms/20-problem-deep-dives.md#trapping-rain-water) — Two pointers `l_max, r_max`; advance side with smaller max.
 - [Median of Two Sorted Arrays](../02-algorithms/20-problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition of shorter array.
 - **Sliding Window Maximum `⚡ T1`** — Monotonic deque; O(N).
-- **Count of Smaller Numbers After Self `💤 T3`** — Merge sort augmentation or BIT.
 
 ---
 

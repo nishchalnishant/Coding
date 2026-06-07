@@ -87,7 +87,6 @@ DP
 │   ├── LCS → SCS, LPS, Edit Distance
 │   └── Distinct Subsequences, Interleaving String
 ├── Interval DP: dp[i][j] by length; k = split point
-│   ├── MCM, Burst Balloons, Palindrome Cuts
 │   └── Strange Printer, Zuma, Optimal BST
 ├── Grid DP: dp[r][c]; sometimes reverse fill
 │   ├── Unique Paths, Min Path Sum, Triangle
@@ -99,7 +98,6 @@ DP
 ├── Bitmask DP: dp[mask][node] for N ≤ 20
 │   ├── TSP, Shortest Path All Nodes
 │   └── Smallest Sufficient Team, Stickers
-├── Digit DP: dp[pos][tight][started][state]
 │   ├── Count integers in [L,R] with property
 │   └── Monotone digits, No consecutive same
 ├── Stock State Machine: dp[i][k][holding]
@@ -123,7 +121,6 @@ DP
 | Split interval `[i,j]` at every `k` | **MCM / Interval DP** |
 | Subtree answers combined at root | **DP on Trees** |
 | Node + extra state (mask, moves) | **DP on Graphs / Bitmask** |
-| Count integers in range with digit property | **Digit DP `💤 T3`** |
 | Count strings / sequences with constraints | **Counting / Probability DP** |
 
 ---
@@ -142,8 +139,7 @@ DP
 | "Interval `[i,j]`", "split at `k`", "optimal order" | MCM / Interval DP |
 | Tree problem with "rob/skip", "path through root" | Tree DP (post-order DFS, return pair) |
 | N ≤ 20, "visit all nodes", "assign items" | Bitmask DP |
-| "Count integers in [L,R] with digit-level property" | Digit DP (`tight` flag) |
-| "Probability", "expected value" | Probability / Expected Value DP |
+| "Count integers in [L,R] with digit-level property" | "Probability", "expected value" | Probability / Expected Value DP |
 | "Optimal play", "both players optimal" | Game / Minimax DP |
 
 ---
@@ -597,17 +593,6 @@ def matrix_chain_multiplication(dims: list[int]) -> int:
                 dp[i][j] = min(dp[i][j], cost)
     return dp[1][n]
 
-def burst_balloons(nums: list[int]) -> int:
-    nums = [1] + nums + [1]
-    n = len(nums)
-    dp = [[0] * n for _ in range(n)]
-    for length in range(2, n):
-        for i in range(0, n - length):
-            j = i + length
-            for k in range(i + 1, j):      # k = LAST balloon to burst in (i, j)
-                coins = nums[i] * nums[k] * nums[j]
-                dp[i][j] = max(dp[i][j], dp[i][k] + coins + dp[k][j])
-    return dp[0][n - 1]
 
 def palindrome_partition_min_cuts(s: str) -> int:
     n = len(s)
@@ -627,15 +612,10 @@ def palindrome_partition_min_cuts(s: str) -> int:
     return dp[n - 1]
 ```
 
-> [!CAUTION]
-> **Burst Balloons gotcha: `💤 T3`** `k` is the **last** balloon to burst within `(i, j)`, not the first. When `k` bursts, `nums[i]` and `nums[j]` are still present (boundaries), so the coins = `nums[i] * nums[k] * nums[j]`.
-
 ## Interval DP Variations
 
 | Problem | Cost at split | State |
 | :--- | :--- | :--- |
-| **Matrix Chain Multiplication** | `dims[i-1]*dims[k]*dims[j]` | `dp[i][j]` = min multiplications |
-| **Burst Balloons `💤 T3`** | `nums[i]*nums[k]*nums[j]` | `k` = last to burst in open interval `(i,j)` |
 | **Palindrome Partitioning II `🎯 T2`** | `1` if `s[j..i]` is palindrome | `dp[i]` = min cuts for prefix |
 | **Strange Printer** | Reuse or overwrite | `dp[i][j]` = min turns to print `s[i..j]` |
 | **Optimal BST** | Key search probabilities | `dp[i][j]` = min expected search cost |
@@ -942,9 +922,7 @@ def minimum_xor_sum(nums1: list[int], nums2: list[int]) -> int:
 | Problem | State | N limit |
 | :--- | :--- | :--- |
 | **Travelling Salesman** | `dp[mask][city]` | N ≤ 20 |
-| **Shortest Path Visiting All Nodes `💤 T3`** | BFS with `(node, visited_mask)` | N ≤ 12 |
 | **Minimum XOR Sum (assignment)** | `dp[mask]` = cost assigning first `popcount(mask)` | N ≤ 14 |
-| **Smallest Sufficient Team `💤 T3`** | `dp[skill_mask]` = min team to cover skills | skills ≤ 26 |
 | **Stickers to Spell Word** | `dp[mask]` = min stickers to cover chars in mask | word ≤ 15 |
 
 ---
@@ -1181,474 +1159,6 @@ def is_match_wildcard(s: str, p: str) -> bool:
 
 ---
 
-# Pattern 13 — Digit DP
-
-## Theory & Mental Model
-
-**The `tight` constraint:** If `tight=True`, digit at `pos` can be at most `limit[pos]`. Once you pick a digit strictly less, all future digits are free.
-
-**The `started` flag:** Handles leading zeros. Don't update state while `started=False`.
-
-**Standard state:** `dp[pos][tight][started][extra]`
-
-> [!IMPORTANT]
-> **Always call `dp.cache_clear()` between `f(R)` and `f(L-1)`.** The `digits` string lives in the closure; cached results for `f(R)` are wrong for `f(L-1)`.
-
-## Universal Template
-
-```python
-from functools import lru_cache
-
-def count_up_to(limit: int, K: int) -> int:
-    digits = str(limit)
-    n = len(digits)
-
-    @lru_cache(maxsize=None)
-    def dp(pos: int, tight: bool, started: bool, state: int) -> int:
-        if pos == n:
-            return 1 if started and is_valid(state, K) else 0
-        max_d = int(digits[pos]) if tight else 9
-        total = 0
-        for d in range(0, max_d + 1):
-            new_started = started or d != 0
-            new_state = update(state, d) if new_started else state
-            total += dp(pos + 1, tight and d == max_d, new_started, new_state)
-        return total
-
-    result = dp(0, True, False, 0)
-    dp.cache_clear()          # ← critical
-    return result
-
-def count_in_range(L: int, R: int, K: int) -> int:
-    return count_up_to(R, K) - count_up_to(L - 1, K)
-```
-
-## Problem Implementations
-
-```python
-# Count numbers with digit sum = K
-def count_digit_sum(L: int, R: int, K: int) -> int:
-    def count_up_to(limit: int) -> int:
-        s = str(limit); n = len(s)
-        @lru_cache(maxsize=None)
-        def dp(pos, tight, started, curr_sum):
-            if curr_sum > K: return 0
-            if pos == n: return 1 if started and curr_sum == K else 0
-            max_d = int(s[pos]) if tight else 9
-            total = 0
-            for d in range(0, max_d + 1):
-                new_started = started or d != 0
-                new_sum = (curr_sum + d) if new_started else 0
-                total += dp(pos+1, tight and d==max_d, new_started, new_sum)
-            return total
-        result = dp(0, True, False, 0); dp.cache_clear(); return result
-    return count_up_to(R) - count_up_to(L - 1)
-
-# No consecutive same digits
-def count_no_consecutive(N: int) -> int:
-    s = str(N); n = len(s)
-    @lru_cache(maxsize=None)
-    def dp(pos, tight, started, last):
-        if pos == n: return 1 if started else 0
-        max_d = int(s[pos]) if tight else 9
-        total = 0
-        for d in range(0, max_d + 1):
-            if started and d == last: continue
-            new_started = started or d != 0
-            new_last = d if new_started else -1
-            total += dp(pos+1, tight and d==max_d, new_started, new_last)
-        return total
-    result = dp(0, True, False, -1); dp.cache_clear(); return result
-
-# Count numbers with all unique digits (LC 357)
-def count_numbers_with_unique_digits(n: int) -> int:
-    limit = 10**n - 1
-    s = str(limit); L = len(s)
-    @lru_cache(maxsize=None)
-    def dp(pos, tight, started, mask):
-        if pos == L: return 1 if started else 0
-        max_d = int(s[pos]) if tight else 9
-        total = 0
-        for d in range(0, max_d + 1):
-            if started and (mask >> d & 1): continue
-            new_started = started or d != 0
-            new_mask = mask | (1 << d) if new_started else 0
-            total += dp(pos+1, tight and d==max_d, new_started, new_mask)
-        return total
-    result = dp(0, True, False, 0); dp.cache_clear(); return result
-```
-
-> [!CAUTION]
-> **State during leading zeros** — do NOT update digit sum, mask, or remainder when `started=False`.
-
-## Digit DP Quick Reference
-
-```
-f(R) - f(L-1)                            → always decompose [L,R]
-State = (pos, tight, started, extra)     → standard tuple
-tight' = tight AND d == max_d            → propagation rule
-Update extra only when started=True      → no leading-zero state pollution
-dp.cache_clear() after every f(x) call  → critical correctness
-```
-
-## Digit DP Interview Questions
-
-| Problem | LC # | Key State | Click Moment | Gotcha |
-| :--- | :--- | :--- | :--- | :--- |
-| Count Numbers with Unique Digits | 357 | `digit_mask` | 10-bit bitmask tracks used digits | Leading zero ≠ used digit |
-| Numbers At Most N Given Digit Set | 902 | `tight` only | Free positions multiply by `len(digits)` | Sort allowed digits; break early |
-| Number of Digit One | 233 | `cnt` accumulator | Classic occurrence counting | Math formula also exists |
-| Monotone Increasing Digits | 738 | `last_digit` | `d ≥ last` constraint | Greedy O(N) also works |
-| Non-neg Integers Without Consecutive Ones | 600 | `last_bit` | Binary `tight` DP | Tight applies to binary string of N |
-
----
-
-# Pattern 14 — Probability, Counting & Game Theory DP
-
-## Theory
-
-**Expected value DP:** State = current configuration; `dp[state] = E[cost to reach terminal]`.
-```
-dp[state] = Σ over transitions t: prob(t) * (cost(t) + dp[next_state(t)])
-```
-
-**Game DP:** `dp[state]` = True if current player wins with optimal play. `dp[i] = max(score[i], score_k - dp[i+k])` for minimax.
-
-## Implementations
-
-```python
-# Knight Probability (LC 688)
-def knight_probability(n: int, k: int, row: int, col: int) -> float:
-    moves = [(-2,-1),(-2,1),(-1,-2),(-1,2),(1,-2),(1,2),(2,-1),(2,1)]
-    dp = [[0.0]*n for _ in range(n)]
-    dp[row][col] = 1.0
-    for _ in range(k):
-        ndp = [[0.0]*n for _ in range(n)]
-        for i in range(n):
-            for j in range(n):
-                if dp[i][j] == 0: continue
-                for di, dj in moves:
-                    ni, nj = i+di, j+dj
-                    if 0 <= ni < n and 0 <= nj < n:
-                        ndp[ni][nj] += dp[i][j] / 8.0
-        dp = ndp
-    return sum(dp[i][j] for i in range(n) for j in range(n))
-
-# New 21 Game (LC 837)
-def new21game(n: int, k: int, maxPts: int) -> float:
-    if k == 0 or n >= k + maxPts:
-        return 1.0
-    dp = [0.0] * (n + 1)
-    dp[0] = 1.0
-    window_sum = 1.0
-    result = 0.0
-    for x in range(1, n + 1):
-        dp[x] = window_sum / maxPts
-        if x < k:
-            window_sum += dp[x]
-        else:
-            result += dp[x]
-        if x >= maxPts:
-            window_sum -= dp[x - maxPts]
-    return result
-
-# Soup Servings (LC 808)
-def soup_servings(n: int) -> float:
-    if n >= 4800:
-        return 1.0
-    n = (n + 24) // 25
-    from functools import lru_cache
-    @lru_cache(maxsize=None)
-    def dp(a: int, b: int) -> float:
-        if a <= 0 and b <= 0: return 0.5
-        if a <= 0: return 1.0
-        if b <= 0: return 0.0
-        return 0.25 * (dp(a-4, b) + dp(a-3, b-1) + dp(a-2, b-2) + dp(a-1, b-3))
-    return dp(n, n)
-
-# Stone Game III (LC 1406) — minimax DP
-def stone_game_iii(stoneValue: list[int]) -> str:
-    n = len(stoneValue)
-    dp = [float('-inf')] * (n + 1)
-    dp[n] = 0
-    for i in range(n - 1, -1, -1):
-        take = 0
-        for k in range(1, 4):
-            if i + k <= n:
-                take += stoneValue[i + k - 1]
-                dp[i] = max(dp[i], take - dp[i + k])
-    score = dp[0]
-    if score > 0: return "Alice"
-    if score < 0: return "Bob"
-    return "Tie"
-
-# Nim Game — Sprague-Grundy
-def can_win_nim(piles: list[int]) -> bool:
-    xor = 0
-    for p in piles: xor ^= p
-    return xor != 0
-
-# Egg Drop Problem (LC 887) — Inverted DP O(K log N)
-def super_egg_drop(k: int, n: int) -> int:
-    m = 0
-    dp = [0] * (k + 1)
-    while dp[k] < n:
-        m += 1
-        new_dp = [0] * (k + 1)
-        for j in range(1, k + 1):
-            new_dp[j] = dp[j-1] + 1 + dp[j]
-        dp = new_dp
-    return m
-
-# Catalan Numbers (Unique BSTs — LC 96)
-def num_trees(n: int) -> int:
-    dp = [0] * (n + 1)
-    dp[0] = dp[1] = 1
-    for i in range(2, n + 1):
-        for j in range(i):
-            dp[i] += dp[j] * dp[i - 1 - j]
-    return dp[n]
-```
-
-> [!IMPORTANT]
-> The inverted Egg Drop DP is O(K × log N). The recurrence `dp[m][k] = dp[m-1][k-1] + 1 + dp[m-1][k]` comes from: if egg breaks → check `dp[m-1][k-1]` floors below; if survives → check `dp[m-1][k]` floors above.
-
-> [!TIP]
-> **Minimax insight:** `dp[i]` = max score difference (current player − opponent) from position `i`. If `dp[0] > 0` → Alice wins; `< 0` → Bob wins; `= 0` → tie.
-
-## Interview Questions — Probability & Game Theory
-
-| Problem | LC # | Type | Click Moment | Gotcha |
-| :--- | :--- | :--- | :--- | :--- |
-| **Knight Probability** | 688 | Expected value | Propagate probability forward | Off-board transitions just disappear |
-| **Soup Servings** | 808 | Probability DP | Return 1.0 for N ≥ 4800 | Scale N down by 25 first |
-| **New 21 Game** | 837 | Probability + sliding window | `window_sum` avoids O(N·maxPts) | Sliding window is the key optimization |
-| **Stone Game I** | 877 | Game theory | Math: Alice always wins | DP insight: difference state |
-| **Stone Game III** | 1406 | Minimax DP | `dp[i]` = score advantage from position i | Take 1,2, or 3; score = take - opponent |
-| **Egg Drop** | 887 | Inverted DP | Invert: "max floors with m moves and k eggs" | Standard DP is O(KN²); inverted O(K log N) |
-| **Unique BSTs** | 96 | Catalan DP | Root = i splits into left (i-1) and right (n-i) | Answer = Catalan(n) |
-| **Nim Game** | 292 | Sprague-Grundy | Win iff XOR of all piles ≠ 0 | Generalizes with Grundy for multi-pile |
-
----
-
-# Pattern 15 — Advanced DP Optimizations
-
-## Overview
-
-| Technique | Applicable When | Reduction |
-| :--- | :--- | :--- |
-| **Monotonic Deque** | `dp[i]` depends on `max/min` of sliding window | O(N²) → O(N) |
-| **Convex Hull Trick (CHT)** | Transition is linear: `dp[j] + a[j]*b[i]`; `b[i]` monotone | O(N²) → O(N) |
-| **Li Chao Segment Tree** | CHT where `b[i]` is NOT monotone | O(N²) → O(N log N) |
-| **Divide & Conquer Optimization** | `opt(i-1,j) ≤ opt(i,j)` (monotone optimal split) | O(N²) → O(N log N) |
-| **SOS DP (Sum over Subsets)** | `f[mask] = sum of f[submask]` for all submasks | O(3^N) → O(N·2^N) |
-| **Knuth-Yao Optimization** | Interval DP with quadrangle inequality | O(N³) → O(N²) |
-| **WQS Binary Search (Aliens Trick)** | Exactly K decisions; answer concave/convex in K | O(NK) → O(N log(max)) |
-
-## 1. Monotonic Deque (Sliding Window DP)
-
-```python
-from collections import deque
-
-# Jump Game VI (LC 1696)
-def max_result(nums: list[int], k: int) -> int:
-    n = len(nums)
-    dp = [0] * n
-    dp[0] = nums[0]
-    dq = deque([0])
-    for i in range(1, n):
-        while dq and dq[0] < i - k:
-            dq.popleft()
-        dp[i] = dp[dq[0]] + nums[i]
-        while dq and dp[dq[-1]] <= dp[i]:
-            dq.pop()
-        dq.append(i)
-    return dp[n-1]
-```
-
-> [!TIP]
-> **Deque invariant:** Front = index of the maximum value; back = most recently added. Deque is always decreasing. Pop expired indices from the front when window moves.
-
-## 2. Convex Hull Trick (CHT)
-
-```python
-class ConvexHullTrick:
-    """Maintains lines y = m*x + b; queries minimum y for given x (x increasing)."""
-
-    def __init__(self):
-        self.lines = []
-        self.ptr = 0
-
-    def _bad(self, l1, l2, l3):
-        m1, b1 = l1; m2, b2 = l2; m3, b3 = l3
-        return (b3 - b1) * (m1 - m2) <= (b2 - b1) * (m1 - m3)
-
-    def add_line(self, m: int, b: int):
-        new_line = (m, b)
-        while len(self.lines) >= 2 and self._bad(self.lines[-2], self.lines[-1], new_line):
-            self.lines.pop()
-        self.lines.append(new_line)
-
-    def query_min(self, x: int) -> int:
-        while self.ptr < len(self.lines) - 1:
-            m1, b1 = self.lines[self.ptr]
-            m2, b2 = self.lines[self.ptr + 1]
-            if m1 * x + b1 >= m2 * x + b2:
-                self.ptr += 1
-            else:
-                break
-        m, b = self.lines[self.ptr]
-        return m * x + b
-```
-
-> [!TIP]
-> **CHT conditions:** (1) Transition = `dp[j] + f(j)*g(i)`. (2) If f(j) monotone AND g(i) monotone → O(N) linear CHT. If only g(i) sorted → binary search on hull. If neither sorted → Li Chao Tree O(N log N).
-
-## 3. Divide & Conquer Optimization
-
-```python
-def dp_divide_conquer(cost, n: int, layers: int) -> list[int]:
-    INF = float('inf')
-    prev = [cost(0, j) for j in range(n + 1)]
-    prev[0] = 0
-    for l in range(2, layers + 1):
-        curr = [INF] * (n + 1)
-        curr[0] = 0
-        def solve(lo: int, hi: int, opt_lo: int, opt_hi: int):
-            if lo > hi: return
-            mid = (lo + hi) // 2
-            best_k, best_val = opt_lo, INF
-            for k in range(opt_lo, min(opt_hi, mid) + 1):
-                val = prev[k] + cost(k, mid)
-                if val < best_val:
-                    best_val = val
-                    best_k = k
-            curr[mid] = best_val
-            solve(lo, mid - 1, opt_lo, best_k)
-            solve(mid + 1, hi, best_k, opt_hi)
-        solve(1, n, 0, n - 1)
-        prev = curr
-    return prev
-```
-
-> [!CAUTION]
-> D&C optimization requires **verifying monotone optimal split** before applying. If `opt(i,j)` is not monotone, this produces wrong answers silently. Prove via quadrangle inequality: `cost(a,c) + cost(b,d) ≤ cost(a,d) + cost(b,c)` for `a ≤ b ≤ c ≤ d`.
-
-## 4. SOS DP — Sum over Subsets
-
-```python
-def sos_dp(g: list[int], n: int) -> list[int]:
-    """Compute f[mask] = sum of g[sub] for all sub ⊆ mask."""
-    f = g[:]
-    for i in range(n):
-        for mask in range(1 << n):
-            if mask >> i & 1:
-                f[mask] += f[mask ^ (1 << i)]
-    return f
-
-# Smallest Sufficient Team (LC 1125)
-def smallest_sufficient_team(req_skills, people):
-    n = len(req_skills)
-    skill_idx = {s: i for i, s in enumerate(req_skills)}
-    person_masks = [0] * len(people)
-    for i, skills in enumerate(people):
-        for s in skills:
-            if s in skill_idx:
-                person_masks[i] |= 1 << skill_idx[s]
-    FULL = (1 << n) - 1
-    INF = float('inf')
-    dp = [INF] * (FULL + 1)
-    parent = [None] * (FULL + 1)
-    dp[0] = 0; parent[0] = []
-    for mask in range(FULL + 1):
-        if dp[mask] == INF: continue
-        for i, pm in enumerate(person_masks):
-            new_mask = mask | pm
-            if dp[new_mask] > dp[mask] + 1:
-                dp[new_mask] = dp[mask] + 1
-                parent[new_mask] = parent[mask] + [i]
-    return parent[FULL]
-```
-
-> [!TIP]
-> **SOS for superset sum:** Reverse the loop: `if NOT (mask >> i & 1): f[mask] += f[mask | (1<<i)]`. This gives sum of all g[sup] for supersets of mask.
-
-## 5. Knuth-Yao Optimization
-
-```python
-def knuth_yao(w: list[list[int]], n: int) -> list[list[int]]:
-    INF = float('inf')
-    dp  = [[0]*n for _ in range(n)]
-    opt = [[0]*n for _ in range(n)]
-    for i in range(n):
-        dp[i][i] = w[i][i]
-        opt[i][i] = i
-    for length in range(2, n + 1):
-        for i in range(n - length + 1):
-            j = i + length - 1
-            dp[i][j] = INF
-            k_lo = opt[i][j-1]
-            k_hi = opt[i+1][j] if i+1 <= j else j
-            for k in range(k_lo, min(k_hi, j-1) + 1):
-                val = dp[i][k] + dp[k+1][j] + w[i][j]
-                if val < dp[i][j]:
-                    dp[i][j] = val
-                    opt[i][j] = k
-    return dp
-```
-
-## 6. WQS Binary Search (Aliens Trick)
-
-```python
-def wqs_binary_search(prices: list[int], k: int) -> int:
-    """Best Time to Buy/Sell Stock IV using WQS binary search."""
-    n = len(prices)
-    def solve(fee: int) -> tuple[int, int]:
-        hold = (-prices[0] - fee, 1)
-        free = (0, 0)
-        for p in prices[1:]:
-            new_hold = max(hold, (free[0] - p - fee, free[1] + 1))
-            new_free = max(free, (hold[0] + p, hold[1]))
-            hold, free = new_hold, new_free
-        return free
-    lo, hi = 0, max(prices)
-    while lo < hi:
-        mid = (lo + hi + 1) // 2
-        profit, txns = solve(mid)
-        if txns >= k:
-            lo = mid
-        else:
-            hi = mid - 1
-    profit, txns = solve(lo)
-    return profit + lo * k
-```
-
-> [!CAUTION]
-> WQS binary search is competitive programming advanced. In interviews, mention it as an optimization over O(NK) only if the interviewer pushes past the standard solution.
-
-## Quick Decision Tree
-
-```
-O(N²) DP with sliding window max/min dependency?
-  └─ Yes → Monotonic Deque O(N)
-
-dp[i] = min over j of (dp[j] + f(j)*g(i)), linear form?
-  └─ g(i) monotone → Convex Hull Trick O(N)
-  └─ g(i) not monotone → Li Chao Tree O(N log N)
-
-Interval DP, optimal split monotone (quadrangle inequality)?
-  └─ cost has quadrangle + monotone weight → Knuth-Yao O(N²)
-  └─ otherwise → Divide & Conquer O(N log N)
-
-f[mask] = sum over all submasks?
-  └─ SOS DP O(N · 2^N)
-
-Exactly-K decisions, concave/convex in K?
-  └─ WQS binary search / Aliens Trick
-```
-
----
-
 # Common DP Bugs — The 12
 
 > [!CAUTION]
@@ -1659,13 +1169,11 @@ Exactly-K decisions, concave/convex in K?
 3. **Missing modulo** — In counting problems, mod every `+=` and `*` operation.
 4. **Off-by-one in 1-indexed tables** — `dp[i]` corresponds to `arr[i-1]`; base cases at row/col 0.
 5. **Wrong interval DP fill order** — Always fill by increasing interval length, not by row.
-6. **Burst Balloons: k is last not first** — `k` = last balloon to burst; boundaries `i,j` still present when k pops.
-7. **Regex `*` zero-occurrence** — `dp[i][j-2]` skips both `*` and the preceding element.
-8. **Edit distance base cases `🎯 T2`** — `dp[0][j] = j` and `dp[i][0] = i` (full insert/delete cost).
-9. **Digit DP cache not cleared between calls** — `dp.cache_clear()` after every `f(x)` call.
-10. **Dungeon forward DP is impossible** — Forward doesn't know minimum HP required; must fill backwards.
-11. **Stock cooldown uses prev_sold** — Save `prev_sold = sold` before updating `sold`; else uses same-day value.
-12. **LIS tails ≠ actual LIS** — `tails` array only gives correct length; to reconstruct, use `parent[]` in O(N²).
+6. **Regex `*` zero-occurrence** — `dp[i][j-2]` skips both `*` and the preceding element.
+7. **Edit distance base cases `🎯 T2`** — `dp[0][j] = j` and `dp[i][0] = i` (full insert/delete cost).
+9. **Dungeon forward DP is impossible** — Forward doesn't know minimum HP required; must fill backwards.
+10. **Stock cooldown uses prev_sold** — Save `prev_sold = sold` before updating `sold`; else uses same-day value.
+11. **LIS tails ≠ actual LIS** — `tails` array only gives correct length; to reconstruct, use `parent[]` in O(N²).
 
 ---
 
@@ -1705,8 +1213,8 @@ When given a DP problem in an interview:
 4. **Write recurrence:** Two cases: match/take vs skip/split.
 5. **Identify base cases:** Boundaries where recursion stops.
 6. **Determine fill order:** Which loop goes outside; which inside.
-7. **Code bottom-up:** Skip memoization unless interviewer asks for top-down first.
-8. **Space optimize:** Always offer to reduce space; don't apply until base solution is correct.
+6. **Code bottom-up:** Skip memoization unless interviewer asks for top-down first.
+7. **Space optimize:** Always offer to reduce space; don't apply until base solution is correct.
 
 ---
 
@@ -1735,12 +1243,7 @@ When given a DP problem in an interview:
 | Grid DP | O(M×N) | O(N) |
 | Tree DP | O(N) | O(h) |
 | Bitmask DP | O(2^N × N²) | O(2^N × N) |
-| Digit DP | O(D × |state| × 10) | O(D × |state|) |
 | Probability DP | O(states × transitions) | O(states) |
-| CHT / Deque Opt | O(N) | O(N) |
-| D&C DP | O(N log N) | O(N) |
-| SOS DP | O(N × 2^N) | O(2^N) |
-| Knuth-Yao | O(N²) | O(N²) |
 
 ---
 
@@ -1776,18 +1279,12 @@ When given a DP problem in an interview:
 
 | Problem | Pattern | Complexity / Optimization |
 | :--- | :--- | :--- |
-| **Burst Balloons `💤 T3`** | Interval DP | `k` is the **last** balloon to burst |
-| **Super Egg Drop `💤 T3`** | Inverted DP | Invert to `dp[moves][eggs]`; O(K log N) |
-| **Shortest Path Visiting All Nodes `💤 T3`** | Bitmask DP | `(mask, last_node)` state in BFS |
-| **Numbers At Most N Given Digit Set** | Digit DP | `tight` constraint tracking |
-| **Binary Tree Maximum Path Sum `🎯 T2`** | Tree DP | Single-arm gain vs full-path through node |
+| **Numbers At Most N Given Digit Set** | **Binary Tree Maximum Path Sum `🎯 T2`** | Tree DP | Single-arm gain vs full-path through node |
 | **Stock with Cooldown** | State Machine | 3 states: `hold`, `sold`, `rest` |
 | **Cherry Pickup II** | Grid DP | Two travelers 3D→2D compression |
 | **Palindrome Partitioning III `🎯 T2`** | 2D DP + cost | Cost function `cost(l,r)` memoized |
-| **TSP / Hamiltonian Path** | Bitmask DP | `dp[mask][node]`; O(2^N × N²) |
 | **Stone Game III** | Minimax DP | `dp[i]` = score advantage; Alice/Bob generalized |
 | **Jump Game VI `🎯 T2`** | Deque Optimization | Monotonic deque; O(N) |
-| **Smallest Sufficient Team `💤 T3`** | Bitmask + SOS | `dp[skill_mask]` = min team |
 
 ---
 
@@ -1814,8 +1311,6 @@ When given a DP problem in an interview:
 | **Max Subarray (Kadane)** | Kadane | `end_here = max(x, end_here+x)` | Start fresh when extending worse |
 | **Max Product Subarray** | Kadane | Track `cur_max` and `cur_min` | Negative × negative = positive |
 | **Circular Subarray Max** | Kadane | `max(straight, total - min_subarray)` | All-negative edge case |
-| **Burst Balloons `💤 T3`** | Interval DP | `k` = last burst; boundaries still present | `k` is last, not first |
-| **Matrix Chain Multiplication** | Interval DP | `dp[i][j] = min over k of cost` | Fill by increasing length |
 | **Palindrome Partitioning II `🎯 T2`** | Interval DP | Precompute palindrome table first | `is_pal[0][i]` → no cut needed |
 | **Unique Paths `🎯 T2`** | Grid DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Init row 0 and col 0 to 1 |
 | **Min Path Sum** | Grid DP | Accumulate costs | Init first row/col explicitly |
@@ -1824,8 +1319,6 @@ When given a DP problem in an interview:
 | **House Robber III `🎯 T2`** | Tree DP | `dfs → (rob, skip)` | Return pair from DFS |
 | **Max Path Sum `🎯 T2`** | Tree DP | Ignore negative subtrees | Global max updated per node |
 | **Binary Tree Cameras `🎯 T2`** | Tree DP | 3 states: covered/has_camera/not_covered | Root NOT_COVERED needs +1 |
-| **TSP `💤 T3`** | Bitmask DP | `dp[mask][node]`; BFS pairwise first | `FULL = (1<<n)-1` is goal |
-| **Smallest Sufficient Team `💤 T3`** | Bitmask DP | `dp[skill_mask]` = min team | OR masks for coverage |
 | **Stock I** | State Machine | Greedy: track min price | Edge case: empty array |
 | **Stock II** | State Machine | `hold, free` two states | Unlimited transactions |
 | **Stock III** | State Machine | `buy1, sell1, buy2, sell2` | Chain sell1 into buy2 |

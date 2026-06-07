@@ -22,51 +22,6 @@ difficulty: mixed
 
 ## Merge Sort Variants
 
-### Count Inversions (Merge Sort) `💤 T3`
-
-> [!example] Problem
-> Given array, count pairs (i,j) where i < j but arr[i] > arr[j].
-
-> [!info] Approach
-> Brute force O(n²). Merge sort naturally counts inversions — when a right half element is placed before left half elements, each remaining left half element contributes one inversion. Modified merge sort. During merge, when right[j] < left[i], add (mid - left_ptr) to count. Recursive merge sort returning (sorted_array, inversion_count). Standard merge with count accumulation.
-
-> [!note]- Python Solution
-> ```python
-> def count_inversions(arr):
->     def merge_sort(a):
->         if len(a) <= 1:
->             return a, 0
->         mid = len(a) // 2
->         left, lc = merge_sort(a[:mid])
->         right, rc = merge_sort(a[mid:])
->         merged = []
->         count = lc + rc
->         i = j = 0
->         while i < len(left) and j < len(right):
->             if left[i] <= right[j]:
->                 merged.append(left[i])
->                 i += 1
->             else:
->                 # all remaining left elements > right[j]
->                 count += len(left) - i
->                 merged.append(right[j])
->                 j += 1
->         merged.extend(left[i:])
->         merged.extend(right[j:])
->         return merged, count
-> 
->     _, total = merge_sort(arr)
->     return total
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(n) space.
-
-> [!tip] Alternatives
-> Fenwick Tree (BIT) on coordinate-compressed values — O(n log n), different approach: process elements left to right, query prefix sum for elements already seen that are larger.
-
----
-
 ## QuickSort / QuickSelect
 
 ### Maximum Gap (Bucket Sort)

@@ -321,7 +321,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 > [!tip] Alternatives
 > - DP table `dp[i][j]`: `dp[i][j] = True` if `s[i..j]` is a palindrome. O(n²) time and space — same time but uses O(n²) memory vs O(1).
-> - Manacher's algorithm: O(n) — insert `#` sentinels between chars, exploit palindrome symmetry to skip recomputation. Optimal but complex to implement in an interview.
+> - Manacher's algorithm: O(n) — optimal but **L4+** complexity to implement. Expand-around-center O(n²) is the expected L3 approach.
 
 ---
 
@@ -378,7 +378,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 > [!tip] Alternatives
 > - DP table `dp[i][j]`: `dp[i][j] = (s[i] == s[j]) and dp[i+1][j-1]`. O(n²) time and space — count every `True` cell. Easier to understand but uses more memory.
-> - Manacher's: O(n) — derive palindrome radii array, sum `ceil(radius[i] / 2)` for each center. Optimal, rarely needed in interviews.
+> - Manacher's: O(n) — **L4+ / overkill** for L3. Expand-around-center suffices.
 
 ---
 

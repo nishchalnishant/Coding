@@ -378,36 +378,10 @@ def findMaximumXOR(nums: list[int]) -> int:
 
 ---
 
-## SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Compressed Trie (Patricia Trie)
-
-When paths have long chains with no branching, merge them into one edge labeled with the full substring. Reduces space from O(total chars) to O(words). Used in IP routing tables (longest prefix match).
-
-### Delete operation
-
-```python
-def delete(self, word: str) -> bool:
-    def _del(node, word, depth):
-        if depth == len(word):
-            if not node.is_end:
-                return False
-            node.is_end = False
-            return len(node.children) == 0  # safe to delete if leaf
-        ch = word[depth]
-        if ch not in node.children:
-            return False
-        should_delete_child = _del(node.children[ch], word, depth + 1)
-        if should_delete_child:
-            del node.children[ch]
-            return not node.is_end and len(node.children) == 0
-        return False
-    _del(self.root, word, 0)
-```
-
-### Aho-Corasick (multi-pattern matching in a stream)
-
-Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../02-algorithms/02-string.md) for implementation sketch.
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -447,7 +421,6 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 | Autocomplete / prefix search | Trie insert + DFS from prefix node |
 | Dictionary word check with prefix pruning | Trie + backtracking (Word Search II) |
 | Maximum XOR of two numbers | XOR Trie (binary, MSB→LSB, greedy opposite bit) |
-| Multi-pattern stream matching | Aho-Corasick (Trie + failure links) |
 | IP longest prefix match | Compressed trie / Patricia trie |
 
 ---
@@ -460,13 +433,11 @@ Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across
 - If the problem says "maximum XOR of two numbers" → think Binary XOR Trie; process bits MSB→LSB, greedily choose opposite bit at each level.
 - If the problem says "replace words with shortest root" → think Trie; insert all roots, walk each word until `is_end` hit.
 - If the problem says "design search autocomplete with ranking" → think Trie with top-K list cached at each node; avoid full DFS on every query.
-- If you need multi-pattern matching in a stream → think Aho-Corasick (Trie + failure links); O(N + matches) vs O(N×K) for K patterns.
 
 ## See also
 
 - [backtracking.md](../02-algorithms/12-backtracking.md) — Word Search II uses Trie + backtracking together
 - [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md) — XOR Trie for max XOR pair
-- [string.md](../02-algorithms/02-string.md) — Aho-Corasick for multi-pattern matching
 - [hashing.md](02-hashing.md) — alternative for exact word lookups when prefix search not needed
 
 ## Flashcards

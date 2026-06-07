@@ -332,7 +332,7 @@ class RollbackDSU:
 ### Concurrency: Lock-Free DSU
 
 > [!TIP]
-> Lock-free DSU uses **CAS (compare-and-swap)** on parent pointers: `parent[x].compareAndSet(x, root)`. Race conditions in path compression are benign — multiple threads may write the same compressed path, but all compressed values are valid roots. Union requires a CAS retry loop: read both roots, attempt to update the smaller-rank root's parent. If the CAS fails, retry. This is the approach in the Ligra parallel graph framework (C++) and is feasible in Java via `AtomicIntegerArray`.
+> **Production note:** Thread-safe DSU (using CAS/atomic ops) is an L4+ concurrency topic; not required for L3 interviews.
 
 ### Trade-offs: DSU vs Alternatives
 

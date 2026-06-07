@@ -76,7 +76,7 @@ WHY graph algorithms exist → WHAT they do → HOW they work → WHEN to use �
 │   ├── Trigger 3: "order of tasks / dependencies" → Topological Sort
 │   ├── Trigger 4: "minimum cost to connect all nodes" → Kruskal / Prim MST
 │   ├── Trigger 5: "connected components, islands, reachability" → BFS/DFS
-│   └── Trigger 6: "strongly connected components" → Kosaraju / Tarjan DFS
+│   └── Trigger 6: "strongly connected components" → (L4+ topic; skip for L3)
 └── COMMON MISTAKES
     ├── Mistake 1: forgetting to mark visited before pushing to queue → infinite loop in BFS
     ├── Mistake 2: using Dijkstra with negative edges → incorrect distances
@@ -562,7 +562,6 @@ def prim_mst(n: int, adj: dict) -> int:
 | **Minimum Height Trees [M]** | "Find roots that minimize tree height" | Iteratively trim leaf nodes (degree 1) until 1 or 2 nodes remain | Same idea as topological sort from leaves inward. At most 2 centroids for any tree. |
 | **Dijkstra's Shortest Path [M]** | "Single-source shortest paths in weighted graph with non-negative weights" | Min-heap `(dist, node)`; relax neighbors; skip stale heap entries | Won't work with negative edges (use Bellman-Ford). Stale entry check: `if dist > current best, skip`. |
 | **Bus Routes [H]** | "Minimum bus transfers to reach destination" | BFS on bus routes (not stops); each route is a node; stop-to-routes mapping | Build `stop → list of routes` map; BFS expands entire routes, not individual stops. |
-| **Shortest Path Visiting All Nodes [H] `💤 T3`** | "Shortest path that visits all nodes in undirected graph" | BFS with state `(node, visited_bitmask)`; start from all nodes simultaneously | Multi-source BFS with bitmask state. Goal state = `visited == (1<<n)-1`. State space O(N × 2^N). |
 
 ---
 

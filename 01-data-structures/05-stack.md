@@ -42,7 +42,7 @@ WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 - **Why it's fast**: Push/pop only touch the top pointer — no traversal, no rebalancing, O(1) always.
 - **Where it breaks**: Unbounded recursion overflows the call stack; monotonic stack loses its invariant if push/pop conditions are wrong; not suitable when you need arbitrary access.
 
-# Stack — SDE-3 Gold Standard
+# Stack — L3 Core
 
 ```
 [STACK]
@@ -349,33 +349,10 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Stream Processing with Monotonic Stack
-
-> [!TIP]
-> Monotonic stacks process data in a **single pass** with O(N) total work — ideal for streaming. For the "next greater element in a stream", you can maintain a persistent monotonic stack across arrivals: new elements resolve pending queries for all smaller elements in the stack. This is the architecture behind real-time alert systems ("when does this metric first exceed threshold X?").
-
-For very large streams that don't fit in memory: partition the stream into chunks, compute NGE within each chunk, then handle cross-chunk boundaries with a reconciliation pass — the unresolved tail of each chunk is a small monotonic stack passed forward.
-
-### Concurrency: Thread-Safe Stacks
-
-> [!TIP]
-> **Java**: `ArrayDeque` is not thread-safe. Use `Deque<T>` wrapped with `Collections.synchronizedDeque()`, or switch to `LinkedBlockingDeque` for producer-consumer patterns. Prefer `LinkedBlockingDeque` when multiple threads push/pop concurrently — it uses two locks (head + tail) for lower contention.
->
-> **Lock-free stack**: Treiber's stack uses CAS on the top pointer. `push`: `new.next = top; CAS(top, old_top, new)`. `pop`: `old = top; CAS(top, old, old.next)`. O(1) amortized with retry on CAS failure. Used in JVM's thread-local allocation buffers.
->
-> **Python**: Use `collections.deque` with `appendleft`/`popleft` — each operation is thread-safe in CPython due to the GIL, but don't rely on multi-operation atomicity.
-
-### Trade-offs
-
-| Approach | Time per Element | Space | When to Prefer |
-| :--- | :--- | :--- | :--- |
-| Brute force (nested loop) | O(N) | O(1) | N ≤ 1000; clarity over performance |
-| Monotonic stack | O(1) amortized | O(N) | N > 1000; stream processing |
-| Sparse table (RMQ) | O(1) query | O(N log N) | Many range-min queries; static data |
-| Segment tree | O(log N) query | O(N) | Range queries with updates |
-| Two pointers (rain water) | O(N) | O(1) | Rain water specific; simpler than stack |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 

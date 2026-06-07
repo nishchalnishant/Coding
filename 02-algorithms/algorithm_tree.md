@@ -114,7 +114,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 2. Searching & Binary Search
 
-→ [binary-search.md](./11-binary-search.md) · [searching.md](./11-searching.md)
+→ [binary-search.md](./11-binary-search.md)
 - **Binary Search (Template Variants)** — Logarithmic search in sorted spaces using low/high pointers and mid-point logic.
     - *Patterns:* Left-most vs Right-most insertion point.
 - **Binary Search on Answer (Optimization)** — Searching the range of possible solutions when the "is possible" function is monotonic.
@@ -144,19 +144,29 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 4. Union-Find (Disjoint Set Union)
 
-→ [union-find.md](./14-union-find.md) · [advanced-graphs.md](./14-advanced-graphs.md)
+→ [union-find.md](./14-union-find.md)
+
+- **Standard DSU (Path Compression + Rank)** — Near-constant time `O(α(N))` per operation for connectivity tracking and set merging. Essential for dynamic connectivity and detecting cycles in undirected graphs.
+    - *Variants:* Number of Provinces, Longest Consecutive Sequence, Redundant Connection, Accounts Merge.
+- **Kruskal's MST** — Greedy edge selection for minimum spanning trees. Sorts edges by weight and uses DSU to safely connect nodes without forming cycles. Time complexity `O(E log E + E α(V))`.
+    - *Variants:* Min Cost to Connect All Points, Critical and Pseudo-Critical Edges in MST.
+- **Weighted DSU (Ratio/Parity Tracking)** — A specialized DSU that maintains relationship values (e.g., ratios, distance, parity) between a node and its root. Used for equations and consistency checks.
+    - *Variants:* Evaluate Division, Is Graph Bipartite? (Using DSU), Satisfiability of Equality Equations.
+- **DSU with Rollback** — DSU variant for undoing operations. Used in offline queries or backtracking. Drops path compression (uses only Union by Rank/Size) to maintain a strict tree structure for `O(log N)` rollback.
+    - *Variants:* Number of Islands II (Dynamic additions grid), Offline Dynamic Connectivity.
 
 ## 4b. Graph Traversal & Shortest Path
 
 → [graph.md](./13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion/graph-recursion.md](./recursion/graph-recursion.md)
-- **Standard DSU (Path Compression + Rank)** — Near-constant time connectivity tracking and set merging.
-    - *Variants:* Number of Provinces, Longest Consecutive Sequence.
-- **Kruskal's MST** — Greedy edge selection for minimum spanning trees; uses sorting and DSU for cycle detection.
-    - *Variants:* Min Cost to Connect All Points, Critical and Pseudo-Critical Edges in MST.
-- **Weighted DSU (Ratio Tracking)** — DSU variant that maintains relationships or weights (e.g., ratios) relative to the root.
-    - *Variants:* Evaluate Division, Path with Maximum Probability.
-- **DSU with Rollback** — DSU optimized for undoing operations, typically used in offline dynamic connectivity.
-    - *Variants:* Number of Islands II (Dynamic additions), Offline Dynamic Connectivity.
+
+- **Breadth-First Search (BFS)** — Shortest path on unweighted graphs. Explore level-by-level. Mark nodes visited *before* enqueueing to prevent exponential blow-up.
+    - *Variants:* Word Ladder, Shortest Path in Binary Matrix, Rotting Oranges (Multi-source BFS).
+- **Depth-First Search (DFS)** — Recursively explore to the deepest nodes. Used for connected components, Topological Sorting, and cycle detection (3-Color states).
+    - *Variants:* Clone Graph, Course Schedule (Cycle Detection), Pacific Atlantic Water Flow.
+- **Dijkstra's Algorithm** — Shortest path on weighted graphs with non-negative edges. Uses a Min-Heap `(distance, node)` and relaxes edges greedily. Time `O((V+E) log V)`.
+    - *Variants:* Network Delay Time, Path With Minimum Effort.
+- **Bellman-Ford Algorithm** — Shortest path allowing negative edges or enforcing a maximum number of steps `K`. Requires snapshotting distances across `K+1` rounds.
+    - *Variants:* Cheapest Flights Within K Stops.
 
 ## 5. Dynamic Programming
 
@@ -173,7 +183,6 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
     - *Variants:* Burst Balloons, Matrix Chain Multiplication, Triangulation of Polygon.
 - **Bitmask DP (N ≤ 20)** — Subset-state tracking using integers as bitsets to solve NP-Hard problems for small N.
     - *Variants:* Traveling Salesperson (TSP), Can I Win.
-- **Digit DP** — Counting numbers in a range `[L, R]` that satisfy specific digit-level properties.
     - *Variants:* Numbers At Most N Given Digit Set, Non-negative Integers without Consecutive Ones.
 - **Tree DP** — Propagation of state from leaves to root (postorder) to optimize selections on tree structures.
     - *Variants:* Binary Tree Maximum Path Sum, House Robber III.
@@ -221,7 +230,6 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 ## 10. System Design Algorithms (Distributed Scale)
 
 - **Consistent Hashing** — Distributed data partitioning that minimizes reshuffling during node churn.
-- **Bloom Filters & HyperLogLog** — Space-efficient probabilistic structures for membership and cardinality estimation.
 - **Rate Limiting (Token/Leaky Bucket)** — Algorithms for flow control and protecting systems from traffic bursts.
 - **Consensus (Raft/Paxos)** — Reaching agreement across unreliable distributed nodes for leader election and state replication.
 - **Sketching (Count-Min Sketch)** — Frequency estimation in high-volume data streams (e.g., trending hashtags).

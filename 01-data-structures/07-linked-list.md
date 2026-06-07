@@ -32,7 +32,6 @@ WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → W
 [Decision: Linked List vs alternatives]
   ├── vs Array      → insert/delete O(1) vs O(n); but no O(1) random access
   ├── vs Deque      → deque is array-backed linked list hybrid; better cache
-  └── vs Skip List  → skip list adds O(log n) search over sorted linked list
 ```
 
 ## First-Principles Breakdown
@@ -42,7 +41,7 @@ WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → W
 - **Why it's fast**: Insert/delete at a known node is O(1) — just pointer surgery; no memory movement.
 - **Where it breaks**: Sequential access only (O(n) to reach index k); pointer overhead doubles memory vs array; poor cache locality kills performance on large lists.
 
-# Linked List — SDE-3 Gold Standard
+# Linked List — L3 Core
 
 ```
 [LINKED LIST]
@@ -365,35 +364,10 @@ class LRUCache:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Production Context (L3 Note)
 
-### Scalability: Skip Lists
-
-> [!TIP]
-> A **skip list `💤 T3`** is a probabilistic linked-list-based data structure supporting O(log N) search, insert, and delete — matching balanced BSTs without complex rotations. It uses multiple levels of "express lanes" (linked lists of increasing step size), each node randomly promoted to higher levels.
->
-> Used in: Redis sorted sets (`ZSET`), LevelDB/RocksDB memtables, Java's `ConcurrentSkipListMap`. At Google scale, skip lists handle sorted-set operations in Bigtable's in-memory index.
-
-### Concurrency: Lock-Free Linked Lists
-
-> [!TIP]
-> **Michael-Scott Lock-Free Queue** uses CAS on the `tail.next` pointer for enqueue. The key trick: if `tail.next != null`, another thread is mid-enqueue — help it by advancing `tail` before your own insert. This makes all threads cooperative, preventing starvation.
->
-> For lock-free singly linked list **delete**: use **logical deletion** — mark the `next` pointer with a "deleted" bit (tagged pointer). Physical removal happens lazily during traversal. Avoids the ABA problem without versioned pointers.
-
-> [!CAUTION]
-> Python's CPython GIL makes individual `append`/`popleft` on `collections.deque` thread-safe, but multi-step operations (check-then-act) are not atomic. Use `threading.Lock` for LRU Cache or other multi-step DLL operations in concurrent Python code.
-
-### Trade-offs: Linked List vs Array
-
-| Operation | Singly LL | Doubly LL | Dynamic Array |
-| :--- | :--- | :--- | :--- |
-| Random access | O(N) | O(N) | O(1) |
-| Insert at head | O(1) | O(1) | O(N) amortized |
-| Insert at tail | O(N) or O(1) with tail ptr | O(1) | O(1) amortized |
-| Delete (given node ptr) | O(N) for prev | O(1) | O(N) shift |
-| Cache performance | Poor (pointer chasing) | Poor | Excellent (contiguous) |
-| Memory overhead | 1 pointer/node | 2 pointers/node | None (contiguous) |
+> [!NOTE]
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 

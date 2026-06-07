@@ -620,7 +620,6 @@ Segment trees, Fenwick trees, consistent hashing, and skip lists are **not** in 
         - **Trie + Grid DFS:** Word Search II — prune DFS branches when no prefix match; delete dead nodes after finding words.
         - **XOR Trie (Binary):** Maximum XOR of two numbers — process bits MSB→LSB; greedily choose opposite bit.
         - **Compressed Trie (Radix Tree):** Merge single-child chains; O(N) nodes for N words; used in IP routing.
-        - **Aho-Corasick:** Multi-pattern stream matching — O(N + matches) vs O(N × K) for K patterns.
     - Gotchas
         - `is_end` vs prefix reachability — `search("app")` must return `False` if only "apple" was inserted. Never conflate prefix walk success with word completion.
         - Word Search II deduplication — set `node.is_end = False` immediately after recording to prevent duplicate results.

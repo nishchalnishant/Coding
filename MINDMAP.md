@@ -589,8 +589,6 @@ coding/data-structures/09-trie.md
     │       → Brute force is O(n²).
     ├── Miscellaneous
     │   └── Number of Distinct Substrings in a String
-    ├── Aho-Corasick — Multi-Pattern Matching
-    │   ├── Aho-Corasick Algorithm (Conceptual + Implementation)
     │   │   → KMP handles one pattern in O(n+m).
     │   └── Multi String Search (AlgoExpert / similar)
     │       → Naive approach: for each small string, run Python's in operator — O(b × s × len(small)) total.
@@ -754,7 +752,6 @@ coding/data-structures/13-graph.md
     │   ├── Longest Path in a DAG `⚡ T1`
     │   │   → Kahn's topo sort + DP — relax dp[v] = max(dp[u] + 1).
     │   ├── Reconstruct Itinerary (LC 332)
-    │   │   → Eulerian path problem on a directed multigraph — visit every edge exactly once.
     │   └── Minimum Height Trees (LC 310)
     │       → The roots of minimum height trees are the "center" nodes of the tree — at most 2 nodes lying on the longest path (diameter).
     └── Advanced Graph Algorithms
@@ -1058,9 +1055,6 @@ coding/algorithms/13-graph-algorithms.md
     ├── Cycle Detection in Directed Graph
     │   └── Detect Cycle in Directed Graph (DFS 3-Color)
     │       → Kahn's BFS detects cycles implicitly via count, but DFS 3-color is the canonical O(V+E) approach that also identifies the cycle.
-    ├── Eulerian Path
-    │   └── Reconstruct Itinerary (Hierholzer's)
-    │       → "Use every edge exactly once" = Eulerian path in a directed graph.
     ├── 0-1 BFS
     │   └── Open the Lock (Unweighted BFS Variant) `⚡ T1`
     │       → Each combination is a node; 8 neighbors (each of 4 digits ±1 mod 10).
@@ -1314,11 +1308,6 @@ coding/algorithms/02-string-algorithms.md
     │   │   → [!info] Approach Each center expansion contributes one palindrome per step.
     │   └── Manacher's Algorithm — O(n) All Palindromes
     │       → [!info] Approach Naive expand-around-center is O(n²) because each center expands independently.
-    ├── Suffix Array / Trie Based
-    │   ├── Number of Distinct Substrings
-    │   │   → [!info] Approach Total substrings = n(n+1)/2.
-    │   └── Longest Common Prefix of All Suffixes
-    │       → [!info] Approach Brute-force LCP computation between all suffix pairs is O(n²).
     ├── Sliding Window on Strings
     │   ├── Longest Substring with K Distinct Characters
     │   │   → [!info] Approach We want the longest window satisfying a constraint on character diversity — a classic sliding window.
@@ -1401,7 +1390,6 @@ coding/algorithms/15-dynamic-programming.md
     │   │   → Three states model the constraint: holding, just sold (cooldown), resting.
     │   └── Stock with Transaction Fee
     │       → Two states: hold (best profit holding), cash (best profit not holding).
-    ├── Bitmask / Digit DP
     │   └── Numbers At Most N Given Digit Set
     ├── Longest Increasing Subsequence (LIS) Family
     │   ├── Longest Increasing Subsequence `⚡ T1`
@@ -1425,7 +1413,6 @@ coding/algorithms/15-dynamic-programming.md
     ├── Bitmask DP
     │   └── Partition to K Equal Subset Sums `🎯 T2`
     │       → Subset assignment is NP-hard in general but n ≤ 16 makes 2^n bitmask DP feasible.
-    ├── Digit DP
     │   └── Count Numbers with Unique Digits
     │       → At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
     ├── Game Theory DP
