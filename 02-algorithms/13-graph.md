@@ -48,7 +48,7 @@ WHY graph algorithms exist → WHAT they do → HOW they work → WHEN to use �
 - **Why it's fast**: Each vertex and edge is processed at most once in BFS/DFS — O(V+E) is optimal for graph traversal; Dijkstra's greedy correctness relies on non-negative edge weights (no shorter path can appear later).
 - **Where it breaks**: Dijkstra fails with negative edges (use Bellman-Ford); DFS topo sort fails on cyclic graphs (detect with gray/black coloring); BFS on implicit graphs (e.g., word ladder) can use excessive memory.
 
-# Graphs (Algorithms) — SDE-3 Gold Standard
+# Graphs (Algorithms) — L3 Gold Standard
 
 ```
 [GRAPH ALGORITHMS — MINDMAP]
@@ -84,7 +84,7 @@ WHY graph algorithms exist → WHAT they do → HOW they work → WHEN to use �
     └── Mistake 4: lazy deletion guard in Dijkstra — skip stale (dist, node) pairs from heap
 ```
 
-Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: correct algorithm selection, Dijkstra implementation with lazy deletion guard, Bellman-Ford for negative weights, and distributed graph thinking.
+Vertices and edges; directed/undirected, weighted/unweighted. L3 expects: correct algorithm selection, Dijkstra implementation with lazy deletion guard, Bellman-Ford for negative weights, and distributed graph thinking.
 
 
 
@@ -97,7 +97,7 @@ Vertices and edges; directed/undirected, weighted/unweighted. SDE-3 expects: cor
 
 **Why it exists.** Many real-world problems are graphs in disguise: course prerequisites (DAG + topological sort), network routing (shortest path), social connectivity (union-find / BFS components), infrastructure cost (MST). Graph algorithms formalize "how do nodes relate?" into efficient traversal and optimization procedures.
 
-**The mental model.** Think of the graph as a city map. BFS finds the fewest-turn driving route (unweighted). Dijkstra finds the fastest route (weighted, non-negative). DFS checks if two cities are connected at all. Topological sort gives the prerequisite order for course enrollment. Algorithm selection is the core SDE-3 graph skill.
+**The mental model.** Think of the graph as a city map. BFS finds the fewest-turn driving route (unweighted). Dijkstra finds the fastest route (weighted, non-negative). DFS checks if two cities are connected at all. Topological sort gives the prerequisite order for course enrollment. Algorithm selection is the core L3 graph skill.
 
 **Complexity at a glance.**
 
@@ -484,7 +484,7 @@ def prim_mst(n: int, adj: dict) -> int:
 
 ---
 
-## 4. SDE-3 Deep Dives
+## 4. L3 Deep Dives
 
 ### Scalability: Distributed Shortest Path
 
@@ -520,18 +520,18 @@ def prim_mst(n: int, adj: dict) -> int:
 ## 5. Common Interview Problems
 
 ### Medium
-- [Course Schedule](20-problem-deep-dives.md#course-schedule) — Kahn's topo sort; detect cycle.
-- [Course Schedule II](20-problem-deep-dives.md#course-schedule) — Same; return the order.
-- [Network Delay Time](20-problem-deep-dives.md#network-delay-time) — Dijkstra from source; answer = max(dist) if all nodes reached.
+- Course Schedule — Kahn's topo sort; detect cycle.
+- Course Schedule II — Same; return the order.
+- Network Delay Time — Dijkstra from source; answer = max(dist) if all nodes reached.
 - **Number of Islands `⚡ T1`** — DFS/BFS flood fill (see graphs.md).
 - **Clone Graph `⚡ T1`** — DFS with `old→clone` map.
 - **Rotting Oranges `⚡ T1`** — Multi-source BFS.
 - **Evaluate Division** — Build weighted directed graph; DFS/BFS with accumulated product.
 
 ### Hard
-- [Word Ladder](20-problem-deep-dives.md#word-ladder) — BFS; neighbors = one-letter edits in word set.
-- [Alien Dictionary](20-problem-deep-dives.md#alien-dictionary) — Build edges from adjacent word pairs; Kahn's topo.
-- [Cheapest Flights Within K Stops](20-problem-deep-dives.md#cheapest-flights-within-k-stops) — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
+- Word Ladder — BFS; neighbors = one-letter edits in word set.
+- Alien Dictionary — Build edges from adjacent word pairs; Kahn's topo.
+- Cheapest Flights Within K Stops — Modified Bellman-Ford (K+1 relaxations) or BFS with state `(node, stops)`.
 - **Find the City with Smallest Reachable Neighbors** — Floyd-Warshall; count reachable cities within threshold.
 - **Reconstruct Itinerary** — Eulerian path; Hierholzer's algorithm; DFS with lexicographic neighbor ordering.
 - **Critical Connections in a Network** — Tarjan's bridge-finding algorithm.
@@ -542,11 +542,11 @@ def prim_mst(n: int, adj: dict) -> int:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Course Schedule](20-problem-deep-dives.md#course-schedule) `⚡ T1`** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
-| **[Network Delay Time](20-problem-deep-dives.md#network-delay-time)** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
-| **[Word Ladder](20-problem-deep-dives.md#word-ladder) `⚡ T1`** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
-| **[Alien Dictionary](20-problem-deep-dives.md#alien-dictionary) `⚡ T1`** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
-| **[Cheapest Flights K Stops](20-problem-deep-dives.md#cheapest-flights-within-k-stops)** | "Shortest path with at most K intermediate nodes" | Bellman-Ford for K+1 rounds | Standard Dijkstra doesn't work — need to track stop count in state. |
+| **Course Schedule `⚡ T1`** | Topological Sort (Kahn's) | "Detect cycle in DAG" | Kahn's; `len(order) < n` → cycle | Edge direction: `prereq → course`, not reversed. |
+| **Network Delay Time** | "All-nodes reachable from source, total time?" | Dijkstra; answer = `max(dist)` if all reached | If any node unreachable: `dist[v] = inf` → return -1. |
+| **Word Ladder `⚡ T1`** | "Minimum transformation steps" | BFS; neighbor = one-letter edit in word set | Remove visited words from set immediately — prevents revisit and cycle. |
+| **Alien Dictionary `⚡ T1`** | "Character order from sorted words" | First mismatch between adjacent words → directed edge; Kahn's | Invalid: `"abc"` before `"ab"` → return `""`. |
+| **Cheapest Flights K Stops** | "Shortest path with at most K intermediate nodes" | Bellman-Ford for K+1 rounds | Standard Dijkstra doesn't work — need to track stop count in state. |
 | **Number of Islands `⚡ T1`** | "Connected components in grid" | DFS/BFS flood-fill; count calls | In-place mark (`'1'→'0'`) avoids visited set. Recursion limit for 200×200 grid. |
 | **Evaluate Division** | "Graph: nodes=variables, edges=ratios" | Build weighted graph; BFS/DFS to find path product | Handle disconnected components (query impossible → -1). Bidirectional edges: A/B and B/A. |
 | **Reconstruct Itinerary** | "Eulerian path with lexicographic order" | Hierholzer's; DFS with sorted neighbors; post-order reversal | Must visit all edges exactly once — Eulerian, not Hamiltonian. Sort neighbors for lex order. |

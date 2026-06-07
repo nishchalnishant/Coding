@@ -15,7 +15,7 @@ WHY systematic algorithm selection beats intuition
 │   ├── Not necessarily the right one — leads to brute force or wrong complexity
 │   └── Trial-and-error wastes 10-15 minutes on wrong family before pivoting
 ├── A systematic map gives deterministic O(1) family selection from problem signal
-└── SDE-3 expectation: name the algorithm family and its complexity before coding starts
+└── L3 expectation: name the algorithm family and its complexity before coding starts
 │
 WHAT the strategic algorithm families are
 ├── Sort / Partition  — O(n log n); prerequisite for two-pointer, binary search, greedy
@@ -25,9 +25,7 @@ WHAT the strategic algorithm families are
 ├── Dynamic Prog.     — O(n²) to O(n·k); memoize or tabulate; count / optimize
 ├── Backtracking      — O(k^n) worst case; prune aggressively; all valid states
 ├── Greedy            — O(n log n) with sort; exchange argument must hold
-├── Math / Bits       — O(1) or O(log n); number theory, bit manipulation, modular
-├── Concurrency       — lock/semaphore discipline; producer-consumer, readers-writers
-└── Distributed       — Raft/Paxos consensus; consistent hashing; vector clocks
+└── (L3 skip: bit/math deep-dives, concurrency, distributed systems)
 │
 HOW to map a problem to a family in seconds
 ├── Core question → family
@@ -98,7 +96,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 1. Sorting & Partitioning
 
-→ [sorting.md](./00-sorting.md) · [divide-and-conquer.md](./18-divide-and-conquer.md)
+→ [sorting.md](./00-sorting.md)
 - **Merge Sort (Divide & Conquer)** — Recursive halving and merging; the standard for stable sorting and inversion counting.
     - *Variants:* Count of Range Sum, Reverse Pairs, Global Inversions.
 - **Quick Sort (Partitioning)** — Pivot-based partitioning; optimized for in-place sorting and cache efficiency.
@@ -157,7 +155,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 4b. Graph Traversal & Shortest Path
 
-→ [graph.md](./13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion/graph-recursion.md](./recursion/graph-recursion.md)
+→ [graph.md](./13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion.md](./15-recursion.md)
 
 - **Breadth-First Search (BFS)** — Shortest path on unweighted graphs. Explore level-by-level. Mark nodes visited *before* enqueueing to prevent exponential blow-up.
     - *Variants:* Word Ladder, Shortest Path in Binary Matrix, Rotting Oranges (Multi-source BFS).
@@ -213,26 +211,9 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 - **Resource Management** — Optimizing distribution or consumption of finite resources.
     - *Variants:* Gas Station, Task Scheduler, Candy.
 
-## 8. Mathematics & Bit Manipulation
+## 8. Out of L3 scope (skip)
 
-→ [maths.md](./17-maths.md) · [bit-manipulation.md](./17-bit-manipulation.md)
-- **Number Theory**
-    - *Variants:* Sieve of Eratosthenes, Prime Factorization, GCD (Euclidean), Fast Exponentiation.
-- **Bit Manipulation**
-    - *Variants:* Counting Bits, Single Number I & II, Maximum XOR of Two Numbers.
-
-## 9. Concurrency & Parallelism
-
-- **Producer-Consumer** — Synchronization between data sources and sinks using bounded buffers and semaphores.
-- **Read-Write Locking** — Optimizing for high-read throughput while ensuring exclusive write access.
-- **Barrier/Phaser Synchronization** — Multi-threaded coordination where threads must wait at specific checkpoints.
-
-## 10. System Design Algorithms (Distributed Scale)
-
-- **Consistent Hashing** — Distributed data partitioning that minimizes reshuffling during node churn.
-- **Rate Limiting (Token/Leaky Bucket)** — Algorithms for flow control and protecting systems from traffic bursts.
-- **Consensus (Raft/Paxos)** — Reaching agreement across unreliable distributed nodes for leader election and state replication.
-- **Sketching (Count-Min Sketch)** — Frequency estimation in high-volume data streams (e.g., trending hashtags).
+> Bit manipulation, number theory, concurrency, and system-design algorithms are **not tested at Google L3**. Skim conceptually only.
 
 ---
 

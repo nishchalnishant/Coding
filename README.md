@@ -35,6 +35,8 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Flowcharts | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
 | Pattern triggers | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
 | Track progress | [`questions.md`](questions.md) |
+| Interview strategy | [`coding/google-interview-strategy.md`](coding/google-interview-strategy.md) |
+| Complexity cheatsheet | [`coding/complexity-cheatsheet.md`](coding/complexity-cheatsheet.md) |
 
 ---
 

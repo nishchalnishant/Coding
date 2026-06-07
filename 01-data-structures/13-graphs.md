@@ -104,7 +104,7 @@ WHY graphs exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
     └── Avoid adjacency matrix when: graph is sparse (V > 10³ and E << V²)
 ```
 
-Vertices (nodes) + Edges (connections). SDE-3 focus: correct representation choice, clean traversal templates, multi-source BFS, topological sort, and knowing when each algorithm applies.
+Vertices (nodes) + Edges (connections). L3 focus: correct representation choice, clean traversal templates, multi-source BFS, topological sort, and knowing when each algorithm applies.
 
 
 
@@ -345,24 +345,24 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy / Medium (High Frequency)
-- [Number of Islands](../02-algorithms/20-problem-deep-dives.md#number-of-islands) — DFS/BFS flood fill; count calls to unvisited `1`.
+- Number of Islands — DFS/BFS flood fill; count calls to unvisited `1`.
 - **Flood Fill `⚡ T1`** — BFS/DFS from `(sr, sc)`; recolor connected component.
-- [Rotting Oranges](../02-algorithms/20-problem-deep-dives.md#rotting-oranges) — Multi-source BFS from all rotten oranges at distance 0; count levels.
-- [Course Schedule](../02-algorithms/20-problem-deep-dives.md#course-schedule) — Kahn's topo sort; cycle ⟺ `len(order) < n`.
-- [Clone Graph](../02-algorithms/20-problem-deep-dives.md#clone-graph) — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
+- Rotting Oranges — Multi-source BFS from all rotten oranges at distance 0; count levels.
+- Course Schedule — Kahn's topo sort; cycle ⟺ `len(order) < n`.
+- Clone Graph — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
 - **Surrounded Regions `⚡ T1`** — Flood fill from border `O`s to mark safe; flip remaining interior `O`→`X`.
 - **Max Area of Island `⚡ T1`** — DFS/BFS; return max area across all components.
 
 ### Hard / Stretch (Common at Google)
-- [Word Ladder](../02-algorithms/20-problem-deep-dives.md#word-ladder) — BFS; neighbors = one-letter edits in word set; remove visited words.
-- [Alien Dictionary](../02-algorithms/20-problem-deep-dives.md#alien-dictionary) — Build directed edges from adjacent word pairs; topo sort all characters.
+- Word Ladder — BFS; neighbors = one-letter edits in word set; remove visited words.
+- Alien Dictionary — Build directed edges from adjacent word pairs; topo sort all characters.
 - **Pacific Atlantic Water Flow `⚡ T1`** — Reverse BFS: which cells can reach Pacific? Atlantic? Intersect.
 - **Network Delay Time** — Dijkstra from source; answer = max dist if all nodes reached.
 
@@ -372,14 +372,14 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 
 | Question | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- |
-| **[Number of Islands](../02-algorithms/20-problem-deep-dives.md#number-of-islands) `⚡ T1`** | "Count connected components in grid" | DFS/BFS; mark visited by sinking (`'1'→'0'`) | 4-dir vs 8-dir neighbors — confirm with interviewer. Recursion overflow on large grids. |
+| **Number of Islands `⚡ T1`** | "Count connected components in grid" | DFS/BFS; mark visited by sinking (`'1'→'0'`) | 4-dir vs 8-dir neighbors — confirm with interviewer. Recursion overflow on large grids. |
 | **Flood Fill `⚡ T1`** | "Recolor connected region" | BFS/DFS from `(sr,sc)`; only spread to same original color | Skip if `newColor == oldColor` — avoids infinite loop. |
-| **[Rotting Oranges](../02-algorithms/20-problem-deep-dives.md#rotting-oranges) `⚡ T1`** | "Simultaneous spread, minimum time" | Multi-source BFS; count fresh oranges; return levels-1 | Track fresh count — if fresh remain after BFS, return -1 (unreachable). |
-| **[Course Schedule](../02-algorithms/20-problem-deep-dives.md#course-schedule) `⚡ T1`** | "Detect cycle in prerequisites" | Kahn's topo; cycle ⟺ `len(order) < n` | Edge direction: `prereq → course`, not `course → prereq`. |
-| **[Clone Graph](../02-algorithms/20-problem-deep-dives.md#clone-graph) `⚡ T1`** | "Deep copy graph with cycles" | Map `old→clone`; DFS/BFS; create clone before recursing | Cycles require the map before recursion — avoids infinite loop. |
+| **Rotting Oranges `⚡ T1`** | "Simultaneous spread, minimum time" | Multi-source BFS; count fresh oranges; return levels-1 | Track fresh count — if fresh remain after BFS, return -1 (unreachable). |
+| **Course Schedule `⚡ T1`** | "Detect cycle in prerequisites" | Kahn's topo; cycle ⟺ `len(order) < n` | Edge direction: `prereq → course`, not `course → prereq`. |
+| **Clone Graph `⚡ T1`** | "Deep copy graph with cycles" | Map `old→clone`; DFS/BFS; create clone before recursing | Cycles require the map before recursion — avoids infinite loop. |
 | **Surrounded Regions `⚡ T1`** | "Flip interior isolated regions" | BFS from border O's to mark safe; flip rest | Don't BFS from every interior `O` — O(R²C²) vs O(RC) from borders. |
-| **[Word Ladder](../02-algorithms/20-problem-deep-dives.md#word-ladder) `⚡ T1`** | "Shortest transformation sequence" | BFS; each word's neighbors = one-letter edits in dict | Remove words from set as visited — prevents revisit. Bidirectional BFS for follow-up. |
-| **[Alien Dictionary](../02-algorithms/20-problem-deep-dives.md#alien-dictionary) `⚡ T1`** | "Infer char ordering from sorted words" | Extract edges from first mismatch in adjacent words; topo | Invalid input: `"abc"` before `"ab"` — detect and return `""`. |
+| **Word Ladder `⚡ T1`** | "Shortest transformation sequence" | BFS; each word's neighbors = one-letter edits in dict | Remove words from set as visited — prevents revisit. Bidirectional BFS for follow-up. |
+| **Alien Dictionary `⚡ T1`** | "Infer char ordering from sorted words" | Extract edges from first mismatch in adjacent words; topo | Invalid input: `"abc"` before `"ab"` — detect and return `""`. |
 | **Pacific Atlantic Flow** | "Which cells reach both oceans?" | Reverse BFS from each ocean's border; intersect reachable sets | Reverse means: "can water flow here from the border?" — go uphill. |
 | **Find if Path Exists `⚡ T1`** [E] | "Is there a path from source to destination?" | BFS/DFS or Union-Find; mark visited | Union-Find: check `find(source) == find(destination)` after all union ops. |
 | **Find Center of Star Graph** [E] | "Node connected to all others in star" | Center appears in both of the first two edges | Any common node in `edges[0]` and `edges[1]` is the center — O(1). |

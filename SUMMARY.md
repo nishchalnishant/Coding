@@ -18,9 +18,6 @@
 * [Python Whiteboarding Cheatsheet](00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md)
 * [Master Decision Guide](00-L3-EXECUTION-META/DECISION_GUIDE.md)
 * [Decision Flowcharts (Markdown)](00-L3-EXECUTION-META/FLOWCHART_MEDIUM.md)
-* [Interactive Flowcharts (Printable)](00-L3-EXECUTION-META/FLOWCHART_MEDIUM.html)
-* [Wall Poster (A1 Print)](00-L3-EXECUTION-META/POSTER.html)
-* [A4 Printable Cheat Sheets](00-L3-EXECUTION-META/A4_CHEAT_SHEETS.html)
 
 ---
 
@@ -54,7 +51,6 @@
 * [Dynamic Programming](02-algorithms/15-dynamic-programming.md)
 * [Recursion](02-algorithms/15-recursion.md)
 * [Recursion → DP Bridge](02-algorithms/15-recursion-to-dp.md)
-* [Divide & Conquer](02-algorithms/18-divide-and-conquer.md)
 * [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
 
 ---
@@ -87,7 +83,6 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [String Algorithms](coding/algorithms/02-string-algorithms.md)
 * [Dynamic Programming](coding/algorithms/15-dynamic-programming.md)
 * [Recursion](coding/algorithms/15-recursion.md)
-* [Divide & Conquer](coding/algorithms/18-divide-and-conquer.md)
 
 ---
 

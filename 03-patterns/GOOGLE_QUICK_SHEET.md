@@ -14,25 +14,25 @@ tags: [patterns, google-quick-sheet]
 
 ```
 WHY a Google-specific Quick Sheet exists
-├── Google's bar is calibrated to L4/L5 — pattern recognition alone is insufficient
+├── Google's bar is calibrated to L3+ — pattern recognition alone is insufficient
 ├── Interviewers look for structured reasoning + clean abstraction, not just a working solution
 └── Google rounds have specific failure modes not present at other companies
 
 WHAT it is
-├── A one-page compressed map of: Google-specific patterns, L4 bar signals, interviewer heuristics
+├── A one-page compressed map of: Google-specific patterns, L3 bar signals, interviewer heuristics
 ├── Covers: what gets hired, what gets a "no hire," and why
 └── Examples:
-    ├── L4 signal: correct O(n log n) solution with clean code + edge case handling
-    ├── L5 signal: proactively finds the optimal, discusses tradeoffs unprompted
+    ├── L3 signal: correct O(n log n) solution with clean code + edge case handling
+    ├── L3 stretch signal: proactively finds the optimal, discusses tradeoffs unprompted
     └── No-hire signal: correct answer but silent, messy, or no complexity analysis
 
 HOW it works
 ├── Google-specific patterns (appear more often than elsewhere):
 │   ├── Graph problems disguised as matrix traversal (BFS/DFS on grid)
 │   ├── Interval scheduling / meeting rooms (greedy + sort)
-│   ├── System design via coding proxy (LRU cache, rate limiter)
-│   └── Two-phase problems: preprocess → query (prefix sum, sparse table)
-├── L4 bar signals:
+│   ├── Prefix sum + hash → subarray sum equals K
+│   └── Two-phase preprocess → query (prefix sum; skip sparse table at L3)
+├── L3 bar signals:
 │   ├── Arrives at correct approach within 10 min
 │   ├── Code is readable without explanation
 │   ├── States time/space complexity unprompted
@@ -43,7 +43,7 @@ HOW it works
 │   ├── Communication: structured, proactive, non-defensive to hints
 │   └── Testing: catches own bugs, handles edge cases
 └── Complexity:
-    ├── Google expects optimal or near-optimal — brute force is a no-hire at L4+
+    ├── Google expects optimal or near-optimal — brute force is a no-hire at L3
     └── "Almost correct" with wrong complexity = no hire
 
 WHEN to use
@@ -58,13 +58,13 @@ WHAT can go wrong
 ├── Treating Google like LeetCode — passing test cases ≠ hired
 ├── Solving correctly but communicating poorly → "brilliant jerk" signal → no hire
 ├── Skipping complexity analysis → automatic downgrade
-└── Over-engineering the solution → wrong level signal (L6 cleverness at L4 round)
+└── Over-engineering the solution → wrong signal (clever but unreadable code)
 ```
 
 ## First-Principles Breakdown
 
 - **Root problem:** Google's hiring bar is calibrated to predict on-the-job performance at scale — the interview is a proxy for real engineering judgment, not puzzle solving.
-- **Core insight:** L4 bar = correct + clean + communicated; optimality alone without communication is insufficient for a hire signal.
+- **Core insight:** L3 bar = correct medium solution + clean code + communicated; near-optimal with tradeoffs stated is a strong hire signal.
 - **Invariant:** Every Google round scores four axes (problem solving, coding, testing, communication) — a zero on any axis is a no-hire regardless of other axes.
 - **Why it works:** The quick sheet surfaces the meta-game (what the interviewer is scoring) so you optimize for the actual signal, not just the answer.
 - **Where it breaks:** If the quick sheet is read but not internalized under pressure — knowing the rubric cold is necessary but not sufficient without practice reps.
@@ -132,4 +132,4 @@ Print or keep on a second screen during **last-minute** review (not during the i
 
 ## Full notes
 
-For explanations and practice lists, use [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md) and the topic files under [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md). Each topic file has an **Interview Questions — Logic & Trickiness** section; consolidated tables: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+For explanations and practice lists, use [GOOGLE_INTERVIEW_REVISION.md](GOOGLE_INTERVIEW_REVISION.md), [01-data-structures/README.md](../01-data-structures/README.md), and [02-algorithms/README.md](../02-algorithms/README.md). Problem walkthroughs: [`coding/`](../coding/) and [MINDMAP.md](../MINDMAP.md).

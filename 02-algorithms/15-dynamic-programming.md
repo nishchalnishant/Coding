@@ -70,7 +70,7 @@ Step 4 — Optimize space (rolling array / two variables)
 
 ---
 
-## SDE-3 Gold Standard Mental Map
+## L3 Gold Standard Mental Map
 
 ```
 DP
@@ -1203,7 +1203,7 @@ def is_match_wildcard(s: str, p: str) -> bool:
 
 ---
 
-## SDE-3 Interview Communication Framework (8-Step)
+## L3 Interview Communication Framework (8-Step)
 
 When given a DP problem in an interview:
 
@@ -1260,7 +1260,7 @@ When given a DP problem in an interview:
 | **Longest Common Subsequence `🎯 T2`** | LCS | `s1[i] == s2[j] ? 1 + diag : max(top, left)` |
 | **Maximum Subarray (Kadane) `🎯 T2`** | Kadane | `best = max(x, best + x)` |
 
-### Level 2 — SDE-2 Standard
+### Level 2 — L3 Standard
 
 | Problem | Pattern | The Twist |
 | :--- | :--- | :--- |
@@ -1275,7 +1275,7 @@ When given a DP problem in an interview:
 | **LIS `🎯 T2`** | LIS | O(N log N) with patience sort |
 | **Russian Doll Envelopes** | LIS | Sort (w asc, h desc); LIS on h |
 
-### Level 3 — SDE-3 / Staff Level
+### Level 3 — L3 / Staff Level
 
 | Problem | Pattern | Complexity / Optimization |
 | :--- | :--- | :--- |

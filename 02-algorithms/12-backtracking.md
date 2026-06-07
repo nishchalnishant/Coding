@@ -54,7 +54,7 @@ DECISION
 
 ---
 
-# Backtracking — SDE-3 Gold Standard
+# Backtracking — L3 Gold Standard
 
 ```
 [BACKTRACKING — MINDMAP]
@@ -86,7 +86,7 @@ DECISION
     └── Mistake 4: confusing backtracking with DP — if subproblems overlap and you only need count/optimum, add memoization → DP
 ```
 
-Build solutions incrementally; **backtrack** when constraints fail. DFS over the implicit decision tree. SDE-3 expects: pruning strategies, complexity derivation, and knowing when to add memoization to convert to DP.
+Build solutions incrementally; **backtrack** when constraints fail. DFS over the implicit decision tree. L3 expects: pruning strategies, complexity derivation, and knowing when to add memoization to convert to DP.
 
 ---
 
@@ -291,7 +291,7 @@ def solve_n_queens(n: int) -> list[list[str]]:
 ```
 
 > [!TIP]
-> **Bitmask N-Queens (SDE-3 follow-up)**: Encode `cols`, `diag1`, `diag2` as integers. Available columns = `((1 << n) - 1) & ~(cols | diag1 | diag2)`. Extract lowest set bit with `pos = avail & (-avail)`. This runs 3-5× faster than set-based due to cache efficiency — mention this as the optimized version.
+> **Bitmask N-Queens (L3 follow-up)**: Encode `cols`, `diag1`, `diag2` as integers. Available columns = `((1 << n) - 1) & ~(cols | diag1 | diag2)`. Extract lowest set bit with `pos = avail & (-avail)`. This runs 3-5× faster than set-based due to cache efficiency — mention this as the optimized version.
 
 #### Sudoku Solver (LC 37)
 
@@ -417,7 +417,7 @@ def partition(s: str) -> list[list[str]]:
 ## 4. Advanced Pruning Strategies
 
 > [!IMPORTANT]
-> SDE-3 interviews aren't just about writing the backtracking template — they are about **pruning the search space** aggressively. Without pruning, backtracking is just O(N!) brute force.
+> L3 interviews aren't just about writing the backtracking template — they are about **pruning the search space** aggressively. Without pruning, backtracking is just O(N!) brute force.
 
 ### 4.1 Minimum Remaining Values (MRV) Heuristic
 Instead of picking the "next" item sequentially, always pick the item with the **fewest valid options**. If an item has 0 options, the branch dies immediately.
@@ -448,7 +448,7 @@ If the problem space is symmetric, force an arbitrary order to avoid exploring i
 
 ---
 
-## 5. SDE-3 Deep Dives
+## 5. L3 Deep Dives
 
 ### Backtracking vs DP: The Conversion Rule
 
@@ -505,7 +505,7 @@ def word_break_ii(s: str, word_dict: list[str]) -> list[str]:
 | **Mutable (In-place)** | `path.append(x); dfs(); path.pop()` | O(1) space allocation per node; extremely fast | High risk of bugs if `pop()` missed or path not copied at base case. |
 | **Immutable (Copy)** | `dfs(path + [x])` | Safe; no undo needed; easy to convert to DP | O(N) allocation per call; very slow for deep trees. |
 
-**SDE-3 Rule**: Use mutable state for large collections (lists, grids, sets) to avoid O(N) allocation overhead per node. Use immutable state (strings, integers) where Python handles the immutability natively.
+**L3 Rule**: Use mutable state for large collections (lists, grids, sets) to avoid O(N) allocation overhead per node. Use immutable state (strings, integers) where Python handles the immutability natively.
 
 ### Scalability: Iterative Backtracking for Deep Trees
 
@@ -621,7 +621,7 @@ def dfs_iterative(start, choices):
 
 **Coach:** "It’s a clever trick to avoid using a separate `visited` set, which saves memory. But here’s the **Gotcha**: if you don't change that `#` back to the original letter before you `return`, you've just permanently 'burned' that cell for every other branch of the search. You've broken the universe for every other path!"
 
-**Student:** "When does an interviewer know I'm ready for SDE-3 based on my backtracking?"
+**Student:** "When does an interviewer know I'm ready for L3 based on my backtracking?"
 
 **Coach:** "When you start talking about **Pruning**. A Junior writes a clean DFS. A Senior says: 'Wait, if I need 5 more numbers to reach the target, and there are only 3 left in the array, I can kill this entire branch right now.' That **Pruning** is the difference between a solution that passes in 5ms and one that TLEs at 2.0 seconds. It's about respecting the CPU's time."
 

@@ -300,10 +300,10 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 | **Find All Anagrams `⚡ T1`** | Fixed window | Window size = len(p) | Compare frequency maps each step | Use 26-array diff count for O(1) compare. |
 | **Longest Palindromic Substring `🎯 T2`** | Expand around center | Every center → expand | O(n²) expand; Manacher O(n) stretch | Check **odd and even** centers. |
 | **Longest Repeating Char Replacement** | Window + max freq | Valid if `len - max_freq <= k` | Track max frequency **in current window** | max_freq can decrease when shrinking — still correct for max **length**. |
-| **Decode String** | Stack | Push context on `[` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
+| **Decode String** | Stack | Push context on `` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
 | **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
 
-More walkthroughs: [problem-deep-dives.md](../02-algorithms/20-problem-deep-dives.md). String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/02-string.md) in `02-algorithms/`.
+More walkthroughs: [problem-deep-dives.md. String **algorithms** (KMP, Rabin-Karp detail): [string.md](../02-algorithms/02-string.md) in `02-algorithms/`.
 
 ---
 

@@ -97,13 +97,13 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | Resource | What's in it |
 |----------|-------------|
 | [`patterns-master.md`](./patterns-master.md) | **Primary guide.** 60-second recognition triggers for all major patterns. Read this first. |
-| [`02-algorithms/two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
-| [`02-algorithms/sliding-window.md`](../02-algorithms/04-sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
-| [`02-algorithms/binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
-| [`dynamic-programming/`](../02-algorithms/dynamic-programming/) | DP paradigms: 1D, 2D, interval, knapsack |
+| [`02-algorithms/03-two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
+| [`02-algorithms/04-sliding-window.md`](../02-algorithms/04-sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
+| [`02-algorithms/11-binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
+| [`15-dynamic-programming.md`](../02-algorithms/15-dynamic-programming.md) | DP paradigms: 1D, 2D, grid, knapsack, LCS |
 | [`12-backtracking.md`](../02-algorithms/12-backtracking.md) | Backtracking template + pruning strategies |
 | [`13-graph.md`](../02-algorithms/13-graph.md) | BFS, DFS, topological sort, shortest path |
-| [`20-problem-deep-dives.md`](../02-algorithms/20-problem-deep-dives.md) | 100+ problems with pattern tags and key insights |
+| [`MINDMAP.md`](../MINDMAP.md) | T1/T2 problem index with one-line hints (`coding/`) |
 
 ---
 
@@ -111,30 +111,28 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 
 | Pattern | When triggered | Primary file |
 |---------|---------------|-------------|
-| **Two Pointers (Converging)** | Sorted array, pair/triplet sum, palindrome, water container | `02-algorithms/two-pointers.md` |
-| **Two Pointers (Fast/Slow)** | Cycle detection, linked list middle, duplicate in array | `02-algorithms/two-pointers.md` |
-| **Sliding Window (Fixed)** | Max/min/avg of every K-window, anagram check | `02-algorithms/sliding-window.md` |
-| **Sliding Window (Variable)** | Longest/shortest subarray with constraint | `02-algorithms/sliding-window.md` |
-| **Binary Search (Exact)** | "Find in sorted", "is X in the array" | `02-algorithms/binary-search.md` |
-| **Binary Search (Bounds)** | First/last occurrence, insertion point | `02-algorithms/binary-search.md` |
-| **Binary Search on Answer** | Minimize max, maximize min, "can we do X in Y" | `02-algorithms/binary-search.md` |
-| **BFS** | Shortest path (unweighted), level-order, connected components, multi-source flood | `02-algorithms/graph.md` |
-| **DFS** | Path existence, all paths, islands, cycle detection, backtracking | `02-algorithms/graph.md` |
-| **Topological Sort** | Dependencies, build order, alien dictionary | `02-algorithms/graph.md` |
-| **Dynamic Programming (1D)** | Linear recurrence — house robber, climb stairs, coin change | `02-algorithms/dynamic-programming/` |
-| **Dynamic Programming (2D)** | Grid paths, edit distance, LCS, matrix chain | `02-algorithms/dynamic-programming/` |
-| **Knapsack** | "Pick items with weight/value constraints" | `02-algorithms/dynamic-programming/` |
-| **Interval DP** | Burst balloons, stone merge, optimal BST | `02-algorithms/dynamic-programming/` |
-| **Greedy** | Interval scheduling, jump game, task scheduler | `02-algorithms/greedy.md` |
-| **Backtracking** | Permutations, combinations, subsets, N-Queens, Sudoku | `02-algorithms/backtracking.md` |
-| **Monotonic Stack** | Next greater/smaller element, histogram, trapped water | `01-data-structures/stack.md` |
-| **Monotonic Deque** | Sliding window max/min | `02-algorithms/sliding-window.md` |
-| **Union-Find** | Connected components, cycle in undirected, MST (Kruskal) | `02-algorithms/union-find.md` |
-| **Heap / Priority Queue** | Top-K, merge K sorted, Dijkstra, two-heap median | `01-data-structures/heap.md` |
-| **Trie** | Prefix matching, word search, autocomplete, XOR max | `01-data-structures/trie.md` |
-| **Prefix Sum** | Subarray sum queries, range sum, 2D prefix sum | `01-data-structures/array.md` |
-| **Divide & Conquer** | Merge sort, quick select, closest pair | `02-algorithms/divide-and-conquer.md` |
-| **Bit Manipulation** | XOR tricks, power of 2, single number, subset enumeration | `02-algorithms/bit-manipulation.md` |
+| **Two Pointers (Converging)** | Sorted array, pair/triplet sum, palindrome, water container | `02-algorithms/03-two-pointers.md` |
+| **Two Pointers (Fast/Slow)** | Cycle detection, linked list middle, duplicate in array | `02-algorithms/03-two-pointers.md` |
+| **Sliding Window (Fixed)** | Max/min/avg of every K-window, anagram check | `02-algorithms/04-sliding-window.md` |
+| **Sliding Window (Variable)** | Longest/shortest subarray with constraint | `02-algorithms/04-sliding-window.md` |
+| **Binary Search (Exact)** | "Find in sorted", "is X in the array" | `02-algorithms/11-binary-search.md` |
+| **Binary Search (Bounds)** | First/last occurrence, insertion point | `02-algorithms/11-binary-search.md` |
+| **Binary Search on Answer** | Minimize max, maximize min, "can we do X in Y" | `02-algorithms/11-binary-search.md` |
+| **BFS** | Shortest path (unweighted), level-order, connected components, multi-source flood | `02-algorithms/13-graph.md` |
+| **DFS** | Path existence, all paths, islands, cycle detection, backtracking | `02-algorithms/13-graph.md` |
+| **Topological Sort** | Dependencies, build order, alien dictionary | `02-algorithms/13-graph.md` |
+| **Dynamic Programming (1D)** | Linear recurrence — house robber, climb stairs, coin change | `02-algorithms/15-dynamic-programming.md` |
+| **Dynamic Programming (2D)** | Grid paths, edit distance, LCS, matrix chain | `02-algorithms/15-dynamic-programming.md` |
+| **Knapsack** | "Pick items with weight/value constraints" | `02-algorithms/15-dynamic-programming.md` |
+| **Greedy** | Interval scheduling, jump game, task scheduler | `02-algorithms/16-greedy.md` |
+| **Backtracking** | Permutations, combinations, subsets, N-Queens, Sudoku | `02-algorithms/12-backtracking.md` |
+| **Monotonic Stack** | Next greater/smaller element, histogram, trapped water | `01-data-structures/05-stack.md` |
+| **Monotonic Deque** | Sliding window max/min | `02-algorithms/04-sliding-window.md` |
+| **Union-Find** | Connected components, cycle in undirected, MST (Kruskal) | `02-algorithms/14-union-find.md` |
+| **Heap / Priority Queue** | Top-K, merge K sorted, Dijkstra, two-heap median | `01-data-structures/10-heap.md` |
+| **Trie** | Prefix matching, word search, autocomplete, XOR max | `01-data-structures/09-trie.md` |
+| **Prefix Sum** | Subarray sum queries, range sum, 2D prefix sum | `01-data-structures/01-array.md` |
+| **Divide & Conquer (reference)** | Merge sort, quick select — in sorting file | `02-algorithms/00-sorting.md` |
 
 ---
 

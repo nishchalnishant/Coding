@@ -62,7 +62,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 ### Heap
 
 - [ ] [Merge K Sorted Lists `⚡ T1`](coding/data-structures/07-linked-list.md#merge-k-sorted-lists) — Merge `k` sorted linked lists into one sorted linked list [H]
-- [ ] [Kth Largest Element `🎯 T2`](02-algorithms/20-problem-deep-dives.md#kth-largest-element) — Find kth largest element in array [M]
+- [ ] Kth Largest Element `🎯 T2` — Find kth largest element in array [M]
 - [ ] [Top K Frequent `⚡ T1`](coding/data-structures/10-heap.md#top-k-frequent-elements) — Return the k most frequent elements or words. [M]
 - [ ] [K Closest Points `⚡ T1`](coding/data-structures/10-heap.md#k-closest-points-to-origin) — Return the points closest to the origin. [M]
 - [ ] [Task Scheduler `⚡ T1`](coding/data-structures/06-queue.md#task-scheduler) — Given tasks (letters) and a cooldown `n`, find the minimum time to finish all tasks. Same task must have at least `n` intervals gap [M]
@@ -78,7 +78,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Add Two Numbers `🎯 T2`](coding/data-structures/07-linked-list.md#add-two-numbers) — Two non-empty linked lists represent non-negative integers in reverse order (each node = one digit). Return the sum as a linked list in reverse order [M]
 - [ ] [Linked List Cycle `🎯 T2`](coding/data-structures/07-linked-list.md#linked-list-cycle) — Detect if a linked list has a cycle [E]
 - [ ] [Merge Two Sorted Lists `🎯 T2`](coding/data-structures/07-linked-list.md#merge-two-sorted-lists) — Merge two sorted linked lists into one sorted list. Return the head of the merged list [E]
-- [ ] [Reorder List `🎯 T2`](02-algorithms/20-problem-deep-dives.md#lis) — Reorder list in-place: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → ...` [M]
+- [ ] Reorder List `🎯 T2` — Reorder list in-place: `L0 → Ln → L1 → Ln-1 → L2 → Ln-2 → ...` [M]
 - [ ] [Merge K Sorted Lists `⚡ T1`](coding/data-structures/07-linked-list.md#merge-k-sorted-lists) — Merge `k` sorted linked lists into one sorted linked list [H]
 
 ### Queue
@@ -101,14 +101,14 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Tree
 
-- [ ] [Validate BST `🎯 T2`](02-algorithms/20-problem-deep-dives.md#validate-bst) — Check if a binary tree satisfies BST ordering [M]
+- [ ] Validate BST `🎯 T2` — Check if a binary tree satisfies BST ordering [M]
 - [ ] [LCA `⚡ T1`](coding/data-structures/08-tree.md#lowest-common-ancestor) — Find LCA in a general binary tree (alias) [M]
 - [ ] [Kth Smallest `🎯 T2`](01-data-structures/08-tree.md#bst-operations-validate-kth-smallest-range-sum) — Return the kth smallest value in a BST. [M]
-- [ ] [Diameter `⚡ T1`](02-algorithms/recursion/aditya-verma.md#diameter-of-binary-tree-pass-height-up-update-diameter-via-closure) — Solve the standard interview variant of Diameter. [E]
+- [ ] Diameter `⚡ T1` — Solve the standard interview variant of Diameter. [E]
 - [ ] [House Robber III `🎯 T2`](coding/data-structures/08-tree.md#house-robber-iii) — Houses are arranged in a binary tree. Adjacent nodes (parent-child) cannot both be robbed. Maximize total money robbed [M]
 - [ ] [Invert Binary Tree `🎯 T2`](coding/data-structures/08-tree.md#invert-binary-tree) — Given a binary tree root, mirror it — every left child becomes right and vice versa at every level [E]
 - [ ] [Count Good Nodes `🎯 T2`](coding/data-structures/08-tree.md#count-good-nodes-in-binary-tree) — A node X is "good" if no node on the root-to-X path has a value greater than X.val. Count good nodes [M]
-- [ ] [Construct Binary Tree from Preorder and Inorder `🎯 T2`](coding/algorithms/18-divide-and-conquer.md#construct-binary-tree-from-preorder-and-inorder) — Given preorder and inorder traversal arrays, reconstruct the binary tree [M]
+- [ ] [Construct Binary Tree from Preorder and Inorder `🎯 T2`](coding/data-structures/08-tree.md) — Given preorder and inorder traversal arrays, reconstruct the binary tree [M]
 - [ ] [Binary Tree Maximum Path Sum `⚡ T1`](coding/data-structures/08-tree.md#binary-tree-maximum-path-sum) — Find the maximum path sum between any two nodes. Values can be negative; a path can start and end anywhere [H]
 - [ ] [LCA BST `⚡ T1`](01-data-structures/08-tree.md#lca-bst) — Solve the standard interview variant of LCA BST. [M]
 
@@ -120,7 +120,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ## Algorithms
 
-### Advanced Graphs
+### Graph (additional)
 
 - [ ] [Alien Dictionary `⚡ T1`](coding/data-structures/13-graph.md#alien-dictionary) — Given a list of words from an alien dictionary sorted in alien lexicographic order, derive the order of letters in the alien alphabet. Return any valid order, or `""` if the ordering is invalid (contains a cycle or a word is a prefix-violated neighbor) [H]
 - [ ] [Course Schedule II `⚡ T1`](coding/data-structures/13-graph.md#course-schedule-ii) — Same setup as Course Schedule, but return one valid ordering of courses to take. Return an empty list if impossible (LC 210) [M]
@@ -128,14 +128,14 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Backtracking
 
-- [ ] [Subsets `🎯 T2`](02-algorithms/20-problem-deep-dives.md#subsets) — Given distinct integers, return all subsets (the power set) [M]
+- [ ] Subsets `🎯 T2` — Given distinct integers, return all subsets (the power set) [M]
 - [ ] [Permutations `🎯 T2`](coding/algorithms/15-recursion.md#permutations) — Given distinct integers, return all permutations [M]
-- [ ] [Combination Sum `🎯 T2`](02-algorithms/20-problem-deep-dives.md#combination-sum) — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
+- [ ] Combination Sum `🎯 T2` — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
 - [ ] [N-Queens `🎯 T2`](coding/algorithms/15-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
 - [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
 - [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/15-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
-- [ ] [Letter Combinations `🎯 T2`](02-algorithms/recursion/tips-and-gotchas.md#letter-combinations-phone-wrong) — Solve the standard interview variant of Letter Combinations. [M]
+- [ ] Letter Combinations `🎯 T2` — Solve the standard interview variant of Letter Combinations. [M]
 - [ ] [Combinations `🎯 T2`](coding/algorithms/15-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
 - [ ] [Target Sum `🎯 T2`](coding/algorithms/15-dynamic-programming.md#target-sum) — Given an integer array and a target, assign `+` or `-` to each element and count the number of ways to reach target [M]
 - [ ] [Word Break II `🎯 T2`](coding/algorithms/12-backtracking.md#word-break-ii) — Given a string `s` and a dictionary, return all ways to segment `s` into space-separated dictionary words [M]
@@ -143,16 +143,6 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Combination Sum III `🎯 T2`](coding/algorithms/12-backtracking.md#combination-sum-iii) — Find all combinations of exactly k numbers from 1-9 that sum to target n. Each number used at most once, no duplicates in output [M]
 
 
-
-### Concurrency
-
-- [ ] ----------
-
-### Divide And Conquer
-
-- [ ] [Pow(x,n) `🎯 T2`](02-algorithms/18-divide-and-conquer.md#powxn) — Compute `x^n` efficiently; handle negative exponents [M]
-- [ ] [Maximum Subarray (D&C) `⚡ T1`](coding/data-structures/01-array.md#maximum-subarray) — Find the contiguous subarray with the largest sum. Return the sum [M]
-- [ ] [Merge K Sorted Lists `⚡ T1`](coding/data-structures/07-linked-list.md#merge-k-sorted-lists) — Merge `k` sorted linked lists into one sorted linked list [H]
 
 ### Graph
 
@@ -172,12 +162,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Task Scheduler `⚡ T1`](coding/data-structures/06-queue.md#task-scheduler) — Given tasks (letters) and a cooldown `n`, find the minimum time to finish all tasks. Same task must have at least `n` intervals gap [M]
 - [ ] [Partition Labels `🎯 T2`](coding/algorithms/16-greedy.md#partition-labels-lc-763) — Partition string s into as many parts as possible such that each letter appears in at most one part. Return list of partition sizes [M]
 
-### Maths
-
-- [ ] [Pow(x, n) `🎯 T2`](coding/algorithms/17-maths.md#powx-n-fast-exponentiation-with-mod) — Compute `x^n` efficiently; handle negative exponents [M]
-- [ ] [Happy Number `🎯 T2`](coding/data-structures/07-linked-list.md#happy-number) — Determine if a number `n` is "happy": repeatedly replace it with the sum of the squares of its digits. If the process eventually reaches 1, it is happy. Otherwise it loops forever [E]
-
-### Miscellaneous
+### Greedy
 
 - [ ] [Merge Intervals `⚡ T1`](coding/data-structures/01-array.md#merge-intervals-lc-56) — Given a list of intervals, merge all overlapping intervals and return the result [M]
 - [ ] [Meeting Rooms II `⚡ T1`](coding/algorithms/16-greedy.md#meeting-rooms-ii) — Given intervals [start, end], find the minimum number of conference rooms required [M]
@@ -190,7 +175,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Koko Eating Bananas `⚡ T1`](coding/algorithms/11-binary-search.md#koko-eating-bananas-lc-875) — `piles` of bananas. Eat at constant speed `k` bananas/hour, one pile at a time. Must finish all piles in `h` hours. Minimize `k` [M]
 - [ ] [Search in Rotated Sorted Array II `⚡ T1`](coding/algorithms/11-binary-search.md#search-in-rotated-sorted-array-ii-lc-81) — Rotated sorted array *with duplicates*. Return True if target exists [M]
 - [ ] [Find Minimum in Rotated Sorted Array II `⚡ T1`](coding/algorithms/11-binary-search.md#find-minimum-in-rotated-sorted-array-ii-lc-154) — Rotated sorted array with duplicates. Find the minimum [M]
-- [ ] [Time Based Key-Value Store `🎯 T2`](02-algorithms/11-searching.md#time-based-key-value-store) — Solve the standard interview variant of Time Based Key-Value Store. [M]
+- [ ] [Time Based Key-Value Store `🎯 T2`](02-algorithms/11-binary-search.md#time-based-key-value-store) — Solve the standard interview variant of Time Based Key-Value Store. [M]
 - [ ] [Koko Eating Bananas `⚡ T1`](coding/algorithms/11-binary-search.md#koko-eating-bananas-lc-875) — `piles` of bananas. Eat at constant speed `k` bananas/hour, one pile at a time. Must finish all piles in `h` hours. Minimize `k` [M]
 - [ ] [Capacity to Ship Packages Within D Days `⚡ T1`](coding/algorithms/11-binary-search.md#capacity-to-ship-packages-within-d-days-lc-1011) — Ship packages in order. Ship has fixed capacity per day. Minimize capacity to ship all within `days` days [M]
 - [ ] [Search a 2D Matrix `🎯 T2`](coding/data-structures/01-array.md#search-a-2d-matrix-lc-74) — Given an m×n matrix where each row is sorted and the first element of each row is greater than the last element of the previous row, search for a target value in O(log(m×n)) [M]
@@ -210,7 +195,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Valid Palindrome `🎯 T2`](coding/data-structures/02-string.md#valid-palindrome) — Given string `s`, return true if it is a palindrome considering only alphanumeric characters and ignoring case [E]
 - [ ] [Longest Repeating Character Replacement `🎯 T2`](coding/data-structures/01-array.md#longest-repeating-character-replacement) — Given string `s` and integer `k`, find the length of the longest substring where you can replace at most `k` characters to make all characters in the window the same [M]
 - [ ] [Longest Substring Without Repeating Characters `⚡ T1`](coding/data-structures/02-string.md#longest-substring-without-repeating-characters) — Given string `s`, return the length of the longest substring with all unique characters [M]
-- [ ] [Palindromic Substrings `🎯 T2`](02-algorithms/dynamic-programming/string-palindrome-dp.md#14-count-palindromic-substrings-leetcode-647) — Given string `s`, return the total count of substrings that are palindromes (single characters count too) [M]
+- [ ] Palindromic Substrings `🎯 T2` — Given string `s`, return the total count of substrings that are palindromes (single characters count too) [M]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
 - [ ] [Regular Expression Matching `🎯 T2`](coding/algorithms/15-dynamic-programming.md#regular-expression-matching) — Given string `s` and pattern `p` with `'.'` (any single char) and `'*'` (zero or more of preceding element), implement full regex matching. Must match the entire string [H]
 - [ ] [Valid Palindrome II `🎯 T2`](coding/data-structures/02-string.md#valid-palindrome-ii-lc-680) — Given string `s`, return true if the string can become a palindrome by removing **at most one** character [E]
@@ -228,18 +213,18 @@ This file contains a comprehensive list of all questions covered in the `01-data
 ### Aditya Verma
 
 - [ ] ----------
-- [ ] [Subsets `🎯 T2`](02-algorithms/20-problem-deep-dives.md#subsets) — Given distinct integers, return all subsets (the power set) [E]
+- [ ] Subsets `🎯 T2` — Given distinct integers, return all subsets (the power set) [E]
 - [ ] [Subsets II `🎯 T2`](coding/algorithms/15-recursion.md#subsets-ii-lc-90) — Input may contain duplicates; return only unique subsets [M]
 - [ ] [Permutations `🎯 T2`](coding/algorithms/15-recursion.md#permutations) — Given distinct integers, return all permutations [M]
 - [ ] [Permutations II `🎯 T2`](coding/algorithms/15-recursion.md#permutations-ii-lc-47) — Input may contain duplicates; return only unique permutations [M]
 - [ ] [Combinations `🎯 T2`](coding/algorithms/15-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
-- [ ] [Combination Sum `🎯 T2`](02-algorithms/20-problem-deep-dives.md#combination-sum) — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
-- [ ] [Combination Sum II `🎯 T2`](02-algorithms/20-problem-deep-dives.md#combination-sum) — Candidates may contain duplicates; each used at most once. Return unique combinations summing to target [M]
+- [ ] Combination Sum `🎯 T2` — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
+- [ ] Combination Sum II `🎯 T2` — Candidates may contain duplicates; each used at most once. Return unique combinations summing to target [M]
 - [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/15-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
 - [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
 - [ ] [N-Queens `🎯 T2`](coding/algorithms/15-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
-- [ ] [Pow(x, n) `🎯 T2`](coding/algorithms/17-maths.md#powx-n-fast-exponentiation-with-mod) — Compute `x^n` efficiently; handle negative exponents [M]
+- [ ] Pow(x, n) `🎯 T2` — Compute `x^n` efficiently; handle negative exponents [M]
 - [ ] [Decode Ways `🎯 T2`](coding/algorithms/15-dynamic-programming.md#decode-ways) — String of digits where A=1..Z=26. Count distinct decodings [M]
 - [ ] [Word Break `🎯 T2`](coding/algorithms/15-dynamic-programming.md#word-break) — Given string s and a word dictionary, return true if s can be segmented into dictionary words [M]
 - [ ] [Diameter of Binary Tree `⚡ T1`](coding/data-structures/08-tree.md#diameter-of-binary-tree) — Return the length of the longest path between any two nodes (measured in edges). The path need not pass through the root [M]
@@ -247,11 +232,11 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Dp Aditya Verma
 
-- [ ] [Subset Sum `🎯 T2`](02-algorithms/dynamic-programming/dp-aditya-verma.md#knapsack-subset-sum-reductions) — Solve the standard interview variant of Subset Sum. [M]
+- [ ] Subset Sum `🎯 T2` — Solve the standard interview variant of Subset Sum. [M]
 - [ ] [Partition Equal Subset Sum `🎯 T2`](coding/algorithms/15-dynamic-programming.md#partition-equal-subset-sum) — Can `nums` be split into two subsets with equal sum? [M]
 - [ ] [Target Sum (±) `🎯 T2`](coding/algorithms/15-dynamic-programming.md#target-sum) — Given an integer array and a target, assign `+` or `-` to each element and count the number of ways to reach target [M]
-- [ ] [Coin Change I `🎯 T2`](02-algorithms/20-problem-deep-dives.md#coin-change) — Optimize coin usage or count combinations for an amount. [M]
-- [ ] [Coin Change II `🎯 T2`](02-algorithms/20-problem-deep-dives.md#coin-change) — Count combinations (not permutations) of coins summing to `amount` [M]
+- [ ] Coin Change I `🎯 T2` — Optimize coin usage or count combinations for an amount. [M]
+- [ ] Coin Change II `🎯 T2` — Count combinations (not permutations) of coins summing to `amount` [M]
 - [ ] [Climbing Stairs `🎯 T2`](coding/algorithms/15-dynamic-programming.md#climbing-stairs) — Count distinct ways to climb n stairs, taking 1 or 2 steps at a time [E]
 - [ ] [House Robber `🎯 T2`](coding/algorithms/15-dynamic-programming.md#house-robber) — Rob houses along a street; no two adjacent houses. Maximize money [M]
 - [ ] [House Robber II `🎯 T2`](coding/algorithms/15-dynamic-programming.md#house-robber) — Houses in a circle — first and last are adjacent [M]
@@ -261,11 +246,9 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Palindrome Partitioning II `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Return the minimum number of cuts to partition a string so every substring is a palindrome [H]
 - [ ] [House Robber III `🎯 T2`](coding/data-structures/08-tree.md#house-robber-iii) — Houses are arranged in a binary tree. Adjacent nodes (parent-child) cannot both be robbed. Maximize total money robbed [M]
 - [ ] [Unique Paths `🎯 T2`](coding/algorithms/15-dynamic-programming.md#unique-paths) — Count distinct paths from top-left to bottom-right of m×n grid, moving only right or down [M]
-- [ ] [Unique Paths II `🎯 T2`](02-algorithms/dynamic-programming/grid-dp.md#unique-paths-ii-with-obstacles-leetcode-63) — Unique paths but some cells are blocked (obstacle=1) [M]
+- [ ] Unique Paths II `🎯 T2` — Unique paths but some cells are blocked (obstacle=1) [M]
 - [ ] [Last Stone Weight II `🎯 T2`](coding/algorithms/15-dynamic-programming.md#last-stone-weight-ii) — Smash pairs of stones (losing the difference); minimize the last remaining stone weight [M]
 - [ ] [Interleaving String `🎯 T2`](coding/algorithms/15-dynamic-programming.md#interleaving-string) — Given `s1`, `s2`, `s3`, return true if `s3` is formed by an interleaving of `s1` and `s2` (LC 97) [M]
 - [ ] [Min Cost Climbing Stairs `🎯 T2`](coding/algorithms/15-dynamic-programming.md#min-cost-climbing-stairs) — Each step has a cost. You can start from step 0 or 1. Pay cost to leave a step (+1 or +2). Minimize total cost to reach beyond the last step [E]
-- [ ] [Best Time to Buy and Sell Stock II `⚡ T1`](02-algorithms/dynamic-programming/README.md#best-time-to-buy-and-sell-stock-ii-unlimited-transactions) — Solve the standard interview variant of Best Time to Buy and Sell Stock II. [M]
-- [ ] [Best Time to Buy and Sell Stock III `⚡ T1`](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-3-best-time-to-buy-and-sell-stock-iii-leetcode-123) — Solve the standard interview variant of Best Time to Buy and Sell Stock III. [H]
-- [ ] [Best Time to Buy and Sell Stock IV `⚡ T1`](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-4-best-time-to-buy-and-sell-stock-iv-leetcode-188) — Solve the standard interview variant of Best Time to Buy and Sell Stock IV. [H]
-- [ ] [Best Time to Buy and Sell Stock with Cooldown `⚡ T1`](02-algorithms/dynamic-programming/stock-trading-dp.md#problem-5-best-time-to-buy-and-sell-stock-with-cooldown-leetcode-309) — Solve the standard interview variant of Best Time to Buy and Sell Stock with Cooldown. [M]
+- [ ] [Best Time to Buy and Sell Stock II `⚡ T1`](02-algorithms/15-dynamic-programming.md#best-time-to-buy-and-sell-stock-ii-unlimited-transactions) — Solve the standard interview variant of Best Time to Buy and Sell Stock II. [M]
+- [ ] Best Time to Buy and Sell Stock with Cooldown `⚡ T1` — Solve the standard interview variant of Best Time to Buy and Sell Stock with Cooldown. [M]

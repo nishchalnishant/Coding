@@ -61,8 +61,8 @@ WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 │   ├── Peek/Top: return top without removing → O(1)
 │   ├── isEmpty: check if stack is empty → O(1)
 │   └── All operations are at one end — the top
-├── KEY TECHNIQUES (SDE-3)
-│   ├── Monotonic Stack — the most critical SDE-3 pattern
+├── KEY TECHNIQUES (L3)
+│   ├── Monotonic Stack — the most critical L3 pattern
 │   │   ├── Monotonic increasing: pop while top ≥ current → finds next smaller element
 │   │   ├── Monotonic decreasing: pop while top ≤ current → finds next greater element
 │   │   ├── Each element pushed/popped at most once → O(N) total
@@ -85,7 +85,7 @@ WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
     └── Avoid stack when: random access to elements is needed
 ```
 
-LIFO (Last In, First Out) structure. SDE-3 focus: **monotonic stack** for "next greater/smaller" in O(N), expression parsing, and the deque extension for sliding window problems.
+LIFO (Last In, First Out) structure. L3 focus: **monotonic stack** for "next greater/smaller" in O(N), expression parsing, and the deque extension for sliding window problems.
 
 
 
@@ -352,7 +352,7 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -384,15 +384,15 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Daily Temperatures](../02-algorithms/20-problem-deep-dives.md#daily-temperatures) `🎯 T2`** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
+| **Daily Temperatures `🎯 T2`** | Monotonic Stack (Decreasing) | "Days until warmer" | Decreasing stack of indices; `result[j] = i - j` | Store **indices**, not values — need distance computation. |
 | **Next Greater Element II `🎯 T2`** | "Next greater in circular array" | Iterate `0..2N-1` with `% N`; same monotonic stack | Never push index `i % N` when `i >= N` — only query, don't double-add. |
-| **[Largest Rectangle](../02-algorithms/20-problem-deep-dives.md#largest-rectangle-in-histogram) `🎯 T2`** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
+| **Largest Rectangle `🎯 T2`** | "Max area in histogram" | Increasing stack; pop on lower bar; width = `i - stack[-1] - 1` | Empty stack after pop → `width = i` (bar is global minimum so far). |
 | **Maximal Rectangle** | "Max rectangle of 1s in matrix" | Build histogram row by row; run LRH each row | Heights reset to 0 on encountering `'0'`; LRH applied to each row. |
-| **[Valid Parentheses](../02-algorithms/20-problem-deep-dives.md#valid-parentheses) `🎯 T2`** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
+| **Valid Parentheses `🎯 T2`** | "Matching nested brackets" | Push open; pop on close and verify | Check `not stack` before peek — empty stack on close char = invalid. |
 | **Min Stack `🎯 T2`** | "O(1) getMin with push/pop" | Parallel min-stack synced with main | Popping from both stacks atomically; duplicates in min-stack are fine. |
-| **[Decode String](../02-algorithms/20-problem-deep-dives.md#decode-string)** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
+| **Decode String** | "Nested repetition decoding" | Stack `(built_string, repeat_k)` on `[`; unwind on `]` | Multi-digit `k`; deeply nested `"3[a2[c]]"` must handle stack depth. |
 | **Exclusive Time of Functions** | "Non-overlapping function runtimes" | Stack of `(id, start)`; on end: `time += end - start + 1` | Nested calls: pause outer by subtracting inner's duration from outer's start time. |
-| **[Trapping Rain Water](../02-algorithms/20-problem-deep-dives.md#trapping-rain-water) `⚡ T1`** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
+| **Trapping Rain Water `⚡ T1`** | "Water trapped between bars" | Decreasing stack; pop and compute water above popped bar | Stack approach is more intuitive for "explain why"; two-pointer is simpler to code. |
 | **Maximum Frequency Stack** | "Pop most frequent; ties: most recent" | Map `freq→[elements]`; map `val→freq`; track `max_freq` | On pop, decrement `max_freq` if top bucket becomes empty. |
 | **Balanced Parentheses** [E] | "Check if brackets are balanced" | Push open brackets; on close check top matches; stack empty at end | Map `')': '('` for clean matching; early return if stack empty on close. |
 | **Baseball Game** [E] | "Simulate score with ops `+`, `D`, `C`, int" | Stack; `+` sums top two; `D` doubles top; `C` pops top | Process in order; `+` looks at top two without popping them before pushing sum. |

@@ -74,7 +74,7 @@ WHAT can go wrong
 
 ---
 
-# Google Behavioral / Googliness (SDE-2) — Story Bank + Prompts
+# Google Behavioral / Googliness (L3) — Story Bank + Prompts
 
 Behavioral rounds at Google often evaluate:
 - Collaboration + empathy ("Googleyness")

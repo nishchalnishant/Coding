@@ -381,7 +381,7 @@ def findMaximumXOR(nums: list[int]) -> int:
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
@@ -437,7 +437,7 @@ def findMaximumXOR(nums: list[int]) -> int:
 ## See also
 
 - [backtracking.md](../02-algorithms/12-backtracking.md) — Word Search II uses Trie + backtracking together
-- [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md) — XOR Trie for max XOR pair
+- MINDMAP.md — XOR Trie for max XOR pair
 - [hashing.md](02-hashing.md) — alternative for exact word lookups when prefix search not needed
 
 ## Flashcards

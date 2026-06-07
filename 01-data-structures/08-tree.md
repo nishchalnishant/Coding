@@ -92,7 +92,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
     └── Avoid unbalanced BST: degenerates to O(N) linked list on sorted input
 ```
 
-Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
+Hierarchical structure: root, parent-child relationships, leaves. L3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
 
 
 
@@ -395,7 +395,7 @@ def iterative_postorder(root) -> list[int]:
 ```
 
 > [!TIP]
-> A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, SDE-3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
+> A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, L3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
 
 #### Common Variants & Twists
 1. **Binary Tree Right Side View `🎯 T2`**:
@@ -433,29 +433,29 @@ def deserialize(data: str):
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy
-- [Invert Binary Tree](../02-algorithms/20-problem-deep-dives.md#invert-binary-tree) — Swap children at each node; recursive or BFS.
+- Invert Binary Tree — Swap children at each node; recursive or BFS.
 - **Symmetric Tree `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
 - **Maximum Depth `🎯 T2`** — `1 + max(depth(left), depth(right))`.
 
 ### Medium
-- [Validate BST](../02-algorithms/20-problem-deep-dives.md#validate-bst) — Pass `(min, max)` bounds down.
-- [LCA of Binary Tree](../02-algorithms/20-problem-deep-dives.md#lca) — "Both sides non-null" = LCA found.
-- [Kth Smallest in BST](../02-algorithms/20-problem-deep-dives.md#kth-smallest-in-bst) — Iterative inorder; stop at K.
+- Validate BST — Pass `(min, max)` bounds down.
+- LCA of Binary Tree — "Both sides non-null" = LCA found.
+- Kth Smallest in BST — Iterative inorder; stop at K.
 - **Binary Tree Level Order `🎯 T2`** — BFS; separate levels by queue-size snapshot.
 - **Diameter of Binary Tree `🎯 T2`** — Postorder height; update global `left + right`.
 - **House Robber III `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
 - **Flatten Binary Tree to Linked List `🎯 T2`** — Morris-like threading; preorder rewiring.
 
 ### Hard
-- [Serialize and Deserialize](../02-algorithms/20-problem-deep-dives.md#serialize-and-deserialize-binary-tree) — Preorder with `N` markers.
-- [Binary Tree Max Path Sum](../02-algorithms/20-problem-deep-dives.md#binary-tree-maximum-path-sum) — Tree DP; `max(0, child)` to drop negatives.
+- Serialize and Deserialize — Preorder with `N` markers.
+- Binary Tree Max Path Sum — Tree DP; `max(0, child)` to drop negatives.
 - **Binary Tree Cameras `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
 - **Recover BST `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
 - **Vertical Order Traversal `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
@@ -466,10 +466,10 @@ def deserialize(data: str):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Validate BST](../02-algorithms/20-problem-deep-dives.md#validate-bst) `🎯 T2`** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
-| **[Max Path Sum](../02-algorithms/20-problem-deep-dives.md#binary-tree-maximum-path-sum) `🎯 T2`** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
-| **[LCA](../02-algorithms/20-problem-deep-dives.md#lca) `🎯 T2`** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
-| **[Kth Smallest](../02-algorithms/20-problem-deep-dives.md#kth-smallest-in-bst) `🎯 T2`** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
+| **Validate BST `🎯 T2`** | DFS with Range Bounds | "All left < node, all right > node" | Pass `(lo, hi)` range recursively | Checking only immediate children misses global BST violation. |
+| **Max Path Sum `🎯 T2`** | "Any-to-any path, max sum" | `max(0, child)` to cut negatives; update global via closure | Path can start/end at any node; distinguish "gain returned up" from "path through node". |
+| **LCA `🎯 T2`** | "First node that sees both p and q below it" | `left and right` both non-null → current is LCA | For BST LCA: exploit ordering; no need to search both sides. |
+| **Kth Smallest `🎯 T2`** | "K-th in sorted BST order" | Iterative inorder; stop at count k | Recursive version risks stack overflow for skewed trees. |
 | **Diameter `🎯 T2`** | "Longest path between any two nodes" | `height(left) + height(right)` at each node | Diameter doesn't have to pass through root; track global max. |
 | **House Robber III `🎯 T2`** | "No adjacent nodes (parent-child), max sum" | Return `(rob_this, skip_this)` per node | Two values per node, not one — the novelty of tree DP. |
 | **Serialize/Deserialize** | "Lossless tree → string → tree" | Preorder + `N` markers; use iterator for deserialize | Why preorder works: root first unambiguously determines left vs right subtrees. |
@@ -505,7 +505,7 @@ def deserialize(data: str):
 ## See also
 
 - [Graph](../02-algorithms/13-graph.md) — trees are acyclic connected graphs; BFS/DFS apply
-- [Dynamic Programming](../02-algorithms/dynamic-programming/README.md) — Tree DP (postorder state propagation)
+- [Dynamic Programming](../02-algorithms/15-dynamic-programming.md) — Tree DP (postorder state propagation)
 - [Backtracking](../02-algorithms/12-backtracking.md) — path sum with backtracking
 - [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers
 

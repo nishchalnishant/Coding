@@ -48,7 +48,7 @@ WHY sorting exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 - **Why it's fast**: Merge sort divides the problem into two halves each time — T(n) = 2T(n/2) + O(n) solves to O(n log n) by master theorem.
 - **Where it breaks**: Non-comparison sorts (counting, radix) break if keys aren't bounded integers; unstable sorts (heapsort, quicksort) break multi-key sort correctness; quicksort degrades to O(n²) on already-sorted input without pivot randomization.
 
-# Sorting — SDE-3 Gold Standard
+# Sorting — L3 Gold Standard
 
 ```
 [SORTING — MINDMAP]
@@ -142,7 +142,7 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 | **Bucket Sort** | O(N + K) avg | O(N²) | O(N + K) | **Yes** | Uniform distributions; floating-point in [0, 1). |
 
 > [!TIP]
-> Python uses **TimSort** (hybrid merge + insertion sort). Java uses dual-pivot QuickSort for primitives and TimSort for objects. Knowing *why* each language made its choice is an SDE-3 signal: TimSort exploits partially-sorted real-world data; dual-pivot QuickSort has better cache behavior for primitive arrays.
+> Python uses **TimSort** (hybrid merge + insertion sort). Java uses dual-pivot QuickSort for primitives and TimSort for objects. Knowing *why* each language made its choice is an L3 signal: TimSort exploits partially-sorted real-world data; dual-pivot QuickSort has better cache behavior for primitive arrays.
 
 ---
 
@@ -399,7 +399,7 @@ def largest_number(nums: list[int]) -> str:
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. L3 Deep Dives
 
 ### Scalability: External Merge Sort (Data > RAM)
 
@@ -468,8 +468,8 @@ For distributed sort (MapReduce model):
 ## 4. Common Interview Problems
 
 ### Medium
-- [Merge Intervals](20-problem-deep-dives.md#merge-intervals) — Sort by start time; sweep and merge.
-- [Kth Largest Element](20-problem-deep-dives.md#kth-largest-element) — QuickSelect O(N) avg or min-heap O(N log K).
+- Merge Intervals — Sort by start time; sweep and merge.
+- Kth Largest Element — QuickSelect O(N) avg or min-heap O(N log K).
 - **Sort Colors `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
 - **Largest Number** — Custom comparator: `a+b > b+a`.
 - **Meeting Rooms II** — Sort starts and ends separately; two-pointer sweep for peak overlap.
@@ -484,7 +484,7 @@ For distributed sort (MapReduce model):
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Merge Intervals](20-problem-deep-dives.md#merge-intervals) `🎯 T2`** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
+| **Merge Intervals `🎯 T2`** | Sort + Greedy Merge | "Overlapping ranges" | Sort by start; `end = max(end, next.end)` | Update `end = max(end, next_end)`, not just `next_end`. |
 | **Meeting Rooms II** | "Max concurrent meetings" | Sort starts + ends; two-pointer sweep | Use a **min-heap** of end times for generality. |
 | **Largest Number** | "Lex concat order" | Custom comparator `a+b vs b+a` | Handle all-zeros: `[0,0]` → `"0"`, not `"00"`. |
 | **H-Index** | "Count vs. value crossover" | Sort desc or bucket sort | Find `i` where `citations[i] >= i+1`; off-by-one is common. |
@@ -518,7 +518,7 @@ For distributed sort (MapReduce model):
 
 ## See also
 
-- [Divide and Conquer](18-divide-and-conquer.md) — merge sort and quicksort derivation
+- Divide and Conquer — merge sort and quicksort derivation
 - [Heap](../01-data-structures/10-heap.md) — heap sort and top-K streaming
 - [Two Pointers](03-two-pointers.md) — Dutch National Flag, Meeting Rooms II
 - [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers

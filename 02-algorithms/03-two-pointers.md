@@ -291,7 +291,7 @@ def sort_colors(nums):
 | **Remove Duplicates (sorted)** | Same-direction | `write` only on new value | `if nums[fast] != nums[write]: write++` | Return `write+1` as new length. |
 | **Sort Colors (Dutch flag) `⚡ T1`** | Same-direction | Three pointers lo/mid/hi | 0→lo, 1→mid, 2→hi | Swap mid with hi then mid++ only if not 2. |
 
-Walkthroughs: [problem-deep-dives.md](./20-problem-deep-dives.md). Linked lists: [linked-list.md](../01-data-structures/07-linked-list.md).
+Walkthroughs: problem-deep-dives.md. Linked lists: [linked-list.md](../01-data-structures/07-linked-list.md).
 
 ---
 

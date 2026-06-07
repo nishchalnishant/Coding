@@ -19,7 +19,7 @@ WHY a structured revision plan exists
 └── Two weeks before interview = consolidation phase, not learning phase
 
 WHAT it is
-├── A time-boxed, priority-ordered revision schedule targeting Google SDE-2/SDE-3 bar
+├── A time-boxed, priority-ordered revision schedule targeting Google L3/L3 bar
 ├── Covers: topic priority order, daily time allocation, revision triggers, mock cadence
 └── Examples:
     ├── Day 1–3: arrays, hashing, two-pointer, sliding window (highest frequency)
@@ -31,7 +31,7 @@ HOW it works
 ├── Topic priority (by Google frequency):
 │   ├── Tier 1 (every round): arrays, strings, trees, graphs
 │   ├── Tier 2 (most rounds): DP, heap, binary search, backtracking
-│   └── Tier 3 (occasional): trie, segment tree, union-find, bit manipulation
+│   └── Tier 3 (skim/skip at L3): segment tree, bit manipulation deep-dives, advanced graph algorithms
 ├── Revision triggers (when to revisit a topic):
 │   ├── Solved correctly but slowly → 1 more rep
 │   ├── Needed a hint → 2 more reps on variants
@@ -131,7 +131,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 **Must know:** Two pointers (opposite ends + same direction), sliding window (variable/fixed), prefix sum, Kadane.
 
 - Full notes: [../01-data-structures/array.md](../01-data-structures/01-array.md)  
-- Patterns: `02-algorithms/two-pointers.md`, `02-algorithms/sliding-window.md`
+- Patterns: `02-algorithms/03-two-pointers.md`, `02-algorithms/04-sliding-window.md`
 
 **Google-style practice (names only — use your platform):** Two Sum, 3Sum, Subarray Sum Equals K, Longest Substring Without Repeating Characters, Minimum Window Substring, Trapping Rain Water, Merge Intervals, Product of Array Except Self.
 
@@ -193,7 +193,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Lower/upper bound; binary search on answer (minimize max, etc.); rotated sorted array.
 
-- Full notes: [algorithms/searching.md](../02-algorithms/11-searching.md)
+- Full notes: [algorithms/11-binary-search.md](../02-algorithms/11-binary-search.md)
 
 **Practice:** Search in Rotated Sorted Array, Find First and Last Position, Koko Eating Bananas (or similar BS-on-answer).
 
@@ -204,10 +204,9 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 **Must know:** Adjacency list; BFS shortest path (unweighted); DFS for components/cycle; topological sort (Kahn / DFS); Dijkstra (non-negative weights); when to use Union-Find.
 
 - Full notes: [algorithms/graph.md](../02-algorithms/13-graph.md), [data-structures/graphs.md](../01-data-structures/13-graphs.md)  
-- Union-Find: [algorithms/union-find.md](../02-algorithms/14-union-find.md)  
-- Advanced (if L5+): [../advanced-dsa/advanced-graphs.md](../advanced-dsa/14-advanced-graphs.md)
+- Union-Find: [algorithms/union-find.md](../02-algorithms/14-union-find.md)
 
-**Practice:** Number of Islands, Course Schedule, Rotten Oranges, Clone Graph, Word Ladder (BFS), Cheapest Flights Within K Stops (or Bellman/Dijkstra variant).
+**Practice:** Number of Islands, Course Schedule, Rotting Oranges, Clone Graph, Word Ladder (BFS), Network Delay Time (Dijkstra).
 
 ---
 
@@ -215,8 +214,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Define state; recurrence; base case; space optimization when only previous row/column needed.
 
-- Full notes: [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md)  
-- 16 patterns: [../02-algorithms/dynamic-programming/advanced-dp-optimizations.md](../02-algorithms/dynamic-programming/advanced-dp-optimizations.md)
+- Full notes: [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md) · [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md)
 
 **Practice:** Coin Change, House Robber, Longest Increasing Subsequence, Longest Common Subsequence, Unique Paths, Edit Distance, Word Break.
 
@@ -232,19 +230,11 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 ---
 
-### B11. Bit manipulation
+### B11. Sorting (reference)
 
-**Must know:** XOR for single number; n & (n-1) clears lowest bit; bitmask for subsets when N small.
+**Must know:** Merge/quick sort O(n log n); when sort enables greedy or two pointers.
 
-- Full notes: [algorithms/bit-manipulation.md](../02-algorithms/17-bit-manipulation.md)
-
----
-
-### B12. Maths & sorting
-
-**Must know:** GCD, modular arithmetic basics; merge/quick sort complexity; when counting sort applies.
-
-- Full notes: [algorithms/maths.md](../02-algorithms/17-maths.md), [algorithms/sorting.md](../02-algorithms/00-sorting.md)
+- Full notes: [00-sorting.md](../02-algorithms/00-sorting.md)
 
 ---
 
@@ -270,14 +260,14 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | 2 | Strings + two pointers | [string](../01-data-structures/02-string.md) + sliding window pattern; 4 problems |
 | 3 | Trees + BST | [tree](../01-data-structures/08-tree.md); 3 problems |
 | 4 | Graphs | [graph](../02-algorithms/13-graph.md); BFS/DFS/topo; 4 problems |
-| 5 | DP | [DP README](../02-algorithms/dynamic-programming/README.md) + [dp-advanced](../02-algorithms/dynamic-programming/advanced-dp-optimizations.md); 4 problems |
-| 6 | Heap + binary search + stack | [heap](../01-data-structures/10-heap.md), [searching](../02-algorithms/11-searching.md), [stack](../01-data-structures/05-stack.md); 4 problems |
+| 5 | DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md) + [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md); 4 problems |
+| 6 | Heap + binary search + stack | [heap](../01-data-structures/10-heap.md), [binary search](../02-algorithms/11-binary-search.md), [stack](../01-data-structures/05-stack.md); 4 problems |
 | 7 | Mixed mock | 2 timed problems (45 min each) + review mistakes |
 
 ### If you have 48 hours
 
 - **Hour 0–4:** Part A (this doc) + redo 2 Medium problems you failed recently.
-- **Hour 4–12:** Skim Quick Revision in: array, tree, graph, DP README, heap, searching.
+- **Hour 4–12:** Skim Quick Revision in: array, tree, graph, DP, heap, binary search.
 - **Hour 12–24:** One full mock (2 problems); note gaps only.
 - **Hour 24–36:** Only gaps + Union-Find + topo sort if weak.
 - **Hour 36–48:** Sleep, light review of Part A, no new problems.
@@ -299,7 +289,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
-- [00-start-here/README.md](../00-start-here/README.md) — weekly plan and 6-week SDE-3 schedule  
+- [00-start-here/README.md](../00-start-here/README.md) — weekly plan and 6-week L3 schedule  
 - [03-patterns/patterns-master.md](patterns-master.md) — condensed patterns with triggers  
 
 **Good luck.** You’ve already done the hard work building this repo — use Part A + one full mock in the last 48 hours to walk in confident.
@@ -314,5 +304,5 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/01-array.md) |
 | **Graphs (compact)** | [algorithms/graph.md](../02-algorithms/13-graph.md) |
 | **Graphs (long examples)** | [data-structures/graphs.md](../01-data-structures/13-graphs.md) |
-| **DP** | [../02-algorithms/dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md) |
+| **DP** | [../02-algorithms/15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md) |
 | **Full topic index** | [01-data-structures](../01-data-structures/README.md), [02-algorithms](../02-algorithms/README.md) |

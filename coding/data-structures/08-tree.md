@@ -1973,7 +1973,7 @@ difficulty: mixed
 > Time O(n), Space O(h).
 
 > [!tip] Alternatives
-> - 2-stack "cheat": reverse-preorder trick — do iterative preorder with right-before-left and reverse the output. Works correctly but SDE-3 interviewers often explicitly ban it to test whether you understand the `last_visited` state machine. The 1-stack approach above is the expected answer.
+> - 2-stack "cheat": reverse-preorder trick — do iterative preorder with right-before-left and reverse the output. Works correctly but L3 interviewers often explicitly ban it to test whether you understand the `last_visited` state machine. The 1-stack approach above is the expected answer.
 
 ---
 

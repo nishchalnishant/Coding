@@ -53,7 +53,7 @@ WHAT can go wrong
 ├── Misidentifying the canonical form (e.g., treating variant as base)
 ├── Correct pattern, wrong invariant (off-by-one in window bounds)
 ├── Forgetting edge cases: empty input, single element, all duplicates
-└── Complexity mismatch: O(n²) DP when O(n log n) is expected at SDE-3 bar
+└── Complexity mismatch: O(n²) DP when O(n log n) is expected at L3 bar
 ```
 
 ## First-Principles Breakdown

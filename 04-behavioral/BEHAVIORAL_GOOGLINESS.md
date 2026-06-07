@@ -72,7 +72,7 @@ WHAT can go wrong
 
 ---
 
-# Behavioral + Googliness — Google SDE-2
+# Behavioral + Googliness — Google L3
 
 Google evaluates every candidate on four attributes. This file covers all four with signal phrases, anti-patterns, and STAR story guidance.
 

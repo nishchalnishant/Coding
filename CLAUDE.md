@@ -1,41 +1,41 @@
 # Coding Interview Prep Hub — CLAUDE.md
 
 ## What this repo is
-DSA + System Design prep targeting Google SDE-2 / SDE-3 roles. All content is Markdown — no source code to build or test.
+Google **L3 SWE** interview prep: DSA coding rounds + Googliness/behavioral. All content is Markdown — no source code to build or test.
+
+**Out of scope:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Tarjan/SCC), bit-manipulation deep-dives, maths deep-dives.
 
 ## Directory layout (don't explore, use this)
 ```
-00-start-here/     # Navigation hub — read this first
-01-data-structures/  # Deep-dives: array, linked-list, tree, graph, heap, trie, segment-tree, hashing, stack, queue, string, advanced
-02-algorithms/       # Deep-dives: binary-search, two-pointers, sliding-window, sorting, greedy, backtracking, graph, union-find, string, bit-manipulation, maths, sql, concurrency, system-design-algorithms
-  dynamic-programming/  # DP sub-topic files (grid, stock, string, digit, interval, probability, tips)
-  recursion/            # Recursion sub-topic files
-03-patterns/       # Pattern triggers, canonical questions, revision guides, system-design overview
-04-behavioral/     # STAR stories, Google attributes (Googliness)
-05-revision/       # Complexity cheatsheet, coding rubric
-books/             # Algorithm design book notes (EPI, CP3, TADM)
-archive/           # Legacy content, ignore unless asked
+00-start-here/           # Navigation hub
+00-L3-EXECUTION-META/    # 45-min plan, constraints, Python cheatsheet, decision guides
+01-data-structures/      # DS deep-dives (array, hashing, string, stack, queue, linked-list, tree, trie, heap, graph)
+02-algorithms/           # Algo deep-dives (two-pointers, sliding-window, binary-search, sorting, graph, union-find, greedy, backtracking, string, DP, recursion)
+03-patterns/             # Pattern triggers, canonical questions, Google revision
+04-behavioral/           # STAR stories, Googliness
+coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 ```
 
 ## Common tasks and where to go
 
 | Task | File |
 |---|---|
+| L3 study schedule | `coding/l3-google-roadmap.md` |
+| DS / algo indexes + must-solve | `01-data-structures/README.md`, `02-algorithms/README.md` |
 | Add / update a DSA topic | `01-data-structures/` or `02-algorithms/` |
+| Add a problem walkthrough | matching file under `coding/data-structures/` or `coding/algorithms/` |
+| Regenerate problem mindmap | `python3 scripts/regen_l3_maps.py` |
 | Add a pattern trigger | `03-patterns/patterns-master.md` |
-| Add a canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
-| Add a problem with full walkthrough | `02-algorithms/problem-deep-dives.md` |
+| Add canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
 | Behavioral / googliness | `04-behavioral/BEHAVIORAL_GOOGLINESS.md` |
-| System design overview | `03-patterns/system-design.md` |
-| System design algorithms (Bloom, HLL, Raft) | `02-algorithms/system-design-algorithms.md` |
-| Concurrency / LLD | `02-algorithms/concurrency.md` |
-| SQL queries | `02-algorithms/sql.md` |
-| Complexity cheatsheet | `05-revision/README.md` |
-| Interview rubric | `05-revision/coding-rubric.md` |
+| Complexity cheatsheet | `coding/complexity-cheatsheet.md` |
+| Interview strategy | `coding/google-interview-strategy.md` |
+| GitBook navigation | `SUMMARY.md` |
 
 ## Working norms
 - All files are Markdown. Edit in place — don't create new files unless asked.
 - No code is executed; no tests to run.
 - Prefer editing existing structure over creating new files.
-- When adding problems: include pattern tag, difficulty, and key insight — not just the problem name.
+- When adding problems: include tier (`⚡ T1` / `🎯 T2` / `💤 T3`), difficulty, and key insight.
+- Mark `💤 T3` for overkill-at-L3; exclude from SUMMARY and MINDMAP.
 - Keep notes dense and high-signal. No padding.

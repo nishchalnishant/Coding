@@ -50,7 +50,7 @@ WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go
 - **Why it's fast**: One pass (after optional sorting) — O(n) or O(n log n) total; no recursion tree, no memoization table.
 - **Where it breaks**: Fails when local optimum ≠ global optimum (e.g., coin change with non-canonical denominations like {1,3,4} for target 6 — greedy gives 4+1+1=3 coins, DP gives 3+3=2 coins).
 
-# Greedy Algorithms — SDE-3 Gold Standard
+# Greedy Algorithms — L3 Gold Standard
 
 ```
 [GREEDY ALGORITHMS — MINDMAP]
@@ -78,12 +78,12 @@ WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go
 │   └── Trigger 6: "fractional knapsack" → sort by value/weight ratio, take greedily
 └── COMMON MISTAKES
     ├── Mistake 1: applying greedy to 0/1 knapsack → wrong; greedy only works for fractional variant
-    ├── Mistake 2: skipping the correctness proof — exchange argument is required at SDE-3 level
+    ├── Mistake 2: skipping the correctness proof — exchange argument is required at L3 level
     ├── Mistake 3: wrong sort key — e.g., sorting intervals by start time instead of end time for scheduling
     └── Mistake 4: confusing "greedy works here" with "DP is needed" — always check if choices affect future subproblems
 ```
 
-Make the **locally optimal choice** at each step; prove it leads to a **global optimum**. SDE-3 expects: proof intuition (exchange argument or "stays ahead"), knowing when greedy fails, and choosing between greedy and DP under pressure.
+Make the **locally optimal choice** at each step; prove it leads to a **global optimum**. L3 expects: proof intuition (exchange argument or "stays ahead"), knowing when greedy fails, and choosing between greedy and DP under pressure.
 
 
 
@@ -126,11 +126,11 @@ Make the **locally optimal choice** at each step; prove it leads to a **global o
 
 ---
 
-## 1. Concept Overview: The SDE-3 Bar
+## 1. Concept Overview: The L3 Bar
 
 **When to use**: Optimal substructure + **greedy choice property** (the globally optimal solution can always be extended by taking the locally best choice). If "take best local option" can be shown never to hurt the global solution, use greedy. Otherwise, reach for DP.
 
-### Proof Techniques (The SDE-3 Requirement)
+### Proof Techniques (The L3 Requirement)
 Interviewers for Staff/Senior roles often ask: "How do you *know* greedy works here?"
 
 1. **Exchange Argument (The Gold Standard)**:
@@ -390,7 +390,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. L3 Deep Dives
 
 ### When Greedy Fails: DP is Needed
 
@@ -439,11 +439,11 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ### Medium
 - **Jump Game I `🎯 T2`** — Track `farthest`; O(N) single pass.
-- [Jump Game II](20-problem-deep-dives.md#jump-game-ii) — Greedy BFS levels; O(N).
-- [Non-overlapping Intervals](20-problem-deep-dives.md#non-overlapping-intervals) — Sort by end; keep non-overlapping.
+- Jump Game II — Greedy BFS levels; O(N).
+- Non-overlapping Intervals — Sort by end; keep non-overlapping.
 - **Meeting Rooms II** `🎯 T2` — Min-heap of end times; active room count = heap size.
-- [Gas Station](20-problem-deep-dives.md#gas-station) — Running tank; reset start on deficit.
-- [Task Scheduler](20-problem-deep-dives.md#task-scheduler) — Formula or heap simulation.
+- Gas Station — Running tank; reset start on deficit.
+- Task Scheduler — Formula or heap simulation.
 - **Partition Labels** — Last occurrence map; sweep and cut.
 - **Candy `🎯 T2`** — Two-pass: left-right then right-left.
 - **Minimum Arrows to Burst Balloons** — Sort by end; shoot at end of each new balloon.
@@ -460,11 +460,11 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
 | **Jump Game I `🎯 T2`** | Greedy Reach Tracking | "Can you reach the end?" | Track `farthest`; if `i > farthest` → False | O(N) — not DP. Greedy works because reaching farther never hurts. |
-| **[Jump Game II](20-problem-deep-dives.md#jump-game-ii) `🎯 T2`** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
-| **[Non-overlapping Intervals](20-problem-deep-dives.md#non-overlapping-intervals) `🎯 T2`** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
+| **Jump Game II `🎯 T2`** | "Minimum jumps to end" | Greedy BFS: jump to `farthest` when `i == current_end` | Increment jumps at `current_end`, not when pushing `farthest`. Off-by-one on final step. |
+| **Non-overlapping Intervals `🎯 T2`** | "Remove minimum to make non-overlapping" | Sort by end; keep non-overlapping; count removed | Sort by **end** (not start). Max non-overlapping = n - removed. |
 | **Min Arrows to Burst Balloons** | "Minimum shots to pop all balloons" | Sort by end; new arrow only if `start > arrow_pos` | `>` not `>=` — touching boundary is one shot. |
-| **[Gas Station](20-problem-deep-dives.md#gas-station) `🎯 T2`** | "Starting point for circular traversal" | Reset `start` when tank goes negative | Uniqueness: valid start exists iff `sum(gas) >= sum(cost)`. |
-| **[Task Scheduler](20-problem-deep-dives.md#task-scheduler) `⚡ T1`** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
+| **Gas Station `🎯 T2`** | "Starting point for circular traversal" | Reset `start` when tank goes negative | Uniqueness: valid start exists iff `sum(gas) >= sum(cost)`. |
+| **Task Scheduler `⚡ T1`** | "Minimum time with cooldown n" | `(max_f-1)*(n+1) + count_max`, cap at `len(tasks)` | The cap handles "enough variety to fill idle slots" — don't forget `max(formula, len(tasks))`. |
 | **Assign Cookies** | "Satisfy max children greedily" | Sort both; smallest sufficient cookie per smallest unsatisfied child | Two-pointer: greedily match smallest satisfied first. |
 | **Candy `🎯 T2`** | "Minimum candy with neighbor constraints" | Two-pass: L→R then R→L; `candy[i] = max(both passes)` | One pass fails — left and right constraints are independent. |
 | **Fractional Knapsack** | "Max value with fractional items" | Sort by value/weight; take greedily | 0/1 Knapsack is **not** greedy — needs DP. Verify items are divisible. |
@@ -516,7 +516,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 **Coach:** "You could, but that's O(2^N) or O(N²) with DP. The Greedy insight is: if you can reach index 10, you can *definitely* reach everything before 10. So you don't care *how* you got to 10, you only care about the farthest point you can see from there. It’s like driving at night with high beams—you only care about the farthest point the light hits."
 
-**Student:** "What's the one 'Gotcha' that trips up SDE-3 candidates?"
+**Student:** "What's the one 'Gotcha' that trips up L3 candidates?"
 
 **Coach:** "The **Overlap Boundary**. In 'Minimum Arrows to Burst Balloons,' if two balloons touch at `x=5`, one arrow pops both. In 'Non-overlapping Intervals,' if they touch at `x=5`, they *don't* overlap. Interviewers will watch your `>` vs `>=` like a hawk. One character difference is the gap between a Senior and a Junior hire."
 

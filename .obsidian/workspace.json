@@ -178,6 +178,10 @@
   },
   "active": "55abc373778b0e74",
   "lastOpenFiles": [
+    "coding/complexity-cheatsheet.md",
+    "coding/google-interview-strategy.md",
+    "scripts/l3_cleanup.py",
+    "scripts",
     "01-data-structures/ds_tree.md",
     "02-algorithms/algorithm_tree.md",
     "00-L3-EXECUTION-META/A4_CHEAT_SHEETS.html",
@@ -189,10 +193,8 @@
     "02-algorithms/README.md.recovered5",
     "02-algorithms/README.md.recovered",
     "scripts/regen_l3_maps.py",
-    "scripts",
     "02-algorithms/_L3-SKIP-README.md",
     "practice/ll.py",
-    "practice/string.py",
     "00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md",
     "00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md",
     "00-L3-EXECUTION-META/01-45-minute-execution-plan.md",
@@ -211,8 +213,6 @@
     "coding/algorithms/12-backtracking.md",
     "coding/algorithms/14-union-find.md",
     "coding/algorithms/02-string-algorithms.md",
-    "coding/data-structures/13-graph.md",
-    "coding/data-structures/08-tree.md",
-    "coding/data-structures/06-queue.md"
+    "coding/data-structures/13-graph.md"
   ]
 }

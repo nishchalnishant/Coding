@@ -751,57 +751,6 @@ class UnionFind:
 
 ---
 
-## Bit Manipulation
-
-`🎯 T2` — Direct binary operations. O(1) per operation. Critical for space optimization, XOR tricks, and mask-based DP.
-
-### Core Operations Reference
-
-| Operation | Python | Use |
-| :--- | :--- | :--- |
-| Check bit k | `(n >> k) & 1` | Is bit k set? |
-| Set bit k | `n \| (1 << k)` | Force bit k to 1 |
-| Clear bit k | `n & ~(1 << k)` | Force bit k to 0 |
-| Toggle bit k | `n ^ (1 << k)` | Flip bit k |
-| Remove lowest set bit | `n & (n - 1)` | Brian Kernighan: count set bits in O(popcount) |
-| Isolate lowest set bit | `n & (-n)` | Used in Fenwick Tree (BIT) |
-| Check power of 2 | `n > 0 and (n & (n-1)) == 0` | Exactly one bit set |
-| Count set bits | `bin(n).count('1')` or `n.bit_count()` | Python 3.10+ |
-| XOR all in range [1..n] | Pattern cycles 4: n, 1, n+1, 0 | XOR 1 to N without loop |
-
-### Key Patterns
-
-| Pattern | How |
-| :--- | :--- |
-| **XOR cancel pairs** | `a ^ a = 0`; XOR all elements — duplicates cancel; single remains | Single Number I |
-| **XOR find two singles** | XOR all — get `x ^ y`; isolate any differing bit; partition and XOR each group | Single Number III |
-| **Enumerate subsets of mask** | `sub = mask; while sub: ...; sub = (sub-1) & mask` | Bitmask DP over subsets |
-| **DP over bitmasks** | State = visited set of nodes encoded as bitmask; O(2^N · N) | TSP, Hamiltonian path |
-| **XOR Trie** | Binary Trie on bits MSB→LSB; greedily pick opposite bit to maximize XOR | Maximum XOR pair |
-
-### Gotchas
-- **Python integers are arbitrary-precision** — no overflow, but simulate 32-bit with `n & 0xFFFFFFFF` if the problem requires fixed-width behavior.
-- **Right shift of negative in Java/C++ is arithmetic** (sign-extended); use `>>>` for logical right shift in Java.
-- **`n & (n-1)` removes lowest set bit** — memorize this; it's the building block of Brian Kernighan's bit count.
-- **Bitmask DP state space**: 2^N grows fast; only viable for N ≤ 20.
-
-### Questions
-
-| Problem | Pattern | Key Insight | Tier |
-| :--- | :--- | :--- | :--- |
-| **Single Number I** | XOR cancel | `reduce(xor, nums)` — all duplicates cancel; single remains | `⚡ T1` |
-| **Single Number II** | Bit count mod 3 | Count each bit across all numbers; if `bit_count % 3 != 0`, that bit is in the single | `⚡ T1` |
-| **Single Number III** | XOR + partition | XOR all to get `x^y`; find any differing bit; partition on it; XOR each group | `🎯 T2` |
-| **Number of 1 Bits (Hamming Weight)** | `n & (n-1)` loop | Each iteration removes lowest set bit; count iterations | `🎯 T2` |
-| **Counting Bits** | DP + lowest bit | `dp[i] = dp[i >> 1] + (i & 1)` — O(N) | `🎯 T2` |
-| **Reverse Bits** | Shift + OR | Shift result left, OR in LSB of n, shift n right; 32 iterations | `🎯 T2` |
-| **Missing Number** | XOR or Gauss | XOR `0..n` with all elements; missing is what's left. Or: `n*(n+1)//2 - sum(nums)` | `🎯 T2` |
-| **Sum of Two Integers (No +/-)** | XOR + carry | `a ^ b` = sum without carry; `(a & b) << 1` = carry; repeat until carry = 0 | `🎯 T2` |
-| **Maximum XOR of Two Numbers** | XOR Trie | Binary trie bits MSB→LSB; greedily choose opposite bit at each level | `⚡ T1` |
-| **Subsets via Bitmask** | Enumerate 2^N masks | For each mask in `0..2^N-1`, bit k set = include nums[k] | `🎯 T2` |
-
----
-
 ## Intervals
 
 `🎯 T2` — Sort then sweep. Interval problems are greedy once you sort. The boundary condition (`>` vs `>=`) is the single most common bug.

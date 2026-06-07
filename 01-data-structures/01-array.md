@@ -64,7 +64,7 @@ WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to u
 │   ├── Search (sorted): O(log N) binary search
 │   ├── Resize (dynamic): allocate 2× buffer, copy all elements → amortized O(1) per append
 │   └── Range update (difference array trick): O(1) per update, O(N) to reconstruct
-├── KEY TECHNIQUES (SDE-3 level)
+├── KEY TECHNIQUES (L3 level)
 │   ├── Two pointers: O(N) in-place reversal, partition, sorted-merge
 │   ├── Sliding window: O(N) subarray problems — fixed/variable window
 │   │   └── CAUTION: variable window breaks with negative numbers (use prefix sums instead)
@@ -84,7 +84,7 @@ WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to u
     └── Avoid arrays when: prepend-heavy workload or unbounded growth with heavy mid-insertion
 ```
 
-Fixed-size sequential collection in contiguous memory. Mastery at SDE-3 means choosing the right technique, proving it correct, knowing when sliding window fails (negatives), and handling range updates at scale.
+Fixed-size sequential collection in contiguous memory. Mastery at L3 means choosing the right technique, proving it correct, knowing when sliding window fails (negatives), and handling range updates at scale.
 
 
 
@@ -436,20 +436,20 @@ def find_duplicate(nums: list[int]) -> int:
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy
-- [Two Sum](../02-algorithms/20-problem-deep-dives.md#two-sum) — Hash map for complement; or two pointers if sorted.
+- Two Sum — Hash map for complement; or two pointers if sorted.
 - **Best Time to Buy/Sell Stock** — Track min so far; `profit = max(profit, price - min_price)`.
 - **Move Zeros** — Two-pointer: maintain `write_idx` for non-zeros.
 
 ### Medium
-- [3Sum](../02-algorithms/20-problem-deep-dives.md#3sum) — Sort + fix one + two pointers; skip duplicates at all three sites.
-- [Subarray Sum Equals K](../02-algorithms/20-problem-deep-dives.md#subarray-sum-equals-k) — Prefix sum + count map; `seen[0] = 1`.
+- 3Sum — Sort + fix one + two pointers; skip duplicates at all three sites.
+- Subarray Sum Equals K — Prefix sum + count map; `seen[0] = 1`.
 - **Longest Subarray with K Distinct** — Sliding window + frequency map.
 - **Product of Array Except Self** — Prefix product from left × suffix product from right; O(1) extra space.
 - **Container with Most Water `⚡ T1`** — Two pointers; advance the side with shorter height.
@@ -457,8 +457,8 @@ def find_duplicate(nums: list[int]) -> int:
 - **Jump Game `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
 
 ### Hard
-- [Trapping Rain Water](../02-algorithms/20-problem-deep-dives.md#trapping-rain-water) — Two pointers `l_max, r_max`; advance side with smaller max.
-- [Median of Two Sorted Arrays](../02-algorithms/20-problem-deep-dives.md#median-of-two-sorted-arrays) — Binary search on partition of shorter array.
+- Trapping Rain Water — Two pointers `l_max, r_max`; advance side with smaller max.
+- Median of Two Sorted Arrays — Binary search on partition of shorter array.
 - **Sliding Window Maximum `⚡ T1`** — Monotonic deque; O(N).
 
 ---
@@ -467,10 +467,10 @@ def find_duplicate(nums: list[int]) -> int:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Two Sum](../02-algorithms/20-problem-deep-dives.md#two-sum) `⚡ T1`** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
-| **[3Sum](../02-algorithms/20-problem-deep-dives.md#3sum) `⚡ T1`** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
-| **[Trapping Rain Water](../02-algorithms/20-problem-deep-dives.md#trapping-rain-water) `⚡ T1`** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
-| **[Subarray Sum = K](../02-algorithms/20-problem-deep-dives.md#subarray-sum-equals-k)** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
+| **Two Sum `⚡ T1`** | Complement Map | "Pair summing to target" | Complement map `target - x` | Return **indices** vs values — clarify with interviewer. |
+| **3Sum `⚡ T1`** | "Triplets summing to 0, no duplicates" | Sort + fix i + two pointers | Skip duplicates at **three** sites: i, left, right — miss one, get duplicates. |
+| **Trapping Rain Water `⚡ T1`** | "Water level bounded by shorter wall" | Two pointers; advance smaller max side | Level at position i = `min(l_max, r_max) - height[i]`; advance the smaller-max side. |
+| **Subarray Sum = K** | "Count subarrays with exact sum K" | Prefix sum + `seen[0]=1`; `count += seen[prefix-K]` | Sliding window **fails** with negatives — always use prefix map. |
 | **Product Except Self** | "Product of all but self, no division" | Left-pass product × right-pass product | Division approach fails on zeros; two-pass achieves O(1) extra space. |
 | **Container with Most Water `⚡ T1`** | "Max area between two lines" | Two pointers; advance shorter side | Area = `min(h[l], h[r]) * (r - l)`; advancing taller side never improves. |
 | **Next Permutation** | "Lexicographic next arrangement" | Find rightmost descent; swap with next larger; reverse suffix | Rightmost **ascending** pair from the right = descent point; edge case: fully descending → reverse all. |
@@ -505,7 +505,7 @@ def find_duplicate(nums: list[int]) -> int:
 ## See also
 
 - [Hashing](02-hashing.md) — two sum, subarray sum = K complement maps
-- [Searching](../02-algorithms/11-searching.md) — binary search on answer for array problems
+- [Searching](../02-algorithms/11-binary-search.md) — binary search on answer for array problems
 - [Stack](05-stack.md) — monotonic stack/deque for sliding window max and histogram
 - [Patterns Master](../03-patterns/patterns-master.md) — sliding window and two-pointer triggers
 

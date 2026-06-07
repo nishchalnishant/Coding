@@ -64,7 +64,7 @@ WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → W
 │   ├── Delete given node (SLL): O(N) to find predecessor; DLL: O(1)
 │   ├── Search: O(N) linear scan
 │   └── Reversal (in-place): O(N) time, O(1) space — three-pointer technique
-├── KEY TECHNIQUES (SDE-3)
+├── KEY TECHNIQUES (L3)
 │   ├── Fast/slow pointers (Floyd's)
 │   │   ├── Cycle detection: fast moves 2, slow moves 1 → meet if cycle exists
 │   │   ├── Cycle entry: reset one pointer to head, advance both at speed 1 → meet at entry
@@ -86,7 +86,7 @@ WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → W
     └── Avoid linked list when: random access patterns dominate (O(N) access kills performance)
 ```
 
-A linear data structure where nodes are stored in non-contiguous memory, connected via next pointers. SDE-3 expects: clean in-place pointer manipulation, cycle detection with proof, DLL-based design problems, and trade-offs vs arrays.
+A linear data structure where nodes are stored in non-contiguous memory, connected via next pointers. L3 expects: clean in-place pointer manipulation, cycle detection with proof, DLL-based design problems, and trade-offs vs arrays.
 
 
 
@@ -367,28 +367,28 @@ class LRUCache:
 ## 3. Production Context (L3 Note)
 
 > [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L4/L5 system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
+> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
 
 ---
 
 ## 4. Common Interview Problems
 
 ### Easy
-- [Reverse Linked List](../02-algorithms/20-problem-deep-dives.md#reverse-linked-list) — Three-pointer iterative; recursive is shorter but O(N) stack.
+- Reverse Linked List — Three-pointer iterative; recursive is shorter but O(N) stack.
 - **Linked List Cycle `🎯 T2`** — Fast & slow; `O is O` identity check.
 - **Merge Two Sorted Lists `🎯 T2`** — Dummy head; two-pointer merge.
 
 ### Medium
-- [Remove Nth From End](../02-algorithms/20-problem-deep-dives.md#remove-nth-from-end) — Fast advances N steps first; both advance together until fast.next is null.
-- [Copy List with Random Pointer](../02-algorithms/20-problem-deep-dives.md#copy-list-with-random-pointer) — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
+- Remove Nth From End — Fast advances N steps first; both advance together until fast.next is null.
+- Copy List with Random Pointer — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
 - **Palindrome Linked List** — Find middle, reverse second half, compare, restore.
 - **Add Two Numbers** — Digit-by-digit sum with carry; handle length mismatch.
 - **Reorder List `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
 - **Swap Nodes in Pairs** — Reverse every two nodes; dummy node simplifies head case.
 
 ### Hard
-- [Merge K Sorted Lists](../02-algorithms/20-problem-deep-dives.md#merge-k-sorted-lists) — Min-heap of K nodes; or divide-and-conquer pairwise merge.
-- [LRU Cache](../02-algorithms/20-problem-deep-dives.md#lru-cache) — DLL + hash map; dummy head/tail to avoid edge cases.
+- Merge K Sorted Lists — Min-heap of K nodes; or divide-and-conquer pairwise merge.
+- LRU Cache — DLL + hash map; dummy head/tail to avoid edge cases.
 - **Reverse K-Group** — Recursion or iterative; check K nodes exist before reversing.
 - **Sort List** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
 
@@ -398,10 +398,10 @@ class LRUCache:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **[Reverse List](../02-algorithms/20-problem-deep-dives.md#reverse-linked-list)** | Iterative Pointer Reversal | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
-| **[Remove Nth From End](../02-algorithms/20-problem-deep-dives.md#remove-nth-from-end)** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
-| **[Merge K Lists](../02-algorithms/20-problem-deep-dives.md#merge-k-sorted-lists)** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
-| **[LRU Cache](../02-algorithms/20-problem-deep-dives.md#lru-cache) `🎯 T2`** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
+| **Reverse List** | Iterative Pointer Reversal | "Flip all pointers" | `nxt = curr.next; curr.next = prev; prev, curr = curr, nxt` | Save `nxt` first — overwriting `curr.next` loses the rest of the list. |
+| **Remove Nth From End** | "Nth from end without length" | Fast advances N steps; then both advance; fast.next=null → slow is before target | Use dummy head: handles removing the actual head node (N = length). |
+| **Merge K Lists** | "Smallest of K heads at all times" | Min-heap `(val, list_idx, node)` | Tie-break: include unique `list_idx` to prevent comparing `ListNode` objects. |
+| **LRU Cache `🎯 T2`** | "O(1) get and put with LRU eviction" | DLL for recency + hash map for O(1) node access | Dummy head/tail eliminate all edge cases in `_remove` and `_insert_front`. |
 | **Detect Cycle Entry** | "Where does the cycle begin?" | Two-pointer meet inside cycle; reset slow to head; advance both by 1 | The math: meeting point is exactly `L` steps from entry — derive it once, remember it. |
 | **Palindrome LL** | "Is the list a palindrome?" | Find middle, reverse second half, compare | Restore the second half after comparison — mutation side effect trap. |
 | **Reverse K-Group** | "Reverse every K nodes" | Count K nodes; reverse; connect tail to result of recursive call | Fewer than K nodes at end — don't reverse; just return `head`. |

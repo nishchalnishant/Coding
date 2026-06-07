@@ -70,7 +70,7 @@ WHAT can go wrong
 
 ---
 
-# The SDE-3 Pattern Playbook: A Guided Conversation
+# The L3 Pattern Playbook: A Guided Conversation
 
 Welcome to the heart of this repository. If you've ever felt like you're "memorizing" LeetCode instead of "learning" it, this document is for you. We’ve organized these problems not just as static code blocks, but as a series of **conversations**. 
 
@@ -170,7 +170,7 @@ This pattern is for **continuous subarrays**. If the problem says "contiguous," 
 
 **The Conversation:**
 You have a `left` and `right` pointer. You move `right` to grow the window. If you hit a duplicate, you shrink `left`. 
-The "SDE-3 move" is not moving `left` by 1. It's using a Hash Map to store the last index of each character and **jumping** `left` directly to `map[char] + 1`.
+The "L3 move" is not moving `left` by 1. It's using a Hash Map to store the last index of each character and **jumping** `left` directly to `map[char] + 1`.
 
 **The Interviewer's Twist:**
 *   "What if I can **Replace K characters**?" (The window is valid as long as `window_size - max_char_frequency <= k`).

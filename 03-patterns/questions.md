@@ -24,7 +24,6 @@ This file serves as a centralized, interactive checklist for all the canonical i
 *   [ ] **Trees & BST** (`0 / 18`)
 *   [ ] **Graphs** (`0 / 16`)
 *   [ ] **Disjoint Set Union (DSU)** (`0 / 5`)
-*   [ ] **Segment Tree & Fenwick Tree** (`0 / 3`)
 *   [ ] **Heaps & Priority Queues** (`0 / 6`)
 *   [ ] **Backtracking** (`0 / 12`)
 *   [ ] **Dynamic Programming** (`0 / 18`)
@@ -33,8 +32,6 @@ This file serves as a centralized, interactive checklist for all the canonical i
 *   [ ] **Tries** (`0 / 3`)
 *   [ ] **Matrix / Grid BFS** (`0 / 5`)
 *   [ ] **Binary Search** (`0 / 7`)
-*   [ ] **Bit Manipulation** (`0 / 7`)
-*   [ ] **Math & Number Theory** (`0 / 4`)
 
 ---
 
@@ -54,8 +51,8 @@ This file serves as a centralized, interactive checklist for all the canonical i
 | [ ] | Non-overlapping Intervals — Find the minimum number of intervals to remove so that the rest are non-overlapping | Medium | Greedy End-Time Sort | [greedy.md](../02-algorithms/16-greedy.md#interview-questions--logic--trickiness) |
 | [ ] | Jump Game — Given an array where `nums[i]` is the max jump length from index `i`, determine if you can reach the last index | Medium | Greedy Reachability | [greedy.md](../02-algorithms/16-greedy.md#interview-questions--logic--trickiness) |
 | [ ] | Jump Game II — Given an array where `nums[i]` is the max jump from index `i`, return the minimum number of jumps to reach the last index. Always reachable | Medium | Greedy BFS Layers | [greedy.md](../02-algorithms/16-greedy.md#interview-questions--logic--trickiness) |
-| [ ] | Find Minimum in Rotated Array — Find the minimum element in a rotated sorted array with no duplicates | Medium | Binary Search | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Search in Rotated Array — Given a sorted array rotated at some pivot, search for a target. Return its index, or -1 if not found | Medium | Binary Search | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
+| [ ] | Find Minimum in Rotated Array — Find the minimum element in a rotated sorted array with no duplicates | Medium | Binary Search | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Search in Rotated Array — Given a sorted array rotated at some pivot, search for a target. Return its index, or -1 if not found | Medium | Binary Search | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
 | [ ] | Subarray Sum Equals K — Count the number of contiguous subarrays with sum equal to `k`. Array may contain negatives | Medium | Prefix Sum + Hash Map | [array.md](../01-data-structures/01-array.md#interview-questions--logic--trickiness) |
 | [ ] | Subarray Sums Divisible by K — Count the number of subarrays whose sum is divisible by `K` | Medium | Prefix Sum Modulo | [array.md](../01-data-structures/01-array.md#interview-questions--logic--trickiness) |
 | [ ] | Subarrays with K Different Integers — Count subarrays with exactly `k` distinct integers | Hard | Sliding Window Subtraction | [array.md](../01-data-structures/01-array.md#interview-questions--logic--trickiness) |
@@ -174,13 +171,6 @@ This file serves as a centralized, interactive checklist for all the canonical i
 
 ---
 
-## 8. Segment Tree & Fenwick Tree
-
-| Status | Question | Difficulty | Pattern | Link to Explanation |
-| :---: | :--- | :---: | :--- | :--- |
-
----
-
 ## 9. Heaps & Priority Queues
 
 | Status | Question | Difficulty | Pattern | Link to Explanation |
@@ -217,24 +207,24 @@ This file serves as a centralized, interactive checklist for all the canonical i
 
 | Status | Question | Difficulty | Pattern | Link to Explanation |
 | :---: | :--- | :---: | :--- | :--- |
-| [ ] | Climbing Stairs — Count distinct ways to climb n stairs, taking 1 or 2 steps at a time | Easy | 1D DP / Fibonacci | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | House Robber — Rob houses along a street; no two adjacent houses. Maximize money | Medium | Binary State Machine | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | House Robber II — Houses in a circle — first and last are adjacent | Medium | Circular State Splitting | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Longest Palindromic Subsequence — Length of longest palindromic subsequence in string `s` | Medium | 2D Interval DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Longest Common Subsequence — Length of longest common subsequence (non-contiguous) of two strings | Medium | 2D Grid DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Edit Distance — Minimum insert/delete/replace operations to convert `word1` to `word2` | Hard | 2D Transformation DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Coin Change — Minimum coins from unlimited denominations to make amount `A`. Return -1 if impossible | Medium | Unbounded Knapsack | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Coin Change II — Count combinations (not permutations) of coins summing to `amount` | Medium | Combinations Knapsack | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | 0-1 Knapsack — Solve the standard interview variant of 0-1 Knapsack. | Medium | 2D Capacity DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Partition Equal Subset Sum — Can `nums` be split into two subsets with equal sum? | Medium | 0-1 Capacity Match | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Word Break — Given string s and a word dictionary, return true if s can be segmented into dictionary words | Medium | Splitting DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Unique Paths — Count distinct paths from top-left to bottom-right of m×n grid, moving only right or down | Medium | Grid movement DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Longest Increasing Subsequence — Given an integer array `nums`, return the length of the longest strictly increasing subsequence | Medium | DP / Patience Sort | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Burst Balloons — `n` balloons with values. Bursting balloon `i` scores `nums[i-1]*nums[i]*nums[i+1]`. Maximize total coins | Hard | Interval split DP | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Regular Expression Matching — Given string `s` and pattern `p` with `'.'` (any single char) and `'*'` (zero or more of preceding element), implement full regex matching. Must match the entire string | Hard | 2D regex State transitions | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
+| [ ] | Climbing Stairs — Count distinct ways to climb n stairs, taking 1 or 2 steps at a time | Easy | 1D DP / Fibonacci | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | House Robber — Rob houses along a street; no two adjacent houses. Maximize money | Medium | Binary State Machine | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | House Robber II — Houses in a circle — first and last are adjacent | Medium | Circular State Splitting | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Longest Palindromic Subsequence — Length of longest palindromic subsequence in string `s` | Medium | 2D Interval DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Longest Common Subsequence — Length of longest common subsequence (non-contiguous) of two strings | Medium | 2D Grid DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Edit Distance — Minimum insert/delete/replace operations to convert `word1` to `word2` | Hard | 2D Transformation DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Coin Change — Minimum coins from unlimited denominations to make amount `A`. Return -1 if impossible | Medium | Unbounded Knapsack | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Coin Change II — Count combinations (not permutations) of coins summing to `amount` | Medium | Combinations Knapsack | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | 0-1 Knapsack — Solve the standard interview variant of 0-1 Knapsack. | Medium | 2D Capacity DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Partition Equal Subset Sum — Can `nums` be split into two subsets with equal sum? | Medium | 0-1 Capacity Match | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Word Break — Given string s and a word dictionary, return true if s can be segmented into dictionary words | Medium | Splitting DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Unique Paths — Count distinct paths from top-left to bottom-right of m×n grid, moving only right or down | Medium | Grid movement DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Longest Increasing Subsequence — Given an integer array `nums`, return the length of the longest strictly increasing subsequence | Medium | DP / Patience Sort | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Burst Balloons — `n` balloons with values. Bursting balloon `i` scores `nums[i-1]*nums[i]*nums[i+1]`. Maximize total coins | Hard | Interval split DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Regular Expression Matching — Given string `s` and pattern `p` with `'.'` (any single char) and `'*'` (zero or more of preceding element), implement full regex matching. Must match the entire string | Hard | 2D regex State transitions | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
 | [ ] | Wildcard Matching — Given string `s` and pattern `p` with `'?'` (any single char) and `'*'` (any sequence including empty), return True if `p` matches `s` entirely | Hard | 2D wildcard State match | [string.md](../02-algorithms/02-string.md#interview-questions--logic--trickiness) |
-| [ ] | Word Break II — Given a string `s` and a dictionary, return all ways to segment `s` into space-separated dictionary words | Hard | DP memoization + backtrack all paths | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
-| [ ] | Interleaving String — Given `s1`, `s2`, `s3`, return true if `s3` is formed by an interleaving of `s1` and `s2` (LC 97) | Medium | 2D DP take-from-either | [dynamic-programming/README.md](../02-algorithms/dynamic-programming/README.md#interview-questions--logic--trickiness) |
+| [ ] | Word Break II — Given a string `s` and a dictionary, return all ways to segment `s` into space-separated dictionary words | Hard | DP memoization + backtrack all paths | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
+| [ ] | Interleaving String — Given `s1`, `s2`, `s3`, return true if `s3` is formed by an interleaving of `s1` and `s2` (LC 97) | Medium | 2D DP take-from-either | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md#interview-questions--logic--trickiness) |
 
 ---
 
@@ -287,35 +277,10 @@ This file serves as a centralized, interactive checklist for all the canonical i
 
 | Status | Question | Difficulty | Pattern | Link to Explanation |
 | :---: | :--- | :---: | :--- | :--- |
-| [ ] | Search in Rotated Sorted Array — Given a sorted array rotated at some pivot, search for a target. Return its index, or -1 if not found | Medium | Rotated interval matching | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Koko Eating Bananas — `piles` of bananas. Eat at constant speed `k` bananas/hour, one pile at a time. Must finish all piles in `h` hours. Minimize `k` | Medium | Binary search on Answer | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Split Array Largest Sum — Split `nums` into exactly `k` non-empty contiguous subarrays. Minimize the largest subarray sum | Hard | BS on Subarray Capacity | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Time-Based Key-Value Store — Solve the standard interview variant of Time-Based Key-Value Store. | Medium | BS on sorted timestamps | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Median of Two Sorted Arrays — Find the median of two sorted arrays in O(log(m+n)) time | Hard | BS on partition sizes | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Search a 2D Matrix — Given an m×n matrix where each row is sorted and the first element of each row is greater than the last element of the previous row, search for a target value in O(log(m×n)) | Medium | Matrix coordinate map BS | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-| [ ] | Find Minimum in Rotated Array — Find the minimum element in a rotated sorted array with no duplicates | Medium | BS bound checking | [searching.md](../02-algorithms/11-searching.md#interview-questions--logic--trickiness) |
-
----
-
-## 17. Bit Manipulation
-
-| Status | Question | Difficulty | Pattern | Link to Explanation |
-| :---: | :--- | :---: | :--- | :--- |
-| [ ] | Single Number — Every element in `nums` appears exactly twice except one. Find that one element. O(N) time, O(1) space | Easy | XOR Properties | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Single Number II — Every element appears exactly three times except one (appears once). Find it. O(N) time, O(1) space | Medium | Modulo Bit Counting | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Counting Bits — For every number `i` in `[0, n]`, return `dp[i]` = number of 1-bits in `i`. O(N) time, O(N) space | Easy | Bitwise shift DP | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Sum of Two Integers — Solve the standard interview variant of Sum of Two Integers. | Medium | Bit adder emulation | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Number of 1 Bits (Hamming Weight) — Return the number of set bits (1-bits) in a 32-bit unsigned integer | Easy | n & (n-1) loop | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Reverse Bits — Reverse the bits of a 32-bit unsigned integer | Easy | Bit-by-bit shift and OR | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-| [ ] | Missing Number — Array `nums` contains `n` distinct numbers in range `[0, n]`. Find the missing number | Easy | XOR or Gauss sum | [bit-manipulation.md](../02-algorithms/17-bit-manipulation.md#interview-questions--logic--trickiness) |
-
----
-
-## 18. Math & Number Theory
-
-| Status | Question | Difficulty | Pattern | Link to Explanation |
-| :---: | :--- | :---: | :--- | :--- |
-| [ ] | Happy Number — Determine if a number `n` is "happy": repeatedly replace it with the sum of the squares of its digits. If the process eventually reaches 1, it is happy. Otherwise it loops forever | Easy | Floyd's cycle checking | [maths.md](../02-algorithms/17-maths.md#interview-questions--logic--trickiness) |
-| [ ] | Pow(x, n) — Compute `x^n` efficiently; handle negative exponents | Medium | Binary exponentiation | [maths.md](../02-algorithms/17-maths.md#interview-questions--logic--trickiness) |
-| [ ] | Sieve of Eratosthenes — Count the number of prime numbers strictly less than n | Easy | Composite prime marking | [maths.md](../02-algorithms/17-maths.md#interview-questions--logic--trickiness) |
-| [ ] | Greatest Common Divisor of Strings — Largest string `t` that divides both strings `s1` and `s2` (i.e., concatenating copies of `t` produces each string) | Easy | Euclidean GCD reduction | [maths.md](../02-algorithms/17-maths.md#interview-questions--logic--trickiness) |
+| [ ] | Search in Rotated Sorted Array — Given a sorted array rotated at some pivot, search for a target. Return its index, or -1 if not found | Medium | Rotated interval matching | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Koko Eating Bananas — `piles` of bananas. Eat at constant speed `k` bananas/hour, one pile at a time. Must finish all piles in `h` hours. Minimize `k` | Medium | Binary search on Answer | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Split Array Largest Sum — Split `nums` into exactly `k` non-empty contiguous subarrays. Minimize the largest subarray sum | Hard | BS on Subarray Capacity | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Time-Based Key-Value Store — Solve the standard interview variant of Time-Based Key-Value Store. | Medium | BS on sorted timestamps | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Median of Two Sorted Arrays — Find the median of two sorted arrays in O(log(m+n)) time | Hard | BS on partition sizes | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Search a 2D Matrix — Given an m×n matrix where each row is sorted and the first element of each row is greater than the last element of the previous row, search for a target value in O(log(m×n)) | Medium | Matrix coordinate map BS | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |
+| [ ] | Find Minimum in Rotated Array — Find the minimum element in a rotated sorted array with no duplicates | Medium | BS bound checking | [11-binary-search.md](../02-algorithms/11-binary-search.md#interview-questions--logic--trickiness) |

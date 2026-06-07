@@ -56,7 +56,7 @@ WHAT can go wrong
 
 ---
 
-## SDE-3 Gold Standard Mindmap
+## L3 Gold Standard Mindmap
 
 ```
 RECURSION
@@ -1341,7 +1341,7 @@ if j + 1 < len(p) and p[j+1] == '*':
 
 ---
 
-## SDE-3 Interview Communication Framework
+## L3 Interview Communication Framework
 
 1. **State IP/OP** — "My function takes X and produces Y"
 2. **Draw the tree** — trace a small example to ground the approach
@@ -1400,7 +1400,7 @@ if j + 1 < len(p) and p[j+1] == '*':
 | Merge Sort | Divide & Conquer | Split until size 1; merge results |
 | Fibonacci | Mathematical | `f(n) = f(n-1) + f(n-2)` |
 
-### Level 2: SDE-2 Standard (Pruning & Constraints)
+### Level 2: L3 Standard (Pruning & Constraints)
 
 | Problem | Pattern | The Twist |
 | :--- | :--- | :--- |
@@ -1411,7 +1411,7 @@ if j + 1 < len(p) and p[j+1] == '*':
 | Palindrome Partitioning | String Splitting | Only recurse if prefix is a palindrome |
 | Letter Case Permutation | IP/OP | Branch on alpha; skip digits |
 
-### Level 3: SDE-3 / Staff Level (Constraint Satisfaction)
+### Level 3: L3 / Staff Level (Constraint Satisfaction)
 
 | Problem | Pattern | Complexity / Optimization |
 | :--- | :--- | :--- |

@@ -358,7 +358,7 @@ def max_sliding_window(nums, k):
 | **Permutation in String `⚡ T1`** | Fixed | Same as anagram | `have == need` when all chars satisfied | Clarify if permutation must be contiguous (yes). |
 | **Subarrays with K Distinct** | At-most trick | `exactly(K) = atMost(K) - atMost(K-1)` | Two passes with helper | "Exactly K" is not monotonic — never use one sliding window for exactly. |
 
-Walkthroughs: [problem-deep-dives.md](../20-problem-deep-dives.md). String windows: [string.md](../01-data-structures/02-string.md).
+Walkthroughs: problem-deep-dives.md. String windows: [string.md](../01-data-structures/02-string.md).
 
 ---
 

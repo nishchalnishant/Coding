@@ -159,7 +159,7 @@ def solve(arr, limit):
 
 **The recognition signal:** "minimum/maximum X such that [condition]" → binary search on X.
 
-**Files:** [binary-search.md](./algorithms/11-binary-search.md) · [searching.md](../02-algorithms/11-searching.md)
+**Files:** [binary-search.md](./algorithms/11-binary-search.md) · [11-binary-search.md](../02-algorithms/11-binary-search.md)
 
 ---
 
@@ -498,7 +498,7 @@ Know these cold:
 
 ### 💤 TIER 3 — Not in L3 navigation (skip)
 
-- [bit-manipulation.md](./algorithms/17-bit-manipulation.md) — on disk only; not linked in GitBook
-- [maths.md](./algorithms/17-maths.md) — on disk only; not linked in GitBook
+- MINDMAP.md — on disk only; not linked in GitBook
+- MINDMAP.md — on disk only; not linked in GitBook
 
 **Behavioral (required):** [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) · [`coding/behavioral-interview.md`](./behavioral-interview.md)
