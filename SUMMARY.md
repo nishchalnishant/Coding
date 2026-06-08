@@ -1,11 +1,12 @@
 # Summary — Google L3 (SWE)
 
-> L3 = 4–5 coding rounds (35–45 min each) + Googliness/behavioral. No system design, LLD, SQL, or concurrency.
+> L3 = 4–5 coding rounds (35–45 min each) + Googliness/behavioral. No system design, LLD, SQL, or concurrency. **Segment trees / Fenwick trees: skip for L3** → [What to Skip](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
 
 ## Start Here
 * [Overview](README.md)
 * [Navigation Hub](00-start-here/README.md)
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
+* [**What to Skip at L3**](00-L3-EXECUTION-META/04-l3-what-to-skip.md) *(segment trees, BIT, T3 topics)*
 * [Questions Tracker](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
 * [Mind Map](MINDMAP.md)
@@ -18,6 +19,7 @@
 * [Python Whiteboarding Cheatsheet](00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md)
 * [Master Decision Guide](00-L3-EXECUTION-META/DECISION_GUIDE.md)
 * [Decision Flowcharts (Markdown)](00-L3-EXECUTION-META/FLOWCHART_MEDIUM.md)
+* [What to Skip at L3](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
 
 ---
 
@@ -43,14 +45,14 @@
 * [Sliding Window](02-algorithms/04-sliding-window.md)
 * [Binary Search](02-algorithms/11-binary-search.md)
 * [Sorting (reference)](02-algorithms/00-sorting.md)
-* [Graph Algorithms](02-algorithms/13-graph.md)
 * [Union Find](02-algorithms/14-union-find.md)
 * [Greedy](02-algorithms/16-greedy.md)
 * [Backtracking](02-algorithms/12-backtracking.md)
-* [String Algorithms](02-algorithms/02-string.md)
 * [Dynamic Programming](02-algorithms/15-dynamic-programming.md)
 * [Recursion](02-algorithms/15-recursion.md)
 * [Recursion → DP Bridge](02-algorithms/15-recursion-to-dp.md)
+* [**Bit Manipulation** *(NEW)*](02-algorithms/17-bit-manipulation.md)
+* [**Math & Number Theory** *(NEW)*](02-algorithms/18-math-and-number-theory.md)
 * [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
 
 ---
@@ -89,6 +91,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 ## Patterns & Revision
 * [Patterns Index](03-patterns/README.md)
 * [Patterns Master](03-patterns/patterns-master.md)
+* [**Mock Interview Set (25 Problems)** *(NEW)*](03-patterns/MOCK_INTERVIEW_SET.md)
 * [Interview Cheatsheet](03-patterns/interview-cheatsheet.md)
 * [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
 * [Canonical Questions](03-patterns/canonical-questions.md)

@@ -143,7 +143,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Frequency map for anagrams; sliding window; KMP/Rabin-Karp at high level; palindrome (expand from center or DP).
 
-- Full notes: [string.md](../01-data-structures/02-string.md) (DS + windows); [string algorithms](../02-algorithms/02-string.md) (KMP, Rabin-Karp), [hashing.md](../01-data-structures/02-hashing.md)
+- Full notes: [string.md](../01-data-structures/02-string.md) (DS + windows); [string algorithms](../01-data-structures/02-string.md) (KMP, Rabin-Karp), [hashing.md](../01-data-structures/02-hashing.md)
 
 **Practice:** Group Anagrams, Valid Anagram, Longest Palindromic Substring, Minimum Window Substring, Find All Anagrams in a String.
 
@@ -203,7 +203,7 @@ For each topic, skim the linked file’s **Quick Revision** and **Interview Stra
 
 **Must know:** Adjacency list; BFS shortest path (unweighted); DFS for components/cycle; topological sort (Kahn / DFS); Dijkstra (non-negative weights); when to use Union-Find.
 
-- Full notes: [algorithms/graph.md](../02-algorithms/13-graph.md), [data-structures/graphs.md](../01-data-structures/13-graphs.md)  
+- Full notes: [algorithms/graph.md](../01-data-structures/13-graphs.md), [data-structures/graphs.md](../01-data-structures/13-graphs.md)  
 - Union-Find: [algorithms/union-find.md](../02-algorithms/14-union-find.md)
 
 **Practice:** Number of Islands, Course Schedule, Rotting Oranges, Clone Graph, Word Ladder (BFS), Network Delay Time (Dijkstra).
@@ -259,7 +259,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 | 1 | Arrays + hashing | Review [array](../01-data-structures/01-array.md) + [hashing](../01-data-structures/02-hashing.md); 4 problems |
 | 2 | Strings + two pointers | [string](../01-data-structures/02-string.md) + sliding window pattern; 4 problems |
 | 3 | Trees + BST | [tree](../01-data-structures/08-tree.md); 3 problems |
-| 4 | Graphs | [graph](../02-algorithms/13-graph.md); BFS/DFS/topo; 4 problems |
+| 4 | Graphs | [graph](../01-data-structures/13-graphs.md); BFS/DFS/topo; 4 problems |
 | 5 | DP | [15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md) + [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md); 4 problems |
 | 6 | Heap + binary search + stack | [heap](../01-data-structures/10-heap.md), [binary search](../02-algorithms/11-binary-search.md), [stack](../01-data-structures/05-stack.md); 4 problems |
 | 7 | Mixed mock | 2 timed problems (45 min each) + review mistakes |
@@ -302,7 +302,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 |------|------|
 | **One-page patterns** | [GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md) |
 | **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/01-array.md) |
-| **Graphs (compact)** | [algorithms/graph.md](../02-algorithms/13-graph.md) |
+| **Graphs (compact)** | [algorithms/graph.md](../01-data-structures/13-graphs.md) |
 | **Graphs (long examples)** | [data-structures/graphs.md](../01-data-structures/13-graphs.md) |
 | **DP** | [../02-algorithms/15-dynamic-programming.md](../02-algorithms/15-dynamic-programming.md) |
 | **Full topic index** | [01-data-structures](../01-data-structures/README.md), [02-algorithms](../02-algorithms/README.md) |

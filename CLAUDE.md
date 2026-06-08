@@ -28,6 +28,7 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 | Add a pattern trigger | `03-patterns/patterns-master.md` |
 | Add canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
 | Behavioral / googliness | `04-behavioral/BEHAVIORAL_GOOGLINESS.md` |
+| L3 scope (what to skip) | `00-L3-EXECUTION-META/04-l3-what-to-skip.md` |
 | Complexity cheatsheet | `coding/complexity-cheatsheet.md` |
 | Interview strategy | `coding/google-interview-strategy.md` |
 | GitBook navigation | `SUMMARY.md` |

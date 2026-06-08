@@ -416,7 +416,7 @@ class RandomizedSet:
 ## See also
 
 - [Array](01-array.md) — prefix sum + map for subarray problems
-- [String](../02-algorithms/02-string.md) — anagram key design; rolling hash (Rabin-Karp)
+- [String](../01-data-structures/02-string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](07-linked-list.md) — LRU cache DLL component
 - [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers
 

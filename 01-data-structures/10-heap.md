@@ -392,7 +392,7 @@ def ipo_maximize_capital(k: int, w: int, profits: list[int], capital: list[int])
 
 - [Sorting](../02-algorithms/00-sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
 - [Queue](06-queue.md) — priority queue vs FIFO; blocking queue for concurrency
-- [Graph](../02-algorithms/13-graph.md) — Dijkstra's algorithm uses a min-heap
+- [Graph](../01-data-structures/13-graphs.md) — Dijkstra's algorithm uses a min-heap
 - [Patterns Master](../03-patterns/patterns-master.md) — top-K and merge-K pattern triggers
 
 ## Flashcards

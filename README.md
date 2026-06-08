@@ -2,6 +2,8 @@
 
 Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium problem each, 35–45 minutes. Dense notes, curated must-solve lists, no 500-problem grind.
 
+> **Segment trees & Fenwick trees are not L3 material** — do not drill them. Use prefix sum, deque, or heap instead. Details: [What to Skip at L3](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+
 ---
 
 ## Start here
@@ -9,6 +11,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Step | Link |
 |------|------|
 | 1 | [`coding/l3-google-roadmap.md`](coding/l3-google-roadmap.md) — 4-week schedule |
+| — | [**What to Skip at L3**](00-L3-EXECUTION-META/04-l3-what-to-skip.md) — segment trees, BIT, T3 topics |
 | 2 | [`01-data-structures/README.md`](01-data-structures/README.md) — DS index + 27 must-solve |
 | 3 | [`02-algorithms/README.md`](02-algorithms/README.md) — algo index + 27 must-solve |
 | 4 | [`00-L3-EXECUTION-META/`](00-L3-EXECUTION-META/) — pacing, constraints, Python syntax |
@@ -23,7 +26,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 
 **Algorithms:** two pointers, sliding window, binary search, sorting (reference), graphs, union-find, greedy, backtracking, core DP, recursion
 
-**Not in scope for L3:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Floyd/Tarjan), bit manipulation deep-dives, bitmask/digit/interval DP
+**Not in scope for L3:** system design, LLD, concurrency, SQL, **segment trees / Fenwick trees**, advanced graphs (Floyd/Tarjan), bit manipulation deep-dives, bitmask/digit/interval DP — see [What to Skip at L3](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
 
 ---
 
@@ -35,6 +38,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Flowcharts | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
 | Pattern triggers | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
 | Track progress | [`questions.md`](questions.md) |
+| **What to skip (segment trees, etc.)** | [`00-L3-EXECUTION-META/04-l3-what-to-skip.md`](00-L3-EXECUTION-META/04-l3-what-to-skip.md) |
 | Interview strategy | [`coding/google-interview-strategy.md`](coding/google-interview-strategy.md) |
 | Complexity cheatsheet | [`coding/complexity-cheatsheet.md`](coding/complexity-cheatsheet.md) |
 

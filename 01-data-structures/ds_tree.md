@@ -151,7 +151,7 @@ Think of this as your "Map of the Hardware." When you're in an interview and the
 
 ## 6. Graphs
 
-→ [graphs.md](./13-graphs.md) · weighted algos: [graph.md](../02-algorithms/13-graph.md)
+→ [graphs.md](./13-graphs.md) · weighted algos: [graph.md](../01-data-structures/13-graphs.md)
 - **Representations** — Choosing between Adjacency Lists (Space-efficient) and Adjacency Matrices (Lookup-efficient).
     - *Patterns:* Adjacency List (Standard), Adjacency Matrix (Dense/Grid).
 - **Basic Traversal** — Foundation for exploring connectivity and node relationships.

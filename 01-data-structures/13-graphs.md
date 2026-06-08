@@ -338,7 +338,7 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 ---
 
 > [!TIP]
-> For weighted shortest path algorithms (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal's), see [Graph Algorithms](../02-algorithms/13-graph.md). This file covers graph **representation and traversal**; that file covers graph **algorithms on weighted edges**.
+> For weighted shortest path algorithms (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal's), see the advanced algorithms section below.
 
 ---
 
@@ -406,9 +406,283 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 - If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
 - If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.
 
+
+
+## Advanced Graph Algorithms
+
+### Dijkstra — Non-Negative Weighted Shortest Path
+
+> [!IMPORTANT]
+> **The Click Moment**: "**Shortest path with edge weights**" — AND — "all weights are **non-negative**". The lazy deletion guard (`if d > dist[u]: continue`) is mandatory — without it, stale heap entries cause incorrect updates and silent bugs.
+
+> [!TIP]
+> Dijkstra is like a GPS that always recalculates from your cheapest unvisited waypoint — always expand the node you can reach most cheaply, not the one you added first. The min-heap enforces this ordering. A "stale entry" arises when you find a cheaper path to a node after it was already pushed onto the heap; the guard `if d > dist[u]: continue` discards those old records rather than re-processing the node at a higher cost.
+
+```python
+import heapq
+
+def dijkstra(adj: dict, n: int, start: int) -> list[float]:
+    dist = [float('inf')] * n
+    dist[start] = 0
+    heap = [(0, start)]  # (distance, node)
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist[u]:
+            continue  # stale entry — lazy deletion
+        for v, weight in adj[u]:
+            if dist[u] + weight < dist[v]:
+                dist[v] = dist[u] + weight
+                heapq.heappush(heap, (dist[v], v))
+    return dist
+```
+
+#### Common Variants & Twists
+1. **Path With Maximum Probability**:
+   - **What (The Problem & Goal):** Find the path from start to end with the highest product of edge probabilities.
+   - **How (Intuition & Mental Model):** Probabilities are in `[0, 1]`, so their product decreases as the path length increases. This is equivalent to Dijkstra, but you want to **maximize** the product. Use a Max-Heap. Or, transform it into a shortest path problem by taking `-log(probability)` (which makes it additive and non-negative).
+2. **Smallest Number of Neighbors at a Threshold Distance**:
+   - **What (The Problem & Goal):** Find the city that has the smallest number of other cities reachable within a certain distance `threshold`.
+   - **How (Intuition & Mental Model):** Run Dijkstra from every single city (O(V * E log V)) to find all-pairs distances. Count how many cities are within the threshold for each source.
+
+> [!CAUTION]
+> Dijkstra **fails with negative weights** — a later-discovered shorter path via a negative edge can undercut an already-finalized node. Use Bellman-Ford for graphs with negative weights. Dijkstra with negative weights produces silently wrong results (not an error).
+
+---
+
+### Bellman-Ford — Negative Weights & Negative Cycle Detection
+
+> [!IMPORTANT]
+> **The Click Moment**: "Graph with **negative edge weights**" — OR — "detect a **negative cycle**" — OR — "find shortest path in directed graph where Dijkstra is disallowed". Relax all edges V-1 times; if a V-th relaxation still improves a distance, a negative cycle exists.
+
+```python
+def bellman_ford(edges: list[tuple[int,int,int]], n: int, start: int) -> tuple[list[float], bool]:
+    dist = [float('inf')] * n
+    dist[start] = 0
+    for _ in range(n - 1):
+        for u, v, w in edges:
+            if dist[u] != float('inf') and dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+    # Detect negative cycle: if any edge still relaxes, there's a negative cycle
+    has_negative_cycle = any(
+        dist[u] != float('inf') and dist[u] + w < dist[v]
+        for u, v, w in edges
+    )
+    return dist, has_negative_cycle
+```
+
+#### Common Variants & Twists
+1. **Cheapest Flights Within K Stops**:
+   - **What (The Problem & Goal):** Find the cheapest price from source to destination with at most `k` stops.
+   - **How (Intuition & Mental Model):** This is a bounded shortest path problem. Run Bellman-Ford for exactly `k+1` iterations. Each iteration `i` represents the minimum cost to reach nodes with at most `i-1` stops. Crucially, use a copy of the distance array to ensure you're only using distances from the *previous* iteration (to avoid using more than `k` edges in a single pass).
+
+---
+
+### Floyd-Warshall — All-Pairs Shortest Path
+
+> [!IMPORTANT]
+> **The Click Moment**: "Find the shortest path between **all pairs** of nodes" — OR — "graph has V ≤ 400". DP-based approach that iteratively allows nodes 0 to k to act as intermediate hops. O(V³) time, O(V²) space.
+
+```python
+def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float]]:
+    dist = [[float('inf')] * n for _ in range(n)]
+    for i in range(n):
+        dist[i][i] = 0
+    for u, v, w in edges:
+        dist[u][v] = min(dist[u][v], w)  # handle parallel edges
+        # dist[v][u] = min(dist[v][u], w) # uncomment if undirected
+
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if dist[i][k] != float('inf') and dist[k][j] != float('inf'):
+                    dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j])
+    return dist
+```
+
+#### Common Variants & Twists
+1. **Transitive Closure**:
+   - **What (The Problem & Goal):** For every pair of nodes `(u, v)`, determine if `v` is reachable from `u`.
+   - **How (Intuition & Mental Model):** Use a modified Floyd-Warshall where the update is `reachable[i][j] = reachable[i][j] or (reachable[i][k] and reachable[k][j])`. This is often more efficient than running V BFS/DFS calls if the graph is dense.
+
+> [!TIP]
+> **Negative cycle detection**: After running the algorithm, if `dist[i][i] < 0` for any `i`, the graph contains a negative cycle.
+
+---
+
+### Topological Sort — Kahn's Algorithm
+
+> [!IMPORTANT]
+> **The Click Moment**: "**Ordering with dependencies**" — OR — "**build order**" — OR — "**course schedule `⚡ T1`** (can all courses be taken?)" — OR — "detect cycle in directed graph". Kahn's: maintain in-degree; process zero-in-degree nodes; cycle exists if not all nodes are processed.
+
+```python
+def kahn_topo_sort(n: int, edges: list[tuple[int,int]]) -> list[int]:
+    adj = defaultdict(list)
+    in_degree = [0] * n
+    for u, v in edges:
+        adj[u].append(v)
+        in_degree[v] += 1
+    queue = deque(i for i in range(n) if in_degree[i] == 0)
+    order = []
+    while queue:
+        u = queue.popleft()
+        order.append(u)
+        for v in adj[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+    return order if len(order) == n else []  # [] = cycle detected
+```
+
+#### Common Variants & Twists
+1. **Alien Dictionary**:
+   - **What (The Problem & Goal):** Deriving character ordering from a sorted list of words in an alien language.
+   - **How (Intuition & Mental Model):** Compare adjacent words to find the first character mismatch (e.g., "word1[i]" vs "word2[i]"). This gives a directed edge `word1[i] -> word2[i]`. Build the graph of characters and run Kahn's algorithm. If the number of sorted characters is less than the number of unique characters, a cycle exists (invalid dictionary).
+
+---
+
+### 0-1 BFS — Binary-Weight Shortest Path
+
+> [!IMPORTANT]
+> **The Click Moment**: "Edges cost **0 or 1**" — OR — "some moves are free, others cost 1" — OR — "minimum cost path where each edge is cheap or expensive". Use a deque: 0-cost edges to front, 1-cost edges to back. O(V+E) — faster than Dijkstra's O(E log V).
+
+```python
+def zero_one_bfs(adj: dict, start: int, target: int) -> int:
+    dist = {start: 0}
+    dq = deque([start])
+    while dq:
+        u = dq.popleft()
+        for v, cost in adj[u]:
+            new_dist = dist[u] + cost
+            if new_dist < dist.get(v, float('inf')):
+                dist[v] = new_dist
+                if cost == 0:
+                    dq.appendleft(v)  # free move → front
+                else:
+                    dq.append(v)      # costly move → back
+    return dist.get(target, -1)
+```
+
+#### Common Variants & Twists
+1. **Minimum Cost to Make at Least One Valid Path in a Grid**:
+   - **What (The Problem & Goal):** You are given a grid where each cell has an arrow pointing to a neighbor. You can change the arrow's direction with cost 1. Find the min cost to reach bottom-right.
+   - **How (Intuition & Mental Model):** Edges to the neighbor pointed at by the arrow have cost 0. Edges to all other 3 neighbors have cost 1. Use 0-1 BFS with a deque.
+
+---
+
+### Minimum Spanning Tree — Kruskal's and Prim's
+
+> [!IMPORTANT]
+> **The Click Moment**: "**Minimum cost to connect** all nodes" — OR — "**minimum spanning tree `⚡ T1`**". Kruskal: sort edges, use DSU to greedily add cheapest non-cycle edge. Prim: from any node, greedily grow the MST by adding the cheapest edge from the frontier (min-heap).
+
+```python
+# Kruskal's (requires Union-Find / DSU)
+def kruskal_mst(n: int, edges: list[tuple[int,int,int]]) -> int:
+    edges.sort(key=lambda e: e[2])
+    parent = list(range(n))
+    rank = [0] * n
+
+    def find(x: int) -> int:
+        while parent[x] != x:
+            parent[x] = parent[parent[x]]  # path compression
+            x = parent[x]
+        return x
+
+    def union(x: int, y: int) -> bool:
+        rx, ry = find(x), find(y)
+        if rx == ry:
+            return False
+        if rank[rx] < rank[ry]:
+            rx, ry = ry, rx
+        parent[ry] = rx
+        if rank[rx] == rank[ry]:
+            rank[rx] += 1
+        return True
+
+    total_cost = 0
+    edges_used = 0
+    for u, v, w in edges:
+        if union(u, v):
+            total_cost += w
+            edges_used += 1
+            if edges_used == n - 1:
+                break
+    return total_cost if edges_used == n - 1 else -1  # -1 if graph is disconnected
+
+# Prim's (requires Min-Heap)
+def prim_mst(n: int, adj: dict) -> int:
+    import heapq
+    heap = [(0, 0)]  # (cost, node); start arbitrarily from node 0
+    visited = set()
+    total_cost = 0
+
+    while heap and len(visited) < n:
+        cost, u = heapq.heappop(heap)
+        if u in visited:
+            continue
+        visited.add(u)
+        total_cost += cost
+        for v, w in adj[u]:
+            if v not in visited:
+                heapq.heappush(heap, (w, v))
+                
+    return total_cost if len(visited) == n else -1
+```
+
+#### Common Variants & Twists
+1. **Min Cost to Connect All Points (Manhattan)**:
+   - **What (The Problem & Goal):** Connect all points in a 2D plane with minimum cost, where cost between points is Manhattan distance.
+   - **How (Intuition & Mental Model):** This is an MST problem on a complete graph (O(V^2) edges). Kruskal's would be O(V^2 log V). Prim's with a simple array (instead of a heap) is O(V^2), which is better for dense graphs.
+
+---
+
+## 3. Advanced Patterns
+
+> [!TIP]
+> **Grid problems**: Each cell is a node; 4-directional neighbors are edges. Don't construct an explicit adjacency list — use a `get_neighbors(r, c)` function inline. Multi-source BFS (all `0`s at once) solves "distance to nearest 0" and "walls and gates" in O(R×C).
+
+> [!TIP]
+> **Bidirectional BFS**: For problems with a known source and target (Word Ladder, 6-degrees of separation), expand from both ends simultaneously. Meet in the middle. Explored nodes shrink from O(b^d) to O(b^(d/2)) where b = branching factor. Google Maps uses bidirectional Dijkstra for shortest route queries.
+
+---
+
+## 4. L3 Deep Dives
+
+### Scalability: Distributed Shortest Path
+
+> [!TIP]
+> **Pregel (Google, 2010)**: Graph computation framework where each vertex computes its state and sends messages to neighbors. Dijkstra's becomes: each vertex maintains `dist`, sends `(dist + edge_weight)` to neighbors, updates if a better value arrives. Converges in O(diameter) supersteps. Handles trillion-edge graphs by partitioning across thousands of machines.
+>
+> **Delta-stepping**: A parallelizable variant of Dijkstra that processes a "bucket" of vertices with distance in `[d, d+Δ]` simultaneously, then advances to the next bucket. Implemented in Boost Graph Library and used in high-performance computing.
+
+### Scalability: Graph Streaming
+
+> [!TIP]
+> When the graph is too large to store (social network with 1 billion edges): use **streaming algorithms** that process each edge once and maintain O(polylog N) state. For connectivity: maintain a random spanning forest using sketches (union-find on the stream). For approximate shortest paths: maintain a distance oracle with O(N^(1+1/k)) space and O(k) query time.
+
+### Concurrency: Lock-Free Graph Traversal
+
+> [!TIP]
+> Concurrent BFS: divide the frontier into shards; each thread processes its shard in parallel. Synchronize on the next frontier with a concurrent queue or `ConcurrentLinkedQueue`. Challenge: avoiding duplicate processing — use a `ConcurrentHashMap` as the visited set with `putIfAbsent` as the atomic gate.
+
+### Trade-offs: Graph Algorithm Selection
+
+| Constraint | Algorithm | Why |
+| :--- | :--- | :--- |
+| Unweighted graph | BFS | O(V+E); no heap needed |
+| Non-negative weights | Dijkstra | O(E log V); greedy optimal |
+| Negative weights | Bellman-Ford | O(VE); relaxes all paths |
+| 0/1 weights | 0-1 BFS | O(V+E); deque vs heap |
+| All-pairs | Floyd-Warshall | O(V³); simple DP on adjacency matrix |
+| Dense graph (E ≈ V²) | Prim with array | O(V²) < O(E log V) for dense |
+| Sparse graph (E ≈ V) | Kruskal | O(E log E) = O(V log V) |
+
+---
+
+
+
 ## See also
 
-- [Graph (algorithms)](../02-algorithms/13-graph.md) — Dijkstra, Bellman-Ford, MST algorithms
+
 - [Union-Find](../02-algorithms/14-union-find.md) — DSU for Kruskal and connectivity
 - [Patterns Master](../03-patterns/patterns-master.md) — graph pattern recognition triggers
 
@@ -440,3 +714,24 @@ Nodes are categorized into three states:
 - **Black (2)**: Fully processed (DFS completed for this node and all its descendants).
 A cycle is detected if a neighbor is found in the **Gray** state during traversal.
 
+
+**"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).?** #flashcard
+"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).
+
+**"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).?** #flashcard
+"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).
+
+**"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).?** #flashcard
+"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).
+
+**"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).?** #flashcard
+"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).
+
+**"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.?** #flashcard
+"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.
+
+**"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).?** #flashcard
+"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).
+
+**"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.?** #flashcard
+"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.

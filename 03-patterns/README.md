@@ -102,7 +102,7 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | [`02-algorithms/11-binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
 | [`15-dynamic-programming.md`](../02-algorithms/15-dynamic-programming.md) | DP paradigms: 1D, 2D, grid, knapsack, LCS |
 | [`12-backtracking.md`](../02-algorithms/12-backtracking.md) | Backtracking template + pruning strategies |
-| [`13-graph.md`](../02-algorithms/13-graph.md) | BFS, DFS, topological sort, shortest path |
+| [`13-graph.md`](../01-data-structures/13-graphs.md) | BFS, DFS, topological sort, shortest path |
 | [`MINDMAP.md`](../MINDMAP.md) | T1/T2 problem index with one-line hints (`coding/`) |
 
 ---
@@ -118,9 +118,9 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | **Binary Search (Exact)** | "Find in sorted", "is X in the array" | `02-algorithms/11-binary-search.md` |
 | **Binary Search (Bounds)** | First/last occurrence, insertion point | `02-algorithms/11-binary-search.md` |
 | **Binary Search on Answer** | Minimize max, maximize min, "can we do X in Y" | `02-algorithms/11-binary-search.md` |
-| **BFS** | Shortest path (unweighted), level-order, connected components, multi-source flood | `02-algorithms/13-graph.md` |
-| **DFS** | Path existence, all paths, islands, cycle detection, backtracking | `02-algorithms/13-graph.md` |
-| **Topological Sort** | Dependencies, build order, alien dictionary | `02-algorithms/13-graph.md` |
+| **BFS** | Shortest path (unweighted), level-order, connected components, multi-source flood | `01-data-structures/13-graphs.md` |
+| **DFS** | Path existence, all paths, islands, cycle detection, backtracking | `01-data-structures/13-graphs.md` |
+| **Topological Sort** | Dependencies, build order, alien dictionary | `01-data-structures/13-graphs.md` |
 | **Dynamic Programming (1D)** | Linear recurrence — house robber, climb stairs, coin change | `02-algorithms/15-dynamic-programming.md` |
 | **Dynamic Programming (2D)** | Grid paths, edit distance, LCS, matrix chain | `02-algorithms/15-dynamic-programming.md` |
 | **Knapsack** | "Pick items with weight/value constraints" | `02-algorithms/15-dynamic-programming.md` |

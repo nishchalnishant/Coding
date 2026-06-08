@@ -57,7 +57,11 @@ Before your onsite, you should be able to say **yes** to all of these:
 
 ### Skip for L3
 
-Segment trees, Fenwick trees, consistent hashing, and skip lists are **not** in scope — ignore if you find old references elsewhere.
+**Segment trees and Fenwick trees (BIT) are not L3 material** — know the one-line idea; do not implement. Use prefix sum, monotonic deque, or heap instead.
+
+→ [What to Skip at L3 (full guide)](../00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+
+Also out of scope: consistent hashing, skip lists, Tarjan SCC, bitmask/digit DP. Ignore if you find old references elsewhere.
 
 ---
 

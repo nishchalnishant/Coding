@@ -157,7 +157,7 @@ Have 2 weeks?
         ├── Merge sort → inversion count side-effect `🎯 T2`
         └── Intervals → merge intervals · meeting rooms (with greedy) `🎯 T2`
 
-02-algorithms/13-graph.md
+01-data-structures/13-graphs.md
     └── Same graph patterns as 13-graphs.md (algorithm lens)
         BFS · DFS · topo · Dijkstra `⚡ T1`
 
@@ -175,7 +175,7 @@ Have 2 weeks?
     └── Choose → explore → unchoose
         Subsets · permutations · combination sum · generate parentheses · word search `🎯 T2`
 
-02-algorithms/02-string.md
+01-data-structures/02-string.md
     └── KMP / rolling hash (know when window fails) `🎯 T2`
 
 02-algorithms/15-recursion.md + 15-recursion-to-dp.md

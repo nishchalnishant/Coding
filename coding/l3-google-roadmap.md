@@ -88,7 +88,7 @@ def topo_sort(n, edges):
     return order if len(order) == n else []  # [] = cycle
 ```
 
-**Files:** [graph-algorithms.md](./algorithms/13-graph-algorithms.md) · [graphs.md](../01-data-structures/13-graphs.md) · [13-graph.md](../02-algorithms/13-graph.md)
+**Files:** [graph-algorithms.md](./algorithms/13-graph-algorithms.md) · [graphs.md](../01-data-structures/13-graphs.md) · [13-graph.md](../01-data-structures/13-graphs.md)
 
 ---
 
@@ -376,7 +376,7 @@ Know these cold:
 
 ---
 
-## TIER 3: Overkill / Lower Priority for L3 `💤 T3`
+## TIER 3: Overkill / Lower Priority for L3 `💤 T3` {#tier-3-skip}
 
 > [!warning] Do NOT Code These
 > These topics almost never appear in Google L3 interviews. Skimming a conceptual summary is enough. Redirect time to Tier 1.
@@ -483,7 +483,7 @@ Know these cold:
 - [array.md](./data-structures/01-array.md) — Two-pointer/window/prefix patterns
 - [hashing.md](./data-structures/02-hashing.md) — Hash map patterns
 - [graphs.md](../01-data-structures/13-graphs.md) — Graph deep dive
-- [13-graph.md](../02-algorithms/13-graph.md) — Dijkstra, topo, BFS variants
+- [13-graph.md](../01-data-structures/13-graphs.md) — Dijkstra, topo, BFS variants
 
 ### 🎯 TIER 2 — Study After Tier 1
 - [dynamic-programming.md](./algorithms/15-dynamic-programming.md)

@@ -8,10 +8,11 @@
 ## How to use this repo
 
 1. Read [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) for the full 4-week schedule.
-2. Use [`01-data-structures/README.md`](../01-data-structures/README.md) and [`02-algorithms/README.md`](../02-algorithms/README.md) as your study indexes.
-3. Solve problems from [`coding/`](../coding/) — one topic at a time, timed.
-4. Follow [`00-L3-EXECUTION-META/`](../00-L3-EXECUTION-META/) for interview pacing and communication.
-5. Prep 5–8 STAR stories in [`04-behavioral/`](../04-behavioral/).
+2. Read [**What to Skip at L3**](../00-L3-EXECUTION-META/04-l3-what-to-skip.md) — segment trees, BIT, and other T3 topics (**do not drill these**).
+3. Use [`01-data-structures/README.md`](../01-data-structures/README.md) and [`02-algorithms/README.md`](../02-algorithms/README.md) as your study indexes.
+4. Solve problems from [`coding/`](../coding/) — one topic at a time, timed.
+5. Follow [`00-L3-EXECUTION-META/`](../00-L3-EXECUTION-META/) for interview pacing and communication.
+6. Prep 5–8 STAR stories in [`04-behavioral/`](../04-behavioral/).
 
 ---
 
@@ -21,7 +22,9 @@
 |--------|------------|
 | Medium DSA (graphs, windows, heaps, BS on answer, tries, basic DP) | System design |
 | Clarify → optimize → code → dry-run → Big-O | LLD / OOP patterns |
-| Googliness / behavioral (often 1 round) | SQL, concurrency |
+| Googliness / behavioral (often 1 round) | SQL, concurrency, **segment trees / BIT** |
+
+→ Full skip list: [What to Skip at L3](../00-L3-EXECUTION-META/04-l3-what-to-skip.md)
 
 ---
 

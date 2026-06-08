@@ -420,7 +420,7 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 ## See also
 
 - [Queue](06-queue.md) — monotonic deque for sliding window max/min
-- [Graph](../02-algorithms/13-graph.md) — iterative DFS uses an explicit stack
+- [Graph](../01-data-structures/13-graphs.md) — iterative DFS uses an explicit stack
 - [Greedy](../02-algorithms/16-greedy.md) — some monotonic stack problems have greedy structure
 - [Patterns Master](../03-patterns/patterns-master.md) — monotonic stack pattern triggers
 
