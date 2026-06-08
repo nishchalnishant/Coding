@@ -114,7 +114,7 @@ WHY topic questions → WHAT they test → HOW to approach → WHEN each arises 
     └── Heap in Python: heapq is a min-heap; for max-heap negate values — always double check sign
 ```
 
-This guide lists **canonical interview questions** by topic, **why** they appear, the **core solution logic**, and **what makes them tricky** (gotchas, wrong turns, follow-ups). Use with the full topic files in [data-structures/](data-structures/README.md) and [algorithms/](algorithms/README.md).
+This guide lists **canonical interview questions** by topic, **why** they appear, the **core solution logic**, and **what makes them tricky** (gotchas, wrong turns, follow-ups). Use with the full topic files in [data-structures/](../01-data-structures/README.md) and [algorithms/](../02-algorithms/README.md).
 
 **Per-file detail:** Each file in `01-data-structures/` and `02-algorithms/` has an **Interview Questions — Logic & Trickiness** section with a table: **Question** | **Core logic** | **Trickiness & details** (follow-ups, edge cases, wrong answers, complexity notes). This document stays a **cross-topic index** with shorter rows; open the specific topic file for the **full** expanded table and the rest of the notes (concept, code, strategy, revision).
 

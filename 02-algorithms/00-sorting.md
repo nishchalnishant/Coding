@@ -521,7 +521,7 @@ For distributed sort (MapReduce model):
 - Divide and Conquer — merge sort and quicksort derivation
 - [Heap](../01-data-structures/10-heap.md) — heap sort and top-K streaming
 - [Two Pointers](03-two-pointers.md) — Dutch National Flag, Meeting Rooms II
-- [Patterns Master](../../03-patterns/patterns-master.md) — sorting-based pattern triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — sorting-based pattern triggers
 
 ## Flashcards
 

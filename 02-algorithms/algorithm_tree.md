@@ -126,7 +126,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 3. Strings & Pattern Matching
 
-→ [string.md](./02-string.md) · [sliding-window.md](./04-sliding-window.md) · [trie.md](../01-data-structures/09-trie.md)
+→ [string.md](../01-data-structures/03-string.md) · [sliding-window.md](./04-sliding-window.md) · [trie.md](../01-data-structures/09-trie.md)
 - **KMP (LPS Table)** — Pattern matching using a failure function to skip unnecessary comparisons in O(N+M).
     - *Variants:* strStr(), Shortest Palindrome (LPS of `s + # + rev(s)`), Repeated Substring Pattern.
 - **Rabin-Karp (Rolling Hash)** — Hash-based matching; constant time window updates enable efficient multi-pattern search.
@@ -155,7 +155,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 4b. Graph Traversal & Shortest Path
 
-→ [graph.md](./13-graph.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion.md](./15-recursion.md)
+→ [graph.md](../01-data-structures/13-graphs.md) · [graphs.md](../01-data-structures/13-graphs.md) · [recursion.md](./09-recursion.md)
 
 - **Breadth-First Search (BFS)** — Shortest path on unweighted graphs. Explore level-by-level. Mark nodes visited *before* enqueueing to prevent exponential blow-up.
     - *Variants:* Word Ladder, Shortest Path in Binary Matrix, Rotting Oranges (Multi-source BFS).
@@ -168,7 +168,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 5. Dynamic Programming
 
-→ [dynamic-programming.md](./15-dynamic-programming.md) · [recursion-to-dp.md](./15-recursion-to-dp.md)
+→ [dynamic-programming.md](./15-dynamic-programming.md) · [recursion-to-dp.md](./10-recursion-to-dp.md)
 - **Linear DP (1D)** — Optimization over a sequence where the current state depends on a fixed number of previous states.
     - *Variants:* Fibonacci, House Robber, Decode Ways, Min Cost For Tickets.
 - **Knapsack Family** — Optimization problems involving item selection under capacity or budget constraints.
@@ -189,7 +189,7 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 
 ## 6. Recursion & Backtracking
 
-→ [recursion.md](./15-recursion.md) · [backtracking.md](./12-backtracking.md)
+→ [recursion.md](./09-recursion.md) · [backtracking.md](./12-backtracking.md)
 - **Structural Recursion** — Processing data structures by delegating work to their self-similar sub-parts (trees, lists).
     - *Variants:* Lowest Common Ancestor (LCA), Flatten Binary Tree to Linked List.
 - **Memoized Recursion (Top-Down)** — Recursion with a cache to solve overlapping subproblems efficiently.

@@ -6,7 +6,7 @@
 > `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
 
 
-**Companion files:** [recursion.md](./15-recursion.md) (write the recurrence) · [dynamic-programming.md](./15-dynamic-programming.md) (pattern catalog + bugs)
+**Companion files:** [recursion.md](./09-recursion.md) (write the recurrence) · [dynamic-programming.md](./15-dynamic-programming.md) (pattern catalog + bugs)
 
 Use this file when you can write recursion but suspect repeated subproblems. The interview workflow:
 

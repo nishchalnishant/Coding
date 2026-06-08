@@ -399,9 +399,9 @@ class RollbackDSU:
 
 ## See also
 
-- [Graph Algorithms](13-graph.md) — Kruskal; when DSU vs BFS/DFS for connectivity
+- [Graph Algorithms](../01-data-structures/13-graphs.md) — Kruskal; when DSU vs BFS/DFS for connectivity
 - [Sorting](00-sorting.md) — edge sorting for Kruskal
-- [Patterns Master](../../03-patterns/patterns-master.md) — DSU pattern recognition triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — DSU pattern recognition triggers
 
 ## Flashcards
 

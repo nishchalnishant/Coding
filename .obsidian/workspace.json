@@ -178,6 +178,9 @@
   },
   "active": "55abc373778b0e74",
   "lastOpenFiles": [
+    "02-algorithms/10-recursion-to-dp.md",
+    "02-algorithms/09-recursion.md",
+    "01-data-structures/03-string.md",
     "03-patterns/MOCK_INTERVIEW_SET.md",
     "02-algorithms/18-math-and-number-theory.md",
     "02-algorithms/17-bit-manipulation.md",
@@ -210,9 +213,6 @@
     "coding/algorithms/15-dynamic-programming.md",
     "coding/algorithms/04-sliding-window.md",
     "coding/algorithms/11-binary-search.md",
-    "coding/algorithms/18-divide-and-conquer.md",
-    "coding/algorithms/15-recursion.md",
-    "coding/algorithms/17-bit-manipulation.md",
-    "coding/algorithms/17-maths.md"
+    "coding/algorithms/18-divide-and-conquer.md"
   ]
 }

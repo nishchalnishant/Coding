@@ -303,7 +303,7 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 | **Decode String** | Stack | Push context on `` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
 | **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
 
-More walkthroughs: [problem-deep-dives.md. String **algorithms** (KMP, Rabin-Karp detail): [string.md](../01-data-structures/02-string.md) in `02-algorithms/`.
+More walkthroughs: [problem-deep-dives.md. String **algorithms** (KMP, Rabin-Karp detail): [string.md](../01-data-structures/03-string.md) in `02-algorithms/`.
 
 ---
 
@@ -797,7 +797,7 @@ class Trie:
 - [hashing.md](./02-hashing.md) — frequency maps, group-by-key
 - [trie.md](./09-trie.md) — prefix dictionary, word search II
 - [stack.md](./05-stack.md) — decode string, parenthesis parsing
-- [02-algorithms/string.md](../01-data-structures/02-string.md) — KMP, Rabin-Karp, Z-function
+- [02-algorithms/string.md](../01-data-structures/03-string.md) — KMP, Rabin-Karp, Z-function
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — string pattern triggers
 
 ---

@@ -292,7 +292,7 @@ class Trie:
 
 **Skip for L3:** Bitmask DP, Digit DP, Interval DP (Burst Balloons), Tree DP (complex variants)
 
-**Files:** [dynamic-programming.md](./algorithms/15-dynamic-programming.md) · [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md)
+**Files:** [dynamic-programming.md](./algorithms/15-dynamic-programming.md) · [recursion-to-dp.md](../02-algorithms/10-recursion-to-dp.md)
 
 ---
 
@@ -489,7 +489,7 @@ Know these cold:
 - [dynamic-programming.md](./algorithms/15-dynamic-programming.md)
 - [backtracking.md](./algorithms/12-backtracking.md)
 - [tree.md](./data-structures/08-tree.md)
-- [recursion-to-dp.md](../02-algorithms/15-recursion-to-dp.md)
+- [recursion-to-dp.md](../02-algorithms/10-recursion-to-dp.md)
 - [linked-list.md](./data-structures/07-linked-list.md)
 - [stack.md](./data-structures/05-stack.md)
 - [greedy.md](./algorithms/16-greedy.md)

@@ -358,7 +358,7 @@ def max_sliding_window(nums, k):
 | **Permutation in String `⚡ T1`** | Fixed | Same as anagram | `have == need` when all chars satisfied | Clarify if permutation must be contiguous (yes). |
 | **Subarrays with K Distinct** | At-most trick | `exactly(K) = atMost(K) - atMost(K-1)` | Two passes with helper | "Exactly K" is not monotonic — never use one sliding window for exactly. |
 
-Walkthroughs: problem-deep-dives.md. String windows: [string.md](../01-data-structures/02-string.md).
+Walkthroughs: problem-deep-dives.md. String windows: [string.md](../01-data-structures/03-string.md).
 
 ---
 
@@ -375,8 +375,8 @@ Walkthroughs: problem-deep-dives.md. String windows: [string.md](../01-data-stru
 ## See also
 
 - [two-pointers.md](./03-two-pointers.md) — opposite-end scans; often combined with windows on strings
-- [string.md](./02-string.md) — KMP, Rabin-Karp (pattern matching, not window)
-- [01-data-structures/string.md](../01-data-structures/02-string.md) — anagram / window canonical problems
+- [string.md](../01-data-structures/03-string.md) — KMP, Rabin-Karp (pattern matching, not window)
+- [01-data-structures/string.md](../01-data-structures/03-string.md) — anagram / window canonical problems
 - [01-data-structures/array.md](../01-data-structures/01-array.md) — prefix sum when window fails
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — sliding window triggers
 

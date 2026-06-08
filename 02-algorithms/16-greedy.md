@@ -498,7 +498,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ## See also
 
-- [Patterns Master](../../03-patterns/patterns-master.md) — greedy pattern triggers
+- [Patterns Master](../03-patterns/patterns-master.md) — greedy pattern triggers
 
 ---
 

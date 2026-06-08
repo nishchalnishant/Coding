@@ -92,7 +92,7 @@ Have 2 weeks?
         ├── Complement → two sum (unsorted) `⚡ T1`
         └── Grouping → group anagrams `⚡ T1`
 
-01-data-structures/02-string.md
+01-data-structures/03-string.md
     ├── Frequency Map → valid anagram · group anagrams `⚡ T1`
     ├── Sliding Window → longest substring without repeat · min window substring `⚡ T1`
     └── Stack / parsing → valid parentheses · decode string `🎯 T2`
@@ -175,10 +175,10 @@ Have 2 weeks?
     └── Choose → explore → unchoose
         Subsets · permutations · combination sum · generate parentheses · word search `🎯 T2`
 
-01-data-structures/02-string.md
+01-data-structures/03-string.md
     └── KMP / rolling hash (know when window fails) `🎯 T2`
 
-02-algorithms/15-recursion.md + 15-recursion-to-dp.md
+02-algorithms/09-recursion.md + 15-recursion-to-dp.md
     └── Recursion → memo → tabulation bridge `🎯 T2`
 ```
 
@@ -212,7 +212,7 @@ Have 2 weeks?
 ## 02 — Recursion (L3 core)
 
 ```
-02-algorithms/15-recursion.md
+02-algorithms/09-recursion.md
     │
     ├── BASE CASE CHECKLIST
     │   ├── Empty input (n==0, node==None, i==len(s))

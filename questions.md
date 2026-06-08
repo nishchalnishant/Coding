@@ -190,7 +190,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 - [ ] [Longest Palindromic Substring `⚡ T1`](coding/data-structures/02-string.md#longest-palindromic-substring) — Given string `s`, return the longest substring that is a palindrome [M]
 - [ ] [Group Anagrams `🎯 T2`](coding/data-structures/02-string.md#group-anagrams) — Group strings that are anagrams of each other [M]
-- [ ] [Valid Parenthesis String `🎯 T2`](01-data-structures/02-string.md#valid-parenthesis-string) — Solve the standard interview variant of Valid Parenthesis String. [M]
+- [ ] [Valid Parenthesis String `🎯 T2`](01-data-structures/03-string.md#valid-parenthesis-string) — Solve the standard interview variant of Valid Parenthesis String. [M]
 - [ ] [Edit Distance `🎯 T2`](coding/algorithms/15-dynamic-programming.md#edit-distance) — Minimum insert/delete/replace operations to convert `word1` to `word2` [H]
 - [ ] [Valid Palindrome `🎯 T2`](coding/data-structures/02-string.md#valid-palindrome) — Given string `s`, return true if it is a palindrome considering only alphanumeric characters and ignoring case [E]
 - [ ] [Longest Repeating Character Replacement `🎯 T2`](coding/data-structures/01-array.md#longest-repeating-character-replacement) — Given string `s` and integer `k`, find the length of the longest substring where you can replace at most `k` characters to make all characters in the window the same [M]
