@@ -193,32 +193,581 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
 
 ## Canonical Interview Problems
 
-| Problem | Tier | Core Trick | Key Insight |
-|:--------|:-----|:-----------|:------------|
-| **Single Number `⚡ T1`** | Easy | XOR cancellation | `a^a=0`, `a^0=a`; XOR all → lone number |
-| **Number of 1 Bits `⚡ T1`** | Easy | Brian Kernighan | `n &= n-1` clears LSB; count iterations |
-| **Counting Bits `⚡ T1`** | Easy | DP on bits | `dp[i] = dp[i >> 1] + (i & 1)` |
-| **Reverse Bits `🎯 T2`** | Easy | Bit shifting | Extract LSB, build reversed 32-bit int |
-| **Missing Number `⚡ T1`** | Easy | XOR or Gauss sum | XOR 0..n with all nums; or `n(n+1)/2 - sum` |
-| **Power of Two `⚡ T1`** | Easy | `n & (n-1) == 0` | Power of 2 → exactly one set bit |
-| **Sum of Two Integers `🎯 T2`** | Medium | XOR + carry | XOR = addition without carry; AND<<1 = carry |
-| **Reverse Integer `🎯 T2`** | Medium | Modular arithmetic | Check overflow before each digit |
-| **Single Number III `🎯 T2`** | Medium | XOR + LSB partition | XOR all → `a^b`; use LSB to separate |
-| **Bitwise AND of Numbers Range `🎯 T2`** | Medium | Common prefix | AND of range = common bit prefix |
-| **Maximum XOR of Two Numbers `💤 T3`** | Hard | Trie on bits | Build bit-trie; greedy pick opposite bit |
+| Problem | Diff | Tier | Core Trick | Key Insight |
+|:--------|:-----|:-----|:-----------|:------------|
+| Single Number | Easy | `⚡ T1` | XOR cancellation | `a^a=0`; XOR all → lone number |
+| Number of 1 Bits | Easy | `⚡ T1` | Brian Kernighan | `n &= n-1` clears LSB; count iterations |
+| Counting Bits | Easy | `⚡ T1` | DP on bits | `dp[i] = dp[i >> 1] + (i & 1)` |
+| Missing Number | Easy | `⚡ T1` | XOR or Gauss sum | XOR `0..n` with values; or `n(n+1)/2 - sum` |
+| Power of Two | Easy | `⚡ T1` | `n & (n-1) == 0` | Exactly one set bit |
+| Reverse Bits | Easy | `🎯 T2` | Bit shifting | Build reversed 32-bit int LSB-first |
+| Sum of Two Integers | Medium | `🎯 T2` | XOR + carry | XOR = sum without carry; `&<<1` = carry |
+| Single Number II | Medium | `🎯 T2` | Bit count mod 3 | Per-bit sum mod 3 across all numbers |
+| Single Number III | Medium | `🎯 T2` | XOR + LSB partition | XOR all → `a^b`; split by any set bit |
+| Bitwise AND of Numbers Range | Medium | `🎯 T2` | Common prefix | Strip trailing bits until `m == n` |
+| Reverse Integer | Medium | `🎯 T2` | Modular arithmetic | Check 32-bit overflow before append digit |
+| Maximum XOR of Two Numbers | Hard | `💤 T3` | Bit trie | Greedy opposite bit at each level |
 
 ---
 
-## Interview Questions — Logic & Trickiness
+## Interview Questions — Deep Dive
 
-| Question | Click Moment | Core Logic | Gotchas |
-|:---------|:-------------|:-----------|:--------|
-| **Single Number `⚡ T1`** | "All duplicates cancel via XOR" | XOR all numbers; pairs become 0 | Python handles arbitrary-size ints — no overflow |
-| **Counting Bits `⚡ T1`** | "Use previously computed answer" | `dp[i] = dp[i>>1] + (i&1)` | Both O(N) and O(N log N) bit-count loop are accepted |
-| **Missing Number `⚡ T1`** | "XOR 0..n with array → unpaired index survives" | `res = n; for i,v: res ^= i^v` | Can also do `n*(n+1)//2 - sum(nums)` — simpler but needs overflow check |
-| **Power of Two `⚡ T1`** | "`n & (n-1)` clears one bit; power of 2 has exactly one" | `n > 0 and (n & (n-1)) == 0` | n=0 edge case: must check `n > 0` |
-| **Number of 1 Bits `⚡ T1`** | "Brian Kernighan: each `n & n-1` removes one set bit" | Loop while `n`; `n &= n-1`; count | Python's `bin(n).count('1')` works but know the algorithm |
-| **Bitwise AND of Range `🎯 T2`** | "Common prefix of all numbers in range" | Right-shift both m and n until equal; shift back | The number of shifts = how many trailing bits diverge |
+### Single Number `⚡ T1`
+
+> [!example] Problem
+> Given an integer array `nums` where every element appears **twice** except for one element which appears **once**, find and return that single element.
+> You must implement a solution with **linear runtime** and use only **constant extra space**.
+>
+> **Example 1:**
+> ```
+> Input: nums = [2,2,1]
+> Output: 1
+> ```
+>
+> **Example 2:**
+> ```
+> Input: nums = [4,1,2,1,2]
+> Output: 4
+> ```
+>
+> **Constraints:**
+> - `1 <= nums.length <= 3 * 10^4`
+> - `-3 * 10^4 <= nums[i] <= 3 * 10^4`
+> - Each element appears twice except for one element that appears once.
+
+> [!info] Approach
+> XOR is associative and commutative. Duplicates cancel: `x ^ x = 0`. XOR-ing every element leaves the unique number. One pass, O(1) extra space.
+
+> [!note]- Python Solution
+> ```python
+> def single_number(nums: list[int]) -> int:
+>     result = 0
+>     for n in nums:
+>         result ^= n
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Gotchas
+> - Works for negative numbers — XOR sign follows two's complement rules.
+> - Do not sort + scan — that is O(n log n) and wastes the bit trick.
+
+---
+
+### Single Number II `🎯 T2`
+
+> [!example] Problem
+> Given an integer array `nums` where every element appears **three times** except for one element which appears **once**, find the single element.
+> Your algorithm should have **linear runtime** and use only **constant extra space**.
+>
+> **Example:**
+> ```
+> Input: nums = [2,2,3,2]
+> Output: 3
+> ```
+>
+> **Constraints:**
+> - `1 <= nums.length <= 3 * 10^4`
+> - `-2^31 <= nums[i] <= 2^31 - 1`
+> - Each element appears three times except for one.
+
+> [!info] Approach
+> Count each bit position across all numbers. If a bit appears `3k+1` times total, it belongs to the single number. Maintain `ones` and `twos` bitmasks (state machine) or use an array of 32 counters mod 3.
+
+> [!note]- Python Solution
+> ```python
+> def single_number_ii(nums: list[int]) -> int:
+>     ones = twos = 0
+>     for n in nums:
+>         ones = (ones ^ n) & ~twos
+>         twos = (twos ^ n) & ~ones
+>     return ones
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Gotchas
+> - XOR-all alone fails — triples do not cancel to zero.
+> - Alternative: `sum(bits[i] for n in nums for i in range(32)) % 3` per bit — clearer but slower constant factor.
+
+---
+
+### Single Number III `🎯 T2`
+
+> [!example] Problem
+> Given an integer array `nums` in which **exactly two** elements appear once and all other elements appear **twice**, return the two single elements in **any order**.
+>
+> **Example:**
+> ```
+> Input: nums = [1,2,1,3,2,5]
+> Output: [3,5]
+> ```
+>
+> **Constraints:**
+> - `2 <= nums.length <= 3 * 10^4`
+> - `-2^31 <= nums[i] <= 2^31 - 1`
+> - Each integer appears exactly once or twice.
+
+> [!info] Approach
+> XOR all numbers → `xor = a ^ b` (the two singles). Any set bit in `xor` differs between `a` and `b`. Use `bit = xor & (-xor)` (lowest set bit) to partition nums into two groups; XOR each group separately.
+
+> [!note]- Python Solution
+> ```python
+> def single_number_iii(nums: list[int]) -> list[int]:
+>     xor_all = 0
+>     for n in nums:
+>         xor_all ^= n
+>     bit = xor_all & (-xor_all)
+>     a = 0
+>     for n in nums:
+>         if n & bit:
+>             a ^= n
+>     return [a, xor_all ^ a]
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Gotchas
+> - `xor_all` is zero only if the two singles are equal — impossible under problem constraints.
+> - Any set bit works for partitioning; LSB is the usual choice.
+
+---
+
+### Number of 1 Bits (Hamming Weight) `⚡ T1`
+
+> [!example] Problem
+> Write a function that takes the unsigned integer `n` and returns the number of `'1'` bits in its binary representation (also known as the **Hamming weight**).
+>
+> **Example 1:**
+> ```
+> Input: n = 11   (binary 1011)
+> Output: 3
+> ```
+>
+> **Example 2:**
+> ```
+> Input: n = 128  (binary 10000000)
+> Output: 1
+> ```
+>
+> **Constraints:**
+> - The input must be a **unsigned** 32-bit integer.
+
+> [!info] Approach
+> **Brian Kernighan:** `n & (n-1)` clears the lowest set bit. Loop until `n == 0`, incrementing count each iteration. Exactly `popcount(n)` iterations.
+
+> [!note]- Python Solution
+> ```python
+> def hamming_weight(n: int) -> int:
+>     count = 0
+>     while n:
+>         n &= n - 1
+>         count += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(k) where k = number of set bits; Space O(1).
+
+> [!tip] Gotchas
+> - Python: `bin(n).count('1')` is acceptable in interviews if you also know Brian Kernighan.
+> - For signed negative `n`, mask to 32 bits: `n &= 0xFFFFFFFF`.
+
+---
+
+### Counting Bits `⚡ T1`
+
+> [!example] Problem
+> Given an integer `n`, return an array `ans` of length `n + 1` where `ans[i]` is the number of `'1'` bits in the binary representation of `i`.
+>
+> **Example:**
+> ```
+> Input: n = 5
+> Output: [0,1,1,2,1,2]
+> Explanation:
+> 0 → 0
+> 1 → 1
+> 2 → 10
+> 3 → 11
+> 4 → 100
+> 5 → 101
+> ```
+>
+> **Constraints:**
+> - `0 <= n <= 10^5`
+
+> [!info] Approach
+> **DP recurrence:** dropping the last bit (`i >> 1`) removes exactly one bit if `i` is odd.
+> `dp[i] = dp[i >> 1] + (i & 1)`. O(n) single pass.
+
+> [!note]- Python Solution
+> ```python
+> def count_bits(n: int) -> list[int]:
+>     dp = [0] * (n + 1)
+>     for i in range(1, n + 1):
+>         dp[i] = dp[i >> 1] + (i & 1)
+>     return dp
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n) for output.
+
+> [!tip] Gotchas
+> - Naive `bin(i).count('1')` per i is O(n log n) — too slow for n = 10^5.
+> - `dp[i] = dp[i & (i-1)] + 1` also works (Brian Kernighan on predecessor).
+
+---
+
+### Missing Number `⚡ T1`
+
+> [!example] Problem
+> Given an array `nums` containing `n` distinct numbers in the range `[0, n]`, return the only number in the range that is **missing** from the array.
+>
+> **Example 1:**
+> ```
+> Input: nums = [3,0,1]
+> Output: 2
+> ```
+>
+> **Example 2:**
+> ```
+> Input: nums = [0,1]
+> Output: 2
+> ```
+>
+> **Constraints:**
+> - `n == nums.length`
+> - `1 <= n <= 10^4`
+> - `0 <= nums[i] <= n`
+> - All numbers are unique.
+
+> [!info] Approach
+> **XOR:** XOR all indices `0..n` with all values. Paired `(index, value)` for present numbers cancel; missing index/value survives.
+> **Alternative:** Gauss sum `n*(n+1)//2 - sum(nums)`.
+
+> [!note]- Python Solution
+> ```python
+> def missing_number(nums: list[int]) -> int:
+>     result = len(nums)
+>     for i, v in enumerate(nums):
+>         result ^= i ^ v
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Gotchas
+> - Gauss formula is simpler to explain but mention overflow on other languages (Python handles big ints).
+> - Sort and scan is O(n log n) — unnecessary.
+
+---
+
+### Power of Two `⚡ T1`
+
+> [!example] Problem
+> Given an integer `n`, return `true` if it is a **power of two**. Otherwise, return `false`.
+> An integer `n` is a power of two if there exists an integer `x` such that `n == 2^x`.
+>
+> **Example 1:**
+> ```
+> Input: n = 1
+> Output: true   (2^0)
+> ```
+>
+> **Example 2:**
+> ```
+> Input: n = 16
+> Output: true
+> ```
+>
+> **Example 3:**
+> ```
+> Input: n = 3
+> Output: false
+> ```
+>
+> **Constraints:**
+> - `-2^31 <= n <= 2^31 - 1`
+
+> [!info] Approach
+> Powers of two have exactly one set bit. `n & (n-1)` clears the lowest set bit; result is 0 iff `n` had only one bit. Require `n > 0` (0 and negatives fail).
+
+> [!note]- Python Solution
+> ```python
+> def is_power_of_two(n: int) -> bool:
+>     return n > 0 and (n & (n - 1)) == 0
+> ```
+
+> [!success] Complexity
+> Time O(1), Space O(1).
+
+> [!tip] Gotchas
+> - `n = 0` → false (not a power of two).
+> - `n = 1` → true (`2^0`).
+
+---
+
+### Reverse Bits `🎯 T2`
+
+> [!example] Problem
+> Reverse bits of a given **32-bit unsigned** integer `n` and return the result.
+>
+> **Example:**
+> ```
+> Input: n = 43261596  (00000010100101000001111010011100)
+> Output: 964176192   (00111001011110000010100101000000)
+> ```
+>
+> **Constraints:**
+> - The input must be a **unsigned** 32-bit integer.
+
+> [!info] Approach
+> Extract LSB of `n` with `n & 1`, append to `result` via `(result << 1) | bit`, then shift `n` right. Repeat 32 times.
+
+> [!note]- Python Solution
+> ```python
+> def reverse_bits(n: int) -> int:
+>     result = 0
+>     for _ in range(32):
+>         result = (result << 1) | (n & 1)
+>         n >>= 1
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(32) = O(1), Space O(1).
+
+> [!tip] Gotchas
+> - Must process exactly 32 bits even if leading bits are zero.
+> - Python ints are unbounded — problem expects 32-bit wrap semantics.
+
+---
+
+### Sum of Two Integers `🎯 T2`
+
+> [!example] Problem
+> Given two integers `a` and `b`, return the **sum** of the two integers **without using** the operators `+` and `-`.
+>
+> **Example 1:**
+> ```
+> Input: a = 1, b = 2
+> Output: 3
+> ```
+>
+> **Example 2:**
+> ```
+> Input: a = 2, b = 3
+> Output: 5
+> ```
+>
+> **Constraints:**
+> - `-1000 <= a, b <= 1000`
+
+> [!info] Approach
+> Binary addition: **sum without carry** = `a ^ b`; **carry** = `(a & b) << 1`. Repeat until carry is 0. Mask to 32 bits in languages with fixed width; handle sign extension in Python.
+
+> [!note]- Python Solution
+> ```python
+> def get_sum(a: int, b: int) -> int:
+>     mask = 0xFFFFFFFF
+>     while b & mask:
+>         carry = (a & b) << 1
+>         a = (a ^ b) & mask
+>         b = carry & mask
+>     if b > mask // 2:
+>         return ~(a ^ mask)
+>     return a
+> ```
+
+> [!success] Complexity
+> Time O(32) per carry propagation in worst case, Space O(1).
+
+> [!tip] Gotchas
+> - Python arbitrary precision — mask each iteration or result may grow unbounded.
+> - Interviewers often accept `while b: a, b = a ^ b, (a & b) << 1` with a verbal 32-bit note.
+
+---
+
+### Bitwise AND of Numbers Range `🎯 T2`
+
+> [!example] Problem
+> Given two integers `left` and `right` that represent the range `[left, right]` inclusive, return the **bitwise AND** of all numbers in this range, inclusive.
+>
+> **Example 1:**
+> ```
+> Input: left = 5, right = 7
+> Output: 4
+> Explanation: 5 & 6 & 7 = 4
+> ```
+>
+> **Example 2:**
+> ```
+> Input: left = 0, right = 0
+> Output: 0
+> ```
+>
+> **Constraints:**
+> - `0 <= left <= right <= 2^31 - 1`
+
+> [!info] Approach
+> AND of a range equals the **common binary prefix** of `left` and `right`. While `left < right`, shift both right (strip divergent trailing bits). Shift accumulated prefix back left by the same count.
+
+> [!note]- Python Solution
+> ```python
+> def range_bitwise_and(left: int, right: int) -> int:
+>     shift = 0
+>     while left < right:
+>         left >>= 1
+>         right >>= 1
+>         shift += 1
+>     return left << shift
+> ```
+
+> [!success] Complexity
+> Time O(log n), Space O(1).
+
+> [!tip] Gotchas
+> - Brute force AND loop TLEs when `right - left` is huge.
+> - Intuition: once range spans a bit flip, that bit is 0 in the answer.
+
+---
+
+### Reverse Integer `🎯 T2`
+
+> [!example] Problem
+> Given a signed 32-bit integer `x`, return `x` with its digits **reversed**. If reversing causes the value to go outside the signed 32-bit range `[-2^31, 2^31 - 1]`, return **0**.
+> Assume the environment does not allow 64-bit integers.
+>
+> **Example 1:**
+> ```
+> Input: x = 123
+> Output: 321
+> ```
+>
+> **Example 2:**
+> ```
+> Input: x = -123
+> Output: -321
+> ```
+>
+> **Example 3:**
+> ```
+> Input: x = 120
+> Output: 21
+> ```
+>
+> **Constraints:**
+> - `-2^31 <= x <= 2^31 - 1`
+
+> [!info] Approach
+> Pop last digit: `digit = x % 10` (handle sign). Check overflow **before** `result = result * 10 + digit`. Bounds: `result > INT_MAX // 10` or `(result == INT_MAX // 10 and digit > 7)`.
+
+> [!note]- Python Solution
+> ```python
+> def reverse(x: int) -> int:
+>     INT_MAX, INT_MIN = 2**31 - 1, -2**31
+>     sign = -1 if x < 0 else 1
+>     x = abs(x)
+>     result = 0
+>     while x:
+>         digit = x % 10
+>         x //= 10
+>         if result > INT_MAX // 10 or (result == INT_MAX // 10 and digit > 7):
+>             return 0
+>         result = result * 10 + digit
+>     return sign * result
+> ```
+
+> [!success] Complexity
+> Time O(log x), Space O(1).
+
+> [!tip] Gotchas
+> - Trailing zeros in input → reversed number has fewer digits (e.g. 120 → 21).
+> - Classic overflow check is the main interview signal — not strictly bit manipulation but grouped here often.
+
+---
+
+### Maximum XOR of Two Numbers in an Array `💤 T3`
+
+> [!example] Problem
+> Given an integer array `nums`, return the **maximum result** of `nums[i] XOR nums[j]` where `0 <= i <= j < n`.
+>
+> **Example:**
+> ```
+> Input: nums = [3,10,5,25,2,8]
+> Output: 28
+> Explanation: 5 XOR 25 = 28
+> ```
+>
+> **Constraints:**
+> - `1 <= nums.length <= 2 * 10^5`
+> - `0 <= nums[i] <= 2^31 - 1`
+
+> [!info] Approach
+> Build a **binary trie** (MSB → LSB). For each number, walk the trie greedily choosing the **opposite** bit when available to maximize XOR. O(n · 32) time.
+
+> [!note]- Python Solution
+> ```python
+> class TrieNode:
+>     __slots__ = ('child',)
+>     def __init__(self):
+>         self.child = [None, None]
+
+> def find_maximum_xor(nums: list[int]) -> int:
+>     root = TrieNode()
+>     for n in nums:
+>         node = root
+>         for i in range(31, -1, -1):
+>             bit = (n >> i) & 1
+>             if node.child[bit] is None:
+>                 node.child[bit] = TrieNode()
+>             node = node.child[bit]
+>     best = 0
+>     for n in nums:
+>         node = root
+>         curr = 0
+>         for i in range(31, -1, -1):
+>             bit = (n >> i) & 1
+>             want = 1 - bit
+>             if node.child[want]:
+>                 curr |= 1 << i
+>                 node = node.child[want]
+>             else:
+>                 node = node.child[bit]
+>         best = max(best, curr)
+>     return best
+> ```
+
+> [!success] Complexity
+> Time O(n · 32), Space O(n · 32) for trie nodes.
+
+> [!tip] Gotchas
+> - `💤 T3` for L3 — know the trie-on-bits idea; full implementation is rare at L3.
+> - Brute force O(n²) fails on n = 2 × 10^5.
+
+---
+
+## Interview Questions — Quick Reference
+
+| Question | Diff | Click Moment | Core Logic | Gotchas |
+|:---------|:-----|:-------------|:-----------|:--------|
+| **Single Number `⚡ T1`** | E | All duplicates cancel via XOR | XOR all numbers | Pairs become 0; lone survives |
+| **Single Number II `🎯 T2`** | M | Triples need per-bit mod 3 | `ones`/`twos` state machine | XOR-all alone fails |
+| **Single Number III `🎯 T2`** | M | Two singles → partition by set bit | XOR all → `a^b`; split groups | `bit = xor & (-xor)` |
+| **Number of 1 Bits `⚡ T1`** | E | Brian Kernighan clears LSB | `while n: n &= n-1; count++` | Know algorithm, not only `bin().count` |
+| **Counting Bits `⚡ T1`** | E | Reuse smaller index | `dp[i] = dp[i>>1] + (i&1)` | O(n) not O(n log n) |
+| **Missing Number `⚡ T1`** | E | XOR indices with values | `res ^= i ^ v`; start `res = n` | Gauss sum alternative |
+| **Power of Two `⚡ T1`** | E | One set bit only | `n > 0 and (n & (n-1)) == 0` | `n = 0` is false |
+| **Reverse Bits `🎯 T2`** | E | Build from LSB | 32 iterations shift/or | Exactly 32 bits |
+| **Sum of Two Integers `🎯 T2`** | M | XOR + carry loop | `a^b` sum; `(a&b)<<1` carry | Mask in Python |
+| **Bitwise AND of Range `🎯 T2`** | M | Common prefix of m and n | Shift until equal; shift back | Brute AND TLEs |
+| **Reverse Integer `🎯 T2`** | M | Check overflow before multiply | Pop digit; pre-check bounds | Returns 0 on overflow |
+| **Maximum XOR `💤 T3`** | H | Trie on bits MSB→LSB | Greedy opposite bit | L3: concept > code |
 
 ---
 
