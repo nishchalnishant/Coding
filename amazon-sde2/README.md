@@ -10,10 +10,11 @@
 
 | File | Contents |
 |---|---|
-| [coding-questions.md](coding-questions.md) | High-probability DSA questions by topic |
-| [patterns.md](patterns.md) | Pattern triggers + approach templates |
-| [system-design.md](system-design.md) | HLD topics + Amazon-specific system design |
-| [behavioral-lp.md](behavioral-lp.md) | All 16 LPs with STAR story templates |
+| [coding-questions.md](coding-questions.md) | High-probability DSA questions by topic (incl. Intervals, Dijkstra, LLD) |
+| [patterns.md](patterns.md) | Pattern triggers + approach templates with code |
+| [system-design.md](system-design.md) | HLD topics + deep dives (OMS, Feed, Search, URL, Rate Limiter, Cache) |
+| [behavioral-lp.md](behavioral-lp.md) | All 16 LPs, STAR format, LP conflict resolution, follow-up patterns |
+| [coding-execution.md](coding-execution.md) | Round execution: time budget, clarification Qs, stuck protocol, red flags |
 
 ## Amazon SDE-2 Coding Distribution (from past interview data)
 | Topic | Weight |

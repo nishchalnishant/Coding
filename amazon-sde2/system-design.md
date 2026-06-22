@@ -37,6 +37,17 @@
 
 ## Design Template (use every time)
 
+**Time budget for 45 min:**
+| Phase | Time |
+|---|---|
+| Clarify requirements | 3–4 min |
+| Capacity estimation | 2–3 min |
+| API design | 3–4 min |
+| Data model | 3–4 min |
+| High-level diagram | 5–7 min |
+| Deep dive (1–2 components) | 10–15 min |
+| Trade-offs + Q&A | 5–7 min |
+
 ### 1. Clarify Requirements (3–4 min)
 - Functional: what does the system DO?
 - Non-functional: scale, latency, availability, consistency
@@ -154,6 +165,80 @@ API Server → Notification Service → Channel Workers → 3rd Party
 **Replication:** W + R > N for strong consistency (e.g., N=3, W=2, R=2)
 **Conflict resolution:** vector clocks or last-write-wins
 **Compaction:** SSTable + LSM tree for write-heavy workloads
+
+---
+
+## Order Management System — Deep Dive (Amazon-specific, very likely)
+
+**Entities:** Order, OrderItem, Customer, Product, Payment, Shipment, Inventory
+
+**Core flows:**
+```
+Place Order:  Customer → Cart → Checkout → Payment → OrderService → InventoryService → ShipmentService
+              → Notification (async via SQS)
+
+Cancel Order: Check status (only if not shipped) → Refund → Restock inventory → Notify
+```
+
+**State machine for Order:**
+```
+CREATED → PAYMENT_PENDING → PAYMENT_CONFIRMED → PROCESSING → SHIPPED → DELIVERED
+                                                           ↘ CANCELLED (before SHIPPED)
+```
+
+**Key design decisions:**
+- Saga pattern for distributed transactions (payment + inventory + shipment are separate services)
+- Outbox pattern: write event to DB atomically with state change, then publish to SQS — avoids dual-write problem
+- Idempotency key on payment to prevent double-charge on retry
+- Eventual consistency between inventory and order service (accept oversell risk for high availability, or use reserved inventory)
+
+**Data model:**
+```
+orders: order_id PK, customer_id, status, created_at, updated_at
+order_items: item_id PK, order_id FK, product_id, qty, unit_price
+payments: payment_id PK, order_id FK, amount, status, idempotency_key
+shipments: shipment_id PK, order_id FK, address, carrier, tracking_no, status
+```
+
+---
+
+## News Feed (Twitter/Instagram-like) — Deep Dive
+
+**Fan-out on write (push):** on post, push to all followers' feed cache
+- Pro: fast read (O(1) from cache)
+- Con: write amplification for celebrities (10M followers = 10M writes)
+
+**Fan-out on read (pull):** on read, fetch posts from all followed users
+- Pro: no write amplification
+- Con: slow read for users who follow many people
+
+**Hybrid:** push for normal users (<1K followers), pull for celebrities; merge at read time
+
+**Feed generation:**
+```
+Write: Post → PostService → MQ → FanoutWorker → push to Redis sorted set (score=timestamp)
+Read:  GET /feed → FeedService → Redis ZRANGE → fill missing (pull celebs) → return merged
+```
+
+---
+
+## Product Search — Deep Dive
+
+**Core challenge:** full-text search + filters (category, price, rating, availability) at scale
+
+**Search stack:**
+- Elasticsearch / OpenSearch as search index (inverted index for text)
+- DynamoDB / Aurora as source of truth for product catalog
+- Change Data Capture (CDC) pipeline: DB → Kafka → Indexer → Elasticsearch
+
+**Relevance ranking signals:** TF-IDF + BM25 (text match), click-through rate, purchase rate, recency, seller rating, Prime eligibility
+
+**Query flow:**
+```
+Search API → Query Parser (tokenize, expand synonyms) → ES Query → Ranker → Result Cache → Response
+```
+
+**Pagination:** cursor-based (not offset) at scale to avoid deep offset scans
 
 ---
 

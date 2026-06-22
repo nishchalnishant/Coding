@@ -131,6 +131,34 @@ Have a ready story for each:
 
 ---
 
+## When Two LPs Conflict — How to Handle
+
+Amazon interviewers sometimes put you in scenarios where two LPs pull in opposite directions. Recognize the tension and name it.
+
+| Conflict | Resolution framing |
+|---|---|
+| Bias for Action vs. Insist on Highest Standards | "I made a scoped, reversible decision quickly, then followed up with the full quality bar once risk was lower." |
+| Customer Obsession vs. Frugality | "I found a solution that met the customer need without the cost — here's how I constrained the scope." |
+| Have Backbone vs. Earn Trust | "I shared my concern once with data, the team decided differently, and I committed fully and didn't relitigate." |
+| Deliver Results vs. Highest Standards | "I negotiated scope — delivered the 80% that mattered, flagged the 20% as tech debt with a written plan." |
+| Think Big vs. Frugality | "I validated the big vision with a small, cheap prototype before committing resources." |
+
+---
+
+## Follow-Up Question Patterns Amazon Uses
+
+Amazon interviewers probe deeper with these. Prepare for them in every story:
+
+- "Why did you make that decision specifically?" → have a clear rationale
+- "What would you do differently?" → show self-awareness, not defensiveness
+- "What was the impact on the customer / business?" → always quantify
+- "Who else was involved and what was your specific contribution?" → own your part
+- "What would you have done if [condition changed]?" → shows adaptability
+- "How did you influence without authority?" → cross-team work signal
+- "What data did you use to make that decision?" → shows analytical rigor
+
+---
+
 ## Questions to Ask the Interviewer
 
 These signal ownership and customer focus:

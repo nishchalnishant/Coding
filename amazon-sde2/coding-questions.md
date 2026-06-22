@@ -155,17 +155,77 @@ Questions sourced from Amazon interview reports (Glassdoor, Leetcode discuss, Bl
 
 ---
 
+## Intervals
+
+| Problem | Pattern | Difficulty | Key Insight |
+|---|---|---|---|
+| 🔴 Merge Intervals (56) | Sort + Scan | Medium | Sort by start; merge if curr.start ≤ prev.end |
+| 🔴 Insert Interval (57) | Scan + Merge | Medium | Three phases: before, overlap, after |
+| 🟠 Non-overlapping Intervals (435) | Greedy | Medium | Sort by end; greedily keep earliest-ending |
+| 🟠 Meeting Rooms II (253) | Min-Heap / Sweep | Medium | Heap of end times; pop if end ≤ curr.start |
+| 🟡 Employee Free Time (759) | Merge Intervals | Hard | Flatten all intervals, sort, find gaps |
+
+---
+
+## Graphs — Shortest Path (weighted)
+
+| Problem | Pattern | Difficulty | Key Insight |
+|---|---|---|---|
+| 🟠 Network Delay Time (743) | Dijkstra | Medium | Min-heap on (dist, node); relax neighbors |
+| 🟠 Cheapest Flights Within K Stops (787) | Bellman-Ford / BFS | Medium | Bellman-Ford k+1 rounds; or BFS with state (node, stops) |
+| 🟡 Path with Minimum Effort (1631) | Dijkstra variant | Medium | Minimize max edge weight on path |
+
+**Dijkstra template:**
+```python
+import heapq
+dist = {node: float('inf') for node in graph}
+dist[src] = 0
+heap = [(0, src)]
+while heap:
+    d, u = heapq.heappop(heap)
+    if d > dist[u]: continue
+    for v, w in graph[u]:
+        if dist[u] + w < dist[v]:
+            dist[v] = dist[u] + w
+            heapq.heappush(heap, (dist[v], v))
+```
+
+---
+
+## Low-Level Design (OOP / Class Design)
+
+Amazon often asks LLD in the coding round for mid-senior roles. Expect one of:
+
+| System | Key Classes / Patterns |
+|---|---|
+| **Parking Lot** | ParkingLot, Floor, Spot(type), Ticket, Fee strategy |
+| **Library Management** | Book, Member, Loan, Search(by title/author), Fine |
+| **Elevator System** | Elevator, Request(up/down), Scheduler (SCAN/SSTF) |
+| **Vending Machine** | Item, Slot, Inventory, Payment(strategy), Dispense |
+| **Amazon Locker** | Locker, Package, Code, Assignment(size-fit), Expiry |
+
+**LLD approach (10-min structure):**
+1. Clarify: actors, core operations, edge cases
+2. List entities (nouns) → classes
+3. List operations (verbs) → methods
+4. Identify design patterns: Strategy, Factory, Singleton, Observer
+5. Write skeleton code: class names, key fields, method signatures
+
+---
+
 ## Amazon-Specific / OA Common
 
-| Problem | Notes |
-|---|---|
-| LRU Cache (146) | Classic Amazon OA question |
-| Design Hit Counter | Sliding window or queue |
-| Maximum Units on Truck (1710) | Greedy — sort by units/box desc |
-| Minimum Number of Refueling Stops (871) | Max-heap greedy |
-| Reorder Log Files (937) | Custom sort — letter logs before digit logs |
-| Most Common Word (819) | String parsing + frequency map |
-| Brick Wall (554) | HashMap on gaps |
-| Prison Cells After N Days (957) | Cycle detection |
-| Expressive Words (809) | Two-pointer + run-length |
-| Advantage Shuffle (870) | Greedy — sorted + two-pointer |
+| Problem | Pattern | Difficulty | Key Insight |
+|---|---|---|---|
+| LRU Cache (146) | HashMap + DLL | Medium | Classic Amazon OA; O(1) get/put |
+| Design Hit Counter | Sliding window / queue | Medium | Deque of timestamps; evict > 300s old |
+| Maximum Units on Truck (1710) | Greedy | Easy | Sort by units/box desc; fill until capacity |
+| Minimum Refueling Stops (871) | Max-heap greedy | Hard | At each stop push fuel; pop max when can't reach next |
+| Reorder Log Files (937) | Custom sort | Easy | Letter logs first (lex by content then id); digit logs stable |
+| Most Common Word (819) | HashMap + parsing | Easy | Lowercase, strip punct, skip banned, max freq |
+| Brick Wall (554) | HashMap on gaps | Medium | Count edge positions; answer = n - max(edge_counts) |
+| Prison Cells After N Days (957) | Cycle detection | Medium | State repeats in ≤256 cycles; find cycle length |
+| Expressive Words (809) | Two-pointer + RLE | Medium | Run-length encode both; match if stretchy (≥3) or equal |
+| Advantage Shuffle (870) | Greedy | Medium | Sort nums; for each B[i] assign smallest winning num or smallest losing |
+| Number of Visible People in Queue (1944) | Monotonic Stack | Hard | Decreasing stack; count pops + 1 (if stack non-empty) |
+| Minimum Domino Rotations (1007) | Greedy | Medium | Try fixing top[0] or bottom[0]; check feasibility |
