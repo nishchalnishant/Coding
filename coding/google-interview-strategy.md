@@ -11,6 +11,9 @@ difficulty: meta
 > Skim for conceptual awareness. Do NOT spend deep implementation time here.
 > Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
 
+> [!tip] SDE-3 DSA completeness
+> For a gap-focused SDE-3 audit, read [`sde3-dsa-completeness.md`](./sde3-dsa-completeness.md) alongside the core topic files. It highlights the advanced graph, string, bitmask, and data-structure variants that often separate a strong L4 candidate from an L5-ready one.
+
 
 
 

@@ -345,6 +345,96 @@ def partition_labels(s: str) -> list[int]:
 
 ---
 
+### Sweep Line — Event-Based Interval Processing
+
+> [!IMPORTANT]
+> **The Click Moment**: "Maximum overlapping intervals at any point in time" — OR — "how many rooms are needed?" — OR — "count events active at time T" — OR — "detect any overlap in a set of intervals". Convert intervals to events, sort by time, then sweep a counter.
+
+**Core idea**: For each interval `[start, end]`, create two events: `(start, +1)` and `(end, -1)`. Sort all events by time (break ties: process ends before starts if intervals are exclusive; process starts before ends if inclusive). Sweep the sorted events maintaining a running count.
+
+```python
+def min_meeting_rooms(intervals: list[list[int]]) -> int:
+    """Minimum rooms needed = peak overlap count."""
+    events = []
+    for start, end in intervals:
+        events.append((start, 1))   # room opens
+        events.append((end, -1))    # room closes
+    # Tie-break: ends before starts (a room freed at time T can be reused at T)
+    events.sort(key=lambda x: (x[0], x[1]))
+    rooms = max_rooms = 0
+    for _, delta in events:
+        rooms += delta
+        max_rooms = max(max_rooms, rooms)
+    return max_rooms
+
+def max_concurrent_events(intervals: list[list[int]]) -> int:
+    """Same pattern — peak active count."""
+    events = []
+    for s, e in intervals:
+        events.append((s, 1))
+        events.append((e, -1))
+    events.sort()
+    count = peak = 0
+    for _, d in events:
+        count += d
+        peak = max(peak, count)
+    return peak
+
+def has_overlap(intervals: list[list[int]]) -> bool:
+    """True if any two intervals overlap."""
+    events = []
+    for s, e in intervals:
+        events.append((s, 1))
+        events.append((e, -1))
+    events.sort(key=lambda x: (x[0], x[1]))
+    active = 0
+    for _, d in events:
+        active += d
+        if active > 1:
+            return True
+    return False
+
+def skyline_events(buildings: list[list[int]]) -> list[list[int]]:
+    """
+    The Skyline Problem (LC 218): critical points where height changes.
+    Each building [L, R, H] → events (L, -H) and (R, +H).
+    Negative heights for left edge ensures they're processed before right edges at same x.
+    """
+    import heapq
+    events = []
+    for l, r, h in buildings:
+        events.append((l, -h, r))   # left edge: height starts
+        events.append((r, 0, 0))    # right edge: height ends
+    events.sort()
+    result = []
+    # Max-heap of (height, end): current active buildings
+    heap = [(0, float('inf'))]  # ground level, never expires
+    for x, neg_h, end in events:
+        if neg_h != 0:
+            heapq.heappush(heap, (neg_h, end))   # neg height → max-heap
+        # Remove expired buildings
+        while heap[0][1] <= x:
+            heapq.heappop(heap)
+        max_h = -heap[0][0]
+        if not result or result[-1][1] != max_h:
+            result.append([x, max_h])
+    return result
+```
+
+**Sweep line canonical problems**:
+| Problem | Event type | Sort key | What to track |
+|---|---|---|---|
+| Min meeting rooms | `+1` start, `-1` end | time, ends-first | peak active count |
+| Max overlap at any point | same | time | peak count |
+| Has any overlap | same | time, ends-first | active > 1 |
+| Skyline problem | `(x, -h, end)` per building | x, then height | max-heap of active heights |
+| Number of flowers in bloom | `+1` start, `-1` end+1 | time | count at each query point |
+| Insert Interval (merge) | sort by start, merge greedily | start time | running merged interval |
+
+**Gotcha**: The tie-breaking rule for events at the same time matters. For "exclusive" intervals `[s, e)` where `e` frees a resource that can be immediately reused: sort ends before starts `(t, delta)` with `delta=-1` before `+1`. For "inclusive" intervals where touching counts as overlap: sort starts before ends.
+
+---
+
 ### Priority Queue Greedy — Maximize Capital (IPO)
 
 > [!IMPORTANT]

@@ -328,6 +328,57 @@ class DSU:
 
 ---
 
+## 7. DAG Shortest Path — Topological Relaxation
+
+> [!IMPORTANT]
+> **The Click Moment**: "Shortest path in a **directed acyclic graph**" — OR — "dependencies with weights, find min cost ordering" — OR — "longest path in DAG (negate weights)". Dijkstra is O((V+E) log V); DAG topological relaxation is **O(V+E)** with no heap.
+
+**Why it works**: In a DAG, a topological ordering guarantees that when we process node `u`, all predecessors of `u` have already been finalized. Relaxing outgoing edges in topological order is therefore always safe — no predecessor can be updated later.
+
+```python
+from collections import defaultdict, deque
+
+def dag_shortest_path(n: int, edges: list[tuple[int, int, int]], src: int) -> list[float]:
+    graph = defaultdict(list)
+    in_degree = [0] * n
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        in_degree[v] += 1
+
+    # Kahn's BFS for topological order
+    queue = deque(i for i in range(n) if in_degree[i] == 0)
+    topo = []
+    while queue:
+        u = queue.popleft()
+        topo.append(u)
+        for v, _ in graph[u]:
+            in_degree[v] -= 1
+            if in_degree[v] == 0:
+                queue.append(v)
+
+    dist = [float('inf')] * n
+    dist[src] = 0
+    for u in topo:
+        if dist[u] == float('inf'):
+            continue
+        for v, w in graph[u]:
+            if dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+    return dist  # dist[i] = min cost from src to i; inf = unreachable
+```
+
+> [!TIP]
+> **Longest path**: negate all weights before running. The "critical path" in project scheduling is longest-path on a DAG — identical algorithm.
+
+**Complexity**: O(V + E) — topological sort is O(V + E); relaxation visits each edge once.
+
+**Gotchas**:
+- Only works on DAGs — use Dijkstra or Bellman-Ford for graphs with cycles.
+- If multiple nodes have in-degree 0 at the start, the src node still initializes `dist[src] = 0`; other zero-in-degree nodes will have `dist = inf` and be skipped.
+- Longest path in a general graph is NP-hard; on a DAG it's O(V + E).
+
+---
+
 ## See also
 
 - [Graph Fundamentals](../01-data-structures/graphs.md) — BFS, DFS, and Dijkstra  

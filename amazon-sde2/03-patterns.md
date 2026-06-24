@@ -343,66 +343,6 @@ def backtrack(start, current):
 
 ---
 
-## TIER 4 — Skim Only
-
----
-
-### Pattern 14: Dijkstra (Weighted Shortest Path)
-
-**Trigger words:** cheapest path, minimum cost route, weighted graph
-
-```python
-import heapq
-dist = {node: float('inf') for node in graph}
-dist[src] = 0
-heap = [(0, src)]
-while heap:
-    d, u = heapq.heappop(heap)
-    if d > dist[u]: continue
-    for v, w in graph[u]:
-        if dist[u] + w < dist[v]:
-            dist[v] = dist[u] + w
-            heapq.heappush(heap, (dist[v], v))
-```
-
----
-
-### Pattern 15: Trie
-
-**Trigger words:** prefix search, autocomplete, word dictionary, starts with
-
-```python
-class TrieNode:
-    def __init__(self):
-        self.children = {}
-        self.is_end = False
-
-class Trie:
-    def __init__(self): self.root = TrieNode()
-
-    def insert(self, word):
-        node = self.root
-        for c in word:
-            node = node.children.setdefault(c, TrieNode())
-        node.is_end = True
-
-    def search(self, word):
-        node = self.root
-        for c in word:
-            if c not in node.children: return False
-            node = node.children[c]
-        return node.is_end
-
-    def starts_with(self, prefix):
-        node = self.root
-        for c in prefix:
-            if c not in node.children: return False
-            node = node.children[c]
-        return True
-```
-
----
-
 ## Complexity Quick-Reference
 
 | Pattern | Time | Space |
@@ -419,4 +359,3 @@ class Trie:
 | Binary Search on answer | O(n log(range)) | O(1) |
 | Monotonic Stack | O(n) | O(n) |
 | Backtracking (subsets) | O(2^n) | O(n) |
-| Dijkstra | O((V+E) log V) | O(V) |

@@ -53,6 +53,7 @@
 | Pattern recognition master | `03-patterns/patterns-master.md` |
 | Interview cheatsheet | `03-patterns/interview-cheatsheet.md` |
 | Google revision guide | `03-patterns/GOOGLE_INTERVIEW_REVISION.md` |
+| SDE-3 DSA completeness addendum | `coding/sde3-dsa-completeness.md` |
 | Complexity + syntax quick sheet | `05-revision/README.md` |
 | Behavioral STAR stories | `04-behavioral/behavioral.md` |
 | System design guide | `03-patterns/system-design.md` |

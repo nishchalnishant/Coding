@@ -2,7 +2,7 @@
 
 Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with data-structure notes in [01-data-structures](../01-data-structures/README.md); use this folder for **how to solve** (patterns, recurrences, graph algos, string matching).
 
-**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (triggers):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Walkthroughs:** [problem-deep-dives.md](./problem-deep-dives.md) · **Google revision:** [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md)
+**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (triggers):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Walkthroughs:** [problem-deep-dives.md](./problem-deep-dives.md) · **Google revision:** [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) · **SDE-3 completeness:** [sde3-dsa-completeness.md](./sde3-dsa-completeness.md)
 
 ---
 

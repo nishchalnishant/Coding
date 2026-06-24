@@ -753,6 +753,92 @@ def find_paths(m: int, n: int, max_move: int, start_row: int, start_col: int) ->
     return ans
 ```
 
+## DP Reconstruction — Finding the Actual Solution
+
+> [!IMPORTANT]
+> **The Click Moment**: Interviewer says "now print the actual path / sequence / partition, not just the score". DP tables store *values*; reconstruction walks them backwards using the same recurrence to find which choice was made at each step.
+
+**Pattern**: After filling the DP table, start from the answer cell and greedily trace back the choice that produced the current value.
+
+```python
+# Example 1: LCS reconstruction (which characters form the LCS)
+def lcs_reconstruct(s: str, t: str) -> str:
+    m, n = len(s), len(t)
+    dp = [[0] * (n + 1) for _ in range(m + 1)]
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if s[i-1] == t[j-1]:
+                dp[i][j] = dp[i-1][j-1] + 1
+            else:
+                dp[i][j] = max(dp[i-1][j], dp[i][j-1])
+    # Trace back from dp[m][n]
+    result = []
+    i, j = m, n
+    while i > 0 and j > 0:
+        if s[i-1] == t[j-1]:
+            result.append(s[i-1])
+            i -= 1; j -= 1
+        elif dp[i-1][j] >= dp[i][j-1]:
+            i -= 1
+        else:
+            j -= 1
+    return ''.join(reversed(result))
+
+# Example 2: 0/1 Knapsack — which items were selected
+def knapsack_reconstruct(weights: list[int], values: list[int], W: int) -> list[int]:
+    n = len(weights)
+    dp = [[0] * (W + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        for w in range(W + 1):
+            dp[i][w] = dp[i-1][w]
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i][w], values[i-1] + dp[i-1][w - weights[i-1]])
+    # Trace back: which items were included?
+    selected = []
+    w = W
+    for i in range(n, 0, -1):
+        if dp[i][w] != dp[i-1][w]:  # item i was taken
+            selected.append(i - 1)
+            w -= weights[i - 1]
+    return selected[::-1]
+
+# Example 3: Shortest path parent-pointer reconstruction
+def dijkstra_path(adj: dict, src: int, tgt: int) -> list[int]:
+    import heapq
+    dist = {src: 0}
+    parent = {src: None}
+    heap = [(0, src)]
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist.get(u, float('inf')):
+            continue
+        if u == tgt:
+            break
+        for v, w in adj.get(u, []):
+            nd = d + w
+            if nd < dist.get(v, float('inf')):
+                dist[v] = nd
+                parent[v] = u
+                heapq.heappush(heap, (nd, v))
+    # Reconstruct path from parent map
+    path, node = [], tgt
+    while node is not None:
+        path.append(node)
+        node = parent.get(node)
+    return path[::-1] if path and path[-1] == src else []
+```
+
+**Three reconstruction strategies**:
+| Strategy | When | How |
+|---|---|---|
+| Trace-back from answer cell | Grid DP, LCS, edit distance | Follow the recurrence decision at each cell backwards |
+| Parent pointer array | Shortest path, BFS | Store `parent[v] = u` when relaxing; walk from target to source |
+| Separate `choice[]` array | Knapsack, interval DP | Store the split/item chosen at each state; replay forward |
+
+**Gotcha**: When DP is space-optimized to 1D, reconstruction is impossible from the compressed table — keep the full 2D table if you need the actual solution, not just the value.
+
+---
+
 ## Space Optimization Rules
 
 | Pattern | Original | Optimized |

@@ -581,6 +581,64 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 ---
 
+## XOR Basis (Linear Basis over GF(2))
+
+> [!IMPORTANT]
+> **The Click Moment**: "Maximum XOR of any subset of an array" — OR — "can we form XOR value X using a subset?" — OR — "number of distinct XOR values achievable from subsets". A linear basis is a set of at most 64 numbers that spans the same XOR space as all 2^N subsets, reducible in O(N × 64).
+
+**Core idea**: Gaussian elimination over bits. Maintain `basis[i]` = the representative for the leading bit position `i`. Inserting a number: try to reduce it using existing basis vectors (XOR away the highest set bit if a basis vector exists for it). If it reduces to 0, it's linearly dependent — already representable. If not, insert the residual at its leading bit position.
+
+```python
+class XORBasis:
+    def __init__(self):
+        self.basis = [0] * 64  # basis[i] handles bit position i
+
+    def insert(self, x: int) -> bool:
+        for i in range(63, -1, -1):
+            if not (x >> i & 1):
+                continue
+            if not self.basis[i]:
+                self.basis[i] = x
+                return True       # x is linearly independent — inserted
+            x ^= self.basis[i]   # reduce x using existing basis vector
+        return False              # x reduces to 0 — linearly dependent
+
+    def max_xor(self) -> int:
+        result = 0
+        for i in range(63, -1, -1):
+            result = max(result, result ^ self.basis[i])
+        return result
+
+    def can_form(self, target: int) -> bool:
+        for i in range(63, -1, -1):
+            if not (target >> i & 1):
+                continue
+            if not self.basis[i]:
+                return False
+            target ^= self.basis[i]
+        return True  # target reduced to 0 — it's in the span
+
+    def max_xor_with(self, val: int) -> int:
+        """Max XOR achievable by XORing val with any subset."""
+        for i in range(63, -1, -1):
+            val = max(val, val ^ self.basis[i])
+        return val
+```
+
+**Complexity**: O(N × 64) build; O(64) = O(1) for max_xor / can_form queries.
+
+**Canonical problems**:
+- **Maximum XOR Subarray** (LC 1707 variant): Build prefix XOR array, insert each prefix into the basis, then query `max_xor_with(prefix[i])` for each i.
+- **Count distinct XOR values**: The basis has rank `r` = number of non-zero vectors → `2^r` distinct XOR values achievable.
+- **Can subset XOR equal target**: Use `can_form(target)`.
+
+**Gotchas**:
+- The basis doesn't preserve which elements were used — it only tells you whether a value is achievable.
+- For "maximum XOR of two elements" (not subset), use an XOR Trie instead (O(N × 32) with cleaner construction).
+- In Python integers are arbitrary precision; the range loop `range(63, -1, -1)` covers 64-bit numbers. Adjust to `range(29, -1, -1)` for 30-bit constraints.
+
+---
+
 ## See also
 
 - [Dynamic Programming](dynamic-programming/README.md) — bitmask DP and O(3^N) subset enumeration

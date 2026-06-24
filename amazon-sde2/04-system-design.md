@@ -16,22 +16,18 @@
 2. **Design Rate Limiter**
 3. **Design LRU Cache / Distributed Cache**
 4. **Design Notification System** (push/email/SMS)
-5. **Design Amazon-like Product Search**
+5. **Design Order Management System** (very Amazon-specific)
 6. **Design a Feed / News Feed** (Twitter/Instagram timeline)
 
 ### Tier 2 — High Probability
-7. **Design Distributed Message Queue** (Kafka-like or SQS-like)
-8. **Design Key-Value Store** (DynamoDB-like)
-9. **Design Typeahead / Autocomplete**
-10. **Design Amazon S3 / Object Storage**
-11. **Design Order Management System** (very Amazon-specific)
-12. **Design Ride Sharing / Location Service**
+7. **Design Distributed Message Queue** (SQS-like)
+8. **Design Typeahead / Autocomplete**
+9. **Design Amazon S3 / Object Storage**
+10. **Design Ride Sharing / Location Service**
 
-### Tier 3 — Medium (comes up in specialized teams)
-13. Design Video Streaming (Prime Video)
-14. Design Recommendation System
-15. Design Distributed ID Generator (Snowflake)
-16. Design Web Crawler
+### Tier 3 — Low Priority for SDE-2 (skip unless time allows)
+11. Design Video Streaming (Prime Video)
+12. Design Web Crawler
 
 ---
 
@@ -159,15 +155,6 @@ API Server → Notification Service → Channel Workers → 3rd Party
 
 ---
 
-## Key-Value Store (DynamoDB-like) — Deep Dive
-
-**Consistent hashing:** ring with virtual nodes, each server owns a range
-**Replication:** W + R > N for strong consistency (e.g., N=3, W=2, R=2)
-**Conflict resolution:** vector clocks or last-write-wins
-**Compaction:** SSTable + LSM tree for write-heavy workloads
-
----
-
 ## Order Management System — Deep Dive (Amazon-specific, very likely)
 
 **Entities:** Order, OrderItem, Customer, Product, Payment, Shipment, Inventory
@@ -219,26 +206,6 @@ shipments: shipment_id PK, order_id FK, address, carrier, tracking_no, status
 Write: Post → PostService → MQ → FanoutWorker → push to Redis sorted set (score=timestamp)
 Read:  GET /feed → FeedService → Redis ZRANGE → fill missing (pull celebs) → return merged
 ```
-
----
-
-## Product Search — Deep Dive
-
-**Core challenge:** full-text search + filters (category, price, rating, availability) at scale
-
-**Search stack:**
-- Elasticsearch / OpenSearch as search index (inverted index for text)
-- DynamoDB / Aurora as source of truth for product catalog
-- Change Data Capture (CDC) pipeline: DB → Kafka → Indexer → Elasticsearch
-
-**Relevance ranking signals:** TF-IDF + BM25 (text match), click-through rate, purchase rate, recency, seller rating, Prime eligibility
-
-**Query flow:**
-```
-Search API → Query Parser (tokenize, expand synonyms) → ES Query → Ranker → Result Cache → Response
-```
-
-**Pagination:** cursor-based (not offset) at scale to avoid deep offset scans
 
 ---
 

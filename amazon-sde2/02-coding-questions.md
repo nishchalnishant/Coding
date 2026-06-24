@@ -45,8 +45,7 @@ _At least 1 DP problem per loop. Coin Change and LCS are classics._
 | 🟠 Partition Equal Subset Sum (416) | 0/1 Knapsack | Medium | Subset sum = total/2 |
 | 🟠 Jump Game II (45) | Greedy / DP | Medium | Track farthest reachable per BFS level |
 | 🟠 Edit Distance (72) | 2D DP | Hard | dp[i][j] = min(insert, delete, replace) |
-| 🟡 Burst Balloons (312) | Interval DP | Hard | dp[i][j] = last balloon to burst in range |
-| 🟡 Regular Expression Matching (10) | 2D DP | Hard | Handle `*` = 0 or more of preceding |
+| 🟡 Decode Ways (91) | DP | Medium | dp[i] depends on 1-digit and 2-digit decode |
 
 ---
 
@@ -81,7 +80,7 @@ _Number of Islands variants and Course Schedule are near-guaranteed._
 | 🟠 Number of Connected Components (323) | Union-Find / BFS | Medium | Union-Find with path compression |
 | 🟠 Redundant Connection (684) | Union-Find | Medium | Add edge that creates cycle |
 | 🟠 Word Ladder (127) | BFS + pattern hashing | Hard | Replace each char with '*'; build adjacency |
-| 🟡 Alien Dictionary (269) | Topological Sort | Hard | Build graph from adjacent word pair diffs |
+| 🟡 Accounts Merge (721) | Union-Find | Medium | Union by email; group by component root |
 
 ---
 
@@ -141,7 +140,7 @@ _Search in Rotated Array is near-certain. Parametric search is a follow-up trick
 | 🟠 Find Minimum in Rotated Array (153) | Binary Search | Medium | mid > right → min in right half |
 | 🟠 Koko Eating Bananas (875) | Search on answer space | Medium | Binary search on speed k |
 | 🟠 Binary Search on Answer (generic) | Parametric Search | Medium | "Is X achievable?" as predicate |
-| 🟡 Median of Two Sorted Arrays (4) | Binary Search on partition | Hard | Partition smaller array |
+| 🟡 Time Based Key-Value Store (981) | Binary Search | Medium | Binary search on list of (timestamp, value) |
 
 ---
 
@@ -185,65 +184,7 @@ _Reverse and Merge are easy — don't drop points here. LRU is a design-coding c
 | 🟠 Permutations (46, 47) | Backtracking + used[] | Medium | Swap or visited array |
 | 🟠 Letter Combinations of Phone (17) | Backtracking | Medium | Map digits to chars; recurse |
 | 🟡 Palindrome Partitioning (131) | Backtracking + DP | Medium | Precompute isPalin[i][j] |
-| 🟡 N-Queens (51) | Backtracking | Hard | Track col, diag1, diag2 sets |
-
----
-
-## PRIORITY TIER 4 — Skim Only
-> Skip unless interviewing for a specific team (Maps, Systems, Search). Know they exist.
-
----
-
-### 12. Graphs — Weighted / Shortest Path
-
-| Problem | Pattern | Difficulty | Key Insight |
-|---|---|---|---|
-| 🟠 Network Delay Time (743) | Dijkstra | Medium | Min-heap on (dist, node); relax neighbors |
-| 🟠 Cheapest Flights Within K Stops (787) | Bellman-Ford / BFS | Medium | Bellman-Ford k+1 rounds |
-| 🟡 Path with Minimum Effort (1631) | Dijkstra variant | Medium | Minimize max edge weight on path |
-
-**Dijkstra template:**
-```python
-import heapq
-dist = {node: float('inf') for node in graph}
-dist[src] = 0
-heap = [(0, src)]
-while heap:
-    d, u = heapq.heappop(heap)
-    if d > dist[u]: continue
-    for v, w in graph[u]:
-        if dist[u] + w < dist[v]:
-            dist[v] = dist[u] + w
-            heapq.heappush(heap, (dist[v], v))
-```
-
----
-
-### 13. Trie
-
-| Problem | Pattern | Difficulty | Key Insight |
-|---|---|---|---|
-| 🟡 Implement Trie (208) | Trie | Medium | children dict + is_end flag |
-| 🟡 Word Search II (212) | Trie + DFS | Hard | Build trie from words; DFS on board |
-
----
-
-## BONUS — LLD / Class Design (coding round variant)
-_Amazon asks this especially for SDE-2+ in platform/infrastructure teams._
-
-| System | Key Classes / Patterns |
-|---|---|
-| **Parking Lot** | ParkingLot, Floor, Spot(type), Ticket, Fee strategy |
-| **Library Management** | Book, Member, Loan, Search(by title/author), Fine |
-| **Elevator System** | Elevator, Request(up/down), Scheduler (SCAN/SSTF) |
-| **Vending Machine** | Item, Slot, Inventory, Payment(strategy), Dispense |
-| **Amazon Locker** | Locker, Package, Code, Assignment(size-fit), Expiry |
-
-**LLD approach (10-min structure):**
-1. Clarify actors, core operations, edge cases
-2. List entities (nouns) → classes; operations (verbs) → methods
-3. Identify patterns: Strategy, Factory, Singleton, Observer
-4. Write skeleton: class names, key fields, method signatures
+| 🟡 Word Search (79) | Backtracking + DFS | Medium | Mark visited; restore on backtrack |
 
 ---
 

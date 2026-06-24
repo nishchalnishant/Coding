@@ -82,12 +82,6 @@ Amazon uses LPs as a **core filter** — not a formality. SDE-2 candidates need 
 > Leaders have relentlessly high standards; don't let mediocre work pass
 - Sample Q: "Tell me about a time you raised the bar for quality on your team."
 
-#### 15. Strive to be Earth's Best Employer
-> Leaders create a safe, productive environment (rarely asked for IC roles)
-
-#### 16. Success and Scale Bring Broad Responsibility
-> Amazon's impact = responsibility to improve (rarely asked at SDE-2)
-
 ---
 
 ## STAR Format (strict)

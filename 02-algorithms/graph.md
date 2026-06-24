@@ -482,6 +482,56 @@ def prim_mst(n: int, adj: dict) -> int:
 > [!TIP]
 > **Bidirectional BFS**: For problems with a known source and target (Word Ladder, 6-degrees of separation), expand from both ends simultaneously. Meet in the middle. Explored nodes shrink from O(b^d) to O(b^(d/2)) where b = branching factor. Google Maps uses bidirectional Dijkstra for shortest route queries.
 
+### Bidirectional BFS — Meet in the Middle
+
+> [!IMPORTANT]
+> **The Click Moment**: "Shortest path between **specific source and target**" — AND — "branching factor is large or graph is huge" (Word Ladder, 6 degrees of separation). Alternating between two frontiers reduces explored nodes from O(b^d) to O(b^(d/2)) — the difference between millions and thousands.
+
+**Key invariant**: When any node in the current frontier is also in the opposite `visited` set, a shortest path has been found. The path length = `dist_fwd[meeting] + dist_bwd[meeting]`.
+
+```python
+from collections import deque
+
+def bidirectional_bfs(graph: dict, src, tgt) -> int:
+    if src == tgt:
+        return 0
+    fwd_visited = {src: 0}
+    bwd_visited = {tgt: 0}
+    fwd_queue = deque([src])
+    bwd_queue = deque([tgt])
+
+    def expand(queue, visited, other_visited) -> int | None:
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            for nb in graph.get(node, []):
+                if nb not in visited:
+                    visited[nb] = visited[node] + 1
+                    queue.append(nb)
+                if nb in other_visited:
+                    return visited[nb] + other_visited[nb]
+        return None
+
+    while fwd_queue and bwd_queue:
+        # Always expand the smaller frontier first
+        if len(fwd_queue) <= len(bwd_queue):
+            result = expand(fwd_queue, fwd_visited, bwd_visited)
+        else:
+            result = expand(bwd_queue, bwd_visited, fwd_visited)
+        if result is not None:
+            return result
+    return -1  # no path
+```
+
+> [!TIP]
+> **Word Ladder trick**: Represent each word state. Build the neighbor relation lazily (replace each char with a wildcard, group words by pattern). This avoids building the full graph upfront and is the standard Google interview approach for Word Ladder.
+
+**Complexity**: O(b^(d/2)) vs O(b^d) for standard BFS, where b = branching factor, d = shortest path depth. For dense graphs this is the difference between feasible and infeasible.
+
+**Gotchas**:
+- Always expand the smaller queue first — this keeps both frontiers balanced and guarantees the O(b^(d/2)) bound.
+- The meeting condition must check both directions: a node discovered by the forward frontier that is already in the backward `visited` set (and vice versa).
+- Does **not** work for directed graphs unless you also reverse all edges for the backward BFS.
+
 ---
 
 ## 4. SDE-3 Deep Dives

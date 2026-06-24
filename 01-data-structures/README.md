@@ -1,6 +1,6 @@
 # Data Structures — Start Here
 
-Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file is self-contained; this page is your **navigation hub** — use it to pick what to read and in what order.
+Deep-dive notes for **Amazon SDE-2** coding interviews. Each topic file is self-contained; this page is your **navigation hub** — use it to pick what to read and in what order.
 
 **Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (when to use what):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Algorithms (techniques):** [02-algorithms/README.md](../02-algorithms/README.md) · **Problem walkthroughs:** [02-algorithms/problem-deep-dives.md](../02-algorithms/problem-deep-dives.md)
 
@@ -10,7 +10,7 @@ Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file 
 
 | If you… | Do this |
 |---------|---------|
-| **Have ~2 weeks** (Google L4 loop) | Follow **Must-nail for L4** below → one topic/day → **Quick Revision Triggers** on final days. Cross-check gaps with [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) and [GOOGLE_QUICK_SHEET.md](../03-patterns/GOOGLE_QUICK_SHEET.md). |
+| **Have ~2 weeks** (Amazon SDE-2 loop) | Follow **Must-nail for SDE-2** below → one topic/day → **Quick Revision Triggers** on final days. |
 | **Are learning a topic for the first time** | Open the topic file → skim **First-Principles Map** → read **Core Algorithms & Click Moments** → do 2–3 problems from **Interview Questions** table. |
 | **Are revising before a mock** | Read **Quick Revision Triggers** + **Interview Questions — Logic & Trickiness** only (skip theory). |
 | **Stuck on “which DS?”** | Open [ds_tree.md](./ds_tree.md) — decision tree + pattern → structure mapping. |
@@ -31,8 +31,8 @@ Deep-dive notes for **Google SDE-2 / SDE-3** coding interviews. Each topic file 
 | **Hash maps** | Easy–Med | Frequency, two sum, grouping, prefix + map | [hashing.md](./hashing.md) |
 | **Tries** | Med | Prefix search, word break, XOR trie | [trie.md](./trie.md) |
 | **Graphs** | Med–Hard | BFS/DFS, topo, union-find; weighted → [graph.md](../02-algorithms/graph.md) | [graphs.md](./graphs.md) |
-| **Segment trees** | Hard | Range query/update, lazy propagation | [segment-tree.md](./segment-tree.md) |
-| **Advanced** | Hard | LRU/LFU, Bloom filter, Fenwick, skip list | [advanced-structures.md](./advanced-structures.md) |
+| **Segment trees** | Hard — awareness only | Range query/update — not tested at SDE-2 | [segment-tree.md](./segment-tree.md) |
+| **Advanced** | Varies | LRU/LFU (must know), Bloom filter (awareness), skip list (awareness) | [advanced-structures.md](./advanced-structures.md) |
 | **DS decision tree** | — | “Which structure for this constraint?” | [ds_tree.md](./ds_tree.md) |
 
 ---
@@ -72,21 +72,21 @@ Read top-to-bottom on first pass; on revision, jump to the **bold** sections.
 9. [heap.md](./heap.md) — top-K, merge K, median stream  
 10. [trie.md](./trie.md) — prefix / dictionary problems  
 11. Union-find — [union-find.md](../02-algorithms/union-find.md)  
-12. [segment-tree.md](./segment-tree.md) — concept-level OK for most L4 loops  
 
-**Good to know (time permitting)**  
-[advanced-structures.md](./advanced-structures.md) — unlikely to implement from scratch; know **use cases**.
+**Awareness only (do not spend implementation time)**  
+[segment-tree.md](./segment-tree.md) — know it exists, what problem it solves; not tested at SDE-2.  
+[advanced-structures.md](./advanced-structures.md) — LRU/LFU must know; Bloom filter, skip list: know what they are.
 
 ---
 
-## Must-nail for L4 (Google frequency)
+## Must-nail for Amazon SDE-2
 
 | Priority | Topics |
 |----------|--------|
 | **Very high** | Arrays, hashing, trees, graphs, strings |
 | **High** | Stacks, heaps, linked lists |
 | **Medium** | Tries, queues, union-find |
-| **Lower** | Segment trees, advanced structures (know *what problem they solve*) |
+| **Awareness only** | Segment trees, Fenwick trees, persistent/exotic structures — not expected at SDE-2 |
 
 ---
 

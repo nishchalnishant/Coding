@@ -284,6 +284,47 @@ def rabin_karp(text: str, pattern: str) -> list[int]:
 > [!CAUTION]
 > **Hash collisions**: Always verify `text[i:i+m] == pattern` on hash match — rolling hash can produce false positives. For security-critical applications (e.g., anti-plagiarism), use **double hashing** (two independent hash functions) to reduce collision probability to ~1/p₁×p₂.
 
+```python
+def rabin_karp_double_hash(text: str, pattern: str) -> list[int]:
+    """Double hashing: two independent (base, mod) pairs to eliminate false positives."""
+    n, m = len(text), len(pattern)
+    if m > n:
+        return []
+
+    B1, M1 = 31, 10**9 + 7
+    B2, M2 = 37, 10**9 + 9
+
+    def char_val(c): return ord(c) - ord('a') + 1
+
+    # Precompute pattern hash and initial window hash for both functions
+    ph1 = ph2 = wh1 = wh2 = 0
+    pow1, pow2 = pow(B1, m - 1, M1), pow(B2, m - 1, M2)
+    for i in range(m):
+        v = char_val(pattern[i])
+        ph1 = (ph1 * B1 + v) % M1
+        ph2 = (ph2 * B2 + v) % M2
+        tv = char_val(text[i])
+        wh1 = (wh1 * B1 + tv) % M1
+        wh2 = (wh2 * B2 + tv) % M2
+
+    matches = []
+    if wh1 == ph1 and wh2 == ph2:
+        matches.append(0)
+
+    for i in range(1, n - m + 1):
+        old, new = char_val(text[i-1]), char_val(text[i+m-1])
+        wh1 = (wh1 - old * pow1 % M1 + M1) * B1 % M1
+        wh1 = (wh1 + new) % M1
+        wh2 = (wh2 - old * pow2 % M2 + M2) * B2 % M2
+        wh2 = (wh2 + new) % M2
+        if wh1 == ph1 and wh2 == ph2:
+            matches.append(i)  # collision probability ~10^-18; no char-by-char verify needed
+    return matches
+```
+
+> [!TIP]
+> With double hashing, the probability of a false positive per window is ~(1/10^9)² ≈ 10^-18. In competitive programming this is accepted without string verification. In production code, still verify — defence in depth.
+
 ---
 
 ### Longest Palindromic Substring — Expand from Center
@@ -542,6 +583,89 @@ class AhoCorasick:
 > - **Suffix automaton** gives O(N) build and O(N) total size for all suffixes — used in Google's text indexing.
 >
 > In competitive programming: longest duplicate substring = binary search on length + rolling hash (O(N log N)); suffix array gives exact O(N log N) or O(N) with SA-IS.
+
+### Suffix Array — O(N log N) Build + LCP
+
+> [!IMPORTANT]
+> **The Click Moment**: "Longest repeated substring" — OR — "number of distinct substrings" — OR — "longest common substring of two strings" — OR — "many substring queries on the same text". A suffix array is the sorted order of all suffixes; the LCP array gives the longest common prefix of adjacent suffixes in sorted order.
+
+**When to use vs alternatives**:
+- Single pattern in text → KMP.
+- Many patterns in text → Aho-Corasick.
+- Many substring queries on fixed text, or problems involving repeated/distinct substrings → Suffix Array + LCP.
+
+```python
+def build_suffix_array(s: str) -> list[int]:
+    """O(N log^2 N) suffix array via doubling. Sufficient for interviews."""
+    n = len(s)
+    # Initial rank = character ordinal
+    sa = sorted(range(n), key=lambda i: s[i])
+    rank = [0] * n
+    for i in range(1, n):
+        rank[sa[i]] = rank[sa[i - 1]] + (s[sa[i]] != s[sa[i - 1]])
+
+    gap = 1
+    while gap < n:
+        # Sort by (rank[i], rank[i+gap]) pairs
+        def key(i):
+            return (rank[i], rank[i + gap] if i + gap < n else -1)
+        sa = sorted(range(n), key=key)
+        tmp = [0] * n
+        for i in range(1, n):
+            tmp[sa[i]] = tmp[sa[i - 1]] + (key(sa[i]) != key(sa[i - 1]))
+        rank = tmp
+        if rank[sa[-1]] == n - 1:
+            break  # All ranks unique — done
+        gap *= 2
+    return sa
+
+def build_lcp_array(s: str, sa: list[int]) -> list[int]:
+    """Kasai's algorithm: O(N) LCP array from suffix array."""
+    n = len(s)
+    rank = [0] * n
+    for i, suf in enumerate(sa):
+        rank[suf] = i
+    lcp = [0] * n
+    h = 0
+    for i in range(n):
+        if rank[i] > 0:
+            j = sa[rank[i] - 1]
+            while i + h < n and j + h < n and s[i + h] == s[j + h]:
+                h += 1
+            lcp[rank[i]] = h
+            if h > 0:
+                h -= 1
+    return lcp  # lcp[i] = LCP length between sa[i-1] and sa[i]
+```
+
+**Applications**:
+```python
+def count_distinct_substrings(s: str) -> int:
+    """Total substrings minus duplicates counted by LCP array."""
+    n = len(s)
+    sa = build_suffix_array(s)
+    lcp = build_lcp_array(s, sa)
+    # Each suffix i contributes (n - sa[i]) substrings, minus lcp[i] duplicates
+    return sum(n - sa[i] - lcp[i] for i in range(n))
+
+def longest_repeated_substring(s: str) -> str:
+    sa = build_suffix_array(s)
+    lcp = build_lcp_array(s, sa)
+    max_len = max(lcp)
+    if max_len == 0:
+        return ""
+    idx = lcp.index(max_len)
+    return s[sa[idx]: sa[idx] + max_len]
+```
+
+**Complexity**: Build O(N log² N) with the doubling approach above; Kasai LCP is O(N). For O(N log N) build: use radix sort instead of comparison sort inside the doubling loop — rarely needed in interviews.
+
+**Gotchas**:
+- LCP array is 0-indexed but `lcp[0]` is always 0 (no predecessor for the first suffix in sorted order).
+- Distinct substrings formula: total = N*(N+1)/2; subtract sum(lcp) for the duplicates.
+- For "longest common substring of two strings": concatenate with a sentinel character (`s + '#' + t`), build SA+LCP, then find max LCP between suffixes from different strings.
+
+---
 
 ### Concurrency: String Immutability and StringBuilder
 
