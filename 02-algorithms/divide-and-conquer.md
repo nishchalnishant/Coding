@@ -297,46 +297,6 @@ def max_subarray_dc(nums: list[int], lo: int, hi: int) -> int:
 
 ---
 
-### Closest Pair of Points — O(N log N)
-
-> [!IMPORTANT]
-> **The Click Moment**: "Minimum distance between any **two points** in a 2D plane" in less than O(N²). The D&C trick: after finding the minimum distance δ in each half, only check points within distance δ of the dividing line — and at most 7 other points per candidate (geometric packing argument).
-
-```python
-def closest_pair(points: list[tuple[float,float]]) -> float:
-    import math
-    pts = sorted(points)  # sort by x coordinate
-
-    def dist(p1, p2):
-        return math.hypot(p1[0]-p2[0], p1[1]-p2[1])
-
-    def rec(pts_x):
-        n = len(pts_x)
-        if n <= 3:
-            return min(dist(pts_x[i], pts_x[j]) for i in range(n) for j in range(i+1, n))
-        mid = n // 2
-        mid_x = pts_x[mid][0]
-        d = min(rec(pts_x[:mid]), rec(pts_x[mid:]))
-        strip = [p for p in pts_x if abs(p[0] - mid_x) < d]
-        strip.sort(key=lambda p: p[1])  # sort by y
-        for i in range(len(strip)):
-            for j in range(i+1, min(i+8, len(strip))):  # at most 7 candidates
-                if strip[j][1] - strip[i][1] >= d:
-                    break
-                d = min(d, dist(strip[i], strip[j]))
-        return d
-
-    return rec(pts)
-
-#### Common Variants & Twists
-1. **Closest Pair of Points in 3D**:
-   - **What (The Problem & Goal):** Extend the 2D algorithm to 3D space.
-   - **How (Intuition & Mental Model):** The D&C structure remains the same (divide by x, solve halves, check strip). However, the strip in 3D is a "slab" of width `2δ`, and the "check constant" increases from 7 to roughly 15-20 points based on 3D sphere packing.
-2. **All Nearest Neighbors**:
-   - **What (The Problem & Goal):** For every point in a set, find its nearest neighbor.
-   - **How (Intuition & Mental Model):** While it can be solved with a KD-Tree, a D&C approach can solve this in O(N log N) by passing more information up the merge step.
-```
-
 ---
 
 ## 3. Master Theorem
@@ -364,7 +324,7 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 
 ---
 
-## 4. SDE-3 Deep Dives
+## 4. Trade-offs: D&C vs DP
 
 ### D&C vs DP: The Key Distinction
 
@@ -378,18 +338,6 @@ def closest_pair(points: list[tuple[float,float]]) -> float:
 - `merge_sort(lo, hi)`: The left half `[lo, mid]` shares exactly **zero** elements with the right half `[mid+1, hi]`. There is no overlapping work to memoize. This is pure D&C and strictly O(N log N).
 
 **Quick Test**: Draw the recursion tree. Do nodes across different branches receive the exact same arguments? If yes → DP. If no → D&C.
-
-### Scalability: Parallel D&C
-
-> [!TIP]
-> D&C is **embarrassingly parallelizable**: the left and right subproblems are independent and can run on separate cores/machines. Java's `ForkJoinPool` implements parallel merge sort with a configurable threshold — below the threshold, use sequential sort (avoids thread overhead for small arrays). Python: use `multiprocessing.Pool` for CPU-bound D&C; `ThreadPoolExecutor` is limited by the GIL for Python code.
->
-> **MapReduce as D&C**: The map phase = divide (parallel); reduce phase = combine (also parallel per key). Merge sort on 1 TB of data: workers sort local shards (map), then a tree of reducers merges pairs (combine) — O(N/P log N/P + log P × N/P) total time.
-
-### Concurrency: Thread-Safe Combine
-
-> [!CAUTION]
-> The combine step often requires **coordination**: all sub-results must be available before combining. Use `Future.get()` (Java) or `Pool.map()` (Python) to block until all recursive calls complete. Avoid shared mutable state in the combine step — each level should produce a new result rather than mutating a shared array.
 
 ---
 

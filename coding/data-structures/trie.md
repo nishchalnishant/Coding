@@ -6,22 +6,15 @@ difficulty: mixed
 
 # Trie Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
-
 
 Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix trie.
-
-
 
 
 ---
 
 ## Core Trie Implementation
 
-### Implement Trie (Prefix Tree) `⚡ T1`
+### Implement Trie (Prefix Tree)
 
 > [!example] Problem
 > A trie (pronounced as "try") or prefix tree is a tree data structure used to efficiently store and retrieve keys in a dataset of strings. There are various applications of this data structure, such as autocomplete and spellchecker.
@@ -123,7 +116,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Autocomplete / Prefix Search
 
-### Design Search Autocomplete System `⚡ T1`
+### Design Search Autocomplete System
 
 > [!example] Problem
 > Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character `'#'`).
@@ -401,7 +394,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Replace Words `⚡ T1`
+### Replace Words
 
 > [!example] Problem
 > In English, we have a concept called root, which can be followed by some other word to form another longer word - let's call this word derivative. For example, when the root "help" is followed by the word "ful", we can form a derivative "helpful".
@@ -476,7 +469,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Trie + Backtracking
 
-### Word Search II `⚡ T1`
+### Word Search II
 
 > [!example] Problem
 > Given an m x n board of characters and a list of strings words, return all words on the board.
@@ -562,7 +555,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ### Word Squares
 
 > [!example] Problem
-> Given an array of **unique `🎯 T2`** strings `words`, return *all the ***[word squares](https://en.wikipedia.org/wiki/Word_square)*** you can build from *`words`. The same word from `words` can be used **multiple times**. You can return the answer in **any order**.
+> Given an array of **unique** strings `words`, return *all the ***[word squares](https://en.wikipedia.org/wiki/Word_square)*** you can build from *`words`. The same word from `words` can be used **multiple times**. You can return the answer in **any order**.
 > 
 > A sequence of strings forms a valid **word square** if the `k^th` row and column read the same string, where `0 <= k < max(numRows, numColumns)`.
 > 
@@ -606,7 +599,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 > 	
 > - `words[i]` consists of only lowercase English letters.
 > 	
-> - All `words[i]` are **unique `🎯 T2`**.
+> - All `words[i]` are **unique**.
 
 > [!info] Approach
 > At row `k` of a partial word square, the k-th column of all previously placed words determines the prefix that the next word must start with. A trie makes it O(L) to enumerate all words matching that prefix. Trie with word lists cached at each node (all words reachable from that node). Backtracking over rows, using column-prefix constraints to look up candidates. Build trie; at each node store all words whose prefix passes through it (`node.words`). Backtrack row by row: at row `k`, the required prefix = `square[0][k] + square[1][k] + ... + square[k-1][k]` (k-th column of already-placed words). Look up all words with that prefix in the trie. Try each as `square[k]`; recurse to row `k+1`. Base case: `len(square) == word_length` → record result.
@@ -654,7 +647,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## XOR Trie
 
-### Maximum XOR of Two Numbers in an Array `⚡ T1`
+### Maximum XOR of Two Numbers in an Array
 
 > [!example] Problem
 > Given an integer array nums, return the maximum result of nums[i] XOR nums[j], where 0 <= i <= j < n.
@@ -732,7 +725,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ### Number of Distinct Substrings in a String
 
 > [!example] Problem
-> Given a string `s`, return *the number of **distinct `🎯 T2`** substrings of* `s`.
+> Given a string `s`, return *the number of **distinct** substrings of* `s`.
 > 
 > A **substring** of a string is obtained by deleting any number of characters (possibly zero) from the front of the string and any number (possibly zero) from the back of the string.
 > 
@@ -935,7 +928,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Core Trie Operations (Extended)
 
-### Add and Search Word `⚡ T1`
+### Add and Search Word
 
 > [!example] Problem
 > Design a data structure with `addWord(word)` and `search(word)`. `search` supports the wildcard character `.` which matches any single letter. Return true if the word (with wildcards) matches any previously added word.
@@ -991,7 +984,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Prefix Problems
 
-### Search Suggestions System `⚡ T1`
+### Search Suggestions System
 
 > [!example] Problem
 > You are given an array of strings products and a string searchWord.
@@ -1519,7 +1512,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 > 	
 > - `1 <= value <= 10^9`
 > 	
-> - Each `path` is **valid `🎯 T2`** and consists of lowercase English letters and `'/'`.
+> - Each `path` is **valid** and consists of lowercase English letters and `'/'`.
 > 	
 > - At most `10^4` calls **in total** will be made to `createPath` and `get`.
 
@@ -1657,7 +1650,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Palindrome Pairs `⚡ T1`
+### Palindrome Pairs
 
 > [!example] Problem
 > You are given a 0-indexed array of unique strings words.
@@ -1731,7 +1724,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Design Search Autocomplete System (Trie + DFS Variant) `⚡ T1`
+### Design Search Autocomplete System (Trie + DFS Variant)
 
 > [!example] Problem
 > Design a search autocomplete system for a search engine. Users may input a sentence (at least one word and end with a special character `'#'`).
@@ -1873,7 +1866,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Suffix Trie / Advanced
 
-### Implement Trie II (Count Operations) `⚡ T1`
+### Implement Trie II (Count Operations)
 
 > [!example] Problem
 > Implement a trie with `insert(word)`, `countWordsEqualTo(word)` (exact count of that word inserted), `countWordsStartingWith(prefix)` (count of all inserted words with that prefix), and `erase(word)` (remove one occurrence).
@@ -1982,7 +1975,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Maximum XOR of Two Numbers — Prefix Hash Approach `⚡ T1`
+### Maximum XOR of Two Numbers — Prefix Hash Approach
 
 > [!example] Problem (Variant of LC 421)
 > Same as LC 421 (max XOR in array) but solved without an explicit trie node class — using a set-based prefix approach to contrast with the trie solution.
@@ -2021,7 +2014,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ## See Also
 
 [[string-algorithms]] | [[backtracking]] | [[hashing]]
-### Implement Trie II (Count Prefixes and Equal Words) `⚡ T1`
+### Implement Trie II (Count Prefixes and Equal Words)
 
 > [!example] Problem
 > Extend a trie so you can count how many words equal a string and how many words have a given prefix.
@@ -2053,7 +2046,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ## Trie Applications
 
-### Replace Words (LC 648) `⚡ T1`
+### Replace Words (LC 648)
 
 > [!example] Problem
 > In English, we have a concept called root, which can be followed by some other word to form another longer word - let's call this word derivative. For example, when the root "help" is followed by the word "ful", we can form a derivative "helpful".
@@ -2128,7 +2121,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 
 ---
 
-### Palindrome Pairs (LC 336) `⚡ T1`
+### Palindrome Pairs (LC 336)
 
 > [!example] Problem
 > You are given a 0-indexed array of unique strings words.
@@ -2202,7 +2195,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 ### Word Squares (LC 425)
 
 > [!example] Problem
-> Given an array of **unique `🎯 T2`** strings `words`, return *all the ***[word squares](https://en.wikipedia.org/wiki/Word_square)*** you can build from *`words`. The same word from `words` can be used **multiple times**. You can return the answer in **any order**.
+> Given an array of **unique** strings `words`, return *all the ***[word squares](https://en.wikipedia.org/wiki/Word_square)*** you can build from *`words`. The same word from `words` can be used **multiple times**. You can return the answer in **any order**.
 > 
 > A sequence of strings forms a valid **word square** if the `k^th` row and column read the same string, where `0 <= k < max(numRows, numColumns)`.
 > 
@@ -2246,7 +2239,7 @@ Pattern tags: trie insert/search, prefix search, backtracking, XOR trie, suffix 
 > 	
 > - `words[i]` consists of only lowercase English letters.
 > 	
-> - All `words[i]` are **unique `🎯 T2`**.
+> - All `words[i]` are **unique**.
 
 > [!info] Approach
 > When building the square row by row, the prefix of each new row is already determined by the column values filled in so far. A trie with prefix-to-words index lets us quickly find all words matching a required prefix. Build a trie where each node stores all words that pass through it (i.e., all words with that prefix). Backtrack: at row `k`, the required prefix is `square[0][k] + square[1][k] + ... + square[k-1][k]`. Fetch all matching words from the trie and try each. Insert all words into the trie, at each node also storing the list of words with that prefix. Backtrack with `build(step, square)`: if `step == n`, save the square. Otherwise extract prefix from the current partial square, look up matching words in the trie, and recurse.

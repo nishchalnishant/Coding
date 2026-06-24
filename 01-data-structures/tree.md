@@ -9,10 +9,10 @@ tags: [data-structures, tree]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+> [!abstract] Amazon SDE-2 Priority Legend
+> `⚡ T1` — **Must Master**: High-frequency Amazon problems. Do not move on until these are reflexive.
+> `🎯 T2` — **Build Fluidity**: Know the pattern cold; minor edge cases matter less.
+> `💤 T3` — **Awareness Only**: Not expected at SDE-2. Know what it does; skip deep implementation.
 
 
 ```
@@ -44,7 +44,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 - **Why it's fast**: A balanced tree of n nodes has height log₂n — binary search through levels, touching only log n nodes per operation.
 - **Where it breaks**: Without balancing (AVL/RB), repeated sorted insertions produce a O(n)-height linked list; recursion depth can overflow call stack on skewed trees.
 
-# Tree — SDE-3 Gold Standard
+# Tree — Amazon SDE-2
 
 ```
 [TREE]
@@ -68,9 +68,9 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 │   ├── BFS (level-order): queue-based, processes nodes level by level
 │   ├── BST operations: search/insert/delete all O(h); O(log N) balanced, O(N) skewed
 │   ├── LCA (Lowest Common Ancestor)
-│   │   ├── Naive: O(N) per query via ancestor sets
-│   │   ├── Binary lifting: O(N log N) build, O(log N) per query
-│   │   └── Euler tour + RMQ: O(N log N) build, O(1) per query
+│   │   ├── BT: postorder DFS — return node when found; if both sides non-null → current is LCA
+│   │   ├── BST: exploit ordering — go left/right until p and q diverge
+│   │   └── Binary lifting / Euler tour+RMQ: O(N log N) build — SDE-3, awareness only
 │   ├── Tree DP: post-order aggregation returning tuple of values per node
 │   │   └── Pattern: solve subtree → combine children → return to parent
 │   └── Serialization: preorder + null markers → unique reconstruction
@@ -82,7 +82,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 ├── COMPLEXITY
 │   ├── Time — BST search/insert/delete: O(log N) balanced, O(N) worst (skewed)
 │   ├── Time — traversal (all nodes): O(N)
-│   ├── Time — LCA (binary lifting): O(log N) query after O(N log N) build
+│   ├── Time — LCA (general BT): O(N) via postorder DFS; BST: O(h)
 │   └── Space: O(N) nodes + O(h) recursion stack; Morris = O(1) stack
 └── WHEN TO USE vs ALTERNATIVES
     ├── Use BST when: sorted order + O(log N) search/insert/delete
@@ -92,7 +92,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
     └── Avoid unbalanced BST: degenerates to O(N) linked list on sorted input
 ```
 
-Hierarchical structure: root, parent-child relationships, leaves. SDE-3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
+Hierarchical structure: root, parent-child relationships, leaves. Amazon SDE-2 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
 
 
 
@@ -395,7 +395,7 @@ def iterative_postorder(root) -> list[int]:
 ```
 
 > [!TIP]
-> A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. However, SDE-3 interviewers explicitly ban the reverse trick to test your state-machine logic. The 1-stack `last_visited` approach above is the true gold standard.
+> A common "cheat" for iterative postorder is the 2-stack approach: do an iterative preorder `Root → Right → Left` and reverse the output array. The 1-stack `last_visited` approach above is more robust and worth knowing — some interviewers ban the reverse trick.
 
 #### Common Variants & Twists
 1. **Binary Tree Right Side View `🎯 T2`**:
@@ -430,27 +430,11 @@ def deserialize(data: str):
 
 ---
 
-## 3. SDE-3 Deep Dives
+## 3. Awareness Only (SDE-3 / Not Tested at Amazon SDE-2)
 
-### Scalability: Balanced BSTs and Self-Balancing Trees
+### Self-Balancing BSTs
 
-> [!TIP]
-> A plain BST degrades to O(N) in the worst case (sorted insertions = linked list). Production systems use:
-> - **AVL tree**: Strict height balance (|left - right| ≤ 1); O(log N) guaranteed; more rotations on insert.
-> - **Red-Black tree**: Relaxed balance; O(log N) amortized; fewer rotations; used in Java's `TreeMap`, Linux kernel's task scheduler.
-> - **B-tree / B+ tree**: Branching factor >> 2; optimized for disk I/O; used in all relational databases.
->
-> At Google scale: sharded B-trees underlie Bigtable's SSTable format.
-
-### Scalability: Parallel Tree Traversal
-
-> [!TIP]
-> Tree DFS is naturally parallelizable: left and right subtrees are independent. For very large trees (file systems, ASTs), use a thread pool where each task processes a subtree and submits children as new tasks. In Python, use `concurrent.futures.ThreadPoolExecutor` with a work queue seeded from the root.
-
-### Concurrency: Lock-Free BST
-
-> [!TIP]
-> Lock-free concurrent BSTs use **CAS on child pointers**. The key insight: reads of child pointers are safe without locks (pointer reads are atomic on 64-bit systems); writes use CAS to atomically update a child pointer only if it hasn't changed. Used in Java's `ConcurrentSkipListMap` (skip list ≈ probabilistic balanced BST) for lock-free ordered map.
+AVL tree (strict balance), Red-Black tree (relaxed balance, used in Java `TreeMap` / Linux scheduler), B-tree / B+ tree (disk-optimized, used in databases). Know what they are; implementation not expected at Amazon SDE-2.
 
 ### Trade-offs
 

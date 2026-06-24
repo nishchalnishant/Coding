@@ -317,24 +317,7 @@ class RollbackDSU:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: Parallel DSU
-
-> [!TIP]
-> For distributed graphs (billions of nodes): the **Shiloach-Vishkin** algorithm runs DSU in parallel. Each node races to link to a neighbor with a smaller label using atomic compare-and-swap on parent pointers. Converges in O(log n) rounds with O((n + E) / P) work per round where P = processors. Used in graph processing frameworks like GraphX (Spark) and Ligra.
-
-### Scalability: Dynamic Connectivity with Deletions
-
-> [!TIP]
-> Standard DSU handles edge additions but not deletions. For **fully dynamic connectivity** (add and delete edges): use **link-cut trees** (O(log n) per operation) or process offline in reverse (deletions become additions when processed right-to-left). For online deletions, the best practical solution is **Et-trees** (Euler tour trees), used in research graph databases.
-
-### Concurrency: Lock-Free DSU
-
-> [!TIP]
-> Lock-free DSU uses **CAS (compare-and-swap)** on parent pointers: `parent[x].compareAndSet(x, root)`. Race conditions in path compression are benign — multiple threads may write the same compressed path, but all compressed values are valid roots. Union requires a CAS retry loop: read both roots, attempt to update the smaller-rank root's parent. If the CAS fails, retry. This is the approach in the Ligra parallel graph framework (C++) and is feasible in Java via `AtomicIntegerArray`.
-
-### Trade-offs: DSU vs Alternatives
+## 3. Trade-offs: DSU vs Alternatives
 
 | Need | DSU | BFS/DFS | Link-Cut Tree |
 | :--- | :--- | :--- | :--- |

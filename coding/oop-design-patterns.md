@@ -1,21 +1,12 @@
 ---
-tags: [coding, google-interview, oop, design-patterns, solid]
-topic: OOP & Design Patterns
-difficulty: sde2-sde3
+tags: [coding, amazon-interview, oop, design-patterns, solid, lld]
+topic: OOP & Design Patterns — Amazon SDE-2
+difficulty: sde2
 ---
 
-# OOP & Design Patterns — Google Interview Guide
+# OOP & Design Patterns — Amazon SDE-2
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
-
-
-
-
-> [!note] When This Gets Asked
-> Google may ask "design a parking lot" or "design a chess game" in a coding round. More often, OOP concepts come up in system design ("how would you model this?") and behavioral rounds ("how do you approach code organization?"). SOLID principles frequently appear in code review discussions.
+> Amazon may ask "design a parking lot" or "design an LRU cache" in a coding or LLD round. OOP concepts come up in system design ("how would you model this?") and behavioral rounds ("how do you approach code organization?"). SOLID principles frequently appear in code review discussions. Know Parking Lot and LRU Cache implementations cold.
 
 ---
 
@@ -726,6 +717,6 @@ When the interviewer asks "how would you improve this?", say:
 
 ## See Also
 
-- [Google Interview Strategy](./google-interview-strategy.md)
+- [Amazon Interview Strategy](./google-interview-strategy.md)
 - [System Design Guide](./system-design.md)
-- [Advanced Data Structures](./data-structures/advanced.md)
+- [Advanced Data Structures](./data-structures/advanced.md) — LRU/LFU implementations

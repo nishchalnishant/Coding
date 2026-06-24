@@ -1,15 +1,10 @@
 ---
-tags: [coding, google-interview, complexity, cheatsheet, big-o]
+tags: [coding, amazon-interview, complexity, cheatsheet, big-o]
 topic: Complexity Cheat Sheet
 difficulty: reference
 ---
 
 # Complexity Cheat Sheet — Complete Reference
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
 
 
 
@@ -304,7 +299,7 @@ Case 3: f(n) = Ω(n^(log_b(a) + ε))  →  T(n) = Θ(f(n))
 
 ---
 
-## Complexity Pitfalls at Google Interviews
+## Complexity Pitfalls in Interviews
 
 ### Pitfall 1: Hidden O(n) operations
 ```python
@@ -352,6 +347,6 @@ arr[l]     # O(1) — index access
 
 ## See Also
 
-- [Google Interview Strategy](./google-interview-strategy.md)
+- [Amazon Interview Strategy](./google-interview-strategy.md)
 - [Dynamic Programming](./algorithms/dynamic-programming.md)
 - [Graph Algorithms](./algorithms/graph-algorithms.md)

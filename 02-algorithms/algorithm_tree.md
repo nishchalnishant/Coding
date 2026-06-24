@@ -207,21 +207,11 @@ When you're reading a problem, I want you to ask: "Is this a **Dependency** prob
 - **Bit Manipulation**
     - *Variants:* Counting Bits, Single Number I & II, Maximum XOR of Two Numbers.
 
-## 9. Concurrency & Parallelism
+## 9. Concurrency & System Design Algorithms (Awareness Only)
 
-→ [concurrency.md](./concurrency.md)
-- **Producer-Consumer** — Synchronization between data sources and sinks using bounded buffers and semaphores.
-- **Read-Write Locking** — Optimizing for high-read throughput while ensuring exclusive write access.
-- **Barrier/Phaser Synchronization** — Multi-threaded coordination where threads must wait at specific checkpoints.
-
-## 10. System Design Algorithms (Distributed Scale)
-
-→ [system-design-algorithms.md](./system-design-algorithms.md)
-- **Consistent Hashing** — Distributed data partitioning that minimizes reshuffling during node churn.
-- **Bloom Filters & HyperLogLog** — Space-efficient probabilistic structures for membership and cardinality estimation.
-- **Rate Limiting (Token/Leaky Bucket)** — Algorithms for flow control and protecting systems from traffic bursts.
-- **Consensus (Raft/Paxos)** — Reaching agreement across unreliable distributed nodes for leader election and state replication.
-- **Sketching (Count-Min Sketch)** — Frequency estimation in high-volume data streams (e.g., trending hashtags).
+> SDE-2 scope: name the concept and its use case. See trimmed awareness notes: [concurrency.md](./concurrency.md) · [system-design-algorithms.md](./system-design-algorithms.md)
+- **Concurrency**: mutex/semaphore, producer-consumer, CAS, deadlock (Coffman conditions), thread pool sizing.
+- **System Design Algorithms**: Bloom filter, HyperLogLog, consistent hashing, Count-Min Sketch, Raft, token bucket.
 
 ---
 

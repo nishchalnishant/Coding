@@ -507,31 +507,6 @@ def word_break_ii(s: str, word_dict: list[str]) -> list[str]:
 
 **SDE-3 Rule**: Use mutable state for large collections (lists, grids, sets) to avoid O(N) allocation overhead per node. Use immutable state (strings, integers) where Python handles the immutability natively.
 
-### Scalability: Iterative Backtracking for Deep Trees
-
-> [!CAUTION]
-> Python's default recursion limit is 1000. For grids with up to 200×200 = 40,000 cells, recursive DFS will stack-overflow. Convert to **explicit stack** for production:
-
-```python
-def dfs_iterative(start, choices):
-    stack = [(start, [])]  # (state, path)
-    results = []
-    while stack:
-        state, path = stack.pop()
-        if is_goal(state):
-            results.append(path)
-            continue
-        for choice in get_choices(state):
-            if is_valid(choice, state):
-                stack.append((next_state(state, choice), path + [choice]))
-    return results
-```
-
-### Concurrency: Parallel Backtracking
-
-> [!TIP]
-> Backtracking trees are **embarrassingly parallelizable at the root's children**. For N-Queens(N=20+), split across the N choices for row 0 and assign each subtree to a different process (`multiprocessing.Pool`). Each subtree is fully independent — no shared state between branches. Combine results after all subtrees complete. This scales linearly with available cores.
-
 ### Trade-offs
 
 | Approach | Time | Space | When to Prefer |

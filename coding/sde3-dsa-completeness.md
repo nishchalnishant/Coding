@@ -1,119 +1,170 @@
 ---
-tags: [coding, sde3, dsa, completeness, audit]
-topic: SDE-3 DSA Completeness Addendum
+tags: [coding, amazon-sde2, dsa, completeness, checklist]
+topic: Amazon SDE-2 DSA Completeness Checklist
 difficulty: reference
 ---
 
-# SDE-3 DSA Completeness Addendum
+# Amazon SDE-2 DSA Completeness Checklist
 
-This note is the audit companion for the repo. The core material already covers the interview staples; this page fills the gaps that matter when the bar moves from "solve the problem" to "solve it cleanly, prove it, and know the right variant to use".
-
-> [!important] SDE-3 bar for DSA
-> You are expected to do more than recall templates. You should:
-> - pick the correct family of algorithms from the constraints,
-> - state the invariant before coding,
-> - prove correctness at a high level,
-> - compare alternatives honestly,
-> - and know the harder follow-up variant if the interviewer pushes.
+Use this to audit your readiness before an Amazon SDE-2 loop. Check off topics you can solve cold (no reference) in under 25 minutes with clean, bug-free code.
 
 ---
 
-## What the repo already covers well
+## Arrays & Strings
 
-- Core data structures: arrays, strings, linked lists, stacks, queues, heaps, hash maps, trees, tries, graphs, segment trees.
-- Core algorithms: recursion, backtracking, binary search, greedy, divide-and-conquer, DP, graph algorithms, bit manipulation, union-find, string matching.
-- Interview framing: complexity, Google-specific communication, and problem pattern recognition.
-
-## What is often still missing at SDE-3 level
-
-### Advanced graph depth
-
-- **Tarjan articulation points**: not just bridges, but the node version of the same low-link idea.
-- **Strongly connected components**: SCC condensation graph, reverse topological reasoning, and when Kosaraju vs Tarjan is simpler.
-- **Eulerian path / Hierholzer**: itinerary-style problems where every edge must be used exactly once.
-- **0-1 BFS**: the shortest-path trick when edge weights are only `0` and `1`.
-- **Bidirectional BFS**: massive reduction for shortest-path-in-unweighted-graph problems.
-- **Shortest path on DAGs**: topological ordering plus relaxation.
-- **Floyd-Warshall**: dense-all-pairs shortest path and transitive closure.
-
-### Advanced data structure depth
-
-- **Fenwick tree variants**: range update + point query, point update + range query, and the idea of two BITs for range update + range query.
-- **Persistent segment tree**: immutable versions for order statistics and historical queries.
-- **Order statistic tree / Treap**: ranked lookup, k-th smallest, and dynamic sorted order.
-- **Interval tree / sweep-line structures**: overlap queries, calendar booking, and event intersection problems.
-- **Bloom filter**: probabilistic membership test when false positives are acceptable.
-- **Skip list**: randomized ordered structure that behaves like a simpler balanced tree.
-
-### Advanced string depth
-
-- **Aho-Corasick**: multi-pattern matching at scale.
-- **Suffix array / LCP**: all-substring reasoning, repeated substring questions, and lexicographic suffix order.
-- **Suffix automaton**: compact representation for substring problems.
-- **Rolling hash details**: double hashing, collision awareness, and substring equality.
-
-### Advanced bit / DP depth
-
-- **Bitmask DP**: subset states, traveling-salesman style transitions, and small-`n` exponential solutions.
-- **Submask enumeration**: the `sub = (sub - 1) & mask` trick.
-- **XOR basis**: stronger than XOR tricks when the question asks for linear independence over bits.
+- [ ] Two-pointer (opposite ends): two sum sorted, 3Sum, container with most water
+- [ ] Sliding window (variable): longest substring without repeat, minimum window substring
+- [ ] Sliding window (fixed): max sum subarray of size k
+- [ ] Prefix sums: subarray sum equals k, range sum query
+- [ ] Kadane's algorithm: maximum subarray
+- [ ] In-place array tricks: rotate array, move zeroes, remove duplicates
+- [ ] String: anagram check, group anagrams, valid palindrome
+- [ ] Sorting tricks: sort colors (Dutch flag), merge intervals, meeting rooms
 
 ---
 
-## Canonical SDE-3 follow-up questions to be able to answer
+## Linked Lists
 
-### Graphs
-
-1. Can you detect a bridge and explain `low[]` vs `disc[]`?
-2. Can you find articulation points and explain why the root case is special?
-3. Can you decompose a directed graph into SCCs and explain the condensation graph?
-4. Can you solve shortest path with `0/1` weights without a heap?
-5. Can you do shortest path on a DAG in linear time after topological sort?
-
-### Data structures
-
-1. Can you support range updates and range queries efficiently?
-2. Can you explain when BIT is simpler than a segment tree?
-3. Can you use a persistent tree for versioned queries?
-4. Can you maintain sorted order with insert/delete and rank queries?
-5. Can you explain the tradeoff between skip list, BST, and treap?
-
-### Strings
-
-1. Can you match many patterns against one text in one pass?
-2. Can you reason about suffix order and repeated substrings?
-3. Can you explain why rolling hash is probabilistic and how to reduce collisions?
-
-### Bit / combinatorics
-
-1. Can you enumerate all subsets and all submasks without extra memory?
-2. Can you recognize bitmask DP when `n <= 20`?
-3. Can you explain why some XOR problems need a basis instead of a simple trick?
+- [ ] Fast/slow pointers: cycle detection (Floyd's), find cycle start
+- [ ] Reversal: reverse linked list (iterative + recursive), reverse k-group
+- [ ] Merge: merge two sorted lists, merge k sorted lists
+- [ ] Runner technique: find middle, reorder list
+- [ ] LRU Cache: doubly linked list + hash map, O(1) get/put
 
 ---
 
-## Missing-content checklist for revision
+## Stacks & Queues
 
-- Know the invariant first; code second.
-- State the asymptotic cost of every operation, not just the headline complexity.
-- Be able to compare at least two alternatives for every topic.
-- Know the edge cases: empty input, duplicates, disconnected graphs, skewed trees, overflow, and negative values.
-- Be able to explain why the "easy" solution fails to scale.
-- Be able to say when a problem is actually a disguised version of a known pattern.
+- [ ] Monotonic stack: next greater element, largest rectangle in histogram, daily temperatures
+- [ ] Valid parentheses and variants
+- [ ] Min stack (O(1) getMin)
+- [ ] Monotonic deque: sliding window maximum
+- [ ] BFS queue patterns (separate from graph section below)
 
 ---
 
-## Where to read next in this repo
+## Hash Maps / Hash Sets
 
-- `coding/data-structures/advanced.md`
-- `coding/data-structures/graph.md`
-- `coding/data-structures/trie.md`
-- `coding/algorithms/graph-algorithms.md`
-- `coding/algorithms/bit-manipulation.md`
-- `coding/algorithms/string-algorithms.md`
-- `coding/algorithms/dynamic-programming.md`
-- `coding/complexity-cheatsheet.md`
+- [ ] Frequency map: top K frequent elements, first unique character
+- [ ] Complement lookup: two sum, four sum
+- [ ] Grouping: group anagrams, isomorphic strings
+- [ ] Sliding window with hash map: longest substring with k distinct characters
 
-## Final bar
+---
 
-If you can explain the invariant, prove correctness, derive complexity, and handle the obvious follow-up variant without panic, you are at the right DSA level for a Google / Meta / Amazon / Microsoft SDE-3 loop.
+## Trees
+
+- [ ] All four traversals: preorder, inorder, postorder (iterative + recursive), level-order BFS
+- [ ] Path problems: max path sum, path sum II (root to leaf), diameter of binary tree
+- [ ] LCA: lowest common ancestor of binary tree and BST
+- [ ] BST: validate BST, kth smallest in BST, BST insert/delete
+- [ ] Construction: build tree from preorder+inorder, serialize/deserialize
+- [ ] Tree DP: house robber III, maximum goods (rob tree)
+
+---
+
+## Heaps / Priority Queues
+
+- [ ] Top-K elements (min-heap of size k)
+- [ ] K-way merge: merge k sorted lists, smallest range covering k lists
+- [ ] Kth largest/smallest: kth largest in array, kth smallest in sorted matrix
+- [ ] Median of data stream (two heaps: max-heap + min-heap)
+- [ ] Task scheduler (greedy + heap)
+
+---
+
+## Tries
+
+- [ ] Insert and search words
+- [ ] Starts-with (prefix) check
+- [ ] Word search II (trie + backtracking)
+- [ ] Replace words (trie for dictionary lookups)
+
+---
+
+## Graphs
+
+- [ ] Representations: adjacency list, adjacency matrix
+- [ ] BFS: shortest path unweighted, word ladder, 01 matrix (multi-source BFS)
+- [ ] DFS: number of islands, flood fill, connected components
+- [ ] Topological sort (Kahn's BFS and DFS): course schedule, alien dictionary
+- [ ] Dijkstra's: network delay time, cheapest flights within k stops
+- [ ] Union-Find: number of connected components, redundant connection, accounts merge
+- [ ] Cycle detection: directed (DFS with states) and undirected (Union-Find or DFS)
+
+---
+
+## Dynamic Programming
+
+- [ ] 1D DP: climbing stairs, house robber, coin change, decode ways
+- [ ] 2D DP: unique paths, edit distance, longest common subsequence
+- [ ] Knapsack: 0/1 knapsack, coin change II (unbounded)
+- [ ] LIS: longest increasing subsequence (O(n²) DP + O(n log n) with binary search)
+- [ ] String DP: palindromic substrings, longest palindromic subsequence
+- [ ] Interval DP: burst balloons (awareness — rare at SDE-2)
+- [ ] DP with states: jump game II, best time to buy and sell stock with cooldown
+
+---
+
+## Backtracking
+
+- [ ] Subsets (with and without duplicates)
+- [ ] Permutations (with and without duplicates)
+- [ ] Combinations (combination sum I and II)
+- [ ] N-Queens (conceptual understanding)
+- [ ] Word search (grid backtracking)
+- [ ] Palindrome partitioning
+
+---
+
+## Binary Search
+
+- [ ] Standard: binary search, search in rotated sorted array, find minimum in rotated array
+- [ ] Binary search on answer: koko eating bananas, capacity to ship packages, split array largest sum
+- [ ] 2D binary search: search a 2D matrix
+
+---
+
+## Greedy
+
+- [ ] Interval greedy: merge intervals, non-overlapping intervals, meeting rooms II
+- [ ] Jump game (I and II)
+- [ ] Gas station
+- [ ] Task scheduler
+
+---
+
+## Bit Manipulation (Awareness-level)
+
+- [ ] XOR tricks: find single number, missing number
+- [ ] Bit masking: count bits, power of two, hamming distance
+- [ ] Subsets via bitmask (n ≤ 20)
+
+---
+
+## System Design (SDE-2 Scope)
+
+- [ ] URL shortener: Base62 encoding, Redis cache, KV store
+- [ ] Rate limiter: token bucket, sliding window counter, Redis atomic ops
+- [ ] Simple feed: fan-out on write vs read, Redis sorted set for timeline
+- [ ] Distributed cache: Redis cluster, eviction policies (LRU/LFU/TTL), cache stampede
+- [ ] Framework: requirements → capacity → high-level → deep dive → scale → tradeoffs
+
+---
+
+## Readiness Bar
+
+You are ready for an Amazon SDE-2 coding loop when you can:
+- Solve any Tier 1 topic above cold in ≤ 20 minutes with correct edge case handling
+- State time and space complexity before writing code
+- Handle empty input, single element, duplicates, overflow (mention INT_MIN/MAX where relevant)
+- Optimize from brute force to optimal when asked without prompting
+
+---
+
+## See Also
+
+- `amazon-sde2/` — full Amazon interview track
+- `coding/patterns-quick-reference.md` — code templates
+- `coding/complexity-cheatsheet.md` — complexity reference
+- `coding/behavioral-interview.md` — Amazon Leadership Principles guide

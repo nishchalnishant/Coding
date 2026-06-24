@@ -495,21 +495,6 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 >
 > Rule of thumb: if you can construct a counterexample, it's not greedy — reach for DP.
 
-### Scalability: Online / Streaming Greedy
-
-> [!TIP]
-> Many greedy algorithms are **online** (process one element at a time without future knowledge):
-> - **Interval scheduling**: Sort offline is required. For online scheduling, use a priority queue of active intervals by end time.
-> - **Task Scheduler in production `⚡ T1`**: At Google scale, task scheduling is a distributed bin-packing problem — use the **Longest Processing Time (LPT)** greedy for makespan minimization on K machines.
-> - **Online ads**: Greedy matching of ads to slots using priority queue of bids — approximation ratio of `1 - 1/e` for online bipartite matching.
-
-### Concurrency: Parallel Greedy
-
-> [!TIP]
-> Some greedy algorithms parallelize naturally:
-> - **Huffman coding**: Build the priority queue in parallel; merge step is sequential but small.
-> - **Prim's MST `⚡ T1`**: Each machine explores its local graph shard; coordinator merges minimum edges. Approximated in distributed settings via Borůvka's algorithm — inherently parallel (each component finds its lightest outgoing edge simultaneously).
-
 ### Trade-offs: Greedy vs DP vs Backtracking
 
 | Approach | Time | Space | When Correct |

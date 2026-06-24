@@ -1,8 +1,8 @@
 # Algorithms — Start Here
 
-Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with data-structure notes in [01-data-structures](../01-data-structures/README.md); use this folder for **how to solve** (patterns, recurrences, graph algos, string matching).
+Technique deep-dives for **Amazon SDE-2** coding interviews. Pair with data-structure notes in [01-data-structures](../01-data-structures/README.md); use this folder for **how to solve** (patterns, recurrences, graph algos, string matching).
 
-**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (triggers):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Walkthroughs:** [problem-deep-dives.md](./problem-deep-dives.md) · **Google revision:** [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) · **SDE-3 completeness:** [sde3-dsa-completeness.md](./sde3-dsa-completeness.md)
+**Repo hub:** [00-start-here/README.md](../00-start-here/README.md) · **Patterns (triggers):** [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) · **Walkthroughs:** [problem-deep-dives.md](./problem-deep-dives.md) · **Amazon SDE-2 track:** [amazon-sde2/README.md](../amazon-sde2/README.md)
 
 ---
 
@@ -10,9 +10,9 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 
 | If you… | Do this |
 |---------|---------|
-| **Have ~2 weeks before Google L4** | Must-nail topics below → **Quick Revision Triggers** per file → 2 timed problems/day → [GOOGLE_INTERVIEW_REVISION.md](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
+| **Have ~2 weeks before Amazon SDE-2** | Must-nail topics below → **Quick Revision Triggers** per file → 2 timed problems/day → [amazon-sde2/02-coding-questions.md](../amazon-sde2/02-coding-questions.md) |
 | **Learning a technique fresh** | Topic file → **Core Algorithms / Click Moments** → 2 problems from **Interview Questions** table |
-| **Are revising before a mock** | **Quick Revision Triggers** + **Interview Questions** only; use [problem-deep-dives.md](./problem-deep-dives.md#l4-must-nail-problems) for one full walkthrough |
+| **Are revising before a mock** | **Quick Revision Triggers** + **Interview Questions** only; use [problem-deep-dives.md](./problem-deep-dives.md) for one full walkthrough |
 | **Stuck on “which algorithm?”** | [algorithm_tree.md](./algorithm_tree.md) — signal → family → file |
 
 ---
@@ -70,7 +70,7 @@ Technique deep-dives for **Google SDE-2 / SDE-3** coding interviews. Pair with d
 |---------|----------------|
 | **First-Principles Map** | First visit — why this technique exists |
 | **Core Algorithms / Click Moments** | Learn templates and invariants |
-| **SDE-3 Deep Dives** | Stretch; skip until L4 core is solid |
+| **Trade-offs** | Algorithm selection and when NOT to use a technique |
 | **Interview Questions — Logic & Trickiness** | **High yield** before mocks |
 | **Quick Revision Triggers** | **Day-before** — phrase → technique |
 | **See also** | Links to DS files + patterns |
@@ -116,10 +116,12 @@ Full tree: [algorithm_tree.md](./algorithm_tree.md).
 
 ---
 
-## Must-nail vs good-to-have (L4)
+## Must-nail vs good-to-have (Amazon SDE-2)
 
-**Must-nail:** binary search (incl. on answer), two pointers, sliding window, BFS/DFS, core DP (1D/2D/knapsack), backtracking template, heap top-K, hash patterns (in [01-data-structures](../01-data-structures/README.md))
+**Must-nail:** binary search (incl. on answer), two pointers, sliding window, BFS/DFS, core DP (1D/2D/knapsack), backtracking (subsets/permutations/N-Queens), heap top-K, hash patterns (in [01-data-structures](../01-data-structures/README.md))
 
-**High:** greedy intervals, union-find, topo sort, divide & conquer (quickselect)
+**High:** greedy intervals (meeting rooms, non-overlapping), union-find, topo sort, Dijkstra, divide & conquer (merge sort/quickselect)
 
-**Good-to-have:** KMP/Rabin-Karp, Tarjan/bridges, segment tree, bit tricks, system-design algos, SQL, concurrency
+**Good-to-have:** KMP awareness, bit manipulation (XOR tricks, power of 2), string patterns (anagram, palindrome), DSU Kruskal
+
+**Awareness only (not tested in depth):** Tarjan/bridges, suffix arrays, Aho-Corasick, system-design algos, SQL, concurrency LLD

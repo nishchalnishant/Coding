@@ -9,10 +9,10 @@ tags: [data-structures, linked-list]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+> [!abstract] Amazon SDE-2 Priority Legend
+> `⚡ T1` — **Must Master**: High-frequency Amazon problems. Do not move on until these are reflexive.
+> `🎯 T2` — **Build Fluidity**: Know the pattern cold; minor edge cases matter less.
+> `💤 T3` — **Awareness Only**: Not expected at SDE-2. Know what it does; skip deep implementation.
 
 
 ```

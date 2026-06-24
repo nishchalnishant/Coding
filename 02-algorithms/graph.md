@@ -534,24 +534,7 @@ def bidirectional_bfs(graph: dict, src, tgt) -> int:
 
 ---
 
-## 4. SDE-3 Deep Dives
-
-### Scalability: Distributed Shortest Path
-
-> [!TIP]
-> **Pregel (Google, 2010)**: Graph computation framework where each vertex computes its state and sends messages to neighbors. Dijkstra's becomes: each vertex maintains `dist`, sends `(dist + edge_weight)` to neighbors, updates if a better value arrives. Converges in O(diameter) supersteps. Handles trillion-edge graphs by partitioning across thousands of machines.
->
-> **Delta-stepping**: A parallelizable variant of Dijkstra that processes a "bucket" of vertices with distance in `[d, d+Δ]` simultaneously, then advances to the next bucket. Implemented in Boost Graph Library and used in high-performance computing.
-
-### Scalability: Graph Streaming
-
-> [!TIP]
-> When the graph is too large to store (social network with 1 billion edges): use **streaming algorithms** that process each edge once and maintain O(polylog N) state. For connectivity: maintain a random spanning forest using sketches (union-find on the stream). For approximate shortest paths: maintain a distance oracle with O(N^(1+1/k)) space and O(k) query time.
-
-### Concurrency: Lock-Free Graph Traversal
-
-> [!TIP]
-> Concurrent BFS: divide the frontier into shards; each thread processes its shard in parallel. Synchronize on the next frontier with a concurrent queue or `ConcurrentLinkedQueue`. Challenge: avoiding duplicate processing — use a `ConcurrentHashMap` as the visited set with `putIfAbsent` as the atomic gate.
+## 4. Algorithm Selection Trade-offs
 
 ### Trade-offs: Graph Algorithm Selection
 

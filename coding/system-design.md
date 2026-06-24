@@ -1,15 +1,12 @@
 ---
-tags: [coding, google-interview, system-design, architecture]
-topic: System Design
-difficulty: sde3
+tags: [coding, amazon-interview, system-design, architecture]
+topic: System Design — Amazon SDE-2
+difficulty: sde2
 ---
 
-# System Design Guide — Google SDE 2/3
+# System Design Guide — Amazon SDE-2
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+> SDE-2 system design scope: URL Shortener, Rate Limiter, Distributed Cache, News Feed (simplified). Know the 5-step framework cold. You are expected to make reasonable tradeoff decisions and explain them, but you are NOT expected to handle petabyte-scale distributed consensus or ML pipeline design.
 
 
 
@@ -351,77 +348,26 @@ Read path:
 
 ---
 
-## Design 4: Google Drive / Dropbox
+## Design 4: File Storage (Dropbox) — Awareness
 
-**Functional**: Upload/download files, sync across devices, share with others
+**Not a core SDE-2 design. Know the key ideas:**
 
-**The Core Challenge**: Large file uploads, efficient sync (only send changes, not whole file)
-
-```
-File Chunking:
-  Split file into 4MB chunks
-  Each chunk has a SHA-256 hash
-  Upload only chunks that have changed (delta sync)
-  Benefits: resume interrupted uploads; deduplicate identical chunks across users
-
-Storage:
-  Metadata DB (PostgreSQL): files, folders, versions, chunks, permissions
-  Object Storage (S3): actual file chunks (immutable, addressed by hash)
-  CDN: serve frequently accessed files close to users
-
-Upload Flow:
-  Client chunks file (4MB chunks) → computes SHA-256 per chunk
-  → POST /upload/init (get presigned S3 URLs for new chunks)
-  → Client uploads chunks directly to S3 (bypass app server!)
-  → POST /upload/complete → DB records file metadata + chunk list
-  
-Download / Sync Flow:
-  Server sends diff: "chunks [A,B,C] changed; chunk D is new"
-  Client downloads only changed chunks → reassembles file
-  Use long-polling or WebSocket for real-time sync notification
-
-Conflict Resolution:
-  Last-write-wins (simple, loses data)
-  Operational Transform (Google Docs — complex)
-  Keep both versions with conflict marker (Dropbox approach — simple, safe)
-```
+- **File chunking**: split files into 4 MB chunks; each chunk hashed (SHA-256); upload only changed chunks (delta sync).
+- **Storage split**: metadata DB (Postgres) for folders/files/permissions; Object Storage (S3) for actual chunks.
+- **Upload flow**: client uploads chunks directly to S3 via presigned URLs (bypasses app server); app records metadata after S3 upload completes.
+- **Sync**: server sends diff of changed chunk IDs; client downloads only those.
+- **Conflict resolution**: simplest approach is keep-both-versions with conflict marker (Dropbox style).
 
 ---
 
-## Design 5: YouTube / Video Streaming
+## Design 5: Video Streaming (YouTube) — Awareness
 
-**Functional**: Upload videos, stream videos at adaptive quality
+**Not a core SDE-2 design. Know the key ideas:**
 
-**The Core Challenge**: Video transcoding (MP4 → multiple resolutions), CDN delivery
-
-```
-Upload Pipeline:
-  User uploads raw video → Object Storage (S3, raw)
-  → Transcoding Service (async, Kafka trigger):
-    Transcode to: 360p, 480p, 720p, 1080p, 4K
-    Generate thumbnail
-    Extract audio track
-  → Store transcoded files in S3 (by video_id/resolution/)
-  → Update metadata DB: "video ready"
-  → Invalidate CDN cache; push to CDN edge nodes
-
-Streaming:
-  Adaptive Bitrate Streaming (HLS / DASH):
-    Video split into 2-sec segments at each resolution
-    Client downloads a manifest file (playlist of segments)
-    Player monitors bandwidth → switches resolution dynamically
-    → Smooth playback even on slow networks
-
-CDN Strategy:
-  Push model: pre-push popular videos to all edge nodes
-  Pull model: edge node fetches from origin on first request, caches
-  Hybrid: push top 10% videos; pull the rest
-
-Storage estimation:
-  1 video × 5 resolutions × 1 hour = ~10 GB
-  500 hours uploaded/minute → 500 × 60 × 10 GB = 300 TB/day
-  → Use tiered storage: hot (SSD, recent/popular), cold (HDD/glacier, old)
-```
+- **Upload pipeline**: raw video → Object Storage → async transcoding service (Kafka trigger) → multiple resolutions (360p, 720p, 1080p) stored back in S3 → CDN.
+- **Adaptive bitrate streaming (HLS/DASH)**: video split into 2-sec segments at each resolution; client downloads a manifest file; player switches resolution based on bandwidth.
+- **CDN**: push popular videos to edge nodes; pull-on-first-request for the long tail.
+- **Scale signal**: 500 hours uploaded/minute → ~300 TB/day of transcoded video; tiered storage (SSD for hot, cold storage for archive).
 
 ---
 
@@ -458,85 +404,26 @@ Cache Stampede (Thundering Herd):
 
 ---
 
-## Design 7: Chat System (WhatsApp / Slack)
+## Design 7: Chat System — Awareness
 
-**Functional**: 1:1 messaging, group chats, online presence, message history
+**Know the key ideas:**
 
-**The Core Challenge**: Real-time message delivery, offline message storage
-
-```
-Connection Layer:
-  WebSocket (persistent TCP connection) for real-time delivery
-  Each user → connected to one Chat Server (stateful)
-  Load balancer with consistent hashing (same user → same server)
-
-Message Flow (1:1):
-  User A sends message → Chat Server A → checks if User B is online:
-    Online: → Chat Server B → WebSocket push to User B
-    Offline: → Message Queue → stores in DB; push notification via APNS/FCM
-
-Storage:
-  Message DB: Cassandra (append-heavy, time-ordered, multi-region)
-    Partition key: chat_id (ensures messages for same chat co-located)
-    Sort key: message_id (Snowflake ID — time-ordered, globally unique)
-  
-  NoSQL because:
-    Messages are never updated (append-only)
-    Read pattern: "give me last 100 messages for chat X" = range scan
-    Scale: billions of messages/day → NoSQL scales horizontally
-
-Snowflake ID (message_id):
-  64-bit ID = timestamp (41 bits) + datacenter_id (5) + machine_id (5) + sequence (12)
-  Globally unique, time-ordered, no central coordinator needed
-
-Group Chats:
-  Fan-out on write: message → write to each member's inbox (if small group)
-  Fan-out on read: store once; members pull when online (if large group)
-  Threshold: fan-out on write up to 100 members; pull model beyond that
-
-Presence:
-  User sends heartbeat every 30 sec → Redis TTL key expires if no heartbeat
-  On disconnect: set "last seen" timestamp in Redis
-  On reconnect: update status + drain offline message queue
-```
+- **Transport**: WebSocket (persistent TCP) for real-time; stateful chat servers; consistent hashing so same user → same server.
+- **Message flow**: online → WebSocket push; offline → Message Queue → DB + push notification (APNS/FCM).
+- **Storage**: Cassandra (append-heavy, time-ordered); partition by chat_id; sort by Snowflake ID.
+- **Group chat**: fan-out on write for small groups (< 100 members); fan-out on read for large groups.
+- **Presence**: heartbeat every 30s → Redis TTL key; "last seen" on disconnect.
 
 ---
 
-## Design 8: Search Autocomplete
+## Design 8: Search Autocomplete — Awareness
 
-**Functional**: As user types, show top 5 search suggestions in real-time
+**Know the key ideas:**
 
-**The Core Challenge**: <100ms latency, suggestions based on global query frequency
-
-```
-Data Collection:
-  Every search → Kafka event → Aggregation Service (batch, hourly)
-  Count query frequency per time window (last 7 days weighted)
-  Filter: spam, offensive content, privacy (personal data)
-  Output: (query, score) pairs → Trie stored in DB
-
-Trie Storage:
-  In-memory Trie on suggestion servers (for <10ms lookup)
-  Serialized Trie in DB (rebuilt from aggregation output)
-  Cache: top-5 suggestions for each prefix cached in Trie nodes
-    Trade read time (no traversal needed) for space
-
-Trie rebuild:
-  Batch rebuild every few hours (offline) → swap into memory atomically
-  No locking: blue-green swap (build new trie, swap pointer)
-
-API:
-  GET /autocomplete?q=ap → returns ["apple", "app store", "apple watch", ...]
-  
-Latency optimization:
-  Client: debounce 100ms (don't send request on every keystroke)
-  CDN: cache responses for common prefixes (prefix "the" = same everywhere)
-  Server: Trie lookup in-memory = <1ms; total with network = <50ms
-
-Personalization (advanced):
-  Blend global top-5 with user's personal search history
-  User history stored in small per-user Redis hash (last 20 searches)
-```
+- **Data collection**: search events → Kafka → batch aggregation (hourly) → (query, score) pairs.
+- **Trie storage**: in-memory trie on suggestion servers; each node caches top-5 suggestions; rebuilt from batch job every few hours (blue-green swap).
+- **Latency**: client debounce 100ms; CDN for common prefixes; in-memory trie lookup < 1ms.
+- **API**: `GET /autocomplete?q=ap` → top 5 completions.
 
 ---
 
@@ -601,7 +488,7 @@ PACELC (more practical than CAP):
 
 1. **Jumping to components before requirements** — Always clarify scale and constraints first
 2. **Over-engineering** — Don't design for 1 billion users if the question says 1 million
-3. **No capacity estimation** — Google loves when you quantify; it shows engineering rigor
+3. **No capacity estimation** — Amazon expects you to quantify; it shows engineering rigor
 4. **Ignoring failure modes** — "What happens when the DB goes down?" is always asked
 5. **Single point of failure (SPOF)** — Everything needs redundancy: DB replication, multi-AZ
 6. **Not explaining tradeoffs** — "I chose Cassandra because [tradeoffs]" > "I chose Cassandra"
@@ -615,5 +502,5 @@ PACELC (more practical than CAP):
 ## See Also
 
 - [System Design Algorithms](../02-algorithms/system-design-algorithms.md)
-- [Google Interview Strategy](./google-interview-strategy.md)
+- [Amazon Interview Strategy](./google-interview-strategy.md)
 - [Behavioral Interview](./behavioral-interview.md)

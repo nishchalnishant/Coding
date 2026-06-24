@@ -6,11 +6,6 @@ difficulty: mixed
 
 # Graph Problems — Deep Dive
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
-
 
 **Pattern map**: Graph problems collapse into five patterns — BFS (shortest path, multi-source spread), DFS (connectivity, flood fill, cycle detection), Topological Sort (dependency ordering on DAGs), Shortest Path / Weighted (Dijkstra, modified BFS), Bipartite coloring, and Advanced (Union-Find / MST / DAG DP). Pick BFS when you need minimum steps; DFS when you need reachability or ordering; Union-Find when you need dynamic connectivity with no full traversal needed.
 
@@ -19,13 +14,11 @@ difficulty: mixed
 **Edge cases worth checking**: empty graph, single node, disconnected components, duplicate edges, self-loops, cycles in a "tree" input, and recursion depth on large grids/graphs. For grid problems, confirm whether diagonals count, whether borders are included, and whether you can mutate the input to mark visited.
 
 
-
-
 ---
 
 ## BFS on Graphs
 
-### Rotting Oranges `⚡ T1`
+### Rotting Oranges
 
 > [!example] Problem
 > You are given an m x n grid where each cell can have one of three values:
@@ -105,7 +98,7 @@ difficulty: mixed
 
 ---
 
-### Number of Islands (BFS) `⚡ T1`
+### Number of Islands (BFS)
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -178,7 +171,7 @@ difficulty: mixed
 
 ---
 
-### Walls and Gates (LC 286) `⚡ T1`
+### Walls and Gates (LC 286)
 
 > [!example] Problem
 > You are given an `m x n` grid `rooms` initialized with these three possible values.
@@ -262,7 +255,7 @@ difficulty: mixed
 
 ---
 
-### 01 Matrix (LC 542) `⚡ T1`
+### 01 Matrix (LC 542)
 
 > [!example] Problem
 > Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
@@ -320,7 +313,7 @@ difficulty: mixed
 
 ---
 
-### Word Ladder `⚡ T1`
+### Word Ladder
 
 > [!example] Problem
 > A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
@@ -446,7 +439,7 @@ difficulty: mixed
 
 ---
 
-### Find if Path Exists in a Graph `⚡ T1`
+### Find if Path Exists in a Graph
 
 > [!example] Problem
 > Given n nodes, a list of bidirectional edges, source and destination, determine if a valid path exists.
@@ -540,7 +533,7 @@ difficulty: mixed
 
 ## DFS on Graphs
 
-### Number of Islands `⚡ T1`
+### Number of Islands
 
 > [!example] Problem
 > Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
@@ -612,7 +605,7 @@ difficulty: mixed
 
 ---
 
-### Flood Fill `⚡ T1`
+### Flood Fill
 
 > [!example] Problem
 > You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Your task is to perform a flood fill on the image starting from the pixel image[sr][sc].
@@ -678,7 +671,7 @@ difficulty: mixed
 
 ---
 
-### Max Area of Island `⚡ T1`
+### Max Area of Island
 
 > [!example] Problem
 > You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
@@ -730,7 +723,7 @@ difficulty: mixed
 
 ---
 
-### Surrounded Regions `⚡ T1`
+### Surrounded Regions
 
 > [!example] Problem
 > You are given an m x n matrix board containing letters 'X' and 'O', capture regions that are surrounded:
@@ -797,7 +790,7 @@ difficulty: mixed
 
 ---
 
-### Pacific Atlantic Water Flow `⚡ T1`
+### Pacific Atlantic Water Flow
 
 > [!example] Problem
 > There is an m x n rectangular island that borders both the Pacific Ocean and Atlantic Ocean. The Pacific Ocean touches the island's left and top edges, and the Atlantic Ocean touches the island's right and bottom edges.
@@ -879,7 +872,7 @@ difficulty: mixed
 
 ---
 
-### All Paths From Source to Target `⚡ T1`
+### All Paths From Source to Target
 
 > [!example] Problem
 > Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
@@ -937,7 +930,7 @@ difficulty: mixed
 
 ---
 
-### Number of Provinces (LC 547) `⚡ T1`
+### Number of Provinces (LC 547)
 
 > [!example] Problem
 > There are n cities. Some of them are connected, while some are not. If city a is connected directly with city b, and city b is connected directly with city c, then city a is connected indirectly with city c.
@@ -998,7 +991,7 @@ difficulty: mixed
 
 ---
 
-### Number of Enclaves (LC 1020) `⚡ T1`
+### Number of Enclaves (LC 1020)
 
 > [!example] Problem
 > You are given an m x n binary matrix grid, where 0 represents a sea cell and 1 represents a land cell.
@@ -1061,7 +1054,7 @@ difficulty: mixed
 
 ---
 
-### Clone Graph `⚡ T1`
+### Clone Graph
 
 > [!example] Problem
 > Given a reference of a node in a connected undirected graph.
@@ -1143,7 +1136,7 @@ difficulty: mixed
 
 ---
 
-### Find Eventual Safe States `⚡ T1`
+### Find Eventual Safe States
 
 > [!example] Problem
 > There is a directed graph of n nodes with each node labeled from 0 to n - 1. The graph is represented by a 0-indexed 2D integer array graph where graph[i] is an integer array of nodes adjacent to node i, meaning there is an edge from node i to each node in graph[i].
@@ -1209,7 +1202,7 @@ difficulty: mixed
 
 ## Topological Sort
 
-### Course Schedule II `⚡ T1`
+### Course Schedule II
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -1280,7 +1273,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Number of Vertices to Reach All Nodes `⚡ T1`
+### Minimum Number of Vertices to Reach All Nodes
 
 > [!example] Problem
 > Given a directed acyclic graph, with n vertices numbered from 0 to n-1, and an array edges where edges[i] = [fromi, toi] represents a directed edge from node fromi to node toi.
@@ -1477,7 +1470,7 @@ difficulty: mixed
 
 ---
 
-### Path with Minimum Effort (LC 1631) `⚡ T1`
+### Path with Minimum Effort (LC 1631)
 
 > [!example] Problem
 > You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
@@ -1597,7 +1590,7 @@ difficulty: mixed
 
 ## Bipartite / Coloring
 
-### Is Graph Bipartite? `⚡ T1`
+### Is Graph Bipartite?
 
 > [!example] Problem
 > There is an undirected graph with n nodes, where each node is numbered between 0 and n - 1. You are given a 2D array graph, where graph[u] is an array of nodes that node u is adjacent to. More formally, for each v in graph[u], there is an undirected edge between node u and node v. The graph has the following properties:
@@ -1732,7 +1725,7 @@ difficulty: mixed
 
 ## Advanced
 
-### Redundant Connection `⚡ T1`
+### Redundant Connection
 
 > [!example] Problem
 > In this problem, a tree is an undirected graph that is connected and has no cycles.
@@ -1807,7 +1800,7 @@ difficulty: mixed
 > Given a connected undirected weighted graph, find the minimum spanning tree — a subset of edges that connects all nodes with minimum total weight and no cycles.
 
 > [!info] Approach
-> **Kruskal's — sort edges by weight, greedily add if no cycle. `⚡ T1`** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
+> **Kruskal's — sort edges by weight, greedily add if no cycle.** The cut property — the minimum weight edge crossing any cut belongs to some MST. Kruskal's: sort all edges by weight and greedily add each edge if it doesn't form a cycle. Union-Find for O(α) cycle detection per edge (vs O(V) DFS cycle check). Sort edges by weight; for each edge, union its endpoints if they're in different components; stop after adding V-1 edges.
 
 > [!note]- Python Solution
 > ```python
@@ -1855,7 +1848,7 @@ difficulty: mixed
 
 ---
 
-### Longest Path in a DAG `⚡ T1`
+### Longest Path in a DAG
 
 > [!example] Problem
 > Find the length of the longest path in a directed acyclic graph (in terms of number of edges).
@@ -1957,7 +1950,7 @@ difficulty: mixed
 
 ---
 
-### Critical Connections / Bridges (LC 1192) `💤 T3`
+### Critical Connections / Bridges (LC 1192)
 
 > [!example] Problem
 > There are n servers numbered from 0 to n - 1 connected by undirected server-to-server connections forming a network where connections[i] = [ai, bi] represents a connection between servers ai and bi. Any server can reach other servers directly or indirectly through the network.
@@ -2103,7 +2096,7 @@ difficulty: mixed
 
 ## Advanced Graph Algorithms
 
-### Strongly Connected Components — Kosaraju's Algorithm `💤 T3`
+### Strongly Connected Components — Kosaraju's Algorithm
 
 > [!example] Problem
 > Find all strongly connected components (SCCs) in a directed graph. An SCC is a maximal set of nodes where every node is reachable from every other node.

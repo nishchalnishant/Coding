@@ -6,11 +6,6 @@ difficulty: mixed
 
 # Linked List — Problem Deep Dives
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
 
 **Core invariants to internalize:**
 - Singly linked: each node holds `val` + `next`. No backward traversal.
@@ -34,13 +29,11 @@ difficulty: mixed
 - Cycles absent vs present; duplicate values vs duplicate nodes.
 
 
-
-
 ---
 
 ## In-Place Reversal
 
-### Reverse Linked List `🎯 T2`
+### Reverse Linked List
 
 > [!example] Problem
 > Given the head of a singly linked list, reverse the list, and return the reversed list.
@@ -96,7 +89,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Linked List II `🎯 T2`
+### Reverse Linked List II
 
 > [!example] Problem
 > Given the head of a singly linked list and two integers left and right where left <= right, reverse the nodes of the list from position left to position right, and return the reversed list.
@@ -147,7 +140,7 @@ difficulty: mixed
 
 ---
 
-### Palindrome Linked List `🎯 T2`
+### Palindrome Linked List
 
 > [!example] Problem
 > Given the head of a singly linked list, return true if it is a palindrome or false otherwise.
@@ -208,7 +201,7 @@ difficulty: mixed
 
 ---
 
-### Reorder List `🎯 T2`
+### Reorder List
 
 > [!example] Problem
 > You are given the head of a singly linked-list. The list can be represented as:
@@ -278,7 +271,7 @@ difficulty: mixed
 
 ---
 
-### Reverse Nodes in K-Group `🎯 T2`
+### Reverse Nodes in K-Group
 
 > [!example] Problem
 > Given the head of a linked list, reverse the nodes of the list k at a time, and return the modified list.
@@ -337,7 +330,7 @@ difficulty: mixed
 
 ## Fast / Slow Pointers
 
-### Linked List Cycle `🎯 T2`
+### Linked List Cycle
 
 > [!example] Problem
 > Given head, the head of a linked list, determine if the linked list has a cycle in it.
@@ -440,7 +433,7 @@ difficulty: mixed
 
 ---
 
-### Remove Nth Node From End of List `🎯 T2`
+### Remove Nth Node From End of List
 
 > [!example] Problem
 > Given the head of a linked list, remove the nth node from the end of the list and return its head.
@@ -616,7 +609,7 @@ difficulty: mixed
 
 ## Floyd's Cycle Detection
 
-### Linked List Cycle II `🎯 T2`
+### Linked List Cycle II
 
 > [!example] Problem
 > Given the head of a linked list, return the node where the cycle begins. If there is no cycle, return null.
@@ -679,7 +672,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number (Floyd's variant) `🎯 T2`
+### Find the Duplicate Number (Floyd's variant)
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -742,7 +735,7 @@ difficulty: mixed
 
 ## Merge / Sorting
 
-### Merge Two Sorted Lists `🎯 T2`
+### Merge Two Sorted Lists
 
 > [!example] Problem
 > You are given the heads of two sorted linked lists list1 and list2.
@@ -801,7 +794,7 @@ difficulty: mixed
 
 ---
 
-### Sort List `🎯 T2`
+### Sort List
 
 > [!example] Problem
 > Given the head of a linked list, return the list after sorting it in ascending order.
@@ -949,7 +942,7 @@ difficulty: mixed
 
 ## Copy / Design
 
-### Copy List with Random Pointer `🎯 T2`
+### Copy List with Random Pointer
 
 > [!example] Problem
 > A linked list of length n is given such that each node contains an additional random pointer, which could point to any node in the list, or null.
@@ -1017,7 +1010,7 @@ difficulty: mixed
 
 ---
 
-### LRU Cache `🎯 T2`
+### LRU Cache
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
@@ -1680,7 +1673,7 @@ difficulty: mixed
 
 ## Design
 
-### LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
+### LRU Cache (Doubly Linked List + Hash Map)
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.

@@ -6,20 +6,12 @@ difficulty: mixed
 
 # Array Problems — Deep Dive
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
-
-
-
-
 
 ---
 
 ## Two Pointers
 
-### Two Sum (sorted variant) `⚡ T1`
+### Two Sum (sorted variant)
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -82,7 +74,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum `⚡ T1`
+### 3Sum
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -164,7 +156,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum Closest `⚡ T1`
+### 3Sum Closest
 
 > [!example] Problem
 > Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
@@ -225,7 +217,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum `⚡ T1`
+### 4Sum
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -293,7 +285,7 @@ difficulty: mixed
 
 ---
 
-### Container with Most Water `⚡ T1`
+### Container with Most Water
 
 > [!example] Problem
 > You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
@@ -346,7 +338,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water `⚡ T1`
+### Trapping Rain Water
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -403,7 +395,7 @@ difficulty: mixed
 
 ---
 
-### Remove Duplicates from Sorted Array `⚡ T1`
+### Remove Duplicates from Sorted Array
 
 > [!example] Problem
 > Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
@@ -471,7 +463,7 @@ difficulty: mixed
 
 ---
 
-### Next Permutation `🎯 T2`
+### Next Permutation
 
 > [!example] Problem
 > A permutation of an array of integers is an arrangement of its members into a sequence or linear order.
@@ -540,7 +532,7 @@ difficulty: mixed
 
 ## Sliding Window
 
-### Max Consecutive Ones III `⚡ T1`
+### Max Consecutive Ones III
 
 > [!example] Problem
 > Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
@@ -593,7 +585,7 @@ difficulty: mixed
 
 ---
 
-### Subarrays with K Different Integers `⚡ T1`
+### Subarrays with K Different Integers
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the number of good subarrays of nums.
@@ -764,7 +756,7 @@ difficulty: mixed
 
 ## Kadane's Algorithm
 
-### Maximum Subarray `🎯 T2`
+### Maximum Subarray
 
 > [!example] Problem
 > Given an integer array nums, find the subarray with the largest sum, and return its sum.
@@ -855,7 +847,7 @@ difficulty: mixed
 
 ## Dutch National Flag / Partitioning
 
-### Sort Colors `⚡ T1`
+### Sort Colors
 
 > [!example] Problem
 > Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
@@ -955,7 +947,7 @@ difficulty: mixed
 
 ## Boyer-Moore Voting
 
-### Majority Element `🎯 T2`
+### Majority Element
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -1007,7 +999,7 @@ difficulty: mixed
 
 ---
 
-### Find the Duplicate Number `🎯 T2`
+### Find the Duplicate Number
 
 > [!example] Problem
 > Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
@@ -1267,7 +1259,7 @@ difficulty: mixed
 
 ## Miscellaneous Array Techniques
 
-### Best Time to Buy and Sell Stock `🎯 T2`
+### Best Time to Buy and Sell Stock
 
 > [!example] Problem
 > You are given an array prices where prices[i] is the price of a given stock on the ith day.
@@ -1317,7 +1309,7 @@ difficulty: mixed
 
 ---
 
-### Move Zeroes `⚡ T1`
+### Move Zeroes
 
 > [!example] Problem
 > Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
@@ -1363,7 +1355,7 @@ difficulty: mixed
 
 ---
 
-### Two Sum (hash map variant) `⚡ T1`
+### Two Sum (hash map variant)
 
 > [!example] Problem
 > Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
@@ -1607,7 +1599,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query — Immutable (LC 303) `💤 T3`
+### Range Sum Query — Immutable (LC 303)
 
 > [!example] Problem
 > Given an integer array nums, handle multiple queries of the following type:
@@ -1658,7 +1650,7 @@ difficulty: mixed
 
 ---
 
-### Range Sum Query 2D — Immutable (LC 304) `💤 T3`
+### Range Sum Query 2D — Immutable (LC 304)
 
 > [!example] Problem
 > Given a 2D matrix matrix, handle multiple queries of the following type:
@@ -1722,7 +1714,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game (LC 55) `🎯 T2`
+### Jump Game (LC 55)
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -1769,7 +1761,7 @@ difficulty: mixed
 
 ---
 
-### Gas Station (LC 134) `🎯 T2`
+### Gas Station (LC 134)
 
 > [!example] Problem
 > There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
@@ -1886,7 +1878,7 @@ difficulty: mixed
 
 ---
 
-### Merge Intervals (LC 56) `🎯 T2`
+### Merge Intervals (LC 56)
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -1935,7 +1927,7 @@ difficulty: mixed
 
 ---
 
-### Insert Interval (LC 57) `🎯 T2`
+### Insert Interval (LC 57)
 
 > [!example] Problem
 > You are given an array of non-overlapping intervals intervals where intervals[i] = [starti, endi] represent the start and the end of the ith interval and intervals is sorted in ascending order by starti. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
@@ -1999,7 +1991,7 @@ difficulty: mixed
 
 ---
 
-### Non-overlapping Intervals (LC 435) `🎯 T2`
+### Non-overlapping Intervals (LC 435)
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -2183,7 +2175,7 @@ difficulty: mixed
 
 ## Prefix Sum
 
-### Subarray Sum Equals K (with negative numbers) `⚡ T1`
+### Subarray Sum Equals K (with negative numbers)
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -2233,7 +2225,7 @@ difficulty: mixed
 
 ---
 
-### Contiguous Array (Equal 0s and 1s) `⚡ T1`
+### Contiguous Array (Equal 0s and 1s)
 
 > [!example] Problem
 > Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.

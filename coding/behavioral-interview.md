@@ -1,273 +1,210 @@
 ---
-tags: [coding, google-interview, behavioral, star, googleyness]
-topic: Behavioral Interview
+tags: [coding, amazon-interview, behavioral, star, leadership-principles]
+topic: Behavioral Interview — Amazon SDE-2
 difficulty: meta
 ---
 
-# Behavioral Interview Guide — Google SDE 2/3
+# Behavioral Interview Guide — Amazon SDE-2
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
-
-
-
-
-> [!important] This Round Is Not Optional
-> Google's behavioral round (called "Googleyness & Leadership" internally) is **weighted equally** to coding rounds. Strong technical candidates are rejected every week because they bomb this round. Prepare it with the same seriousness as LeetCode Hard problems.
+> At Amazon, behavioral interviews are evaluated entirely through the lens of **Leadership Principles (LPs)**. Every question maps to one or more LPs. Prepare 2–3 STAR stories per LP that matters most (Customer Obsession, Ownership, Dive Deep, Deliver Results, Bias for Action, Earn Trust, Disagree and Commit).
 
 ---
 
-## What Google Is Actually Evaluating
+## Amazon's 16 Leadership Principles
 
-Google uses a framework called **"Googleyness"** + **"Leadership"** with these specific attributes:
+| # | LP | Core Signal |
+|---|---|---|
+| 1 | **Customer Obsession** | Start with the customer and work backwards |
+| 2 | **Ownership** | Act like an owner, not just a role holder |
+| 3 | **Invent and Simplify** | Find simpler solutions; simplicity is strength |
+| 4 | **Are Right, A Lot** | Strong judgment; seek diverse perspectives |
+| 5 | **Learn and Be Curious** | Continuously improve; explore new possibilities |
+| 6 | **Hire and Develop the Best** | Raise the bar with every hire; mentor |
+| 7 | **Insist on the Highest Standards** | Never settle; drive quality |
+| 8 | **Think Big** | Bold direction; inspire results |
+| 9 | **Bias for Action** | Speed matters; calculated risk-taking |
+| 10 | **Frugality** | Accomplish more with less |
+| 11 | **Earn Trust** | Listen attentively; be honest even when uncomfortable |
+| 12 | **Dive Deep** | Operate at all levels; stay connected to details |
+| 13 | **Have Backbone; Disagree and Commit** | Challenge respectfully; commit fully once decided |
+| 14 | **Deliver Results** | Focus on key inputs; deliver with quality on time |
+| 15 | **Strive to Be Earth's Best Employer** | Empathy, safety, inclusion |
+| 16 | **Success and Scale Bring Broad Responsibility** | Do better for society |
 
-| Attribute | What it means | How to demonstrate |
-|-----------|--------------|-------------------|
-| **Cognitive Ability** | How you think through ambiguity | Structured STAR answers with insight |
-| **Emergent Leadership** | Lead without authority | Stories of influencing without a title |
-| **Role-Related Knowledge** | Depth in your domain | Specific technical details in your stories |
-| **Googleyness** | Comfortable with ambiguity, collaborative, humble | Show intellectual curiosity; credit teammates |
-
-> [!caution] What "Googleyness" Actually Means
-> Google explicitly screens for: comfort with ambiguity, a bias toward action, intellectual humility (you can be wrong and learn from it), and genuine collaborative instinct. Candidates who come across as overly self-promoting, dismissive of teammates, or unable to change their mind when given new information are flagged.
+**Most tested at SDE-2**: Customer Obsession, Ownership, Bias for Action, Dive Deep, Disagree and Commit, Deliver Results, Earn Trust, Invent and Simplify.
 
 ---
 
-## The STAR Framework — Done Right
+## The Bar Raiser
+
+Every Amazon interview loop includes a **Bar Raiser** — a specially trained interviewer from a different team whose sole job is to maintain the hiring bar. They:
+- Are not your future manager or teammate
+- Ask harder follow-up questions than standard interviewers
+- Can veto a hire even if the rest of the loop approves
+- Focus heavily on behavioral signals and LP coverage
+
+Prepare as if every interviewer is the bar raiser.
+
+---
+
+## The STAR Framework — Amazon Style
 
 **S**ituation → **T**ask → **A**ction → **R**esult
 
-Most candidates know STAR, but they do it wrong. Here's the difference:
+Amazon expects STAR answers to be **specific, measurable, and LP-tagged**. After every answer, the interviewer should be able to say "that demonstrates [LP]."
 
 ### Wrong STAR:
-> "My team had a bug in production. I was tasked with fixing it. I investigated the logs, found the issue, fixed it, and deployed."
+> "My team had a difficult project. I helped lead it. We shipped it on time."
 
-### Right STAR (what Google wants):
-> **Situation (10%)**: "We were two weeks before a major product launch. Our payment processing service was throwing intermittent 500 errors in production — affecting about 3% of transactions."
+### Right STAR (Amazon wants):
+> **Situation**: "Our team's checkout service was experiencing a 2% cart abandonment spike during peak traffic. We were two weeks before Prime Day."
 >
-> **Task (10%) `⚡ T1`**: "I was the on-call engineer and the only backend engineer available on a Sunday. My manager was traveling internationally with no phone access."
+> **Task**: "I was the owner of the checkout backend. No one explicitly asked me to investigate — I flagged it myself after seeing it in our dashboards."
 >
-> **Action (60% — this is the meat)**: "I started by pulling the error logs and noticed the failures were correlated with a specific database region. I formed a hypothesis that we were hitting connection pool exhaustion under load. I wrote a quick script to plot the error rate against DB connection count — confirmed the correlation. Rather than just restarting the service (which would have masked the root cause), I dug into the connection pool configuration and found we had inherited a default max_connections=10 from a library upgrade three versions back — previously it was 50. I patched the config, deployed to staging, ran a load test to confirm, then deployed to prod with a feature flag so I could roll back instantly. I also wrote a runbook for the on-call rotation explaining the fix and monitoring signals to watch."
+> **Action**: "I pulled traces and found that our payment gateway was timing out on retries, but the timeout was set to 5 seconds — too long under load. I ran experiments in staging to find the optimal retry budget (1.5s + exponential backoff with jitter), confirmed the fix with load testing simulating 3x Prime Day traffic, and proposed the change at design review. Two other engineers pushed back saying the fix was too risky pre-Prime Day. I came prepared with the data: the retry storm was worse than the risk of the fix. We agreed to deploy behind a feature flag with instant rollback capability."
 >
-> **Result (20%)**: "Errors dropped to zero within 10 minutes of the deploy. The payment success rate went from 97% back to 99.97%. At the post-mortem I proposed adding a connection pool saturation alert — which we shipped two weeks later and has caught two similar incidents since."
+> **Result**: "Cart abandonment dropped from 2% to 0.3% within 30 minutes of the flag flip. Prime Day ran without incidents on this service. I also wrote a doc on retry budget best practices that became our team's standard reference."
 
-**Key differences:**
-- Specific numbers (3% failure rate, 10 minutes to fix)
-- Shows independent judgment (didn't wait for manager)
-- Shows depth (root cause, not just symptom fix)
-- Shows ownership beyond the fix (runbook, monitoring alert)
-- Result includes *impact*, not just "it worked"
+**LP tags**: Ownership (didn't wait to be asked), Dive Deep (traces → root cause), Disagree and Commit (won with data, others committed), Deliver Results.
 
 ---
 
-## The 25 Most-Asked Google Behavioral Questions
+## High-Signal LP → Question Mapping
 
-Prepare a STAR story for each category. You don't need 25 separate stories — 8 good stories can answer all 25 with different angles.
+### Customer Obsession
+- "Tell me about a time you made a decision that prioritized the customer over a short-term technical or business metric."
+- "Describe a time you advocated for the customer when others didn't."
+- "Tell me about a time you discovered an unmet customer need."
 
-### Category 1: Impact & Ownership
+### Ownership
+- "Tell me about a time you owned a project end to end."
+- "Describe a time you stepped up to fix something outside your job description."
+- "Tell me about a time you took responsibility for a failure."
 
-**Q1. Tell me about a project you're most proud of.**
-> Key signals: Self-direction, scope, measurable impact, what you'd do differently
+### Invent and Simplify
+- "Tell me about a time you simplified a complex process or system."
+- "Describe an innovative solution you implemented."
 
-**Q2. Tell me about a time you went above and beyond what was expected.**
-> Key signals: Intrinsic motivation, ownership mindset, proactivity
+### Bias for Action
+- "Tell me about a time you made a decision without all the information you wanted."
+- "Describe a time you took a calculated risk. What was the outcome?"
+- "Tell me about a time you had to move fast despite uncertainty."
 
-**Q3. Describe a time you identified a significant risk or problem and addressed it proactively.**
-> Key signals: Judgment, bias toward action, risk awareness
+### Dive Deep
+- "Tell me about a time you dug into a problem deeper than was expected."
+- "Describe a time you found a root cause that others had missed."
+- "Tell me about a time data changed your initial assumption."
 
-**Q4. Tell me about a time you had a significant technical impact.**
-> Key signals: Technical depth, influence on codebase/architecture
+### Disagree and Commit
+- "Tell me about a time you disagreed with a decision and how you handled it."
+- "Describe a time you committed to a direction you didn't initially agree with."
+- "Tell me about a time you pushed back on a requirement or a direction."
 
-**Q5. Describe the most complex system you've designed or built.**
-> Key signals: Architecture thinking, tradeoff reasoning, scale awareness
+### Deliver Results
+- "Tell me about a time you delivered a result despite significant obstacles."
+- "Describe a time you had to make hard tradeoffs to meet a deadline."
+- "Tell me about a project you drove from idea to completion."
 
----
-
-### Category 2: Conflict & Disagreement
-
-**Q6. Tell me about a time you disagreed with your manager or tech lead.**
-> Key signals: Courage, data-driven argumentation, knowing when to concede
-
-**Q7. Describe a time you had a conflict with a teammate. How was it resolved?**
-> Key signals: Emotional intelligence, focus on the work not the person, resolution
-
-**Q8. Tell me about a time you had to push back on a product requirement.**
-> Key signals: Technical judgment, ability to say no constructively
-
-**Q9. Tell me about a time you were wrong. How did you handle it?**
-> Key signals: Intellectual humility, learning orientation — this is a TRAP for people who can't admit mistakes
-
-**Q10. Tell me about a time you changed your mind after initially being certain you were right.**
-> Key signals: Openness to new evidence, intellectual honesty
-
----
-
-### Category 3: Ambiguity & Decisions Under Uncertainty
-
-**Q11. Tell me about a time you had to make a decision with incomplete information.**
-> Key signals: Comfort with ambiguity, pragmatic decision making, defined a decision threshold
-
-**Q12. Describe a time you had to prioritize between multiple important competing tasks.**
-> Key signals: Judgment, transparency, impact-based prioritization
-
-**Q13. Tell me about a time requirements changed significantly mid-project.**
-> Key signals: Adaptability, stakeholder management, pivot execution
-
-**Q14. Describe a time you had to make a technical decision without a clear right answer.**
-> Key signals: Tradeoff reasoning, framing the decision, driving to a conclusion
-
----
-
-### Category 4: Leadership & Cross-Functional
-
-**Q15. Tell me about a time you led a project or initiative (even informally).**
-> Key signals: Project ownership, coordination, unblocking others
-
-**Q16. Describe a time you influenced people who didn't report to you.**
-> Key signals: Influence without authority — critical for SDE 3
-
-**Q17. Tell me about a time you mentored or helped a teammate grow.**
-> Key signals: Collaborative instinct, teaching ability, patience
-
-**Q18. Tell me about a time you had to align multiple stakeholders with different priorities.**
-> Key signals: Communication, negotiation, keeping focus on shared goal
-
-**Q19. Describe a time you drove a cross-team or cross-functional initiative.**
-> Key signals: Org navigation, written communication, long-horizon thinking
-
----
-
-### Category 5: Failure & Learning
-
-**Q20. Tell me about a time you failed. What happened and what did you learn?**
-> Key signals: This is NOT a trick question — Google wants real failures with real learning. Saying "I worked too hard" is a red flag. Say something that actually went wrong.
-
-**Q21. Tell me about a bug or outage you caused. What did you do?**
-> Key signals: Accountability, systematic debugging, post-mortem mindset
-
-**Q22. Describe a project that didn't go as planned.**
-> Key signals: Honest retrospection, what you controlled vs didn't, what you'd change
-
----
-
-### Category 6: Googleyness-Specific
-
-**Q23. Why Google? Why this team?**
-> Key signals: Genuine curiosity about the mission, specific knowledge of the team/product
-> Never say "compensation" or "prestige" — say "scale of impact", "technical challenges", "open culture"
-
-**Q24. What do you do when you don't know how to solve a problem?**
-> Key signals: Learning instinct, asking for help appropriately, resourcefulness
-
-**Q25. Tell me about a time you had to learn something completely new quickly.**
-> Key signals: Growth mindset, learning efficiency, applied the learning
+### Earn Trust
+- "Tell me about a time you had to give difficult feedback."
+- "Describe a time you made a mistake and how you communicated it."
+- "Tell me about a time you earned the trust of a skeptical stakeholder."
 
 ---
 
 ## 8 Core Stories to Prepare
 
-Prepare these 8 stories. Each can flex to answer multiple questions above.
-
-| Story | Questions it covers |
-|-------|-------------------|
-| **Story 1: Your best technical project** | Q1, Q4, Q5 |
-| **Story 2: A time you went above and beyond** | Q2, Q3, Q15 |
-| **Story 3: A disagreement you won (with data)** | Q6, Q8, Q14 |
-| **Story 4: A disagreement you lost (and why that was right)** | Q9, Q10 |
-| **Story 5: A real failure / outage you caused** | Q20, Q21, Q22 |
-| **Story 6: A decision under ambiguity/incomplete info** | Q11, Q12, Q13 |
-| **Story 7: Cross-functional influence or leadership** | Q16, Q17, Q18, Q19 |
-| **Story 8: Why Google / what excites you** | Q23, Q24, Q25 |
+| Story | Primary LP | Secondary LPs |
+|-------|-----------|--------------|
+| **Your best technical project** | Deliver Results | Ownership, Dive Deep |
+| **A time you went above and beyond scope** | Ownership | Bias for Action, Customer Obsession |
+| **A time you disagreed and won (with data)** | Disagree and Commit | Are Right A Lot, Earn Trust |
+| **A time you disagreed and committed** | Disagree and Commit | Earn Trust |
+| **A real failure you caused and owned** | Ownership | Earn Trust, Learn and Be Curious |
+| **A decision under ambiguity/incomplete info** | Bias for Action | Are Right A Lot |
+| **A time you simplified something** | Invent and Simplify | Frugality |
+| **Why Amazon / what excites you** | Customer Obsession | Think Big |
 
 ---
 
-## Story Template (Fill This Out for Each)
+## Story Template
 
 ```
 Story: [Name]
-Questions it answers: [list]
+Primary LP:
+Secondary LPs:
 
 SITUATION (2 sentences):
-- Context: What was the project/team/timeline?
-- Stakes: Why did this matter?
+- Context: project/team/timeline/stakes
 
 TASK (1 sentence):
-- What specifically was your role/responsibility?
+- Your specific role or what you were responsible for
 
-ACTION (5–7 sentences — the most important part):
-- What did YOU do? (Use "I", not "we")
+ACTION (5–7 sentences — heaviest weight):
+- What did YOU do? (use "I" not "we")
 - What alternatives did you consider?
-- Why did you choose this approach?
-- What obstacles did you hit and how did you resolve them?
-- What was the hardest part?
+- Why this approach?
+- What obstacles; how did you resolve them?
 
 RESULT (2–3 sentences):
-- Quantified outcome (time saved, revenue, reliability, users affected)
-- What you learned
-- What you changed after (process improvement, runbook, new policy)
+- Quantified impact (latency, revenue, users, error rate, time saved)
+- What you learned or changed afterward
 
-Gotcha / Tricky angle:
-- If asked "what would you do differently?" say: [honest answer]
+If asked "what would you do differently?":
+- [Honest answer — shows self-awareness]
 ```
 
 ---
 
-## Anti-Patterns That Get You Rejected
+## Anti-Patterns That Get You Rejected at Amazon
 
-| Anti-Pattern | Why It's Bad | Fix |
+| Anti-Pattern | Why It Fails | Fix |
 |-------------|-------------|-----|
-| **"We did X"** throughout your story | Can't tell what YOUR contribution was | Always use "I" — it's not bragging, it's clarity |
-| **Vague results** — "it went well" | Google needs evidence of impact | Quantify: "reduced latency by 40%, from 200ms to 120ms" |
-| **A story with no conflict** | Signals you haven't done hard things | Pick stories with real tension, real stakes |
-| **Perfect stories where everything went right** | Signals lack of experience or dishonesty | Include what went wrong and what you learned |
-| **Blaming teammates for failures** | Red flag for Googleyness | Own your part; show empathy for others' constraints |
-| **Saying "it was a team effort"** when pressed | Too humble to the point of unhelpful | "The team shipped it, my specific contribution was X" |
-| **Short answers (under 3 min)** | Not enough signal for the interviewer | Aim for 3–4 min per story; they can interrupt if needed |
-| **Reading from notes** | Sounds rehearsed and disconnected | Know your stories, not memorize them |
-
----
-
-## What "SDE 3 vs SDE 2" Behavioral Looks Like
-
-The same question is evaluated differently:
-
-**Q: "Tell me about a time you led a project."**
-
-| SDE 2 (L4) answer | SDE 3 (L5) answer |
-|-----------------|-----------------|
-| Led a team of 2 engineers to ship a feature | Defined the technical direction for a cross-org initiative, aligned 3 teams with competing priorities |
-| Made technical decisions for my service | Made architecture decisions that affected the platform; created standards others adopted |
-| Resolved a conflict with a teammate | Identified an organizational inefficiency, designed a process improvement, rolled it out to 20 engineers |
-| Fixed a bug proactively | Instituted post-mortem process that reduced recurring incidents by 60% |
-
-**The pattern**: SDE 3 stories have larger scope, more stakeholders, more ambiguity, and system-level thinking.
+| "We did X" throughout | Can't evaluate YOUR contribution | Always use "I" for your actions |
+| Vague results — "it went well" | No LP signal without impact | Quantify: "reduced p99 latency from 800ms to 120ms" |
+| A story with no conflict or difficulty | Signals shallow experience | Pick stories with real tension and real stakes |
+| Blaming teammates | Fails Earn Trust | Own your part; show empathy for constraints |
+| Saying "I followed my manager's direction" for Ownership stories | Fails the LP | Ownership requires self-direction — you should initiate |
+| Short answers (< 2 min) | Too little signal | Aim for 3–4 min per story |
+| Generic answers not tied to LP | Misses the frame | Know which LP each question targets |
 
 ---
 
 ## Questions to Ask Your Interviewer
 
-Always have 2–3 questions ready. Good ones show intellectual curiosity:
-
 **About the role:**
 - "What does success look like in this role after 6 months?"
-- "What's the biggest technical challenge the team is facing right now?"
-- "What's the team's on-call rotation like, and how do you handle incidents?"
+- "What's the biggest technical challenge the team is working on right now?"
+- "How does the team measure customer impact?"
 
-**About Google:**
-- "How does the team balance feature work vs technical debt?"
+**About working at Amazon:**
+- "How does the team balance operational load with new feature work?"
 - "How are technical decisions made — is there a design review process?"
 - "What's something you wish you'd known before joining this team?"
 
-**Never ask:**
-- "What's the compensation?" (ask the recruiter separately)
-- "What are the hours?" (implies you're worried about work-life balance)
-- Questions easily answered by reading the job description
+**About the bar raiser (if applicable):**
+- "What qualities in engineers have you seen raise the bar on this team?"
+
+**Avoid:**
+- "What's the compensation?" (ask recruiter)
+- Questions answered by reading the job description
+- "How many hours do people typically work?" (comes across wrong)
+
+---
+
+## Why Amazon (Not "Why Google")
+
+Interviewers will ask "Why Amazon?" Be specific. Generic answers ("great company", "scale") are weak.
+
+Good angles:
+- A specific Amazon product/service that you use and have opinions about improving
+- The LP framework itself — "I want to work somewhere that rewards ownership and customer focus explicitly, not just as values on a wall"
+- A specific team's technical challenges (if you know them)
+- Amazon's breadth: "I want the optionality of working across AWS, retail, devices — the range of hard problems is unmatched"
 
 ---
 
 ## See Also
 
-- [Google Interview Strategy](./google-interview-strategy.md)
-- [System Design Guide](./system-design.md)
+- [amazon-interview-strategy.md](./google-interview-strategy.md) — now reframed for Amazon
+- [system-design.md](./system-design.md) — SDE-2 scoped system design

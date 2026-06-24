@@ -6,14 +6,6 @@ difficulty: mixed
 
 # Stack Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
-
-
-
 
 ---
 
@@ -34,7 +26,7 @@ difficulty: mixed
 
 ## Monotonic Stack — Next Greater/Smaller
 
-### Daily Temperatures `🎯 T2`
+### Daily Temperatures
 
 > [!example] Problem
 > Given an array of integers temperatures represents the daily temperatures, return an array answer such that answer[i] is the number of days you have to wait after the ith day to get a warmer temperature. If there is no future day for which this is possible, keep answer[i] == 0 instead.
@@ -85,7 +77,7 @@ difficulty: mixed
 
 ---
 
-### Next Greater Element II `🎯 T2`
+### Next Greater Element II
 
 > [!example] Problem
 > Given a circular integer array nums (i.e., the next element of nums[nums.length - 1] is nums[0]), return the next greater number for every element in nums.
@@ -255,7 +247,7 @@ difficulty: mixed
 
 ## Monotonic Stack — Histogram / Rectangle
 
-### Largest Rectangle in Histogram `🎯 T2`
+### Largest Rectangle in Histogram
 
 > [!example] Problem
 > Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
@@ -303,7 +295,7 @@ difficulty: mixed
 
 ---
 
-### Maximal Rectangle `🎯 T2`
+### Maximal Rectangle
 
 > [!example] Problem
 > Given a rows x cols binary matrix filled with 0's and 1's, find the largest rectangle containing only 1's and return its area.
@@ -370,7 +362,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water (stack approach) `⚡ T1`
+### Trapping Rain Water (stack approach)
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -423,7 +415,7 @@ difficulty: mixed
 
 ## Valid Parentheses / Nesting
 
-### Valid Parentheses `🎯 T2`
+### Valid Parentheses
 
 > [!example] Problem
 > Given a string s containing just the characters '(', ')', '{', '}', '[' and ']', determine if the input string is valid.
@@ -537,7 +529,7 @@ difficulty: mixed
 
 ---
 
-### Remove K Digits `🎯 T2`
+### Remove K Digits
 
 > [!example] Problem
 > Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
@@ -596,7 +588,7 @@ difficulty: mixed
 
 ## Stack Design
 
-### Min Stack `🎯 T2`
+### Min Stack
 
 > [!example] Problem
 > Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
@@ -855,7 +847,7 @@ difficulty: mixed
 
 ## Expression Evaluation
 
-### Evaluate Reverse Polish Notation `🎯 T2`
+### Evaluate Reverse Polish Notation
 
 > [!example] Problem
 > You are given an array of strings tokens that represents an arithmetic expression in a Reverse Polish Notation.
@@ -1383,7 +1375,7 @@ difficulty: mixed
 
 ---
 
-### Asteroid Collision `🎯 T2`
+### Asteroid Collision
 
 > [!example] Problem
 > We are given an array asteroids of integers representing asteroids in a row. The indices of the asteriod in the array represent their relative position in space.
@@ -1615,7 +1607,7 @@ difficulty: mixed
 
 ## Monotonic Stack — Arrays and Sequences
 
-### Car Fleet (LC 853) `🎯 T2`
+### Car Fleet (LC 853)
 
 > [!example] Problem
 > There are n cars at given miles away from the starting mile 0, traveling to reach the mile target.
@@ -1791,7 +1783,7 @@ difficulty: mixed
 
 ---
 
-### Flatten Binary Tree to Linked List (LC 114 — iterative) `🎯 T2`
+### Flatten Binary Tree to Linked List (LC 114 — iterative)
 
 > [!example] Problem
 > Given the root of a binary tree, flatten the tree into a "linked list"
@@ -1851,7 +1843,7 @@ difficulty: mixed
 
 ---
 
-### Path Sum II (LC 113 — iterative DFS) `🎯 T2`
+### Path Sum II (LC 113 — iterative DFS)
 
 > [!example] Problem
 > Given the root of a binary tree and an integer targetSum, return all root-to-leaf paths where the sum of the node values in the path equals targetSum. Each path should be returned as a list of the node values, not node references.
@@ -1919,7 +1911,7 @@ difficulty: mixed
 ## See Also
 
 [[queue]] | [[dynamic-programming]] | [[monotonic-techniques]]
-### Next Greater Element I `🎯 T2`
+### Next Greater Element I
 
 > [!example] Problem
 > The next greater element of some element x in an array is the first greater element that is to the right of x in the same array.

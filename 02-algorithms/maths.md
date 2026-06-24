@@ -9,10 +9,8 @@ tags: [algorithms, maths]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+> [!abstract] Amazon SDE-2 scope: GCD/LCM, sieve, fast exponentiation, modular arithmetic, nCr.
+> Segmented sieve, CRT, Miller-Rabin, and advanced number theory are out of scope — removed.
 
 
 ```text
@@ -410,24 +408,7 @@ def max_points_on_line(points: list[list[int]]) -> int:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: Segmented Sieve for Huge N
-
-> [!TIP]
-> Standard sieve uses O(N) memory — infeasible for N = 10^12. **Segmented sieve**: first sieve primes up to √N (fits in RAM), then process the range [lo, hi] in √N-sized blocks. Each block is O(√N) memory. Total time is still O(N log log N). Used in competitive programming for N up to 10^10 and in distributed prime generation systems.
-
-### Scalability: Chinese Remainder Theorem (CRT)
-
-> [!TIP]
-> CRT lets you reconstruct a large number from remainders modulo small coprime moduli. Application: compute a huge product modulo multiple small primes in parallel on different machines, then combine with CRT. Used in FFT-based polynomial multiplication (number-theoretic transform) and multi-party computation protocols.
-
-### Concurrency: Thread-Safe Prime Cache
-
-> [!TIP]
-> A sieve computed once at startup is read-only and needs no locking — safe for concurrent reads. For an incremental primality service: maintain a sorted set of known primes protected by a `ReadWriteLock` (Java) or `threading.RLock` (Python). On query for n: acquire read lock, trial-divide against known primes ≤ √n; if n is new prime, upgrade to write lock and insert. The read path scales linearly with threads.
-
-### Trade-offs: Float vs Integer Arithmetic
+## 3. Trade-offs: Float vs Integer Arithmetic
 
 | Problem | Float approach | Integer approach | Prefer |
 | :--- | :--- | :--- | :--- |

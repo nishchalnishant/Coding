@@ -6,22 +6,15 @@ difficulty: mixed
 
 # String Problems — Deep Dive
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
 
 Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
-
-
 
 
 ---
 
 ## Frequency Map / Anagram
 
-### Valid Anagram `🎯 T2`
+### Valid Anagram
 
 > [!example] Problem
 > Given two strings s and t, return true if t is an anagram of s, and false otherwise.
@@ -79,7 +72,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Group Anagrams `⚡ T1`
+### Group Anagrams
 
 > [!example] Problem
 > Given an array of strings strs, group the anagrams together. You can return the answer in any order.
@@ -135,7 +128,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Find All Anagrams in a String `⚡ T1`
+### Find All Anagrams in a String
 
 > [!example] Problem
 > Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
@@ -212,7 +205,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Two Pointers — Palindrome
 
-### Valid Palindrome `🎯 T2`
+### Valid Palindrome
 
 > [!example] Problem
 > A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
@@ -273,7 +266,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Longest Palindromic Substring `🎯 T2`
+### Longest Palindromic Substring
 
 > [!example] Problem
 > Given a string s, return the longest palindromic substring in s.
@@ -384,7 +377,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Sliding Window
 
-### Longest Substring Without Repeating Characters `⚡ T1`
+### Longest Substring Without Repeating Characters
 
 > [!example] Problem
 > Given a string s, find the length of the longest substring without duplicate characters.
@@ -443,7 +436,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Minimum Window Substring `⚡ T1`
+### Minimum Window Substring
 
 > [!example] Problem
 > Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
@@ -520,7 +513,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Longest Repeating Character Replacement `⚡ T1`
+### Longest Repeating Character Replacement
 
 > [!example] Problem
 > You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
@@ -769,7 +762,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Subarray Sum Equals K (character version) `⚡ T1`
+### Subarray Sum Equals K (character version)
 
 > [!example] Problem
 > Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
@@ -820,7 +813,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ## Encoding / Hashing
 
-### Encode and Decode Strings `🎯 T2`
+### Encode and Decode Strings
 
 > [!example] Problem
 > Design an algorithm to encode **a list of strings** to **a string**. The encoded string is then sent over the network and is decoded back to the original list of strings.
@@ -1799,7 +1792,7 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
-### Valid Palindrome II (LC 680) `🎯 T2`
+### Valid Palindrome II (LC 680)
 
 > [!example] Problem
 > Given a string s, return true if the s can be palindrome after deleting at most one character from it.

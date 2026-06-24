@@ -307,23 +307,6 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
    - **How (Intuition & Mental Model):** Use a bitmask where each bit represents whether to include the character at that index in the current subsequence.
 ```
 
-### O(3^N) Submask Enumeration (Advanced DP)
-
-> [!IMPORTANT]
-> **The Click Moment**: You are doing Bitmask DP, but instead of adding one element at a time, you need to transition by choosing an entire **subset `🎯 T2`** of the available elements (e.g., assigning a subset of tasks to one worker). 
-
-If you iterate `0` to `mask` checking `(sub & mask) == sub`, that's O(4^N). The SDE-3 trick is to generate *only* the valid submasks directly.
-
-```python
-def process_submasks(mask: int):
-    sub = mask
-    while sub:
-        # process(sub)
-        sub = (sub - 1) & mask  # The magic step: subtract 1, then clear invalid bits
-```
-
-**Complexity Insight**: If you run this loop inside an outer loop over all `2^N` masks, the total number of inner loop executions across all masks is exactly `3^N`. This non-obvious bound separates SDE-3 candidates in DP optimization questions.
-
 ---
 
 ### Power of Two Check
@@ -486,31 +469,7 @@ def find_maximum_xor(nums: list[int]) -> int:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: Streaming & Distributed Bit Operations
-
-> [!TIP]
-> **XOR is associative and commutative** — it can be computed across a distributed cluster without ordering. Each worker XORs its data shard; the coordinator XORs the worker results. This is how "find the missing number" or "detect data corruption" works at petabyte scale without loading everything into RAM.
-
-For **popcount at scale**:
-- Redis `BITCOUNT` operates on bitstrings stored in memory with an O(N/8) scan.
-- CPU-native: x86 `POPCNT` instruction processes 64 bits in a single cycle.
-- Software fallback: split 64-bit integers into 4 × 16-bit chunks with a precomputed 65536-entry lookup table — O(1) per integer.
-
-For **streaming unique element detection**, XOR-based algorithms are naturally **single-pass** and **O(1) space** — ideal for log-based anomaly detection at scale.
-
-### Concurrency: Atomic Bit Operations
-
-> [!TIP]
-> Use a single **`AtomicLong`** (Java) or **`std::atomic<uint64_t>`** (C++) to store 64 boolean flags. `fetch_or` / `fetch_and` with Compare-And-Swap (CAS) lets you set/clear individual bits **lock-free** — far cheaper than 64 `AtomicBoolean` objects due to cache-line efficiency.
-
-In Python (CPython): basic `int` mutations are GIL-protected within a single process, but not across subprocesses or native threads modifying shared memory. For multi-process bit state, use `multiprocessing.Value('I', 0, lock=True)`.
-
-> [!CAUTION]
-> **ABA problem**: CAS-based bit operations can succeed spuriously if another thread toggles a bit and restores it between your read and write. Use versioned CAS (`compare_exchange_strong` with an expected-value check) for flag fields that must be monotonic.
-
-### Trade-offs: Memory vs. CPU vs. Code Complexity
+## 3. Trade-offs: Memory vs. CPU vs. Code Complexity
 
 | Approach | Memory | CPU | Code Complexity | When to Prefer |
 | :--- | :--- | :--- | :--- | :--- |
@@ -581,61 +540,8 @@ In Python (CPython): basic `int` mutations are GIL-protected within a single pro
 
 ---
 
-## XOR Basis (Linear Basis over GF(2))
-
-> [!IMPORTANT]
-> **The Click Moment**: "Maximum XOR of any subset of an array" — OR — "can we form XOR value X using a subset?" — OR — "number of distinct XOR values achievable from subsets". A linear basis is a set of at most 64 numbers that spans the same XOR space as all 2^N subsets, reducible in O(N × 64).
-
-**Core idea**: Gaussian elimination over bits. Maintain `basis[i]` = the representative for the leading bit position `i`. Inserting a number: try to reduce it using existing basis vectors (XOR away the highest set bit if a basis vector exists for it). If it reduces to 0, it's linearly dependent — already representable. If not, insert the residual at its leading bit position.
-
-```python
-class XORBasis:
-    def __init__(self):
-        self.basis = [0] * 64  # basis[i] handles bit position i
-
-    def insert(self, x: int) -> bool:
-        for i in range(63, -1, -1):
-            if not (x >> i & 1):
-                continue
-            if not self.basis[i]:
-                self.basis[i] = x
-                return True       # x is linearly independent — inserted
-            x ^= self.basis[i]   # reduce x using existing basis vector
-        return False              # x reduces to 0 — linearly dependent
-
-    def max_xor(self) -> int:
-        result = 0
-        for i in range(63, -1, -1):
-            result = max(result, result ^ self.basis[i])
-        return result
-
-    def can_form(self, target: int) -> bool:
-        for i in range(63, -1, -1):
-            if not (target >> i & 1):
-                continue
-            if not self.basis[i]:
-                return False
-            target ^= self.basis[i]
-        return True  # target reduced to 0 — it's in the span
-
-    def max_xor_with(self, val: int) -> int:
-        """Max XOR achievable by XORing val with any subset."""
-        for i in range(63, -1, -1):
-            val = max(val, val ^ self.basis[i])
-        return val
-```
-
-**Complexity**: O(N × 64) build; O(64) = O(1) for max_xor / can_form queries.
-
-**Canonical problems**:
-- **Maximum XOR Subarray** (LC 1707 variant): Build prefix XOR array, insert each prefix into the basis, then query `max_xor_with(prefix[i])` for each i.
-- **Count distinct XOR values**: The basis has rank `r` = number of non-zero vectors → `2^r` distinct XOR values achievable.
-- **Can subset XOR equal target**: Use `can_form(target)`.
-
-**Gotchas**:
-- The basis doesn't preserve which elements were used — it only tells you whether a value is achievable.
-- For "maximum XOR of two elements" (not subset), use an XOR Trie instead (O(N × 32) with cleaner construction).
-- In Python integers are arbitrary precision; the range loop `range(63, -1, -1)` covers 64-bit numbers. Adjust to `range(29, -1, -1)` for 30-bit constraints.
+> [!warning] **XOR Basis (Linear Basis over GF(2)): SDE-3 / competitive programming only.**
+> "Maximum XOR of any subset" via Gaussian elimination over bits — not an Amazon SDE-2 topic. For "max XOR of two elements in an array," use XOR Trie (already covered above).
 
 ---
 

@@ -9,10 +9,10 @@ tags: [data-structures, trie]
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
 ## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+> [!abstract] Amazon SDE-2 Priority Legend
+> `⚡ T1` — **Must Master**: High-frequency Amazon problems. Do not move on until these are reflexive.
+> `🎯 T2` — **Build Fluidity**: Know the pattern cold; minor edge cases matter less.
+> `💤 T3` — **Awareness Only**: Not expected at SDE-2. Know what it does; skip deep implementation.
 
 
 ```
@@ -378,11 +378,11 @@ def findMaximumXOR(nums: list[int]) -> int:
 
 ---
 
-## SDE-3 Deep Dives
+## Advanced / Awareness Only
 
 ### Compressed Trie (Patricia Trie)
 
-When paths have long chains with no branching, merge them into one edge labeled with the full substring. Reduces space from O(total chars) to O(words). Used in IP routing tables (longest prefix match).
+When paths have long chains with no branching, merge them into one edge labeled with the full substring. Reduces space from O(total chars) to O(words). Used in IP routing tables (longest prefix match). **Know what it is; implementation not expected at SDE-2.**
 
 ### Delete operation
 
@@ -405,9 +405,9 @@ def delete(self, word: str) -> bool:
     _del(self.root, word, 0)
 ```
 
-### Aho-Corasick (multi-pattern matching in a stream)
+### Aho-Corasick (multi-pattern matching in a stream) — awareness only
 
-Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. See [string.md](../02-algorithms/string.md) for implementation sketch.
+Build a Trie of all patterns + add **failure links** (like KMP's LPS, but across the trie). Lets you match all K patterns in a text of length N in O(N + total matches) — much faster than running KMP K times. **SDE-3 topic; not expected at SDE-2.** See [string.md](../02-algorithms/string.md) for detail.
 
 ---
 

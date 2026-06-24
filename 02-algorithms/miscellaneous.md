@@ -9,10 +9,8 @@ tags: [algorithms, miscellaneous]
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 ## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+> [!abstract] Amazon SDE-2 scope: Boyer-Moore Voting, Reservoir Sampling, Fisher-Yates, LRU Cache.
+> Fenwick/BIT, Segment tree, Sparse table, LFU Cache, Mo's algorithm are SDE-3 / competitive programming — removed.
 
 
 ```
@@ -92,195 +90,13 @@ Decision tree
 
 ---
 
-# Miscellaneous Algorithms — SDE-3 Gold Standard
+# Miscellaneous Algorithms — Amazon SDE-2 Essentials
 
-Advanced data structures and cross-cutting patterns that don't fit neatly into one category. SDE-3 expects: Fenwick tree for dynamic prefix sums, segment tree for range queries, and rapid problem-category recognition for "disguised" problems.
-
----
-
-## Theory & Mental Models
-
-**What it is.** Advanced data structures (Fenwick tree, Segment tree, Sparse table) and sweep-line / design patterns that don't fit a single algorithmic paradigm. Core invariant: each structure exploits a specific structural property of its problem class — binary index tricks for prefix sums, interval trees for range aggregation, event sorting for sweep line.
-
-**Why it exists.** Many competitive and SDE-3 interview problems require operations that prefix arrays can't support (point updates) or that Fenwick trees can't express (range min/max). These structures fill those gaps at O(log N) per operation rather than O(N) brute force.
-
-**The mental model.** Power tools for specific problem shapes. Fenwick tree = "dynamic prefix sum with a 10-line implementation"; Segment tree = "any associative range operation + lazy propagation"; Sweep line = "sort events by x, process with an active set"; LRU/LFU = "system design in code using standard data structure combos".
-
-**Complexity at a glance.**
-
-| Structure | Build | Point Update | Range Query | Notes |
-| :--- | :--- | :--- | :--- | :--- |
-| Prefix array (static) | O(N) | O(N) rebuild | O(1) | Read-only; no updates |
-| Fenwick tree (BIT) | O(N log N) | O(log N) | O(log N) prefix sum | Supports sum and count; not min/max |
-| Segment tree | O(N) | O(log N) | O(log N) | Any associative op; lazy prop for range update |
-| Sparse table | O(N log N) | — (static) | O(1) | Idempotent ops only (min, max, GCD); no updates |
-| Sweep line | O(N log N) | — | — | Sort + active set; O(N log N) total |
-
-**When to reach for it.**
-- Range sum/min/max with point updates → Fenwick (sum only) or Segment tree (general).
-- Sliding window with complex queries → monotonic deque.
-- Building data structures in code (LRU = HashMap + doubly linked list; LFU = three maps + min_freq).
-- Event-based geometry (skyline problem, rectangle area union) → sweep line.
-- Count inversions dynamically → Fenwick tree on coordinate-compressed values.
-
-**When NOT to use it.**
-- N is small (≤ 1000) — brute force is cleaner and faster to code.
-- Array is read-only — a prefix sum array handles range sum in O(1) with O(N) precompute; no Fenwick needed.
-- Range update + range query is needed — Segment tree with lazy propagation; Fenwick alone cannot do this cleanly.
-
-**Common mistakes.**
-- Fenwick tree is 1-indexed — `update(0, ...)` is wrong; all indices must be ≥ 1.
-- Segment tree: lazy propagation must be pushed down before querying children — missed push-down produces stale values.
-- LRU: "move to head on get" is required, not just on put — forgetting this breaks the recency invariant.
-- LFU: `min_freq` must be reset to 1 on every new key insertion — not resetting causes wrong eviction.
+Core algorithmic patterns that don't fit one category but appear frequently in SDE-2 interviews.
 
 ---
 
-## 1. Advanced Data Structures
-
-### Fenwick Tree (Binary Indexed Tree) — Dynamic Prefix Sums
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Point update + prefix sum query**" — OR — "count of elements ≤ x in a **dynamic** array" — OR — "**inversion count** (merge sort alternative)". Fenwick tree gives O(log N) update and O(log N) prefix sum with ~5× less code than a segment tree.
-
-```python
-class FenwickTree:
-    def __init__(self, n: int) -> None:
-        self.n = n
-        self.tree = [0] * (n + 1)  # 1-indexed
-
-    def update(self, i: int, delta: int) -> None:
-        while i <= self.n:
-            self.tree[i] += delta
-            i += i & (-i)  # move to responsible parent
-
-    def prefix_sum(self, i: int) -> int:
-        total = 0
-        while i > 0:
-            total += self.tree[i]
-            i -= i & (-i)  # move to responsible ancestor
-        return total
-
-    def range_sum(self, l: int, r: int) -> int:
-        return self.prefix_sum(r) - self.prefix_sum(l - 1)
-
-def count_inversions_fenwick(nums: list[int]) -> int:
-    sorted_unique = sorted(set(nums))
-    rank = {v: i + 1 for i, v in enumerate(sorted_unique)}
-    tree = FenwickTree(len(sorted_unique))
-    inversions = 0
-    for i in range(len(nums) - 1, -1, -1):
-        r = rank[nums[i]]
-        inversions += tree.prefix_sum(r - 1)  # count smaller elements to the right
-        tree.update(r, 1)
-    return inversions
-
-#### Common Variants & Twists
-1. **Count of Smaller Numbers After Self**:
-   - **What (The Problem & Goal):** For each element in an array, count how many numbers to its right are smaller than it.
-   - **How (Intuition & Mental Model):** Use coordinate compression to map large numbers to a small range `[1, K]`. Iterate from right to left. For each number, query the Fenwick tree for the prefix sum up to its rank (this gives the count of numbers already seen that are smaller). Then, update the Fenwick tree at its rank by `+1`.
-2. **Reverse Pairs (Fenwick approach)**:
-   - **What (The Problem & Goal):** Count pairs `(i, j)` where `i < j` and `nums[i] > 2 * nums[j]`.
-   - **How (Intuition & Mental Model):** Similar to counting smaller numbers. Coordinate compress all `nums[i]` and `2 * nums[i]`. Iterate right to left, query the tree for prefix sum up to `(nums[i] - 1) // 2` rank, then update the tree at `nums[i]` rank.
-```
-
-> [!TIP]
-> `i & (-i)` isolates the lowest set bit of i. This is the entire indexing trick: `update` adds the lowest bit to climb to parent; `prefix_sum` subtracts the lowest bit to climb to the responsible ancestor. Memorize both directions — the asymmetry is why the tree works.
-
----
-
-### Segment Tree — Range Query + Range Update
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Range update + range query**" — OR — "**minimum / maximum / GCD** over a subarray" — OR — "dynamic range problems where Fenwick tree can't express the aggregation (min, max, GCD)". Segment tree handles any associative operation over ranges in O(log N).
-
-```python
-class SegmentTree:
-    def __init__(self, nums: list[int]) -> None:
-        self.n = len(nums)
-        self.tree = [0] * (4 * self.n)
-        if nums:
-            self._build(nums, 0, 0, self.n - 1)
-
-    def _build(self, nums: list[int], node: int, start: int, end: int) -> None:
-        if start == end:
-            self.tree[node] = nums[start]
-            return
-        mid = (start + end) // 2
-        self._build(nums, 2 * node + 1, start, mid)
-        self._build(nums, 2 * node + 2, mid + 1, end)
-        self.tree[node] = self.tree[2*node+1] + self.tree[2*node+2]
-
-    def update(self, node: int, start: int, end: int, idx: int, val: int) -> None:
-        if start == end:
-            self.tree[node] = val
-            return
-        mid = (start + end) // 2
-        if idx <= mid:
-            self.update(2*node+1, start, mid, idx, val)
-        else:
-            self.update(2*node+2, mid+1, end, idx, val)
-        self.tree[node] = self.tree[2*node+1] + self.tree[2*node+2]
-
-    def query(self, node: int, start: int, end: int, l: int, r: int) -> int:
-        if r < start or end < l:
-            return 0  # identity for sum; float('inf') for min; 0 for max
-        if l <= start and end <= r:
-            return self.tree[node]
-        mid = (start + end) // 2
-        return (self.query(2*node+1, start, mid, l, r) +
-                self.query(2*node+2, mid+1, end, l, r))
-
-#### Common Variants & Twists
-1. **Falling Squares**:
-   - **What (The Problem & Goal):** Squares are dropped onto a 1D line. Each square lands on top of any existing squares. Find the current maximum height after each drop.
-   - **How (Intuition & Mental Model):** This is a range update (set height) and range query (max height). Use coordinate compression on all square boundaries. A segment tree with lazy propagation handles "find max in range `[l, r]`" and "set range `[l, r]` to `new_max_height + square_side`".
-2. **Range Module**:
-   - **What (The Problem & Goal):** Track ranges of numbers (add range, remove range, query range).
-   - **How (Intuition & Mental Model):** A dynamic segment tree (where nodes are created on demand) or a segment tree on a fixed large range can handle this. Alternatively, use a `SortedDict` to store disjoint intervals and merge/split them on each operation.
-```
-
-> [!CAUTION]
-> **Allocate 4×n nodes**, not 2×n. A complete binary tree on n leaves needs at most 4n array slots when n is not a power of 2. Off-by-one: node indices are 0-based, but range `[start, end]` is inclusive on both ends. The identity element for `query` out-of-range must match the aggregation (`0` for sum, `inf` for min, `-inf` for max).
-
----
-
-### Sparse Table — O(1) Range Minimum Query (Static Arrays)
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Static array**, many range min/max queries, O(1) per query". No updates allowed. Precompute in O(N log N); query in O(1) using overlapping power-of-2 intervals. Used as the engine for LCA (Lowest Common Ancestor) via Euler tour.
-
-```python
-import math
-
-def build_sparse_table(nums: list[int]) -> list[list[int]]:
-    n = len(nums)
-    k = max(1, math.floor(math.log2(n)) + 1)
-    table = [nums[:]]
-    for j in range(1, k):
-        row = []
-        for i in range(n - (1 << j) + 1):
-            row.append(min(table[j-1][i], table[j-1][i + (1 << (j-1))]))
-        table.append(row)
-    return table
-
-def rmq(table: list[list[int]], l: int, r: int) -> int:
-    k = int(math.log2(r - l + 1))
-    return min(table[k][l], table[k][r - (1 << k) + 1])
-
-#### Common Variants & Twists
-1. **Range GCD Query**:
-   - **What (The Problem & Goal):** Static array, many queries for the GCD of a subarray.
-   - **How (Intuition & Mental Model):** GCD is idempotent (`gcd(x, x) = x`) and associative. A sparse table can be built for GCD in O(N log N) and answered in O(1).
-2. **Lowest Common Ancestor (LCA)**:
-   - **What (The Problem & Goal):** Find the LCA of two nodes in a static tree.
-   - **How (Intuition & Mental Model):** Perform an Euler Tour of the tree, recording the depth of each node visited. The LCA of nodes `u` and `v` corresponds to the node with the minimum depth in the Euler tour array between the first occurrences of `u` and `v`. Use a sparse table on the depth array for O(1) RMQ.
-```
-
-> [!TIP]
-> Overlapping intervals are valid for **idempotent** operations (min, max, GCD) — taking the min of two overlapping ranges that cover `[l, r]` gives the correct answer. This does **not** work for sum (double-counting). For sum: use prefix array (static) or Fenwick tree (dynamic).
-
----
+## 1. Core Algorithms (SDE-2 in-scope)
 
 ### Design Pattern — LRU Cache (Least Recently Used)
 
@@ -383,36 +199,7 @@ class LRUCache:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: Persistent Segment Tree
-
-> [!TIP]
-> A **persistent segment tree** stores all historical versions after each update by sharing unchanged nodes. Memory: O(N log N) for N updates (each update creates O(log N) new nodes). Used for: "count elements in range `[l, r]` with value in `[a, b]`" — query two prefix versions and subtract. Also called a "merge sort tree" or "wavelet tree" in competitive programming.
-
-### Scalability: Mo's Algorithm — Offline Range Queries
-
-> [!TIP]
-> **Mo's algorithm** processes offline range queries in O((N + Q) √N) by sorting queries into √N-sized blocks to minimize element additions/removals. For each step, move `[l, r]` to `[l±1, r±1]` in O(1). Used when you need "count distinct in range" or frequency-based queries where a segment tree would be complex. Block size = √N is optimal.
-
-### Concurrency: Concurrent Segment Tree
-
-> [!TIP]
-> For a read-heavy segment tree with infrequent updates: use a **readers-writer lock** (`threading.RLock` in Python; `ReentrantReadWriteLock` in Java). Multiple readers acquire shared mode concurrently; writers acquire exclusive mode. For extreme read throughput: maintain two copies and **atomically swap a pointer** on update — readers always see a consistent snapshot (MVCC). This is the pattern used in time-series databases.
-
-### Trade-offs: Fenwick vs Segment Tree vs Prefix Array
-
-| Capability | Prefix Array | Fenwick Tree | Segment Tree |
-| :--- | :--- | :--- | :--- |
-| Point update | O(N) rebuild | **O(log N)** | **O(log N)** |
-| Range sum query | **O(1)** | **O(log N)** | **O(log N)** |
-| Range min/max query | Sparse table O(1) static | ❌ Not natural | **O(log N)** |
-| Range update + range query | ❌ | O(log N) with difference BIT | **O(log N)** with lazy prop |
-| Code complexity | Minimal | Low (10 lines) | High (40+ lines) |
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Medium (High Frequency)
 - **Merge Intervals `🎯 T2`** — Sort by start; extend `end = max(end, interval[1])` while overlapping.
@@ -422,11 +209,12 @@ class LRUCache:
 - **Range Sum Query (Mutable) `💤 T3`** — Fenwick tree; O(log N) update and prefix query.
 
 ### Hard
-- **Count of Smaller Numbers After Self `💤 T3`** — Fenwick tree on coordinate-compressed values; or merge sort augmented.
-- **Count of Range Sum** — Merge sort on prefix sums; count cross-half pairs in `[lower, upper]`.
 - **The Skyline Problem** — Sweep line on building start/end events; max-heap of active heights.
 - **Data Stream as Disjoint Intervals** — `SortedList` + binary search; merge left/right neighbors on insert.
-- **Design LFU Cache** — Three maps: `key→val`, `key→freq`, `freq→OrderedDict`; track `min_freq`; O(1) all ops.
+- **Find Median from Data Stream** — Two heaps (max-heap lower half, min-heap upper half); rebalance on insert.
+- **Minimum Interval to Include Each Query** — Sort queries + intervals; min-heap sweep; lazy-remove expired.
+
+> [!note] Count of Smaller Numbers After Self and Count of Range Sum require Fenwick/merge sort (SDE-3). Skip for Amazon SDE-2.
 
 ---
 
@@ -436,10 +224,7 @@ class LRUCache:
 | :--- | :--- | :--- | :--- | :--- |
 | **Merge Intervals `🎯 T2`** | Sort + Greedy Merge | "Combine overlapping [l, r] ranges" | Sort by start; extend `end` greedily while `interval[0] <= end` | Touching intervals `[1,2]` and `[2,3]` — confirm merging rule. Sort by start, not end. |
 | **Meeting Rooms II** | "Minimum rooms for N meetings" | Min-heap of end times; if `heap[0] <= start`, reuse room (pop + push new end) | Heap size at any moment = answer (max concurrent meetings). Sort by start first. |
-| **Range Sum Query Mutable `💤 T3`** | "Prefix sum with point updates" | Fenwick tree; `update(i, delta)` and `prefix_sum(i)` each O(log N) | 1-indexed; `i += i & (-i)` for update; `i -= i & (-i)` for query — opposite directions. |
-| **Count Smaller After Self** | "For each i, count j>i where nums[j]<nums[i]" | Fenwick on coordinate-compressed values (right-to-left); or merge sort counting right-picks | Merge sort: pass `(value, original_index)` pairs to track positions through sorting. |
 | **The Skyline Problem** | "Height profile of buildings as events" | Sweep line on start/end events; max-heap of `(-height, end)` for active buildings | Lazy deletion from heap (check if top is still active). Critical point = when max height changes. |
-| **Design LFU Cache** | "Evict least-frequently used; ties → LRU" | `key→val`, `key→freq`, `freq→OrderedDict`; track global `min_freq` | Reset `min_freq = 1` on every `put` of a new key. Increment `min_freq` in `get` only when `freq_map[min_freq]` becomes empty. |
 | **Non-Overlapping Intervals `🎯 T2`** | "Min removals to make disjoint" | Sort by **end**; greedily keep interval with earliest end; count removals | Sort by end (not start): earliest end leaves max room for future intervals. |
 | **Data Stream Intervals** | "Maintain disjoint intervals dynamically" | Binary search for left/right overlap; merge on insert | Handle both neighbors: merge left if `new.start <= left.end + 1`; merge right if `new.end >= right.start - 1`. |
 | **Design HashSet [E]** | "Implement a hash set without built-in hash" | Array of buckets (chaining); `hash(key) = key % size`; linked list per bucket | Choose bucket count as a prime (e.g., 1009) to reduce collisions. Handle remove in chained list carefully. |
@@ -465,13 +250,14 @@ class LRUCache:
 
 ## Quick Revision Triggers
 
-- "Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.
-- "Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).
-- "Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.
-- "Events at coordinates: intervals, rectangles, skyline" → sweep line; sort events by x, process with sorted structure.
-- "O(1) average get/put with eviction of least recently used" → LRU: `OrderedDict` or doubly-linked list + hash map.
-- "O(1) average get/put with eviction of least frequently used" → LFU: two hash maps + min_freq pointer; reset min_freq=1 on put.
-- "Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).
+- "Find majority element (appears > n/2 times), O(1) space" → Boyer-Moore Voting; add verification pass if majority not guaranteed.
+- "Random sample from unknown-length stream" → Reservoir Sampling; keep with prob k/i.
+- "Unbiased shuffle in-place" → Fisher-Yates; draw from [0..i], not [0..n-1].
+- "O(1) get/put with LRU eviction" → HashMap + doubly linked list; move node to head on every access.
+- "Events at coordinates: intervals, skyline" → sweep line; sort events by x, process with sorted structure or heap.
+- "Running median" → two heaps (max-heap lower half, min-heap upper half); keep sizes balanced.
+- "Merge overlapping intervals" → sort by start; extend end greedily.
+- "Meeting rooms / concurrent interval count" → min-heap of end times; heap size = max concurrent.
 
 ---
 
@@ -485,23 +271,14 @@ class LRUCache:
 
 ## Flashcards
 
-**"Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.?** #flashcard
-"Range sum / frequency queries with point updates" → Fenwick tree (BIT), O(log N) per op; use 1-indexed.
+**Boyer-Moore Voting: what does the candidate hold after all cancellations?** #flashcard
+If a majority element (>n/2) exists, it survives — net count > 0. Always verify with a second pass if majority not guaranteed.
 
-**"Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).?** #flashcard
-"Range min/max/sum queries with range updates" → Segment tree with lazy propagation, O(log N).
+**Reservoir Sampling: probability that item i ends up in the reservoir of size k?** #flashcard
+k/i — maintained by accepting item i with prob k/i and replacing a random reservoir element.
 
-**"Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.?** #flashcard
-"Range min/max queries, no updates" → Sparse table, O(N log N) build, O(1) query.
+**Fisher-Yates: what range should the random index be drawn from at step i?** #flashcard
+[0, i] — NOT [0, n-1]. Drawing from [0, n-1] produces biased shuffles.
 
-**"Events at coordinates?** #flashcard
-intervals, rectangles, skyline" → sweep line; sort events by x, process with sorted structure.
-
-**"O(1) average get/put with eviction of least recently used" → LRU?** #flashcard
-`OrderedDict` or doubly-linked list + hash map.
-
-**"O(1) average get/put with eviction of least frequently used" → LFU?** #flashcard
-two hash maps + min_freq pointer; reset min_freq=1 on put.
-
-**"Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).?** #flashcard
-"Need both prefix sums and point updates" → Fenwick tree beats prefix array (which is O(N) on update).
+**LRU Cache: what must happen on a `get` call besides returning the value?** #flashcard
+Move the accessed node to the head (mark as most recently used). Forgetting this breaks the recency invariant.

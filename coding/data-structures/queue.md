@@ -6,11 +6,6 @@ difficulty: mixed
 
 # Queue Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
 
 ## Queue Patterns to Recognize
 
@@ -22,13 +17,11 @@ difficulty: mixed
 - **Common pitfalls:** Mark visited when enqueuing, snapshot the queue size for level order, and always handle stale deque entries before using the front element.
 
 
-
-
 ---
 
 ## Monotonic Deque
 
-### Sliding Window Maximum `⚡ T1`
+### Sliding Window Maximum
 
 > [!example] Problem
 > You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
@@ -199,7 +192,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game VI (DP + Sliding Window Max) `🎯 T2`
+### Jump Game VI (DP + Sliding Window Max)
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -322,7 +315,7 @@ difficulty: mixed
 
 ## BFS / Level-order
 
-### Binary Tree Level Order Traversal `🎯 T2`
+### Binary Tree Level Order Traversal
 
 > [!example] Problem
 > Given the root of a binary tree, return the level order traversal of its nodes' values. (i.e., from left to right, level by level).
@@ -390,7 +383,7 @@ difficulty: mixed
 
 ---
 
-### Binary Tree Right Side View `🎯 T2`
+### Binary Tree Right Side View
 
 > [!example] Problem
 > Given the root of a binary tree, imagine yourself standing on the right side of it, return the values of the nodes you can see ordered from top to bottom.
@@ -463,7 +456,7 @@ difficulty: mixed
 
 ## BFS Multi-Source
 
-### 01 Matrix `⚡ T1`
+### 01 Matrix
 
 > [!example] Problem
 > Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
@@ -525,7 +518,7 @@ difficulty: mixed
 
 ---
 
-### Walls and Gates `⚡ T1`
+### Walls and Gates
 
 > [!example] Problem
 > You are given an `m x n` grid `rooms` initialized with these three possible values.
@@ -649,7 +642,7 @@ difficulty: mixed
 
 ---
 
-### Shortest Path in Binary Matrix `⚡ T1`
+### Shortest Path in Binary Matrix
 
 > [!example] Problem
 > Given an n x n binary matrix grid, return the length of the shortest clear path in the matrix. If there is no clear path, return -1.
@@ -715,7 +708,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Knight Moves `⚡ T1`
+### Minimum Knight Moves
 
 > [!example] Problem
 > In an **infinite** chess board with coordinates from `-infinity` to `+infinity`, you have a **knight** at square `[0, 0]`.
@@ -791,7 +784,7 @@ difficulty: mixed
 
 ## BFS Single-Source
 
-### Open the Lock `⚡ T1`
+### Open the Lock
 
 > [!example] Problem
 > You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'. The wheels can rotate freely and wrap around: for example we can turn '9' to be '0', or '0' to be '9'. Each move consists of turning one wheel one slot.
@@ -1059,7 +1052,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game III `🎯 T2`
+### Jump Game III
 
 > [!example] Problem
 > Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, you can jump to i + arr[i] or i - arr[i], check if you can reach any index with value 0.
@@ -1131,7 +1124,7 @@ difficulty: mixed
 
 ## Topological Sort (Kahn's BFS)
 
-### Course Schedule `⚡ T1`
+### Course Schedule
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -1195,7 +1188,7 @@ difficulty: mixed
 
 ---
 
-### Alien Dictionary `⚡ T1`
+### Alien Dictionary
 
 > [!example] Problem
 > There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
@@ -1659,7 +1652,7 @@ difficulty: mixed
 
 ## Priority Queue / Heap
 
-### Task Scheduler `⚡ T1`
+### Task Scheduler
 
 > [!example] Problem
 > You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.
@@ -1731,7 +1724,7 @@ difficulty: mixed
 
 ---
 
-### Find Median from Data Stream `⚡ T1`
+### Find Median from Data Stream
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
@@ -1864,7 +1857,7 @@ difficulty: mixed
 
 ## Sliding Window with Queue
 
-### Sliding Window Median (LC 480) `⚡ T1`
+### Sliding Window Median (LC 480)
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
@@ -1953,7 +1946,7 @@ difficulty: mixed
 
 ## Scheduling
 
-### Task Scheduler with Cooldown (LC 621) `⚡ T1`
+### Task Scheduler with Cooldown (LC 621)
 
 > [!example] Problem
 > You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.

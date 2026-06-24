@@ -1,15 +1,10 @@
 ---
-tags: [coding, google-interview, patterns, templates, quick-reference]
-topic: Google Patterns Quick Reference
+tags: [coding, amazon-interview, patterns, templates, quick-reference]
+topic: Pattern Templates & Quick Reference — Amazon SDE-2
 difficulty: reference
 ---
 
-# Google Interview — Pattern Templates & Quick Reference
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `💤 T3` — **This entire file is TIER 3 / Lower Priority for L3.**
-> Skim for conceptual awareness. Do NOT spend deep implementation time here.
-> Redirect time to Tier 1 (graphs, binary search, heaps, tries) and Tier 2 (DP, backtracking, trees).
+# Pattern Templates & Quick Reference — Amazon SDE-2
 
 
 
@@ -561,7 +556,7 @@ def merge_k_sorted(lists):
 
 ---
 
-## Common Google-Specific Gotchas
+## Common Gotchas
 
 | Gotcha | Wrong | Right |
 |--------|-------|-------|
@@ -606,7 +601,7 @@ def merge_k_sorted(lists):
 
 ## See Also
 
-- [Google Interview Strategy](./google-interview-strategy.md)
+- [Amazon Interview Strategy](./google-interview-strategy.md)
 - [Complexity Cheat Sheet](./complexity-cheatsheet.md)
 - [Dynamic Programming](./algorithms/dynamic-programming.md)
 - [Graph Algorithms](./algorithms/graph-algorithms.md)

@@ -399,58 +399,7 @@ def largest_number(nums: list[int]) -> str:
 
 ---
 
-## 3. SDE-3 Deep Dives
-
-### Scalability: External Merge Sort (Data > RAM)
-
-> [!TIP]
-> When the dataset doesn't fit in RAM (think: sorting 100 GB of logs on a machine with 4 GB RAM):
-> 1. **Split**: Read chunks that fit in RAM, sort each chunk, write sorted runs to disk.
-> 2. **K-way merge**: Use a **min-heap** of size K (one entry per run file) to merge all runs in O(N log K) time with O(K) RAM.
->
-> This is the architecture behind `sort` in Unix, Google's MapReduce shuffle phase, and database `ORDER BY` with limited buffer pool.
-
-```python
-import heapq
-
-def k_way_merge(sorted_runs: list[list[int]]) -> list[int]:
-    heap = []
-    iterators = [iter(run) for run in sorted_runs]
-    for i, it in enumerate(iterators):
-        val = next(it, None)
-        if val is not None:
-            heapq.heappush(heap, (val, i))
-
-    result = []
-    while heap:
-        val, i = heapq.heappop(heap)
-        result.append(val)
-        next_val = next(iterators[i], None)
-        if next_val is not None:
-            heapq.heappush(heap, (next_val, i))
-    return result
-```
-
-### Scalability: Streaming Sort (Approximate / Top-K)
-
-When you need only the **top K** elements from a stream of N items (N >> K):
-- Use a **min-heap of size K**. Push each element; if heap exceeds K, pop the minimum.
-- Result: O(N log K) time, O(K) space — no need to sort the full stream.
-
-### Concurrency: Parallel Merge Sort
-
-> [!TIP]
-> Merge sort is **embarrassingly parallelizable**: each half is independent. Java's `ForkJoinPool` / `Arrays.parallelSort()` splits at a configurable threshold (default: 8192 elements) and merges on the calling thread. In Python, use `concurrent.futures.ThreadPoolExecutor` for the recursive split, but note the GIL limits CPU parallelism — use `ProcessPoolExecutor` for CPU-bound sorts.
-
-For distributed sort (MapReduce model):
-- **Map**: Each worker sorts its local shard.
-- **Shuffle**: Range-partition keys across workers (requires knowing the key distribution or sampling).
-- **Reduce**: Each worker receives a contiguous key range, already locally sorted — final merge is trivial.
-
-> [!CAUTION]
-> **Load balancing** is the hard problem in distributed sort. Naive range partitioning skews badly on non-uniform data (e.g., log data with timestamps — most logs cluster in a short window). Use **reservoir sampling** to estimate quantiles before partitioning.
-
-### Trade-offs: Choosing the Right Sort
+## 3. Trade-offs: Choosing the Right Sort
 
 | Scenario | Best Choice | Why |
 | :--- | :--- | :--- |
