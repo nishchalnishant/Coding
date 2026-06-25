@@ -4,13 +4,7 @@ topic: Sorting
 difficulty: mixed
 ---
 
-# Sorting — Problem Compendium
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
+# Sorting — Amazon SDE-2
 
 > [!info] Approach
 > Identify what property sorting exposes (adjacency, rank, monotone structure), then apply the right sort variant. Non-comparison sorts (counting/radix/bucket) bypass O(n log n) when keys are bounded integers. QuickSelect gets rank-k in O(n) avg. Merge sort naturally counts cross-half inversions.
@@ -22,7 +16,7 @@ difficulty: mixed
 
 ## Merge Sort Variants
 
-### Count Inversions (Merge Sort) `💤 T3`
+### Count Inversions (Merge Sort)
 
 > [!example] Problem
 > Given array, count pairs (i,j) where i < j but arr[i] > arr[j].
@@ -359,7 +353,7 @@ difficulty: mixed
 
 ## Interview Classics
 
-### H-Index (LC 274) `⚡ T1`
+### H-Index (LC 274)
 
 > [!example] Problem
 > Given an array of integers citations where citations[i] is the number of citations a researcher received for their ith paper, return the researcher's h-index.
@@ -470,7 +464,7 @@ difficulty: mixed
 
 ## Classic Merge Variants
 
-### Majority Element (Boyer-Moore) `🎯 T2`
+### Majority Element (Boyer-Moore)
 
 > [!example] Problem
 > Given an array nums of size n, return the majority element.
@@ -565,43 +559,10 @@ difficulty: mixed
 
 ---
 
-### Radix Sort Implementation
+### Radix Sort (Awareness)
 
-> [!example] Problem
-> Sort a list of non-negative integers using radix sort — process digits from LSD (least significant) to MSD using a stable counting sort per digit pass.
-
-> [!info] Approach
-> Achieves O(d · (n + b)) where d = number of digits, b = base (10). Beats comparison sort when d is small. For each digit position (units, tens, hundreds, …), perform a stable counting sort keyed on that digit only. Extract digit with `(x // exp) % base`. Counting sort must be stable so relative order from previous passes is preserved.
-
-> [!note]- Python Solution
-> ```python
-> def radix_sort(nums):
->     if not nums:
->         return nums
->     base = 10
->     exp = 1
->     max_val = max(nums)
->     while max_val // exp > 0:
->         count = [0] * base
->         for x in nums:
->             count[(x // exp) % base] += 1
->         for i in range(1, base):
->             count[i] += count[i - 1]
->         output = [0] * len(nums)
->         for x in reversed(nums):          # reversed for stability
->             d = (x // exp) % base
->             count[d] -= 1
->             output[count[d]] = x
->         nums = output
->         exp *= base
->     return nums
-> ```
-
-> [!success] Complexity
-> Time O(d · n), Space O(n + b). d = ⌈log_b(max_val)⌉.
-
-> [!tip] Alternatives
-> For signed integers, sort by absolute value then handle negatives separately. For strings, same LSD approach on characters.
+> [!info] Awareness
+> Non-comparison sort. Sorts integers digit-by-digit (LSD → MSD) using stable counting sort per pass. O(d · n) time where d = digit count. Useful when d is small and n is large. Not expected to implement in Amazon SDE-2 — know it exists and when it beats O(n log n).
 
 ---
 
@@ -827,7 +788,7 @@ difficulty: mixed
 
 ## Topological Sort
 
-### Course Schedule II (LC 210) `⚡ T1`
+### Course Schedule II (LC 210)
 
 > [!example] Problem
 > There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
@@ -894,7 +855,7 @@ difficulty: mixed
 
 ---
 
-### Alien Dictionary (LC 269) `⚡ T1`
+### Alien Dictionary (LC 269)
 
 > [!example] Problem
 > There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
@@ -988,7 +949,7 @@ difficulty: mixed
 
 ## External Sort / K-way Merge
 
-### Find K Pairs with Smallest Sums (LC 373) `⚡ T1`
+### Find K Pairs with Smallest Sums (LC 373)
 
 > [!example] Problem
 > You are given two integer arrays nums1 and nums2 sorted in non-decreasing order and an integer k.
@@ -1044,7 +1005,7 @@ difficulty: mixed
 
 ---
 
-### Kth Largest Element in a Stream (LC 703) `⚡ T1`
+### Kth Largest Element in a Stream (LC 703)
 
 > [!example] Problem
 > You are part of a university admissions office and need to keep track of the kth highest test score from applicants in real-time. This helps to determine cut-off marks for interviews and admissions dynamically as new applicants submit their scores.
@@ -1101,7 +1062,7 @@ difficulty: mixed
 
 ---
 
-### Find Median from Data Stream (LC 295) `⚡ T1`
+### Find Median from Data Stream (LC 295)
 
 > [!example] Problem
 > The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.

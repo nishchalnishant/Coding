@@ -4,13 +4,7 @@ topic: Greedy Algorithms
 difficulty: mixed
 ---
 
-# Greedy Algorithms — Problem Compendium
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
-
+# Greedy Algorithms — Amazon SDE-2
 
 Greedy works when a locally optimal choice at each step provably leads to a globally optimal solution (greedy-choice property + optimal substructure). Proof strategy: exchange argument — show any solution deviating from the greedy choice can be transformed into the greedy solution without worsening it. If no such argument holds, use DP.
 
@@ -21,7 +15,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Interval Greedy
 
-### Merge Intervals `🎯 T2`
+### Merge Intervals
 
 > [!example] Problem
 > Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
@@ -69,7 +63,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Non-overlapping Intervals (Minimum number to remove) `🎯 T2`
+### Non-overlapping Intervals (Minimum number to remove)
 
 > [!example] Problem
 > Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
@@ -485,7 +479,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ## Jump / Coverage Greedy
 
-### Jump Game (can reach?) `🎯 T2`
+### Jump Game (can reach?)
 
 > [!example] Problem
 > You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
@@ -531,7 +525,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game II (minimum jumps) `🎯 T2`
+### Jump Game II (minimum jumps)
 
 > [!example] Problem
 > You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
@@ -579,7 +573,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Jump Game VI (DP + Deque) `🎯 T2`
+### Jump Game VI (DP + Deque)
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -643,7 +637,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Candy (LC 135) `🎯 T2`
+### Candy (LC 135)
 
 > [!example] Problem
 > There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
@@ -700,7 +694,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Reorganize String `⚡ T1`
+### Reorganize String
 
 > [!example] Problem
 > Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
@@ -756,104 +750,9 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Rearrange String k Distance Apart (Rearrange Barcodes)
-
-> [!example] Problem
-> Given a string `s` and an integer `k`, rearrange `s` such that the same characters are **at least** distance `k` from each other. If it is not possible to rearrange the string, return an empty string `""`.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input:** s = "aabbcc", k = 3
-> **Output:** "abcabc"
-> **Explanation:** The same letters are at least a distance of 3 from each other.
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> 
-> **Input:** s = "aaabc", k = 3
-> **Output:** ""
-> **Explanation:** It is not possible to rearrange the string.
-> 
-> ```
-> 
-> Example 3:
-> 
-> ```
-> 
-> **Input:** s = "aaadbbcc", k = 2
-> **Output:** "abacabcd"
-> **Explanation:** The same letters are at least a distance of 2 from each other.
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `1 <= s.length <= 3 * 10^5`
-> 	
-> - `s` consists of only lowercase English letters.
-> 	
-> - `0 <= k <= s.length`
-
-> [!info] Approach
-> Generalization of Reorganize String with cooldown k instead of 1. Most frequent characters must be spread across n/k-sized "chunks." A greedy fill of k-size chunks from the most frequent characters produces a valid arrangement if possible. Max-heap by frequency. Fill k characters per round (one from each of the k most frequent). After each round, re-push decremented counts. Use a queue to enforce cooldown: after using a character, re-push only after k steps.
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter, deque
-> 
-> def rearrange_barcodes(barcodes):
->     freq = Counter(barcodes)
->     heap = [(-cnt, val) for val, cnt in freq.items()]
->     heapq.heapify(heap)
->     result = []
->     wait: deque[tuple[int, int, int]] = deque()  # (available_at, cnt, val)
->     step = 0
->     while heap or wait:
->         if wait and wait[0][0] <= step:
->             cnt, val = wait.popleft()[1], wait.popleft()[2] if False else (lambda q: (q[1], q[2]))(wait.popleft())
->             # simplified:
->             pass
->         step += 1
->     # Cleaner implementation:
->     return result
-> 
-> def rearrange_barcodes_clean(barcodes):
->     freq = Counter(barcodes)
->     heap = [(-cnt, val) for val, cnt in freq.items()]
->     heapq.heapify(heap)
->     result = []
->     # k=2 for barcodes (no two same adjacent)
->     prev_cnt, prev_val = 0, -1
->     while heap:
->         cnt, val = heapq.heappop(heap)
->         result.append(val)
->         if prev_cnt < 0:
->             heapq.heappush(heap, (prev_cnt, prev_val))
->         prev_cnt, prev_val = cnt + 1, val
->     return result
-> ```
-
-> [!success] Complexity
-> O(n log k) time.
-
-> [!tip] Alternatives
-> Sort by frequency; place at even then odd indices (valid for k=2). For general k, chunk-fill approach.
-
----
-
 ## String / Array Greedy
 
-### Gas Station `🎯 T2`
+### Gas Station
 
 > [!example] Problem
 > There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
@@ -918,7 +817,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Trapping Rain Water (greedy view) `⚡ T1`
+### Trapping Rain Water (greedy view)
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -1164,7 +1063,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### IPO (Maximize Capital, LC 502) `⚡ T1`
+### IPO (Maximize Capital, LC 502)
 
 > [!example] Problem
 > Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
@@ -1260,148 +1159,3 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 ## See Also
 
 [[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]]
-
----
-
-## Greedy — Interval and Coverage Problems
-
-### Video Stitching (LC 1024)
-
-> [!example] Problem
-> You are given a series of video clips from a sporting event that lasted time seconds. These video clips can be overlapping with each other and have varying lengths.
-> Each video clip is described by an array clips where clips[i] = [starti, endi] indicates that the ith clip started at starti and ended at endi.
-> We can cut these clips into segments freely.
-> Return the minimum number of clips needed so that we can cut the clips into segments that cover the entire sporting event [0, time]. If the task is impossible, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: clips = [[0,2],[4,6],[8,10],[1,9],[1,5],[5,9]], time = 10
-> Output: 3
-> Explanation: We take the clips [0,2], [8,10], [1,9]; a total of 3 clips.
-> Then, we can reconstruct the sporting event as follows:
-> We cut [1,9] into segments [1,2] + [2,8] + [8,9].
-> Now we have segments [0,2] + [2,8] + [8,10] which cover the sporting event [0, 10].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: clips = [[0,1],[1,2]], time = 5
-> Output: -1
-> Explanation: We cannot cover [0,5] with only [0,1] and [1,2].
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: clips = [[0,1],[6,8],[0,2],[5,6],[0,4],[0,3],[6,7],[1,3],[4,7],[1,4],[2,5],[2,6],[3,4],[4,5],[5,7],[6,9]], time = 9
-> Output: 3
-> Explanation: We can take clips [0,4], [4,7], and [6,9].
-> ```
-> 
-> **Constraints:**
-> - 1 <= clips.length <= 100
-> - 0 <= starti <= endi <= 100
-> - 1 <= time <= 100
-
-> [!info] Approach
-> This is the classic "minimum jumps to cover a range" greedy problem. Sort clips by start time. At each step, among all clips that start at or before the current position, pick the one that extends the furthest. Sort by start. Maintain `cur_end` (current covered end) and `farthest` (furthest reach among clips starting ≤ `cur_end`). When we've processed all clips starting ≤ `cur_end`, we must extend using the farthest clip found, incrementing the count. Iterate through sorted clips. If `clip_start > cur_end`, return -1 (gap). Update `farthest`. When we've exhausted clips for this jump, set `cur_end = farthest`, increment count.
-
-> [!note]- Python Solution
-> ```python
-> def video_stitching(clips, time):
->     clips.sort()
->     count = 0
->     cur_end = 0
->     farthest = 0
->     i = 0
->     n = len(clips)
->     while cur_end < time:
->         while i < n and clips[i][0] <= cur_end:
->             farthest = max(farthest, clips[i][1])
->             i += 1
->         if farthest == cur_end:
->             return -1
->         cur_end = farthest
->         count += 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n log n) for sort, O(n) for scan. Space O(1).
-
-> [!tip] Alternatives
-> - DP: `dp[i]` = minimum clips to reach time `i`. Fill left to right from clip endpoints. O(n * T) — correct but slower.
-> - Key insight: greedy "jump to maximum reach" from each coverage window mirrors the Jump Game II pattern exactly.
-
----
-
-### Minimum Taps to Water a Garden (LC 1326)
-
-> [!example] Problem
-> There is a one-dimensional garden on the x-axis. The garden starts at the point 0 and ends at the point n. (i.e., the length of the garden is n).
-> There are n + 1 taps located at points [0, 1, ..., n] in the garden.
-> Given an integer n and an integer array ranges of length n + 1 where ranges[i] (0-indexed) means the i-th tap can water the area [i - ranges[i], i + ranges[i]] if it was open.
-> Return the minimum number of taps that should be open to water the whole garden, If the garden cannot be watered return -1.
-> 
-> **Example 1:**
-> ```
-> Input: n = 5, ranges = [3,4,1,1,0,0]
-> Output: 1
-> Explanation: The tap at point 0 can cover the interval [-3,3]
-> The tap at point 1 can cover the interval [-3,5]
-> The tap at point 2 can cover the interval [1,3]
-> The tap at point 3 can cover the interval [2,4]
-> The tap at point 4 can cover the interval [4,4]
-> The tap at point 5 can cover the interval [5,5]
-> Opening Only the second tap will water the whole garden [0,5]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 3, ranges = [0,0,0,0]
-> Output: -1
-> Explanation: Even if you activate all the four taps you cannot water the whole garden.
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 10^4
-> - ranges.length == n + 1
-> - 0 <= ranges[i] <= 100
-
-> [!info] Approach
-> This reduces directly to the Jump Game II / interval cover problem. Each tap covers an interval. We want to cover `[0, n]` with the fewest intervals. Convert each tap to its interval. Then apply the same greedy: sort by left endpoint, for each coverage window pick the interval that extends farthest right. Build intervals `(max(0, i - ranges[i]), min(n, i + ranges[i]))` for each tap. Sort. Apply the Video Stitching greedy.
-
-> [!note]- Python Solution
-> ```python
-> def min_taps(n, ranges):
->     intervals = []
->     for i in range(n + 1):
->         left = max(0, i - ranges[i])
->         right = min(n, i + ranges[i])
->         intervals.append((left, right))
->     intervals.sort()
->     count = 0
->     cur_end = 0
->     farthest = 0
->     i = 0
->     while cur_end < n:
->         while i < len(intervals) and intervals[i][0] <= cur_end:
->             farthest = max(farthest, intervals[i][1])
->             i += 1
->         if farthest == cur_end:
->             return -1
->         cur_end = farthest
->         count += 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n log n), Space O(n).
-
-> [!tip] Alternatives
-> - A cleaner O(n) approach: use an array `max_reach[i]` = farthest right endpoint of any interval starting at `i`. Then one pass with the Jump Game II logic. O(n) after the O(n) preprocessing — no sort needed.
-
----
-
-## See Also (Extended)
-
-[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]] | [[sliding-window]]

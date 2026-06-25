@@ -4,15 +4,7 @@ topic: Two Pointers
 difficulty: mixed
 ---
 
-# Two Pointers — Problem Set
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
-
-
-
+# Two Pointers — Amazon SDE-2
 
 
 ---
@@ -24,7 +16,7 @@ difficulty: mixed
 
 ---
 
-### Two Sum II — Input Array is Sorted (LC 167) `⚡ T1`
+### Two Sum II — Input Array is Sorted (LC 167)
 
 > [!example] Problem
 > Given a 1-indexed array of integers numbers that is already sorted in non-decreasing order, find two numbers such that they add up to a specific target number. Let these two numbers be numbers[index1] and numbers[index2] where 1 <= index1 < index2 <= numbers.length.
@@ -86,7 +78,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum (LC 15) `⚡ T1`
+### 3Sum (LC 15)
 
 > [!example] Problem
 > Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
@@ -157,7 +149,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum (LC 18) `⚡ T1`
+### 4Sum (LC 18)
 
 > [!example] Problem
 > Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
@@ -219,7 +211,7 @@ difficulty: mixed
 
 ---
 
-### Container With Most Water (LC 11) `⚡ T1`
+### Container With Most Water (LC 11)
 
 > [!example] Problem
 > You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
@@ -257,8 +249,7 @@ difficulty: mixed
 >         area = min(height[lo], height[hi]) * (hi - lo)
 >         best = max(best, area)
 >         if height[lo] <= height[hi]:
->             lo += 1   # move shorter bar
->             taller side moving can't improve
+>             lo += 1   # move shorter bar; taller side moving can't improve
 >         else:
 >             hi -= 1
 >     return best
@@ -272,7 +263,7 @@ difficulty: mixed
 
 ---
 
-### Trapping Rain Water (LC 42) `⚡ T1`
+### Trapping Rain Water (LC 42)
 
 > [!example] Problem
 > Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
@@ -331,7 +322,7 @@ difficulty: mixed
 
 ---
 
-### Remove Duplicates from Sorted Array (LC 26) `⚡ T1`
+### Remove Duplicates from Sorted Array (LC 26)
 
 > [!example] Problem
 > Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
@@ -467,7 +458,7 @@ difficulty: mixed
 
 ---
 
-### Move Zeroes (LC 283) `⚡ T1`
+### Move Zeroes (LC 283)
 
 > [!example] Problem
 > Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
@@ -569,7 +560,7 @@ difficulty: mixed
 
 ---
 
-### Sort Colors (LC 75) `⚡ T1`
+### Sort Colors (LC 75)
 
 > [!example] Problem
 > Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
@@ -628,7 +619,7 @@ difficulty: mixed
 
 ---
 
-### Linked List Cycle (LC 141) `🎯 T2`
+### Linked List Cycle (LC 141)
 
 > [!example] Problem
 > Given head, the head of a linked list, determine if the linked list has a cycle in it.
@@ -797,7 +788,7 @@ difficulty: mixed
 
 ---
 
-### Remove Nth Node From End of List (LC 19) `🎯 T2`
+### Remove Nth Node From End of List (LC 19)
 
 > [!example] Problem
 > Given the head of a linked list, remove the nth node from the end of the list and return its head.
@@ -856,7 +847,7 @@ difficulty: mixed
 
 ---
 
-### 3Sum Closest (LC 16) `⚡ T1`
+### 3Sum Closest (LC 16)
 
 > [!example] Problem
 > Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
@@ -1319,9 +1310,6 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[binary-search]] | [[sliding-window]] | [[array]] | [[linked-list]]
 ### Reverse Vowels of a String
 
 > [!example] Problem
@@ -1376,7 +1364,7 @@ difficulty: mixed
 
 ## Two Pointers — More Problems
 
-### Minimum Operations to Reduce X to Zero (LC 1658) `⚡ T1`
+### Minimum Operations to Reduce X to Zero (LC 1658)
 
 > [!example] Problem
 > You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or the rightmost element from the array nums and subtract its value from x. Note that this modifies the array for future operations.

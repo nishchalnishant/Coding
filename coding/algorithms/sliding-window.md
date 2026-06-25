@@ -4,15 +4,7 @@ topic: Sliding Window
 difficulty: mixed
 ---
 
-# Sliding Window — Problem Set
-
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
-
-
-
+# Sliding Window — Amazon SDE-2
 
 
 ---
@@ -24,7 +16,7 @@ difficulty: mixed
 
 ---
 
-### Find All Anagrams in a String (LC 438) `⚡ T1`
+### Find All Anagrams in a String (LC 438)
 
 > [!example] Problem
 > Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
@@ -141,7 +133,7 @@ difficulty: mixed
 
 ---
 
-### Permutation in String (LC 567) `⚡ T1`
+### Permutation in String (LC 567)
 
 > [!example] Problem
 > Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
@@ -215,7 +207,7 @@ difficulty: mixed
 
 ---
 
-### Longest Substring Without Repeating Characters (LC 3) `⚡ T1`
+### Longest Substring Without Repeating Characters (LC 3)
 
 > [!example] Problem
 > Given a string s, find the length of the longest substring without duplicate characters.
@@ -271,7 +263,7 @@ difficulty: mixed
 
 ---
 
-### Longest Repeating Character Replacement (LC 424) `⚡ T1`
+### Longest Repeating Character Replacement (LC 424)
 
 > [!example] Problem
 > You are given a string s and an integer k. You can choose any character of the string and change it to any other uppercase English character. You can perform this operation at most k times.
@@ -318,7 +310,7 @@ difficulty: mixed
 >         if (right - left + 1) - max_count > k:
 >             freq[s[left]] -= 1
 >             left += 1   # shrink by 1
->             don't update max_count (intentional)
+>             # don't update max_count (intentional: we track best seen)
 >         best = max(best, right - left + 1)
 > 
 >     return best
@@ -401,7 +393,7 @@ difficulty: mixed
 ### Longest Substring with At Most K Distinct Characters (LC 340)
 
 > [!example] Problem
-> Given a string `s` and an integer `k`, return *the length of the longest **substring** of* `s` *that contains at most* `k` ***distinct `🎯 T2`** characters*.
+> Given a string `s` and an integer `k`, return *the length of the longest **substring** of* `s` *that contains at most* `k` ***distinct** characters*.
 > 
 >  
 > 
@@ -472,7 +464,7 @@ difficulty: mixed
 
 ---
 
-### Subarrays with K Different Integers (LC 992) `⚡ T1`
+### Subarrays with K Different Integers (LC 992)
 
 > [!example] Problem
 > Given an integer array nums and an integer k, return the number of good subarrays of nums.
@@ -653,7 +645,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Window Substring (LC 76) `⚡ T1`
+### Minimum Window Substring (LC 76)
 
 > [!example] Problem
 > Given two strings s and t of lengths m and n respectively, return the minimum window substring of s such that every character in t (including duplicates) is included in the window. If there is no such substring, return the empty string "".
@@ -738,7 +730,7 @@ difficulty: mixed
 
 ---
 
-### Sliding Window Maximum (LC 239) `⚡ T1`
+### Sliding Window Maximum (LC 239)
 
 > [!example] Problem
 > You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
@@ -779,7 +771,7 @@ difficulty: mixed
 > 
 > def max_sliding_window(nums, k):
 >     dq: deque[int] = deque()  # stores indices
->     front = max of current window
+>     # front of dq = index of max in current window
 >     result = []
 > 
 >     for i, val in enumerate(nums):
@@ -818,7 +810,7 @@ difficulty: mixed
 > 
 > def min_sliding_window(nums, k):
 >     dq: deque[int] = deque()  # stores indices
->     front = min of current window
+>     # front of dq = index of min in current window
 >     result = []
 > 
 >     for i, val in enumerate(nums):
@@ -1045,7 +1037,7 @@ difficulty: mixed
 
 ---
 
-### Max Consecutive Ones III (LC 1004) `⚡ T1`
+### Max Consecutive Ones III (LC 1004)
 
 > [!example] Problem
 > Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
@@ -1381,7 +1373,7 @@ difficulty: mixed
 
 ---
 
-### Jump Game VI (LC 1696) `🎯 T2`
+### Jump Game VI (LC 1696)
 
 > [!example] Problem
 > You are given a 0-indexed integer array nums and an integer k.
@@ -1707,9 +1699,6 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[two-pointers]] | [[hashing]] | [[string]] | [[queue]]
 ### Maximum Number of Vowels in a Substring of Given Length
 
 > [!example] Problem
@@ -1768,7 +1757,7 @@ difficulty: mixed
 
 ## Sliding Window — More Problems
 
-### Grumpy Bookstore Owner (LC 1052) `⚡ T1`
+### Grumpy Bookstore Owner (LC 1052)
 
 > [!example] Problem
 > There is a bookstore owner that has a store open for n minutes. You are given an integer array customers of length n where customers[i] is the number of the customers that enter the store at the start of the ith minute and all those customers leave after the end of that minute.
