@@ -20,6 +20,8 @@
 * [Master Decision Guide](00-L3-EXECUTION-META/DECISION_GUIDE.md)
 * [Decision Flowcharts (Markdown)](00-L3-EXECUTION-META/FLOWCHART_MEDIUM.md)
 * [What to Skip at L3](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+* [**Complexity Deep-Dive** *(NEW)*](00-L3-EXECUTION-META/05-complexity-analysis.md)
+* [**Edge Case Taxonomy** *(NEW)*](00-L3-EXECUTION-META/06-edge-case-taxonomy.md)
 
 ---
 
@@ -65,6 +67,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Array](coding/data-structures/01-array.md)
 * [Hashing](coding/data-structures/02-hashing.md)
 * [String](coding/data-structures/02-string.md)
+* [**Matrix / Grid** *(NEW)*](coding/data-structures/04-matrix.md)
 * [Stack](coding/data-structures/05-stack.md)
 * [Queue](coding/data-structures/06-queue.md)
 * [Linked List](coding/data-structures/07-linked-list.md)

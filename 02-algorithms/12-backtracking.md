@@ -605,6 +605,63 @@ def dfs_iterative(start, choices):
 
 ---
 
+## Deduplication Template `⚡ T1`
+
+When input has **duplicates** and results must be distinct, you must prevent identical choices at the same recursion level.
+
+### Rule
+Sort the input first. At each recursion level, skip any element equal to the **previous element at the same level** (not anywhere in the array — only same-start siblings).
+
+```python
+# Subsets II / Combination Sum II pattern
+def backtrack(start: int, path: list) -> None:
+    results.append(path[:])
+    for i in range(start, len(nums)):
+        if i > start and nums[i] == nums[i - 1]:   # skip duplicate AT THIS LEVEL
+            continue
+        path.append(nums[i])
+        backtrack(i + 1, path)                      # i+1 → no reuse
+        path.pop()
+
+nums.sort()   # MUST sort first
+backtrack(0, [])
+```
+
+### Permutations with duplicates — different guard
+Permutations use a `used[]` array, not a `start` index. The dedup condition flips:
+
+```python
+# Permutations II pattern
+def backtrack(path: list) -> None:
+    if len(path) == len(nums):
+        results.append(path[:])
+        return
+    for i in range(len(nums)):
+        if used[i]:
+            continue
+        if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:   # skip dup
+            continue
+        used[i] = True
+        path.append(nums[i])
+        backtrack(path)
+        path.pop()
+        used[i] = False
+
+nums.sort()
+used = [False] * len(nums)
+backtrack([])
+```
+
+**Why `not used[i-1]`?** If `used[i-1]` is `False`, the previous identical element was already explored and abandoned at this level — skipping prevents duplicate permutations. If it's `True`, the previous element is in the current path at a different depth, and we're building a genuinely different permutation.
+
+| Problem | Strategy | Guard condition |
+|---------|----------|-----------------|
+| Subsets II | `start` index | `i > start and nums[i] == nums[i-1]` |
+| Combination Sum II | `start` index | `i > start and nums[i] == nums[i-1]` |
+| Permutations II | `used[]` array | `i > 0 and nums[i]==nums[i-1] and not used[i-1]` |
+
+---
+
 ## See also
 
 - [Trie](../01-data-structures/09-trie.md) — Word Search II (pruning via Trie prefix)

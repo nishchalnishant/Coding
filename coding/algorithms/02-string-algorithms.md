@@ -44,7 +44,7 @@ difficulty: mixed
 >             i += 1
 >         elif length:
 >             length = lps[length - 1]   # fall back
->             do NOT increment i
+>             # do NOT increment i
 >         else:
 >             lps[i] = 0
 >             i += 1
@@ -567,6 +567,100 @@ difficulty: mixed
 
 ---
 
+## Suffix Array / Trie Based
+
+---
+
+### Number of Distinct Substrings
+
+> [!example] Problem
+> Count the number of distinct substrings in string `s` (including empty string is sometimes excluded — confirm per problem).
+
+> [!info] Approach
+> [!info] Approach
+> Total substrings = n(n+1)/2. Duplicates arise when multiple suffixes share a common prefix. The LCP array captures exactly this overlap. Build suffix array SA (sorted order of all suffixes). Build LCP array via Kasai's algorithm: `LCP[i]` = longest common prefix between `SA[i]` and `SA[i-1]`. Each suffix contributes `(n - SA[i]) - LCP[i]` new distinct substrings (total length minus the shared prefix already counted). Distinct substrings = `n(n+1)/2 - sum(LCP)`.
+
+> [!note]- Python Solution
+> ```python
+> def count_distinct_substrings(s):
+>     n = len(s)
+> 
+>     # O(n log^2 n) suffix array via prefix doubling
+>     sa = sorted(range(n), key=lambda i: s[i:])  # O(n^2 log n) — use SA-IS for large n
+> 
+>     # Kasai's algorithm for LCP array — O(n)
+>     rank = [0] * n
+>     for i, suffix_start in enumerate(sa):
+>         rank[suffix_start] = i
+>     lcp = [0] * n
+>     h = 0
+>     for i in range(n):
+>         if rank[i] > 0:
+>             j = sa[rank[i] - 1]
+>             while i + h < n and j + h < n and s[i + h] == s[j + h]:
+>                 h += 1
+>             lcp[rank[i]] = h
+>             if h > 0:
+>                 h -= 1
+> 
+>     total = n * (n + 1) // 2
+>     return total - sum(lcp)
+> ```
+
+> [!success] Complexity
+> Time O(n log² n) for suffix array (O(n log n) with radix sort), O(n) for LCP via Kasai | Space O(n).
+
+> [!tip] Alternatives
+> Suffix automaton (SAM): O(n) build, counts distinct substrings as sum of `len[v] - len[link[v]]` over all states. More complex to implement but strictly O(n).
+
+---
+
+### Longest Common Prefix of All Suffixes
+
+> [!example] Problem
+> Build the LCP array for a string and answer: what is the longest string that appears as a prefix in at least two suffixes?
+
+> [!info] Approach
+> [!info] Approach
+> Brute-force LCP computation between all suffix pairs is O(n²). Kasai's algorithm exploits the rank structure to do it in O(n). After building the suffix array SA, `LCP[i]` = length of common prefix between suffix `SA[i]` and suffix `SA[i-1]` in sorted order. The maximum LCP value = longest repeated substring. Kasai's key insight: if suffix starting at i has LCP of h with its SA predecessor, then suffix starting at `i+1` has LCP ≥ h-1 with its SA predecessor. This means we can start each computation from `h-1` and `h` only ever decreases by 1 between iterations → O(n) total.
+
+> [!note]- Python Solution
+> ```python
+> def build_suffix_array_and_lcp(s):
+>     n = len(s)
+>     sa = sorted(range(n), key=lambda i: s[i:])   # simple O(n^2 log n)
+>     replace with DC3 for O(n)
+> 
+>     rank = [0] * n
+>     for i, v in enumerate(sa):
+>         rank[v] = i
+>     lcp = [0] * n
+>     h = 0
+>     for i in range(n):
+>         if rank[i] > 0:
+>             j = sa[rank[i] - 1]
+>             while i + h < n and j + h < n and s[i + h] == s[j + h]:
+>                 h += 1
+>             lcp[rank[i]] = h
+>             if h:
+>                 h -= 1
+>     return sa, lcp
+> 
+> def longest_repeated_substring(s):
+>     sa, lcp = build_suffix_array_and_lcp(s)
+>     max_lcp = max(lcp)
+>     idx = lcp.index(max_lcp)
+>     return s[sa[idx]: sa[idx] + max_lcp]
+> ```
+
+> [!success] Complexity
+> Time O(n log² n) build + O(n) Kasai | Space O(n).
+
+> [!tip] Alternatives
+> Rolling hash + binary search: O(n log n) with collision risk. Suffix automaton: O(n) but complex.
+
+---
+
 ## Sliding Window on Strings
 
 ---
@@ -975,4 +1069,281 @@ difficulty: mixed
 > - Key equivalence: min insertions = n - LPS = n - LCS(s, reverse(s)).
 
 ---
+
+## Z-Algorithm Problems `🎯 T2`
+
+### Implement Z-Algorithm Search `🎯 T2`
+
+> [!example] Problem
+> Given pattern `P` and text `T`, return all start indices in `T` where `P` occurs as a substring.
+>
+> **Example:**
+> ```
+> Input: P = "aab", T = "aabaabaabaab"
+> Output: [0, 3, 6, 9]
+> ```
+
+> [!info] Approach
+> The Z-array of a string `s` stores at each index `i` the length of the longest substring starting at `i` that matches a prefix of `s`. Concatenate `P + '#' + T` (the `#` sentinel prevents Z-values from crossing the boundary). Any position `i` in the combined string where `Z[i] == len(P)` is a match start at offset `i - len(P) - 1` in `T`.
+>
+> **Z-array construction:** maintain a window `[l, r]` — the rightmost Z-box found so far. For each `i`:
+> - If `i` is inside `[l, r]`, `Z[i] >= min(Z[i-l], r-i+1)` — use the mirror. Then try to extend.
+> - Otherwise, extend from scratch.
+
+> [!note]- Python Solution
+> ```python
+> def build_z(s):
+>     n = len(s)
+>     z = [0] * n
+>     z[0] = n
+>     l = r = 0
+>     for i in range(1, n):
+>         if i < r:
+>             z[i] = min(r - i, z[i - l])
+>         while i + z[i] < n and s[z[i]] == s[i + z[i]]:
+>             z[i] += 1
+>         if i + z[i] > r:
+>             l, r = i, i + z[i]
+>     return z
+>
+> def z_search(text, pattern):
+>     if not pattern:
+>         return list(range(len(text) + 1))
+>     combined = pattern + '#' + text
+>     z = build_z(combined)
+>     m = len(pattern)
+>     return [i - m - 1 for i in range(m + 1, len(combined)) if z[i] == m]
+> ```
+
+> [!success] Complexity
+> Time O(n+m), Space O(n+m) — n = len(text), m = len(pattern).
+
+> [!tip] Edge cases / Alternatives
+> - Empty pattern: return all positions 0..n.
+> - Pattern longer than text: return [].
+> - vs KMP: identical complexity, different mental model. Z-array is often simpler to remember and implement under pressure.
+
+---
+
+### Longest Happy Prefix `🎯 T2`
+
+> [!example] Problem
+> LeetCode 1392. A string is "happy" if it has a longest prefix that is also a suffix (both proper and non-empty). Return that prefix, or `""` if none exists.
+>
+> **Example:**
+> ```
+> Input: s = "level"
+> Output: "l"
+>
+> Input: s = "ababab"
+> Output: "abab"
+> ```
+
+> [!info] Approach — KMP failure function
+> The KMP LPS (longest proper prefix that is also suffix) array directly gives the answer. `lps[-1]` is the length of the longest proper prefix of the whole string that is also a suffix. Return `s[:lps[-1]]`.
+
+> [!note]- Python Solution (KMP)
+> ```python
+> def longest_prefix(s: str) -> str:
+>     n = len(s)
+>     lps = [0] * n
+>     length = 0
+>     i = 1
+>     while i < n:
+>         if s[i] == s[length]:
+>             length += 1
+>             lps[i] = length
+>             i += 1
+>         elif length:
+>             length = lps[length - 1]
+>             # do NOT increment i
+>         else:
+>             lps[i] = 0
+>             i += 1
+>     return s[:lps[-1]]
+> ```
+
+> [!info] Approach — Z-algorithm
+> Build the Z-array of `s`. Any `i` where `Z[i] + i == n` means the suffix starting at `i` matches a prefix of length `Z[i]`. The longest such prefix is `max(Z[i] for i in range(1, n) if Z[i] + i == n)`, defaulting to 0.
+
+> [!note]- Python Solution (Z-array)
+> ```python
+> def longest_prefix_z(s: str) -> str:
+>     z = build_z(s)   # from above
+>     n = len(s)
+>     best = 0
+>     for i in range(1, n):
+>         if z[i] + i == n:
+>             best = max(best, z[i])
+>     return s[:best]
+> ```
+
+> [!success] Complexity
+> O(n) time, O(n) space — both approaches.
+
+> [!tip] Edge cases / Alternatives
+> - Single character: `lps[-1] == 0`, return `""`.
+> - Whole string is periodic (e.g. `"aaaa"`): LPS answer is `n-1` = `"aaa"`.
+
+---
+
+## Rabin-Karp Problems `🎯 T2`
+
+### Repeated String Match `🎯 T2`
+
+> [!example] Problem
+> LeetCode 686. Given strings `a` and `b`, return the minimum number of times you must repeat `a` such that `b` is a substring of the result. Return `-1` if this is impossible.
+>
+> **Example:**
+> ```
+> Input: a = "abcd", b = "cdabcdab"
+> Output: 3   # "abcdabcdabcd" contains "cdabcdab"
+>
+> Input: a = "a", b = "aa"
+> Output: 2
+> ```
+
+> [!info] Approach
+> The minimum repeats needed is `ceil(len(b) / len(a))`. If `b` is a substring, it must appear within at most `ceil + 1` repetitions (one extra in case `b` spans a boundary). Build that string and check. Use Python's `in` operator (O(n·m) naive but accepted at interview); optionally use Rabin-Karp rolling hash for O(n+m).
+>
+> **Rolling hash approach:** hash `b`, then slide a window of `len(b)` over the repeated `a` string using the recurrence:
+> `h = (h - ord(leaving) * base^(w-1)) * base + ord(entering)) % mod`
+
+> [!note]- Python Solution
+> ```python
+> def repeated_string_match(a: str, b: str) -> int:
+>     import math
+>     reps = math.ceil(len(b) / len(a))
+>     candidate = a * reps
+>     if b in candidate:
+>         return reps
+>     candidate += a
+>     if b in candidate:
+>         return reps + 1
+>     return -1
+> ```
+
+> [!note]- Python Solution (Rabin-Karp)
+> ```python
+> def repeated_string_match_rk(a: str, b: str) -> int:
+>     import math
+>     BASE, MOD = 31, (1 << 61) - 1
+>     m = len(b)
+>     # hash b
+>     hb = 0
+>     for c in b:
+>         hb = (hb * BASE + ord(c)) % MOD
+>     # build repeated a up to len(b) + len(a)
+>     reps = math.ceil(len(b) / len(a)) + 1
+>     s = a * reps
+>     n = len(s)
+>     if n < m:
+>         return -1
+>     # compute hash of first window
+>     hs = 0
+>     high = 1
+>     for i in range(m):
+>         hs = (hs * BASE + ord(s[i])) % MOD
+>         if i < m - 1:
+>             high = (high * BASE) % MOD
+>     base_reps = math.ceil(len(b) / len(a))
+>     for i in range(n - m + 1):
+>         if hs == hb and s[i:i+m] == b:   # verify on hash match
+>             needed = math.ceil((i + m) / len(a))
+>             return needed
+>         if i + m < n:
+>             hs = (hs - ord(s[i]) * high) % MOD
+>             hs = (hs * BASE + ord(s[i + m])) % MOD
+>     return -1
+> ```
+
+> [!success] Complexity
+> `in` operator: O(n·m) naive, O(n+m) with Python's optimized search. Rabin-Karp: O(n+m) expected. Space O(n+m) for the repeated string.
+
+> [!tip] Edge cases / Alternatives
+> - `len(a) > len(b)`: answer is either 1 (if `b in a`) or -1.
+> - Characters in `b` not in `a`: immediately return -1 (can short-circuit with `set(b) <= set(a)`).
+> - Double hashing (two independent mods) eliminates collision probability in adversarial inputs.
+
+---
+
+## Manacher's Algorithm Problems `⚡ T1`
+
+### Longest Palindromic Substring `⚡ T1`
+
+> [!example] Problem
+> LeetCode 5. Given string `s`, return the longest substring that is a palindrome. If there are ties, return any.
+>
+> **Example:**
+> ```
+> Input: s = "babad"
+> Output: "bab"  (or "aba")
+>
+> Input: s = "cbbd"
+> Output: "bb"
+> ```
+
+> [!info] Approach — O(n²) expand-around-center (default)
+> For each center (n odd centers + n-1 even centers), expand while characters match. Track best. This is the expected L3 answer.
+
+> [!note]- Python Solution (expand-around-center)
+> ```python
+> def longest_palindrome(s: str) -> str:
+>     def expand(l, r):
+>         while l >= 0 and r < len(s) and s[l] == s[r]:
+>             l -= 1; r += 1
+>         return s[l+1:r]
+>     best = ""
+>     for i in range(len(s)):
+>         for sub in (expand(i, i), expand(i, i+1)):
+>             if len(sub) > len(best):
+>                 best = sub
+>     return best
+> ```
+
+> [!info] Approach — O(n) Manacher's (when interviewer asks "can you do better than O(n²)?")
+> **Transform:** insert `#` between every character and at boundaries: `"abc"` → `"#a#b#c#"`. Now every palindrome is odd-length.
+>
+> **p[i]:** palindrome radius at center `i` in the transformed string (not counting the center itself).
+>
+> **Mirror property:** maintain the rightmost palindrome `[l, r]` with center `c`. For new center `i`:
+> - If `i < r`: `p[i] >= min(p[2*c - i], r - i)` — use mirror, then try to expand.
+> - If `i >= r`: expand from scratch.
+>
+> Update `c, r` whenever expansion pushes past the current `r`.
+
+> [!note]- Python Solution (Manacher)
+> ```python
+> def longest_palindrome_manacher(s: str) -> str:
+>     # Transform: insert '#'
+>     t = '#' + '#'.join(s) + '#'
+>     n = len(t)
+>     p = [0] * n
+>     c = r = 0   # center and right boundary of rightmost palindrome
+>     for i in range(n):
+>         if i < r:
+>             mirror = 2 * c - i
+>             p[i] = min(r - i, p[mirror])
+>         # try to expand
+>         while i - p[i] - 1 >= 0 and i + p[i] + 1 < n and t[i - p[i] - 1] == t[i + p[i] + 1]:
+>             p[i] += 1
+>         # update rightmost palindrome
+>         if i + p[i] > r:
+>             c, r = i, i + p[i]
+>     # find the max radius and map back to original string
+>     best_center = p.index(max(p))
+>     best_len = p[best_center]
+>     # in transformed string, original index = (transformed_index - 1) // 2
+>     start = (best_center - best_len) // 2
+>     return s[start: start + best_len]
+> ```
+
+> [!success] Complexity
+> Expand-around-center: O(n²) time, O(1) space. Manacher: O(n) time, O(n) space.
+
+> [!tip] Edge cases / Alternatives
+> - Empty string or single character: return `s` as-is.
+> - All same characters (e.g. `"aaaa"`): answer is the whole string — both approaches handle this.
+> - When to use Manacher: only if interviewer explicitly asks for O(n). The expand approach is cleaner and sufficient for L3.
+> - The `#` sentinel makes all palindromes odd-length in the transformed string — this is the key insight that unifies odd/even cases.
 

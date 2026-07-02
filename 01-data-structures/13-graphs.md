@@ -680,8 +680,44 @@ def prim_mst(n: int, adj: dict) -> int:
 
 
 
-## See also
+## Bellman-Ford Algorithm
 
+> [!IMPORTANT]
+> **When to use:** Dijkstra fails when edges have **negative weights**. Bellman-Ford handles them. Also use for **K-hop shortest paths** (flight problems with at most K stops).
+
+Relax **all** edges exactly **V-1** times. After round `i`, `dist[v]` holds the shortest path using at most `i` edges.
+
+**Negative Cycle Detection**: After V-1 rounds, do one more pass. If any edge can still relax, a negative cycle exists.
+
+```python
+def bellman_ford(n, edges, src):
+    INF = float('inf')
+    dist = [INF] * n
+    dist[src] = 0
+    for _ in range(n - 1):
+        updated = False
+        for u, v, w in edges:
+            if dist[u] != INF and dist[u] + w < dist[v]:
+                dist[v] = dist[u] + w
+                updated = True
+        if not updated:
+            break
+    for u, v, w in edges:
+        if dist[u] != INF and dist[u] + w < dist[v]:
+            return []   # negative cycle
+    return dist
+```
+
+**K-Hop variant** (Cheapest Flights in K Stops): run only K+1 rounds and snapshot `dist` before each round (`temp = dist.copy()`) to prevent same-round chaining.
+
+| | Value |
+|---|---|
+| Time | O(V · E) |
+| Space | O(V) |
+
+---
+
+## See also
 
 - [Union-Find](../02-algorithms/14-union-find.md) — DSU for Kruskal and connectivity
 - [Patterns Master](../03-patterns/patterns-master.md) — graph pattern recognition triggers

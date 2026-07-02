@@ -478,6 +478,102 @@ Use this when you have a brute-force solution and need to optimize under time pr
 
 ---
 
+---
+
+## Implicit Graph Pattern `⚡ T1`
+
+An **implicit graph** is one where nodes and edges are never explicitly listed — they emerge from problem state. You recognize it when the problem never says "graph" but BFS/DFS is the right tool.
+
+**Trigger signals**:
+- "Minimum number of operations/steps to reach state X from state Y"
+- State transitions described by rules (flip bit, rotate, swap, replace character)
+- Lock combinations, word ladders, sliding puzzles
+
+**Template**:
+```python
+from collections import deque
+
+def bfs_implicit(start, target):
+    if start == target:
+        return 0
+    visited = {start}
+    queue = deque([(start, 0)])
+    while queue:
+        state, steps = queue.popleft()
+        for next_state in get_neighbors(state):   # domain-specific
+            if next_state == target:
+                return steps + 1
+            if next_state not in visited:
+                visited.add(next_state)
+                queue.append((next_state, steps + 1))
+    return -1
+```
+
+**Key insight**: Encode state as a string/tuple so it's hashable for `visited`. Generate neighbors by applying every valid operation to the current state. BFS gives shortest path in unweighted state space.
+
+**Bidirectional BFS** (when state space is huge): expand from both ends, meet in the middle. Cuts from O(b^d) to O(b^(d/2)).
+
+| Problem | State | Neighbor generation |
+|---------|-------|---------------------|
+| Word Ladder | word string | swap each char with a–z |
+| Open the Lock | "0000" string | +1/-1 each of 4 wheels |
+| Minimum Genetic Mutation | gene string | swap each char from bank |
+| Sliding Puzzle | board tuple | swap 0 with adjacent cells |
+
+---
+
+## Follow-Up Chains — Interview Progression `⚡ T1`
+
+Google interviewers stack follow-ups to probe depth. Know the upgrade path for each pattern family.
+
+### Two Sum family
+1. Two Sum (unsorted, hash map) → 2. Two Sum sorted (two pointers) → 3. 3Sum (fix one, two-pointer inner) → 4. 4Sum (fix two, two-pointer inner) → 5. Subarray Sum = K (prefix sum + hash map)
+
+### Sliding Window family
+1. Max sum of size-k subarray → 2. Longest substring with k distinct chars → 3. Minimum window substring → 4. Sliding window with frequency map and two pointers
+
+### Binary Search family
+1. Search in sorted array → 2. Search in rotated sorted array → 3. Find minimum in rotated array → 4. Search in 2D matrix → 5. Binary search on answer (capacity, split, minimize max)
+
+### Tree DFS family
+1. Max depth → 2. Path sum (root-to-leaf) → 3. Path sum III (any path, prefix sums) → 4. Lowest common ancestor → 5. Serialize/deserialize binary tree
+
+### DP Linear family
+1. Climb stairs → 2. House robber → 3. House robber II (circular) → 4. Decode ways → 5. Jump game II (BFS/greedy DP)
+
+### Backtracking family
+1. Subsets → 2. Combinations → 3. Permutations → 4. All three with duplicates (sort + skip) → 5. N-Queens / Sudoku (constraint + pruning)
+
+### Graph BFS family
+1. Number of islands (DFS/BFS) → 2. Walls and gates (multi-source BFS) → 3. Rotting oranges (multi-source BFS with time) → 4. Word ladder (implicit graph BFS) → 5. Alien dictionary (topological sort)
+
+### Interval Scheduling family
+1. Merge intervals → 2. Meeting rooms (any overlap?) → 3. Meeting rooms II (min rooms, heap) → 4. Non-overlapping intervals (max removals) → 5. Task scheduler (formula)
+
+### Heap family
+1. Kth largest element → 2. K closest points to origin → 3. Top K frequent elements → 4. Merge K sorted lists → 5. Find median from data stream (two heaps)
+
+---
+
+## Hybrid Patterns `🎯 T2`
+
+When a problem combines two pattern families, name both upfront in the interview.
+
+| Hybrid | When you see it | Example |
+|--------|----------------|---------|
+| **DP + Binary Search** | LIS-style: optimize over a sorted structure | Longest Increasing Subsequence O(N log N) |
+| **Graph + DP** | Shortest path with state, DAG counting | Unique paths in grid, cheapest flights within K stops |
+| **Backtracking + Memo** | Subproblems repeat in recursion tree | Word Break II, Palindrome Partitioning II |
+| **Greedy + Heap** | Sort by one key, dynamically pick best by another | Meeting Rooms II, Task Scheduler, Dijkstra |
+| **BFS + Binary Search** | "Minimum X such that Y is possible" in a grid/graph | Swim in Rising Water, Path With Minimum Effort |
+| **Two Pointers + Hash Map** | Sliding window with constraint tracking | Minimum Window Substring, Fruit Into Baskets |
+| **Trie + DFS** | Batch prefix queries, pruning on Trie branches | Word Search II |
+| **Union-Find + Sort** | Process edges in weight order, merge components | Kruskal's MST, Redundant Connection |
+
+**Naming hybrid patterns in interviews**: "This looks like a DP problem, but the recurrence needs to query a monotonic structure — so I'll use binary search on the DP array, which gives us O(N log N) instead of O(N²)."
+
+---
+
 ## See Also
 
 - Problem bank with logic & trickiness: `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`
