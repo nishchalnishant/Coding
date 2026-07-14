@@ -5,39 +5,6 @@ subtopic:
 status: unread
 tags: [patterns, patterns-master]
 ---
-## First-Principles Map
-
-```
-WHY pattern recognition → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
-       │                       │               │               │               │
-  [Interviews don't test      [mapping         [scan problem   [identify in    [forcing a
-   memorized solutions —       problem signals   statement for   first 2 mins:   pattern that
-   they test the ability       to algorithm      trigger words   sorted? → BS;   doesn't fit;
-   to map unfamiliar           families using    + constraints;  contiguous? →   using sliding
-   problems to known           trigger signals   match to        sliding window; window when
-   structures; without         and constraint    pattern family; graph? → BFS;   no window
-   a pattern taxonomy,         analysis]         apply template; dynamic? → DP]  constraint;
-   every problem feels new]                      adapt details]                  DP when greedy
-                                                                                 suffices]
-       │                       │               │
-  [real-world:                [pattern         [Two-pointer: sorted array,
-   doctor pattern              categories:      pair/triplet sum, palindrome;
-   matching symptoms to        two-pointer,     Sliding window: max/min in
-   diseases; chess master       sliding window,  subarray/substring; monotonic
-   recognizing board            binary search,   stack: next greater element;
-   positions]                  BFS/DFS, DP,     union-find: connected components;
-                               greedy, union-   heap: top-K, median stream]
-                               find, heap]
-       ↓
-[Decision: Which pattern for which signal]
-  ├── "Sorted array, find pair"    → Two pointers
-  ├── "Contiguous subarray max"    → Sliding window
-  ├── "Shortest path"              → BFS (unweighted) / Dijkstra (weighted)
-  ├── "Count/min/max ways"         → DP (optimal substructure)
-  ├── "Connected groups"           → Union-Find or DFS
-  └── "Top K / K smallest"         → Heap (priority queue)
-```
-
 ## First-Principles Breakdown
 - **Root problem**: Every problem in isolation looks unique; pattern taxonomy converts "novel problem" into "known template + small adaptation."
 - **Core insight**: Problems share structural signatures (sorted input, contiguous subarray, graph edges, optimal substructure) — these signals map reliably to algorithm families.
@@ -52,68 +19,6 @@ WHY pattern recognition → WHAT it is → HOW it works → WHEN to use → WHAT
 > It is NOT a coding practice file. Do not deep-study it like a topic file.
 
 
-```
-[PATTERN RECOGNITION — MINDMAP]
-├── WHY IT EXISTS
-│   ├── Problem it solves: map an unfamiliar problem to a known algorithmic template within 60 seconds
-│   ├── Most interview problems are compositions of ~15 core patterns — recognition beats re-invention
-│   └── Analogy: patterns are chess openings — you don't compute from scratch, you pattern-match and adapt
-├── WHAT IT IS (First Principles)
-│   ├── Core definition: a pattern = (trigger signals) → (algorithm family) + (canonical data structure)
-│   ├── Signal types: problem constraints, input shape, optimization target, query type
-│   └── Hierarchy: input type → constraint → pattern → algorithm → implementation variant
-├── HOW TO RECOGNIZE PATTERNS
-│   ├── Array / Subarray Patterns
-│   │   ├── "Contiguous subarray, max/min sum" → Kadane's algorithm O(N)
-│   │   ├── "Subarray sum equals K" → prefix sum + hash map O(N)
-│   │   ├── "Two elements / pair / complement" → two pointers or hash map O(N)
-│   │   └── "Longest subarray with constraint" → sliding window O(N)
-│   ├── Search / Optimization Patterns
-│   │   ├── "Sorted array, find element / boundary" → binary search O(log N)
-│   │   ├── "Minimize max / maximize min over a range" → binary search on answer
-│   │   └── "K-th smallest/largest" → heap (min/max) or quickselect O(N) avg
-│   ├── Tree / Graph Patterns
-│   │   ├── "Explore all paths, level order" → BFS (queue)
-│   │   ├── "DFS: path, cycle, topological order" → DFS + visited/color array
-│   │   ├── "Shortest path, unweighted" → BFS | weighted positive → Dijkstra | negative → Bellman-Ford
-│   │   └── "Connected components, union queries" → Union-Find
-│   ├── Dynamic Programming Patterns
-│   │   ├── "Count/optimize over subsets or subsequences" → DP
-│   │   ├── "Overlapping subproblems" → memoization / bottom-up table
-│   │   ├── "Decision at each step: take or skip" → 0/1 knapsack pattern
-│   │   └── "Interval DP" → dp[i][j] = optimal for s[i..j]; diagonal fill
-│   ├── String Patterns
-│   │   ├── "Pattern match in text" → KMP O(N+M)
-│   │   ├── "Anagram / permutation in string" → sliding window + freq array O(N)
-│   │   └── "Longest palindromic substring" → expand-around-center or Manacher
-│   ├── Greedy Patterns
-│   │   ├── "Interval scheduling / merging" → sort by end time, greedy pick
-│   │   ├── "Minimum cost to connect all" → Kruskal / Prim MST
-│   │   └── "Local optimum = global optimum" → greedy; else → DP
-│   └── Backtracking Patterns
-│       ├── "Generate all subsets / permutations / combinations" → backtrack with undo
-│       └── "Constraint satisfaction (N-Queens, Sudoku)" → backtrack + pruning
-├── COMPLEXITY SUMMARY (Pattern → Typical Complexity)
-│   ├── Sliding window: O(N)
-│   ├── Binary search: O(log N) or O(N log N) with pre-sort
-│   ├── BFS/DFS on graph: O(V + E)
-│   ├── DP (2D): O(N·M) time and space (optimize to O(M) space with rolling array)
-│   └── Backtracking: O(2^N) or O(N!) worst — prune aggressively
-├── WHEN TO USE WHICH PATTERN
-│   ├── Signal: "find all / enumerate" → backtracking
-│   ├── Signal: "optimal / min / max with choices" → DP or greedy
-│   ├── Signal: "sorted + search" → binary search
-│   ├── Signal: "shortest path" → BFS (unweighted) / Dijkstra (weighted)
-│   ├── Signal: "sliding / contiguous window" → sliding window or two pointers
-│   └── Signal: "group / component / connectivity" → Union-Find or BFS/DFS
-└── COMMON MISTAKES / GOTCHAS
-    ├── Using DFS for shortest path: BFS guarantees shortest in unweighted graphs — DFS does not
-    ├── Greedy on problems requiring global optimum: always verify greedy choice property before committing
-    ├── DP without memoization: exponential time — always cache or build bottom-up
-    ├── Two pointers requiring sort: forgetting to sort first invalidates the approach
-    ├── Sliding window with negative numbers: two-pointer shrinking doesn't work — use deque or prefix sum
-    └── Pattern misfire: "find any" vs "find all" vs "find optimal" require different approaches
-```
 
 **Use this when:** You read a problem and need to identify the solution approach within 60 seconds.
 
@@ -145,7 +50,11 @@ WHY pattern recognition → WHAT it is → HOW it works → WHEN to use → WHAT
 | "Shortest path" (weighted) | Dijkstra | Min-heap expands cheapest known node |
 | "Maximize minimum / Minimize maximum" | Binary search on answer | Guess value, check feasibility (monotonicity) |
 | "All possible ways" | Backtracking (list them), DP (count them) | Backtrack to enumerate; DP for count only |
-| "Kth smallest/largest" | Heap, quickselect, binary search on answer | Heap: O(N log K); Quickselect: O(N) average |
+| "Kth smallest/largest" (incl. sorted matrix) | Heap, quickselect, binary search on answer | Heap: O(N log K); Quickselect: O(N) average; matrix: BS on value range, count ≤ mid |
+| "Subarray sum = K" | Prefix sum + hash map | `prefix_count[running_sum - K]` gives count of valid subarrays |
+| "Next greater/smaller" | Monotonic stack | Store indices; pop while current element breaks monotonicity |
+| "Connectivity / cycles" | Union-Find | Union two nodes; find detects if already connected (cycle) |
+| "Stream / running median" | Two heaps | Max-heap (lower half) + min-heap (upper half); rebalance to size diff ≤ 1 |
 
 ---
 
@@ -432,11 +341,14 @@ def backtrack(start, path):
 
 | Problem type | Reframe as |
 |--------------|------------|
-| Meeting rooms | Merge intervals |
+| Meeting rooms — can all fit? | Merge intervals |
+| Meeting rooms — minimum rooms needed? | Sort by start + min-heap of end times |
 | Word transformation | BFS (words = nodes, 1-char diff = edge) |
 | Next greater temperature | Monotonic stack |
 | Collecting gold in grid | 2D DP pathfinding |
 | Assigning tasks to workers | Bin packing (backtracking) or flow (advanced) |
+| Group words by same letters | Sorted string as hash key (anagram grouping) |
+| Earliest time all nodes connected | Union-Find + sort edges by weight (Kruskal) |
 
 ---
 
@@ -450,6 +362,18 @@ Ask interviewer:
 5. **Negative values?** → Breaks simple sliding window, Dijkstra
 
 ---
+
+## Critical Gotchas (Last-Minute Check)
+
+| Gotcha | Rule |
+|--------|------|
+| Sliding window + negatives | Can't shrink window on negatives; use prefix sum + map instead |
+| Duplicates in backtracking | `if i > start and nums[i] == nums[i-1]: continue` |
+| Binary search mid overflow | `mid = lo + (hi - lo) // 2`, not `(lo + hi) // 2` |
+| BFS visited mark | Mark visited **when enqueuing**, not when dequeuing — prevents duplicates in queue |
+| Topo sort cycle detection | If processed nodes < total nodes after Kahn's, there's a cycle |
+| Tree DP return vs global | Return the single-arm gain upward; update global max with both arms at current node |
+| Dijkstra with negative edges | Does not work — use Bellman-Ford |
 
 ---
 
@@ -475,8 +399,6 @@ Use this when you have a brute-force solution and need to optimize under time pr
 
 > [!TIP]
 > The most common upgrade paths: **O(N²) → O(N)** via hash map or two pointers; **O(N²) → O(N log N)** via sort + greedy; **exponential → polynomial** via DP or memoization. When stuck on optimization, ask: "Am I recomputing something? Can I cache it?" (hash/DP) or "Is the data sortable? Does sorting unlock a linear pass?" (sort + greedy/two-pointer).
-
----
 
 ---
 
@@ -577,5 +499,5 @@ When a problem combines two pattern families, name both upfront in the interview
 ## See Also
 
 - Problem bank with logic & trickiness: `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`
-- Canonical questions index: `03-patterns/canonical-questions.md`
+- Derive the pattern from first principles: `03-patterns/HOW_TO_THINK.md`
 - Problem deep-dives with full walkthroughs: `02-algorithms/problem-deep-dives.md`

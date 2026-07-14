@@ -2104,6 +2104,146 @@ difficulty: mixed
 
 ---
 
+## Implicit-Graph BFS — L4 additions
+
+### Snakes and Ladders `🎯 T2`
+
+> [!example] Problem
+> An n×n board numbered 1..n² boustrophedon-style from the bottom-left. From square s you may move to s+1..s+6; landing on a snake/ladder teleports you. Minimum dice rolls from 1 to n²?
+
+> [!info] Approach
+> Pure unweighted shortest path ⇒ BFS over squares. The entire difficulty is the **`square → (row, col)` decode**: `r, c = divmod(sq - 1, n)`, flip `c` on odd rows, and the board row is `n - 1 - r`. Write and dry-run the decode as its own helper before touching BFS — the mapping *is* the problem.
+
+> [!note]- Python Solution
+> ```python
+> from collections import deque
+> >
+> def snakesAndLadders(board):
+>     n = len(board)
+>     def cell(sq):
+>         r, c = divmod(sq - 1, n)
+>         if r % 2:
+>             c = n - 1 - c
+>         return n - 1 - r, c
+> >
+>     q, seen = deque([(1, 0)]), {1}
+>     while q:
+>         sq, moves = q.popleft()
+>         if sq == n * n:
+>             return moves
+>         for nxt in range(sq + 1, min(sq + 6, n * n) + 1):
+>             r, c = cell(nxt)
+>             if board[r][c] != -1:
+>                 nxt = board[r][c]
+>             if nxt not in seen:
+>                 seen.add(nxt)
+>                 q.append((nxt, moves + 1))
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(n²); Space O(n²).
+
+> [!warning] Gotcha
+> Mark `seen` on the square you land on **after** the teleport, and never follow a second snake/ladder from the destination — one jump per roll.
+
+---
+
+### Bus Routes `🎯 T2`
+
+> [!example] Problem
+> `routes[i]` is the list of stops bus i cycles through. Minimum number of **buses** to get from stop `source` to stop `target`?
+
+> [!info] Approach
+> The answer counts buses, so BFS must expand **route by route**, not stop by stop. Build `stop → routes through it`; BFS state = stop, but each expansion consumes an unvisited *route* and adds all its stops at `buses + 1`. Choosing the right node type for the graph is the entire problem — say why stops-as-nodes gives the wrong metric.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict, deque
+> >
+> def numBusesToDestination(routes, source, target):
+>     if source == target:
+>         return 0
+>     stop_routes = defaultdict(list)
+>     for r, stops in enumerate(routes):
+>         for s in stops:
+>             stop_routes[s].append(r)
+>     q, seen_r, seen_s = deque([(source, 0)]), set(), {source}
+>     while q:
+>         stop, buses = q.popleft()
+>         for r in stop_routes[stop]:
+>             if r in seen_r:
+>                 continue
+>             seen_r.add(r)
+>             for s in routes[r]:
+>                 if s == target:
+>                     return buses + 1
+>                 if s not in seen_s:
+>                     seen_s.add(s)
+>                     q.append((s, buses + 1))
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(total stops across routes); Space same.
+
+> [!warning] Gotcha
+> Two visited sets — routes **and** stops. Skipping either one turns the BFS quadratic on adversarial inputs.
+
+---
+
+### Word Ladder II `🎯 T2`
+
+> [!example] Problem
+> Like Word Ladder, but return **all** shortest transformation sequences from beginWord to endWord.
+
+> [!info] Approach
+> Never collect paths during BFS — that explodes memory. Two phases: (1) level-by-level BFS recording every word's **parents at its first (shortest) level**; remove each level's discoveries from the word set *after* the whole level so same-level words can share a child. (2) Backtrack from endWord through `parents` to enumerate paths — all are shortest by construction.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> >
+> def findLadders(beginWord, endWord, wordList):
+>     words = set(wordList)
+>     if endWord not in words:
+>         return []
+>     words.discard(beginWord)
+>     parents, level = defaultdict(set), {beginWord}
+>     while level and endWord not in level:
+>         next_level = defaultdict(set)
+>         for w in level:
+>             for i in range(len(w)):
+>                 for c in 'abcdefghijklmnopqrstuvwxyz':
+>                     nw = w[:i] + c + w[i+1:]
+>                     if nw in words:
+>                         next_level[nw].add(w)
+>         if not next_level:
+>             return []
+>         words -= next_level.keys()
+>         parents.update(next_level)
+>         level = set(next_level)
+> >
+>     res = []
+>     def backtrack(w, path):
+>         if w == beginWord:
+>             res.append(path[::-1])
+>             return
+>         for p in parents[w]:
+>             backtrack(p, path + [p])
+>     backtrack(endWord, [endWord])
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(N·L²) for the BFS + output size for backtracking; Space O(N·L).
+
+> [!warning] Gotcha
+> Prune the word set per **level**, not per word — pruning too early loses valid parents; too late creates longer-than-shortest paths.
+
+---
+
+
 ## See Also
 
 [[union-find]] | [[binary-search]] | [[dynamic-programming]] | [[sorting]]

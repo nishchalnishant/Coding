@@ -1901,6 +1901,39 @@ difficulty: mixed
 
 ---
 
+## DP + Binary Search — L4 addition
+
+### Maximum Profit in Job Scheduling `🎯 T2`
+
+> [!example] Problem
+> Given jobs as `(startTime, endTime, profit)`, pick non-overlapping jobs maximizing total profit. Jobs ending at t and starting at t don't overlap.
+
+> [!info] Approach
+> Weighted interval scheduling — greedy fails because profits are arbitrary, so it's DP. Sort jobs by **end time**; let `dp[i]` = best profit using the first i jobs. For job i: skip it (`dp[i-1]`) or take it (`profit + dp[j]` where j = count of jobs ending `≤ start_i`, found with `bisect_right` on the sorted ends). The DP + binary-search composition is exactly the "combine two T1 patterns" move Google L4 rounds test.
+
+> [!note]- Python Solution
+> ```python
+> import bisect
+> >
+> def jobScheduling(startTime, endTime, profit):
+>     jobs = sorted(zip(endTime, startTime, profit))
+>     ends = [e for e, _, _ in jobs]
+>     dp = [0] * (len(jobs) + 1)
+>     for i, (e, s, p) in enumerate(jobs):
+>         j = bisect.bisect_right(ends, s, 0, i)
+>         dp[i + 1] = max(dp[i], dp[j] + p)
+>     return dp[-1]
+> ```
+
+> [!success] Complexity
+> Time O(n log n); Space O(n).
+
+> [!warning] Gotcha
+> `bisect_right` (not `bisect_left`) because a job ending exactly at `s` is compatible. Limit the search to `[0, i)` — searching the whole array can "find" the current job. State the greedy counter-example (one long high-profit job vs many short ones) before writing the DP.
+
+---
+
+
 ## See Also
 
 [[recursion]] | [[sorting]] | [[binary-search]] | [[graph-algorithms]]

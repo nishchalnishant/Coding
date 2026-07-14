@@ -1915,6 +1915,111 @@ Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
 
 ---
 
+## Parsing & Simulation — L4 additions
+
+### Text Justification `⚡ T1`
+
+> [!example] Problem
+> Given words and maxWidth, format the text fully justified: each line packed greedily with as many words as fit, extra spaces distributed as evenly as possible with left gaps getting more. The last line (and any single-word line) is left-justified, padded right.
+
+> [!info] Approach
+> Zero algorithms, pure care — that's why Google asks it at L4. Two phases per line: greedy packing (a word fits if `current_length + len(line) + len(word) <= maxWidth`, where `len(line)` counts the mandatory single spaces), then space distribution: with `gaps = len(line) - 1`, hand out `maxWidth - length` spaces round-robin so the leftmost gaps get the extras. Handle the two left-justified cases (last line, single word) with `' '.join(...).ljust(maxWidth)`.
+
+> [!note]- Python Solution
+> ```python
+> def fullJustify(words, maxWidth):
+>     res, line, length = [], [], 0
+>     for w in words:
+>         if length + len(line) + len(w) > maxWidth:
+>             gaps = len(line) - 1 or 1
+>             for i in range(maxWidth - length):
+>                 line[i % gaps] += ' '
+>             res.append(''.join(line))
+>             line, length = [], 0
+>         line.append(w)
+>         length += len(w)
+>     res.append(' '.join(line).ljust(maxWidth))
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(total characters); Space O(maxWidth) working.
+
+> [!warning] Gotcha
+> The `or 1` makes a single-word line reuse the round-robin path (all spaces onto `line[0]`) — one branch instead of three. Dry-run the last line and a one-word line before declaring done; that's where everyone fails.
+
+---
+
+### String to Integer (atoi) `🎯 T2`
+
+> [!example] Problem
+> Convert a string to a 32-bit signed integer: skip leading spaces, optional sign, consume digits until a non-digit, clamp to `[-2^31, 2^31 - 1]`.
+
+> [!info] Approach
+> The grading is your edge-case enumeration, not the loop. Say the pipeline out loud before coding: **strip spaces → one optional sign → digits until non-digit → clamp**. Enumerate aloud: empty string, only spaces, sign with no digits, `"+-12"`, leading zeros, overflow, trailing garbage (`"4193 with words"`).
+
+> [!note]- Python Solution
+> ```python
+> def myAtoi(s):
+>     s = s.lstrip(' ')
+>     sign, i, num = 1, 0, 0
+>     if i < len(s) and s[i] in '+-':
+>         sign = -1 if s[i] == '-' else 1
+>         i += 1
+>     while i < len(s) and s[i].isdigit():
+>         num = num * 10 + int(s[i])
+>         i += 1
+>     return max(-2**31, min(2**31 - 1, sign * num))
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(1).
+
+> [!tip] Follow-up
+> "No big integers in your language" → check overflow *before* the multiply: `num > (INT_MAX - digit) // 10`. In Python you clamp at the end; know both answers.
+
+---
+
+### Valid Number `🎯 T2`
+
+> [!example] Problem
+> Return whether a string is a valid number: optional sign, digits, at most one dot, at most one exponent (`e`/`E`) which must be preceded by a number and followed by an integer.
+
+> [!info] Approach
+> A hand-rolled state machine via three flags: `seen_digit`, `seen_dot`, `seen_exp`. Walk once; each character class checks its legality against the flags. The key rule: after `e`, **reset `seen_digit`** — the exponent needs its own digits. Enumerate the grammar out loud before coding; the interviewer is grading the enumeration.
+
+> [!note]- Python Solution
+> ```python
+> def isNumber(s):
+>     seen_digit = seen_dot = seen_exp = False
+>     for i, c in enumerate(s):
+>         if c.isdigit():
+>             seen_digit = True
+>         elif c in '+-':
+>             if i > 0 and s[i-1] not in 'eE':
+>                 return False
+>         elif c == '.':
+>             if seen_dot or seen_exp:
+>                 return False
+>             seen_dot = True
+>         elif c in 'eE':
+>             if seen_exp or not seen_digit:
+>                 return False
+>             seen_exp, seen_digit = True, False
+>         else:
+>             return False
+>     return seen_digit
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(1).
+
+> [!warning] Gotcha
+> A sign is only legal at index 0 or right after `e` — that single condition covers `"+-6"`, `"6+1"`, `"1e+5"` at once. Test set: `".1"` ✓, `"3."` ✓, `"e3"` ✗, `"1e"` ✗, `"."` ✗.
+
+---
+
+
 ## See Also
 
 [[two-pointers]] | [[sliding-window]] | [[hashing]] | [[string-algorithms]]

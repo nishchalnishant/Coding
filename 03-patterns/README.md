@@ -1,78 +1,3 @@
-## First-Principles Map
-
-```text
-WHY pattern recognition is the core interview skill
-├── Novel problems are rare; novel disguises of known patterns are everywhere
-│   ├── "Trapping Rain Water"  ≡ two-pointer scan with running max
-│   ├── "Sliding Window Max"   ≡ monotonic deque pattern
-│   └── "Word Ladder"          ≡ BFS on implicit graph of word states
-├── Recognizing pattern in <60s → correct complexity from the start
-├── Missing pattern → brute force → TLE → failed interview
-└── Pattern fluency = the delta between L3 and L4 performance
-│
-WHAT the pattern taxonomy is
-├── Two Pointers      — opposite ends or same-direction; sorted arrays, linked lists
-├── Sliding Window    — fixed or variable window; max sum, longest substring
-├── BFS / DFS         — level-order / exhaustive traversal; graphs, trees, matrices
-├── DP                — memoized recursion or bottom-up table; count / optimize
-├── Greedy            — sort + scan with local decision; intervals, scheduling
-├── Backtracking      — DFS + undo; all valid combos, permutations, constraint sat
-├── Heap              — maintain top-k or running extremum; two-heap for median
-├── Binary Search     — on sorted array or on answer space (feasibility function)
-├── Union-Find        — dynamic connectivity; components, Kruskal, redundancy
-├── Monotonic Stack   — next greater/smaller element, histogram, temperatures
-└── Prefix Sum / Hash — O(1) range sum; subarray sum = k, balance arrays
-│
-HOW to recognize the pattern in <60 seconds
-├── Signal words → pattern
-│   ├── "Subarray / substring"                → Sliding window or prefix sum
-│   ├── "k-th largest / smallest"             → Heap or quickselect
-│   ├── "All permutations / combinations"     → Backtracking
-│   ├── "Shortest path"                       → BFS (unweighted) / Dijkstra (weighted)
-│   ├── "Count ways / min cost"               → DP
-│   ├── "Sorted + two values summing"         → Two pointers
-│   ├── "Next greater element"                → Monotonic stack
-│   ├── "Connected components / union"        → Union-Find or BFS/DFS
-│   └── "Search in sorted / minimize max"     → Binary search on answer
-├── Constraint signals → pattern
-│   ├── n ≤ 20        → Backtracking / bitmask DP
-│   ├── n ≤ 1000      → O(n²) DP or brute force with pruning
-│   ├── n ≤ 10^5      → O(n log n) — sort, heap, segment tree, binary search
-│   └── n ≤ 10^6      → O(n) — two pointers, sliding window, prefix sum
-│
-WHEN each pattern applies
-├── Two Pointers   — pair/triplet sum, palindrome check, remove duplicates
-├── Sliding Window — longest substring without repeat, max sum subarray of size k
-├── BFS            — word ladder, 0-1 matrix, rotten oranges, min depth
-├── DFS            — number of islands, path sum, clone graph
-├── DP             — coin change, LCS, edit distance, house robber, knapsack
-├── Greedy         — jump game, meeting rooms, task scheduler, gas station
-├── Backtracking   — N-queens, subsets, letter combos, Sudoku solver
-├── Heap           — merge k lists, top k frequent, median finder
-├── Binary Search  — search rotated array, koko eating bananas, capacity to ship
-├── Union-Find     — number of provinces, redundant connection, accounts merge
-└── Monotonic Stack— daily temperatures, largest rectangle in histogram, stock span
-│
-WHAT CAN GO WRONG
-├── Forcing sliding window on non-contiguous subproblem → wrong answer
-├── Using DFS where BFS needed for shortest path         → wrong answer (not guaranteed shortest)
-├── Greedy without verifying exchange argument           → fails on edge cases
-├── Backtracking without pruning on large input          → TLE
-├── DP with wrong state definition                       → wrong transitions, wrong answer
-└── Missing key constraint (e.g. "sorted" → two pointers valid) → O(n²) instead of O(n)
-│
-DECISION — signal → pattern (60-second checklist)
-├── Contiguous subarray/string    → Sliding window / prefix sum
-├── Sorted + two targets          → Two pointers
-├── Shortest unweighted path      → BFS
-├── Count/optimize over choices   → DP
-├── All valid arrangements        → Backtracking
-├── Running min/max / top-k       → Heap
-├── Search sorted / minimize max  → Binary search
-├── Component / connectivity      → Union-Find / BFS/DFS
-└── Next greater/smaller          → Monotonic stack
-```
-
 ## First-Principles Breakdown
 
 - **Root problem:** Interviews test pattern recognition, not creative problem-solving from scratch; every problem is a known template with a problem-specific twist applied on top.
@@ -97,6 +22,14 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | Resource | What's in it |
 |----------|-------------|
 | [`patterns-master.md`](./patterns-master.md) | **Primary guide.** 60-second recognition triggers for all major patterns. Read this first. |
+| [`HOW_TO_THINK.md`](./HOW_TO_THINK.md) | First-principles derivation of every pattern — build intuition instead of memorizing |
+| [`RECURSION_AND_DP_MASTERCLASS.md`](./RECURSION_AND_DP_MASTERCLASS.md) | Teacher-voice course: recursion → memoization → bottom-up DP |
+| [`INTERVIEW_JUDGMENT.md`](./INTERVIEW_JUDGMENT.md) | Live-interview decisions: correctness arguments, pivoting, using hints, recovery |
+| [`PATTERN_LADDERS.md`](./PATTERN_LADDERS.md) | Problem ladders per pattern — learn by deriving each rung from the last |
+| [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | Question bank: per-topic canonical problems with core logic + trickiness |
+| [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Final revision: pattern triggers table, topic capsules, day-before schedule |
+| [`MOCK_INTERVIEW_SET.md`](./MOCK_INTERVIEW_SET.md) | 25 timed mock problems with rubric |
+| [`leetcode-variants.md`](./leetcode-variants.md) | Narrative walkthroughs of follow-up/variant questions |
 | [`02-algorithms/03-two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
 | [`02-algorithms/04-sliding-window.md`](../02-algorithms/04-sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
 | [`02-algorithms/11-binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
@@ -148,5 +81,5 @@ When you hear a problem, ask these in order:
 6. **Best way to do X across all possibilities?** → DP (check: overlapping subproblems?)
 7. **All valid combinations / permutations?** → Backtracking
 8. **Top K, Kth largest/smallest, median stream?** → Heap
-9. **Prefix/range query?** → Prefix sum or Segment tree
+9. **Prefix/range query?** → Prefix sum
 10. **Dynamic connectivity?** → Union-Find

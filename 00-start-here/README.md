@@ -1,30 +1,39 @@
-# Start Here — Google L3 (SWE) Prep
+# Start Here — Google L3/L4 (SWE / SDE-2) Prep
 
-**Goal:** Pass Google L3 coding + Googliness rounds.  
-**Approach:** Master Tier 1 patterns first, drill must-solve problems cold, mock under time pressure.
-
----
-
-## How to use this repo
-
-1. Read [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) for the full 4-week schedule.
-2. Read [**What to Skip at L3**](../00-L3-EXECUTION-META/04-l3-what-to-skip.md) — segment trees, BIT, and other T3 topics (**do not drill these**).
-3. Use [`01-data-structures/README.md`](../01-data-structures/README.md) and [`02-algorithms/README.md`](../02-algorithms/README.md) as your study indexes.
-4. Solve problems from [`coding/`](../coding/) — one topic at a time, timed.
-5. Follow [`00-L3-EXECUTION-META/`](../00-L3-EXECUTION-META/) for interview pacing and communication.
-6. Prep 5–8 STAR stories in [`04-behavioral/`](../04-behavioral/).
+**Goal:** Pass Google coding + Googliness rounds. The base track targets L3; the [L4 delta](../coding/l4-sde2-delta.md) layers the SDE-2 bar on top.
+**Approach:** Derive patterns from invariants (don't memorize problems) → build breadth over the topic indexes → integrate under time pressure.
 
 ---
 
-## What L3 tests
+## The three-phase loop
 
-| Tested | Not tested |
-|--------|------------|
-| Medium DSA (graphs, windows, heaps, BS on answer, tries, basic DP) | System design |
-| Clarify → optimize → code → dry-run → Big-O | LLD / OOP patterns |
-| Googliness / behavioral (often 1 round) | SQL, concurrency, **segment trees / BIT** |
+### Phase 1 — Derive the patterns (weeks 1–3)
+Work through [**Pattern Ladders**](../03-patterns/PATTERN_LADDERS.md), one ladder at a time. Each ladder gives you one *invariant* and a sequence of problems that each change exactly one thing. Follow its study protocol: 20–25 min honest attempts before reading anything, and log the trigger you missed — not the solution.
 
-→ Full skip list: [What to Skip at L3](../00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+This phase is where problem-solving ability actually forms. Do not skip to Phase 2 because reading indexes feels faster; recognition without derivation collapses on unseen problems.
+
+### Phase 2 — Breadth (weeks 3–5)
+Sweep the topic indexes — [`01-data-structures/README.md`](../01-data-structures/README.md) and [`02-algorithms/README.md`](../02-algorithms/README.md) — and the walkthrough bank in [`coding/`](../coding/). Everything here should now feel like "another rung on a ladder I know." Where it doesn't, that's a gap: return to the ladder, don't memorize the entry.
+
+Skip list still applies: [What to Skip](../00-L3-EXECUTION-META/04-l3-what-to-skip.md) (segment trees, BIT, Tarjan — at L4 too).
+
+### Phase 3 — Integration (weeks 5–6)
+- Timed mocks: [`03-patterns/MOCK_INTERVIEW_SET.md`](../03-patterns/MOCK_INTERVIEW_SET.md), 35–45 min each.
+- Execution mechanics: [`00-L3-EXECUTION-META/`](../00-L3-EXECUTION-META/) — 45-min plan, constraint heuristics, edge-case taxonomy.
+- **L4 only:** follow-up drills and gap problems from the [L4 delta](../coding/l4-sde2-delta.md).
+- Behavioral: 5–8 STAR stories in [`04-behavioral/`](../04-behavioral/); L4 stories need ownership/influence framing (delta §5).
+
+---
+
+## Interviewing at L3 or L4?
+
+| | L3 | L4 (SDE-2) |
+|---|---|---|
+| Schedule | [4-week roadmap](../coding/l3-google-roadmap.md) | [6-week: roadmap + delta](../coding/l4-sde2-delta.md) |
+| DP / Dijkstra | recognize (T2) | implement cold (T1) |
+| Design-a-DS | LRU only | full family ([Ladder 12](../03-patterns/PATTERN_LADDERS.md#ladder-12--design-a-data-structure-l4-signature)) |
+| Follow-up chains | bonus | expected — drill them |
+| Not tested (both) | system design, LLD, SQL, concurrency, segment trees/BIT | same |
 
 ---
 
@@ -32,57 +41,29 @@
 
 | Folder | Purpose |
 |--------|---------|
-| `coding/l3-google-roadmap.md` | **Primary schedule** — start here |
-| `01-data-structures/` | DS deep-dives + L3 must-solve index |
-| `02-algorithms/` | Algorithm deep-dives + L3 must-solve index |
-| `coding/` | Problem bank with approaches |
-| `00-L3-EXECUTION-META/` | 45-min plan, constraint heuristics, Python cheatsheet |
-| `03-patterns/` | Pattern triggers and Google revision guides |
+| `03-patterns/PATTERN_LADDERS.md` | **Phase 1 — start here** |
+| `coding/l3-google-roadmap.md` + `coding/l4-sde2-delta.md` | Schedules and L4 gap problems |
+| `01-data-structures/`, `02-algorithms/` | Phase 2 breadth indexes + deep-dives |
+| `coding/` | Problem walkthrough bank |
+| `00-L3-EXECUTION-META/` | 45-min plan, constraint heuristics, Python cheatsheet, edge cases |
+| `03-patterns/` | Triggers, mock set, revision sheets |
 | `04-behavioral/` | STAR stories and Googliness |
 
 ---
 
-## 4-week plan (summary)
+## 48-hour sprint (interview is imminent)
 
-| Week | Topics |
-|------|--------|
-| **1** | BFS/DFS, topo sort, arrays, hashing, two pointers, sliding window |
-| **2** | Heaps, tries, binary search on answer |
-| **3** | Trees, DP (core), backtracking, union-find, greedy |
-| **4** | Integration + mocks + behavioral |
-
-Details: [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md)
-
----
-
-## Key files
-
-| What | Link |
-|------|------|
-| L3 roadmap | [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) |
-| DS cheat sheet | [`01-data-structures/README.md`](../01-data-structures/README.md) |
-| Algo cheat sheet | [`02-algorithms/README.md`](../02-algorithms/README.md) |
-| 45-min execution plan | [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) |
-| Mind map | [`MINDMAP.md`](../MINDMAP.md) |
-| Patterns | [`03-patterns/patterns-master.md`](../03-patterns/patterns-master.md) |
-| Behavioral | [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) |
-| Progress tracker | [`questions.md`](../questions.md) |
-
----
-
-## 48-hour sprint
-
-**Hours 0–8:** `patterns-master.md` + 2 problems each: sliding window, BFS, binary search  
-**Hours 8–16:** `02-algorithms/README.md` + `01-data-structures/README.md` quick triggers; `GOOGLE_QUICK_SHEET.md`  
-**Hours 16–24:** 3 timed mocks (35 min); rehearse 3 STAR stories  
-**Hours 24–48:** Sleep; light review only — no new topics
+**Hours 0–8:** ladder invariants only (the bold paragraph atop each ladder in [`PATTERN_LADDERS.md`](../03-patterns/PATTERN_LADDERS.md)) + 2 problems each: sliding window, BFS, binary search
+**Hours 8–16:** quick triggers in both README indexes; Part A of [`GOOGLE_INTERVIEW_REVISION.md`](../03-patterns/GOOGLE_INTERVIEW_REVISION.md); L4 → skim delta §1 and the follow-up table
+**Hours 16–24:** 3 timed mocks (35–45 min); rehearse 3 STAR stories
+**Hours 24–48:** sleep; light review only — no new topics
 
 ---
 
 ## Interview day (30 minutes)
 
-1. [`03-patterns/interview-cheatsheet.md`](../03-patterns/interview-cheatsheet.md)
-2. Quick Pattern Triggers in both README indexes
+1. [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) — Part A only (pattern triggers + gotchas)
+2. The 12 ladder invariants — read the bold paragraphs, nothing else
 3. Three behavioral story titles + outcomes
 
 **Do not** open new topics or hard DP variants.

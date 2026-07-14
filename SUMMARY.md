@@ -5,7 +5,12 @@
 ## Start Here
 * [Overview](README.md)
 * [Navigation Hub](00-start-here/README.md)
+* [**How to Think — pattern intuition from first principles** *(NEW)*](03-patterns/HOW_TO_THINK.md)
+* [**Recursion & DP Masterclass** *(NEW)*](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
+* [**Interview Judgment — proofs & live decisions** *(NEW)*](03-patterns/INTERVIEW_JUDGMENT.md)
+* [**Pattern Ladders — learn by deriving** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
+* [**L4 (SDE-2) Delta** *(NEW)*](coding/l4-sde2-delta.md)
 * [**What to Skip at L3**](00-L3-EXECUTION-META/04-l3-what-to-skip.md) *(segment trees, BIT, T3 topics)*
 * [Questions Tracker](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
@@ -75,6 +80,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Trie](coding/data-structures/09-trie.md)
 * [Heap](coding/data-structures/10-heap.md)
 * [Graph](coding/data-structures/13-graph.md)
+* [**Design a Data Structure (L4)** *(NEW)*](coding/data-structures/14-design.md)
 
 ### Algorithms
 * [Two Pointers](coding/algorithms/03-two-pointers.md)
@@ -93,15 +99,16 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 
 ## Patterns & Revision
 * [Patterns Index](03-patterns/README.md)
+* [**How to Think — first-principles guide** *(NEW)*](03-patterns/HOW_TO_THINK.md)
+* [**Recursion & DP Masterclass** *(NEW)*](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
+* [**Interview Judgment — proofs & live decisions** *(NEW)*](03-patterns/INTERVIEW_JUDGMENT.md)
+* [**Pattern Ladders** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [Patterns Master](03-patterns/patterns-master.md)
 * [**Mock Interview Set (25 Problems)** *(NEW)*](03-patterns/MOCK_INTERVIEW_SET.md)
-* [Interview Cheatsheet](03-patterns/interview-cheatsheet.md)
 * [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
-* [Canonical Questions](03-patterns/canonical-questions.md)
 * [Leetcode Variants](03-patterns/leetcode-variants.md)
 * [Questions Bank](03-patterns/questions.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
-* [Google Quick Sheet](03-patterns/GOOGLE_QUICK_SHEET.md)
 
 ---
 

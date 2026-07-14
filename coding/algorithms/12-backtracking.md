@@ -1994,3 +1994,48 @@ Prune when: the partial answer is already invalid, not enough room left to finis
 
 ---
 
+
+
+## Partition to K Equal Sum Subsets `🎯 T2`
+
+> [!example] Problem
+> Can `nums` be partitioned into k non-empty subsets with equal sums?
+
+> [!info] Approach
+> Backtracking over **buckets**: place each number (sorted descending) into one of k buckets without exceeding `target = total // k`. Three prunings make it feasible: (1) sort descending so contradictions surface early; (2) skip buckets whose current sum equals one already tried for this number — identical buckets give identical futures; (3) bail immediately if `total % k` or `max(nums) > target`.
+
+> [!note]- Python Solution
+> ```python
+> def canPartitionKSubsets(nums, k):
+>     total = sum(nums)
+>     if total % k:
+>         return False
+>     target = total // k
+>     nums.sort(reverse=True)
+>     if nums[0] > target:
+>         return False
+>     buckets = [0] * k
+> >
+>     def dfs(i):
+>         if i == len(nums):
+>             return True
+>         tried = set()
+>         for b in range(k):
+>             if buckets[b] + nums[i] <= target and buckets[b] not in tried:
+>                 tried.add(buckets[b])
+>                 buckets[b] += nums[i]
+>                 if dfs(i + 1):
+>                     return True
+>                 buckets[b] -= nums[i]
+>         return False
+> >
+>     return dfs(0)
+> ```
+
+> [!success] Complexity
+> Time O(k^n) worst case, far less with pruning; Space O(n + k) recursion + buckets.
+
+> [!tip] Follow-up
+> Mention that an O(n·2ⁿ) bitmask-DP exists (`dp[mask]` = remainder in current bucket) — name it, don't implement it. The dedup-on-equal-buckets pruning is the same trick as skipping duplicate choices in Subsets II.
+
+---

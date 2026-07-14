@@ -49,8 +49,8 @@ Follow [`l3-google-roadmap.md`](./l3-google-roadmap.md):
 
 ## Day-of checklist
 
-- [ ] Read [`03-patterns/interview-cheatsheet.md`](../03-patterns/interview-cheatsheet.md) (10 min max)
-- [ ] Skim [`03-patterns/GOOGLE_QUICK_SHEET.md`](../03-patterns/GOOGLE_QUICK_SHEET.md)
+- [ ] Read Part A of [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) (10 min max)
+- [ ] Skim the Critical Gotchas in [`03-patterns/patterns-master.md`](../03-patterns/patterns-master.md)
 - [ ] Review 2 STAR stories from [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md)
 - [ ] Python syntax refresh: [`00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md`](../00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md)
 

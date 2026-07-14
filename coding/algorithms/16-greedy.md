@@ -1429,3 +1429,123 @@ def isNStraightHand(hand, groupSize):
 
 **TC**: O(n log n) | **SC**: O(n) | Related: Task Scheduler (same greedy idea)
 
+
+---
+
+## Intervals & Sweep — L4 additions
+
+> The L4 interval family beyond Merge / Insert / Non-overlapping (covered above and in [array](../data-structures/01-array.md)). Derivation ladder: [Pattern Ladders — Ladder 11](../../03-patterns/PATTERN_LADDERS.md#ladder-11--intervals--sweep). Overlap test to burn in: `start_A < end_B and start_B < end_A`.
+
+### Interval List Intersections `⚡ T1`
+
+**Problem**: Two lists of sorted, disjoint intervals. Return their intersections.
+
+**Key Insight**: Two pointers. Candidate intersection = `[max(starts), min(ends)]`, real iff `start <= end`. Advance whichever interval **ends first** — it can't intersect anything else.
+
+```python
+def intervalIntersection(A, B):
+    res, i, j = [], 0, 0
+    while i < len(A) and j < len(B):
+        s = max(A[i][0], B[j][0])
+        e = min(A[i][1], B[j][1])
+        if s <= e:
+            res.append([s, e])
+        if A[i][1] < B[j][1]:
+            i += 1
+        else:
+            j += 1
+    return res
+```
+
+**TC**: O(m + n) | **SC**: O(1) extra | Same "advance the smaller end" move as merge sort's merge step.
+
+### My Calendar I `⚡ T1`
+
+**Problem**: `book(start, end)` succeeds only if the event doesn't double-book with any prior booking. Bookings arrive online.
+
+**Key Insight**: The *online* version of interval overlap. Keep a sorted list of bookings; conflict iff the symmetric overlap test fires against a neighbor. With `SortedList`, bisect to find the insertion point and check only the two neighbors — O(log n). A plain list with a linear scan is acceptable if you state it's O(n).
+
+```python
+from sortedcontainers import SortedList
+
+class MyCalendar:
+    def __init__(self):
+        self.cal = SortedList()
+
+    def book(self, start, end):
+        i = self.cal.bisect_right((start, end))
+        if i > 0 and self.cal[i-1][1] > start:
+            return False
+        if i < len(self.cal) and self.cal[i][0] < end:
+            return False
+        self.cal.add((start, end))
+        return True
+```
+
+**TC**: O(log n) per booking | **SC**: O(n)
+
+### My Calendar II `🎯 T2`
+
+**Problem**: Same, but allow double-booking; reject only **triple** bookings.
+
+**Key Insight**: Keep two lists: `bookings` and `overlaps` (regions already booked twice). A new event causes a triple booking iff it intersects anything in `overlaps`. Otherwise, add its intersections with `bookings` to `overlaps`, then add it to `bookings`. Generalization to "at most k" = sweep line with a diff map (My Calendar III).
+
+```python
+class MyCalendarTwo:
+    def __init__(self):
+        self.bookings = []
+        self.overlaps = []
+
+    def book(self, start, end):
+        for s, e in self.overlaps:
+            if start < e and s < end:
+                return False
+        for s, e in self.bookings:
+            if start < e and s < end:
+                self.overlaps.append((max(start, s), min(end, e)))
+        self.bookings.append((start, end))
+        return True
+```
+
+**TC**: O(n) per booking | **SC**: O(n)
+
+### Car Pooling `🎯 T2`
+
+**Problem**: Trips `[passengers, from, to]` and a capacity. Can all trips be served by one car driving east?
+
+**Key Insight**: Difference array over stops — `+p` at pickup, `-p` at drop-off — then prefix-scan and check the running load never exceeds capacity. Same events trick as Meeting Rooms II, but bounded stop range makes an array beat sorting.
+
+```python
+def carPooling(trips, capacity):
+    diff = [0] * 1001
+    for p, s, e in trips:
+        diff[s] += p
+        diff[e] -= p
+    load = 0
+    for d in diff:
+        load += d
+        if load > capacity:
+            return False
+    return True
+```
+
+**TC**: O(n + range) | **SC**: O(range) | Drop-off is exclusive: subtract at `e`, not `e+1`.
+
+### Employee Free Time `🎯 T2`
+
+**Problem**: Each employee has a sorted list of working intervals. Return the finite intervals where **everyone** is free.
+
+**Key Insight**: Individual ownership doesn't matter — flatten all intervals, sort by start, merge; the **gaps between merged blocks** are the common free time. K-way heap merge saves the sort if lists are long (say it as the follow-up).
+
+```python
+def employeeFreeTime(schedule):
+    ivals = sorted((iv.start, iv.end) for emp in schedule for iv in emp)
+    res, end = [], ivals[0][1]
+    for s, e in ivals[1:]:
+        if s > end:
+            res.append((end, s))
+        end = max(end, e)
+    return res
+```
+
+**TC**: O(n log n) | **SC**: O(n) | Related: Merge Intervals (this is its "invert the output" twin)

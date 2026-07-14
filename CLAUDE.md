@@ -1,7 +1,7 @@
 # Coding Interview Prep Hub — CLAUDE.md
 
 ## What this repo is
-Google **L3 SWE** interview prep: DSA coding rounds + Googliness/behavioral. All content is Markdown — no source code to build or test.
+Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/behavioral. Base track is L3; `coding/l4-sde2-delta.md` layers the L4 bar on top. All content is Markdown — no source code to build or test.
 
 **Out of scope:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Tarjan/SCC), bit-manipulation deep-dives, maths deep-dives.
 
@@ -21,6 +21,10 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 | Task | File |
 |---|---|
 | L3 study schedule | `coding/l3-google-roadmap.md` |
+| L4 (SDE-2) delta: bar, tier promotions, gap problems | `coding/l4-sde2-delta.md` |
+| Intuition-first pattern curriculum | `03-patterns/PATTERN_LADDERS.md` |
+| First-principles pattern thinking guide | `03-patterns/HOW_TO_THINK.md` |
+| In-interview judgment: proofs, pivots, hints, recovery | `03-patterns/INTERVIEW_JUDGMENT.md` |
 | DS / algo indexes + must-solve | `01-data-structures/README.md`, `02-algorithms/README.md` |
 | Add / update a DSA topic | `01-data-structures/` or `02-algorithms/` |
 | Add a problem walkthrough | matching file under `coding/data-structures/` or `coding/algorithms/` |

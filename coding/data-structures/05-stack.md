@@ -2164,6 +2164,67 @@ difficulty: mixed
 
 ---
 
+## Contribution Counting — L4 additions
+
+### Sum of Subarray Minimums `🎯 T2`
+
+> [!example] Problem
+> Given an array, return the sum of `min(subarray)` over **all** contiguous subarrays, mod 1e9+7.
+
+> [!info] Approach
+> Flip the question: instead of "what's the min of each subarray," ask **"for how many subarrays is `arr[j]` the minimum?"** That count is `(j - prev_smaller) * (next_smaller_or_equal - j)`, and the element contributes `arr[j] * count`. One monotonic increasing stack finds both boundaries in a single pass: when `arr[j]` pops off, the popper is its right boundary and the new stack top is its left boundary. This *contribution counting* reframe is the whole L4 signal.
+
+> [!note]- Python Solution
+> ```python
+> def sumSubarrayMins(arr):
+>     MOD = 10**9 + 7
+>     stack, res = [], 0
+>     for i in range(len(arr) + 1):
+>         cur = arr[i] if i < len(arr) else float('-inf')
+>         while stack and arr[stack[-1]] >= cur:
+>             j = stack.pop()
+>             left = stack[-1] if stack else -1
+>             res += arr[j] * (j - left) * (i - j)
+>         stack.append(i)
+>     return res % MOD
+> ```
+
+> [!success] Complexity
+> Time O(n) — each index pushed/popped once; Space O(n).
+
+> [!warning] Gotcha
+> Equal elements double-count unless one side is strict and the other isn't: pop on `>=` makes the left boundary strictly-smaller and the right boundary smaller-*or-equal*. The `-inf` sentinel at `i == n` flushes the stack without a second loop.
+
+---
+
+### Car Fleet `🎯 T2`
+
+> [!example] Problem
+> n cars at `position[i]` drive at `speed[i]` toward `target`; a car that catches up to a slower one locks into its speed (a fleet). How many fleets arrive?
+
+> [!info] Approach
+> Convert cars to **arrival times** `(target - pos) / speed` and sort by position **descending** (closest to target first). Walking that order, a car merges into the fleet ahead iff its time ≤ the fleet's time; otherwise it starts a new fleet. The "stack" only ever needs its top — a monotonic stack of fleet times where you push only strictly larger times.
+
+> [!note]- Python Solution
+> ```python
+> def carFleet(target, position, speed):
+>     stack = []
+>     for p, s in sorted(zip(position, speed), reverse=True):
+>         t = (target - p) / s
+>         if not stack or t > stack[-1]:
+>             stack.append(t)
+>     return len(stack)
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for the sort; Space O(n).
+
+> [!tip] Follow-up
+> "Which car leads each fleet?" → push `(time, position)` pairs. The insight to articulate: after sorting by position, *catching up* is purely a comparison of arrival times — physics collapses into one `<=`.
+
+---
+
+
 ## See Also
 
 [[queue]] | [[dynamic-programming]] | [[monotonic-techniques]]

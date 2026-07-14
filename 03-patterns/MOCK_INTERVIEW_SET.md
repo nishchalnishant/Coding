@@ -115,9 +115,28 @@ Use this when a mock attempt reveals a gap:
 
 ---
 
+## L4 (SDE-2) Mock Rounds — follow-up chains
+
+> [!IMPORTANT]
+> An L4 round is not one problem — it's a **chain**. Budget 45 min per round: base problem solved cleanly in ~20–25 min, then the interviewer escalates. Simulate that: solve the base, then *without a break* attempt each follow-up. A round "passes" only if you get through follow-up 1. Full L4 bar: [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md).
+
+| Round | Base (20–25 min) | Follow-up 1 | Follow-up 2 (stretch) |
+|---|---|---|---|
+| A | Insert Delete GetRandom O(1) | allow duplicates | weighted `getRandom` (→ Random Pick with Weight) |
+| B | Merge Intervals | bookings arrive online (→ My Calendar I) | reject only triple bookings (→ My Calendar II) |
+| C | Network Delay Time (Dijkstra cold) | grid version, minimize max edge (→ Path With Minimum Effort) | at most k stops — why Dijkstra breaks (→ Cheapest Flights) |
+| D | LRU Cache | evict by frequency (→ LFU) | thread safety — discuss locking, don't code |
+| E | Word Search | many words to find (→ Word Search II, Trie) | prune trie nodes after matches |
+| F | Kth Largest in a Stream | median of a stream (→ two heaps) | values can be *corrected* later (→ lazy deletion, Stock Price Fluctuation) |
+| G | Longest Increasing Subsequence | O(n log n) version | 2-D: Longest Increasing Path in a Matrix |
+| H | Rotting Oranges | BFS from all targets (→ 01 Matrix) | answer counts *routes* not cells (→ Bus Routes) |
+
+Scoring per round: base unsolved = not ready; base + F1 = on the bar; base + F1 + F2 = strong hire territory. Log which *invariant* failed, per the [Pattern Ladders](PATTERN_LADDERS.md) protocol.
+
+---
+
 ## See Also
 
 - [patterns-master.md](./patterns-master.md) — Full pattern reference
 - [GOOGLE_INTERVIEW_REVISION.md](./GOOGLE_INTERVIEW_REVISION.md) — 7-day and 48-hour schedules
-- [GOOGLE_QUICK_SHEET.md](./GOOGLE_QUICK_SHEET.md) — One-page cheatsheet
 - [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) — Per-topic problem breakdowns

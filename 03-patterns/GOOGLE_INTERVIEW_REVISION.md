@@ -5,59 +5,11 @@ subtopic:
 status: unread
 tags: [patterns, google-interview-revision]
 ---
-# First-Principles Map — Google Interview Revision
 
 > [!note] L3 Reference Document
 > This file is a **reference / meta document** — read it once, then use it as a lookup.
 > It is NOT a coding practice file. Do not deep-study it like a topic file.
 
-
-```
-WHY a structured revision plan exists
-├── Random LeetCode grinding has diminishing returns after week 1
-├── Spaced repetition on high-signal topics outperforms breadth grinding
-└── Two weeks before interview = consolidation phase, not learning phase
-
-WHAT it is
-├── A time-boxed, priority-ordered revision schedule targeting Google L3/L3 bar
-├── Covers: topic priority order, daily time allocation, revision triggers, mock cadence
-└── Examples:
-    ├── Day 1–3: arrays, hashing, two-pointer, sliding window (highest frequency)
-    ├── Day 4–6: trees, graphs, BFS/DFS, backtracking
-    ├── Day 7–9: DP (1D, 2D, interval), heap, greedy
-    └── Day 10–14: mocks, weak-area drilling, behavioral prep
-
-HOW it works
-├── Topic priority (by Google frequency):
-│   ├── Tier 1 (every round): arrays, strings, trees, graphs
-│   ├── Tier 2 (most rounds): DP, heap, binary search, backtracking
-│   └── Tier 3 (skim/skip at L3): segment tree, bit manipulation deep-dives, advanced graph algorithms
-├── Revision triggers (when to revisit a topic):
-│   ├── Solved correctly but slowly → 1 more rep
-│   ├── Needed a hint → 2 more reps on variants
-│   └── Wrong approach → full re-read of the topic file
-├── Time allocation per session:
-│   ├── 30 min: solve 2 problems cold (no notes)
-│   ├── 15 min: review solutions + complexity
-│   └── 15 min: write key insight in one line
-└── Complexity:
-    ├── Each topic session: O(problems × insight_depth)
-    └── Total revision arc: O(14 days × 3 sessions) = ~42 focused sessions
-
-WHEN to use
-├── T-14 days: start the plan from Day 1
-├── T-3 days: switch to mocks only, no new topics
-└── Decision:
-    ├── Behind on Tier 1 topics → drop Tier 3 entirely
-    ├── Consistent on mocks → add one new hard problem per day
-    └── Behavioral unprepped → allocate 1 session/day from Day 7 onward
-
-WHAT can go wrong
-├── Starting from Day 1 on hard DP → demoralizing, wrong warm-up order
-├── No mocks → can't detect timing/communication gaps until interview day
-├── Treating revision as first-time learning → wrong mode, wrong pace
-└── Skipping behavioral → Google scores behavioral as heavily as coding
-```
 
 ## First-Principles Breakdown
 
@@ -97,9 +49,12 @@ Use this document for **focused revision** before your Google interview. It comp
 
 ### Complexity you must state correctly
 
-- BFS/DFS on graph: **O(V + E)** time, **O(V)** space (visited + queue/stack).
-- Dijkstra: **O((V + E) log V)** with min-heap.
-- Sorting: **O(N log N)**; hash map ops average **O(1)**.
+Sound bites — say them exactly like this:
+
+- “We visit each node/edge at most once → **O(V + E)**” (BFS/DFS); Dijkstra: **O((V + E) log V)** with min-heap.
+- “Sorting dominates → **O(N log N)**.”
+- “Hash map gives O(1) average lookup, so overall **O(N)**.”
+- “Binary search on answer: O(N) check per mid × O(log range) mids → **O(N log range)**.”
 - Sliding window: usually **O(N)** time.
 
 ### Edge cases to always mention
@@ -108,17 +63,30 @@ Use this document for **focused revision** before your Google interview. It comp
 - Graph: disconnected; self-loop; 0 or 1 node.
 - Tree: empty tree; single node; skewed tree.
 
-### 30-second pattern triggers
+### Patterns → action (30-second triggers)
 
-| You hear / see | Think |
-|----------------|--------|
-| Subarray sum = K | Prefix sum + hash map (count of prefix sums) |
-| Longest substring with … | Sliding window |
-| Sorted + pair / triplet | Two pointers or binary search |
-| Dependencies / order | Graph + topological sort |
-| K largest / smallest | Heap of size K |
-| Max path through node | Tree DP / postorder |
-| Minimize maximum / maximize minimum | Binary search on answer |
+| Pattern | When | Core idea | Time |
+|---------|------|-----------|------|
+| Hash map | Two sum, frequency, grouping | Key → count or index | O(n) avg |
+| Prefix + map | Subarray sum = K | Count of `prefix - K` | O(n) |
+| Sliding window | Longest/shortest substring/subarray with constraint | Expand j, shrink i while invalid | O(n) |
+| Two pointers | Sorted array, pair/triplet | left/right or slow/fast | O(n) or O(n²) |
+| Kadane | Max subarray sum | `cur = max(x, cur+x)` | O(n) |
+| BFS | Shortest path unweighted, level order | Queue + visited | O(V+E) |
+| DFS | Components, cycle, topo | Stack/recursion + visited | O(V+E) |
+| Topo sort | Dependencies, DAG | Kahn (in-degree) or DFS post | O(V+E) |
+| Dijkstra | Weighted, non-negative | Min-heap of (dist, node) | O((V+E)log V) |
+| Union-Find | Connectivity, Kruskal | find + union | ~O(1) amortized |
+| Heap | Top K, merge K lists | Size-K min-heap or push all heads | O(n log k) |
+| Binary search on answer | Minimize max, feasibility | `valid(mid)` + search range | O(n log range) |
+| Monotonic stack | Next greater, histogram | Pop while smaller | O(n) |
+| Tree DP | Max path through node | Postorder, return up value | O(n) |
+| 2D DP | LCS, edit distance | `dp[i][j]` from three neighbors | O(nm) |
+
+### Open with / Close with
+
+**Open:** repeat the problem in your words; ask — size limits? duplicates? can we modify input?
+**Close:** state time and space; run two test cases (normal + edge); name a follow-up (stream, huge n).
 
 ---
 
@@ -300,7 +268,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 | Need | File |
 |------|------|
-| **One-page patterns** | [GOOGLE_QUICK_SHEET.md](GOOGLE_QUICK_SHEET.md) |
+| **One-page patterns** | Part A above · [patterns-master.md](patterns-master.md) |
 | **Arrays / two pointers** | [../01-data-structures/array.md](../01-data-structures/01-array.md) |
 | **Graphs (compact)** | [algorithms/graph.md](../01-data-structures/13-graphs.md) |
 | **Graphs (long examples)** | [data-structures/graphs.md](../01-data-structures/13-graphs.md) |

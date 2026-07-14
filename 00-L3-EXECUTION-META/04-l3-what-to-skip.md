@@ -54,6 +54,24 @@ Full T3 table with every skipped topic: [Tier 3 — Overkill for L3](../coding/l
 
 ---
 
+## What changes at L4 (SDE-2)
+
+The skip list barely shrinks — the *bar* on the kept topics rises. Full details: [L4 delta](../coding/l4-sde2-delta.md).
+
+**Still skipped at L4:** segment trees / BIT implementation, Tarjan/Kosaraju, Floyd-Warshall, bitmask DP, digit DP, system design (appears at L5, not L4 loops).
+
+**Promoted at L4 (T2 → T1):**
+
+| Topic | Why |
+| :--- | :--- |
+| Dynamic programming (1D/grid/string) | In most L4 loops; follow-ups escalate into DP |
+| Dijkstra, including on grids | Min Effort / Swim in Water family is a Google favorite |
+| Intervals / sweep line | Calendar & booking problems are classic L4 |
+| Design-a-data-structure | LFU, GetRandom O(1), Hit Counter — the L4 signature family |
+| String parsing / simulation | Text Justification, calculator-style care problems |
+
+---
+
 ## What to prioritize instead
 
 1. Graphs — BFS, DFS, topo, union-find, Dijkstra  

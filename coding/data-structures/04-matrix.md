@@ -455,3 +455,38 @@ def uniquePathsWithObstacles(grid):
 - Matrix/grid theory: [`01-data-structures/04-matrix.md`](../../01-data-structures/04-matrix.md) (if exists) or [`01-data-structures/13-graphs.md`](../../01-data-structures/13-graphs.md)
 - Graph algorithms: [`coding/algorithms/13-graph-algorithms.md`](../algorithms/13-graph-algorithms.md)
 - DP patterns: [`coding/algorithms/15-dynamic-programming.md`](../algorithms/15-dynamic-programming.md)
+
+
+---
+
+## DP on the Grid — L4 addition
+
+### Longest Increasing Path in a Matrix `⚡ T1`
+
+> [!example] Problem
+> Given an integer matrix, return the length of the longest strictly increasing path (4-directional moves).
+
+> [!info] Approach
+> The canonical "DP meets graphs" bridge. The strictly-increasing rule makes the move graph a **DAG** — no cycles are possible, so DFS needs **no visited set**, only a memo: `memo[(r,c)]` = longest path starting here = `1 + max over strictly-greater neighbors`. Say the DAG observation explicitly; it's the insight being tested.
+
+> [!note]- Python Solution
+> ```python
+> def longestIncreasingPath(matrix):
+>     R, C = len(matrix), len(matrix[0])
+>     memo = {}
+>     def dfs(r, c):
+>         if (r, c) not in memo:
+>             memo[(r, c)] = 1 + max(
+>                 (dfs(nr, nc)
+>                  for nr, nc in ((r+1, c), (r-1, c), (r, c+1), (r, c-1))
+>                  if 0 <= nr < R and 0 <= nc < C and matrix[nr][nc] > matrix[r][c]),
+>                 default=0)
+>         return memo[(r, c)]
+>     return max(dfs(r, c) for r in range(R) for c in range(C))
+> ```
+
+> [!success] Complexity
+> Time O(R·C) — each cell computed once; Space O(R·C).
+
+> [!tip] Follow-up
+> "Do it without recursion" → topological order: process cells sorted by value ascending; each cell's answer is final when reached. Same O(R·C) after the sort.

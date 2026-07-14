@@ -61,7 +61,7 @@ Read constraints + examples (n, m, sorted?, negative?, tree/graph?)
     ├── Day 1 → coding/l3-google-roadmap.md (4-week plan) `⚡ T1`
     ├── Always → 00-L3-EXECUTION-META/01-45-minute-execution-plan.md
     ├── Before mocks → 00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md
-    └── Interview day → 03-patterns/interview-cheatsheet.md (10 min max)
+    └── Interview day → 03-patterns/GOOGLE_INTERVIEW_REVISION.md Part A (10 min max)
 
 Have 4 weeks?
     Week 1 → Arrays, hashing, two pointers, sliding window, binary search
@@ -241,14 +241,8 @@ Have 2 weeks?
         Trigger: contiguous + constraint → Sliding Window `⚡ T1`
         Trigger: dependencies → Topological Sort `⚡ T1`
 
-03-patterns/interview-cheatsheet.md
-    └── One-page sheet [interview day, 10 min max]
-
 03-patterns/GOOGLE_INTERVIEW_REVISION.md
-    └── Week 4 deep revision (Google lens)
-
-03-patterns/GOOGLE_QUICK_SHEET.md
-    └── What Google rewards / red flags
+    └── Week 4 deep revision (Google lens); Part A = interview-day quick sheet
 
 coding/complexity-cheatsheet.md
     └── Big-O quick reference (replaces advanced revision topics)
