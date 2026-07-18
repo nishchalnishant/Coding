@@ -28,7 +28,6 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 | DS / algo indexes + must-solve | `01-data-structures/README.md`, `02-algorithms/README.md` |
 | Add / update a DSA topic | `01-data-structures/` or `02-algorithms/` |
 | Add a problem walkthrough | matching file under `coding/data-structures/` or `coding/algorithms/` |
-| Regenerate problem mindmap | `python3 scripts/regen_l3_maps.py` |
 | Add a pattern trigger | `03-patterns/patterns-master.md` |
 | Add canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
 | Behavioral / googliness | `04-behavioral/BEHAVIORAL_GOOGLINESS.md` |

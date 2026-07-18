@@ -452,7 +452,7 @@ def uniquePathsWithObstacles(grid):
 
 ## See Also
 
-- Matrix/grid theory: [`01-data-structures/04-matrix.md`](../../01-data-structures/04-matrix.md) (if exists) or [`01-data-structures/13-graphs.md`](../../01-data-structures/13-graphs.md)
+- Matrix/grid theory: [`01-data-structures/13-graphs.md`](../../01-data-structures/13-graphs.md)
 - Graph algorithms: [`coding/algorithms/13-graph-algorithms.md`](../algorithms/13-graph-algorithms.md)
 - DP patterns: [`coding/algorithms/15-dynamic-programming.md`](../algorithms/15-dynamic-programming.md)
 

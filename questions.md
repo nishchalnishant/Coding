@@ -49,13 +49,13 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### Hashing
 
-- [ ] [Group Anagrams `🎯 T2`](coding/data-structures/02-string.md#group-anagrams) — Group strings that are anagrams of each other [M]
+- [ ] [Group Anagrams `🎯 T2`](coding/data-structures/03-string.md#group-anagrams) — Group strings that are anagrams of each other [M]
 - [ ] [Longest Consecutive `🎯 T2`](coding/data-structures/01-array.md#longest-consecutive-sequence) — Solve the standard interview variant of Longest Consecutive. [H]
 - [ ] [LRU Cache `⚡ T1`](coding/data-structures/07-linked-list.md#lru-cache) — Design a cache with O(1) `get` and `put` operations, evicting the Least Recently Used item when capacity is exceeded [M]
 - [ ] [Minimum Window `⚡ T1`](coding/data-structures/01-array.md#minimum-window-substring) — Solve the standard interview variant of Minimum Window. [H]
 - [ ] [Insert Delete GetRandom `⚡ T1`](coding/data-structures/02-hashing.md#insert-delete-getrandom-o1) — Solve the standard interview variant of Insert Delete GetRandom. [M]
 - [ ] [Two Sum `⚡ T1`](coding/data-structures/02-hashing.md#two-sum) — Given an integer array `nums` and target, return indices of two numbers that sum to `target`. Exactly one solution exists [E]
-- [ ] [Valid Anagram `🎯 T2`](coding/data-structures/02-string.md#valid-anagram) — Return true if `t` is an anagram of `s` (same characters, same counts) [E]
+- [ ] [Valid Anagram `🎯 T2`](coding/data-structures/03-string.md#valid-anagram) — Return true if `t` is an anagram of `s` (same characters, same counts) [E]
 - [ ] [Subarray Sum Equals K `⚡ T1`](coding/data-structures/01-array.md#subarray-sum-equals-k) — Count the number of contiguous subarrays with sum equal to `k`. Array may contain negatives [M]
 - [ ] [Longest Increasing Subsequence (via hash) `🎯 T2`](coding/algorithms/15-dynamic-programming.md#longest-increasing-subsequence) — Given an integer array `nums`, return the length of the longest strictly increasing subsequence [M]
 
@@ -129,14 +129,14 @@ This file contains a comprehensive list of all questions covered in the `01-data
 ### Backtracking
 
 - [ ] Subsets `🎯 T2` — Given distinct integers, return all subsets (the power set) [M]
-- [ ] [Permutations `🎯 T2`](coding/algorithms/15-recursion.md#permutations) — Given distinct integers, return all permutations [M]
+- [ ] [Permutations `🎯 T2`](coding/algorithms/09-recursion.md#permutations) — Given distinct integers, return all permutations [M]
 - [ ] Combination Sum `🎯 T2` — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
-- [ ] [N-Queens `🎯 T2`](coding/algorithms/15-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
+- [ ] [N-Queens `🎯 T2`](coding/algorithms/09-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
-- [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
-- [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/15-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
+- [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/09-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
+- [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/09-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
 - [ ] Letter Combinations `🎯 T2` — Solve the standard interview variant of Letter Combinations. [M]
-- [ ] [Combinations `🎯 T2`](coding/algorithms/15-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
+- [ ] [Combinations `🎯 T2`](coding/algorithms/09-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
 - [ ] [Target Sum `🎯 T2`](coding/algorithms/15-dynamic-programming.md#target-sum) — Given an integer array and a target, assign `+` or `-` to each element and count the number of ways to reach target [M]
 - [ ] [Word Break II `🎯 T2`](coding/algorithms/12-backtracking.md#word-break-ii) — Given a string `s` and a dictionary, return all ways to segment `s` into space-separated dictionary words [M]
 - [ ] [Unique Paths III `🎯 T2`](coding/algorithms/12-backtracking.md#unique-paths-iii) — Start at cell with value 1, reach cell with value 2, visiting every non-obstacle cell exactly once. Return count of such paths [H]
@@ -188,18 +188,18 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 ### String
 
-- [ ] [Longest Palindromic Substring `⚡ T1`](coding/data-structures/02-string.md#longest-palindromic-substring) — Given string `s`, return the longest substring that is a palindrome [M]
-- [ ] [Group Anagrams `🎯 T2`](coding/data-structures/02-string.md#group-anagrams) — Group strings that are anagrams of each other [M]
+- [ ] [Longest Palindromic Substring `⚡ T1`](coding/data-structures/03-string.md#longest-palindromic-substring) — Given string `s`, return the longest substring that is a palindrome [M]
+- [ ] [Group Anagrams `🎯 T2`](coding/data-structures/03-string.md#group-anagrams) — Group strings that are anagrams of each other [M]
 - [ ] [Valid Parenthesis String `🎯 T2`](01-data-structures/03-string.md#valid-parenthesis-string) — Solve the standard interview variant of Valid Parenthesis String. [M]
 - [ ] [Edit Distance `🎯 T2`](coding/algorithms/15-dynamic-programming.md#edit-distance) — Minimum insert/delete/replace operations to convert `word1` to `word2` [H]
-- [ ] [Valid Palindrome `🎯 T2`](coding/data-structures/02-string.md#valid-palindrome) — Given string `s`, return true if it is a palindrome considering only alphanumeric characters and ignoring case [E]
+- [ ] [Valid Palindrome `🎯 T2`](coding/data-structures/03-string.md#valid-palindrome) — Given string `s`, return true if it is a palindrome considering only alphanumeric characters and ignoring case [E]
 - [ ] [Longest Repeating Character Replacement `🎯 T2`](coding/data-structures/01-array.md#longest-repeating-character-replacement) — Given string `s` and integer `k`, find the length of the longest substring where you can replace at most `k` characters to make all characters in the window the same [M]
-- [ ] [Longest Substring Without Repeating Characters `⚡ T1`](coding/data-structures/02-string.md#longest-substring-without-repeating-characters) — Given string `s`, return the length of the longest substring with all unique characters [M]
+- [ ] [Longest Substring Without Repeating Characters `⚡ T1`](coding/data-structures/03-string.md#longest-substring-without-repeating-characters) — Given string `s`, return the length of the longest substring with all unique characters [M]
 - [ ] Palindromic Substrings `🎯 T2` — Given string `s`, return the total count of substrings that are palindromes (single characters count too) [M]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
 - [ ] [Regular Expression Matching `🎯 T2`](coding/algorithms/15-dynamic-programming.md#regular-expression-matching) — Given string `s` and pattern `p` with `'.'` (any single char) and `'*'` (zero or more of preceding element), implement full regex matching. Must match the entire string [H]
-- [ ] [Valid Palindrome II `🎯 T2`](coding/data-structures/02-string.md#valid-palindrome-ii-lc-680) — Given string `s`, return true if the string can become a palindrome by removing **at most one** character [E]
-- [ ] [Encode and Decode Strings `🎯 T2`](coding/data-structures/02-string.md#encode-and-decode-strings) — Design functions `encode(strs)` and `decode(s)` to encode a list of strings into a single string and decode it back. The encoding must handle strings that contain any character including `#` and `/` [M]
+- [ ] [Valid Palindrome II `🎯 T2`](coding/data-structures/03-string.md#valid-palindrome-ii-lc-680) — Given string `s`, return true if the string can become a palindrome by removing **at most one** character [E]
+- [ ] [Encode and Decode Strings `🎯 T2`](coding/data-structures/03-string.md#encode-and-decode-strings) — Design functions `encode(strs)` and `decode(s)` to encode a list of strings into a single string and decode it back. The encoding must handle strings that contain any character including `#` and `/` [M]
 - [ ] [Permutation in String `🎯 T2`](coding/algorithms/04-sliding-window.md#permutation-in-string-lc-567) — Given strings `s1` and `s2`, return True if any permutation of `s1` is a substring of `s2`. LeetCode 567 [M]
 
 ### Union Find
@@ -214,16 +214,16 @@ This file contains a comprehensive list of all questions covered in the `01-data
 
 - [ ] ----------
 - [ ] Subsets `🎯 T2` — Given distinct integers, return all subsets (the power set) [E]
-- [ ] [Subsets II `🎯 T2`](coding/algorithms/15-recursion.md#subsets-ii-lc-90) — Input may contain duplicates; return only unique subsets [M]
-- [ ] [Permutations `🎯 T2`](coding/algorithms/15-recursion.md#permutations) — Given distinct integers, return all permutations [M]
-- [ ] [Permutations II `🎯 T2`](coding/algorithms/15-recursion.md#permutations-ii-lc-47) — Input may contain duplicates; return only unique permutations [M]
-- [ ] [Combinations `🎯 T2`](coding/algorithms/15-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
+- [ ] [Subsets II `🎯 T2`](coding/algorithms/09-recursion.md#subsets-ii-lc-90) — Input may contain duplicates; return only unique subsets [M]
+- [ ] [Permutations `🎯 T2`](coding/algorithms/09-recursion.md#permutations) — Given distinct integers, return all permutations [M]
+- [ ] [Permutations II `🎯 T2`](coding/algorithms/09-recursion.md#permutations-ii-lc-47) — Input may contain duplicates; return only unique permutations [M]
+- [ ] [Combinations `🎯 T2`](coding/algorithms/09-recursion.md#combinations-lc-77) — Return all combinations of k numbers from the range [1, n] [M]
 - [ ] Combination Sum `🎯 T2` — Given distinct candidates and a target, return all unique combinations (with repetition) summing to target [M]
 - [ ] Combination Sum II `🎯 T2` — Candidates may contain duplicates; each used at most once. Return unique combinations summing to target [M]
-- [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/15-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
-- [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
+- [ ] [Generate Parentheses `🎯 T2`](coding/algorithms/09-recursion.md#generate-parentheses) — Generate all combinations of n pairs of well-formed parentheses [M]
+- [ ] [Palindrome Partitioning `🎯 T2`](coding/algorithms/09-recursion.md#palindrome-partitioning) — Partition string s such that every substring is a palindrome. Return all valid partitioning schemes [M]
 - [ ] [Word Search `⚡ T1`](coding/algorithms/12-backtracking.md#word-search) — Given a 2D board and a word, determine if the word exists as a path of adjacent non-revisiting cells [M]
-- [ ] [N-Queens `🎯 T2`](coding/algorithms/15-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
+- [ ] [N-Queens `🎯 T2`](coding/algorithms/09-recursion.md#n-queens) — Place n queens on an n×n board so no two queens attack each other. Return all valid configurations [H]
 - [ ] Pow(x, n) `🎯 T2` — Compute `x^n` efficiently; handle negative exponents [M]
 - [ ] [Decode Ways `🎯 T2`](coding/algorithms/15-dynamic-programming.md#decode-ways) — String of digits where A=1..Z=26. Count distinct decodings [M]
 - [ ] [Word Break `🎯 T2`](coding/algorithms/15-dynamic-programming.md#word-break) — Given string s and a word dictionary, return true if s can be segmented into dictionary words [M]
@@ -243,7 +243,7 @@ This file contains a comprehensive list of all questions covered in the `01-data
 - [ ] [Decode Ways `🎯 T2`](coding/algorithms/15-dynamic-programming.md#decode-ways) — String of digits where A=1..Z=26. Count distinct decodings [M]
 - [ ] [Edit Distance `🎯 T2`](coding/algorithms/15-dynamic-programming.md#edit-distance) — Minimum insert/delete/replace operations to convert `word1` to `word2` [H]
 - [ ] [Burst Balloons `🎯 T2`](coding/algorithms/15-dynamic-programming.md#burst-balloons) — `n` balloons with values. Bursting balloon `i` scores `nums[i-1]*nums[i]*nums[i+1]`. Maximize total coins [H]
-- [ ] [Palindrome Partitioning II `🎯 T2`](coding/algorithms/15-recursion.md#palindrome-partitioning) — Return the minimum number of cuts to partition a string so every substring is a palindrome [H]
+- [ ] [Palindrome Partitioning II `🎯 T2`](coding/algorithms/09-recursion.md#palindrome-partitioning) — Return the minimum number of cuts to partition a string so every substring is a palindrome [H]
 - [ ] [House Robber III `🎯 T2`](coding/data-structures/08-tree.md#house-robber-iii) — Houses are arranged in a binary tree. Adjacent nodes (parent-child) cannot both be robbed. Maximize total money robbed [M]
 - [ ] [Unique Paths `🎯 T2`](coding/algorithms/15-dynamic-programming.md#unique-paths) — Count distinct paths from top-left to bottom-right of m×n grid, moving only right or down [M]
 - [ ] Unique Paths II `🎯 T2` — Unique paths but some cells are blocked (obstacle=1) [M]

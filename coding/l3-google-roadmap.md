@@ -494,7 +494,7 @@ Know these cold:
 - [stack.md](./data-structures/05-stack.md)
 - [greedy.md](./algorithms/16-greedy.md)
 - [sorting.md](./algorithms/00-sorting.md)
-- [string.md](./data-structures/02-string.md)
+- [string.md](./data-structures/03-string.md)
 
 ### 💤 TIER 3 — Not in L3 navigation (skip)
 

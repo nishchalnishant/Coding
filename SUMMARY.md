@@ -71,7 +71,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 ### Data Structures
 * [Array](coding/data-structures/01-array.md)
 * [Hashing](coding/data-structures/02-hashing.md)
-* [String](coding/data-structures/02-string.md)
+* [String](coding/data-structures/03-string.md)
 * [**Matrix / Grid** *(NEW)*](coding/data-structures/04-matrix.md)
 * [Stack](coding/data-structures/05-stack.md)
 * [Queue](coding/data-structures/06-queue.md)
@@ -93,7 +93,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Backtracking](coding/algorithms/12-backtracking.md)
 * [String Algorithms](coding/algorithms/02-string-algorithms.md)
 * [Dynamic Programming](coding/algorithms/15-dynamic-programming.md)
-* [Recursion](coding/algorithms/15-recursion.md)
+* [Recursion](coding/algorithms/09-recursion.md)
 
 ---
 

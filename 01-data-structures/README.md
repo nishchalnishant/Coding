@@ -37,7 +37,7 @@ Study **T1 topics first**, in this order. Each block = read the deep-dive file, 
 | 1 | Array, Hashing, Graphs (BFS/DFS) | `01-array.md`, `02-hashing.md`, `13-graphs.md` |
 | 2 | Heap, Queue (BFS patterns), Trie | `10-heap.md`, `06-queue.md`, `09-trie.md` |
 | 3 | Tree, Stack, Linked List | `08-tree.md`, `05-stack.md`, `07-linked-list.md` |
-| 4 | String + integration mocks | `02-string.md` + timed mocks |
+| 4 | String + integration mocks | `03-string.md` + timed mocks |
 
 > **Practice bar:** For each `⚡ T1` topic, you should be able to code the top 3 problems **without notes** in under 25 minutes and explain time/space complexity out loud.
 

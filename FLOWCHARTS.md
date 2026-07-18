@@ -36,7 +36,7 @@ Read constraints + examples (n, m, sorted?, negative?, tree/graph?)
 │   └── Heap → 10-heap.md · 16-greedy.md `⚡ T1`
 │
 ├── Prefix / complement / frequency count?
-│   └── Hash map → 02-hashing.md · 02-string.md `⚡ T1`
+│   └── Hash map → 02-hashing.md · 03-string.md `⚡ T1`
 │
 ├── Monotonic property while scanning (next greater, histogram)?
 │   └── Monotonic Stack → 05-stack.md `⚡ T1`
@@ -45,7 +45,7 @@ Read constraints + examples (n, m, sorted?, negative?, tree/graph?)
 │   └── Sort + Greedy → 16-greedy.md · 00-sorting.md `🎯 T2`
 │
 ├── Count / generate all valid configurations?
-│   └── Backtracking → 12-backtracking.md · 15-recursion.md `🎯 T2`
+│   └── Backtracking → 12-backtracking.md · 09-recursion.md `🎯 T2`
 │
 └── Optimal substructure + overlapping subproblems?
     └── DP (1D / knapsack / grid / LCS) → 15-dynamic-programming.md `🎯 T2`

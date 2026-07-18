@@ -183,11 +183,11 @@ coding/data-structures/02-hashing.md
             → O(n⁴) brute force is too slow.
 ```
 
-### 02-string.md
+### 03-string.md
 
 ```
-coding/data-structures/02-string.md
-└── 02-string.md
+coding/data-structures/03-string.md
+└── 03-string.md
     ├── Frequency Map / Anagram
     │   ├── Valid Anagram `🎯 T2`
     │   │   → Two strings are anagrams iff they are identical after sorting.
@@ -1439,11 +1439,11 @@ coding/algorithms/15-dynamic-programming.md
             → If we sort by width, this becomes LIS on heights.
 ```
 
-### 15-recursion.md
+### 09-recursion.md
 
 ```
-coding/algorithms/15-recursion.md
-└── 15-recursion.md
+coding/algorithms/09-recursion.md
+└── 09-recursion.md
     ├── Foundation — Include/Exclude
     │   └── Binary Tree Paths
     │       → Tree structure is inherently recursive; each subtree is a smaller instance of the same problem.

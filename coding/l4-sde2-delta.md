@@ -101,7 +101,7 @@ Full walkthroughs with code: [`coding/data-structures/13-graph.md` → "Implicit
 
 ### 3.4 String parsing / simulation `⚡ T1`
 
-Full walkthroughs with code: [`coding/data-structures/02-string.md` → "Parsing & Simulation — L4 additions"](data-structures/02-string.md#parsing--simulation--l4-additions).
+Full walkthroughs with code: [`coding/data-structures/03-string.md` → "Parsing & Simulation — L4 additions"](data-structures/03-string.md#parsing--simulation--l4-additions).
 
 - **Text Justification** `⚡ T1` · Hard
   - Key insight: greedy line packing, then distribute spaces left-heavy: `gaps = words-1`, each gap gets `total//gaps`, first `total%gaps` gaps get one extra. Last line + single-word lines are left-justified. Pure care, zero algorithms — exactly why Google asks it.
