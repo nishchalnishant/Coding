@@ -5,7 +5,7 @@ topic: Complexity Cheatsheet
 
 # Complexity Cheatsheet — Google L3
 
-Quick Big-O reference for whiteboard interviews. Pair with [`00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md`](../00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md).
+Quick Big-O reference for whiteboard interviews. Pair with [`00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md`](../00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md). Theory (amortized analysis, recurrences, Master theorem): [`00-L3-EXECUTION-META/05-complexity-analysis.md`](../00-L3-EXECUTION-META/05-complexity-analysis.md).
 
 ## Constraint → expected complexity
 

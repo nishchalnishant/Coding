@@ -1569,9 +1569,46 @@ difficulty: mixed
 
 ---
 
-## See Also
+### Time Based Key-Value Store (LC 981) `🎯 T2`
 
-[[two-pointers]] | [[sliding-window]] | [[sorting]] | [[dynamic-programming]]
+> [!example] Problem
+> Design a class `TimeMap` supporting `set(key, value, timestamp)` and `get(key, timestamp)`. `get` returns the value whose stored timestamp is the largest one `<= timestamp`, or `""` if none. All timestamps passed to `set` for a key are strictly increasing.
+>
+> **Example:**
+> ```
+> set("foo", "bar", 1); get("foo", 1) → "bar"; get("foo", 3) → "bar"
+> set("foo", "bar2", 4); get("foo", 4) → "bar2"; get("foo", 5) → "bar2"
+> ```
+
+> [!info] Approach
+> Because timestamps arrive strictly increasing, each key's history is already a sorted list — no sorting needed. `set` is an O(1) append to `dict[key] → [(timestamp, value), ...]`. `get` is "rightmost entry with timestamp ≤ t": binary search for the insertion point of `(t, ~)` and take the element just before it. This is the classic **rightmost ≤ target** template; `bisect_right` on the timestamp gives the index directly.
+
+> [!note]- Python Solution
+> ```python
+> import bisect
+> from collections import defaultdict
+>
+> class TimeMap:
+>     def __init__(self):
+>         self.store = defaultdict(list)   # key -> [(ts, value)]
+>
+>     def set(self, key, value, timestamp):
+>         self.store[key].append((timestamp, value))
+>
+>     def get(self, key, timestamp):
+>         entries = self.store[key]
+>         i = bisect.bisect_right(entries, (timestamp, chr(0x10FFFF)))
+>         return entries[i - 1][1] if i else ""
+> ```
+
+> [!success] Complexity
+> `set` O(1) amortized; `get` O(log n) per call, O(n) total space per key.
+
+> [!tip] Alternatives
+> Store timestamps and values in two parallel lists to `bisect_right` on timestamps alone — avoids the tuple sentinel trick. Follow-up to expect: what changes if timestamps are NOT increasing? (insort → O(n) set, or sort lazily on first get.)
+
+---
+
 ### Aggressive Cows / Maximize Minimum Distance
 
 > [!example] Problem
@@ -1748,4 +1785,4 @@ difficulty: mixed
 
 ## See Also
 
-[[two-pointers]] | [[array]] | [[sorting]] | [[greedy]]
+[[two-pointers]] | [[sliding-window]] | [[array]] | [[sorting]] | [[greedy]] | [[dynamic-programming]]

@@ -489,6 +489,45 @@ difficulty: mixed
 
 ---
 
+### Valid Parenthesis String (LC 678) `🎯 T2`
+
+> [!example] Problem
+> String `s` contains only `(`, `)`, and `*`, where `*` can act as `(`, `)`, or an empty string. Return true if `s` can be made valid.
+>
+> **Example:**
+> ```
+> Input: s = "(*))"   → true   (* acts as "(")
+> Input: s = "(*("    → false
+> ```
+
+> [!info] Approach
+> Track the **range** of possible open-bracket counts instead of one exact count. `lo` = open count if every `*` is `)`/empty; `hi` = open count if every `*` is `(`. On `(`: both +1. On `)`: both −1. On `*`: `lo -= 1`, `hi += 1`. If `hi < 0` at any point, too many `)` even with all `*` as `(` → false. Clamp `lo` at 0 (a `*` need not be `)` when there's nothing to close). Valid iff `lo == 0` at the end — some assignment closes everything exactly.
+
+> [!note]- Python Solution
+> ```python
+> def check_valid_string(s):
+>     lo = hi = 0
+>     for c in s:
+>         if c == '(':
+>             lo += 1; hi += 1
+>         elif c == ')':
+>             lo -= 1; hi -= 1
+>         else:  # '*'
+>             lo -= 1; hi += 1
+>         if hi < 0:
+>             return False
+>         lo = max(lo, 0)
+>     return lo == 0
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space.
+
+> [!tip] Alternatives
+> Two-stack solution (indices of `(` and `*`, match `)` greedily, then pair leftover `(` with later `*`) — O(n) space, easier to reinvent under pressure. Greedy range-tracking is the interview-impressive one; know both.
+
+---
+
 ### Remove All Adjacent Duplicates in String
 
 > [!example] Problem

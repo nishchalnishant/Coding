@@ -1,5 +1,7 @@
 # Complexity Analysis Deep-Dive `⚡ T1`
 
+> Quick-reference tables (constraint → complexity, DS/algo Big-O): [`coding/complexity-cheatsheet.md`](../coding/complexity-cheatsheet.md)
+
 > [!important] Interview Signal
 > Saying "O(n log n)" is table stakes. Saying *why* — referencing amortized cost, the master theorem, or auxiliary vs. input space — is what separates L3 from L4.
 

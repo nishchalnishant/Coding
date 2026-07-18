@@ -289,42 +289,7 @@ def has_duplicate_of_length(s: str, L: int) -> bool:
 
 ---
 
-## Interview Questions — Logic & Trickiness
-
-| Question | Pattern | Click moment | Core logic | Gotchas |
-| :--- | :--- | :--- | :--- | :--- |
-| **Valid Anagram `🎯 T2`** | Frequency map | Same multiset of chars | `Counter(s) == Counter(t)` or 26-count array | Unicode: use Counter, not fixed 26-array. |
-| **Group Anagrams `⚡ T1`** | Hash by canonical key | Same letters → same key | Key = `tuple(sorted(w))` or 26-count tuple | Sort key is O(k log k); count tuple is O(k). |
-| **Longest Substring Without Repeat** | Sliding window | Shrink while duplicate | `while c in seen: left++`; update max | Store **last index** of char to jump `left` in O(1). |
-| **Minimum Window Substring `⚡ T1`** | Window + frequency | Expand until valid; shrink while valid | Track `have` vs `need` per char, not total count | Empty `t` or impossible → return `""`. |
-| **Find All Anagrams `⚡ T1`** | Fixed window | Window size = len(p) | Compare frequency maps each step | Use 26-array diff count for O(1) compare. |
-| **Longest Palindromic Substring `🎯 T2`** | Expand around center | Every center → expand | O(n²) expand; Manacher O(n) stretch | Check **odd and even** centers. |
-| **Longest Repeating Char Replacement** | Window + max freq | Valid if `len - max_freq <= k` | Track max frequency **in current window** | max_freq can decrease when shrinking — still correct for max **length**. |
-| **Decode String** | Stack | Push context on `` | Stack of `(built, repeat_k)` | Multi-digit k: parse full number before `[`. |
-| **String to Integer (atoi)** | Parsing | Sign → digits → clamp overflow | Stop at first non-digit; clamp to 32-bit | Leading spaces and lone `'+'` / `'-'`. |
-
-More walkthroughs: [problem-deep-dives.md. String **algorithms** (KMP, Rabin-Karp detail): [string.md](../01-data-structures/03-string.md) in `02-algorithms/`.
-
----
-
-## Quick Revision Triggers
-
-- If the problem is **substring / subarray with constraint** → sliding window (variable or fixed size).
-- If the problem is **anagram or same multiset** → frequency map or sorted/canonical key.
-- If the problem is **palindrome `🎯 T2`** → expand around center (O(n²)) unless asked for O(n) (Manacher).
-- If the problem is **pattern in text, many queries** → KMP or Rabin-Karp; **many patterns** → Trie + DFS (L3 approach).
-- If you need **O(1) char lookup in window** → array of size 26 or hash map; sliding window fails on **negative numbers** in numeric arrays — use prefix sum ([array.md](./01-array.md)).
-- If building strings in a loop → **list + join**, never `s += c` in Python.
-
----
-
-
-
----
-
 # Advanced String Algorithms
-
-# Strings — L3 Gold Standard
 
 ```
 [STRINGS (ALGORITHMS) — MINDMAP]
@@ -757,6 +722,8 @@ class Trie:
 | **Substring with Concatenation** | "Window containing all words exactly once" | Fixed word-length window; multiset word comparison | Multiple occurrences of same word require multiset, not set. O(N×W×K) with rolling word-hash. |
 | **Group Anagrams `⚡ T1`** | "Same letters, different order" | Key = `sorted(s)` or 26-count tuple | 26-array fails for Unicode; `sorted` O(K log K) vs count O(K). |
 | **Valid Parenthesis String** | "`*` can be `(`, `)`, or empty" | Greedy range `[lo, hi]` of possible open-count | `lo = max(0, lo-1)` (can't go negative); `hi` increases on `*`. |
+| **Valid Anagram `🎯 T2`** [E] | "Same multiset of chars" | `Counter(s) == Counter(t)` or 26-count array | Unicode: use Counter, not fixed 26-array. |
+| **Decode String** [M] | "Nested `k[...]` expansion" | Stack of `(built_string, repeat_k)`; push on `[`, pop+expand on `]` | Multi-digit k: parse full number before `[`. |
 | **KMP strStr** | "First occurrence of needle in haystack" | Build LPS; scan text without backtracking text pointer | LPS `length = lps[length-1]` on mismatch — not `length -= 1`. |
 | **Repeated String Match** | "Minimum copies of A to contain B" | Build `A * ceil(len(B)/len(A)) + 1`; KMP/find | At most `ceil(len(B)/len(A)) + 1` copies suffice — prove bound. |
 | **Edit Distance `🎯 T2`** | "Min ops to convert word1 to word2" | 2D DP; `dp[i][j]` from 3 neighbors | Initialize `dp[0][j]=j` and `dp[i][0]=i`; space-optimize to 1D with `prev` diagonal. |
@@ -785,6 +752,7 @@ class Trie:
 - "Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.
 - "Minimum window containing all characters of T" → sliding window with two pointers and character count.
 - "Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).
+- "Search for MANY patterns in one text" → Trie + DFS (L3 approach) or Aho-Corasick awareness.
 - "Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.
 
 ---
@@ -797,7 +765,6 @@ class Trie:
 - [hashing.md](./02-hashing.md) — frequency maps, group-by-key
 - [trie.md](./09-trie.md) — prefix dictionary, word search II
 - [stack.md](./05-stack.md) — decode string, parenthesis parsing
-- [02-algorithms/string.md](../01-data-structures/03-string.md) — KMP, Rabin-Karp, Z-function
 - [03-patterns/patterns-master.md](../03-patterns/patterns-master.md) — string pattern triggers
 
 ---

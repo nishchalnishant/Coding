@@ -1223,9 +1223,7 @@ difficulty: mixed
 
 ---
 
-## Interval DP
-
-## Tree DP
+## State Machine DP (Stock Problems)
 
 ### Best Time to Buy and Sell Stock (All Variants) `🎯 T2`
 
@@ -1357,8 +1355,6 @@ difficulty: mixed
 > Apply fee on buy side: `cash - p - fee` when buying. Equivalent result.
 
 ---
-
-## Bitmask DP
 
 ## Longest Increasing Subsequence (LIS) Family
 
@@ -1779,9 +1775,6 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[recursion]] | [[greedy]] | [[graph-algorithms]] | [[tree]] | [[string-algorithms]]
 ### Longest Common Substring
 
 > [!example] Problem
@@ -1814,38 +1807,6 @@ difficulty: mixed
 
 ---
 
-
-### Matrix Chain Multiplication
-
-> [!example] Problem
-> Given a sequence of matrices with dimensions `dims[i-1] × dims[i]`, find the minimum number of scalar multiplications to compute their product.
-
-> [!info] Approach
-> The order of multiplication matters. Interval DP: `dp[i][j]` = minimum cost to multiply matrices `i` through `j`. Split at every `k` from `i` to `j-1`. `dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]`. Fill by increasing interval length (length 1 has cost 0). Outer loop: `length` from 2 to n. Inner loops: `i`, then `k`.
-
-> [!note]- Python Solution
-> ```python
-> def matrix_chain_order(dims):
->     n = len(dims) - 1
->     dp = [[0] * n for _ in range(n)]
->     for length in range(2, n + 1):
->         for i in range(n - length + 1):
->             j = i + length - 1
->             dp[i][j] = float('inf')
->             for k in range(i, j):
->                 cost = dp[i][k] + dp[k+1][j] + dims[i] * dims[k+1] * dims[j+1]
->                 dp[i][j] = min(dp[i][j], cost)
->     return dp[0][n-1]
-> ```
-
-> [!success] Complexity
-> Time O(n³), Space O(n²).
-
-> [!tip] Alternatives
-> - Top-down with a memo dict on `(i, j)` — same asymptotic, easy to explain in an interview.
-> - Pattern: this is the canonical "interval DP" template. Also appears in: burst balloons, remove boxes, strange printer.
-
----
 
 ### Russian Doll Envelopes (LC 354)
 
@@ -1898,6 +1859,74 @@ difficulty: mixed
 > [!tip] Alternatives
 > - O(n²) DP: for each envelope, check all previous ones and extend. Too slow for large inputs (n up to 10^5).
 > - Key trick: the `(w asc, h desc)` sort is the entire insight — without it, equal-width envelopes would incorrectly contribute to the LIS.
+
+---
+
+---
+
+## Interval DP
+
+### Matrix Chain Multiplication
+
+> [!example] Problem
+> Given a sequence of matrices with dimensions `dims[i-1] × dims[i]`, find the minimum number of scalar multiplications to compute their product.
+
+> [!info] Approach
+> The order of multiplication matters. Interval DP: `dp[i][j]` = minimum cost to multiply matrices `i` through `j`. Split at every `k` from `i` to `j-1`. `dp[i][j] = min over k in [i, j-1] of dp[i][k] + dp[k+1][j] + dims[i-1] * dims[k] * dims[j]`. Fill by increasing interval length (length 1 has cost 0). Outer loop: `length` from 2 to n. Inner loops: `i`, then `k`.
+
+> [!note]- Python Solution
+> ```python
+> def matrix_chain_order(dims):
+>     n = len(dims) - 1
+>     dp = [[0] * n for _ in range(n)]
+>     for length in range(2, n + 1):
+>         for i in range(n - length + 1):
+>             j = i + length - 1
+>             dp[i][j] = float('inf')
+>             for k in range(i, j):
+>                 cost = dp[i][k] + dp[k+1][j] + dims[i] * dims[k+1] * dims[j+1]
+>                 dp[i][j] = min(dp[i][j], cost)
+>     return dp[0][n-1]
+> ```
+
+> [!success] Complexity
+> Time O(n³), Space O(n²).
+
+> [!tip] Alternatives
+> - Top-down with a memo dict on `(i, j)` — same asymptotic, easy to explain in an interview.
+> - Pattern: this is the canonical "interval DP" template. Also appears in: burst balloons, remove boxes, strange printer.
+
+---
+
+### Burst Balloons (LC 312) `🎯 T2`
+
+> [!example] Problem
+> Given `n` balloons with values `nums[i]`, bursting balloon `i` earns `nums[left] * nums[i] * nums[right]` coins (adjacent *remaining* balloons). Maximize total coins after bursting all balloons. [H]
+
+> [!info] Approach
+> Thinking forward ("which balloon do I burst first?") fails because bursting changes adjacency unpredictably. Think **backward**: fix which balloon `k` is burst **last** in the open interval `(i, j)`. When `k` is last, its neighbors are the fixed boundaries `i` and `j`, so it earns `nums[i] * nums[k] * nums[j]`. Pad the array with 1s on both ends. `dp[i][j]` = max coins from bursting everything strictly between `i` and `j`: `dp[i][j] = max over k in (i, j) of dp[i][k] + dp[k][j] + nums[i] * nums[k] * nums[j]`. Fill by increasing interval length.
+
+> [!note]- Python Solution
+> ```python
+> def max_coins(nums):
+>     nums = [1] + nums + [1]
+>     n = len(nums)
+>     dp = [[0] * n for _ in range(n)]
+>     for length in range(2, n):          # gap between i and j
+>         for i in range(n - length):
+>             j = i + length
+>             for k in range(i + 1, j):   # k burst last in (i, j)
+>                 dp[i][j] = max(dp[i][j],
+>                                dp[i][k] + dp[k][j] + nums[i] * nums[k] * nums[j])
+>     return dp[0][n-1]
+> ```
+
+> [!success] Complexity
+> Time O(n³), Space O(n²).
+
+> [!tip] Alternatives
+> - Key insight to state in interview: "last burst" makes subproblems independent — "first burst" does not.
+> - Same last-action-in-interval trick: Remove Boxes (LC 546), Strange Printer (LC 664), Minimum Cost to Merge Stones — all `💤 T3` at L3.
 
 ---
 
