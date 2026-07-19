@@ -99,7 +99,6 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [**Mock Interview Set (25 Problems)** *(NEW)*](03-patterns/MOCK_INTERVIEW_SET.md)
 * [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
 * [Leetcode Variants](03-patterns/leetcode-variants.md)
-* [Questions Bank](03-patterns/questions.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
 
 ---

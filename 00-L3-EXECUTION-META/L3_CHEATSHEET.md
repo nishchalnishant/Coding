@@ -9,8 +9,10 @@
 ## 2. Constraint Analysis (N=10^5 → O(N) or O(N log N))
 | N limit | Target Big-O | Algorithm Family |
 |---|---|---|
-| 10 - 20 | O(N!) or O(2^N) | Backtracking, Bitmask DP |
-| 100 - 1,000 | O(N^3) or O(N^2) | 2D/3D DP, Nested Loops |
+| ≤ 10 | O(N!) | Permutations, exhaustive search |
+| ≤ 20 | O(2^N) | Backtracking, subsets, bitmask DP |
+| ≤ 500 | O(N^3) | 3D DP, interval DP, Floyd-Warshall |
+| ≤ 2,000 | O(N^2) | 2D DP, nested loops, matrix paths |
 | 10^5 | O(N log N) | Sorting, Binary Search, Heaps |
 | 10^5 - 10^6 | O(N) | Sliding Window, Two Pointers, Hash Maps |
 | 10^9+ | O(log N) or O(1) | Binary Search on Answer, Math |

@@ -63,25 +63,29 @@ Sound bites — say them exactly like this:
 - Graph: disconnected; self-loop; 0 or 1 node.
 - Tree: empty tree; single node; skewed tree.
 
-### Patterns → action (30-second triggers)
+### Pattern → core idea → complexity
 
-| Pattern | When | Core idea | Time |
-|---------|------|-----------|------|
-| Hash map | Two sum, frequency, grouping | Key → count or index | O(n) avg |
-| Prefix + map | Subarray sum = K | Count of `prefix - K` | O(n) |
-| Sliding window | Longest/shortest substring/subarray with constraint | Expand j, shrink i while invalid | O(n) |
-| Two pointers | Sorted array, pair/triplet | left/right or slow/fast | O(n) or O(n²) |
-| Kadane | Max subarray sum | `cur = max(x, cur+x)` | O(n) |
-| BFS | Shortest path unweighted, level order | Queue + visited | O(V+E) |
-| DFS | Components, cycle, topo | Stack/recursion + visited | O(V+E) |
-| Topo sort | Dependencies, DAG | Kahn (in-degree) or DFS post | O(V+E) |
-| Dijkstra | Weighted, non-negative | Min-heap of (dist, node) | O((V+E)log V) |
-| Union-Find | Connectivity, Kruskal | find + union | ~O(1) amortized |
-| Heap | Top K, merge K lists | Size-K min-heap or push all heads | O(n log k) |
-| Binary search on answer | Minimize max, feasibility | `valid(mid)` + search range | O(n log range) |
-| Monotonic stack | Next greater, histogram | Pop while smaller | O(n) |
-| Tree DP | Max path through node | Postorder, return up value | O(n) |
-| 2D DP | LCS, edit distance | `dp[i][j]` from three neighbors | O(nm) |
+Recognition triggers ("what do I hear that means sliding window?") are in
+[`patterns-master.md` § Quick Decision Trees](./patterns-master.md#quick-decision-trees).
+This table is the interview-day recall of **the mechanic and the number to say out loud**:
+
+| Pattern | Core idea | Time |
+|---------|-----------|------|
+| Hash map | Key → count or index | O(n) avg |
+| Prefix + map | Count of `prefix - K` | O(n) |
+| Sliding window | Expand j, shrink i while invalid | O(n) |
+| Two pointers | left/right or slow/fast | O(n) or O(n²) |
+| Kadane | `cur = max(x, cur+x)` | O(n) |
+| BFS | Queue + visited | O(V+E) |
+| DFS | Stack/recursion + visited | O(V+E) |
+| Topo sort | Kahn (in-degree) or DFS post | O(V+E) |
+| Dijkstra | Min-heap of (dist, node) | O((V+E)log V) |
+| Union-Find | find + union | ~O(1) amortized |
+| Heap | Size-K min-heap or push all heads | O(n log k) |
+| Binary search on answer | `valid(mid)` + search range | O(n log range) |
+| Monotonic stack | Pop while smaller | O(n) |
+| Tree DP | Postorder, return up value | O(n) |
+| 2D DP | `dp[i][j]` from three neighbors | O(nm) |
 
 ### Open with / Close with
 

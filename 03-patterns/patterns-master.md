@@ -28,14 +28,8 @@ tags: [patterns, patterns-master]
 
 ### By Input Size (N)
 
-| Constraint | Expected Complexity | Likely Patterns |
-|------------|---------------------|-----------------|
-| N ≤ 10 | O(N!) | Permutations, TSP, exhaustive search |
-| N ≤ 20 | O(2^N) | Backtracking, subsets, bitmask DP |
-| N ≤ 500 | O(N³) | Floyd-Warshall, 3D DP, interval DP |
-| N ≤ 2000 | O(N²) | 2D DP, nested loops, matrix paths |
-| N ≤ 10⁵ | O(N log N) or O(N) | Sorting, binary search, heaps, two pointers, sliding window |
-| N ≤ 10⁶ | O(N) or O(log N) | Single pass, greedy, math, binary search |
+Constraint size → target complexity → algorithm family:
+[`L3_CHEATSHEET.md` § 2 Constraint Analysis](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#2-constraint-analysis-n105--on-or-on-log-n).
 
 ### By Keyword/Constraint
 

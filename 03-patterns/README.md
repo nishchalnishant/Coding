@@ -27,7 +27,7 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 | [`INTERVIEW_JUDGMENT.md`](./INTERVIEW_JUDGMENT.md) | Live-interview decisions: correctness arguments, pivoting, using hints, recovery |
 | [`PATTERN_LADDERS.md`](./PATTERN_LADDERS.md) | Problem ladders per pattern — learn by deriving each rung from the last |
 | [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | Question bank: per-topic canonical problems with core logic + trickiness |
-| [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Final revision: pattern triggers table, topic capsules, day-before schedule |
+| [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Final revision: complexity sound bites, topic capsules, day-before schedule |
 | [`MOCK_INTERVIEW_SET.md`](./MOCK_INTERVIEW_SET.md) | 25 timed mock problems with rubric |
 | [`leetcode-variants.md`](./leetcode-variants.md) | Narrative walkthroughs of follow-up/variant questions |
 | [`02-algorithms/03-two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
@@ -69,17 +69,8 @@ Pattern recognition is the skill that separates L4 from L3. The goal: hear a pro
 
 ---
 
-## 60-Second Pattern Recognition Checklist
+## 60-Second Pattern Recognition
 
-When you hear a problem, ask these in order:
-
-1. **Input sorted?** → Binary search candidate
-2. **Subarray / substring, find longest/shortest/sum?** → Sliding window
-3. **Pair/triplet sum, palindrome, sorted partitioning?** → Two pointers
-4. **Graph / grid / connectivity?** → BFS (shortest) or DFS (paths/islands)
-5. **Ordering with dependencies?** → Topological sort
-6. **Best way to do X across all possibilities?** → DP (check: overlapping subproblems?)
-7. **All valid combinations / permutations?** → Backtracking
-8. **Top K, Kth largest/smallest, median stream?** → Heap
-9. **Prefix/range query?** → Prefix sum
-10. **Dynamic connectivity?** → Union-Find
+The ordered trigger questions, the keyword → pattern table, and the pre-code
+clarifying questions all live in one place:
+[`patterns-master.md` § Quick Decision Trees](./patterns-master.md#quick-decision-trees).

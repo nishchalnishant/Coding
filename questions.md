@@ -12,7 +12,7 @@ tags: [root, questions]
 > It is NOT a coding practice file. Do not deep-study it like a topic file.
 
 
-Companion tracker (links into theory-file trick tables, with pattern column): [`03-patterns/questions.md`](03-patterns/questions.md).
+Pattern-by-pattern logic and gotchas for these problems: [`03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
 
 This file lists the questions covered in the `coding/` walkthroughs, grouped by topic. Each problem appears once, under its canonical topic.
 
