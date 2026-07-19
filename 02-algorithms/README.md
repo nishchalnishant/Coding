@@ -12,13 +12,13 @@
 
 | Topic | Section | Tier |
 | :---- | :------ | :--- |
-| Two Pointers & Sliding Window | [Jump](#two-pointers--sliding-window) | `⚡ T1` |
-| Binary Search | [Jump](#binary-search) | `⚡ T1` |
-| Dynamic Programming | [Jump](#dynamic-programming) | `⚡ T1` |
-| Recursion & Backtracking | [Jump](#recursion--backtracking) | `⚡ T1` |
-| Graph Algorithms | [Jump](#graph-algorithms) | `⚡ T1` |
-| Greedy | [Jump](#greedy) | `🎯 T2` |
-| Divide & Conquer / Math | [Jump](#divide--conquer--math) | `🎯 T2` |
+| Two Pointers & Sliding Window | [Two Pointers](03-two-pointers.md) · [Sliding Window](04-sliding-window.md) | `⚡ T1` |
+| Binary Search | [Deep-dive](11-binary-search.md) | `⚡ T1` |
+| Dynamic Programming | [Deep-dive](15-dynamic-programming.md) | `⚡ T1` |
+| Recursion & Backtracking | [Recursion](09-recursion.md) · [Backtracking](12-backtracking.md) | `⚡ T1` |
+| Graph Algorithms | [Deep-dive](../01-data-structures/13-graphs.md) | `⚡ T1` |
+| Greedy | [Deep-dive](16-greedy.md) | `🎯 T2` |
+| Divide & Conquer / Math | [Math](18-math-and-number-theory.md) · [Bits](17-bit-manipulation.md) | `🎯 T2` |
 | Sorting (reference) | [Jump](#sorting-reference) | `🎯 T2` |
 | Union-Find (DSU) | [Jump](#union-find-dsu) | `🎯 T2` |
 | Intervals | [Jump](#intervals) | `🎯 T2` |

@@ -69,16 +69,16 @@ Also out of scope: consistent hashing, skip lists, Tarjan SCC, bitmask/digit DP.
 
 | Topic | Section | Tier |
 | :---- | :------ | :--- |
-| Array | [Jump](#array) | `⚡ T1` |
-| Hashing | [Jump](#hashing) | `⚡ T1` |
-| String | [Jump](#string) | `🎯 T2` |
-| Stack | [Jump](#stack) | `🎯 T2` |
-| Queue | [Jump](#queue) | `🎯 T2` |
-| Linked List | [Jump](#linked-list) | `🎯 T2` |
-| Tree | [Jump](#tree) | `⚡ T1` |
-| Trie | [Jump](#trie) | `⚡ T1` |
-| Heap / Priority Queue | [Jump](#heap--priority-queue) | `⚡ T1` |
-| Graphs | [Jump](#graphs) | `⚡ T1` |
+| Array | [Deep-dive](01-array.md) | `⚡ T1` |
+| Hashing | [Deep-dive](02-hashing.md) | `⚡ T1` |
+| String | [Deep-dive](03-string.md) | `🎯 T2` |
+| Stack | [Deep-dive](05-stack.md) | `🎯 T2` |
+| Queue | [Deep-dive](06-queue.md) | `🎯 T2` |
+| Linked List | [Deep-dive](07-linked-list.md) | `🎯 T2` |
+| Tree | [Deep-dive](08-tree.md) | `⚡ T1` |
+| Trie | [Deep-dive](09-trie.md) | `⚡ T1` |
+| Heap / Priority Queue | [Deep-dive](10-heap.md) | `⚡ T1` |
+| Graphs | [Deep-dive](13-graphs.md) | `⚡ T1` |
 
 ---
 

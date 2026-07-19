@@ -471,8 +471,6 @@ def word_break(s: str, word_dict: list[str]) -> bool:
     return can_break(0)
 ```
 
-```
-
 ### Backtracking to DP: All Paths (Word Break II)
 
 Sometimes you need *all* paths, but subproblems overlap wildly. Memoize the **list of valid suffixes** to avoid exponential re-expansion.
