@@ -7,8 +7,7 @@ Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/beha
 
 ## Directory layout (don't explore, use this)
 ```
-00-start-here/           # Navigation hub
-00-L3-EXECUTION-META/    # 45-min plan, constraints, Python cheatsheet, decision guides
+00-L3-EXECUTION-META/    # L3_CHEATSHEET.md — pacing, constraints, decision guide, edge cases, Big-O, skip list
 01-data-structures/      # DS deep-dives (array, hashing, string, stack, queue, linked-list, tree, trie, heap, graph)
 02-algorithms/           # Algo deep-dives (two-pointers, sliding-window, binary-search, sorting, graph, union-find, greedy, backtracking, string, DP, recursion)
 03-patterns/             # Pattern triggers, canonical questions, Google revision
@@ -31,9 +30,9 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 | Add a pattern trigger | `03-patterns/patterns-master.md` |
 | Add canonical problem + logic | `03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md` |
 | Behavioral / googliness | `04-behavioral/BEHAVIORAL_GOOGLINESS.md` |
-| L3 scope (what to skip) | `00-L3-EXECUTION-META/04-l3-what-to-skip.md` |
-| Complexity cheatsheet | `coding/complexity-cheatsheet.md` |
-| Interview strategy | `coding/google-interview-strategy.md` |
+| L3 scope (what to skip) | `00-L3-EXECUTION-META/L3_CHEATSHEET.md` §8 |
+| Complexity cheatsheet | `00-L3-EXECUTION-META/L3_CHEATSHEET.md` §6–7 |
+| Interview strategy | `03-patterns/GOOGLE_INTERVIEW_REVISION.md` |
 | GitBook navigation | `SUMMARY.md` |
 
 ## Working norms

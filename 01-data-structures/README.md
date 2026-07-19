@@ -22,8 +22,7 @@ Google L3 (SWE) loops are **4–5 coding rounds**, one problem each, **35–45 m
 | Purpose | Link |
 | :--- | :--- |
 | Full L3 roadmap + 4-week schedule | [`coding/l3-google-roadmap.md`](../coding/l3-google-roadmap.md) |
-| 45-min interview pacing | [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) |
-| Constraint → Big-O heuristics | [`00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md`](../00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md) |
+| 45-min pacing + constraint → Big-O heuristics | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
 | Problem walkthroughs (code + approach) | [`coding/data-structures/`](../coding/data-structures/) |
 | 30-min pattern revision | [`MINDMAP.md`](../MINDMAP.md) · [`FLOWCHARTS.md`](../FLOWCHARTS.md) |
 | Behavioral / Googliness | [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](../04-behavioral/BEHAVIORAL_GOOGLINESS.md) |
@@ -59,7 +58,7 @@ Before your onsite, you should be able to say **yes** to all of these:
 
 **Segment trees and Fenwick trees (BIT) are not L3 material** — know the one-line idea; do not implement. Use prefix sum, monotonic deque, or heap instead.
 
-→ [What to Skip at L3 (full guide)](../00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+→ [What to Skip at L3](../00-L3-EXECUTION-META/L3_CHEATSHEET.md)
 
 Also out of scope: consistent hashing, skip lists, Tarjan SCC, bitmask/digit DP. Ignore if you find old references elsewhere.
 

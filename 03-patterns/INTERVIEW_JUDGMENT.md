@@ -7,7 +7,7 @@ tags: [logic, proof, counterexamples, decision-making, interview-strategy, googl
 # Interview Judgment — Reasoning Tools & Live Decision-Making
 
 > [!IMPORTANT]
-> **The missing layer this file adds.** [HOW_TO_THINK.md](HOW_TO_THINK.md) teaches you to *derive* patterns. [DECISION_GUIDE.md](../00-L3-EXECUTION-META/DECISION_GUIDE.md) maps keywords → structures. Neither teaches the two skills that actually decide close interviews: **convincing yourself an idea is correct before spending 15 minutes coding it**, and **making good calls under uncertainty** — commit or pivot, which of two approaches, what to do with a hint, how to recover from a wrong path. Strong candidates don't fail because they lack patterns; they fail because they coded the wrong idea confidently or abandoned the right idea nervously. This file trains that judgment.
+> **The missing layer this file adds.** [HOW_TO_THINK.md](HOW_TO_THINK.md) teaches you to *derive* patterns. [The L3 Cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) maps keywords → structures. Neither teaches the two skills that actually decide close interviews: **convincing yourself an idea is correct before spending 15 minutes coding it**, and **making good calls under uncertainty** — commit or pivot, which of two approaches, what to do with a hint, how to recover from a wrong path. Strong candidates don't fail because they lack patterns; they fail because they coded the wrong idea confidently or abandoned the right idea nervously. This file trains that judgment.
 
 ---
 
@@ -22,7 +22,7 @@ Most candidates use examples passively (trace the given sample). Examples are ac
 | **Smallest interesting case** | "What does the mechanism look like with no noise?" | n = 2 or 3, the minimum where a real decision occurs. (n = 0/1 are edge cases, not insight cases.) |
 | **Structure-revealing case** | "What does my hand do when solving this?" | ~8–10 elements, solve it manually, then *introspect the procedure your eyes ran* — it's often the algorithm |
 | **Adversarial case** | "What input would embarrass my current idea?" | Attack your idea's assumption directly: duplicates if you assumed distinct, negatives if you assumed positive, ties if you sort, all-equal elements, already-sorted / reverse-sorted |
-| **Boundary case** | "Does the code survive the edges?" | Saved for the dry run — see [Edge Case Taxonomy](../00-L3-EXECUTION-META/06-edge-case-taxonomy.md) |
+| **Boundary case** | "Does the code survive the edges?" | Saved for the dry run — see [Universal Edge Cases](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
 
 The discipline: after forming an approach and *before* coding it, spend 60 seconds deliberately trying to **break** it with an adversarial case. Finding your own counterexample at minute 8 costs one minute; the interviewer finding it at minute 35 costs the round. The mindset shift is from lawyer (defending your idea) to scientist (attacking it) — interviews reward scientists.
 
@@ -142,7 +142,5 @@ Judgment doesn't improve by reading — it improves by *forcing the decision poi
 
 - [HOW_TO_THINK.md](HOW_TO_THINK.md) — the solve loop, four levers, stuck moves, escalation grammar
 - [RECURSION_AND_DP_MASTERCLASS.md](RECURSION_AND_DP_MASTERCLASS.md) — the contract/induction method this file's proof moves generalize
-- [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) — the timeline these decisions run on
-- [`00-L3-EXECUTION-META/06-edge-case-taxonomy.md`](../00-L3-EXECUTION-META/06-edge-case-taxonomy.md) — boundary-case checklists for the dry run
-- [`00-L3-EXECUTION-META/DECISION_GUIDE.md`](../00-L3-EXECUTION-META/DECISION_GUIDE.md) — keyword → structure selection tables
+- [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) — execution timeline, edge-case checklist, keyword → structure tables
 - [MOCK_INTERVIEW_SET.md](MOCK_INTERVIEW_SET.md) — where to run the judgment drills

@@ -162,7 +162,7 @@ difficulty: mixed
 > Time O(n) init, O(log n) per pick; Space O(n).
 
 > [!tip] Follow-up
-> "Weights get updated" → now you need O(log n) update + prefix query; *name* Fenwick/segment tree as the tool, don't implement ([skip policy](../../00-L3-EXECUTION-META/04-l3-what-to-skip.md)).
+> "Weights get updated" → now you need O(log n) update + prefix query; *name* Fenwick/segment tree as the tool, don't implement ([skip policy](../../00-L3-EXECUTION-META/L3_CHEATSHEET.md)).
 
 ---
 

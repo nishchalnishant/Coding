@@ -56,11 +56,10 @@ Read constraints + examples (n, m, sorted?, negative?, tree/graph?)
 ## 00 — Start Here (L3)
 
 ```
-00-start-here/README.md
+README.md
 └── Entry point — topic-first, not linear
     ├── Day 1 → coding/l3-google-roadmap.md (4-week plan) `⚡ T1`
-    ├── Always → 00-L3-EXECUTION-META/01-45-minute-execution-plan.md
-    ├── Before mocks → 00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md
+    ├── Always → 00-L3-EXECUTION-META/L3_CHEATSHEET.md (pacing + constraints)
     └── Interview day → 03-patterns/GOOGLE_INTERVIEW_REVISION.md Part A (10 min max)
 
 Have 4 weeks?
@@ -244,8 +243,8 @@ Have 2 weeks?
 03-patterns/GOOGLE_INTERVIEW_REVISION.md
     └── Week 4 deep revision (Google lens); Part A = interview-day quick sheet
 
-coding/complexity-cheatsheet.md
-    └── Big-O quick reference (replaces advanced revision topics)
+00-L3-EXECUTION-META/L3_CHEATSHEET.md
+    └── Big-O quick reference + gotchas (§6–7)
 ```
 
 ---
@@ -259,9 +258,6 @@ coding/complexity-cheatsheet.md
 04-behavioral/BEHAVIORAL_GOOGLINESS.md
     └── Four Google attributes — deep dive
         Signal: clarify before coding · own ambiguous work · learn fast · collaborate
-
-coding/behavioral-interview.md
-    └── Quick prep the week of onsite
 ```
 
 ---

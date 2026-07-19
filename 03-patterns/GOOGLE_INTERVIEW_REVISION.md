@@ -257,7 +257,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
-- [00-start-here/README.md](../00-start-here/README.md) — weekly plan and 6-week L3 schedule  
+- [coding/l3-google-roadmap.md](../coding/l3-google-roadmap.md) — 4-week L3 study schedule  
 - [03-patterns/patterns-master.md](patterns-master.md) — condensed patterns with triggers  
 
 **Good luck.** You’ve already done the hard work building this repo — use Part A + one full mock in the last 48 hours to walk in confident.

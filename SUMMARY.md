@@ -1,17 +1,16 @@
 # Summary — Google L3 (SWE)
 
-> L3 = 4–5 coding rounds (35–45 min each) + Googliness/behavioral. No system design, LLD, SQL, or concurrency. **Segment trees / Fenwick trees: skip for L3** → [What to Skip](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
+> L3 = 4–5 coding rounds (35–45 min each) + Googliness/behavioral. No system design, LLD, SQL, or concurrency. **Segment trees / Fenwick trees: skip for L3** → [What to Skip](00-L3-EXECUTION-META/L3_CHEATSHEET.md)
 
 ## Start Here
 * [Overview](README.md)
-* [Navigation Hub](00-start-here/README.md)
 * [**How to Think — pattern intuition from first principles** *(NEW)*](03-patterns/HOW_TO_THINK.md)
 * [**Recursion & DP Masterclass** *(NEW)*](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
 * [**Interview Judgment — proofs & live decisions** *(NEW)*](03-patterns/INTERVIEW_JUDGMENT.md)
 * [**Pattern Ladders — learn by deriving** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
 * [**L4 (SDE-2) Delta** *(NEW)*](coding/l4-sde2-delta.md)
-* [**What to Skip at L3**](00-L3-EXECUTION-META/04-l3-what-to-skip.md) *(segment trees, BIT, T3 topics)*
+* [**L3 Cheatsheet**](00-L3-EXECUTION-META/L3_CHEATSHEET.md) *(pacing, constraints, decision guide, edge cases, what to skip)*
 * [Questions Tracker](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
 * [Mind Map](MINDMAP.md)
@@ -19,14 +18,7 @@
 ---
 
 ## L3 Execution Meta-Skills
-* [45-Minute Execution Plan](00-L3-EXECUTION-META/01-45-minute-execution-plan.md)
-* [Constraint Analysis Heuristics](00-L3-EXECUTION-META/02-constraint-analysis-heuristic.md)
-* [Python Whiteboarding Cheatsheet](00-L3-EXECUTION-META/03-python-whiteboarding-cheatsheet.md)
-* [Master Decision Guide](00-L3-EXECUTION-META/DECISION_GUIDE.md)
-* [Decision Flowcharts (Markdown)](00-L3-EXECUTION-META/FLOWCHART_MEDIUM.md)
-* [What to Skip at L3](00-L3-EXECUTION-META/04-l3-what-to-skip.md)
-* [**Complexity Deep-Dive** *(NEW)*](00-L3-EXECUTION-META/05-complexity-analysis.md)
-* [**Edge Case Taxonomy** *(NEW)*](00-L3-EXECUTION-META/06-edge-case-taxonomy.md)
+* [L3 Cheatsheet — execution plan, constraints, decision guide, Python, edge cases, Big-O, what to skip](00-L3-EXECUTION-META/L3_CHEATSHEET.md)
 
 ---
 
@@ -119,6 +111,3 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Googliness Round](04-behavioral/googliness-round.md)
 
 ## L3 Meta (coding/)
-* [Interview Strategy](coding/google-interview-strategy.md)
-* [Complexity Cheatsheet](coding/complexity-cheatsheet.md)
-* [Behavioral Quick Guide](coding/behavioral-interview.md)

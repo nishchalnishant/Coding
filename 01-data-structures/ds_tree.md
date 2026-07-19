@@ -6,7 +6,7 @@ status: unread
 tags: [data-structures, ds-tree]
 ---
 
-← [Data structures index](./README.md) · 🗺 [Master Decision Guide](../00-L3-EXECUTION-META/DECISION_GUIDE.md)
+← [Data structures index](./README.md) · 🗺 [L3 Cheatsheet — Decision Guide](../00-L3-EXECUTION-META/L3_CHEATSHEET.md)
 
 ## First-Principles Map
 

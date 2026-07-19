@@ -501,4 +501,4 @@ Know these cold:
 - MINDMAP.md — on disk only; not linked in GitBook
 - MINDMAP.md — on disk only; not linked in GitBook
 
-**Behavioral (required):** [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) · [`coding/behavioral-interview.md`](./behavioral-interview.md)
+**Behavioral (required):** [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) · [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](../04-behavioral/BEHAVIORAL_GOOGLINESS.md)

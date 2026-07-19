@@ -518,4 +518,4 @@ The compressed version of this entire file — the nine sentences to hold in wor
 - [patterns-master.md](patterns-master.md) — trigger-phrase quick reference
 - [MOCK_INTERVIEW_SET.md](MOCK_INTERVIEW_SET.md) — 25-problem cold set + L4 follow-up chains
 - [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md) — the L4 bar, tier promotions, gap problems
-- [`00-L3-EXECUTION-META/01-45-minute-execution-plan.md`](../00-L3-EXECUTION-META/01-45-minute-execution-plan.md) — minute-by-minute round plan
+- [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) — 45-minute round plan + decision guide

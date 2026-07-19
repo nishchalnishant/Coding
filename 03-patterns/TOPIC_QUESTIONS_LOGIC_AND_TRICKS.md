@@ -338,7 +338,7 @@ This guide lists **canonical interview questions** by topic, **why** they appear
 
 ## Segment Tree & Fenwick Tree `💤 T3` — out of L3 scope
 
-> Skip for L3 — see [What to Skip](../00-L3-EXECUTION-META/04-l3-what-to-skip.md). Kept here only for reference.
+> Skip for L3 — see [What to Skip](../00-L3-EXECUTION-META/L3_CHEATSHEET.md). Kept here only for reference.
 
 | Problem | Difficulty | Pattern | Key Insight |
 |---------|-----------|---------|-------------|
