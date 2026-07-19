@@ -87,7 +87,7 @@ coding/data-structures/01-array.md
     │   ├── Jump Game (LC 55) `🎯 T2`
     │   │   → Greedy — track farthest reachable index.
     │   └── Gas Station (LC 134) `🎯 T2`
-    ├── Matrix
+    ├── Matrix / Intervals
     │   ├── Rotate Image (LC 48)
     │   │   → Transpose then reverse each row.
     │   ├── Merge Intervals (LC 56) `🎯 T2`
@@ -99,9 +99,6 @@ coding/data-structures/01-array.md
     ├── Miscellaneous (Continued)
     │   └── First Missing Positive (LC 41)
     │       → Index-as-hash — cyclic placement of values in range [1, n].
-    ├── See Also
-    │   └── First Missing Positive
-    │       → Values in [1..n] can be placed into their correct indices in-place.
     └── Prefix Sum
         ├── Subarray Sum Equals K (with negative numbers) `⚡ T1`
         │   → Two-pointer/sliding-window breaks with negatives.
@@ -167,20 +164,13 @@ coding/data-structures/02-hashing.md
     │   │   → Words are fixed length.
     │   └── Max Points on a Line
     │       → For each pair of points, their line is defined by slope.
-    ├── Rolling Hash / Dedup
-    │   ├── Longest Duplicate Substring (Rabin-Karp) `⚡ T1`
-    │   │   → Binary search on length L: if a duplicate of length L exists, so does one of length L-1.
-    │   ├── Find Duplicate File in System
-    │   │   → Files with the same content are duplicates.
-    │   └── 4Sum II `⚡ T1`
-    │       → Brute force O(n⁴).
-    └── See Also
-        ├── Subarray Sums Divisible by K (LC 974) `⚡ T1`
-        │   → sum(i..j) % k == 0 iff prefix[j] % k == prefix[i-1] % k.
-        ├── Contiguous Array (LC 525) `⚡ T1`
-        │   → Map 0 → -1.
-        └── 4Sum II (LC 454) `⚡ T1`
-            → O(n⁴) brute force is too slow.
+    └── Rolling Hash / Dedup
+        ├── Longest Duplicate Substring (Rabin-Karp) `⚡ T1`
+        │   → Binary search on length L: if a duplicate of length L exists, so does one of length L-1.
+        ├── Find Duplicate File in System
+        │   → Files with the same content are duplicates.
+        └── 4Sum II `⚡ T1`
+            → Brute force O(n⁴).
 ```
 
 ### 03-string.md
@@ -254,6 +244,29 @@ coding/data-structures/03-string.md
         │   → A standard two-pointer palindrome check stops at the first mismatch.
         └── Reverse Words in a String (LC 151)
             → Python's split() without arguments handles multiple spaces and strips leading/trailing whitespace.
+```
+
+### 04-matrix.md
+
+```
+coding/data-structures/04-matrix.md
+└── 04-matrix.md
+    ├── Grid BFS / DFS
+    │   ├── Number of Islands `⚡ T1`
+    │   ├── Walls and Gates `⚡ T1`
+    │   ├── Shortest Path in Binary Matrix `⚡ T1`
+    │   └── Rotting Oranges `⚡ T1`
+    ├── Traversal / In-Place Transformation
+    │   ├── Spiral Matrix `🎯 T2`
+    │   ├── Rotate Image `🎯 T2`
+    │   └── Set Matrix Zeroes `🎯 T2`
+    ├── Grid DP
+    │   ├── Unique Paths `⚡ T1`
+    │   ├── Minimum Path Sum `⚡ T1`
+    │   ├── Maximal Square `🎯 T2`
+    │   └── Longest Increasing Path in a Matrix `⚡ T1` (L4)
+    └── Prefix Sums on Grids
+        └── 2D Prefix Sum `🎯 T2`
 ```
 
 ### 05-stack.md
@@ -330,8 +343,6 @@ coding/data-structures/05-stack.md
     │   └── Next Greater Element I `🎯 T2`
     │       → We need the next greater element for many values, so we preprocess nums2 with a monotonic stack to avoid repeated scans.
     └── Monotonic Stack — Advanced
-        ├── Sum of Subarray Minimums (LC 907)
-        │   → Brute force is O(n²).
         ├── 132 Pattern (LC 456)
         │   → Brute force is O(n³).
         └── Buildings With an Ocean View (LC 1762)
@@ -398,12 +409,9 @@ coding/data-structures/06-queue.md
     ├── See Also
     │   └── Design Circular Deque
     │       → A circular buffer lets us use O(1) index arithmetic without shifting elements.
-    ├── Sliding Window with Queue
-    │   └── Sliding Window Median (LC 480) `⚡ T1`
-    │       → Recalculating the median from scratch for each window is O(k log k) per step — too slow.
-    └── Scheduling
-        └── Task Scheduler with Cooldown (LC 621) `⚡ T1`
-            → The bottleneck is the most frequent task — it dictates the minimum frame length.
+    └── Sliding Window with Queue
+        └── Sliding Window Median (LC 480) `⚡ T1`
+            → Recalculating the median from scratch for each window is O(k log k) per step — too slow.
 ```
 
 ### 07-linked-list.md
@@ -412,13 +420,13 @@ coding/data-structures/06-queue.md
 coding/data-structures/07-linked-list.md
 └── 07-linked-list.md
     ├── In-Place Reversal
-    │   ├── ==Reverse Linked List `🎯 T2`
+    │   ├── Reverse Linked List `🎯 T2`
     │   │   → Three-pointer iterative reversal.
     │   ├── Reverse Linked List II `🎯 T2`
     │   │   → Find pre-node + in-place splice-reversal.
     │   ├── Palindrome Linked List `🎯 T2`
     │   │   → Find middle + reverse second half + compare.
-    │   ├── ==Reorder List `🎯 T2`
+    │   ├── Reorder List `🎯 T2`
     │   │   → Find middle + reverse second half + interleave.
     │   └── Reverse Nodes in K-Group `🎯 T2`
     │       → Count-verify + in-place reversal per group.
@@ -450,26 +458,21 @@ coding/data-structures/07-linked-list.md
     │   │   → Hash map original→clone, two-pass wiring.
     │   └── LRU Cache `🎯 T2`
     │       → Doubly linked list + hash map.
-    ├── Other Manipulation
-    │   ├── Add Two Numbers
-    │   │   → Digit-by-digit addition with carry.
-    │   ├── Swap Nodes in Pairs
-    │   │   → Dummy head + iterative pair swapping.
-    │   ├── Intersection of Two Linked Lists
-    │   ├── Rotate List (Circular List Trick)
-    │   │   → Make circular, find new tail, break circle.
-    │   ├── Remove Duplicates from Sorted List
-    │   │   → Single pass: skip consecutive equal nodes.
-    │   ├── Remove Duplicates from Sorted List II
-    │   │   → Dummy head + prev pointer skipping duplicate runs.
-    │   ├── Partition List
-    │   │   → Two dummy heads — collect two sublists, then join.
-    │   ├── Flatten a Multilevel Doubly Linked List
-    │   └── Rotate List
-    │       → A rotation just changes where the tail reconnects to the head.
-    └── Design
-        └── ==LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
-            → A hash map gives O(1) lookup but can't track recency.
+    └── Other Manipulation
+        ├── Add Two Numbers
+        │   → Digit-by-digit addition with carry.
+        ├── Swap Nodes in Pairs
+        │   → Dummy head + iterative pair swapping.
+        ├── Intersection of Two Linked Lists
+        ├── Rotate List (Circular List Trick)
+        │   → Make circular, find new tail, break circle.
+        ├── Remove Duplicates from Sorted List
+        │   → Single pass: skip consecutive equal nodes.
+        ├── Remove Duplicates from Sorted List II
+        │   → Dummy head + prev pointer skipping duplicate runs.
+        ├── Partition List
+        │   → Two dummy heads — collect two sublists, then join.
+        └── Flatten a Multilevel Doubly Linked List
 ```
 
 ### 08-tree.md
@@ -552,16 +555,9 @@ coding/data-structures/08-tree.md
     │   ├── Morris Inorder Traversal (Technique)
     │   ├── Morris Preorder Traversal (Technique)
     │   └── Iterative Postorder Traversal (Technique)
-    ├── See Also
-    │   └── Binary Tree Boundary Traversal
-    │       → The boundary is not a standard traversal; it is a combination of three ordered pieces with non-overlapping responsibilities.
-    └── Special Tree Problems
-        ├── Count Complete Tree Nodes (LC 222)
-        │   → A full binary tree of height h has 2^h - 1 nodes.
-        ├── Binary Tree Cameras (LC 968) `🎯 T2`
-        │   → Greedy: leaf nodes should never have cameras — it's always better to place a camera on the parent, which then covers both the leaf and the grandparent.
-        └── Recover Binary Search Tree (LC 99)
-            → In an inorder traversal of a valid BST, values are strictly increasing.
+    └── See Also
+        └── Binary Tree Boundary Traversal
+            → The boundary is not a standard traversal; it is a combination of three ordered pieces with non-overlapping responsibilities.
 ```
 
 ### 09-trie.md
@@ -588,7 +584,7 @@ coding/data-structures/09-trie.md
     │   └── Maximum XOR of Two Numbers in an Array `⚡ T1`
     │       → Brute force is O(n²).
     ├── Miscellaneous
-    │   └── Number of Distinct Substrings in a String
+    │   ├── Number of Distinct Substrings in a String
     │   │   → KMP handles one pattern in O(n+m).
     │   └── Multi String Search (AlgoExpert / similar)
     │       → Naive approach: for each small string, run Python's in operator — O(b × s × len(small)) total.
@@ -613,25 +609,15 @@ coding/data-structures/09-trie.md
     │   ├── Design File System
     │   ├── Stream of Characters
     │   │   → Checking all words against the current stream suffix by suffix is O(W × L) per query.
-    │   ├── Palindrome Pairs `⚡ T1`
-    │   │   → Brute force O(N² × L).
-    │   └── Design Search Autocomplete System (Trie + DFS Variant) `⚡ T1`
-    ├── Suffix Trie / Advanced
-    │   ├── Implement Trie II (Count Operations) `⚡ T1`
-    │   │   → The basic trie only tracks is_end (bool).
-    │   ├── Shortest Unique Prefix for Every Word
-    │   │   → "Unique prefix" means the trie node at the end of the prefix has pass_count == 1 — only one word passes through it.
-    │   └── Maximum XOR of Two Numbers — Prefix Hash Approach `⚡ T1`
-    │       → Demonstrates the equivalence of "XOR trie greedy" and "prefix hash greedy" for this problem.
-    ├── See Also
-    │   └── Implement Trie II (Count Prefixes and Equal Words) `⚡ T1`
-    │       → Standard trie nodes need counters, not just child pointers, when queries ask for multiplicity.
-    └── Trie Applications
-        ├── Replace Words (LC 648) `⚡ T1`
-        │   → For each word in the sentence we need to find if any dictionary root is a prefix of it, and we want the shortest such root.
-        ├── Palindrome Pairs (LC 336) `⚡ T1`
-        │   → For words[i] + words[j] to be a palindrome, either: (a) one is the reverse of the other, (b) one word has a palindromic suffix/prefix and its prefix/suffix reverse exists in the list.
-        └── Word Squares (LC 425)
+    │   └── Palindrome Pairs `⚡ T1`
+    │       → Brute force O(N² × L).
+    └── Suffix Trie / Advanced
+        ├── Implement Trie II (Count Operations) `⚡ T1`
+        │   → The basic trie only tracks is_end (bool).
+        ├── Shortest Unique Prefix for Every Word
+        │   → "Unique prefix" means the trie node at the end of the prefix has pass_count == 1 — only one word passes through it.
+        └── Maximum XOR of Two Numbers — Prefix Hash Approach `⚡ T1`
+            → Demonstrates the equivalence of "XOR trie greedy" and "prefix hash greedy" for this problem.
 ```
 
 ### 10-heap.md
@@ -669,16 +655,13 @@ coding/data-structures/10-heap.md
     │   │   → This is the general form of "Kth Smallest in a Sorted Matrix" — M sorted sequences, find the k-th minimum globally.
     │   └── Maximum CPU Load `⚡ T1`
     │       → Classic interval overlap problem — need to track which jobs are active at each moment.
-    ├── Dijkstra / Graph
+    ├── Dijkstra / Design / Ordered Generation
     │   ├── Path with Minimum Effort `⚡ T1`
     │   │   → Minimizing the maximum edge weight along a path — modified Dijkstra where "dist" is the bottleneck edge.
     │   ├── Design Twitter `⚡ T1`
     │   │   → News feed merges multiple sorted tweet streams (one per followee) — this is K-way merge on recency.
     │   └── Ugly Number II `⚡ T1`
     │       → We need to generate ugly numbers in order without iterating all integers.
-    ├── See Also
-    │   └── Smallest Range Covering Elements from K Lists `⚡ T1`
-    │       → To keep a valid range, we must always know the current minimum and maximum among the chosen elements from each list.
     └── Heap Applications
         ├── Reorganize String (LC 767) `⚡ T1`
         │   → Greedy: always place the most frequent remaining character, as long as it is not the same as the last placed character.
@@ -761,6 +744,31 @@ coding/data-structures/13-graph.md
             → Dijkstra's is per-source (O(V * E log V) total for all-pairs).
 ```
 
+### 14-design.md
+
+```
+coding/data-structures/14-design.md
+└── 14-design.md
+    ├── Sliding-Window State
+    │   └── Design Hit Counter `⚡ T1`
+    │       → Deque of timestamps; pop expired (<= t - 300) from the left — each hit enters and leaves once, amortized O(1).
+    ├── Composed Data Structures
+    │   ├── Insert Delete GetRandom O(1) `⚡ T1`
+    │   │   → Array + map val→index; remove = swap with last, pop — order is destroyed, but nothing required order.
+    │   └── LFU Cache `⚡ T1`
+    │       → key→(val, freq) + freq→LRU bucket + min_freq; it's LRU plus one more dimension — derive it from LRU, don't recall it.
+    ├── Randomness / Versioning
+    │   ├── Random Pick with Weight `⚡ T1`
+    │   │   → Prefix sums + binary search: each index owns a segment of the number line proportional to its weight.
+    │   ├── Snapshot Array `🎯 T2`
+    │   │   → Copying per snapshot is the trap; per-index history [(snap_id, val)] + bisect on read.
+    │   └── Stock Price Fluctuation `🎯 T2`
+    │       → Map timestamp→price is the truth; heaps for max/min with lazy deletion — pop while the heap top disagrees with the map.
+    └── Iterators
+        └── Peeking Iterator / Flatten Nested List Iterator `🎯 T2`
+            → Peek = cache one element ahead; nested = stack holding reversed contents, flatten lazily on hasNext.
+```
+
 
 ## coding/algorithms/
 
@@ -799,10 +807,10 @@ coding/algorithms/03-two-pointers.md
     │   │   → Length unknown without full traversal.
     │   └── Remove Nth Node From End of List (LC 19) `🎯 T2`
     │       → To reach the nth-from-end, the fast pointer must be exactly n steps ahead of slow.
-    ├── Palindrome Two Pointers
+    ├── 3Sum Family (Anchor + Two Pointers)
     │   └── 3Sum Closest (LC 16) `⚡ T1`
     │       → Same scaffold as 3Sum — fix anchor, converging two-pointer on remainder.
-    ├── Hash Map Two-Sum Variant
+    ├── Partition / Sort-Based
     │   ├── Partition Array According to Given Pivot (LC 2161)
     │   │   → Relative order must be preserved, so an in-place swap (DNF-style) would break ordering.
     │   └── Minimum Difference Between Highest and Lowest of K Scores (LC 1984)
@@ -977,10 +985,10 @@ coding/algorithms/11-binary-search.md
 ```
 coding/algorithms/00-sorting.md
 └── 00-sorting.md
-    ├── QuickSort / QuickSelect
+    ├── Bucket Sort
     │   └── Maximum Gap (Bucket Sort)
     │       → Comparison sort O(n log n) is too slow.
-    ├── Bucket Sort
+    ├── Custom Ordering / Comparator
     │   ├── Pancake Sorting
     │   │   → Standard swaps aren't available; only prefix reversals.
     │   ├── Custom Sort String
@@ -1025,8 +1033,6 @@ coding/algorithms/00-sorting.md
     │   └── Wiggle Sort II (Median Split)
     │       → The median separates smaller and larger elements.
     └── Sorting Applications
-        ├── Maximum Gap (LC 164)
-        │   → Sorting is O(n log n).
         └── Relative Sort Array (LC 1122)
             → Standard sorting can't directly encode a custom ordering defined by another array.
 ```
@@ -1071,12 +1077,9 @@ coding/algorithms/13-graph-algorithms.md
     ├── Graph Coloring
     │   └── M-Coloring Problem (Backtracking)
     │       → Graph coloring is NP-complete in general; backtracking with pruning is the standard approach for exact solutions on small graphs.
-    ├── See Also
-    │   └── Bellman-Ford (Negative Weights)
-    │       → Dijkstra does not work with negative edges.
-    └── Graph Algorithms — More Problems
-        └── Word Ladder II (LC 126) `⚡ T1`
-            → BFS finds shortest path length.
+    └── See Also
+        └── Bellman-Ford (Negative Weights)
+            → Dijkstra does not work with negative edges.
 ```
 
 ### 14-union-find.md
@@ -1118,23 +1121,16 @@ coding/algorithms/14-union-find.md
     │   └── Most Stones Removed with Same Row or Column
     ├── Weighted / Partial Swap Union-Find
     │   └── Minimize Hamming Distance After Swap Operations
-    ├── Connectivity With Constraints
-    │   ├── Minimum Cost to Make at Least One Valid Path in a Grid
-    │   │   → Edge weights are 0 (follow direction) or 1 (change direction).
-    │   ├── Remove Max Number of Edges to Keep Graph Fully Traversable
-    │   │   → We want minimal spanning forest for Alice and Bob independently.
-    │   ├── Making a Large Island `⚡ T1`
-    │   │   → After flipping a 0, the new cell connects up to 4 adjacent islands.
-    │   ├── Number of Good Paths
-    │   └── Largest Component Size by Common Factor
-    │       → Shared prime factors link numbers together transitively.
-    ├── See Also
-    │   └── Accounts Merge `⚡ T1`
-    │       → Shared emails create connected components.
-    └── Union-Find — More Problems
-        ├── Redundant Connection II (LC 685, Directed Graph) `⚡ T1`
-        │   → In a directed rooted tree, every node except the root has exactly one parent.
-        └── Smallest String With Swaps (LC 1202)
+    └── Connectivity With Constraints
+        ├── Minimum Cost to Make at Least One Valid Path in a Grid
+        │   → Edge weights are 0 (follow direction) or 1 (change direction).
+        ├── Remove Max Number of Edges to Keep Graph Fully Traversable
+        │   → We want minimal spanning forest for Alice and Bob independently.
+        ├── Making a Large Island `⚡ T1`
+        │   → After flipping a 0, the new cell connects up to 4 adjacent islands.
+        ├── Number of Good Paths
+        └── Largest Component Size by Common Factor
+            → Shared prime factors link numbers together transitively.
 ```
 
 ### 16-greedy.md
@@ -1193,11 +1189,6 @@ coding/algorithms/16-greedy.md
     │   │   → At each step, among all affordable projects, the greedy optimal is to pick the highest-profit one — taking less profit now can't help unlock better future projects than taking more profit.
     │   └── Activity Selection (Maximum Non-Overlapping Intervals)
     │       → Greedy by earliest finishing time leaves the most room for future intervals.
-    ├── Greedy — Interval and Coverage Problems
-    │   ├── Video Stitching (LC 1024)
-    │   │   → This is the classic "minimum jumps to cover a range" greedy problem.
-    │   └── Minimum Taps to Water a Garden (LC 1326)
-    │       → This reduces directly to the Jump Game II / interval cover problem.
     └── See Also (Extended)
         └── Hand of Straights `🎯 T2`
 ```
@@ -1265,16 +1256,13 @@ coding/algorithms/12-backtracking.md
     │   │   → Enumerate all valid root-to-destination paths in a grid graph.
     │   └── Word Search (All Occurrences) `⚡ T1`
     │       → Extension of Word Search I: instead of stopping at the first match, collect all starting (r,c) positions.
-    ├── Advanced Backtracking
-    │   ├── N-Queens II (Count Only) `🎯 T2`
-    │   │   → Same algorithm as N-Queens but without board construction or path copying — just increment a counter at the leaf.
-    │   ├── Word Break (Decision — Backtracking + Memo) `🎯 T2`
-    │   │   → At each position, try every dictionary word as the next segment.
-    │   └── Generate All Valid IP Addresses (Generalized Segmentation)
-    │       → Generalizes Restore IP Addresses: given a digit string, split into exactly k segments each in range [lo, hi] with no leading zeros.
-    └── Backtracking — Hard Problems
-        └── Remove Invalid Parentheses (LC 301)
-            → We need the minimum removal and all unique results.
+    └── Advanced Backtracking
+        ├── N-Queens II (Count Only) `🎯 T2`
+        │   → Same algorithm as N-Queens but without board construction or path copying — just increment a counter at the leaf.
+        ├── Word Break (Decision — Backtracking + Memo) `🎯 T2`
+        │   → At each position, try every dictionary word as the next segment.
+        └── Generate All Valid IP Addresses (Generalized Segmentation)
+            → Generalizes Restore IP Addresses: given a digit string, split into exactly k segments each in range [lo, hi] with no leading zeros.
 ```
 
 ### 02-string-algorithms.md
@@ -1284,47 +1272,44 @@ coding/algorithms/02-string-algorithms.md
 └── 02-string-algorithms.md
     ├── KMP (Knuth-Morris-Pratt)
     │   ├── Implement KMP — Failure Function + Search
-    │   │   → [!info] Approach Naive search rescans characters already matched; O(nm) is unacceptable for large text.
+    │   │   → Naive search rescans characters already matched; O(nm) is unacceptable for large text.
     │   ├── Find All Occurrences of Pattern in Text
-    │   │   → [!info] Approach Standard substring search is O(nm); we need every occurrence, not just the first.
+    │   │   → Standard substring search is O(nm); we need every occurrence, not just the first.
     │   └── Add Minimum Characters to Make String a Palindrome
-    │       → [!info] Approach We need the longest prefix of s that is already a palindrome; characters after that prefix must be reflected at the front.
+    │       → We need the longest prefix of s that is already a palindrome; characters after that prefix must be reflected at the front.
     ├── Rabin-Karp (Rolling Hash)
     │   ├── Implement Rabin-Karp
-    │   │   → [!info] Approach Direct character-by-character comparison at each position is O(nm).
+    │   │   → Direct character-by-character comparison at each position is O(nm).
     │   ├── Longest Duplicate Substring `⚡ T1`
-    │   │   → [!info] Approach Checking all substrings for duplicates is O(n³).
+    │   │   → Checking all substrings for duplicates is O(n³).
     │   └── Count Distinct Doubled Substrings
-    │       → [!info] Approach We need to find all substrings of even length where both halves are identical — checking naively is O(n³).
+    │       → We need to find all substrings of even length where both halves are identical — checking naively is O(n³).
     ├── Z-Function / Z-Algorithm
     │   ├── Pattern Matching Using Z-Array
-    │   │   → [!info] Approach Same goal as KMP — O(n+m) pattern matching.
+    │   │   → Same goal as KMP — O(n+m) pattern matching.
     │   └── Repeated String Match
-    │       → [!info] Approach B can span at most ceil(len(B)/len(A)) + 1 copies of A.
+    │       → B can span at most ceil(len(B)/len(A)) + 1 copies of A.
     ├── Palindrome Algorithms
     │   ├── Longest Palindromic Substring — Expand Around Center `🎯 T2`
-    │   │   → [!info] Approach A palindrome reads the same forwards and backwards; the structural invariant is symmetry around a center.
+    │   │   → A palindrome reads the same forwards and backwards; the structural invariant is symmetry around a center.
     │   ├── Palindromic Substrings — Count
-    │   │   → [!info] Approach Each center expansion contributes one palindrome per step.
+    │   │   → Each center expansion contributes one palindrome per step.
     │   └── Manacher's Algorithm — O(n) All Palindromes
-    │       → [!info] Approach Naive expand-around-center is O(n²) because each center expands independently.
+    │       → Naive expand-around-center is O(n²) because each center expands independently.
     ├── Sliding Window on Strings
     │   ├── Longest Substring with K Distinct Characters
-    │   │   → [!info] Approach We want the longest window satisfying a constraint on character diversity — a classic sliding window.
+    │   │   → We want the longest window satisfying a constraint on character diversity — a classic sliding window.
     │   ├── Permutation in String `⚡ T1`
-    │   │   → [!info] Approach A permutation of s1 is any arrangement of its characters; we need a window in s2 with the same character frequencies.
+    │   │   → A permutation of s1 is any arrangement of its characters; we need a window in s2 with the same character frequencies.
     │   ├── Regular Expression Matching (LC 10)
-    │   │   → [!info] Approach '*' creates a choice — use the preceding element 0 times (skip pattern[i-1] and '*') or 1+ times (consume s[j] if it matches).
+    │   │   → '*' creates a choice — use the preceding element 0 times (skip pattern[i-1] and '*') or 1+ times (consume s[j] if it matches).
     │   ├── Wildcard Matching (LC 44)
-    │   │   → [!info] Approach '*' can match any sequence — creates branching over all possible lengths.
+    │   │   → '*' can match any sequence — creates branching over all possible lengths.
     │   └── Distinct Subsequences (LC 115) `🎯 T2`
-    │       → [!info] Approach At each character of s, we choose to include it (matching t[j]) or skip it.
-    ├── See Also
-    │   └── Shortest Palindrome
-    │       → We need the longest palindromic prefix.
-    └── String Algorithms — More Problems
-        └── Add Minimum Characters to Make a String Palindrome
-            → Minimum insertions = n - LPS(s), where LPS is the Longest Palindromic Subsequence.
+    │       → At each character of s, we choose to include it (matching t[j]) or skip it.
+    └── See Also
+        └── Shortest Palindrome
+            → We need the longest palindromic prefix.
 ```
 
 ### 15-dynamic-programming.md
@@ -1384,13 +1369,16 @@ coding/algorithms/15-dynamic-programming.md
     │   │   → Splitting the chain at any point k yields independent subproblems for left and right chains; optimal split depends on results of all sub-chains — overlapping.
     │   └── Strange Printer
     │       → Printing s[i..j] can leverage if s[i]==s[k] for some k in (i,j) — we can extend the first turn to cover s[k].
-    ├── Tree DP
+    ├── State Machine DP (Stocks)
     │   ├── Best Time to Buy and Sell Stock (All Variants) `🎯 T2`
     │   ├── Stock with Cooldown
     │   │   → Three states model the constraint: holding, just sold (cooldown), resting.
     │   └── Stock with Transaction Fee
     │       → Two states: hold (best profit holding), cash (best profit not holding).
-    │   └── Numbers At Most N Given Digit Set
+    ├── Digit DP
+    │   ├── Numbers At Most N Given Digit Set
+    │   └── Count Numbers with Unique Digits
+    │       → At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
     ├── Longest Increasing Subsequence (LIS) Family
     │   ├── Longest Increasing Subsequence `⚡ T1`
     │   │   → Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n).
@@ -1413,8 +1401,6 @@ coding/algorithms/15-dynamic-programming.md
     ├── Bitmask DP
     │   └── Partition to K Equal Subset Sums `🎯 T2`
     │       → Subset assignment is NP-hard in general but n ≤ 16 makes 2^n bitmask DP feasible.
-    │   └── Count Numbers with Unique Digits
-    │       → At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
     ├── Game Theory DP
     │   ├── Stone Game
     │   │   → Each player maximises their own score minus the opponent's; the decision at each subarray depends on what the opponent will optimally do.
@@ -1433,8 +1419,6 @@ coding/algorithms/15-dynamic-programming.md
     │   └── Longest Common Substring
     │       → Unlike LCS, contiguity matters.
     └── Dynamic Programming — Hard Problems
-        ├── Matrix Chain Multiplication
-        │   → The order of multiplication matters.
         └── Russian Doll Envelopes (LC 354)
             → If we sort by width, this becomes LIS on heights.
 ```
@@ -1509,13 +1493,11 @@ coding/algorithms/09-recursion.md
     │   └── Fast Doubling Fibonacci
     │       → The recurrence can be reduced by halving n, which turns linear recursion into logarithmic recursion depth.
     └── Recursion — More Problems
-        ├── Predict the Winner (LC 486)
-        │   → dp(i, j) = score advantage for the current player on subarray [i, j].
-        └── Flatten Nested List Iterator (LC 341)
-            → Lazy flattening with a stack: push the full list onto the stack.
+        └── Predict the Winner (LC 486)
+            → dp(i, j) = score advantage for the current player on subarray [i, j].
 ```
 
 
 ---
 
-_Regenerated by `scripts/regen_l3_maps.py` — re-run after editing `coding/` problem files._
+_Maintained by hand — update alongside `coding/` problem files._

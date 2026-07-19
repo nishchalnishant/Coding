@@ -40,7 +40,7 @@ difficulty: mixed
 
 ## In-Place Reversal
 
-### ==Reverse Linked List `🎯 T2`
+### Reverse Linked List `🎯 T2`
 
 > [!example] Problem
 > Given the head of a singly linked list, reverse the list, and return the reversed list.
@@ -208,7 +208,7 @@ difficulty: mixed
 
 ---
 
-### ==Reorder List `🎯 T2`
+### Reorder List `🎯 T2`
 
 > [!example] Problem
 > You are given the head of a singly linked-list. The list can be represented as:
@@ -1680,7 +1680,7 @@ difficulty: mixed
 
 ## Design
 
-### ==LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
+### LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
 
 > [!example] Problem
 > Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.

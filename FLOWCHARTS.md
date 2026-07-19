@@ -26,11 +26,11 @@ Read constraints + examples (n, m, sorted?, negative?, tree/graph?)
 │   └── Feasibility on answer space → Binary Search on Answer → 11-binary-search.md `⚡ T1`
 │
 ├── Tree or graph structure?
-│   ├── Shortest path (unweighted) → BFS → 13-graph.md · 13-graph-algorithms.md `⚡ T1`
-│   ├── Connected components / flood fill → DFS → 13-graph.md `⚡ T1`
-│   ├── Prerequisites / ordering → Topological Sort → 13-graph-algorithms.md `⚡ T1`
+│   ├── Shortest path (unweighted) → BFS → 13-graphs.md `⚡ T1`
+│   ├── Connected components / flood fill → DFS → 13-graphs.md `⚡ T1`
+│   ├── Prerequisites / ordering → Topological Sort → 13-graphs.md `⚡ T1`
 │   ├── Dynamic connectivity / grouping → Union-Find → 14-union-find.md `⚡ T1`
-│   └── Weighted shortest path (non-negative) → Dijkstra + heap → 13-graph-algorithms.md `⚡ T1`
+│   └── Weighted shortest path (non-negative) → Dijkstra + heap → 13-graphs.md `⚡ T1`
 │
 ├── Top-K / merge K streams / running median?
 │   └── Heap → 10-heap.md · 16-greedy.md `⚡ T1`
@@ -156,10 +156,6 @@ Have 2 weeks?
         ├── Merge sort → inversion count side-effect `🎯 T2`
         └── Intervals → merge intervals · meeting rooms (with greedy) `🎯 T2`
 
-01-data-structures/13-graphs.md
-    └── Same graph patterns as 13-graphs.md (algorithm lens)
-        BFS · DFS · topo · Dijkstra `⚡ T1`
-
 02-algorithms/14-union-find.md
     └── DSU template [α(n) amortized]
         ├── Cycle → redundant connection · graph valid tree `⚡ T1`
@@ -177,7 +173,7 @@ Have 2 weeks?
 01-data-structures/03-string.md
     └── KMP / rolling hash (know when window fails) `🎯 T2`
 
-02-algorithms/09-recursion.md + 15-recursion-to-dp.md
+02-algorithms/09-recursion.md + 10-recursion-to-dp.md
     └── Recursion → memo → tabulation bridge `🎯 T2`
 ```
 
