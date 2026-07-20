@@ -11,7 +11,7 @@
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
 * [**L4 (SDE-2) Delta** *(NEW)*](coding/l4-sde2-delta.md)
 * [**L3 Cheatsheet**](00-L3-EXECUTION-META/L3_CHEATSHEET.md) *(pacing, constraints, decision guide, edge cases, what to skip)*
-* [Questions Tracker](questions.md)
+* [Problem Index](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
 * [Mind Map](MINDMAP.md)
 
@@ -27,6 +27,7 @@
 * [Array](01-data-structures/01-array.md)
 * [Hashing](01-data-structures/02-hashing.md)
 * [String](01-data-structures/03-string.md)
+* [**Matrix / Grid** *(NEW)*](01-data-structures/04-matrix.md)
 * [Stack](01-data-structures/05-stack.md)
 * [Queue](01-data-structures/06-queue.md)
 * [Linked List](01-data-structures/07-linked-list.md)
@@ -40,6 +41,7 @@
 
 ## Algorithms
 * [L3 Index & Must-Solve List](02-algorithms/README.md)
+* [**String Algorithms** *(NEW)*](02-algorithms/02-string-algorithms.md)
 * [Two Pointers](02-algorithms/03-two-pointers.md)
 * [Sliding Window](02-algorithms/04-sliding-window.md)
 * [Binary Search](02-algorithms/11-binary-search.md)
@@ -104,9 +106,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 ---
 
 ## Behavioral (required at L3)
-* [Behavioral Index](04-behavioral/README.md)
-* [Behavioral Stories](04-behavioral/behavioral.md)
-* [Googliness Guide](04-behavioral/BEHAVIORAL_GOOGLINESS.md)
-* [Googliness Round](04-behavioral/googliness-round.md)
+* [**Behavioral + Googliness — complete guide**](04-behavioral/BEHAVIORAL_GOOGLINESS.md)
+* [Behavioral Index & attribute map](04-behavioral/README.md)
 
 ## L3 Meta (coding/)

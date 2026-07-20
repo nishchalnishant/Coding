@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Linked List
-subtopic: 
-status: unread
 tags: [data-structures, linked-list]
 ---
 

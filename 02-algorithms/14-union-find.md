@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Union Find
-subtopic: 
-status: unread
 tags: [algorithms, union-find]
 ---
 
@@ -170,6 +168,7 @@ class DSU:
 
     def component_size(self, x: int) -> int:
         return self.size[self.find(x)]
+```
 
 #### Common Variants & Twists
 1. **Longest Consecutive Sequence**:
@@ -181,6 +180,7 @@ class DSU:
 ```
 
 ---
+```
 
 ## 2. Core Patterns & Click Moments
 
@@ -217,6 +217,7 @@ def kruskal_mst(n: int, edges: list[tuple[int, int, int]]) -> int:
             if edges_used == n - 1:
                 break
     return total_cost if edges_used == n - 1 else -1  # -1 = disconnected graph
+```
 
 #### Common Variants & Twists
 1. **Min Cost to Connect All Points**:
@@ -228,6 +229,7 @@ def kruskal_mst(n: int, edges: list[tuple[int, int, int]]) -> int:
 ```
 
 ---
+```
 
 ### Weighted DSU — Variable Ratios (Evaluate Division)
 
@@ -260,6 +262,7 @@ class WeightedDSU:
         rx, wx = self.find(x)
         ry, wy = self.find(y)
         return wx / wy if rx == ry else -1.0
+```
 
 #### Common Variants & Twists
 1. **Path with Maximum Probability**:
@@ -268,6 +271,7 @@ class WeightedDSU:
 ```
 
 ---
+```
 
 ### DSU with Rollback — Offline Dynamic Connectivity
 
@@ -305,6 +309,7 @@ class RollbackDSU:
             ry, old_parent, rx, old_rank = entry
             self.parent[ry] = old_parent
             self.rank[rx] = old_rank
+```
 
 #### Common Variants & Twists
 1. **Number of Islands II**:
@@ -316,6 +321,7 @@ class RollbackDSU:
 > **No path compression in rollback DSU.** Without compression, `find` is O(log n) per call (union by rank bounds tree height to log n). This is an acceptable trade-off for offline queries. The O(α(n)) guarantee of the standard DSU requires both optimizations together.
 
 ---
+```
 
 ## 3. L3 Deep Dives
 
@@ -405,23 +411,23 @@ class RollbackDSU:
 
 ## Flashcards
 
-**"Are two elements in the same group after a series of merges?" → DSU `find(x) == find(y)`.?** #flashcard
-"Are two elements in the same group after a series of merges?" → DSU `find(x) == find(y)`.
+**Are two elements in the same group after a series of merges? — what technique, and why?** #flashcard
+DSU `find(x) == find(y)`.
 
-**"Add edges one by one; query connectivity after each addition" → DSU; O(α(N)) per operation.?** #flashcard
-"Add edges one by one; query connectivity after each addition" → DSU; O(α(N)) per operation.
+**Add edges one by one; query connectivity after each addition — what technique, and why?** #flashcard
+DSU; O(α(N)) per operation.
 
-**"Detect cycle in undirected graph without BFS/DFS" → DSU; `union` returns False when already connected.?** #flashcard
-"Detect cycle in undirected graph without BFS/DFS" → DSU; `union` returns False when already connected.
+**Detect cycle in undirected graph without BFS/DFS — what technique, and why?** #flashcard
+DSU; `union` returns False when already connected.
 
 **"Minimum spanning tree with sparse edge list" → Kruskal?** #flashcard
 sort edges, DSU for cycle detection.
 
-**"Group accounts / emails by shared identifier" → DSU on the shared element (email), not the container (account).?** #flashcard
-"Group accounts / emails by shared identifier" → DSU on the shared element (email), not the container (account).
+**Group accounts / emails by shared identifier — what technique, and why?** #flashcard
+DSU on the shared element (email), not the container (account).
 
 **"Need to undo a union (offline queries)" → rollback DSU?** #flashcard
 union by rank only, no path compression.
 
-**"Variables with ratios (a/b = k)" → weighted DSU storing ratio relative to root; accumulate on path compression.?** #flashcard
-"Variables with ratios (a/b = k)" → weighted DSU storing ratio relative to root; accumulate on path compression.
+**Variables with ratios (a/b = k) — what technique, and why?** #flashcard
+weighted DSU storing ratio relative to root; accumulate on path compression.

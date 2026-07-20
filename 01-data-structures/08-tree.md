@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Tree
-subtopic: 
-status: unread
 tags: [data-structures, tree]
 ---
 

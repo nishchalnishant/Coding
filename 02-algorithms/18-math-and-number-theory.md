@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Math & Number Theory
-subtopic:
-status: unread
 tags: [algorithms, math, number-theory]
 ---
 

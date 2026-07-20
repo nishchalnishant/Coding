@@ -482,8 +482,8 @@ Know these cold:
 - [trie.md](./data-structures/09-trie.md) — Trie + Trie+DFS
 - [array.md](./data-structures/01-array.md) — Two-pointer/window/prefix patterns
 - [hashing.md](./data-structures/02-hashing.md) — Hash map patterns
-- [graphs.md](../01-data-structures/13-graphs.md) — Graph deep dive
-- [13-graph.md](../01-data-structures/13-graphs.md) — Dijkstra, topo, BFS variants
+- [graphs.md](../01-data-structures/13-graphs.md) — Graph deep dive: Dijkstra, topo, BFS variants
+- [matrix.md](../01-data-structures/04-matrix.md) — Grid as implicit graph; multi-source BFS, grid DP
 
 ### 🎯 TIER 2 — Study After Tier 1
 - [dynamic-programming.md](./algorithms/15-dynamic-programming.md)
@@ -495,10 +495,10 @@ Know these cold:
 - [greedy.md](./algorithms/16-greedy.md)
 - [sorting.md](./algorithms/00-sorting.md)
 - [string.md](./data-structures/03-string.md)
+- [string-algorithms.md](../02-algorithms/02-string-algorithms.md) — KMP, Z, rolling hash; expand-around-center first
 
 ### 💤 TIER 3 — Not in L3 navigation (skip)
 
-- MINDMAP.md — on disk only; not linked in GitBook
-- MINDMAP.md — on disk only; not linked in GitBook
+- MINDMAP.md — skim once for the big picture; not a study file
 
-**Behavioral (required):** [`04-behavioral/behavioral.md`](../04-behavioral/behavioral.md) · [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](../04-behavioral/BEHAVIORAL_GOOGLINESS.md)
+**Behavioral (required):** [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](../04-behavioral/BEHAVIORAL_GOOGLINESS.md)

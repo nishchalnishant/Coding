@@ -1,8 +1,6 @@
 ---
 module: 03-patterns
 topic: Topic Questions Logic And Tricks
-subtopic: 
-status: unread
 tags: [patterns, topic-questions-logic-and-tricks]
 ---
 # Topic Questions — Logic, Patterns, and Trickiness

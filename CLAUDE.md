@@ -3,7 +3,9 @@
 ## What this repo is
 Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/behavioral. Base track is L3; `coding/l4-sde2-delta.md` layers the L4 bar on top. All content is Markdown — no source code to build or test.
 
-**Out of scope:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Tarjan/SCC), bit-manipulation deep-dives, maths deep-dives.
+**Out of scope:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Tarjan/SCC).
+
+**In scope but capped:** bit manipulation and math/number theory are covered at interview depth (`02-algorithms/17`, `02-algorithms/18`) — common tricks and tier-tagged problems, not deep-dives.
 
 ## Directory layout (don't explore, use this)
 ```

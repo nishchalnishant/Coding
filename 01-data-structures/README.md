@@ -33,10 +33,12 @@ Study **T1 topics first**, in this order. Each block = read the deep-dive file, 
 
 | Week | Topics | Deep-dive files |
 | :--- | :--- | :--- |
-| 1 | Array, Hashing, Graphs (BFS/DFS) | `01-array.md`, `02-hashing.md`, `13-graphs.md` |
+| 1 | Array, Hashing, Graphs (BFS/DFS), Matrix | `01-array.md`, `02-hashing.md`, `13-graphs.md`, `04-matrix.md` |
 | 2 | Heap, Queue (BFS patterns), Trie | `10-heap.md`, `06-queue.md`, `09-trie.md` |
 | 3 | Tree, Stack, Linked List | `08-tree.md`, `05-stack.md`, `07-linked-list.md` |
 | 4 | String + integration mocks | `03-string.md` + timed mocks |
+
+> Grid/matrix problems are graph problems — [`04-matrix.md`](./04-matrix.md) pairs with week 1's BFS/DFS work.
 
 > **Practice bar:** For each `⚡ T1` topic, you should be able to code the top 3 problems **without notes** in under 25 minutes and explain time/space complexity out loud.
 
@@ -968,7 +970,7 @@ Solve these **cold** before your loop. Full walkthroughs live in [`coding/data-s
 | 27 | Sliding Window Maximum | Queue | Monotonic deque |
 | 28 | Insert Interval | Array / Intervals | Three-phase scan: copy left non-overlapping, merge overlapping, copy right |
 
-> **Mock cadence:** Weeks 3–4, do **2 timed mocks per week** (35 min, one problem, talk out loud). Log misses in [`questions.md`](../questions.md).
+> **Mock cadence:** Weeks 3–4, do **2 timed mocks per week** (35 min, one problem, talk out loud). Log misses in your own tracker; look problems up in [`questions.md`](../questions.md).
 
 ---
 

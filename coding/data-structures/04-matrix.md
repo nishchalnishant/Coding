@@ -1,9 +1,10 @@
 ---
 tags: [l3-google, matrix, grid, bfs, dfs, dp]
 topic: Matrix / Grid Problems
+difficulty: mixed
 ---
 
-← [Data Structures index](../../01-data-structures/README.md)
+← [Concept deep-dive](../../01-data-structures/04-matrix.md) · [Data Structures index](../../01-data-structures/README.md)
 
 # Matrix / Grid — Problem Walkthroughs
 

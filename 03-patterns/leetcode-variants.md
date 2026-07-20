@@ -1,8 +1,6 @@
 ---
 module: 03-patterns
 topic: Leetcode Variants
-subtopic: 
-status: unread
 tags: [patterns, leetcode-variants]
 ---
 # First-Principles Map — LeetCode Variants

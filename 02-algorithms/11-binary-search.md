@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Binary Search
-subtopic: 
-status: unread
 tags: [algorithms, binary-search]
 ---
 
@@ -334,3 +332,27 @@ def search_matrix_ii(matrix, target):
 - **Target not in array:** Standard template returns -1. Lower bound returns insertion point.
 - **Rotated with duplicates:** Worst case O(n) when can't determine sorted half.
 - **BS on answer — set boundaries tightly:** Wrong `lo`/`hi` init causes TLE or wrong answer. Think: what is the minimum possible answer? What is the maximum?
+
+---
+
+## Flashcards
+
+**You wrote `lo = mid` inside a `lo < hi` loop and it hangs forever. What is the cause and the fix?** #flashcard
+When `hi == lo + 1`, floor division makes `mid == lo`, so `lo = mid` never advances. Use the **upper mid**: `mid = lo + (hi - lo + 1) // 2`. Rule: if either branch assigns `lo = mid`, you must bias `mid` upward.
+
+**For lower bound, why is `hi` initialized to `n` rather than `n-1`, and why `hi = mid` rather than `hi = mid - 1`?** #flashcard
+The answer is an *insertion point* in `[0, n]`, not an index — every element being smaller than the target is a valid result of `n`. And `mid` may itself be the answer, so it must stay inside the range; `hi = mid - 1` would discard a valid candidate.
+
+**In Find Minimum in Rotated Sorted Array, why compare `nums[mid]` to `nums[hi]` instead of `nums[lo]`?** #flashcard
+Comparing against `nums[hi]` is a correct invariant: `nums[mid] > nums[hi]` proves the minimum is strictly right of `mid`. Comparing against `nums[lo]` cannot distinguish a rotated array from an already-sorted one, so it fails on the non-rotated case.
+
+**What are the three things you must identify before writing a binary-search-on-answer solution?** #flashcard
+1. The **search space** — tightest provable `lo`/`hi` (e.g. Koko: `lo=1`, `hi=max(piles)`).
+2. The **feasibility predicate** `check(x)` — boolean, must be monotone.
+3. **Which side to keep** — minimizing keeps the left-most feasible; maximizing keeps the right-most. Without monotonicity binary search is invalid, regardless of sortedness.
+
+**Search a 2D Matrix (LC 74) vs Search a 2D Matrix II (LC 240) — why is only one of them binary search?** #flashcard
+LC 74's rows are globally ordered, so it flattens to one sorted array: binary search over `[0, m*n)` with `mid // n`, `mid % n` → O(log mn). LC 240 only guarantees sorted rows *and* columns, which is not a total order; use the staircase walk from the top-right corner → O(m+n).
+
+**Binary search terminates but returns the wrong index. Which two knobs do you check first?** #flashcard
+The **loop condition** (`lo <= hi` vs `lo < hi`) and the **update pair** (`mid ± 1` vs `mid`). They must agree: `lo <= hi` pairs with `mid+1`/`mid-1` and returns `mid`; `lo < hi` pairs with `mid+1`/`mid` and returns `lo`. Mixing them is the single largest source of off-by-one bugs.

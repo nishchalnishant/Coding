@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Sliding Window
-subtopic: 
-status: unread
 tags: [algorithms, sliding-window]
 ---
 
@@ -384,11 +382,11 @@ Walkthroughs: problem-deep-dives.md. String windows: [string.md](../01-data-stru
 
 ## Flashcards
 
-**Contiguous subarray/substring with constraint → variable sliding window: expand right, shrink left while invalid.?** #flashcard  
-Contiguous subarray/substring with constraint → variable sliding window: expand right, shrink left while invalid.
+**Contiguous subarray/substring with constraint — what technique, and why?** #flashcard
+variable sliding window: expand right, shrink left while invalid.
 
-**Exactly K distinct subarrays → atMost(K) - atMost(K-1); do not use one window for "exactly".?** #flashcard  
-Exactly K distinct subarrays → atMost(K) - atMost(K-1); do not use one window for "exactly".
+**Exactly K distinct subarrays — what technique, and why?** #flashcard
+atMost(K) - atMost(K-1); do not use one window for "exactly".
 
-**Sliding window maximum → monotonic deque of indices; O(n) because each index pushed/popped once.?** #flashcard  
-Sliding window maximum → monotonic deque of indices; O(n) because each index pushed/popped once.
+**Sliding window maximum — what technique, and why?** #flashcard
+monotonic deque of indices; O(n) because each index pushed/popped once.

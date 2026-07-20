@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Bit Manipulation
-subtopic:
-status: unread
 tags: [algorithms, bit-manipulation]
 ---
 

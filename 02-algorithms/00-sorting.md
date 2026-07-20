@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Sorting
-subtopic: 
-status: unread
 tags: [algorithms, sorting]
 ---
 
@@ -181,6 +179,7 @@ def _merge(left: list[int], right: list[int]) -> list[int]:
     result.extend(left[i:])
     result.extend(right[j:])
     return result
+```
 
 #### Common Variants & Twists
 1. **Count of Range Sum**:
@@ -195,6 +194,7 @@ def _merge(left: list[int], right: list[int]) -> list[int]:
 > **Counting inversions**: An inversion is a pair `(i, j)` where `i < j` but `nums[i] > nums[j]`. Count them inside `_merge`: every time you pick from `right` instead of `left`, there are `len(left) - i` inversions. No extra traversal needed — O(N log N) total.
 
 ---
+```
 
 ### Quick Sort — Partitioning
 
@@ -226,6 +226,7 @@ def _partition(nums: list[int], lo: int, hi: int) -> int:
             nums[i], nums[j] = nums[j], nums[i]
     nums[i + 1], nums[hi] = nums[hi], nums[i + 1]
     return i + 1
+```
 
 #### Common Variants & Twists
 1. **Pancake Sorting**:
@@ -237,6 +238,7 @@ def _partition(nums: list[int], lo: int, hi: int) -> int:
 > Always **randomize the pivot** before partitioning. Naive last-element pivot degrades to O(N²) on already-sorted or reverse-sorted input — a frequent interview trap and a real production disaster for user-supplied data.
 
 ---
+```
 
 ### QuickSelect — Kth Order Statistic
 
@@ -261,6 +263,7 @@ def _quickselect(nums: list[int], lo: int, hi: int, target: int) -> int:
         return _quickselect(nums, pivot_idx + 1, hi, target)
     else:
         return _quickselect(nums, lo, pivot_idx - 1, target)
+```
 
 #### Common Variants & Twists
 1. **K Closest Points to Origin**:
@@ -275,6 +278,7 @@ def _quickselect(nums: list[int], lo: int, hi: int, target: int) -> int:
 > QuickSelect **mutates** the input array. If the caller needs the original order preserved, make a copy first. This side-effect surprises interviewers who assume "find" operations are read-only.
 
 ---
+```
 
 ### Dutch National Flag — 3-Way Partition
 
@@ -295,6 +299,7 @@ def sort_colors(nums: list[int]) -> None:
             nums[mid], nums[hi] = nums[hi], nums[mid]
             hi -= 1
     # Loop invariant: nums[:lo]=0s, nums[lo:mid]=1s, nums[mid:]=2s
+```
 
 #### Common Variants & Twists
 1. **Sort Transformed Array**:
@@ -306,6 +311,7 @@ def sort_colors(nums: list[int]) -> None:
 ```
 
 ---
+```
 
 ### Counting Sort & Radix Sort — O(N) Linear Sorts
 
@@ -356,7 +362,8 @@ def radix_sort(nums: list[int]) -> list[int]:
             nums[i] = result[i]
         exp *= 10
     return nums
-    
+```
+
 #### Common Variants & Twists
 1. **Maximum Gap**:
    - **What (The Problem & Goal):** Find the maximum gap between successive elements in their sorted form in O(N) time.
@@ -367,6 +374,7 @@ def radix_sort(nums: list[int]) -> list[int]:
 ```
 
 ---
+```
 
 ### Custom Comparators — Sorting Objects & Intervals
 
@@ -384,6 +392,7 @@ def largest_number(nums: list[int]) -> str:
         return (1 if a + b < b + a else -1)
     strs = sorted(map(str, nums), key=cmp_to_key(compare))
     return "".join(strs)
+```
 
 #### Common Variants & Twists
 1. **Custom Sort String**:
@@ -398,6 +407,7 @@ def largest_number(nums: list[int]) -> str:
 > For **Largest Number**, after sorting, check if the result starts with `'0'` — this handles the all-zeros edge case (e.g., `[0, 0]` should return `"0"`, not `"00"`).
 
 ---
+```
 
 ## 3. L3 Deep Dives
 
@@ -525,14 +535,14 @@ For distributed sort (MapReduce model):
 
 ## Flashcards
 
-**"Problem becomes easy after sorting" → sort first; two pointers / greedy / binary search then apply.?** #flashcard
-"Problem becomes easy after sorting" → sort first; two pointers / greedy / binary search then apply.
+**Problem becomes easy after sorting — what technique, and why?** #flashcard
+sort first; two pointers / greedy / binary search then apply.
 
-**"Need stable sort preserving original order of equal elements" → merge sort or Python's TimSort (`sorted()`).?** #flashcard
-"Need stable sort preserving original order of equal elements" → merge sort or Python's TimSort (`sorted()`).
+**Need stable sort preserving original order of equal elements — what technique, and why?** #flashcard
+merge sort or Python's TimSort (`sorted()`).
 
-**"Sort and count inversions simultaneously" → merge sort; count cross-half pairs during merge step.?** #flashcard
-"Sort and count inversions simultaneously" → merge sort; count cross-half pairs during merge step.
+**Sort and count inversions simultaneously — what technique, and why?** #flashcard
+merge sort; count cross-half pairs during merge step.
 
 **"Interval problems?** #flashcard
 merge overlapping" → sort by start; greedy merge.
@@ -540,8 +550,8 @@ merge overlapping" → sort by start; greedy merge.
 **"Interval problems?** #flashcard
 non-overlapping / scheduling" → sort by end; greedy pick earliest ending.
 
-**"Values bounded by small range (0–K)" → counting sort O(N+K); or radix sort O(N·d) for integers.?** #flashcard
-"Values bounded by small range (0–K)" → counting sort O(N+K); or radix sort O(N·d) for integers.
+**Values bounded by small range (0–K) — what technique, and why?** #flashcard
+counting sort O(N+K); or radix sort O(N·d) for integers.
 
-**"Custom comparator in Python" → `functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).?** #flashcard
-"Custom comparator in Python" → `functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).
+**Custom comparator in Python — what technique, and why?** #flashcard
+`functools.cmp_to_key`; never use `<` override alone (doesn't sort correctly).

@@ -1,8 +1,6 @@
 ---
 module: root
 topic: Mindmap
-subtopic:
-status: unread
 tags: [root, mindmap, l3]
 ---
 

@@ -1,8 +1,6 @@
 ---
 module: root
 topic: Flowcharts
-subtopic:
-status: unread
 tags: [root, flowcharts, l3]
 ---
 
@@ -70,7 +68,7 @@ Have 4 weeks?
 
 Have 2 weeks?
     T1 only from 01-data-structures/README.md + 02-algorithms/README.md must-solve lists
-    + 4 timed mocks logged in questions.md
+    + 4 timed mocks (log misses in your own tracker)
 ```
 
 ---
@@ -248,10 +246,8 @@ Have 2 weeks?
 ## 04 — Behavioral (required at L3)
 
 ```
-04-behavioral/behavioral.md
-    └── STAR story bank (2–3 stories per attribute)
-
 04-behavioral/BEHAVIORAL_GOOGLINESS.md
+    ├── STAR story bank (8 stories, coverage-checked)
     └── Four Google attributes — deep dive
         Signal: clarify before coding · own ambiguous work · learn fast · collaborate
 ```
@@ -263,7 +259,7 @@ Have 2 weeks?
 ```
 Weekly cycle
     Mon–Thu → 1 topic file + 2–3 T1 problems timed (35 min)
-    Fri       → 1 full mock (45 min) + log in questions.md
+    Fri       → 1 full mock (45 min) + log misses
     Sat       → redo misses without looking at solutions
     Sun       → 03-patterns/patterns-master.md weak triggers only
 

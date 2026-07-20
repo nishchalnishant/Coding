@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Trie
-subtopic: 
-status: unread
 tags: [data-structures, trie]
 ---
 

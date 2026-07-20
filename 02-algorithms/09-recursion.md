@@ -1465,3 +1465,25 @@ if j + 1 < len(p) and p[j+1] == '*':
 | Kth Smallest BST | 230 | Inorder + count | Inorder = sorted; stop at k | Short-circuit after kth found |
 | Word Break | 139 | Memoized recursion | `frozenset` word dict; `lru_cache` | O(2^N) without memo |
 | Coin Change | 322 | Memoized recursion | `rem < 0 → inf`; min over coins | Forward loop = unbounded in tabulation |
+
+---
+
+## Flashcards
+
+**Your backtracking result list contains N copies of the same final state. What went wrong?** #flashcard
+`result.append(current)` stored a **reference** to the path list, which every later mutation and `pop()` continues to edit. Append a snapshot: `result.append(current[:])`. Immutable accumulators (str, tuple, int) do not need this.
+
+**Why is the duplicate guard `i > start` for subsets/combinations but `not used[i-1]` for permutations?** #flashcard
+In combinations, `i > start` skips a repeated value only among siblings *at the same depth*, preserving its use deeper in the branch. Permutations revisit all indices, so sameness must be judged by whether the identical prior value is currently placed: `if i > 0 and nums[i] == nums[i-1] and not used[i-1]: continue` — skip only when the twin is unused, meaning this branch was already explored.
+
+**In graph DFS, why must a node be marked visited before recursing rather than after?** #flashcard
+Marking after recursion lets a cycle re-enter a node already on the call stack, causing infinite recursion or exponential revisits. Mark on entry — the analogue of marking on *enqueue* in BFS.
+
+**Why is a single visited set insufficient for cycle detection in a directed graph?** #flashcard
+It cannot distinguish "already fully processed" from "currently on the recursion stack" — a cross-edge into a finished node is legal, a back-edge into an in-progress node is a cycle. Use 3-coloring: white unvisited, **gray in-stack**, black done. A cycle exists exactly when you reach a gray node.
+
+**Combination Sum: when do you recurse with `i` versus `i + 1`?** #flashcard
+`backtrack(i, ...)` — same index — allows the element to be reused unboundedly (LC 39). `backtrack(i + 1, ...)` consumes it once (LC 40). Passing `i + 1` when reuse was intended silently loses valid combinations rather than erroring.
+
+**Python raises `RecursionError` on a deep but correct recursion. What are your two options?** #flashcard
+Raise the ceiling with `sys.setrecursionlimit(10**5)`, or convert to an explicit stack / iterative form. Say out loud that CPython's ~1000-frame default is an implementation limit, not an algorithmic one — for `n > 10^4`, prefer the iterative version or bottom-up DP.

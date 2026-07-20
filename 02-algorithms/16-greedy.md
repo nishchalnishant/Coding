@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Greedy
-subtopic: 
-status: unread
 tags: [algorithms, greedy]
 ---
 
@@ -178,6 +176,7 @@ def min_arrows_to_burst_balloons(points: list[list[int]]) -> int:
             arrows += 1
             arrow_pos = end
     return arrows
+```
 
 #### Common Variants & Twists
 1. **Video Stitching**:
@@ -192,6 +191,7 @@ def min_arrows_to_burst_balloons(points: list[list[int]]) -> int:
 > **Overlap boundary condition**: "Minimum Arrows" uses `start > arrow_pos` (strict) — touching at a point counts as one shot. "Non-overlapping Intervals" uses `s < last_end` (strict) — intervals touching at a point are **not** overlapping. Get the `>` vs `>=` wrong and fail on boundary cases.
 
 ---
+```
 
 ### Jump Game — Reachability
 
@@ -217,6 +217,7 @@ def jump_game_ii_min_jumps(nums: list[int]) -> int:
             jumps += 1
             current_end = farthest
     return jumps
+```
 
 #### Common Variants & Twists
 1. **Jump Game III**:
@@ -231,6 +232,7 @@ def jump_game_ii_min_jumps(nums: list[int]) -> int:
 > Jump Game II does **not** need DP. The greedy argument: at every position `i`, you know the farthest you can reach (`farthest`). When you must jump (at `i == current_end`), jumping to `farthest` is always optimal — any choice within `[current_end+1, farthest]` that improves reach is already captured by `farthest`.
 
 ---
+```
 
 ### Gas Station — Circular Feasibility
 
@@ -249,6 +251,7 @@ def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
             start = i + 1  # reset start to next position
             tank = 0
     return start
+```
 
 #### Common Variants & Twists
 1. **Gas Station II (Multiple valid starts)**:
@@ -260,6 +263,7 @@ def can_complete_circuit(gas: list[int], cost: list[int]) -> int:
 > The problem guarantees a **unique `🎯 T2`** valid start when `sum(gas) >= sum(cost)`. This uniqueness is key to the greedy correctness — if there were two valid starts, one would be contained within the other, contradicting the structure of the circular traversal.
 
 ---
+```
 
 ### Task Scheduler — Frequency-Based Scheduling
 
@@ -277,6 +281,7 @@ def least_interval(tasks: list[str], n: int) -> int:
     count_max = sum(1 for f in freq.values() if f == max_freq)
     min_slots = (max_freq - 1) * (n + 1) + count_max
     return max(min_slots, len(tasks))
+```
 
 #### Common Variants & Twists
 1. **Reorganize String**:
@@ -288,6 +293,7 @@ def least_interval(tasks: list[str], n: int) -> int:
 ```
 
 ---
+```
 
 ### Candy Distribution — Two-Pass Greedy
 
@@ -305,6 +311,7 @@ def candy(ratings: list[int]) -> int:
         if ratings[i] > ratings[i+1]:
             candy[i] = max(candy[i], candy[i+1] + 1)
     return sum(candy)
+```
 
 #### Common Variants & Twists
 1. **Trapping Rain Water**:
@@ -316,6 +323,7 @@ def candy(ratings: list[int]) -> int:
 ```
 
 ---
+```
 
 ### Partition Labels — Greedy Range Extension
 
@@ -333,6 +341,7 @@ def partition_labels(s: str) -> list[int]:
             partitions.append(end - start + 1)
             start = i + 1
     return partitions
+```
 
 #### Common Variants & Twists
 1. **Merge Intervals**:
@@ -344,6 +353,7 @@ def partition_labels(s: str) -> list[int]:
 ```
 
 ---
+```
 
 ### Priority Queue Greedy — Maximize Capital (IPO)
 
@@ -375,6 +385,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
         w += -heapq.heappop(max_heap)
         
     return w
+```
 
 #### Common Variants & Twists
 1. **Minimum Cost to Connect Sticks**:
@@ -389,6 +400,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 > This "Two-Heap/Sorted + Heap" pattern is the gold standard for dynamic greedy algorithms. Sorting handles the unlocking condition (cost), and the max-heap handles the greedy selection (profit).
 
 ---
+```
 
 ## 3. L3 Deep Dives
 
@@ -522,23 +534,23 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ## Flashcards
 
-**"Always pick the locally best option (largest profit, earliest deadline, minimum cost)" → greedy; verify exchange argument before coding.?** #flashcard
-"Always pick the locally best option (largest profit, earliest deadline, minimum cost)" → greedy; verify exchange argument before coding.
+**Always pick the locally best option (largest profit, earliest deadline, minimum cost) — what technique, and why?** #flashcard
+greedy; verify exchange argument before coding.
 
 **"Interval scheduling?** #flashcard
 maximize non-overlapping intervals" → sort by end time; greedily pick earliest-ending.
 
-**"Interval merging / covering" → sort by start time; merge overlapping or count gaps.?** #flashcard
-"Interval merging / covering" → sort by start time; merge overlapping or count gaps.
+**Interval merging / covering — what technique, and why?** #flashcard
+sort by start time; merge overlapping or count gaps.
 
-**"Coin change with standard denominations" → greedy works; arbitrary denominations → DP.?** #flashcard
-"Coin change with standard denominations" → greedy works; arbitrary denominations → DP.
+**Coin change with standard denominations — what technique, and why?** #flashcard
+greedy works; arbitrary denominations → DP.
 
-**"Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints" → greedy scan left to right, extend reach.?** #flashcard
-"Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints" → greedy scan left to right, extend reach.
+**Problem asks for minimum number of 'things' to cover / jump / satisfy all constraints — what technique, and why?** #flashcard
+greedy scan left to right, extend reach.
 
-**"Sort by ratio or combined key (profit/weight, deadline−duration)" → greedy on sorted order.?** #flashcard
-"Sort by ratio or combined key (profit/weight, deadline−duration)" → greedy on sorted order.
+**Sort by ratio or combined key (profit/weight, deadline−duration) — what technique, and why?** #flashcard
+greedy on sorted order.
 
-**"Greedy fails on a small counterexample" → switch to DP immediately.?** #flashcard
-"Greedy fails on a small counterexample" → switch to DP immediately.
+**Greedy fails on a small counterexample — what technique, and why?** #flashcard
+switch to DP immediately.

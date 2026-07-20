@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Backtracking
-subtopic: 
-status: unread
 tags: [algorithms, backtracking]
 ---
 
@@ -367,6 +365,7 @@ def exist(board: list[list[str]], word: str) -> bool:
         return found
 
     return any(dfs(r, c, 0) for r in range(rows) for c in range(cols))
+```
 
 #### Common Variants & Twists
 1. **Word Search II (Trie Optimization)**:
@@ -378,6 +377,7 @@ def exist(board: list[list[str]], word: str) -> bool:
 ```
 
 ---
+```
 
 ### Palindrome Partitioning
 
@@ -405,6 +405,7 @@ def partition(s: str) -> list[list[str]]:
                 path.pop()
     backtrack(0, [])
     return results
+```
 
 #### Common Variants & Twists
 1. **Palindrome Partitioning II (Min Cuts)**:
@@ -413,6 +414,7 @@ def partition(s: str) -> list[list[str]]:
 ```
 
 ---
+```
 
 ## 4. Advanced Pruning Strategies
 
@@ -686,23 +688,23 @@ backtrack([])
 
 ## Flashcards
 
-**"Generate all valid combinations / permutations / subsets" → backtracking with choose / recurse / unchoose.?** #flashcard
-"Generate all valid combinations / permutations / subsets" → backtracking with choose / recurse / unchoose.
+**Generate all valid combinations / permutations / subsets — what technique, and why?** #flashcard
+backtracking with choose / recurse / unchoose.
 
-**"Constraint says order matters, use each element once" → permutation backtracking with `visited[]` array.?** #flashcard
-"Constraint says order matters, use each element once" → permutation backtracking with `visited[]` array.
+**Constraint says order matters, use each element once — what technique, and why?** #flashcard
+permutation backtracking with `visited[]` array.
 
-**"Constraint says order doesn't matter, no reuse" → combination backtracking with `start` index advancing.?** #flashcard
-"Constraint says order doesn't matter, no reuse" → combination backtracking with `start` index advancing.
+**Constraint says order doesn't matter, no reuse — what technique, and why?** #flashcard
+combination backtracking with `start` index advancing.
 
-**"Find paths in a grid with obstacles" → DFS backtracking marking cell visited, unmark on return.?** #flashcard
-"Find paths in a grid with obstacles" → DFS backtracking marking cell visited, unmark on return.
+**Find paths in a grid with obstacles — what technique, and why?** #flashcard
+DFS backtracking marking cell visited, unmark on return.
 
-**"Decision tree branches explode but many share the same failure condition" → prune before recursing.?** #flashcard
-"Decision tree branches explode but many share the same failure condition" → prune before recursing.
+**Decision tree branches explode but many share the same failure condition — what technique, and why?** #flashcard
+prune before recursing.
 
-**"Duplicate elements in input; distinct results required" → sort first, skip `nums[i] == nums[i-1]` at the same depth level.?** #flashcard
-"Duplicate elements in input; distinct results required" → sort first, skip `nums[i] == nums[i-1]` at the same depth level.
+**Duplicate elements in input; distinct results required — what technique, and why?** #flashcard
+sort first, skip `nums[i] == nums[i-1]` at the same depth level.
 
-**"State is mutable (list, grid) and must be restored after recursing" → explicit undo; immutable state (string, int) needs no undo.?** #flashcard
-"State is mutable (list, grid) and must be restored after recursing" → explicit undo; immutable state (string, int) needs no undo.
+**State is mutable (list, grid) and must be restored after recursing — what technique, and why?** #flashcard
+explicit undo; immutable state (string, int) needs no undo.

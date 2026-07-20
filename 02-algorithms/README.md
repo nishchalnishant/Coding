@@ -17,6 +17,8 @@
 | Dynamic Programming | [Deep-dive](15-dynamic-programming.md) | `⚡ T1` |
 | Recursion & Backtracking | [Recursion](09-recursion.md) · [Backtracking](12-backtracking.md) | `⚡ T1` |
 | Graph Algorithms | [Deep-dive](../01-data-structures/13-graphs.md) | `⚡ T1` |
+| Matrix / Grid | [Deep-dive](../01-data-structures/04-matrix.md) | `⚡ T1` |
+| String Algorithms | [Deep-dive](02-string-algorithms.md) | `🎯 T2` |
 | Greedy | [Deep-dive](16-greedy.md) | `🎯 T2` |
 | Divide & Conquer / Math | [Math](18-math-and-number-theory.md) · [Bits](17-bit-manipulation.md) | `🎯 T2` |
 | Sorting (reference) | [Jump](#sorting-reference) | `🎯 T2` |

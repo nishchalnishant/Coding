@@ -542,3 +542,25 @@ Space-opt  = drop dimensions no longer on the dependency frontier
 ```
 
 Define the recursion clearly → everything else is table engineering.
+
+---
+
+## Flashcards
+
+**What is the mechanical rule for deriving bottom-up fill order from a recurrence?** #flashcard
+List every cell `dp[state]` reads on its right-hand side; those must already be filled when you write `state`. Recursion calling *forward* (`f(i+1)`) fills **n → 0**; calling *backward* (`f(i-1)`) fills **0 → n**. Interval DP loops outer on **length**, never on the left endpoint alone.
+
+**In 1D knapsack, why does 0/1 loop weight downward while unbounded loops upward?** #flashcard
+The 1D array conflates the "previous item" and "current item" rows. Descending `w` reads cells not yet overwritten this round — the previous row — so each item is used at most once. Ascending `w` reads cells already updated with the current item, which is exactly the reuse unbounded knapsack wants. Same array, opposite direction, different problem.
+
+**A memoized solution raises `TypeError: unhashable type: 'list'`. What is the fix?** #flashcard
+A mutable argument is in the memo key. Keep only hashable scalars (`i`, `j`, `remaining`) in the key and close over the array in the enclosing scope, or convert with `tuple(nums)`. Never key a cache on a structure that mutates during recursion.
+
+**When should you choose top-down memoization over bottom-up tabulation?** #flashcard
+Top-down when the state space is **sparse** (only reachable states get computed), when the fill order is awkward to explain (interval and tree DP), or when you want correct code fastest in an interview. Bottom-up when recursion depth risks a stack overflow (`n > 10^4`), or when space optimization to a rolling row matters. Both are O(states × work per state).
+
+**Your DP returns 0 or a nonsense value on interval problems like Burst Balloons. What is the likely bug?** #flashcard
+Iterating the outer loop over the left endpoint instead of over **interval length**. `f(l, r)` depends on strictly smaller intervals, so every shorter span must be complete before any longer one starts. Outer = length, inner = left endpoint.
+
+**Why can a min-cost DP produce a wrong answer without an `inf` sentinel?** #flashcard
+Unreachable states initialized to `0` masquerade as free solutions and win the `min`. Initialize unreachable states to `inf`, and check `dp[target] == inf` before returning to convert it to the problem's "impossible" value (typically `-1`).

@@ -16,7 +16,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | 3 | [`02-algorithms/README.md`](02-algorithms/README.md) — algo index + 27 must-solve |
 | 4 | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](00-L3-EXECUTION-META/L3_CHEATSHEET.md) — pacing, constraints, Python syntax |
 | 5 | [`coding/`](coding/) — problem walkthroughs |
-| 6 | [`04-behavioral/behavioral.md`](04-behavioral/behavioral.md) — STAR stories |
+| 6 | [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](04-behavioral/BEHAVIORAL_GOOGLINESS.md) — STAR stories, attributes, prep |
 
 ---
 
@@ -37,7 +37,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Mind map | [`MINDMAP.md`](MINDMAP.md) |
 | Flowcharts | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
 | Pattern triggers | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
-| Track progress | [`questions.md`](questions.md) |
+| Full problem index (125, by topic) | [`questions.md`](questions.md) |
 | **L3 Cheatsheet** (pacing, Big-O, edge cases, what to skip) | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
 | Interview strategy / day-of revision | [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
 

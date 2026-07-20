@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Heap
-subtopic: 
-status: unread
 tags: [data-structures, heap]
 ---
 

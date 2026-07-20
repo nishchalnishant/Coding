@@ -1,8 +1,6 @@
 ---
 module: 03-patterns
 topic: Patterns Master
-subtopic: 
-status: unread
 tags: [patterns, patterns-master]
 ---
 ## First-Principles Breakdown

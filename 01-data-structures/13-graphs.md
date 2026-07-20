@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Graphs
-subtopic: 
-status: unread
 tags: [data-structures, graphs]
 ---
 
@@ -751,23 +749,23 @@ Nodes are categorized into three states:
 A cycle is detected if a neighbor is found in the **Gray** state during traversal.
 
 
-**"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).?** #flashcard
-"Shortest path, unweighted graph" → BFS (level-by-level guarantees minimum hops).
+**Shortest path, unweighted graph — what technique, and why?** #flashcard
+BFS (level-by-level guarantees minimum hops).
 
-**"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).?** #flashcard
-"Shortest path, non-negative weights" → Dijkstra with min-heap, O((V+E) log V).
+**Shortest path, non-negative weights — what technique, and why?** #flashcard
+Dijkstra with min-heap, O((V+E) log V).
 
-**"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).?** #flashcard
-"Shortest path with negative weights or detect negative cycles" → Bellman-Ford, O(VE).
+**Shortest path with negative weights or detect negative cycles — what technique, and why?** #flashcard
+Bellman-Ford, O(VE).
 
-**"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).?** #flashcard
-"All-pairs shortest paths, dense graph" → Floyd-Warshall, O(V³).
+**All-pairs shortest paths, dense graph — what technique, and why?** #flashcard
+Floyd-Warshall, O(V³).
 
-**"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.?** #flashcard
-"Detect cycle in directed graph / topological order" → DFS with three-color marking or Kahn's BFS.
+**Detect cycle in directed graph / topological order — what technique, and why?** #flashcard
+DFS with three-color marking or Kahn's BFS.
 
-**"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).?** #flashcard
-"Minimum spanning tree, sparse graph" → Kruskal (sort edges + DSU); dense graph → Prim (min-heap).
+**Minimum spanning tree, sparse graph — what technique, and why?** #flashcard
+Kruskal (sort edges + DSU); dense graph → Prim (min-heap).
 
-**"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.?** #flashcard
-"Graph is really a grid" → treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.
+**Graph is really a grid — what technique, and why?** #flashcard
+treat cells as nodes, 4-directional edges; BFS for shortest path, DFS for components.

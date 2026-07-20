@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Two Pointers
-subtopic: 
-status: unread
 tags: [algorithms, two-pointers]
 ---
 
@@ -316,11 +314,11 @@ Walkthroughs: problem-deep-dives.md. Linked lists: [linked-list.md](../01-data-s
 
 ## Flashcards
 
-**Sorted array + pair summing to target → converging pointers from both ends after sort.?** #flashcard  
-Sorted array + pair summing to target → converging pointers from both ends after sort.
+**Sorted array + pair summing to target — what technique, and why?** #flashcard
+converging pointers from both ends after sort.
 
-**Linked list cycle detection → fast/slow pointers; if they meet, cycle exists.?** #flashcard  
-Linked list cycle detection → fast/slow pointers; if they meet, cycle exists.
+**Linked list cycle detection — what technique, and why?** #flashcard
+fast/slow pointers; if they meet, cycle exists.
 
-**In-place remove duplicates in sorted array → write pointer advances only on new value.?** #flashcard  
-In-place remove duplicates in sorted array → write pointer advances only on new value.
+**In-place remove duplicates in sorted array — what technique, and why?** #flashcard
+write pointer advances only on new value.

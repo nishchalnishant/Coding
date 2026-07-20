@@ -1,8 +1,6 @@
 ---
 module: 03-patterns
 topic: Mock Interview Problem Set
-subtopic:
-status: unread
 tags: [patterns, mock-interview, google-l3]
 ---
 

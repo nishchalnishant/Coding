@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: String
-subtopic: 
-status: unread
 tags: [data-structures, string]
 ---
 
@@ -440,6 +438,7 @@ def kmp_search(text: str, pattern: str) -> list[int]:
             else:
                 i += 1
     return matches
+```
 
 #### Common Variants & Twists
 1. **Shortest Palindrome**:
@@ -454,6 +453,7 @@ def kmp_search(text: str, pattern: str) -> list[int]:
 > **LPS off-by-one**: The LPS table uses **0-indexed** access (`lps[length - 1]`, not `lps[length]`). This is the most common KMP implementation bug. Also: `lps[0]` is always 0 (no proper prefix of length 1 can also be a suffix).
 
 ---
+```
 
 ### Rabin-Karp — Rolling Hash
 
@@ -488,6 +488,7 @@ def rabin_karp(text: str, pattern: str) -> list[int]:
         if win_hash == pat_hash and text[i:i+m] == pattern:
             matches.append(i)
     return matches
+```
 
 #### Common Variants & Twists
 1. **Longest Duplicate Substring**:
@@ -502,6 +503,7 @@ def rabin_karp(text: str, pattern: str) -> list[int]:
 > **Hash collisions**: Always verify `text[i:i+m] == pattern` on hash match — rolling hash can produce false positives. For security-critical applications (e.g., anti-plagiarism), use **double hashing** (two independent hash functions) to reduce collision probability to ~1/p₁×p₂.
 
 ---
+```
 
 ### Longest Palindromic Substring — Expand from Center
 
@@ -528,6 +530,7 @@ def longest_palindromic_substring(s: str) -> str:
             start, end = l2, r2
 
     return s[start:end+1]
+```
 
 #### Common Variants & Twists
 1. **Palindrome Partitioning II**:
@@ -542,6 +545,7 @@ def longest_palindromic_substring(s: str) -> str:
 > **Manacher's Algorithm** (O(N)): Uses a `radius` array and a "rightmost palindrome" invariant to reuse previously computed radii. State it as an O(N) alternative: "Manacher's achieves O(N) using the fact that palindrome radii are symmetric around the center of the rightmost palindrome." For L3, knowing the idea and complexity is sufficient — full implementation is rarely required.
 
 ---
+```
 
 ### Sliding Window — Minimum Window Substring
 
@@ -574,6 +578,7 @@ def min_window_substring(s: str, t: str) -> str:
                 have -= 1
             left += 1
     return best
+```
 
 #### Common Variants & Twists
 1. **Longest Substring with At Most K Distinct Characters**:
@@ -588,6 +593,7 @@ def min_window_substring(s: str, t: str) -> str:
 > **`have` tracks frequency saturation, not total count**: `have` increments only when `window[ch] == need[ch]` (exactly met), not when `window[ch] >= need[ch]`. This correctly handles characters that appear multiple times in T — you need exactly `need[ch]` of each, not more.
 
 ---
+```
 
 ### Z-Algorithm — Global Pattern Matching
 
@@ -614,6 +620,7 @@ def z_search(text: str, pattern: str) -> list[int]:
     z = z_function(combined)
     m = len(pattern)
     return [i - m - 1 for i in range(m + 1, len(combined)) if z[i] == m]
+```
 
 #### Common Variants & Twists
 1. **Longest Happy Prefix**:
@@ -622,6 +629,7 @@ def z_search(text: str, pattern: str) -> list[int]:
 ```
 
 ---
+```
 
 ### Trie (Prefix Tree) — Fast Prefix Matching
 
@@ -661,6 +669,7 @@ class Trie:
                 return False
             node = node.children[char]
         return True
+```
 
 #### Common Variants & Twists
 1. **Map Sum Pairs**:
@@ -672,6 +681,7 @@ class Trie:
 ```
 
 ---
+```
 
 ## 3. Pattern Matching Quick Reference
 
@@ -788,23 +798,23 @@ Iterate through the string and treat each index as a center. Expand outward whil
 2. **Even-length center**: `expand(i, i+1)`
 
 
-**"Find pattern P in text T efficiently" → KMP, O(N+M); build LPS array first.?** #flashcard
-"Find pattern P in text T efficiently" → KMP, O(N+M); build LPS array first.
+**Find pattern P in text T efficiently — what technique, and why?** #flashcard
+KMP, O(N+M); build LPS array first.
 
-**"Check if two strings are anagrams / find all anagram windows" → sliding window with frequency map, O(N).?** #flashcard
-"Check if two strings are anagrams / find all anagram windows" → sliding window with frequency map, O(N).
+**Check if two strings are anagrams / find all anagram windows — what technique, and why?** #flashcard
+sliding window with frequency map, O(N).
 
-**"Longest palindromic substring" → Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.?** #flashcard
-"Longest palindromic substring" → Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.
+**Longest palindromic substring — what technique, and why?** #flashcard
+Manacher O(N) or expand-around-center O(N²); never O(N³) brute force.
 
-**"Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.?** #flashcard
-"Find repeated substring / detect substring hash collisions" → Rabin-Karp rolling hash, O(N+M) expected.
+**Find repeated substring / detect substring hash collisions — what technique, and why?** #flashcard
+Rabin-Karp rolling hash, O(N+M) expected.
 
-**"Minimum window containing all characters of T" → sliding window with two pointers and character count.?** #flashcard
-"Minimum window containing all characters of T" → sliding window with two pointers and character count.
+**Minimum window containing all characters of T — what technique, and why?** #flashcard
+sliding window with two pointers and character count.
 
-**"Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).?** #flashcard
-"Build result string by repeated concatenation in a loop" → use `''.join(list)` not `s += char` (O(N²) vs O(N)).
+**Build result string by repeated concatenation in a loop — what technique, and why?** #flashcard
+use `''.join(list)` not `s += char` (O(N²) vs O(N)).
 
-**"Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.?** #flashcard
-"Strings compared with `is` give wrong results" → always use `==`; `is` checks identity, not value.
+**Strings compared with `is` give wrong results — what technique, and why?** #flashcard
+always use `==`; `is` checks identity, not value.

@@ -1328,3 +1328,27 @@ When given a DP problem in an interview:
 | **Knight Probability** | Probability DP | Propagate forward | Off-board just discarded |
 | **Stone Game III** | Game / Minimax | Advantage DP | Take 1/2/3; score − opponent |
 | **Jump Game VI `🎯 T2`** | Deque Opt | Monotonic deque for window max | Pop front when expired |
+
+---
+
+## Flashcards
+
+**What two properties must a problem have before DP is the right tool?** #flashcard
+**Optimal substructure** — the optimum is composable from optima of subproblems — and **overlapping subproblems**, the same states recurring across branches. Without overlap, memoizing buys nothing and it is plain divide & conquer; without optimal substructure the recurrence is simply wrong.
+
+**Name three signals that DP is the wrong approach even though the problem looks like DP.** #flashcard
+1. The locally best choice is provably globally best → **greedy**.
+2. You must return an actual path in an unweighted graph → **BFS**.
+3. The state space exceeds the constraints → **math / combinatorics**. Also: subproblems that never repeat → divide & conquer.
+
+**Kadane's algorithm returns 0 on an all-negative array. Why, and what is the fix?** #flashcard
+Initializing `cur`/`best` to `0` encodes an empty subarray as a legal answer, which beats every negative element. Initialize both to `nums[0]` and iterate from index 1, so the answer is the least-negative element.
+
+**When can grid DP be compressed from O(m×n) to O(n), and what breaks it?** #flashcard
+When `dp[r][c]` reads only the previous row and the current row's left neighbor — Unique Paths, Min Path Sum, Maximal Square (plus one scalar for the diagonal `prev`). It breaks when a cell depends on values below or to the right; those need the full table or a reversed fill direction, as in Dungeon Game.
+
+**In the stock state-machine DPs, what is the classic same-iteration bug?** #flashcard
+Overwriting a state and then reading the new value later in the *same* iteration, which lets one transaction feed into another on the same day. Compute all next-states from the previous iteration's values — snapshot `prev_sold` before updating `sold` — or iterate `k` backward so each transaction count reads the prior one.
+
+**Substring DP vs subsequence DP — what changes in the recurrence?** #flashcard
+Subsequence (LCS) allows skipping: on a mismatch, take `max(dp[i-1][j], dp[i][j-1])`, and the answer is `dp[m][n]`. Substring requires contiguity: on a mismatch the run **resets to 0**, and the answer is the max over the whole table, not the last cell.

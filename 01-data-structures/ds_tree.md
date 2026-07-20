@@ -1,8 +1,6 @@
 ---
 module: 01-data-structures
 topic: Ds Tree
-subtopic: 
-status: unread
 tags: [data-structures, ds-tree]
 ---
 

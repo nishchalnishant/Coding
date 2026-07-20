@@ -1,8 +1,6 @@
 ---
 module: 04-behavioral
 topic: Behavioral Googliness
-subtopic: 
-status: unread
 tags: [behavioral, behavioral-googliness]
 ---
 # First-Principles Map — Google Behavioral & Googliness
@@ -176,9 +174,45 @@ Situation: [1-2 sentences — just enough context]
 Task:      [What was your specific responsibility?]
 Action:    [What YOU specifically did — not "we"]
 Result:    [Quantified outcome: %, $, time saved, users impacted]
+Reflection:[If you did it again, what would you improve?]
 ```
 
 **Rule:** If you can't quantify the result, estimate and say so. "Reduced build time by roughly 40%" is better than "made it faster."
+
+**Timing:** 2–3 minutes per story. Practice out loud — reading ≠ saying. Record yourself once and watch it back; pacing, specificity, and "we vs I" are all visible on playback.
+
+**Practice schedule:** 2× per week, 30 min each.
+
+The **Reflection** line is optional but often separates a safe answer from a strong one. Interviewers skip S/T quickly and probe deeply on A and R — that's where signal density is highest.
+
+---
+
+## Story Bank — Prepare These 8
+
+You don't need 20 stories. You need a small set that flexes across questions.
+
+1. **Big impact project** — built or improved something with measurable results
+2. **Conflict / disagreement** — with a teammate, manager, or stakeholder
+3. **Failure / mistake** — a real failure, root cause, and what changed after
+4. **Ambiguity** — unclear requirements; you structured the work yourself
+5. **Influence without authority** — moved a decision without being the boss
+6. **Learning fast** — picked up a new technology or domain under pressure
+7. **Helping others** — mentored, unblocked, or documented for the team
+8. **User / customer focus** — work that measurably improved reliability, latency, or UX
+
+**Coverage check:** technical depth, cross-team collaboration, user impact, failure and recovery, ambiguity, leadership, mentoring. If all your stories come from one project, the round becomes fragile.
+
+---
+
+## Story Depth Guide — Weak vs Strong
+
+| Dimension | Weak | Strong |
+|-----------|------|--------|
+| **Specificity** | "We improved performance" | "Reduced p99 latency from 800ms to 120ms by moving N+1 DB queries to a batch fetch" |
+| **Your role** | "We decided to..." | "I proposed X; the team pushed back on Y; I ran a small experiment to validate and presented results" |
+| **Tradeoffs** | None mentioned | "We could have done A (faster) but chose B because it was safer for production rollout" |
+| **Measurable result** | "It went well" | "Shipped in 3 weeks, 0 P1 incidents, 40% reduction in support tickets" |
+| **Learning** | "I learned to communicate better" | "I now prototype contentious changes before lobbying for them" |
 
 ---
 
@@ -196,6 +230,83 @@ Result:    [Quantified outcome: %, $, time saved, users impacted]
 | Tell me about a time you had to learn something quickly | GCA + Googliness |
 | Tell me about your most impactful project | RRK + Leadership |
 | Tell me about a time you handled ambiguity | GCA |
+
+---
+
+## Question Types — What They're Actually Probing
+
+**"Tell me about yourself"** (2–3 min)
+> Current role → scope → 2 concrete wins → why this role/Google. Don't recite your resume.
+
+**"Why Google?"**
+> Be specific: a product area, a problem space, a team mission, the quality bar. Generic "innovation / impact / learning" reads as low-signal unless connected to a real reason — something you've used or a problem you've worked on that matches this team.
+
+**"A time you disagreed"**
+> Must show: you raised the concern clearly, used evidence over emotion, stayed respectful, and either changed your mind with reason or committed fully to the group's decision.
+
+**"A time you failed"**
+> Must show: full ownership (no blame), root cause analysis, action taken after, behavior change. If the story makes you look perfect, it isn't credible.
+
+**"A time you handled ambiguity"**
+> Must show: how you reduced the ambiguity, what assumptions you made explicit, how you validated them, how you adjusted when reality differed.
+
+**"A time you influenced without authority"**
+> Must show: persuasion via data or prototypes, not enthusiasm. Show you understood what mattered to the other person and addressed it.
+
+**"A time you made a technical tradeoff"**
+> Must show: alternatives considered, why you chose one, what risk you accepted, what benefit you got.
+
+**"A time you improved performance or reliability"**
+> Quantify before/after. Name the investigation method (profiling, dashboards, load testing). Mention tradeoffs.
+
+**"A time you received tough feedback"**
+> Must show: you heard it without defensiveness, acted on it, can articulate what changed. Bonus: you sought it out proactively.
+
+---
+
+## Common Follow-Ups
+
+Practice these without re-telling the whole story.
+
+| Follow-up | What it's testing |
+|-----------|------------------|
+| "What would you have done differently?" | Self-awareness; don't say "nothing" |
+| "How did your teammate react?" | Empathy; show you noticed the human impact |
+| "What was the timeline?" | Specificity; if unsure, anchor with a range |
+| "Did that approach scale?" | Systems thinking; connect to production impact |
+| "Did you consider X instead?" | Comfort with alternatives; show you weighed tradeoffs |
+| "How did you measure success?" | Rigor; tie to a metric, not a feeling |
+
+---
+
+## ML / AI Behavioral Prompts
+
+*(If you have an AI-ML round.)*
+
+- Tell me about an ML project end to end (data → training → serving → impact)
+- A time a model underperformed in production — how did you debug it?
+- How did you measure the success of a model you shipped?
+- A tradeoff you made between latency and model quality
+- A time you decided with incomplete or noisy data
+
+Stay in STAR. Quantify. Be honest about what you used from a library vs what you built.
+
+---
+
+## 10-Question Self-Assessment
+
+Rate yourself 1–5. Anything below 3 needs a prepared story.
+
+1. A time you failed and what you learned
+2. A project where you had significant technical ownership
+3. A time you disagreed with your manager or team
+4. Influencing others without direct authority
+5. Ambiguous requirements where you made a judgment call
+6. Learning a new technology or domain quickly
+7. Going above and beyond your role's expectations
+8. A difficult trade-off (speed vs quality, scope vs deadline)
+9. Mentoring or helping a colleague grow
+10. A significant technical decision and its trade-offs
 
 ---
 
@@ -234,3 +345,48 @@ Before the interview, have these stories ready:
 - Did I quantify at least one result per story?
 - Did I admit something I didn't know or got wrong?
 - Did I show curiosity — asked at least one thoughtful question at the end?
+
+---
+
+## Final Review Order (30 min before)
+
+1. Read your story **titles only** — don't memorize verbatim
+2. Recall the **metric** for each story
+3. Recall the **one-sentence lesson** from each story
+4. Map each story to the 4 attributes — know which covers which
+5. Speak 2–3 minutes per story out loud
+
+Confirm you can answer: biggest impact? failure? conflict? ambiguity? leadership without title? learned fast? made the team better?
+
+---
+
+## Mini Practice Prompts
+
+Say these out loud:
+
+1. Tell me about yourself
+2. Why Google?
+3. A disagreement with a teammate
+4. A time you failed
+5. A decision without enough information
+6. Influencing someone without authority
+7. Improving something measurable
+8. Learning quickly
+9. Mentoring or helping a teammate
+10. A tradeoff between speed and quality
+
+---
+
+## Final Mental Model
+
+The Googliness round isn't about sounding nice. It's proving you are:
+
+- thoughtful under ambiguity
+- reliable in conflict
+- honest about mistakes
+- useful to the team
+- driven by real impact
+
+If the coding round asks *"Can you solve it?"*, this round asks *"Can we trust you to work here?"*
+
+If you're unsure how to pitch an answer: **less polish, more detail.**

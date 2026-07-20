@@ -1,8 +1,6 @@
 ---
 module: 02-algorithms
 topic: Algorithm Tree
-subtopic: 
-status: unread
 tags: [algorithms, algorithm-tree]
 ---
 

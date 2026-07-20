@@ -1,8 +1,6 @@
 ---
 module: 03-patterns
 topic: Google Interview Revision
-subtopic: 
-status: unread
 tags: [patterns, google-interview-revision]
 ---
 
