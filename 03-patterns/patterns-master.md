@@ -55,6 +55,7 @@ Constraint size → target complexity → algorithm family:
 ### 1. Arrays & Strings
 
 #### Prefix Sum
+**Real-life:** A car's trip odometer — instead of re-adding every mile driven, you subtract two odometer readings to get distance for any leg of the trip.
 **When:** Range sum queries, subarray sum = K
 **Template:** `P[i] = P[i-1] + arr[i]`; range sum = `P[j] - P[i-1]`
 **Variants:**
@@ -62,6 +63,7 @@ Constraint size → target complexity → algorithm family:
 - 2D prefix sum: Matrix range queries
 
 #### Two Pointers
+**Real-life:** Two people searching a sorted phone book for a pair of names that combine to a target — one starts from A, one from Z, and they walk toward each other.
 **When:** Sorted array, pair/triplet search, in-place operations
 **Variants:**
 - **Converging:** Opposite ends (3Sum, Container With Most Water)
@@ -69,6 +71,7 @@ Constraint size → target complexity → algorithm family:
 - **Same direction:** Valid palindrome, remove duplicates
 
 #### Sliding Window
+**Real-life:** Cruise control adjusting your following distance — you only look at the car directly ahead and behind, expanding or shrinking the gap, never rescanning the whole highway.
 **When:** Longest/shortest contiguous subarray/substring with constraint
 **Template:**
 ```
@@ -83,6 +86,7 @@ Update answer
 - **Monotonic deque:** Sliding window maximum
 
 #### Kadane's Algorithm
+**Real-life:** Tracking a stock's best buy-low-sell-high run — you keep riding the current winning streak, but the instant it turns net-negative you cut losses and restart from today.
 **When:** Maximum subarray sum
 **Template:** `curr = max(num, curr + num)`; `global_max = max(global_max, curr)`
 
@@ -91,14 +95,17 @@ Update answer
 ### 2. Binary Search
 
 #### Standard Binary Search
+**Real-life:** Looking up a word in a paper dictionary — you open to the middle, decide "earlier" or "later," and repeat, never scanning page by page.
 **When:** Sorted array, search/insert/find bounds
 **Template:** `mid = left + (right - left) // 2`
 
 #### Rotated Sorted Array
+**Real-life:** A deck of cards cut once and restacked — still two sorted runs, so you first figure out which half you're looking at, then binary-search within it.
 **When:** Sorted but rotated
 **Logic:** Compare mid with left to find sorted half, then decide which side to search
 
 #### Binary Search on Answer
+**Real-life:** Tuning a shower to the right temperature by feel — you don't compute the exact setting, you guess, check "too hot/too cold," and bisect toward the answer.
 **When:** "Minimize maximum", "Maximize minimum", feasibility check exists
 **Examples:** Koko Eating Bananas, Split Array Largest Sum
 **Template:**
@@ -115,10 +122,12 @@ while low < high:
 ### 3. Linked Lists
 
 #### Fast/Slow Pointers
+**Real-life:** Two runners on a circular track, one twice as fast as the other — if the track is a loop, the fast runner eventually laps the slow one; if it's a straight line, the fast one just finishes first (marking the middle).
 **When:** Cycle detection, middle finding, kth from end
 **Template:** `slow = head, fast = head.next`
 
 #### In-Place Reversal
+**Real-life:** Flipping a chain of paperclips one link at a time — each clip gets pointed backward to the one before it as you walk down the chain, no extra chain needed.
 **When:** Reverse linked list, reverse in k-group
 **Template:**
 ```
@@ -131,6 +140,7 @@ while curr:
 ```
 
 #### Dummy Node
+**Real-life:** A placeholder "0th" ticket at the front of a queue so you never have to special-case "what if the person at the very front leaves."
 **When:** Merge lists, remove nodes, edge cases with head
 **Template:** `dummy = ListNode(0); dummy.next = head`
 
@@ -139,21 +149,26 @@ while curr:
 ### 4. Stack & Queue
 
 #### Monotonic Stack
+**Real-life:** A stack of people waiting to see the next taller person behind them in line — each time a taller person joins the back, everyone shorter ahead of them finally gets their answer and steps out.
 **When:** Next greater/smaller element, histogram rectangle
 **Template:** Store indices; pop while current violates monotonicity
 **Examples:** Daily Temperatures, Largest Rectangle in Histogram
 
 #### Monotonic Deque
+**Real-life:** Keeping a leaderboard of the tallest person currently visible through a moving window — you discard anyone shorter than the newest entrant since they can never win again.
 **When:** Sliding window maximum/minimum
 **Template:** Maintain decreasing (for max) or increasing (for min) deque
 
 #### BFS (Queue)
+**Real-life:** Ripples spreading from a stone dropped in a pond — everyone at distance 1 is reached before anyone at distance 2, so the first ripple to reach a point is the shortest path.
 **When:** Level-order traversal, shortest path (unweighted)
 **Template:** Queue + visited set
 
 ---
 
 ### 5. Trees
+
+**Real-life:** A company org chart — PreOrder announces the manager before their reports (top-down memo), PostOrder tallies each team's headcount before reporting up to the manager (bottom-up rollup), LevelOrder is announcing everyone rank by rank at an all-hands.
 
 #### Traversals
 - **PreOrder:** Root → Left → Right (serialize, clone)
@@ -162,10 +177,12 @@ while curr:
 - **LevelOrder:** BFS with queue
 
 #### LCA (Lowest Common Ancestor)
+**Real-life:** The most recent shared ancestor of two cousins in a family tree — the closest node from which both people's lineage branches apart.
 **BST:** If both p,q < root → left; else if both > root → right; else return root
 **Binary Tree:** Recursive; if left and right non-null → current is LCA
 
 #### Tree DP
+**Real-life:** Each manager reports their team's best result up the chain, and the CEO takes the max across all divisions — every node combines its children's answers before passing a single number upward.
 **When:** Max path through node, subtree calculations
 **Template:** Postorder; return value up, update global at node
 
@@ -174,14 +191,17 @@ while curr:
 ### 6. Heaps
 
 #### Top K Elements
+**Real-life:** A hospital ER keeping only the 5 most critical patients visible on the board — anyone less urgent than the least-critical of those 5 doesn't make the cut.
 **When:** K largest/smallest, frequent elements
 **Template:** Min-heap of size K (for K largest); pop when size > K
 
 #### Two Heaps
+**Real-life:** Splitting a line of people by height into a "shorter half" and "taller half," each sorted internally, so the median is always visible right at the boundary.
 **When:** Median of data stream
 **Template:** Max-heap (small half), Min-heap (large half); rebalance to keep size diff ≤ 1
 
 #### Merge K Sorted
+**Real-life:** Merging K sorted stacks of graded exams into one ranked pile — you always pull the current top-most paper across all stacks and refill from whichever stack it came from.
 **When:** Merge k sorted lists/arrays
 **Template:** Min-heap of (value, list_id, node); push next from same list
 
@@ -190,25 +210,30 @@ while curr:
 ### 7. Graphs
 
 #### BFS
+**Real-life:** Same ripple-in-a-pond idea as tree BFS, but now the pond has irregular connections — the ripple still reaches everyone at distance 1 before distance 2.
 **When:** Shortest path (unweighted), level-order, connected components
 **Complexity:** O(V + E) time, O(V) space
 
 #### DFS
+**Real-life:** Exploring a maze by always taking the first unexplored turn and backtracking only when you hit a dead end — you commit deep before you go wide.
 **When:** Connected components, cycle detection, backtracking
 **Complexity:** O(V + E) time, O(V) space (recursion stack)
 
 #### Topological Sort
+**Real-life:** Deciding what order to take college courses in when some are prerequisites for others — you can't take "Algorithms II" before "Algorithms I."
 **When:** Dependencies, DAG ordering
 **Variants:**
 - **Kahn's:** In-degree array, queue of zero-degree nodes
 - **DFS:** Postorder + reverse
 
 #### Dijkstra
+**Real-life:** GPS route-finding with tolls and traffic — you always expand from the currently cheapest-known reachable city next, never assume the map is unweighted.
 **When:** Shortest path (weighted, non-negative)
 **Template:** Min-heap of (distance, node); update if shorter path found
 **Complexity:** O((V + E) log V)
 
 #### Union-Find (DSU)
+**Real-life:** Tracking which friend groups have merged at a party — every time two people who know each other are introduced, their whole friend circles fuse into one group, and you can instantly check if two people are in the same circle.
 **When:** Connectivity, cycle detection, Kruskal's MST
 **Complexity:** ~O(1) amortized
 **Template (Python — path compression + union by rank):**
@@ -240,35 +265,43 @@ Note: all pseudocode in this file is illustrative.
 ### 8. Dynamic Programming
 
 #### 1D DP (Fibonacci pattern)
+**Real-life:** Climbing a staircase where you remember how many ways you reached the last two steps instead of recounting from the ground every time.
 **When:** Climbing stairs, house robber, max subarray
 **Template:** `dp[i] = f(dp[i-1], dp[i-2], ...)`
 
 #### 0/1 Knapsack
+**Real-life:** Packing a suitcase with a strict weight limit — each item goes in whole or stays home, so you weigh every combination's value against the limit.
 **When:** Pick or skip, weight constraint
 **Template:** `dp[i][w] = max(dp[i-1][w], val[i] + dp[i-1][w-wt[i]])`
 
 #### Unbounded Knapsack
+**Real-life:** Making change from an ATM with unlimited bills of each denomination — you can reuse the same bill value as many times as needed.
 **When:** Infinite supply (coin change)
 **Template:** `dp[w] = min(dp[w], 1 + dp[w - coin])`
 
 #### LIS (Longest Increasing Subsequence)
+**Real-life:** Picking the longest run of ever-improving quarterly scores from your report card, skipping the bad quarters without needing them to be consecutive.
 **When:** Increasing subsequence (not necessarily contiguous)
 **O(N²):** `dp[i] = max(dp[j] + 1)` for all j < i where arr[j] < arr[i]
 **O(N log N):** Patience sorting with tails array
 
 #### LCS (Longest Common Subsequence)
+**Real-life:** Diffing two edited drafts of a document to find the longest shared skeleton of sentences that appear in the same order in both.
 **When:** Two strings, common order
 **Template:** `dp[i][j] = 1 + dp[i-1][j-1]` if match; else `max(dp[i-1][j], dp[i][j-1])`
 
 #### Interval DP
+**Real-life:** Deciding the cheapest order to demolish a row of connected buildings when the cost of each demolition depends on which neighbors are still standing — you try every possible "last building removed" split.
 **When:** Burst balloons, matrix chain multiplication
 **Template:** Try all split points k in range (i, j)
 
 #### Tree DP
+**Real-life:** Same org-chart rollup as §5, applied to an optimization: each manager decides whether to "use" themselves or skip to grandchildren, based on which children's answers score higher.
 **When:** Max path sum through node, house robber III
 **Template:** Postorder; compute at node using children results
 
 #### Bitmask DP
+**Real-life:** A delivery driver tracking which of ≤20 stops they've already visited as a single binary checklist (bit per stop) instead of a list, so "have I been to stop 7?" is a single bit check.
 **When:** N ≤ 20, subsets, TSP
 **Template:** `dp[mask]` where mask represents visited/included elements
 
@@ -281,20 +314,25 @@ Note: all pseudocode in this file is illustrative.
 ### 9. Greedy
 
 #### Interval Scheduling
+**Real-life:** Booking a single conference room for as many meetings as possible — you always accept the meeting that finishes soonest first, since it frees the room fastest for the next one.
 **When:** Non-overlapping intervals, minimum removals
 **Template:** Sort by end time; pick earliest finishing
 
 #### Jump Game
+**Real-life:** Hopping across stepping stones in a river where each stone shows how far you can leap from it — you just track the furthest stone reachable so far.
 **When:** Can reach end, minimum jumps
 **Template:** Track furthest reachable; increment jumps at boundary
 
 #### Gas Station
+**Real-life:** Planning a road trip around a circular route where each stop gives you some gas and costs some to reach the next — if your tank ever goes negative starting from a stop, that stop (and everything before it since the last reset) can't be the starting point.
 **When:** Circular route, can complete circuit
 **Template:** Reset start when tank < 0; if total gas ≥ cost, solution exists
 
 ---
 
 ### 10. Backtracking
+
+**Real-life:** Solving a maze by trying a path, and the instant you hit a dead end, retracing your last step and trying the next unexplored branch — you never bulldoze forward once a choice is proven wrong.
 
 #### Template
 ```
