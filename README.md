@@ -40,6 +40,10 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Full problem index (125, by topic) | [`questions.md`](questions.md) |
 | **L3 Cheatsheet** (pacing, Big-O, edge cases, what to skip) | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
 | Interview strategy / day-of revision | [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
+| L4 (SDE-2) delta | [`coding/l4-sde2-delta.md`](coding/l4-sde2-delta.md) |
+| SDE-3 / senior delta | [`coding/sde3-senior-delta.md`](coding/sde3-senior-delta.md) |
+| Senior follow-up chains | [`03-patterns/SENIOR_FOLLOWUPS.md`](03-patterns/SENIOR_FOLLOWUPS.md) |
+| Weakness log / spaced revision / mock scoring | [`tracking/`](tracking/) |
 
 ---
 

@@ -10,6 +10,7 @@
 * [**Pattern Ladders — learn by deriving** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
 * [**L4 (SDE-2) Delta** *(NEW)*](coding/l4-sde2-delta.md)
+* [**SDE-3 / Senior Delta** *(NEW)*](coding/sde3-senior-delta.md)
 * [**L3 Cheatsheet**](00-L3-EXECUTION-META/L3_CHEATSHEET.md) *(pacing, constraints, decision guide, edge cases, what to skip)*
 * [Problem Index](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
@@ -99,9 +100,17 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [**Pattern Ladders** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [Patterns Master](03-patterns/patterns-master.md)
 * [**Mock Interview Set (25 Problems)** *(NEW)*](03-patterns/MOCK_INTERVIEW_SET.md)
+* [**Senior Follow-Up Chains** *(NEW)*](03-patterns/SENIOR_FOLLOWUPS.md)
 * [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
 * [Leetcode Variants](03-patterns/leetcode-variants.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
+
+---
+
+## Tracking (Senior)
+* [Weakness Log](tracking/weakness-log.md)
+* [Spaced Revision Protocol](tracking/spaced-revision.md)
+* [Mock Interview Scoring](tracking/mock-scores.md)
 
 ---
 

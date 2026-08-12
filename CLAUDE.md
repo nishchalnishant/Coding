@@ -1,7 +1,7 @@
 # Coding Interview Prep Hub — CLAUDE.md
 
 ## What this repo is
-Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/behavioral. Base track is L3; `coding/l4-sde2-delta.md` layers the L4 bar on top. All content is Markdown — no source code to build or test.
+Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/behavioral. Base track is L3; `coding/l4-sde2-delta.md` layers the L4 bar on top, `coding/sde3-senior-delta.md` layers an SDE-3/senior bar on top of that. All content is Markdown — no source code to build or test.
 
 **Out of scope:** system design, LLD, concurrency, SQL, segment trees, advanced graphs (Tarjan/SCC).
 
@@ -15,6 +15,7 @@ Google **L3 SWE / L4 SDE-2** interview prep: DSA coding rounds + Googliness/beha
 03-patterns/             # Pattern triggers, canonical questions, Google revision
 04-behavioral/           # STAR stories, Googliness
 coding/                  # Problem walkthrough bank + l3-google-roadmap.md
+tracking/                # Senior prep: weakness-log.md, spaced-revision.md, mock-scores.md
 ```
 
 ## Common tasks and where to go
@@ -23,6 +24,11 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 |---|---|
 | L3 study schedule | `coding/l3-google-roadmap.md` |
 | L4 (SDE-2) delta: bar, tier promotions, gap problems | `coding/l4-sde2-delta.md` |
+| SDE-3/senior delta: bar, `T3` promotions, senior-only variants | `coding/sde3-senior-delta.md` |
+| Senior follow-up chains (streaming, concurrency discussion, scale-change, etc.) | `03-patterns/SENIOR_FOLLOWUPS.md` |
+| Weakness taxonomy log | `tracking/weakness-log.md` |
+| 2/7/21-day spaced revision protocol | `tracking/spaced-revision.md` |
+| Senior mock scoring rubric (10-dimension, 8-step flow) | `tracking/mock-scores.md` |
 | Intuition-first pattern curriculum | `03-patterns/PATTERN_LADDERS.md` |
 | First-principles pattern thinking guide | `03-patterns/HOW_TO_THINK.md` |
 | In-interview judgment: proofs, pivots, hints, recovery | `03-patterns/INTERVIEW_JUDGMENT.md` |
@@ -43,4 +49,5 @@ coding/                  # Problem walkthrough bank + l3-google-roadmap.md
 - Prefer editing existing structure over creating new files.
 - When adding problems: include tier (`⚡ T1` / `🎯 T2` / `💤 T3`), difficulty, and key insight.
 - Mark `💤 T3` for overkill-at-L3; exclude from SUMMARY and MINDMAP.
+- Bare `` `T3` `` (no emoji, used only in `coding/sde3-senior-delta.md` and `03-patterns/SENIOR_FOLLOWUPS.md`) means **senior follow-up tier** — unrelated to `💤 T3` "skip at L3." Do not conflate the two; keep the emoji on skip-tier and bare on senior-tier so they stay visually distinct.
 - Keep notes dense and high-signal. No padding.
