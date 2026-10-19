@@ -3,47 +3,30 @@ module: 01-data-structures
 topic: Trie
 tags: [data-structures, trie]
 ---
+# Trie (Prefix Tree)
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Prefix trees: insert/search/startsWith, autocomplete, Trie + backtracking (Word Search II), XOR trie for max-XOR pairs.
+> **You'll be able to:** Implement a trie in ~15 lines; recognise 'many words sharing prefixes' problems; prune a backtracking search with a trie.
+> **Prereqs:** Hashing, tree, backtracking · **Pair with:** [Trie problems](../coding/data-structures/09-trie.md) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY tries exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                │                │               │               │
-  [HashMaps can't      [tree where each  [insert: follow [autocomplete,  [memory blowup:
-   answer "all words   edge = one char;  path char by    spell check,    26 children per
-   with prefix 'pre'"; nodes share       char, create    IP routing,     node × depth =
-   sorted arrays pay   common prefixes;  node if missing; word search,   O(alphabet×L×n)
-   O(L×log n) for      each leaf/marked  search: follow  prefix count,   for n words of
-   prefix queries]     node = word end]  until mismatch; longest prefix  length L]
-                                         O(L) all ops]   matching]
-       │                │                │
-  [real-world:         [invariant:      [compressed trie (radix tree):
-   phone book prefix   root is empty;    merge single-child chains;
-   search; DNS         all strings in    reduces O(alphabet×L×n) nodes
-   longest-prefix      the trie share    to O(n) nodes for n words;
-   match]              common prefixes]  used in Linux kernel routing]
-       ↓
-[Decision: Trie vs alternatives]
-  ├── vs HashMap    → trie supports prefix queries; hash only exact match O(1)
-  ├── vs BST        → trie O(L) vs BST O(L×log n) for string keys
-  └── vs Suffix Array → suffix array for substring queries; trie for prefix queries
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [Concept Overview](#concept-overview) · [Core Implementation](#core-implementation) · [Key Patterns](#key-patterns) · [Word Search II — Trie + Backtracking](#word-search-ii--trie--backtracking) · [XOR Trie — Maximum XOR Pair](#xor-trie--maximum-xor-pair) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Common Gotchas](#common-gotchas) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Prefix-based operations (autocomplete, "all words starting with X") need O(L) time regardless of dictionary size — no hash or tree achieves this.
 - **Core insight**: Sharing common prefixes as tree paths means each character is stored once per distinct prefix, not once per word.
 - **Invariant**: The path from root to any marked node spells exactly one dictionary word; every node's depth equals the length of the shared prefix to that point.
 - **Why it's fast**: Any operation (insert, search, prefix query) takes O(L) where L = string length — independent of dictionary size n.
 - **Where it breaks**: Memory is O(alphabet_size × L × n) in the worst case; for Unicode alphabets this is impractical — use a HashMap of children instead of fixed array.
 
-# Trie (Prefix Tree)
+### One-Page Map
 
 ```
 [TRIE (PREFIX TREE) — MINDMAP]
@@ -97,9 +80,6 @@ WHY tries exist → WHAT they are → HOW they work → WHEN to use → WHAT can
     └── Returning prefix match as word match: StartsWith returning True ≠ Search returning True
 ```
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -133,11 +113,11 @@ WHY tries exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 - Word existence with wildcards (`.` matching any char) — DFS over children.
 - Longest prefix matching (IP routing tables use compressed Patricia tries).
 
-**Common mistakes:**
-- Confusing node = character vs edge = character — the node represents the prefix accumulated so far; the edge label is the next character.
-- Forgetting `is_end = True` after inserting the last character — `search("app")` returns `False` if only "apple" is inserted.
-- Not pruning dead branches in Word Search II — re-exploring already-found dead paths causes TLE.
-- Off-by-one when checking prefix vs full word — always check `is_end` for exact match, reachability for `startsWith`.
+> [!warning] Common mistakes
+> - Confusing node = character vs edge = character — the node represents the prefix accumulated so far; the edge label is the next character.
+> - Forgetting `is_end = True` after inserting the last character — `search("app")` returns `False` if only "apple" is inserted.
+> - Not pruning dead branches in Word Search II — re-exploring already-found dead paths causes TLE.
+> - Off-by-one when checking prefix vs full word — always check `is_end` for exact match, reachability for `startsWith`.
 
 ---
 
@@ -376,13 +356,6 @@ def findMaximumXOR(nums: list[int]) -> int:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
 ## Interview Questions — Logic & Trickiness
 
 | Question | Pattern | Core Logic | Trickiness & Details |
@@ -412,7 +385,7 @@ def findMaximumXOR(nums: list[int]) -> int:
 
 ---
 
-## Quick Revision
+## Quick Revision Triggers
 
 | Trigger | → Use |
 |---------|-------|
@@ -420,10 +393,6 @@ def findMaximumXOR(nums: list[int]) -> int:
 | Dictionary word check with prefix pruning | Trie + backtracking (Word Search II) |
 | Maximum XOR of two numbers | XOR Trie (binary, MSB→LSB, greedy opposite bit) |
 | IP longest prefix match | Compressed trie / Patricia trie |
-
----
-
-## Quick Revision Triggers
 
 - If the problem says "autocomplete" or "return all words with prefix X" → think Trie; walk to prefix node in O(L), then DFS all `is_end` descendants.
 - If the problem says "does any word in the dictionary start with this prefix" → think Trie `startsWith`; O(L) regardless of dictionary size.
@@ -457,4 +426,3 @@ By processing bits from Most Significant Bit (MSB) to Least Significant Bit (LSB
 
 **What is a Compressed Trie (Radix Tree) and when does it improve space complexity?** #flashcard
 A Trie variant where all single-child intermediate chains are merged into single edges with substring labels. It reduces the node count to $O(N)$ for $N$ words, saving massive memory when there are many long non-branching sequences.
-

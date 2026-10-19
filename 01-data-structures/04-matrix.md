@@ -3,54 +3,23 @@ module: 01-data-structures
 topic: Matrix / Grid
 tags: [data-structures, matrix, grid, bfs, dfs]
 ---
+# Matrix / Grid
 
 ← [DS index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know it conceptually.
+## What this covers
 
-> [!important] The single most useful reframe
-> **A grid is a graph.** Each cell is a node; its 4 (or 8) in-bounds neighbours are its edges. Once you see that, "number of islands" is connected components, "rotting oranges" is multi-source BFS, and "shortest path in binary matrix" is plain BFS. You are not learning a new data structure — you are learning that graph algorithms already cover this, with the adjacency list computed on the fly instead of stored.
+> [!abstract] In this file
+> **Covers:** Grids as implicit graphs: direction arrays, bounds checks, BFS/DFS flood fill, in-place transforms (rotate, spiral, set zeroes), grid DP.
+> **You'll be able to:** Write a bug-free grid BFS/DFS template from memory; recognise when a grid problem is really shortest path, connected components or DP.
+> **Prereqs:** Queue, recursion · **Pair with:** [Matrix problems](../coding/data-structures/04-matrix.md) · [Graphs](13-graphs.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY Matrix problems exist
-├── 2D grids are the most natural implicit graph — adjacency is arithmetic, not storage
-│   ├── Neighbours of (r,c) are (r±1,c) and (r,c±1) — no edge list needed
-│   └── V = m·n, E ≈ 2mn → any O(V+E) graph algorithm is O(m·n) here
-WHAT it is
-├── An m×n array where position encodes adjacency
-│   ├── As a graph      → BFS / DFS / union-find over cells
-│   ├── As a DP table   → dp[r][c] built from dp[r-1][c], dp[r][c-1]
-│   └── As pure indexing→ spiral, rotate, transpose — no traversal, just coordinate algebra
-HOW it works
-├── Traversal: queue/stack of (r,c); mark visited on ENQUEUE not dequeue
-│   ├── Multi-source BFS: seed the queue with ALL sources → distances computed in one pass
-│   └── In-place marking: overwrite the cell to avoid an O(mn) visited set
-├── DP on grid: dp[r][c] = f(dp[r-1][c], dp[r][c-1]) → row-rolling gives O(n) space
-└── Coordinate tricks: transpose + reverse rows = rotate 90°; layer-by-layer = spiral
-WHEN to use
-├── "count regions / islands / connected areas"    → DFS/BFS flood fill or union-find
-├── "shortest path / minimum steps on a grid"      → BFS (unweighted) — never DFS
-├── "spread simultaneously from several starts"    → multi-source BFS
-├── "paths from corner to corner / min path sum"   → grid DP
-└── "rotate / spiral / transpose"                  → index manipulation, no search
-WHAT can go wrong
-├── Bounds check written after the array access → IndexError; check before dereferencing
-├── Marking visited on dequeue → the same cell is enqueued many times → TLE / blowup
-├── Using DFS for shortest path → finds *a* path, not the shortest
-├── Mutating the input grid when the caller needs it intact → ask before doing this
-└── Forgetting 8-directional when the problem says diagonal moves count
-DECISION
-├── Shortest / fewest steps        → BFS
-├── Reachability / count regions   → DFS or union-find (either is fine)
-├── Count paths / optimise a path  → DP
-└── Rearrange in place             → index algebra
-```
+**Sections:** [Core Idea](#core-idea) · [The Templates](#the-templates) · [Bounds checking](#bounds-checking) · [Decision Guide](#decision-guide) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Answer reachability, distance, or optimisation questions over a 2D layout without materialising an explicit graph.
 - **Core insight**: Adjacency in a grid is computable from coordinates, so the graph is *implicit* — you get O(V+E) algorithms with zero graph-construction cost. The direction array `[(0,1),(1,0),(0,-1),(-1,0)]` **is** your adjacency list.
@@ -60,7 +29,7 @@ DECISION
 
 ---
 
-# Matrix / Grid
+### One-Page Map
 
 ```
 [MATRIX — MINDMAP]
@@ -83,6 +52,14 @@ DECISION
 └── PREFIX STRUCTURES
     └── 2D prefix sum             → O(1) submatrix queries
 ```
+
+> [!warning] Common mistakes
+> - Marking visited on **dequeue** instead of enqueue — cells get pushed many times and BFS blows up.
+> - Swapping `m`/`n` in bounds checks on non-square grids — `0 <= r < len(grid)`, `0 <= c < len(grid[0])`.
+> - DFS for "shortest / fewest steps" — DFS returns *a* path, not the shortest; use BFS.
+> - Running single-source BFS once per source — seed every source in one queue (multi-source BFS).
+> - Mutating the input grid as a visited marker without saying so — ask first, or restore it.
+> - Path-dependent constraints (obstacles removed, keys held) need the state in the visited key: `(r, c, k)`.
 
 ## The Templates
 
@@ -181,6 +158,23 @@ The sentinel border removes bounds checks entirely, but costs O(m+n) extra memor
 ---
 
 Practice → [`coding/data-structures/04-matrix.md`](../coding/data-structures/04-matrix.md) (12 problems with full walkthroughs)
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Variant | Click moment | Core logic | Gotchas |
+|---|---|---|---|---|
+| ⚡ T1 · Medium — Number of Islands (LC 200) | Flood fill | "count connected regions" | DFS/BFS from each unvisited `'1'`, count launches | Grid holds strings `'1'`, not ints |
+| ⚡ T1 · Medium — Rotting Oranges (LC 994) | Multi-source BFS | "minutes until all…" | Seed all rotten, BFS by levels | Return `-1` if fresh remain; `0` if none at start |
+| ⚡ T1 · Medium — Spiral Matrix (LC 54) | Index algebra | "print in spiral order" | Four shrinking bounds `top/bot/left/right` | Re-check `top <= bot` / `left <= right` before the reverse passes |
+| ⚡ T1 · Medium — Rotate Image (LC 48) | Index algebra | "in place, 90°" | Transpose, then reverse rows | Transpose only `c > r`, or you swap back |
+| ⚡ T1 · Medium — Set Matrix Zeroes (LC 73) | Marker storage | "O(1) extra space" | Use row 0 / col 0 as flags | Separate flag for whether col 0 itself had a zero |
+| 🎯 T2 · Medium — 01 Matrix (LC 542) | Multi-source BFS | "distance to nearest 0 for every cell" | Seed all 0s, BFS outward | Running BFS from every 1 is O((mn)²) |
+| 🎯 T2 · Medium — Pacific Atlantic Water Flow (LC 417) | Reverse BFS | "can reach both borders" | BFS uphill from each ocean, intersect | Searching downhill from every cell is O((mn)²) |
+| 🎯 T2 · Medium — Maximal Square (LC 221) | Grid DP | "largest square of 1s" | `dp = 1 + min(up, left, diag)` | Returns side; answer is area `side²` |
+| 🎯 T2 · Hard — Longest Increasing Path (LC 329) | DFS + memo | Strictly increasing ⇒ DAG | Memoize `dfs(r,c)`; no visited set needed | A visited set is unnecessary *because* of the strict order |
+| 💤 T3 · Hard — Shortest Path with Obstacle Elimination (LC 1293) | State BFS | "remove at most k" | BFS on `(r, c, k_left)` | Visited must include `k` |
 
 ---
 

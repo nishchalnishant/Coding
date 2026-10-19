@@ -3,26 +3,28 @@ tags: [coding, algorithms, sorting]
 topic: Sorting
 difficulty: mixed
 ---
-
 # Sorting — Problem Compendium
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked sorting problems: merge-sort variants (inversions), quickselect, bucket sort, intervals/sweep line, custom ordering, topological sort, K-way merge.
+> **You'll be able to:** Use sort as the first step and know when quickselect/bucket sort beats it.
+> **Prereqs:** Sorting lecture · **Pair with:** [Sorting lecture](../../02-algorithms/00-sorting.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [QuickSort / QuickSelect](#quicksort--quickselect) · [Bucket Sort](#bucket-sort) · [Interview Classics](#interview-classics) · [Classic Merge Variants](#classic-merge-variants) · [Interval / Sweep Line](#interval--sweep-line) · [Offline Sorting Tricks](#offline-sorting-tricks) · [Topological Sort](#topological-sort) · [External Sort / K-way Merge](#external-sort--k-way-merge) · [Sorting Applications](#sorting-applications)
+
+---
 
 > [!info] Approach
 > Identify what property sorting exposes (adjacency, rank, monotone structure), then apply the right sort variant. Non-comparison sorts (counting/radix/bucket) bypass O(n log n) when keys are bounded integers. QuickSelect gets rank-k in O(n) avg. Merge sort naturally counts cross-half inversions.
 
-
-
-
 ---
 
-## Merge Sort Variants
-
 ## QuickSort / QuickSelect
+
+---
 
 ### Maximum Gap (Bucket Sort)
 
@@ -90,6 +92,8 @@ difficulty: mixed
 ---
 
 ## Bucket Sort
+
+---
 
 ### Pancake Sorting
 
@@ -276,6 +280,9 @@ difficulty: mixed
 > - 0 <= nums[i] <= 5000
 > - It is guaranteed that there will be an answer for the given input nums.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** QuickSelect for median; 3-way partition; interleave via index mapping · **Gotcha:** 1)` places larger half at odd indices without extra space.
+
 > [!info] Approach
 > Find median, then place larger-than-median elements at odd indices and smaller-than-median elements at even indices, both in reverse order to avoid equal adjacent elements. QuickSelect for median + index mapping. Find median (QuickSelect O(n)). Use 3-way partition (Dutch flag). Place using index map i → (1+2*i)%(n|1) to interleave.
 
@@ -313,6 +320,8 @@ difficulty: mixed
 ---
 
 ## Interview Classics
+
+---
 
 ### H-Index (LC 274) `⚡ T1`
 
@@ -365,108 +374,17 @@ difficulty: mixed
 
 ### Meeting Rooms II (LC 253)
 
-> [!example] Problem
-> Given an array of meeting time intervals `intervals` where `intervals[i] = [start_i, end_i]`, return *the minimum number of conference rooms required*.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> **Input:** intervals = [[0,30],[5,10],[15,20]]
-> **Output:** 2
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> **Input:** intervals = [[7,10],[2,4]]
-> **Output:** 1
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `1 <= intervals.length <= 10^4`
-> 	
-> - `0 <= start_i < end_i <= 10^6`
-
-> [!info] Approach
-> Sort by start time. Use a min-heap of end times. For each new meeting, if the earliest-ending room frees up before this meeting starts, reuse it (pop). Push this meeting's end time. Heap size = rooms needed. Sort by start + min-heap of end times. Sort intervals by start. For each interval: if heap and heap[0] <= start, heappop (reuse). heappush(end). Return heap size.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> 
-> def min_meeting_rooms(intervals):
->     if not intervals:
->         return 0
->     intervals.sort(key=lambda x: x[0])
->     heap = []  # end times
->     for start, end in intervals:
->         if heap and heap[0] <= start:
->             heapq.heapreplace(heap, end)
->         else:
->             heapq.heappush(heap, end)
->     return len(heap)
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(n) space.
-
-> [!tip] Alternatives
-> Sweep line with sorted start/end events O(n log n): create +1 events at starts and -1 at ends; scan sorted events tracking running room count and max. Same complexity, different mental model — useful when asked for chronological ordering of room assignments.
+> Full walkthrough: [Meeting Rooms II](16-greedy.md#meeting-rooms-ii).
 
 ---
 
 ## Classic Merge Variants
 
+---
+
 ### Majority Element (Boyer-Moore) `🎯 T2`
 
-> [!example] Problem
-> Given an array nums of size n, return the majority element.
-> The majority element is the element that appears more than ⌊n / 2⌋ times. You may assume that the majority element always exists in the array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [3,2,3]
-> Output: 3
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,2,1,1,1,2,2]
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - n == nums.length
-> - 1 <= n <= 5 * 10^4
-> - -10^9 <= nums[i] <= 10^9
-
-> [!info] Approach
-> The majority element has count > n/2, so it outnumbers all others combined. Boyer-Moore voting: each non-majority element can "cancel" one majority element, but majority still survives. Maintain `(candidate, count)`. Increment count if current matches candidate; decrement otherwise; reset candidate when count hits 0. The surviving candidate after one pass is the majority. (If majority not guaranteed, do a second pass to verify.).
-
-> [!note]- Python Solution
-> ```python
-> def majority_element(nums):
->     candidate, count = nums[0], 0
->     for num in nums:
->         if count == 0:
->             candidate = num
->         count += 1 if num == candidate else -1
->     return candidate
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Sort, return `nums[n//2]` — O(n log n). Hash map count — O(n) time and space. Randomized: pick random element, verify in O(n); expected O(1) iterations.
+> Full walkthrough: [Majority Element](../data-structures/01-array.md#majority-element--t2).
 
 ---
 
@@ -617,68 +535,17 @@ difficulty: mixed
 
 ## Interval / Sweep Line
 
+---
+
 ### Minimum Number of Arrows to Burst Balloons (LC 452)
 
-> [!example] Problem
-> There are some spherical balloons taped onto a flat wall that represents the XY-plane. The balloons are represented as a 2D integer array points where points[i] = [xstart, xend] denotes a balloon whose horizontal diameter stretches between xstart and xend. You do not know the exact y-coordinates of the balloons.
-> Arrows can be shot up directly vertically (in the positive y-direction) from different points along the x-axis. A balloon with xstart and xend is burst by an arrow shot at x if xstart <= x <= xend. There is no limit to the number of arrows that can be shot. A shot arrow keeps traveling up infinitely, bursting any balloons in its path.
-> Given the array points, return the minimum number of arrows that must be shot to burst all balloons.
-> 
-> **Example 1:**
-> ```
-> Input: points = [[10,16],[2,8],[1,6],[7,12]]
-> Output: 2
-> Explanation: The balloons can be burst by 2 arrows:
-> - Shoot an arrow at x = 6, bursting the balloons [2,8] and [1,6].
-> - Shoot an arrow at x = 11, bursting the balloons [10,16] and [7,12].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: points = [[1,2],[3,4],[5,6],[7,8]]
-> Output: 4
-> Explanation: One arrow needs to be shot for each balloon for a total of 4 arrows.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: points = [[1,2],[2,3],[3,4],[4,5]]
-> Output: 2
-> Explanation: The balloons can be burst by 2 arrows:
-> - Shoot an arrow at x = 2, bursting the balloons [1,2] and [2,3].
-> - Shoot an arrow at x = 4, bursting the balloons [3,4] and [4,5].
-> ```
-> 
-> **Constraints:**
-> - 1 <= points.length <= 10^5
-> - points[i].length == 2
-> - -2^{31} <= xstart < xend <= 2^{31} - 1
-
-> [!info] Approach
-> Same greedy activity-selection structure as LC 435. Sort by end point; one arrow at the earliest end bursts as many overlapping balloons as possible. Sort intervals by end. Fire an arrow at the first interval's end. Skip all balloons burst by this arrow. Fire again at the next unbursted balloon's end. A balloon `[start, end]` is burst by arrow at position `pos` iff `start <= pos <= end`.
-
-> [!note]- Python Solution
-> ```python
-> def find_min_arrow_shots(points):
->     points.sort(key=lambda x: x[1])
->     arrows = 1
->     arrow_pos = points[0][1]
->     for start, end in points[1:]:
->         if start > arrow_pos:
->             arrows += 1
->             arrow_pos = end
->     return arrows if points else 0
-> ```
-
-> [!success] Complexity
-> Time O(n log n), Space O(1).
-
-> [!tip] Alternatives
-> Sort by start time with a priority queue (overkill here). Note the strict inequality vs LC 435 — touching endpoints count as burst.
+> Full walkthrough: [Minimum Number of Arrows to Burst Balloons](16-greedy.md#minimum-number-of-arrows-to-burst-balloons).
 
 ---
 
 ## Offline Sorting Tricks
+
+---
 
 ### Sort Array by Parity (LC 905)
 
@@ -782,445 +649,43 @@ difficulty: mixed
 
 ## Topological Sort
 
+---
+
 ### Course Schedule II (LC 210) `⚡ T1`
 
-> [!example] Problem
-> There are a total of numCourses courses you have to take, labeled from 0 to numCourses - 1. You are given an array prerequisites where prerequisites[i] = [ai, bi] indicates that you must take course bi first if you want to take course ai.
-> Return the ordering of courses you should take to finish all courses. If there are many valid answers, return any of them. If it is impossible to finish all courses, return an empty array.
-> 
-> **Example 1:**
-> ```
-> Input: numCourses = 2, prerequisites = [[1,0]]
-> Output: [0,1]
-> Explanation: There are a total of 2 courses to take. To take course 1 you should have finished course 0. So the correct course order is [0,1].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: numCourses = 4, prerequisites = [[1,0],[2,0],[3,1],[3,2]]
-> Output: [0,2,1,3]
-> Explanation: There are a total of 4 courses to take. To take course 3 you should have finished both courses 1 and 2. Both courses 1 and 2 should be taken after you finished course 0.
-> So one correct course order is [0,1,2,3]. Another correct ordering is [0,2,1,3].
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: numCourses = 1, prerequisites = []
-> Output: [0]
-> ```
-> 
-> **Constraints:**
-> - 1 <= numCourses <= 2000
-> - 0 <= prerequisites.length <= numCourses * (numCourses - 1)
-> - prerequisites[i].length == 2
-> - 0 <= ai, bi < numCourses
-> - ai != bi
-> - All the pairs [ai, bi] are distinct.
-
-> [!info] Approach
-> Topological sort detects cycles and produces a valid linear ordering of a DAG. Kahn's BFS is iterative and cycle-detection falls out naturally (unprocessed nodes remain). Build adjacency list + in-degree array. Enqueue all nodes with in-degree 0. BFS: pop node → add to order → decrement neighbors' in-degrees → enqueue any that reach 0. If `len(order) < n`, a cycle exists → return `[]`.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> def find_order(numCourses, prerequisites):
->     graph = [[] for _ in range(numCourses)]
->     indegree = [0] * numCourses
->     for a, b in prerequisites:
->         graph[b].append(a)
->         indegree[a] += 1
->     queue = deque(i for i in range(numCourses) if indegree[i] == 0)
->     order = []
->     while queue:
->         node = queue.popleft()
->         order.append(node)
->         for nei in graph[node]:
->             indegree[nei] -= 1
->             if indegree[nei] == 0:
->                 queue.append(nei)
->     return order if len(order) == numCourses else []
-> ```
-
-> [!success] Complexity
-> Time O(V + E), Space O(V + E).
-
-> [!tip] Alternatives
-> DFS-based topological sort with `visited` / `in-stack` coloring. Post-order DFS reversal gives topo order; back edge → cycle.
+> Full walkthrough: [Course Schedule II](../data-structures/13-graph.md#course-schedule-ii--t1).
 
 ---
 
 ### Alien Dictionary (LC 269) `⚡ T1`
 
-> [!example] Problem
-> There is a new alien language that uses the English alphabet. However, the order of the letters is unknown to you.
-> 
-> You are given a list of strings `words` from the alien language's dictionary. Now it is claimed that the strings in `words` are **sorted lexicographically** by the rules of this new language.
-> 
-> If this claim is incorrect, and the given arrangement of string in `words` cannot correspond to any order of letters, return `"".`
-> 
-> Otherwise, return *a string of the unique letters in the new alien language sorted in **lexicographically increasing order** by the new language's rules**. *If there are multiple solutions, return* **any of them***.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input:** words = ["wrt","wrf","er","ett","rftt"]
-> **Output:** "wertf"
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> 
-> **Input:** words = ["z","x"]
-> **Output:** "zx"
-> 
-> ```
-> 
-> Example 3:
-> 
-> ```
-> 
-> **Input:** words = ["z","x","z"]
-> **Output:** ""
-> **Explanation:** The order is invalid, so return `""`.
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `1 <= words.length <= 100`
-> 	
-> - `1 <= words[i].length <= 100`
-> 	
-> - `words[i]` consists of only lowercase English letters.
-
-> [!info] Approach
-> Adjacent words in the sorted list reveal relative character ordering. Build a directed graph from these relations, then topological sort gives the alphabet. Compare each consecutive pair of words character-by-character; the first mismatch gives an edge `u → v` (u comes before v). Detect invalid input: if word A is a prefix of shorter word B, that's impossible. Kahn's BFS topological sort on the character graph. Cycle → return `""`. Unconnected characters can appear anywhere.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict, deque
-> def alien_order(words):
->     graph = defaultdict(set)
->     indegree = {c: 0 for w in words for c in w}
->     for i in range(len(words) - 1):
->         w1, w2 = words[i], words[i + 1]
->         min_len = min(len(w1), len(w2))
->         if len(w1) > len(w2) and w1[:min_len] == w2[:min_len]:
->             return ""
->         for c1, c2 in zip(w1, w2):
->             if c1 != c2:
->                 if c2 not in graph[c1]:
->                     graph[c1].add(c2)
->                     indegree[c2] += 1
->                 break
->     queue = deque(c for c in indegree if indegree[c] == 0)
->     order = []
->     while queue:
->         c = queue.popleft()
->         order.append(c)
->         for nei in graph[c]:
->             indegree[nei] -= 1
->             if indegree[nei] == 0:
->                 queue.append(nei)
->     return "".join(order) if len(order) == len(indegree) else ""
-> ```
-
-> [!success] Complexity
-> Time O(C) where C = total characters across all words, Space O(U + E), U = unique chars.
-
-> [!tip] Alternatives
-> DFS with cycle detection (white/gray/black coloring). Output is reverse post-order.
+> Full walkthrough: [Alien Dictionary](../data-structures/06-queue.md#alien-dictionary--t1).
 
 ---
 
 ## External Sort / K-way Merge
 
+---
+
 ### Find K Pairs with Smallest Sums (LC 373) `⚡ T1`
 
-> [!example] Problem
-> You are given two integer arrays nums1 and nums2 sorted in non-decreasing order and an integer k.
-> Define a pair (u, v) which consists of one element from the first array and one element from the second array.
-> Return the k pairs (u1, v1), (u2, v2), ..., (uk, vk) with the smallest sums.
-> 
-> **Example 1:**
-> ```
-> Input: nums1 = [1,7,11], nums2 = [2,4,6], k = 3
-> Output: [[1,2],[1,4],[1,6]]
-> Explanation: The first 3 pairs are returned from the sequence: [1,2],[1,4],[1,6],[7,2],[7,4],[11,2],[7,6],[11,4],[11,6]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums1 = [1,1,2], nums2 = [1,2,3], k = 2
-> Output: [[1,1],[1,1]]
-> Explanation: The first 2 pairs are returned from the sequence: [1,1],[1,1],[1,2],[2,1],[1,2],[2,2],[1,3],[1,3],[2,3]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums1.length, nums2.length <= 10^5
-> - -10^9 <= nums1[i], nums2[i] <= 10^9
-> - nums1 and nums2 both are sorted in non-decreasing order.
-> - 1 <= k <= 10^4
-> - k <= nums1.length * nums2.length
-
-> [!info] Approach
-> K-way merge pattern: each row `i` of the implicit (nums1 × nums2) matrix is sorted. A min-heap efficiently extracts the global minimum at each step. Seed the heap with `(nums1[i] + nums2[0], i, 0)` for all i < min(k, len(nums1)). Each pop yields the next best pair; push the next pair in the same row (increment j). At most k pops → O(k log k) after O(min(k, m) log min(k, m)) initial heapify.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> def k_smallest_pairs(nums1, nums2, k):
->     if not nums1 or not nums2:
->         return []
->     heap = [(nums1[i] + nums2[0], i, 0) for i in range(min(k, len(nums1)))]
->     heapq.heapify(heap)
->     result = []
->     while heap and len(result) < k:
->         _, i, j = heapq.heappop(heap)
->         result.append([nums1[i], nums2[j]])
->         if j + 1 < len(nums2):
->             heapq.heappush(heap, (nums1[i] + nums2[j + 1], i, j + 1))
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(k log k), Space O(k).
-
-> [!tip] Alternatives
-> Binary search on sum value + counting — complex but useful when k is very large. Brute force: generate all pairs and heap-select top-k — O(mn log k).
+> Full walkthrough: [Find K Pairs with Smallest Sums](../data-structures/10-heap.md#find-k-pairs-with-smallest-sums--t1).
 
 ---
 
 ### Kth Largest Element in a Stream (LC 703) `⚡ T1`
 
-> [!example] Problem
-> You are part of a university admissions office and need to keep track of the kth highest test score from applicants in real-time. This helps to determine cut-off marks for interviews and admissions dynamically as new applicants submit their scores.
-> You are tasked to implement a class which, for a given integer k, maintains a stream of test scores and continuously returns the kth highest test score after a new score has been submitted. More specifically, we are looking for the kth highest score in the sorted list of all scores.
-> Implement the KthLargest class
-> 
-> **Example 1:**
-> ```
-> Input: ["KthLargest", "add", "add", "add", "add", "add"] [[3, [4, 5, 8, 2]], [3], [5], [10], [9], [4]]
-> Output: [null, 4, 5, 5, 8, 8]
-> Explanation:
-> KthLargest kthLargest = new KthLargest(3, [4, 5, 8, 2]); kthLargest.add(3); // return 4 kthLargest.add(5); // return 5 kthLargest.add(10); // return 5 kthLargest.add(9); // return 8 kthLargest.add(4); // return 8
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: ["KthLargest", "add", "add", "add", "add"] [[4, [7, 7, 7, 7, 8, 3]], [2], [10], [9], [9]]
-> Output: [null, 7, 7, 7, 8]
-> Explanation:
-> ```
-> 
-> **Constraints:**
-> - 0 <= nums.length <= 10^4
-> - 1 <= k <= nums.length + 1
-> - -10^4 <= nums[i] <= 10^4
-> - -10^4 <= val <= 10^4
-> - At most 10^4 calls will be made to add.
-
-> [!info] Approach
-> A min-heap of size k maintains exactly the k largest elements seen so far. The heap root is always the kth largest. On initialization, add all elements and trim to size k. On `add`: push new value, pop if size > k, return heap[0]. Heap size invariant: always ≤ k. After each add, heap[0] = k-th largest among all seen elements.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> class KthLargest:
->     def __init__(self, k, nums):
->         self.k = k
->         self.heap = nums[:]
->         heapq.heapify(self.heap)
->         while len(self.heap) > k:
->             heapq.heappop(self.heap)
->     def add(self, val):
->         heapq.heappush(self.heap, val)
->         if len(self.heap) > self.k:
->             heapq.heappop(self.heap)
->         return self.heap[0]
-> ```
-
-> [!success] Complexity
-> Init O(n log k), add O(log k), Space O(k).
-
-> [!tip] Alternatives
-> Balanced BST / order-statistics tree for O(log n) add and O(1) kth query. Overkill for fixed k.
+> Full walkthrough: [Kth Largest Element in a Stream](../data-structures/10-heap.md#kth-largest-element-in-a-stream--t1).
 
 ---
 
 ### Find Median from Data Stream (LC 295) `⚡ T1`
 
-> [!example] Problem
-> The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value, and the median is the mean of the two middle values.
-> Implement the MedianFinder class
-> 
-> **Example 1:**
-> ```
-> Input
-> ["MedianFinder", "addNum", "addNum", "findMedian", "addNum", "findMedian"]
-> [[], [1], [2], [], [3], []]
-> Output
-> [null, null, null, 1.5, null, 2.0]
-> 
-> Explanation
-> MedianFinder medianFinder = new MedianFinder();
-> medianFinder.addNum(1);    // arr = [1]
-> medianFinder.addNum(2);    // arr = [1, 2]
-> medianFinder.findMedian(); // return 1.5 (i.e., (1 + 2) / 2)
-> medianFinder.addNum(3);    // arr[1, 2, 3]
-> medianFinder.findMedian(); // return 2.0
-> ```
-> 
-> **Constraints:**
-> - -10^5 <= num <= 10^5
-> - There will be at least one element in the data structure before calling findMedian.
-> - At most 5 * 10^4 calls will be made to addNum and findMedian.
-
-> [!info] Approach
-> Two heaps maintain a balanced partition: a max-heap for the lower half and a min-heap for the upper half. Median is always accessible at the tops. `lo` = max-heap (negate values for Python's min-heap), `hi` = min-heap. Invariant: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. Median = `lo[0]` if odd total, else `(-lo[0] + hi[0]) / 2`. On add: push to `lo` (negate), rebalance by moving top of `lo` to `hi`, then if `len(hi) > len(lo)` move top of `hi` back to `lo`.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> class MedianFinder:
->     def __init__(self):
->         self.lo = []  # max-heap (negated)
->         self.hi = []  # min-heap
->     def add_num(self, num):
->         heapq.heappush(self.lo, -num)
->         heapq.heappush(self.hi, -heapq.heappop(self.lo))
->         if len(self.hi) > len(self.lo):
->             heapq.heappush(self.lo, -heapq.heappop(self.hi))
->     def find_median(self):
->         if len(self.lo) > len(self.hi):
->             return -self.lo[0]
->         return (-self.lo[0] + self.hi[0]) / 2
-> ```
-
-> [!success] Complexity
-> addNum O(log n), findMedian O(1), Space O(n).
-
-> [!tip] Alternatives
-> Sorted list with bisect — O(n) insert, O(1) median. Order-statistics tree — O(log n) insert/query. For follow-up: if values are bounded integers, use two BITs for O(log M) all operations.
-
----
-
-### Wiggle Sort II (Median Split)
-
-> [!example] Problem
-> Given an integer array nums, reorder it such that nums[0]  nums[2] < nums[3]....
-> You may assume the input array always has a valid answer.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,5,1,1,6,4]
-> Output: [1,6,1,5,1,4]
-> Explanation: [1,4,1,5,1,6] is also accepted.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,3,2,2,3,1]
-> Output: [2,3,1,3,1,2]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 5 * 10^4
-> - 0 <= nums[i] <= 5000
-> - It is guaranteed that there will be an answer for the given input nums.
-
-> [!info] Approach
-> The median separates smaller and larger elements. Interleaving the two halves around the median avoids adjacent violations. Find the median, then place elements using virtual indexing so the larger half fills odd positions and the smaller half fills even positions. Sort and split around the median; place the larger half into odd slots and the smaller half into even slots in reverse order.
-
-> [!note]- Python Solution
-> ```python
-> def wiggle_sort(nums):
->     nums.sort()
->     half = (len(nums) + 1) // 2
->     small = nums[:half][::-1]
->     large = nums[half:][::-1]
->     nums[::2] = small
->     nums[1::2] = large
-> ```
-
-> [!success] Complexity
-> O(n log n) time for the simple sort-based version, O(n) extra space.
-
-> [!tip] Alternatives
-> An O(n) quickselect + 3-way partition version exists, but the sort-based solution is easier to reason about in interviews.
+> Full walkthrough: [Find Median from Data Stream](../data-structures/06-queue.md#find-median-from-data-stream--t1).
 
 ---
 
 ## Sorting Applications
-
-### Maximum Gap (LC 164)
-
-> [!example] Problem
-> Given an integer array nums, return the maximum difference between two successive elements in its sorted form. If the array contains less than two elements, return 0.
-> You must write an algorithm that runs in linear time and uses linear extra space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [3,6,9,1]
-> Output: 3
-> Explanation: The sorted form of the array is [1,3,6,9], either (3,6) or (6,9) has the maximum difference 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [10]
-> Output: 0
-> Explanation: The array contains less than 2 elements, therefore return 0.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - 0 <= nums[i] <= 10^9
-
-> [!info] Approach
-> Sorting is O(n log n). For O(n), use bucket sort (pigeonhole principle). If `n` numbers span range `[min, max]`, with `n-1` gaps, the maximum gap is at least `(max - min) / (n - 1)`. Place each number in a bucket of that size — the maximum gap must span at least two buckets, so we only compare adjacent bucket boundaries. Create `n-1` buckets. For each number, assign it to bucket `(num - min_val) * (n - 1) // (max_val - min_val)`. Track min and max within each bucket. The answer is the maximum `bucket[i+1].min - bucket[i].max` across adjacent non-empty buckets. Edge cases: if all elements are equal, return 0. If n < 2, return 0.
-
-> [!note]- Python Solution
-> ```python
-> def maximum_gap(nums):
->     n = len(nums)
->     if n < 2:
->         return 0
->     min_val = min(nums)
->     max_val = max(nums)
->     if min_val == max_val:
->         return 0
->     bucket_size = max(1, (max_val - min_val) // (n - 1))
->     num_buckets = (max_val - min_val) // bucket_size + 1
->     buckets = [[float('inf'), float('-inf')] for _ in range(num_buckets)]
->     for num in nums:
->         idx = (num - min_val) // bucket_size
->         buckets[idx][0] = min(buckets[idx][0], num)
->         buckets[idx][1] = max(buckets[idx][1], num)
->     max_gap = 0
->     prev_max = min_val
->     for bucket_min, bucket_max in buckets:
->         if bucket_min == float('inf'):
->             continue
->         max_gap = max(max_gap, bucket_min - prev_max)
->         prev_max = bucket_max
->     return max_gap
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Radix sort: also O(n) time and space, achieves the same goal but harder to implement correctly in an interview.
-> - Key insight: elements within the same bucket can never be the maximum gap pair (bucket size ≤ max gap), so we only compare across bucket boundaries.
 
 ---
 

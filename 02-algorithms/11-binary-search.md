@@ -3,43 +3,23 @@ module: 02-algorithms
 topic: Binary Search
 tags: [algorithms, binary-search]
 ---
+# Binary Search
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Binary search as 'find the boundary of a monotone predicate': exact match, lower/upper bound, rotated arrays, binary search on the answer, 2D matrix.
+> **You'll be able to:** Write one loop template that never infinite-loops; turn 'minimise the max / find smallest feasible K' into binary search on answer.
+> **Prereqs:** Arrays · **Pair with:** [Binary search problems](../coding/algorithms/11-binary-search.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY Binary Search exists
-├── Linear scan is O(n) — unacceptable on sorted data at scale
-│   ├── Each comparison on sorted data eliminates half the space
-│   └── Reduces O(n) search to O(log n) by exploiting monotonicity
-WHAT it is
-├── Iterative halving of a sorted search space
-│   ├── Maintains invariant: answer always in [lo, hi]
-│   └── Terminates when lo > hi or exact match found
-HOW it works
-├── mid = lo + (hi - lo) // 2  (avoids overflow)
-│   ├── If target == arr[mid] → found
-│   ├── If target < arr[mid]  → hi = mid - 1
-│   └── If target > arr[mid]  → lo = mid + 1
-WHEN to use
-├── "find X in sorted array" → classic binary search O(log n)
-├── "minimum X satisfying condition" → binary search on answer space
-└── "rotated sorted array / bitonic" → modified binary search
-WHAT can go wrong
-├── Off-by-one: lo = mid vs lo = mid+1 → infinite loop
-├── Integer overflow: (lo + hi) / 2 on large indices
-└── Applying to unsorted data → incorrect results silently
-DECISION
-└── Data is sorted OR answer space is monotone → binary search; unsorted small array → linear scan
-```
+**Sections:** [Core Idea](#core-idea) · [The Mental Model](#the-mental-model) · [Variant 1: Standard Binary Search (Exact Value + Bounds)](#variant-1-standard-binary-search-exact-value--bounds) · [Variant 2: Rotated Sorted Array](#variant-2-rotated-sorted-array) · [Variant 3: Binary Search on Answer](#variant-3-binary-search-on-answer) · [2D Binary Search (Sorted Matrix)](#2d-binary-search-sorted-matrix) · [Off-By-One Mental Model](#off-by-one-mental-model) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Locate a value (or boundary) in a large ordered space without scanning every element.
 - **Core insight**: A monotone predicate on a sorted space lets every comparison eliminate half the remaining candidates.
@@ -47,12 +27,9 @@ DECISION
 - **Why it works**: Each step halves the interval → at most ⌈log₂ n⌉ steps → O(log n) time, O(1) space.
 - **Where it breaks**: Non-monotone predicates or unsorted data — the halving step may discard the answer.
 
-
-
-
 ---
 
-# Binary Search
+### One-Page Map
 
 ```
 [BINARY SEARCH — MINDMAP]
@@ -92,6 +69,13 @@ Binary search eliminates half the search space each step by asking: **"Is the an
 - **Invariant:** The answer always lies in `[lo, hi]` (inclusive).
 - **Termination:** When `lo > hi`, the space is exhausted.
 - **Off-by-one source:** Whether you use `lo <= hi` or `lo < hi`, and whether you set `lo = mid+1` or `lo = mid`.
+
+> [!warning] Common mistakes
+> - Mixing templates — `lo <= hi` with `hi = mid` loops forever; pick one row of the [Off-By-One table](#off-by-one-mental-model) and stick to it.
+> - `lo = mid` with lower-mid → infinite loop when `hi = lo + 1`; use upper-mid `lo + (hi - lo + 1) // 2`.
+> - Non-monotone predicate — if `feasible(x)` can flip True→False→True, binary search silently returns garbage.
+> - Loose answer bounds — `lo` must be a value that *could* be the answer (e.g., `max(nums)` in Split Array, not 0).
+> - Rotated arrays: comparing `nums[mid]` to `nums[lo]` for find-min instead of `nums[hi]`.
 
 ---
 
@@ -239,6 +223,18 @@ def min_eating_speed(piles, h):
     return lo
 ```
 
+**Dry-run trace** — `piles = [3, 6, 7, 11]`, `h = 8`:
+
+| Step | lo | hi | mid | hours = Σ⌈p/mid⌉ | feasible? | Action |
+|---|---|---|---|---|---|---|
+| 1 | 1 | 11 | 6 | 1+1+2+2 = 6 | ✅ | `hi = 6` (6 might be the answer) |
+| 2 | 1 | 6 | 3 | 1+2+3+4 = 10 | ❌ | `lo = 4` (3 is too slow) |
+| 3 | 4 | 6 | 5 | 1+2+2+3 = 8 | ✅ | `hi = 5` |
+| 4 | 4 | 5 | 4 | 1+2+2+3 = 8 | ✅ | `hi = 4` |
+| — | 4 | 4 | — | — | — | `lo == hi` → return **4** |
+
+The predicate over speeds 1…11 reads `F F F T T T …` — the loop finds the first `T`. Note `hi = mid` (not `mid - 1`) keeps a feasible candidate inside `[lo, hi]`.
+
 **Split Array Largest Sum (minimize the maximum sum):**
 ```python
 def split_array(nums, k):
@@ -332,6 +328,22 @@ def search_matrix_ii(matrix, target):
 - **Target not in array:** Standard template returns -1. Lower bound returns insertion point.
 - **Rotated with duplicates:** Worst case O(n) when can't determine sorted half.
 - **BS on answer — set boundaries tightly:** Wrong `lo`/`hi` init causes TLE or wrong answer. Think: what is the minimum possible answer? What is the maximum?
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Variant | Click moment | Core logic | Gotchas |
+|---|---|---|---|---|
+| ⚡ T1 · Easy — Binary Search (LC 704) | Exact | Sorted + find index | `lo <= hi`, shrink by `mid±1` | Return `-1` after loop, not `lo` |
+| ⚡ T1 · Easy — First Bad Version (LC 278) | Lower bound | "first index where predicate flips" | `lo < hi`, `hi = mid` on true | `hi = mid - 1` skips the answer |
+| ⚡ T1 · Medium — Search in Rotated Array (LC 33) | Rotated | One half is always sorted | Check `nums[lo] <= nums[mid]`, test if target in sorted half | `<=` handles `lo == mid` |
+| ⚡ T1 · Medium — Find Min in Rotated (LC 153) | Rotated bound | Compare to right end | `nums[mid] > nums[hi]` → `lo = mid+1` else `hi = mid` | Comparing to `nums[lo]` fails on unrotated input |
+| ⚡ T1 · Medium — Koko Eating Bananas (LC 875) | BS on answer | "minimum speed such that…" | Feasible = hours ≤ h; monotone in speed | Ceiling division; `lo = 1` not 0 |
+| 🎯 T2 · Medium — Find Peak Element (LC 162) | Bound on slope | No sort, but local slope is monotone guidance | Go toward the higher neighbor | Compare `mid` with `mid+1`, loop `lo < hi` |
+| 🎯 T2 · Medium — Capacity to Ship in D Days (LC 1011) | BS on answer | "minimize the max load" | `lo = max(w)`, `hi = sum(w)`, greedy day count | `lo = 1` makes feasible() wrong for heavy items |
+| 🎯 T2 · Hard — Split Array Largest Sum (LC 410) | BS on answer | Same shape as LC 1011 | Greedy split count ≤ k | Reset `curr = 0` then add `n` |
+| 💤 T3 · Hard — Median of Two Sorted Arrays (LC 4) | Partition | O(log(min(m,n))) required | BS on cut in smaller array; `maxL ≤ minR` both sides | ±∞ sentinels at cut edges |
 
 ---
 

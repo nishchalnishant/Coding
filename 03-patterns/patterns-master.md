@@ -3,20 +3,27 @@ module: 03-patterns
 topic: Patterns Master
 tags: [patterns, patterns-master]
 ---
+# Pattern Recognition Master Guide
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Pattern recognition: decision trees, every core pattern's triggers, pivot logic (if X fails try Y), pre-code checklist, follow-up chains, hybrid patterns.
+> **You'll be able to:** Map signal words + constraints to a pattern and know the pivot when the first idea fails.
+> **Prereqs:** Most lecture files · **Pair with:** [How to think](HOW_TO_THINK.md) · [Pattern ladders](PATTERN_LADDERS.md) · **Time:** 1.5 h
+> **How to use:** reference — read once, then use as a lookup.
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [First-Principles Breakdown](#first-principles-breakdown) · [Quick Decision Trees](#quick-decision-trees) · [Core Patterns](#core-patterns) · [If-Not-X-Then-Y (Pivot Logic)](#if-not-x-then-y-pivot-logic) · [Mental Model Shifts](#mental-model-shifts) · [60-Second Pre-Code Checklist](#60-second-pre-code-checklist) · [Critical Gotchas (Last-Minute Check)](#critical-gotchas-last-minute-check) · [Progression Cheatsheet: Brute Force → Optimization → Optimal](#progression-cheatsheet-brute-force--optimization--optimal) · [Implicit Graph Pattern ⚡ T1](#implicit-graph-pattern--t1) · [Follow-Up Chains — Interview Progression ⚡ T1](#follow-up-chains--interview-progression--t1) · [Hybrid Patterns 🎯 T2](#hybrid-patterns--t2) · [See Also](#see-also)
+
+---
+
 ## First-Principles Breakdown
 - **Root problem**: Every problem in isolation looks unique; pattern taxonomy converts "novel problem" into "known template + small adaptation."
 - **Core insight**: Problems share structural signatures (sorted input, contiguous subarray, graph edges, optimal substructure) — these signals map reliably to algorithm families.
 - **Invariant**: A correctly identified pattern always reduces the problem to a known time complexity; misidentified patterns waste interview time backtracking.
 - **Why it's fast**: Template code for each pattern is 10-30 lines; adapting it to a specific problem is faster than deriving from scratch.
 - **Where it breaks**: Over-fitting to pattern — forcing DP on a greedy problem adds unnecessary O(n²) complexity; pattern recognition fails when the problem is a composition of two patterns simultaneously.
-
-# Pattern Recognition Master Guide
-
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
-
-
 
 **Use this when:** You read a problem and need to identify the solution approach within 60 seconds.
 
@@ -476,6 +483,8 @@ def bfs_implicit(start, target):
 
 ## Follow-Up Chains — Interview Progression `⚡ T1`
 
+> The five generic transformations behind every chain below: [HOW_TO_THINK § escalation grammar](HOW_TO_THINK.md#the-escalation-grammar-what-follow-ups-will-be).
+
 Google interviewers stack follow-ups to probe depth. Know the upgrade path for each pattern family.
 
 ### Two Sum family
@@ -508,6 +517,8 @@ Google interviewers stack follow-ups to probe depth. Know the upgrade path for e
 ---
 
 ## Hybrid Patterns `🎯 T2`
+
+> How to *find* the seam between two patterns: [HOW_TO_THINK § two patterns with a seam](HOW_TO_THINK.md#hard-problems-are-two-patterns-with-a-seam).
 
 When a problem combines two pattern families, name both upfront in the interview.
 

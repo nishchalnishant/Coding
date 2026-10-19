@@ -3,38 +3,37 @@ module: 02-algorithms
 topic: Bit Manipulation
 tags: [algorithms, bit-manipulation]
 ---
+# Bit Manipulation — L3 Gold Standard
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. Appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Know the patterns cold.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Conceptual awareness only.
+## What this covers
 
-## First-Principles Map
+> [!abstract] In this file
+> **Covers:** Bitwise operators and the 8 essential tricks: XOR cancellation, lowbit, clear lowest bit, popcount, power-of-two test, masks and subset enumeration.
+> **You'll be able to:** Solve single-number / counting-bits / subset-mask problems; read and write bit tricks without guessing.
+> **Prereqs:** None · **Pair with:** [Bit questions](../03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md#bit-manipulation) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY bit manipulation exists → WHAT it is → HOW it works → WHEN to use
-        │                         │               │               │
-  [CPUs operate on bits;     [direct operation  [bitwise AND     [constant-factor
-   O(1) word-size operations  on binary         OR XOR NOT       speedup; XOR
-   replace expensive          representation;   left/right-      tricks for
-   arithmetic; interview      integers as bit   shift; each      duplicate/missing
-   problems exploit XOR       arrays of width   op is 1 CPU      numbers; bitmask
-   cancellation and           32 or 64]         instruction]     for subset DP
-   masking tricks]                                               on N ≤ 20]
-```
+**Sections:** [Core Idea](#core-idea) · [Operator Reference](#operator-reference) · [Core Tricks — The Essential 8](#core-tricks--the-essential-8) · [Canonical Interview Problems](#canonical-interview-problems) · [Problem Deep Dives](#problem-deep-dives) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Many number-theory and set-membership problems have O(N) arithmetic solutions; bits reduce these to O(1) word operations.
 - **Core insight**: XOR is its own inverse — `a ^ a = 0` and `a ^ 0 = a`. This cancellation property solves "find the odd one out" problems in O(N) time and O(1) space.
 - **Key invariant**: `n & (n-1)` clears the lowest set bit of `n`. When `n` is a power of 2, this produces 0.
 - **Where it breaks**: Bit tricks are unreadable — always add a comment explaining what the operation does. Sign extension in right-shift (`>>` arithmetic vs `>>>` logical) differs across languages.
 
----
+> [!warning] Common mistakes
+> - Operator precedence: `n & 1 == 0` parses as `n & (1 == 0)` — always parenthesize `(n & 1) == 0`.
+> - Python ints are unbounded: negative numbers have infinitely many leading 1s, so loops on `n >> 1` never end — mask with `& 0xFFFFFFFF`.
+> - Power-of-two check without `n > 0` — `0 & -1 == 0` returns true for 0.
+> - Right shift on negatives is arithmetic (sign-extending) in Python/C++/Java `>>`; Java's `>>>` is logical.
+> - Using bit tricks where clarity wins — comment every non-obvious expression.
 
-# Bit Manipulation — L3 Gold Standard
+---
 
 ## Operator Reference
 
@@ -208,7 +207,7 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
 
 ---
 
-## Interview Questions — Deep Dive
+## Problem Deep Dives
 
 ### Single Number `⚡ T1`
 
@@ -690,7 +689,7 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
 
 ---
 
-### Maximum XOR of Two Numbers in an Array `💤 T3`
+### Maximum XOR of Two Numbers in an Array `⚡ T1`
 
 > [!example] Problem
 > Given an integer array `nums`, return the **maximum result** of `nums[i] XOR nums[j]` where `0 <= i <= j < n`.
@@ -750,9 +749,9 @@ def all_subsets(nums: list[int]) -> list[list[int]]:
 
 ---
 
-## Interview Questions — Quick Reference
+## Interview Questions — Logic & Trickiness
 
-| Question | Diff | Click Moment | Core Logic | Gotchas |
+| Question | Diff | Click moment | Core logic | Gotchas |
 |:---------|:-----|:-------------|:-----------|:--------|
 | **Single Number `⚡ T1`** | E | All duplicates cancel via XOR | XOR all numbers | Pairs become 0; lone survives |
 | **Single Number II `🎯 T2`** | M | Triples need per-bit mod 3 | `ones`/`twos` state machine | XOR-all alone fails |

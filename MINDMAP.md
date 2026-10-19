@@ -3,13 +3,22 @@ module: root
 topic: Mindmap
 tags: [root, mindmap, l3]
 ---
+# Mindmap — ASCII only (`coding/`, L3 scope)
 
 ← [L3 Roadmap](coding/l3-google-roadmap.md) · [Flowcharts](FLOWCHARTS.md) · [DS index](01-data-structures/README.md) · [Algorithms index](02-algorithms/README.md)
 
-# Mindmap — ASCII only (`coding/`, L3 scope)
+## What this covers
 
-> [!note] L3 Reference Document
-> Lookup index for **T1/T2 problems only** in the L3 study path. Skips `💤 T3` entries. Not a substitute for topic deep-dives.
+> [!abstract] In this file
+> **Covers:** Every T1/T2 problem in the coding walkthroughs as an ASCII tree, each with a one-line hint.
+> **You'll be able to:** Rapid-fire recall: see a problem name, recall the approach.
+> **Prereqs:** Solved the problems once · **Pair with:** [Questions index](questions.md) · [Flowcharts](FLOWCHARTS.md) · **Time:** 30 min per pass
+> **How to use:** reference — read once, then use as a lookup.
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [coding/data-structures/](#codingdata-structures) · [coding/algorithms/](#codingalgorithms)
+
+---
 
 _→ = one-line hint from each problem's Approach block_
 
@@ -186,7 +195,7 @@ coding/data-structures/03-string.md
     ├── Two Pointers — Palindrome
     │   ├── Valid Palindrome `🎯 T2`
     │   │   → After filtering to alphanumeric + lowercase, a palindrome reads the same forwards and backwards.
-    │   ├── Longest Palindromic Substring `🎯 T2`
+    │   ├── Longest Palindromic Substring `⚡ T1`
     │   │   → A palindrome is symmetric around its center.
     │   └── Palindromic Substrings (Count All Palindromic Substrings)
     │       → Same expand-around-center logic as Longest Palindromic Substring, but instead of tracking the longest, count every expansion that succeeds.
@@ -766,7 +775,6 @@ coding/data-structures/14-design.md
         └── Peeking Iterator / Flatten Nested List Iterator `🎯 T2`
             → Peek = cache one element ahead; nested = stack holding reversed contents, flatten lazily on hasNext.
 ```
-
 
 ## coding/algorithms/
 
@@ -1354,11 +1362,11 @@ coding/algorithms/15-dynamic-programming.md
     │   │   → Deleting characters to equalize is equivalent to keeping the maximum-weight common subsequence (measured in ASCII values).
     │   └── Minimum Window Subsequence (LC 727) `🎯 T2`
     ├── Grid DP
-    │   ├── Unique Paths `🎯 T2`
+    │   ├── Unique Paths `⚡ T1`
     │   │   → Each cell is reachable from exactly above or left; paths to any cell = sum of paths to two neighbors — overlapping.
     │   ├── Unique Paths II (With Obstacles) `🎯 T2`
     │   │   → Same grid DP but obstacle cells have zero paths and block propagation downstream.
-    │   ├── Minimum Path Sum `🎯 T2`
+    │   ├── Minimum Path Sum `⚡ T1`
     │   │   → Min-cost path to (i,j) = grid value + min of cost from above or left — overlapping.
     │   └── Maximal Square `🎯 T2`
     │       → A square of side k at (i,j) requires squares of side k-1 at three adjacent neighbors — optimal substructure with overlapping sub-rectangles.
@@ -1494,7 +1502,6 @@ coding/algorithms/09-recursion.md
         └── Predict the Winner (LC 486)
             → dp(i, j) = score advantage for the current player on subarray [i, j].
 ```
-
 
 ---
 

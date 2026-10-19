@@ -6,27 +6,45 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 
 ---
 
-## Start here
+## What this repo covers
 
-| Step | Link |
-|------|------|
-| 1 | [`coding/l3-google-roadmap.md`](coding/l3-google-roadmap.md) — 4-week schedule |
-| — | [**L3 Cheatsheet**](00-L3-EXECUTION-META/L3_CHEATSHEET.md) — pacing, constraints, decision guide, what to skip |
-| 2 | [`01-data-structures/README.md`](01-data-structures/README.md) — DS index + 27 must-solve |
-| 3 | [`02-algorithms/README.md`](02-algorithms/README.md) — algo index + 27 must-solve |
-| 4 | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](00-L3-EXECUTION-META/L3_CHEATSHEET.md) — pacing, constraints, Python syntax |
-| 5 | [`coding/`](coding/) — problem walkthroughs |
-| 6 | [`04-behavioral/BEHAVIORAL_GOOGLINESS.md`](04-behavioral/BEHAVIORAL_GOOGLINESS.md) — STAR stories, attributes, prep |
+| Area | Topics | Where |
+|---|---|---|
+| **Data structures** | array, hashing, string, matrix/grid, stack, queue/deque, linked list, tree/BST, trie, heap, graph | [`01-data-structures/`](01-data-structures/README.md) |
+| **Algorithms** | sorting, string matching, two pointers, sliding window, recursion, recursion → DP, binary search, backtracking, union-find, DP (9 patterns), greedy/intervals, bit manipulation & math (interview depth) | [`02-algorithms/`](02-algorithms/README.md) |
+| **Practice bank** | 128 walkthrough problems, tier-tagged, one file per topic + design-a-data-structure | [`coding/`](questions.md) |
+| **Thinking & patterns** | first-principles derivation, pattern triggers, ladders, in-interview judgment, mocks | [`03-patterns/`](03-patterns/README.md) |
+| **Behavioral** | Googliness attributes, STAR story bank | [`04-behavioral/`](04-behavioral/README.md) |
+| **Round execution** | 45-min clock, constraint → Big-O, edge cases, what to skip | [L3 Cheatsheet](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
+
+**Not in scope:** system design, LLD, concurrency, SQL, **segment trees / Fenwick trees**, advanced graphs (Floyd-Warshall, Tarjan/SCC), bitmask/digit DP — see [What to Skip at L3](00-L3-EXECUTION-META/L3_CHEATSHEET.md).
+
+**Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](coding/l3-google-roadmap.md#tier-legend)). L4/senior bars layer on top via the [L4 delta](coding/l4-sde2-delta.md) and [senior delta](coding/sde3-senior-delta.md).
 
 ---
 
-## What this repo covers (L3)
+## How every lecture is laid out
 
-**Data structures:** array, hashing, string, stack, queue, linked list, tree, trie, heap, graph
+1. **What this covers**: scope, what you'll be able to do, prereqs, paired practice file, time budget, section links.
+2. **First-Principles Map / Breakdown**: why the structure or technique exists, its invariant, where it breaks.
+3. **Theory → techniques → templates**: the mental model, then code templates with complexity.
+4. **Interview questions, logic & traps**, then **Quick Revision Triggers** and flashcards.
 
-**Algorithms:** two pointers, sliding window, binary search, sorting (reference), graphs, union-find, greedy, backtracking, core DP, recursion
+Each concept file (`01-`, `02-`) links to its practice file in `coding/` and the practice file links back.
 
-**Not in scope for L3:** system design, LLD, concurrency, SQL, **segment trees / Fenwick trees**, advanced graphs (Floyd/Tarjan), bit manipulation deep-dives, bitmask/digit/interval DP — see [What to Skip at L3](00-L3-EXECUTION-META/L3_CHEATSHEET.md)
+---
+
+## Start here: study path
+
+| Step | Do | Link |
+|---|---|---|
+| 1 | Read the plan and the round clock | [L3 roadmap](coding/l3-google-roadmap.md) · [L3 Cheatsheet](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
+| 2 | Learn how to derive patterns | [How to Think](03-patterns/HOW_TO_THINK.md) |
+| 3 | Per topic: lecture, then the practice file, T1 first | [DS index](01-data-structures/README.md) · [Algo index](02-algorithms/README.md) |
+| 4 | Recursion & DP from zero | [Masterclass](03-patterns/RECURSION_AND_DP_MASTERCLASS.md) |
+| 5 | Pressure-test with ladders and mocks | [Pattern Ladders](03-patterns/PATTERN_LADDERS.md) · [Mock set](03-patterns/MOCK_INTERVIEW_SET.md) · [Interview Judgment](03-patterns/INTERVIEW_JUDGMENT.md) |
+| 6 | Behavioral stories | [Behavioral + Googliness](04-behavioral/BEHAVIORAL_GOOGLINESS.md) |
+| 7 | Final week | [Revision guide](03-patterns/GOOGLE_INTERVIEW_REVISION.md) · [Mind map](MINDMAP.md) |
 
 ---
 
@@ -37,13 +55,27 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 | Mind map | [`MINDMAP.md`](MINDMAP.md) |
 | Flowcharts | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
 | Pattern triggers | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
-| Full problem index (125, by topic) | [`questions.md`](questions.md) |
-| **L3 Cheatsheet** (pacing, Big-O, edge cases, what to skip) | [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
+| Full problem index (128, by topic) | [`questions.md`](questions.md) |
 | Interview strategy / day-of revision | [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
 | L4 (SDE-2) delta | [`coding/l4-sde2-delta.md`](coding/l4-sde2-delta.md) |
 | SDE-3 / senior delta | [`coding/sde3-senior-delta.md`](coding/sde3-senior-delta.md) |
 | Senior follow-up chains | [`03-patterns/SENIOR_FOLLOWUPS.md`](03-patterns/SENIOR_FOLLOWUPS.md) |
 | Weakness log / spaced revision / mock scoring | [`tracking/`](tracking/) |
+
+### Flashcards (147 cards, spaced repetition)
+
+Every lecture ends with a `## Flashcards` section. A card is a bold question line tagged `#flashcard`, followed by the answer up to the next blank line:
+
+```
+**What does `lps[i]` mean in KMP?** #flashcard
+Longest proper prefix of pattern[:i+1] that is also a suffix…
+```
+
+- **Anki:** export every card to a tab-separated file, then *File → Import* into a Basic note type with "Allow HTML" on. Multi-line answers are joined with `<br>`.
+  ```sh
+  grep -rl --include='*.md' '#flashcard$' . | xargs awk '/#flashcard$/{if(q)print q"\t"a; q=$0; sub(/ *#flashcard$/,"",q); a=""; next} q&&/^(---)?$/{if(a!=""){print q"\t"a; q=""}; next} q{a=(a==""?$0:a"<br>"$0)} END{if(q)print q"\t"a}' > flashcards.tsv
+  ```
+- **Obsidian:** filter with tag search `tag:#flashcard` to review in-vault. The Spaced Repetition plugin expects `?` / `::` separators, so the Anki export is the supported route for scheduled review.
 
 ---
 

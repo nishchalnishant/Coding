@@ -3,17 +3,23 @@ tags: [coding, algorithms, two-pointers]
 topic: Two Pointers
 difficulty: mixed
 ---
-
 # Two Pointers — Problem Set
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked two-pointer problems: converging, fast/slow, partition, palindrome, two-sum variants, greedy two-pointer.
+> **You'll be able to:** Solve the T1 two-pointer set cold with a stated invariant.
+> **Prereqs:** Two-pointers lecture · **Pair with:** [Two-pointers lecture](../../02-algorithms/03-two-pointers.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [Opposite Ends (Sorted Array)](#opposite-ends-sorted-array) · [Same Direction (Fast/Slow)](#same-direction-fastslow) · [Partition / Dutch National Flag](#partition--dutch-national-flag) · [Linked List Two Pointers](#linked-list-two-pointers) · [Palindrome Two Pointers](#palindrome-two-pointers) · [Hash Map Two-Sum Variant](#hash-map-two-sum-variant) · [Sorted Array / Two-Pointer Greedy](#sorted-array--two-pointer-greedy) · [Two-Pointer on Strings](#two-pointer-on-strings)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Two Sum II — Input Array is Sorted](#two-sum-ii--input-array-is-sorted-lc-167--t1) · [3Sum](#3sum-lc-15--t1) · [Container With Most Water](#container-with-most-water-lc-11--t1) · [Trapping Rain Water](#trapping-rain-water-lc-42--t1) · [Remove Duplicates from Sorted Array](#remove-duplicates-from-sorted-array-lc-26--t1) · [Move Zeroes](#move-zeroes-lc-283--t1) · [Sort Colors](#sort-colors-lc-75--t1) · [3Sum Closest](#3sum-closest-lc-16--t1)
+> **Template:** Opposite ends on sorted input: `while l < r: s = a[l] + a[r]; if s == t: ... elif s < t: l += 1 else: r -= 1`.
+> **Template:** Read/write pointers: `w = 0; for r in range(n): if keep(a[r]): a[w] = a[r]; w += 1`.
+> **Gotchas:** 3Sum dedup: skip equal `a[i]` at the outer loop AND advance past equal `a[l]`/`a[r]` after a hit · Container: always move the shorter side · Sort Colors: don't advance `i` after swapping with `hi` · two pointers need sorted (or monotone) input.
 
 ---
 
@@ -59,6 +65,9 @@ difficulty: mixed
 > - numbers is sorted in non-decreasing order.
 > - -1000 <= target <= 1000
 > - The tests are generated such that there is exactly one solution.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Complement from both ends · **Gotcha:** Input must be **sorted**; 1-indexed return in some problems.
 
 > [!info] Approach
 > Array is sorted — sum is monotonically controlled by which endpoints we choose. Brute force O(n²) is unnecessary. Converging pointers `lo = 0, hi = n-1`. Sum < target → `lo += 1`; sum > target → `hi -= 1`; sum == target → return. Each step either finds the answer or eliminates at least one impossible pair. Total: O(n) steps.
@@ -121,6 +130,12 @@ difficulty: mixed
 > **Constraints:**
 > - 3 <= nums.length <= 3000
 > - -10^5 <= nums[i] <= 10^5
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Fix i; two-pointer on rest · **Gotcha:** Sort first; skip **all** equal values at each level.
+
+> [!failure] Tempting wrong approach
+> Dedup with `set(tuple(sorted(t)))` over a hash-based pair search — O(n²) time but hides the real skip logic and costs extra memory. Sort, then skip equal neighbors for `i`, `lo`, and `hi`.
 
 > [!info] Approach
 > O(n³) brute force is too slow. Fix one element; remaining two-sum on sorted subarray reduces to O(n²) total. Sort array. For each anchor `i`, run converging two-pointer on `[i+1, n-1]`. Skip duplicate anchors (`nums[i] == nums[i-1]`). On finding a triplet, skip duplicate inner pointers before advancing.
@@ -245,6 +260,12 @@ difficulty: mixed
 > - 2 <= n <= 10^5
 > - 0 <= height[i] <= 10^4
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Move shorter side · **Gotcha:** Moving taller side never increases min height.
+
+> [!failure] Tempting wrong approach
+> Moving the taller pointer "to explore." Area is capped by the shorter side, so moving the taller one can never increase it — always move the shorter.
+
 > [!info] Approach
 > Volume = `min(height[lo], height[hi]) * (hi - lo)`. Moving the taller bar inward can only decrease or keep width the same while min height can only stay equal or decrease — it can never improve the result. So always move the shorter bar. Start with widest container `lo=0, hi=n-1`. Move the shorter side inward. `if height[lo] <= height[hi]: lo += 1` else `hi -= 1`. Record max at each step.
 
@@ -294,6 +315,12 @@ difficulty: mixed
 > - n == height.length
 > - 1 <= n <= 2 * 10^4
 > - 0 <= height[i] <= 10^5
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Advance smaller `l_max`/`r_max` side · **Gotcha:** Two-pointer O(n) O(1); differs from stack solution.
+
+> [!failure] Tempting wrong approach
+> Water per bar from adjacent neighbors (`min(h[i-1], h[i+1])`). Depth depends on the max to the left and right across the whole array, not the neighbors.
 
 > [!info] Approach
 > Water at position `i` = `min(max_left, max_right) - height[i]`. Two pointers maintain running left/right maxima without two passes. Converging pointers. Whichever side has the smaller max — that side's water is determined by its own max (the other side can only be higher). Process that side. `if left_max <= right_max: water += left_max - height[lo]; lo += 1` else process right side.
@@ -373,6 +400,9 @@ difficulty: mixed
 > - 1 <= nums.length <= 3 * 10^4
 > - -100 <= nums[i] <= 100
 > - nums is sorted in non-decreasing order.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** `write` only on new value · **Gotcha:** Return `write+1` as new length.
 
 > [!info] Approach
 > Array is sorted — duplicates are contiguous. A write pointer marks the last accepted position. `write = 1` (index 0 always kept). For each `read >= 1`, copy to `write` only if `nums[read] != nums[read-1]`. Each non-duplicate advances `write`. Duplicates are simply skipped.
@@ -565,6 +595,73 @@ difficulty: mixed
 
 ---
 
+### Minimum Operations to Reduce X to Zero (LC 1658) `⚡ T1`
+
+> [!example] Problem
+> You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or the rightmost element from the array nums and subtract its value from x. Note that this modifies the array for future operations.
+> Return the minimum number of operations to reduce x to exactly 0 if it is possible, otherwise, return -1.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,4,2,3], x = 5
+> Output: 2
+> Explanation: The optimal solution is to remove the last two elements to reduce x to zero.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5,6,7,8,9], x = 4
+> Output: -1
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [3,2,20,1,1,3], x = 10
+> Output: 5
+> Explanation: The optimal solution is to remove the last three elements and the first two elements (5 operations in total) to reduce x to zero.
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 10^5
+> - 1 <= nums[i] <= 10^4
+> - 1 <= x <= 10^9
+
+> [!info] Approach
+> Removing from both ends to sum to `x` is equivalent to finding the longest subarray in the middle with sum = `total - x`. This is a sliding window on the middle subarray. Find the maximum-length subarray with sum = `total - x`. The answer is `n - max_length`. Two-pointer (sliding window): expand right to grow the window, shrink left when the window sum exceeds `target`. Track the maximum window length where sum equals `target`.
+
+> [!note]- Python Solution
+> ```python
+> def min_operations(nums, x):
+>     target = sum(nums) - x
+>     if target < 0:
+>         return -1
+>     if target == 0:
+>         return len(nums)
+>     n = len(nums)
+>     left = 0
+>     current_sum = 0
+>     max_len = -1
+>     for right in range(n):
+>         current_sum += nums[right]
+>         while current_sum > target and left <= right:
+>             current_sum -= nums[left]
+>             left += 1
+>         if current_sum == target:
+>             max_len = max(max_len, right - left + 1)
+>     if max_len == -1:
+>         return -1
+>     return n - max_len
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Prefix sum + hash map: store prefix sums, search for `prefix[i] == total - x - suffix_sum`. O(n) time but O(n) space.
+> - Key insight: the "remove from both ends" framing is a classic redirect — always ask if the complement (middle subarray) is easier.
+
+---
+
 ## Partition / Dutch National Flag
 
 ---
@@ -592,6 +689,12 @@ difficulty: mixed
 > - n == nums.length
 > - 1 <= n <= 300
 > - nums[i] is either 0, 1, or 2.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Three pointers lo/mid/hi · **Gotcha:** Swap mid with hi then mid++ only if not 2.
+
+> [!failure] Tempting wrong approach
+> Advancing `i` after swapping with `hi`. The value swapped in from the right is unexamined — advance `i` only on the `lo` swap or on a 1.
 
 > [!info] Approach
 > Standard sort is O(n log n). Three distinct values allow O(n) single-pass partitioning. Three pointers: `lo` (next 0 position), `mid` (current element), `hi` (next 2 position from right). Process `nums[mid]`: if 0 → swap with `lo`, advance both `lo` and `mid`; if 1 → advance `mid` only; if 2 → swap with `hi`, decrement `hi` but do NOT advance `mid` (swapped element is unseen).
@@ -630,225 +733,25 @@ difficulty: mixed
 
 ### Linked List Cycle (LC 141) `🎯 T2`
 
-> [!example] Problem
-> Given head, the head of a linked list, determine if the linked list has a cycle in it.
-> There is a cycle in a linked list if there is some node in the list that can be reached again by continuously following the next pointer. Internally, pos is used to denote the index of the node that tail's next pointer is connected to. Note that pos is not passed as a parameter.
-> Return true if there is a cycle in the linked list. Otherwise, return false.
-> 
-> **Example 1:**
-> ```
-> Input: head = [3,2,0,-4], pos = 1
-> Output: true
-> Explanation: There is a cycle in the linked list, where the tail connects to the 1st node (0-indexed).
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: head = [1,2], pos = 0
-> Output: true
-> Explanation: There is a cycle in the linked list, where the tail connects to the 0th node.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: head = [1], pos = -1
-> Output: false
-> Explanation: There is no cycle in the linked list.
-> ```
-> 
-> **Constraints:**
-> - The number of the nodes in the list is in the range [0, 10^4].
-> - -10^5 <= Node.val <= 10^5
-> - pos is -1 or a valid index in the linked-list.
-
-> [!info] Approach
-> No random access → can't track visited nodes without O(n) space. Floyd's: if a cycle exists, a faster pointer will lap the slower one. `slow` moves 1 step/iteration; `fast` moves 2. If they meet → cycle. If `fast` reaches None → no cycle. Check `fast and fast.next` before each step to avoid null pointer dereference.
-
-> [!note]- Python Solution
-> ```python
-> from typing import Optional
-> 
-> class ListNode:
->     def __init__(self, val=0, next=None):
->         self.val = val
->         self.next = next
-> 
-> def has_cycle(head):
->     slow = fast = head
->     while fast and fast.next:
->         slow = slow.next
->         fast = fast.next.next
->         if slow is fast:
->             return True
->     return False
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> HashSet of visited nodes O(n) space — simpler code but violates space constraint.
+> Full walkthrough: [Linked List Cycle](../data-structures/07-linked-list.md#linked-list-cycle--t2).
 
 ---
 
 ### Find Duplicate Number — Floyd's (LC 287)
 
-> [!example] Problem
-> Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
-> There is only one repeated number in nums, return this repeated number.
-> You must solve the problem without modifying the array nums and using only constant extra space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,4,2,2]
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,1,3,4,2]
-> Output: 3
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,3,3,3,3]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 10^5
-> - nums.length == n + 1
-> - 1 <= nums[i] <= n
-> - All the integers in nums appear only once except for precisely one integer which appears two or more times.
-
-> [!info] Approach
-> Treat the array as a function `f(i) = nums[i]` — following indices creates a linked list with a cycle (since one value appears twice, two indices map to the same "next"). Floyd's cycle detection finds the cycle entry = duplicate. Phase 1: find meeting point (inside cycle). Phase 2: reset one pointer to 0, step both by 1 until they meet — meeting point is the duplicate. Phase 1 uses `slow = nums[slow]; fast = nums[nums[fast]]`. Phase 2: `slow = 0; while slow != fast: slow = nums[slow]; fast = nums[fast]`.
-
-> [!note]- Python Solution
-> ```python
-> def find_duplicate(nums):
->     # Phase 1: detect meeting point inside cycle
->     slow = fast = nums[0]
->     while True:
->         slow = nums[slow]
->         fast = nums[nums[fast]]
->         if slow == fast:
->             break
-> 
->     # Phase 2: find cycle entry (= duplicate value)
->     slow = nums[0]
->     while slow != fast:
->         slow = nums[slow]
->         fast = nums[fast]
->     return slow
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Sort O(n log n); HashSet O(n) space; binary search on value O(n log n) — all inferior for this constraint set.
+> Full walkthrough: [Find the Duplicate Number](../data-structures/01-array.md#find-the-duplicate-number--t2).
 
 ---
 
 ### Middle of the Linked List (LC 876)
 
-> [!example] Problem
-> Given the head of a singly linked list, return the middle node of the linked list.
-> If there are two middle nodes, return the second middle node.
-> 
-> **Example 1:**
-> ```
-> Input: head = [1,2,3,4,5]
-> Output: [3,4,5]
-> Explanation: The middle node of the list is node 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: head = [1,2,3,4,5,6]
-> Output: [4,5,6]
-> Explanation: Since the list has two middle nodes with values 3 and 4, we return the second one.
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the list is in the range [1, 100].
-> - 1 <= Node.val <= 100
-
-> [!info] Approach
-> Length unknown without full traversal. Fast/slow pointers: by the time `fast` reaches the end, `slow` is at the midpoint. `fast` moves 2 steps per iteration; `slow` moves 1. When `fast` or `fast.next` is None, `slow` is at the middle. Condition `while fast and fast.next` — for even-length lists, `slow` stops at the second middle (upper-mid). This matches the problem requirement.
-
-> [!note]- Python Solution
-> ```python
-> def middle_node(head):
->     slow = fast = head
->     while fast and fast.next:
->         slow = slow.next
->         fast = fast.next.next
->     return slow
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Count length then traverse `n//2` — two passes, same O(n) time.
+> Full walkthrough: [Middle of the Linked List](../data-structures/07-linked-list.md#middle-of-the-linked-list).
 
 ---
 
 ### Remove Nth Node From End of List (LC 19) `🎯 T2`
 
-> [!example] Problem
-> Given the head of a linked list, remove the nth node from the end of the list and return its head.
-> 
-> **Example 1:**
-> ```
-> Input: head = [1,2,3,4,5], n = 2
-> Output: [1,2,3,5]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: head = [1], n = 1
-> Output: []
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: head = [1,2], n = 1
-> Output: [1]
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the list is sz.
-> - 1 <= sz <= 30
-> - 0 <= Node.val <= 100
-> - 1 <= n <= sz
-
-> [!info] Approach
-> To reach the nth-from-end, the fast pointer must be exactly n steps ahead of slow. When fast reaches the end, slow is at the node before the target. Advance `fast` n+1 steps (so slow stops at the node *before* the one to delete). Then move both until `fast` is None. Use a dummy head to handle edge case of deleting the first node. `slow.next = slow.next.next` removes the target.
-
-> [!note]- Python Solution
-> ```python
-> def remove_nth_from_end(head, n):
->     dummy = ListNode(0, head)
->     slow = fast = dummy
->     # Advance fast n+1 steps so slow stops before target
->     for _ in range(n + 1):
->         fast = fast.next
->     while fast:
->         slow = slow.next
->         fast = fast.next
->     slow.next = slow.next.next   # remove nth from end
->     return dummy.next
-> ```
-
-> [!success] Complexity
-> O(L) time where L is list length. O(1) space.
-
-> [!tip] Alternatives
-> Two-pass — count length then delete at `L - n`; same O(L) but two traversals.
+> Full walkthrough: [Remove Nth Node From End of List](../data-structures/07-linked-list.md#remove-nth-node-from-end-of-list--t2).
 
 ---
 
@@ -1224,6 +1127,64 @@ difficulty: mixed
 
 ---
 
+### Boats to Save People (LC 881)
+
+> [!example] Problem
+> You are given an array people where people[i] is the weight of the ith person, and an infinite number of boats where each boat can carry a maximum weight of limit. Each boat carries at most two people at the same time, provided the sum of the weight of those people is at most limit.
+> Return the minimum number of boats to carry every given person.
+> 
+> **Example 1:**
+> ```
+> Input: people = [1,2], limit = 3
+> Output: 1
+> Explanation: 1 boat (1, 2)
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: people = [3,2,2,1], limit = 3
+> Output: 3
+> Explanation: 3 boats (1, 2), (2) and (3)
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: people = [3,5,3,4], limit = 5
+> Output: 4
+> Explanation: 4 boats (3), (3), (4), (5)
+> ```
+> 
+> **Constraints:**
+> - 1 <= people.length <= 5 * 10^4
+> - 1 <= people[i] <= limit <= 3 * 10^4
+
+> [!info] Approach
+> Greedy: pair the heaviest person with the lightest person if their combined weight fits. Otherwise, the heaviest person gets a boat alone. Two pointers on a sorted array implements this efficiently. Sort people. Use `left` and `right` pointers. If `people[left] + people[right] <= limit`, both fit — move both pointers. Otherwise, only `right` fits — move only `right`. Each iteration uses one boat. Count iterations until `left > right`.
+
+> [!note]- Python Solution
+> ```python
+> def num_rescue_boats(people, limit):
+>     people.sort()
+>     left = 0
+>     right = len(people) - 1
+>     boats = 0
+>     while left <= right:
+>         if people[left] + people[right] <= limit:
+>             left += 1
+>         right -= 1
+>         boats += 1
+>     return boats
+> ```
+
+> [!success] Complexity
+> Time O(n log n) for sorting, O(n) for the scan. Space O(1).
+
+> [!tip] Alternatives
+> - Greedy with priority queue: overkill — the two-pointer on sorted array is optimal.
+> - Key insight: always try to pair the heaviest with the lightest. If they don't fit, the heaviest must go alone.
+
+---
+
 ## Two-Pointer on Strings
 
 ---
@@ -1319,9 +1280,6 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[binary-search]] | [[sliding-window]] | [[array]] | [[linked-list]]
 ### Reverse Vowels of a String
 
 > [!example] Problem
@@ -1374,133 +1332,7 @@ difficulty: mixed
 
 ---
 
-## Two Pointers — More Problems
-
-### Minimum Operations to Reduce X to Zero (LC 1658) `⚡ T1`
-
-> [!example] Problem
-> You are given an integer array nums and an integer x. In one operation, you can either remove the leftmost or the rightmost element from the array nums and subtract its value from x. Note that this modifies the array for future operations.
-> Return the minimum number of operations to reduce x to exactly 0 if it is possible, otherwise, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,4,2,3], x = 5
-> Output: 2
-> Explanation: The optimal solution is to remove the last two elements to reduce x to zero.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5,6,7,8,9], x = 4
-> Output: -1
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,2,20,1,1,3], x = 10
-> Output: 5
-> Explanation: The optimal solution is to remove the last three elements and the first two elements (5 operations in total) to reduce x to zero.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - 1 <= nums[i] <= 10^4
-> - 1 <= x <= 10^9
-
-> [!info] Approach
-> Removing from both ends to sum to `x` is equivalent to finding the longest subarray in the middle with sum = `total - x`. This is a sliding window on the middle subarray. Find the maximum-length subarray with sum = `total - x`. The answer is `n - max_length`. Two-pointer (sliding window): expand right to grow the window, shrink left when the window sum exceeds `target`. Track the maximum window length where sum equals `target`.
-
-> [!note]- Python Solution
-> ```python
-> def min_operations(nums, x):
->     target = sum(nums) - x
->     if target < 0:
->         return -1
->     if target == 0:
->         return len(nums)
->     n = len(nums)
->     left = 0
->     current_sum = 0
->     max_len = -1
->     for right in range(n):
->         current_sum += nums[right]
->         while current_sum > target and left <= right:
->             current_sum -= nums[left]
->             left += 1
->         if current_sum == target:
->             max_len = max(max_len, right - left + 1)
->     if max_len == -1:
->         return -1
->     return n - max_len
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Prefix sum + hash map: store prefix sums, search for `prefix[i] == total - x - suffix_sum`. O(n) time but O(n) space.
-> - Key insight: the "remove from both ends" framing is a classic redirect — always ask if the complement (middle subarray) is easier.
-
----
-
-### Boats to Save People (LC 881)
-
-> [!example] Problem
-> You are given an array people where people[i] is the weight of the ith person, and an infinite number of boats where each boat can carry a maximum weight of limit. Each boat carries at most two people at the same time, provided the sum of the weight of those people is at most limit.
-> Return the minimum number of boats to carry every given person.
-> 
-> **Example 1:**
-> ```
-> Input: people = [1,2], limit = 3
-> Output: 1
-> Explanation: 1 boat (1, 2)
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: people = [3,2,2,1], limit = 3
-> Output: 3
-> Explanation: 3 boats (1, 2), (2) and (3)
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: people = [3,5,3,4], limit = 5
-> Output: 4
-> Explanation: 4 boats (3), (3), (4), (5)
-> ```
-> 
-> **Constraints:**
-> - 1 <= people.length <= 5 * 10^4
-> - 1 <= people[i] <= limit <= 3 * 10^4
-
-> [!info] Approach
-> Greedy: pair the heaviest person with the lightest person if their combined weight fits. Otherwise, the heaviest person gets a boat alone. Two pointers on a sorted array implements this efficiently. Sort people. Use `left` and `right` pointers. If `people[left] + people[right] <= limit`, both fit — move both pointers. Otherwise, only `right` fits — move only `right`. Each iteration uses one boat. Count iterations until `left > right`.
-
-> [!note]- Python Solution
-> ```python
-> def num_rescue_boats(people, limit):
->     people.sort()
->     left = 0
->     right = len(people) - 1
->     boats = 0
->     while left <= right:
->         if people[left] + people[right] <= limit:
->             left += 1
->         right -= 1
->         boats += 1
->     return boats
-> ```
-
-> [!success] Complexity
-> Time O(n log n) for sorting, O(n) for the scan. Space O(1).
-
-> [!tip] Alternatives
-> - Greedy with priority queue: overkill — the two-pointer on sorted array is optimal.
-> - Key insight: always try to pair the heaviest with the lightest. If they don't fit, the heaviest must go alone.
-
----
-
 ## See Also
 
+[[binary-search]] | [[sliding-window]] | [[array]] | [[linked-list]]
 [[binary-search]] | [[sorting]] | [[sliding-window]] | [[array]]

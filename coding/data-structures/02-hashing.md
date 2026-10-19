@@ -3,21 +3,29 @@ tags: [coding, data-structures, hashing]
 topic: hashing
 difficulty: mixed
 ---
-
 # Hashing Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked hashing problems: complement map, frequency map, set operations, design, rolling hash.
+> **You'll be able to:** Reach for a map/set reflexively and pick the right key.
+> **Prereqs:** Hashing lecture · **Pair with:** [Hashing lecture](../../01-data-structures/02-hashing.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [Complement Map](#complement-map) · [Prefix Sum + Map](#prefix-sum--map) · [Frequency Map](#frequency-map) · [Design](#design) · [Set Operations](#set-operations) · [Rolling Hash / Dedup](#rolling-hash--dedup)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Two Sum](#two-sum--t1) · [Subarray Sum Equals K](#subarray-sum-equals-k--t1) · [Contiguous Array](#contiguous-array-lc-525--t1) · [Subarray Sums Divisible by K](#subarray-sums-divisible-by-k--t1) · [Top K Frequent Elements](#top-k-frequent-elements--t1) · [Longest Consecutive Sequence](#longest-consecutive-sequence--t1) · [Insert Delete GetRandom O(1)](#insert-delete-getrandom-o1--t1)
+> **Template:** Prefix-sum count: `cnt = {0: 1}; for x in a: s += x; ans += cnt.get(s - k, 0); cnt[s] = cnt.get(s, 0) + 1`.
+> **Template:** Check-then-insert (Two Sum) to avoid pairing an element with itself.
+> **Gotchas:** Seed `{0: 1}` (or `{0: -1}` for longest length) · Python `%` is non-negative; other languages need `((s % k) + k) % k` · Longest Consecutive: only start counting from `x` where `x-1` not in set · Top K: bucket sort beats heap.
 
 ---
 
 ## Complement Map
+
+---
 
 ### Two Sum `⚡ T1`
 
@@ -51,6 +59,12 @@ difficulty: mixed
 > - -10^9 <= target <= 10^9
 > - Only one valid answer exists.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Pair summing to target" · **Gotcha:** Return **indices** vs values — clarify with interviewer.
+
+> [!failure] Tempting wrong approach
+> Sort + two pointers — loses the original indices. Store `value → index` and check the complement *before* inserting (handles `[3,3]`).
+
 > [!info] Approach
 > Brute force checks every pair — O(n²). We need to answer "have I seen the complement of this number?" in O(1). A hash map from value to index. For each `x`, check if `target - x` is already stored. Single pass. Before storing `x`, look up `target - x`. If found, return `[seen[complement], i]`. Store `x → i` after checking to avoid using the same index twice.
 
@@ -77,38 +91,7 @@ difficulty: mixed
 ### 3Sum (hash-based) `⚡ T1`
 
 > [!example] Problem
-> Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
-> Notice that the solution set must not contain duplicate triplets.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [-1,0,1,2,-1,-4]
-> Output: [[-1,-1,2],[-1,0,1]]
-> Explanation: 
-> nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
-> nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
-> nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
-> The distinct triplets are [-1,0,1] and [-1,-1,2].
-> Notice that the order of the output and the order of the triplets does not matter.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,1]
-> Output: []
-> Explanation: The only possible triplet does not sum up to 0.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,0,0]
-> Output: [[0,0,0]]
-> Explanation: The only possible triplet sums up to 0.
-> ```
-> 
-> **Constraints:**
-> - 3 <= nums.length <= 3000
-> - -10^5 <= nums[i] <= 10^5
+> Same problem as [3Sum (LC 15)](../algorithms/03-two-pointers.md#3sum-lc-15--t1) — this section covers the alternative approach only.
 
 > [!info] Approach
 > Reduce to two-sum: fix element `a`, find pair `(b, c)` with `b + c = -a` in the remaining array. Sort first to handle duplicates. For each index `i`, use a set to find complements in `nums[i+1:]`. Sort. Skip duplicate values of `a`. For the inner scan, use a seen set: if `target - b` in seen, record triplet; else add `b` to seen.
@@ -150,25 +133,7 @@ difficulty: mixed
 ### 4Sum (hash-based) `⚡ T1`
 
 > [!example] Problem
-> Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
-> You may return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,0,-1,0,-2,2], target = 0
-> Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,2,2,2,2], target = 8
-> Output: [[2,2,2,2]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 200
-> - -10^9 <= nums[i] <= 10^9
-> - -10^9 <= target <= 10^9
+> Same problem as [4Sum (LC 18)](../algorithms/03-two-pointers.md#4sum-lc-18--t1) — this section covers the alternative approach only.
 
 > [!info] Approach
 > Reduce to 3Sum by fixing one element. Reduce 3Sum to 2Sum by fixing another. Sort + two outer loops (skip duplicates) + hash set inner two-sum. Fix `nums[i]` and `nums[j]`. Inner target is `target - nums[i] - nums[j]`. Use seen set for two-sum on remaining elements.
@@ -212,65 +177,313 @@ difficulty: mixed
 
 ### Max Number of K-Sum Pairs
 
+> Full walkthrough: [Max Number of K-Sum Pairs (LC 1679)](../algorithms/03-two-pointers.md#max-number-of-k-sum-pairs-lc-1679).
+
+---
+
+### 4Sum II `⚡ T1`
+
 > [!example] Problem
-> You are given an integer array nums and an integer k.
-> In one operation, you can pick two numbers from the array whose sum equals k and remove them from the array.
-> Return the maximum number of operations you can perform on the array.
+> Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
 > 
 > **Example 1:**
 > ```
-> Input: nums = [1,2,3,4], k = 5
+> Input: nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]
 > Output: 2
-> Explanation: Starting with nums = [1,2,3,4]:
-> - Remove numbers 1 and 4, then nums = [2,3]
-> - Remove numbers 2 and 3, then nums = []
-> There are no more pairs that sum up to 5, hence a total of 2 operations.
+> Explanation:
+> The two tuples are:
+> 1. (0, 0, 0, 1) -> nums1[0] + nums2[0] + nums3[0] + nums4[1] = 1 + (-2) + (-1) + 2 = 0
+> 2. (1, 1, 0, 0) -> nums1[1] + nums2[1] + nums3[0] + nums4[0] = 2 + (-1) + (-1) + 0 = 0
 > ```
 > 
 > **Example 2:**
 > ```
-> Input: nums = [3,1,3,4,3], k = 6
+> Input: nums1 = [0], nums2 = [0], nums3 = [0], nums4 = [0]
 > Output: 1
-> Explanation: Starting with nums = [3,1,3,4,3]:
-> - Remove the first two 3's, then nums = [1,4,3]
-> There are no more pairs that sum up to 6, hence a total of 1 operation.
+> ```
+> 
+> **Constraints:**
+> - n == nums1.length
+> - n == nums2.length
+> - n == nums3.length
+> - n == nums4.length
+> - 1 <= n <= 200
+> - -228 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 228
+
+> [!info] Approach
+> Brute force O(n⁴). Split into two pairs: count all `A[i] + B[j]` sums, then for each `C[k] + D[l]` check if its negation was seen. Hash map `ab_sum → count`. Then iterate all C, D pairs and look up `-(C[k] + D[l])`. Two nested loops for AB → Counter. Two nested loops for CD → look up complement. Sum all matching counts.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> >
+> def four_sum_count(nums1: list[int], nums2: list[int],
+>                    nums3: list[int], nums4: list[int]) -> int:
+>     ab = defaultdict(int)
+>     for a in nums1:
+>         for b in nums2:
+>             ab[a + b] += 1
+>     count = 0
+>     for c in nums3:
+>         for d in nums4:
+>             count += ab[-(c + d)]
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n²); Space O(n²).
+
+> [!tip] Alternatives
+> Meet-in-the-middle generalizes: split k arrays into two halves of k/2, hash one half's sums, probe with the other. Always yields O(n^(k/2)) for k-sum variants.
+
+---
+
+## Prefix Sum + Map
+
+---
+
+### Contiguous Array (LC 525) `⚡ T1`
+
+> [!example] Problem
+> Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [0,1]
+> Output: 2
+> Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [0,1,0]
+> Output: 2
+> Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [0,1,1,1,1,1,0,0,0]
+> Output: 6
+> Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
 > ```
 > 
 > **Constraints:**
 > - 1 <= nums.length <= 10^5
-> - 1 <= nums[i] <= 10^9
-> - 1 <= k <= 10^9
+> - nums[i] is either 0 or 1.
+
+> [!failure] Tempting wrong approach
+> Sliding window on 0/1 counts — there's no monotone shrink condition. Map 0 → −1 and find the longest zero-sum subarray via first-seen prefix index.
 
 > [!info] Approach
-> Each number can only pair once — we need to greedily match available complements, consuming them. Frequency map. For each `x`, check if `k - x` has remaining count. If yes, form a pair and decrement both counts. Build `Counter`. For each unique `x`, pairs formed = `min(freq[x], freq[k - x])` if `x != k - x`, else `freq[x] // 2`. Sum all.
+> Map 0 → -1. Now "equal 0s and 1s" means "subarray sum = 0". A subarray `[i+1..j]` sums to zero iff `prefix[j] == prefix[i]`. We want the maximum `j - i` among equal prefix sums. Hash map of `prefix_sum -> first_index`. When a prefix sum repeats, the distance gives a candidate max length. Initialize `{0: -1}`. For each index `i`, update `prefix`. If `prefix` is in the map, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise record `first_seen[prefix] = i`.
 
 > [!note]- Python Solution
 > ```python
-> from collections import Counter
-> >
-> def max_operations(nums, k):
->     freq = Counter(nums)
->     ops = 0
->     for x in list(freq.keys()):
->         complement = k - x
->         if complement not in freq:
->             continue
->         if x == complement:
->             ops += freq[x] // 2
->         elif x < complement:  # process each pair once
->             ops += min(freq[x], freq[complement])
->     return ops
+> def find_max_length(nums):
+>     first_seen = {0: -1}
+>     prefix = 0
+>     max_len = 0
+>     for i, num in enumerate(nums):
+>         prefix += 1 if num == 1 else -1
+>         if prefix in first_seen:
+>             max_len = max(max_len, i - first_seen[prefix])
+>         else:
+>             first_seen[prefix] = i
+>     return max_len
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Brute force O(n²): enumerate all subarrays, count 0s and 1s.
+> - Key insight: store only the *first* occurrence of each prefix sum to maximise the gap.
+
+---
+
+### Longest Subarray with Sum K
+
+> [!example] Problem
+> Find the maximum length of a contiguous subarray with sum equal to `k`. Array may contain negatives.
+
+> [!info] Approach
+> Sliding window fails with negatives. Prefix sum trick: subarray `[i+1, j]` has sum `k` iff `prefix[j] - prefix[i] = k`, i.e., `prefix[i] = prefix[j] - k`. For maximum length, store the *first* occurrence of each prefix sum. When we see `prefix - k` again later, the gap is as large as possible. `first_seen = {0: -1}`. At index `i`, if `prefix - k` in map, update `best = max(best, i - first_seen[prefix - k])`. Only insert prefix if not already present (preserve earliest index).
+
+> [!note]- Python Solution
+> ```python
+> def max_subarray_len(nums, k):
+>     first_seen = {0: -1}
+>     prefix = 0
+>     best = 0
+>     for i, x in enumerate(nums):
+>         prefix += x
+>         if prefix - k in first_seen:
+>             best = max(best, i - first_seen[prefix - k])
+>         if prefix not in first_seen:
+>             first_seen[prefix] = i
+>     return best
 > ```
 
 > [!success] Complexity
 > Time O(n); Space O(n).
 
 > [!tip] Alternatives
-> Sort + two pointers — O(n log n) time, O(1) space. Cleaner for an interview.
+> For non-negative arrays only: sliding window O(n) O(1). For the general case this prefix-map approach is optimal.
+
+---
+
+### Count Number of Nice Subarrays
+
+> Full walkthrough: [Count Number of Nice Subarrays (LC 1248)](../algorithms/04-sliding-window.md#count-number-of-nice-subarrays-lc-1248).
+
+---
+
+### Subarray Sum Equals K `⚡ T1`
+
+> [!example] Problem
+> Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+> A subarray is a contiguous non-empty sequence of elements within an array.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,1,1], k = 2
+> Output: 2
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,2,3], k = 3
+> Output: 2
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 2 * 10^4
+> - -1000 <= nums[i] <= 1000
+> - -10^7 <= k <= 10^7
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Prefix sum + frequency · **Gotcha:** **Prefix 0** means subarray from start. **Negative numbers** → prefix sum still works; no sliding window for “exactly K” with negatives.
+
+> [!failure] Tempting wrong approach
+> Sliding window — invalid with negatives because the sum isn't monotone in window size. Use prefix sums + a count map seeded with `{0: 1}`.
+
+> [!info] Approach
+> Sliding window fails with negatives (sum can decrease when adding elements). Need a different invariant. prefix[j] - prefix[i] = k implies prefix[i] = prefix[j] - k. Count how many times each prefix sum has appeared. Maintain running prefix sum. Before updating the map, check `seen[prefix - k]`. Initialize `seen = {0: 1}` to handle subarrays starting at index 0.
+
+> [!note]- Python Solution
+> ```python
+> def subarray_sum(nums, k):
+>     count = 0
+>     prefix = 0
+>     seen = {0: 1}
+>     for x in nums:
+>         prefix += x
+>         count += seen.get(prefix - k, 0)
+>         seen[prefix] = seen.get(prefix, 0) + 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> O(n²) prefix sum array with nested loop — correct but slow. Sliding window — only works for positive numbers.
+
+---
+
+### Make the Array Sum Divisible by P
+
+> [!example] Problem
+> Remove the shortest subarray so that the remaining sum is divisible by `P`.
+
+> [!info] Approach
+> We want `(total - subarray_sum) % P == 0`, i.e., `subarray_sum % P == total % P`. Find the shortest subarray with that remainder. Prefix sums mod P. For each `j`, want the most recent `i` where `prefix[i] % P == (prefix[j] - rem) % P`. `rem = sum(nums) % P`. If `rem == 0`, return 0. Use `seen = {0: -1}`. At each step store `prefix % P → i`. Look up `(prefix - rem) % P`.
+
+> [!note]- Python Solution
+> ```python
+> def min_subarray(nums, p):
+>     rem = sum(nums) % p
+>     if rem == 0:
+>         return 0
+>     seen = {0: -1}
+>     prefix = 0
+>     best = len(nums)
+>     for i, x in enumerate(nums):
+>         prefix = (prefix + x) % p
+>         target = (prefix - rem) % p
+>         if target in seen:
+>             best = min(best, i - seen[target])
+>         seen[prefix] = i
+>     return best if best < len(nums) else -1
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(n).
+
+> [!tip] Alternatives
+> No better approach — this is the canonical O(n) solution.
+
+---
+
+### Subarray Sums Divisible by K `⚡ T1`
+
+> [!example] Problem
+> Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
+> A subarray is a contiguous part of an array.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [4,5,0,-2,-3,1], k = 5
+> Output: 7
+> Explanation: There are 7 subarrays with a sum divisible by k = 5:
+> [4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5], k = 9
+> Output: 0
+> ```
+> 
+> **Constraints:**
+> - 1 <= nums.length <= 3 * 10^4
+> - -10^4 <= nums[i] <= 10^4
+> - 2 <= k <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Count subarrays whose sum is divisible by K" · **Gotcha:** Python modulo is always positive; Java/C++ can be negative. Normalize: `(pref % k + k) % k`. `seen[0]=1` for subarray from index 0.
+
+> [!info] Approach
+> `(prefix[j] - prefix[i]) % K == 0` iff `prefix[j] % K == prefix[i] % K`. Count pairs of equal remainders. Frequency map of prefix sums mod K. Each pair of indices with equal remainder contributes one valid subarray. `seen = {0: 1}`. For each element, compute `prefix % K` (handle negatives: `% K` in Python already returns non-negative). Add `seen[(prefix % K)]` to count. Increment map.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> >
+> def subarrays_div_by_k(nums, k):
+>     count = 0
+>     prefix = 0
+>     seen = defaultdict(int)
+>     seen[0] = 1
+>     for x in nums:
+>         prefix = (prefix + x) % k
+>         count += seen[prefix]
+>         seen[prefix] += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(k) — at most k distinct remainders.
+
+> [!tip] Alternatives
+> Prefix array + O(n²) nested loop — correct, slow. This is optimal.
 
 ---
 
 ## Frequency Map
+
+---
 
 ### First Unique Character in a String
 
@@ -400,6 +613,12 @@ difficulty: mixed
 > - -10^4 <= nums[i] <= 10^4
 > - k is in the range [1, the number of unique elements in the array].
 > - It is guaranteed that the answer is unique.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Bucket vs heap · **Gotcha:** **Heap** is O(n log k); **bucket sort** can be O(n) if frequencies bounded.
+
+> [!failure] Tempting wrong approach
+> Sorting by frequency — O(n log n). Use a size-k min-heap (O(n log k)) or bucket sort by count (O(n)).
 
 > [!info] Approach
 > Sorting by frequency is O(n log n). Bucket sort on frequency gives O(n). Count frequencies, then place each number into a bucket indexed by its frequency. Collect from the highest-frequency buckets downward. `Counter` → buckets list of size `n+1` where `buckets[f]` holds all numbers with frequency `f`. Iterate from index `n` down and collect until we have `k` elements.
@@ -542,355 +761,163 @@ difficulty: mixed
 
 ---
 
-### Longest Subarray with Sum K
+### Substring with Concatenation of All Words
 
 > [!example] Problem
-> Find the maximum length of a contiguous subarray with sum equal to `k`. Array may contain negatives.
-
-> [!info] Approach
-> Sliding window fails with negatives. Prefix sum trick: subarray `[i+1, j]` has sum `k` iff `prefix[j] - prefix[i] = k`, i.e., `prefix[i] = prefix[j] - k`. For maximum length, store the *first* occurrence of each prefix sum. When we see `prefix - k` again later, the gap is as large as possible. `first_seen = {0: -1}`. At index `i`, if `prefix - k` in map, update `best = max(best, i - first_seen[prefix - k])`. Only insert prefix if not already present (preserve earliest index).
-
-> [!note]- Python Solution
-> ```python
-> def max_subarray_len(nums, k):
->     first_seen = {0: -1}
->     prefix = 0
->     best = 0
->     for i, x in enumerate(nums):
->         prefix += x
->         if prefix - k in first_seen:
->             best = max(best, i - first_seen[prefix - k])
->         if prefix not in first_seen:
->             first_seen[prefix] = i
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(n).
-
-> [!tip] Alternatives
-> For non-negative arrays only: sliding window O(n) O(1). For the general case this prefix-map approach is optimal.
-
----
-
-### Count Number of Nice Subarrays
-
-> [!example] Problem
-> Given an array of integers nums and an integer k. A continuous subarray is called nice if there are k odd numbers on it.
-> Return the number of nice sub-arrays.
+> You are given a string s and an array of strings words. All the strings of words are of the same length.
+> A concatenated string is a string that exactly contains all the strings of any permutation of words concatenated.
+> Return an array of the starting indices of all the concatenated substrings in s. You can return the answer in any order.
 > 
 > **Example 1:**
 > ```
-> Input: nums = [1,1,2,1,1], k = 3
-> Output: 2
-> Explanation: The only sub-arrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+> Input: s = "barfoothefoobarman", words = ["foo","bar"]
+> Output: [0,9]
+> Explanation:
+> The substring starting at 0 is "barfoo" . It is the concatenation of ["bar","foo"] which is a permutation of words . The substring starting at 9 is "foobar" . It is the concatenation of ["foo","bar"] which is a permutation of words .
 > ```
 > 
 > **Example 2:**
 > ```
-> Input: nums = [2,4,6], k = 1
-> Output: 0
-> Explanation: There are no odd numbers in the array.
+> Input: s = "wordgoodgoodgoodbestword", words = ["word","good","best","word"]
+> Output: []
+> Explanation:
+> There is no concatenated substring.
 > ```
 > 
 > **Example 3:**
 > ```
-> Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
-> Output: 16
+> Input: s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]
+> Output: [6,9,12]
+> Explanation:
+> The substring starting at 6 is "foobarthe" . It is the concatenation of ["foo","bar","the"] . The substring starting at 9 is "barthefoo" . It is the concatenation of ["bar","the","foo"] . The substring starting at 12 is "thefoobar" . It is the concatenation of ["the","foo","bar"] .
 > ```
 > 
 > **Constraints:**
-> - 1 <= nums.length <= 50000
-> - 1 <= nums[i] <= 10^5
-> - 1 <= k <= nums.length
+> - 1 <= s.length <= 10^4
+> - 1 <= words.length <= 5000
+> - 1 <= words[i].length <= 30
+> - s and words[i] consist of lowercase English letters.
 
 > [!info] Approach
-> Map odd/even to 1/0. Problem becomes: count subarrays with sum exactly `k` — identical to LC 560. Parity prefix sum. `prefix[j] - prefix[i] = k` means subarray `[i+1, j]` has exactly `k` odd numbers. `seen = {0: 1}`. Running sum increments by 1 for odd elements, 0 for even. Look up `prefix - k` in `seen` before updating map.
+> Words are fixed length. Enumerate all starting offsets 0 to `word_len - 1`. For each, slide a window of `num_words` words and compare word frequency maps. `words_count` = Counter of required words. Slide a window by one word at a time. Track current window word frequencies and a `have` count. For each offset in `[0, word_len)`, maintain a sliding window of exactly `num_words * word_len` characters. Add/remove one word at a time from window ends.
 
 > [!note]- Python Solution
 > ```python
+> from collections import Counter
+> >
+> def find_substring(s, words):
+>     if not s or not words:
+>         return []
+>     wlen = len(words[0])
+>     num_words = len(words)
+>     total = wlen * num_words
+>     words_count = Counter(words)
+>     result = []
+>     for offset in range(wlen):
+>         window = {}
+>         have = 0
+>         left = offset
+>         for right in range(offset, len(s) - wlen + 1, wlen):
+>             word = s[right:right + wlen]
+>             if word in words_count:
+>                 window[word] = window.get(word, 0) + 1
+>                 if window[word] == words_count[word]:
+>                     have += 1
+>                 while window[word] > words_count[word]:
+>                     left_word = s[left:left + wlen]
+>                     if window[left_word] == words_count.get(left_word, 0):
+>                         have -= 1
+>                     window[left_word] -= 1
+>                     left += wlen
+>                 if have == len(words_count):
+>                     result.append(left)
+>             else:
+>                 window.clear()
+>                 have = 0
+>                 left = right + wlen
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(n * word_len); Space O(num_words).
+
+> [!tip] Alternatives
+> Brute force generating all permutations — O(n * n! * word_len), infeasible. The sliding window per offset is optimal.
+
+---
+
+### Max Points on a Line
+
+> [!example] Problem
+> Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane, return the maximum number of points that lie on the same straight line.
+> 
+> **Example 1:**
+> ```
+> Input: points = [[1,1],[2,2],[3,3]]
+> Output: 3
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]
+> Output: 4
+> ```
+> 
+> **Constraints:**
+> - 1 <= points.length <= 300
+> - points[i].length == 2
+> - -10^4 <= xi, yi <= 10^4
+> - All the points are unique.
+
+> [!info] Approach
+> For each pair of points, their line is defined by slope. Points on the same line share the same slope relative to a fixed anchor. Fix each point as anchor. For all other points, compute the slope as a reduced fraction `(dy/gcd, dx/gcd)`. Count max slope frequency. For each anchor `i`, build a slope map. Use `gcd` to normalize: slope = `(dy // g, dx // g)`. Handle vertical lines (`dx == 0`) and same-point duplicates separately.
+
+> [!note]- Python Solution
+> ```python
+> from math import gcd
 > from collections import defaultdict
 > >
-> def number_of_subarrays(nums, k):
->     seen = defaultdict(int)
->     seen[0] = 1
->     prefix = 0
->     count = 0
->     for x in nums:
->         prefix += x & 1  # 1 if odd, 0 if even
->         count += seen[prefix - k]
->         seen[prefix] += 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(n).
-
-> [!tip] Alternatives
-> `exactly(k) = at_most(k) - at_most(k-1)` sliding window decomposition — O(n) O(1) space, useful when "at most k" variant is easy.
-
----
-
-### Subarray Sum Equals K `⚡ T1`
-
-> [!example] Problem
-> Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
-> A subarray is a contiguous non-empty sequence of elements within an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,1], k = 2
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,2,3], k = 3
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^4
-> - -1000 <= nums[i] <= 1000
-> - -10^7 <= k <= 10^7
-
-> [!info] Approach
-> Sliding window fails with negatives (sum can decrease when adding elements). Need a different invariant. prefix[j] - prefix[i] = k implies prefix[i] = prefix[j] - k. Count how many times each prefix sum has appeared. Maintain running prefix sum. Before updating the map, check `seen[prefix - k]`. Initialize `seen = {0: 1}` to handle subarrays starting at index 0.
-
-> [!note]- Python Solution
-> ```python
-> def subarray_sum(nums, k):
->     count = 0
->     prefix = 0
->     seen = {0: 1}
->     for x in nums:
->         prefix += x
->         count += seen.get(prefix - k, 0)
->         seen[prefix] = seen.get(prefix, 0) + 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(n).
-
-> [!tip] Alternatives
-> O(n²) prefix sum array with nested loop — correct but slow. Sliding window — only works for positive numbers.
-
----
-
-### Contiguous Array (Max Equal 0/1 Subarray) `⚡ T1`
-
-> [!example] Problem
-> Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [0,1]
-> Output: 2
-> Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,0]
-> Output: 2
-> Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,1,1,1,1,1,0,0,0]
-> Output: 6
-> Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - nums[i] is either 0 or 1.
-
-> [!info] Approach
-> "Equal 0s and 1s" means the difference between 0-count and 1-count is 0 over the subarray. Replace 0 with -1. Problem becomes: longest subarray with sum 0. Use prefix sum + first-seen map. Track running sum with 0→-1 transform. When `prefix` repeats, the subarray between the two occurrences has sum 0. Store `first_seen = {0: -1}` and compare `i - first_seen[prefix]`.
-
-> [!note]- Python Solution
-> ```python
-> def find_max_length(nums):
->     first_seen = {0: -1}
->     prefix = 0
->     best = 0
->     for i, x in enumerate(nums):
->         prefix += 1 if x == 1 else -1
->         if prefix in first_seen:
->             best = max(best, i - first_seen[prefix])
->         else:
->             first_seen[prefix] = i
+> def max_points(points):
+>     n = len(points)
+>     if n <= 2:
+>         return n
+>     best = 2
+>     for i in range(n):
+>         slopes = defaultdict(int)
+>         duplicates = 0
+>         for j in range(i + 1, n):
+>             dx = points[j][0] - points[i][0]
+>             dy = points[j][1] - points[i][1]
+>             if dx == 0 and dy == 0:
+>                 duplicates += 1
+>                 continue
+>             g = gcd(abs(dx), abs(dy))
+>             dx //= g
+>             dy //= g
+>             # Normalize sign: keep dx positive (or dy positive if dx == 0)
+>             if dx < 0 or (dx == 0 and dy < 0):
+>                 dx, dy = -dx, -dy
+>             slopes[(dx, dy)] += 1
+>         local_best = max(slopes.values(), default=0) + 1 + duplicates
+>         best = max(best, local_best)
 >     return best
 > ```
 
 > [!success] Complexity
-> Time O(n); Space O(n).
+> Time O(n² log(max_coord)); Space O(n).
 
 > [!tip] Alternatives
-> O(n²) brute force with 0-1 counts — no practical alternative.
-
----
-
-### Make the Array Sum Divisible by P
-
-> [!example] Problem
-> Remove the shortest subarray so that the remaining sum is divisible by `P`.
-
-> [!info] Approach
-> We want `(total - subarray_sum) % P == 0`, i.e., `subarray_sum % P == total % P`. Find the shortest subarray with that remainder. Prefix sums mod P. For each `j`, want the most recent `i` where `prefix[i] % P == (prefix[j] - rem) % P`. `rem = sum(nums) % P`. If `rem == 0`, return 0. Use `seen = {0: -1}`. At each step store `prefix % P → i`. Look up `(prefix - rem) % P`.
-
-> [!note]- Python Solution
-> ```python
-> def min_subarray(nums, p):
->     rem = sum(nums) % p
->     if rem == 0:
->         return 0
->     seen = {0: -1}
->     prefix = 0
->     best = len(nums)
->     for i, x in enumerate(nums):
->         prefix = (prefix + x) % p
->         target = (prefix - rem) % p
->         if target in seen:
->             best = min(best, i - seen[target])
->         seen[prefix] = i
->     return best if best < len(nums) else -1
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(n).
-
-> [!tip] Alternatives
-> No better approach — this is the canonical O(n) solution.
-
----
-
-### Subarray Sums Divisible by K `⚡ T1`
-
-> [!example] Problem
-> Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
-> A subarray is a contiguous part of an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [4,5,0,-2,-3,1], k = 5
-> Output: 7
-> Explanation: There are 7 subarrays with a sum divisible by k = 5:
-> [4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5], k = 9
-> Output: 0
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 3 * 10^4
-> - -10^4 <= nums[i] <= 10^4
-> - 2 <= k <= 10^4
-
-> [!info] Approach
-> `(prefix[j] - prefix[i]) % K == 0` iff `prefix[j] % K == prefix[i] % K`. Count pairs of equal remainders. Frequency map of prefix sums mod K. Each pair of indices with equal remainder contributes one valid subarray. `seen = {0: 1}`. For each element, compute `prefix % K` (handle negatives: `% K` in Python already returns non-negative). Add `seen[(prefix % K)]` to count. Increment map.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def subarrays_div_by_k(nums, k):
->     count = 0
->     prefix = 0
->     seen = defaultdict(int)
->     seen[0] = 1
->     for x in nums:
->         prefix = (prefix + x) % k
->         count += seen[prefix]
->         seen[prefix] += 1
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n); Space O(k) — at most k distinct remainders.
-
-> [!tip] Alternatives
-> Prefix array + O(n²) nested loop — correct, slow. This is optimal.
+> O(n³) brute force checking all triples for collinearity — correct but cubic. The slope map approach is canonical.
 
 ---
 
 ## Design
 
+---
+
 ### Insert Delete GetRandom O(1) `⚡ T1`
 
-> [!example] Problem
-> Implement the RandomizedSet class:
-> You must implement the functions of the class such that each function works in average O(1) time complexity.
-> 
-> **Example 1:**
-> ```
-> Input
-> ["RandomizedSet", "insert", "remove", "insert", "getRandom", "remove", "insert", "getRandom"]
-> [[], [1], [2], [2], [], [1], [2], []]
-> Output
-> [null, true, false, true, 2, true, false, 2]
-> 
-> Explanation
-> RandomizedSet randomizedSet = new RandomizedSet();
-> randomizedSet.insert(1); // Inserts 1 to the set. Returns true as 1 was inserted successfully.
-> randomizedSet.remove(2); // Returns false as 2 does not exist in the set.
-> randomizedSet.insert(2); // Inserts 2 to the set, returns true. Set now contains [1,2].
-> randomizedSet.getRandom(); // getRandom() should return either 1 or 2 randomly.
-> randomizedSet.remove(1); // Removes 1 from the set, returns true. Set now contains [2].
-> randomizedSet.insert(2); // 2 was already in the set, so return false.
-> randomizedSet.getRandom(); // Since 2 is the only number in the set, getRandom() will always return 2.
-> ```
-> 
-> **Constraints:**
-> - -2^{31} <= val <= 2^{31} - 1
-> - At most 2 * 10^5 calls will be made to insert, remove, and getRandom.
-> - There will be at least one element in the data structure when getRandom is called.
-
-> [!info] Approach
-> Hash map gives O(1) insert/delete/lookup. But random access requires an array. Combining both enables all three in O(1). `vals` list for O(1) random access. `idx_map` maps value to its index in `vals`. Delete: swap target with last element to avoid gaps, then pop. Insert appends to list and stores index in map. Remove swaps target with last element, updates map for the moved element, pops the list, deletes map entry for removed value.
-
-> [!note]- Python Solution
-> ```python
-> import random
-> >
-> class RandomizedSet:
->     def __init__(self):
->         self._vals: list[int] = []
->         self._idx: dict[int, int] = {}
-> >
->     def insert(self, val):
->         if val in self._idx:
->             return False
->         self._idx[val] = len(self._vals)
->         self._vals.append(val)
->         return True
-> >
->     def remove(self, val):
->         if val not in self._idx:
->             return False
->         idx = self._idx[val]
->         last = self._vals[-1]
->         self._vals[idx] = last
->         self._idx[last] = idx
->         self._vals.pop()
->         del self._idx[val]
->         return True
-> >
->     def get_random(self):
->         return random.choice(self._vals)
-> ```
-
-> [!success] Complexity
-> Time O(1) amortized all ops; Space O(n).
-
-> [!tip] Alternatives
-> No simpler structure achieves O(1) for all three. The swap-with-last trick is the canonical insight.
+> Full walkthrough: [Insert Delete GetRandom O(1)](14-design.md#insert-delete-getrandom-o1--t1).
 
 ---
 
@@ -965,6 +992,8 @@ difficulty: mixed
 ---
 
 ## Set Operations
+
+---
 
 ### Contains Duplicate
 
@@ -1124,8 +1153,6 @@ difficulty: mixed
 
 ---
 
-## Miscellaneous
-
 ### Longest Consecutive Sequence `⚡ T1`
 
 > [!example] Problem
@@ -1155,6 +1182,12 @@ difficulty: mixed
 > - 0 <= nums.length <= 10^5
 > - -10^9 <= nums[i] <= 10^9
 
+> [!tip] Recognize · Gotcha
+> **Signal:** O(n) expected, not sort · **Gotcha:** **O(n)** only if you don’t sort; **inner while** looks O(n²) but each number visited once across all sequences.
+
+> [!failure] Tempting wrong approach
+> Sorting (O(n log n) breaks the O(n) ask), or walking from every element (O(n²)). Only start a walk where `x - 1` is absent.
+
 > [!info] Approach
 > Sorting is O(n log n). We need O(n). Hash set enables O(1) membership checks. Only start counting a sequence from `x` if `x - 1` is NOT in the set. This prevents redundant work — each element is visited at most twice total. Build set. For each `x`, if `x - 1 not in set`, extend the chain `x, x+1, x+2, ...` while each successor is in the set.
 
@@ -1180,225 +1213,13 @@ difficulty: mixed
 
 ---
 
-### Substring with Concatenation of All Words
-
-> [!example] Problem
-> You are given a string s and an array of strings words. All the strings of words are of the same length.
-> A concatenated string is a string that exactly contains all the strings of any permutation of words concatenated.
-> Return an array of the starting indices of all the concatenated substrings in s. You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: s = "barfoothefoobarman", words = ["foo","bar"]
-> Output: [0,9]
-> Explanation:
-> The substring starting at 0 is "barfoo" . It is the concatenation of ["bar","foo"] which is a permutation of words . The substring starting at 9 is "foobar" . It is the concatenation of ["foo","bar"] which is a permutation of words .
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "wordgoodgoodgoodbestword", words = ["word","good","best","word"]
-> Output: []
-> Explanation:
-> There is no concatenated substring.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "barfoofoobarthefoobarman", words = ["bar","foo","the"]
-> Output: [6,9,12]
-> Explanation:
-> The substring starting at 6 is "foobarthe" . It is the concatenation of ["foo","bar","the"] . The substring starting at 9 is "barthefoo" . It is the concatenation of ["bar","the","foo"] . The substring starting at 12 is "thefoobar" . It is the concatenation of ["the","foo","bar"] .
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^4
-> - 1 <= words.length <= 5000
-> - 1 <= words[i].length <= 30
-> - s and words[i] consist of lowercase English letters.
-
-> [!info] Approach
-> Words are fixed length. Enumerate all starting offsets 0 to `word_len - 1`. For each, slide a window of `num_words` words and compare word frequency maps. `words_count` = Counter of required words. Slide a window by one word at a time. Track current window word frequencies and a `have` count. For each offset in `[0, word_len)`, maintain a sliding window of exactly `num_words * word_len` characters. Add/remove one word at a time from window ends.
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def find_substring(s, words):
->     if not s or not words:
->         return []
->     wlen = len(words[0])
->     num_words = len(words)
->     total = wlen * num_words
->     words_count = Counter(words)
->     result = []
->     for offset in range(wlen):
->         window = {}
->         have = 0
->         left = offset
->         for right in range(offset, len(s) - wlen + 1, wlen):
->             word = s[right:right + wlen]
->             if word in words_count:
->                 window[word] = window.get(word, 0) + 1
->                 if window[word] == words_count[word]:
->                     have += 1
->                 while window[word] > words_count[word]:
->                     left_word = s[left:left + wlen]
->                     if window[left_word] == words_count.get(left_word, 0):
->                         have -= 1
->                     window[left_word] -= 1
->                     left += wlen
->                 if have == len(words_count):
->                     result.append(left)
->             else:
->                 window.clear()
->                 have = 0
->                 left = right + wlen
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n * word_len); Space O(num_words).
-
-> [!tip] Alternatives
-> Brute force generating all permutations — O(n * n! * word_len), infeasible. The sliding window per offset is optimal.
-
----
-
-### Max Points on a Line
-
-> [!example] Problem
-> Given an array of points where points[i] = [xi, yi] represents a point on the X-Y plane, return the maximum number of points that lie on the same straight line.
-> 
-> **Example 1:**
-> ```
-> Input: points = [[1,1],[2,2],[3,3]]
-> Output: 3
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: points = [[1,1],[3,2],[5,3],[4,1],[2,3],[1,4]]
-> Output: 4
-> ```
-> 
-> **Constraints:**
-> - 1 <= points.length <= 300
-> - points[i].length == 2
-> - -10^4 <= xi, yi <= 10^4
-> - All the points are unique.
-
-> [!info] Approach
-> For each pair of points, their line is defined by slope. Points on the same line share the same slope relative to a fixed anchor. Fix each point as anchor. For all other points, compute the slope as a reduced fraction `(dy/gcd, dx/gcd)`. Count max slope frequency. For each anchor `i`, build a slope map. Use `gcd` to normalize: slope = `(dy // g, dx // g)`. Handle vertical lines (`dx == 0`) and same-point duplicates separately.
-
-> [!note]- Python Solution
-> ```python
-> from math import gcd
-> from collections import defaultdict
-> >
-> def max_points(points):
->     n = len(points)
->     if n <= 2:
->         return n
->     best = 2
->     for i in range(n):
->         slopes = defaultdict(int)
->         duplicates = 0
->         for j in range(i + 1, n):
->             dx = points[j][0] - points[i][0]
->             dy = points[j][1] - points[i][1]
->             if dx == 0 and dy == 0:
->                 duplicates += 1
->                 continue
->             g = gcd(abs(dx), abs(dy))
->             dx //= g
->             dy //= g
->             # Normalize sign: keep dx positive (or dy positive if dx == 0)
->             if dx < 0 or (dx == 0 and dy < 0):
->                 dx, dy = -dx, -dy
->             slopes[(dx, dy)] += 1
->         local_best = max(slopes.values(), default=0) + 1 + duplicates
->         best = max(best, local_best)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n² log(max_coord)); Space O(n).
-
-> [!tip] Alternatives
-> O(n³) brute force checking all triples for collinearity — correct but cubic. The slope map approach is canonical.
-
----
-
 ## Rolling Hash / Dedup
+
+---
 
 ### Longest Duplicate Substring (Rabin-Karp) `⚡ T1`
 
-> [!example] Problem
-> Given a string s, consider all duplicated substrings: (contiguous) substrings of s that occur 2 or more times. The occurrences may overlap.
-> Return any duplicated substring that has the longest possible length. If s does not have a duplicated substring, the answer is "".
-> 
-> **Example 1:**
-> ```
-> Input: s = "banana"
-> Output: "ana"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "abcd"
-> Output: ""
-> ```
-> 
-> **Constraints:**
-> - 2 <= s.length <= 3 * 10^4
-> - s consists of lowercase English letters.
-
-> [!info] Approach
-> Binary search on length `L`: if a duplicate of length `L` exists, so does one of length `L-1`. Check feasibility via rolling hash to avoid O(n²) string comparison. Binary search `L` in `[1, n-1]`. For each `L`, use Rabin-Karp: compute polynomial rolling hash for every window of length `L`; if any hash repeats, verify the match (hash collision guard). Hash = `sum(ord(s[i]) * base^(L-1-i)) % mod` for window. Rolling update: `new_hash = (old_hash * base - ord(left) * base^L + ord(right)) % mod`. Store hashes in a set. Return the window on collision.
-
-> [!note]- Python Solution
-> ```python
-> def longest_dup_substring(s):
->     n = len(s)
->     BASE, MOD = 31, (1 << 61) - 1  # Mersenne prime
->     nums = [ord(c) - ord('a') + 1 for c in s]
-> >
->     def search(length):
->         h = 0
->         power = pow(BASE, length, MOD)
->         for i in range(length):
->             h = (h * BASE + nums[i]) % MOD
->         seen = {h: [0]}
->         for i in range(1, n - length + 1):
->             h = (h * BASE - nums[i - 1] * power + nums[i + length - 1]) % MOD
->             if h in seen:
->                 candidate = s[i:i + length]
->                 for start in seen[h]:
->                     if s[start:start + length] == candidate:
->                         return candidate
->                 seen[h].append(i)
->             else:
->                 seen[h] = [i]
->         return ""
-> >
->     lo, hi, result = 1, n - 1, ""
->     while lo <= hi:
->         mid = (lo + hi) // 2
->         found = search(mid)
->         if found:
->             result = found
->             lo = mid + 1
->         else:
->             hi = mid - 1
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n log n) expected; Space O(n).
-
-> [!tip] Alternatives
-> Suffix array + LCP array — O(n log n) deterministic, no hash collisions. Binary search + suffix array is the production approach.
+> Full walkthrough: [Longest Duplicate Substring](../algorithms/02-string-algorithms.md#longest-duplicate-substring--t1).
 
 ---
 
@@ -1458,228 +1279,7 @@ difficulty: mixed
 
 ---
 
-### 4Sum II `⚡ T1`
-
-> [!example] Problem
-> Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
-> 
-> **Example 1:**
-> ```
-> Input: nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]
-> Output: 2
-> Explanation:
-> The two tuples are:
-> 1. (0, 0, 0, 1) -> nums1[0] + nums2[0] + nums3[0] + nums4[1] = 1 + (-2) + (-1) + 2 = 0
-> 2. (1, 1, 0, 0) -> nums1[1] + nums2[1] + nums3[0] + nums4[0] = 2 + (-1) + (-1) + 0 = 0
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums1 = [0], nums2 = [0], nums3 = [0], nums4 = [0]
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - n == nums1.length
-> - n == nums2.length
-> - n == nums3.length
-> - n == nums4.length
-> - 1 <= n <= 200
-> - -228 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 228
-
-> [!info] Approach
-> Brute force O(n⁴). Split into two pairs: count all `A[i] + B[j]` sums, then for each `C[k] + D[l]` check if its negation was seen. Hash map `ab_sum → count`. Then iterate all C, D pairs and look up `-(C[k] + D[l])`. Two nested loops for AB → Counter. Two nested loops for CD → look up complement. Sum all matching counts.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def four_sum_count(nums1: list[int], nums2: list[int],
->                    nums3: list[int], nums4: list[int]) -> int:
->     ab = defaultdict(int)
->     for a in nums1:
->         for b in nums2:
->             ab[a + b] += 1
->     count = 0
->     for c in nums3:
->         for d in nums4:
->             count += ab[-(c + d)]
->     return count
-> ```
-
-> [!success] Complexity
-> Time O(n²); Space O(n²).
-
-> [!tip] Alternatives
-> Meet-in-the-middle generalizes: split k arrays into two halves of k/2, hash one half's sums, probe with the other. Always yields O(n^(k/2)) for k-sum variants.
-
----
-
 ## See Also
 
 [[array]] | [[sliding-window]] | [[string]] | [[two-pointers]]
-### Subarray Sums Divisible by K (LC 974) `⚡ T1`
-
-> [!example] Problem
-> Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
-> A subarray is a contiguous part of an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [4,5,0,-2,-3,1], k = 5
-> Output: 7
-> Explanation: There are 7 subarrays with a sum divisible by k = 5:
-> [4, 5, 0, -2, -3, 1], [5], [5, 0], [5, 0, -2, -3], [0], [0, -2, -3], [-2, -3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5], k = 9
-> Output: 0
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 3 * 10^4
-> - -10^4 <= nums[i] <= 10^4
-> - 2 <= k <= 10^4
-
-> [!info] Approach
-> `sum(i..j) % k == 0` iff `prefix[j] % k == prefix[i-1] % k`. So we count pairs of equal remainders among prefix sums. Track `remainder -> count` in a hash map. For each prefix sum, look up how many prior prefix sums had the same remainder mod `k`. Initialize `{0: 1}`. For each element, compute `remainder = running_sum % k`. In Python, `%` always returns non-negative values, so no adjustment needed. Add `count_map[remainder]` to the answer, then increment `count_map[remainder]`.
-
-> [!note]- Python Solution
-> ```python
-> def subarrays_div_by_k(nums, k):
->     count_map = {0: 1}
->     running_sum = 0
->     total = 0
->     for num in nums:
->         running_sum += num
->         remainder = running_sum % k
->         total += count_map.get(remainder, 0)
->         count_map[remainder] = count_map.get(remainder, 0) + 1
->     return total
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(k).
-
-> [!tip] Alternatives
-> - O(n²) brute force: enumerate all subarray sums and check divisibility.
-> - Key difference from "Subarray Sum Equals K": here we group by remainder, not by exact prefix sum value — the count map has at most `k` keys.
-
----
-
-### Contiguous Array (LC 525) `⚡ T1`
-
-> [!example] Problem
-> Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [0,1]
-> Output: 2
-> Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,0]
-> Output: 2
-> Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,1,1,1,1,1,0,0,0]
-> Output: 6
-> Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - nums[i] is either 0 or 1.
-
-> [!info] Approach
-> Map 0 → -1. Now "equal 0s and 1s" means "subarray sum = 0". A subarray `[i+1..j]` sums to zero iff `prefix[j] == prefix[i]`. We want the maximum `j - i` among equal prefix sums. Hash map of `prefix_sum -> first_index`. When a prefix sum repeats, the distance gives a candidate max length. Initialize `{0: -1}`. For each index `i`, update `prefix`. If `prefix` is in the map, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise record `first_seen[prefix] = i`.
-
-> [!note]- Python Solution
-> ```python
-> def find_max_length(nums):
->     first_seen = {0: -1}
->     prefix = 0
->     max_len = 0
->     for i, num in enumerate(nums):
->         prefix += 1 if num == 1 else -1
->         if prefix in first_seen:
->             max_len = max(max_len, i - first_seen[prefix])
->         else:
->             first_seen[prefix] = i
->     return max_len
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Brute force O(n²): enumerate all subarrays, count 0s and 1s.
-> - Key insight: store only the *first* occurrence of each prefix sum to maximise the gap.
-
----
-
-### 4Sum II (LC 454) `⚡ T1`
-
-> [!example] Problem
-> Given four integer arrays nums1, nums2, nums3, and nums4 all of length n, return the number of tuples (i, j, k, l) such that
-> 
-> **Example 1:**
-> ```
-> Input: nums1 = [1,2], nums2 = [-2,-1], nums3 = [-1,2], nums4 = [0,2]
-> Output: 2
-> Explanation:
-> The two tuples are:
-> 1. (0, 0, 0, 1) -> nums1[0] + nums2[0] + nums3[0] + nums4[1] = 1 + (-2) + (-1) + 2 = 0
-> 2. (1, 1, 0, 0) -> nums1[1] + nums2[1] + nums3[0] + nums4[0] = 2 + (-1) + (-1) + 0 = 0
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums1 = [0], nums2 = [0], nums3 = [0], nums4 = [0]
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - n == nums1.length
-> - n == nums2.length
-> - n == nums3.length
-> - n == nums4.length
-> - 1 <= n <= 200
-> - -228 <= nums1[i], nums2[i], nums3[i], nums4[i] <= 228
-
-> [!info] Approach
-> O(n⁴) brute force is too slow. Split the four arrays into two pairs. All pairwise sums from (A, B) can be stored in a hash map; then for each pairwise sum from (C, D), look up its negative. Build a frequency map of `a + b` for all pairs from A and B. Then for each pair `(c, d)`, query the map for `-(c + d)`. `ab_count = Counter(a + b for a in A for b in B)`. Then `total = sum(ab_count[-(c + d)] for c in C for d in D)`.
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def four_sum_count(nums1, nums2, nums3, nums4):
->     ab_count = Counter(a + b for a in nums1 for b in nums2)
->     total = 0
->     for c in nums3:
->         for d in nums4:
->             total += ab_count.get(-(c + d), 0)
->     return total
-> ```
-
-> [!success] Complexity
-> Time O(n²), Space O(n²).
-
-> [!tip] Alternatives
-> - No fundamentally better approach for the general case — O(n²) is optimal here.
-> - Contrast with 4Sum (LC 18): there, the array is fixed, so sorting + two pointers avoids O(n²) space. Here, four separate arrays make that approach impractical.
-
----
-
-## See Also
-
 [[array]] | [[two-pointers]] | [[sliding-window]] | [[sorting]]

@@ -3,44 +3,30 @@ module: 01-data-structures
 topic: Array
 tags: [data-structures, array]
 ---
+# Arrays — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Memory model of arrays, then the O(N) toolkit: two pointers, sliding window, prefix sum, difference array, Kadane, Dutch-flag partition, Boyer-Moore, binary search on answer.
+> **You'll be able to:** Pick the right array technique from the constraints in under a minute; write in-place index passes with no off-by-one bugs; explain why sliding window fails on negatives.
+> **Prereqs:** Big-O basics · **Pair with:** [Array problems](../coding/data-structures/01-array.md) · [Two pointers](../02-algorithms/03-two-pointers.md) · [Sliding window](../02-algorithms/04-sliding-window.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to use → WHAT can go wrong
-       │                      │                        │                 │               │
-  [O(1) random access    [contiguous block of      [index =         [need index-    [cache thrash on
-   impossible without     memory; address =          base_addr +      based lookup,   large stride;
-   contiguous layout]     base + i×size]             i×element_size]  iteration,      resize copies
-                                                                       prefix sums]    all O(n)]
-       │                      │                        │
-  [CPU cache lines:       [invariant: element i    [time: O(1) read/write,
-   spatial locality        is always at a fixed     O(n) insert/delete mid;
-   makes arrays ~3-10×     offset from base]        space: O(n) contiguous]
-   faster than linked
-   list for iteration]
-       ↓
-[Decision: Array vs alternatives]
-  ├── vs Linked List → random access O(1) vs O(n); array wins for index lookups
-  ├── vs HashMap     → array is ordered, cache-friendly; map wins for sparse keys
-  └── vs Deque       → array for fixed-size; deque for O(1) front insert/delete
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Technique Selection Guide](#1-technique-selection-guide) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Need O(1) access to the k-th element; linked structures require k traversals.
 - **Core insight**: Contiguous memory + uniform element size means any element's address is a simple arithmetic formula.
 - **Invariant**: Element i lives at exactly `base + i × elem_size` — never changes after allocation.
 - **Why it's fast**: CPU fetches cache lines (64 bytes), so iterating an array prefetches neighbors for free.
 - **Where it breaks**: Insertion/deletion at arbitrary index is O(n) due to shifting; resizing copies the whole array; sparse keys waste memory.
 
-# Arrays — L3 Core
+### One-Page Map
 
 ```
 [ARRAY]
@@ -84,9 +70,6 @@ WHY arrays exist → WHAT they fundamentally are → HOW they work → WHEN to u
 
 Fixed-size sequential collection in contiguous memory. Mastery at L3 means choosing the right technique, proving it correct, knowing when sliding window fails (negatives), and handling range updates at scale.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -120,11 +103,11 @@ Fixed-size sequential collection in contiguous memory. Mastery at L3 means choos
 - Prefix sum precomputation for range queries.
 - Input is already sorted and binary search applies.
 
-**Common mistakes:**
-- Off-by-one errors in slice bounds (`nums[l:r]` excludes `r`; `nums[l:r+1]` includes it).
-- Forgetting to handle the empty array edge case before accessing `nums[0]`.
-- Mutating the array while iterating over it (use a copy or two-pointer approach).
-- Using sliding window when negatives exist and sum isn't monotone — switch to prefix sum + map.
+> [!warning] Common mistakes
+> - Off-by-one errors in slice bounds (`nums[l:r]` excludes `r`; `nums[l:r+1]` includes it).
+> - Forgetting to handle the empty array edge case before accessing `nums[0]`.
+> - Mutating the array while iterating over it (use a copy or two-pointer approach).
+> - Using sliding window when negatives exist and sum isn't monotone — switch to prefix sum + map.
 
 ---
 
@@ -431,33 +414,26 @@ def find_duplicate(nums: list[int]) -> int:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- Two Sum — Hash map for complement; or two pointers if sorted.
-- **Best Time to Buy/Sell Stock** — Track min so far; `profit = max(profit, price - min_price)`.
-- **Move Zeros** — Two-pointer: maintain `write_idx` for non-zeros.
+- **[Two Sum](../coding/data-structures/01-array.md#two-sum-sorted-variant--t1) `⚡ T1`** — Hash map for complement; or two pointers if sorted.
+- **[Move Zeros](../coding/data-structures/01-array.md#move-zeroes--t1) `⚡ T1`** — Two-pointer: maintain `write_idx` for non-zeros.
+- **[Best Time to Buy/Sell Stock](../coding/data-structures/01-array.md#best-time-to-buy-and-sell-stock--t2) `🎯 T2`** — Track min so far; `profit = max(profit, price - min_price)`.
 
 ### Medium
-- 3Sum — Sort + fix one + two pointers; skip duplicates at all three sites.
-- Subarray Sum Equals K — Prefix sum + count map; `seen[0] = 1`.
-- **Longest Subarray with K Distinct** — Sliding window + frequency map.
-- **Product of Array Except Self** — Prefix product from left × suffix product from right; O(1) extra space.
-- **Container with Most Water `⚡ T1`** — Two pointers; advance the side with shorter height.
-- **Next Permutation** — Find rightmost descent, swap with next larger, reverse suffix.
-- **Jump Game `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
+- **[Container with Most Water](../coding/data-structures/01-array.md#container-with-most-water--t1) `⚡ T1`** — Two pointers; advance the side with shorter height.
+- **[3Sum](../coding/data-structures/01-array.md#3sum--t1) `⚡ T1`** — Sort + fix one + two pointers; skip duplicates at all three sites.
+- **[Subarray Sum Equals K](../coding/data-structures/01-array.md#subarray-sum-equals-k-with-negative-numbers--t1) `⚡ T1`** — Prefix sum + count map; `seen[0] = 1`.
+- **[Jump Game](../coding/data-structures/01-array.md#jump-game-lc-55--t2) `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
+- **[Longest Subarray with K Distinct](../coding/algorithms/04-sliding-window.md#longest-substring-with-at-most-k-distinct-characters-lc-340) `🎯 T2`** — Sliding window + frequency map.
+- **[Product of Array Except Self](../coding/data-structures/01-array.md#product-of-array-except-self--t2) `🎯 T2`** — Prefix product from left × suffix product from right; O(1) extra space.
+- **[Next Permutation](../coding/data-structures/01-array.md#next-permutation--t2) `🎯 T2`** — Find rightmost descent, swap with next larger, reverse suffix.
 
 ### Hard
-- Trapping Rain Water — Two pointers `l_max, r_max`; advance side with smaller max.
-- Median of Two Sorted Arrays — Binary search on partition of shorter array.
-- **Sliding Window Maximum `⚡ T1`** — Monotonic deque; O(N).
+- **[Sliding Window Maximum](../coding/algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1) `⚡ T1`** — Monotonic deque; O(N).
+- **[Trapping Rain Water](../coding/data-structures/01-array.md#trapping-rain-water--t1) `⚡ T1`** — Two pointers `l_max, r_max`; advance side with smaller max.
+- **[Median of Two Sorted Arrays](../coding/algorithms/11-binary-search.md#median-of-two-sorted-arrays-lc-4--t1) `⚡ T1`** — Binary search on partition of shorter array.
 
 ---
 
@@ -528,4 +504,3 @@ Three pointers: `lo` (boundary for low values), `mid` (current element), and `hi
 Treat the array as a linked list where `next_node = nums[current]`. Since values are in $[1, N]$, index 0 is guaranteed to be outside the cycle (no element points to 0).
 - **Phase 1**: Fast and slow pointers meet at an intersection point inside the cycle.
 - **Phase 2**: Reset slow pointer to 0, advance both at speed 1. They will meet at the cycle entry point, which represents the duplicate number.
-

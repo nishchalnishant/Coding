@@ -3,82 +3,41 @@ module: 03-patterns
 topic: Leetcode Variants
 tags: [patterns, leetcode-variants]
 ---
-# First-Principles Map — LeetCode Variants
+# Pattern Variants Playbook
 
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** A guided walk through how each pattern's classic problem mutates into its common variants (DP, backtracking, windows, graphs, prefix sums, intervals, ...).
+> **You'll be able to:** Recognise a 'new' problem as a variant of one you know.
+> **Prereqs:** Patterns master · **Pair with:** [Patterns master](patterns-master.md) · **Time:** 1.5 h
+> **How to use:** reference — read once, then use as a lookup.
 
-```
-WHY variant problems exist
-├── Interviewers verify depth: can you adapt when the base case is trivially known?
-├── Variants test invariant ownership — do you know WHY the base works, not just HOW?
-└── A candidate who solves the base but fails the variant signals memorization, not understanding
-
-WHAT it is
-├── A taxonomy of how canonical problems mutate: constraint change, output change, input change
-├── A map from variant surface → which invariant shifts → what to re-derive
-└── Examples:
-    ├── Two Sum → Two Sum II (sorted) → variant: use two-pointer instead of hash
-    ├── LCS → LCS of 3 strings → variant: add a third DP dimension
-    ├── BFS shortest path → BFS k stops → variant: track (node, stops) as state
-    └── Merge Intervals → Insert Interval → variant: binary search for insertion point
-
-HOW it works
-├── Variant taxonomy:
-│   ├── Constraint relaxation: remove "distinct" → handle duplicates explicitly
-│   ├── Constraint tightening: add "at most k distinct" → sliding window with freq map
-│   ├── Output change: "find count" vs "find path" → same algorithm, different tracking
-│   └── Input shape change: 1D array → 2D matrix → same logic, 2D indexing
-├── Invariant shifts per variant type:
-│   ├── Sorted input added → two-pointer replaces hash map (O(1) space gain)
-│   ├── "Exactly k" → use "at most k" − "at most k−1" trick
-│   └── Circular array → double the array or use modular indexing
-├── Edge case generation heuristic:
-│   ├── Empty input, single element, all same, all negative, sorted/reverse sorted
-│   ├── n=1, n=2 (catches off-by-one in binary search, DP base cases)
-│   └── Max constraints (overflow check, TLE check)
-└── Complexity impact of variants:
-    ├── Adding "return all solutions" → O(n) → O(2^n) or O(n!) typically
-    └── Adding "online queries" → preprocess O(n) → answer each O(1) or O(log n)
-
-WHEN to use
-├── After solving the base problem — immediately ask "what would change if X?"
-├── During interview: if interviewer adds a constraint, map it to the variant type first
-└── Decision:
-    ├── Constraint tightened → check if current data structure still works
-    ├── Output changed → check if algorithm changes or just the bookkeeping
-    └── Input dimensionality increased → generalize the state, not the algorithm
-
-WHAT can go wrong
-├── Applying base algorithm blindly to variant → wrong invariant → wrong answer
-├── Not recognizing "exactly k" as a two-pass trick → O(n²) solution instead of O(n)
-├── Missing overflow in variant with larger constraints (int → long)
-└── Forgetting that "all solutions" variants need backtracking, not just iteration
-```
-
-## First-Principles Breakdown
-
-- **Root problem:** Interviewers deliberately introduce variants to distinguish memorizers from thinkers — variants are the real test, the base is just calibration.
-- **Core insight:** Every variant changes at most one invariant; identify which invariant shifted and re-derive only that part, keep the rest.
-- **Invariant:** The core algorithm structure (DFS, DP recurrence, window expansion) is almost always preserved across variants — only the state or termination condition changes.
-- **Why it works:** Variant-awareness during prep means you're training the generalization muscle, not the recall muscle — interviewers can't exhaust a generalized thinker.
-- **Where it breaks:** When a variant is actually a disguised different problem (e.g., "Two Sum on a graph" is not Two Sum — it's a graph traversal) — always re-derive from the problem structure, not the surface label.
+**Sections:** [How Variants Work](#how-variants-work) · [1. Dynamic Programming: Beyond the Recurrence](#1-dynamic-programming-beyond-the-recurrence) · [2. Recursion & Backtracking: The Art of Undoing](#2-recursion--backtracking-the-art-of-undoing) · [3. Sliding Window: The Moving Frame](#3-sliding-window-the-moving-frame) · [4. Graphs: The Connectivity Web](#4-graphs-the-connectivity-web) · [5. Prefix Sums: The "Chop Off" Strategy](#5-prefix-sums-the-chop-off-strategy) · [6. Two Pointers: The Converging Search](#6-two-pointers-the-converging-search) · [7. Binary Search: Beyond the Sorted Array](#7-binary-search-beyond-the-sorted-array) · [8. Linked Lists: Pointers in Space](#8-linked-lists-pointers-in-space) · [9. Trees: More Than Traversal](#9-trees-more-than-traversal) · [10. Intervals: Merging and Scheduling](#10-intervals-merging-and-scheduling) · [11. Matrix / Grid Problems](#11-matrix--grid-problems) · [12. Stack Problems](#12-stack-problems) · [13. Heap / Priority Queue](#13-heap--priority-queue) · [14. Trie Problems](#14-trie-problems) · [15. Bit Manipulation](#15-bit-manipulation) · [16. Math / Number Theory](#16-math--number-theory) · [Final Strategy for the Interview](#final-strategy-for-the-interview)
 
 ---
 
-# The L3 Pattern Playbook: A Guided Conversation
+## How Variants Work
 
-Welcome to the heart of this repository. If you've ever felt like you're "memorizing" LeetCode instead of "learning" it, this document is for you. We’ve organized these problems not just as static code blocks, but as a series of **conversations**. 
+- **Core insight:** a variant changes **one invariant** of a base problem — find which one shifted, re-derive only that part, keep the rest of the algorithm.
+- **Four mutation types:**
 
-Imagine we're sitting down together, and I'm showing you the "Matrix of Coding Patterns." For every foundational problem, we’ll talk about why it exists, how to spot it under pressure, and how to handle the "twists" an interviewer will throw at you when they realize you know the base solution.
+| Mutation | Example | What changes |
+|---|---|---|
+| Constraint relaxed / tightened | remove "distinct"; add "at most k distinct" | duplicate handling; add a freq map to the window |
+| Output changed | count → list all / path | bookkeeping (parents, choices); count→all usually O(n) → O(2ⁿ) |
+| Input shape changed | sorted input; 1D → 2D; circular | hash → two pointers; 2D indexing; double the array / mod index |
+| Online / updates | static → stream of queries | precompute, incremental state, or versioning |
+
+- **Reusable tricks:** "exactly k" = atMost(k) − atMost(k−1); sorted input ⇒ two pointers beat hashing on space; "k stops/k uses" ⇒ add k to the state.
+- **Where it breaks:** a disguised *different* problem ("Two Sum on a graph" is graph traversal) — re-check the pattern trigger before reusing the base.
+- Interview follow-ups by transformation → [HOW_TO_THINK § escalation grammar](HOW_TO_THINK.md#the-escalation-grammar-what-follow-ups-will-be); per-family chains → [patterns-master § Follow-Up Chains](patterns-master.md#follow-up-chains--interview-progression--t1).
 
 ---
 
 ## 1. Dynamic Programming: Beyond the Recurrence
 
-Let's start with the big one. DP isn't about math; it's about **memoized decision trees**.
+DP isn't about math; it's about **memoized decision trees**.
 
 ### 1.1 The LIS Family: Sorting the Chaos
 *Foundational Problem: [Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/)*
@@ -453,16 +412,4 @@ Union-Find is an alternative — merge adjacent '1's, count distinct roots.
 
 ## Final Strategy for the Interview
 
-Don't just solve problems; solve **patterns**. When you see a new question, ask yourself:
-1. "Is this a **Binary Choice** at each step? (State Machine DP)"
-2. "Am I **Exploring All Paths** and need to undo? (Backtracking)"
-3. "Is this a **Continuous Window** or contiguous range? (Sliding Window / Prefix Sum)"
-4. "Is there a **Dependency Order**? (Topo Sort)"
-5. "Am I looking for **min/max of a range**? (Heap / Segment Tree / Monotonic)"
-6. "Can I binary search on the **answer** instead of the input? (Binary Search on Answer)"
-7. "Is this a **connectivity** problem? (Union-Find / BFS/DFS)"
-
-> [!TIP]
-> The most common "aha" upgrades: O(N²) → O(N) via hash map; O(N²) → O(N log N) via sort + greedy; brute backtracking → DP when you only need count/max, not the actual path. When stuck, ask: "Am I recomputing something?" (hash/DP) or "Does sorting unlock a linear pass?" (sort + greedy/two-pointer).
-
-If you can map a problem to a conversation, you've already won half the battle. Now go through the `core/` folder and see these patterns in action!
+Pattern selection from a fresh problem lives in [patterns-master § Quick Decision Trees](patterns-master.md#quick-decision-trees). This file's job is the next step: once you've named the base problem, ask *"which invariant did they change?"* and use the section above.

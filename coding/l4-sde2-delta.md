@@ -2,8 +2,19 @@
 tags: [l4-google, sde2, roadmap, delta]
 topic: L4 (SDE-2) Delta — what changes on top of the L3 base
 ---
-
 # Google L4 (SDE-2) Delta — Upgrade Layer
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** What changes at L4 (SDE-2): the higher bar, tier promotions from the L3 track, gap problems, a 6-week schedule, behavioral delta.
+> **You'll be able to:** Upgrade an L3-ready prep to the L4 bar without re-studying everything.
+> **Prereqs:** L3 roadmap · **Pair with:** [L3 roadmap](l3-google-roadmap.md) · [Senior delta](sde3-senior-delta.md) · **Time:** 20 min
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](l3-google-roadmap.md#tier-legend))
+
+**Sections:** [1. What actually changes at L4](#1-what-actually-changes-at-l4) · [2. Tier promotions (L3 → L4)](#2-tier-promotions-l3--l4) · [3. Gap problems (not in the L3 track)](#3-gap-problems-not-in-the-l3-track) · [4. L4 6-week schedule](#4-l4-6-week-schedule) · [5. Behavioral delta](#5-behavioral-delta)
+
+---
 
 > **How to use this file:** Everything in the L3 track ([`l3-google-roadmap.md`](l3-google-roadmap.md)) is still the foundation — L4 loops draw from the *same* topic pool. This file lists only what **changes**: the higher bar, tier promotions, and ~35 gap problems the L3 track doesn't cover. Study the L3 base first; layer this on top.
 
@@ -72,7 +83,7 @@ The pattern behind all of these: **compose two structures so each covers the oth
 
 ### 3.2 Intervals / sweep line `⚡ T1`
 
-Full walkthroughs with code: [`coding/algorithms/16-greedy.md` → "Intervals & Sweep — L4 additions"](algorithms/16-greedy.md#intervals--sweep--l4-additions).
+Full walkthroughs with code: [`coding/algorithms/16-greedy.md` → "Interval Greedy"](algorithms/16-greedy.md#interval-greedy).
 
 - **Insert Interval** `⚡ T1` · Medium
   - Key insight: three phases — copy all ending before, merge all overlapping into one, copy rest. No sort needed (input sorted).
@@ -87,7 +98,7 @@ Full walkthroughs with code: [`coding/algorithms/16-greedy.md` → "Intervals & 
 
 ### 3.3 Graphs — the harder layer `⚡ T1`
 
-Full walkthroughs with code: [`coding/data-structures/13-graph.md` → "Implicit-Graph BFS — L4 additions"](data-structures/13-graph.md#implicit-graph-bfs--l4-additions); LIP: [`04-matrix.md` → "DP on the Grid"](data-structures/04-matrix.md#dp-on-the-grid--l4-addition).
+Full walkthroughs with code: [`coding/data-structures/13-graph.md` → "BFS on Graphs"](data-structures/13-graph.md#bfs-on-graphs); LIP: [`04-matrix.md` → "DP on the Grid"](data-structures/04-matrix.md#dp-on-the-grid-memoized-dfs).
 
 - **Longest Increasing Path in a Matrix** `⚡ T1` · Hard
   - Key insight: DFS + memo; strictly-increasing rule means no cycles → no visited set needed. This *is* DP on an implicit DAG — say that.
@@ -101,7 +112,7 @@ Full walkthroughs with code: [`coding/data-structures/13-graph.md` → "Implicit
 
 ### 3.4 String parsing / simulation `⚡ T1`
 
-Full walkthroughs with code: [`coding/data-structures/03-string.md` → "Parsing & Simulation — L4 additions"](data-structures/03-string.md#parsing--simulation--l4-additions).
+Full walkthroughs with code: [`coding/data-structures/03-string.md` → "Parsing / Simulation"](data-structures/03-string.md#parsing--simulation).
 
 - **Text Justification** `⚡ T1` · Hard
   - Key insight: greedy line packing, then distribute spaces left-heavy: `gaps = words-1`, each gap gets `total//gaps`, first `total%gaps` gaps get one extra. Last line + single-word lines are left-justified. Pure care, zero algorithms — exactly why Google asks it.
@@ -113,7 +124,7 @@ Full walkthroughs with code: [`coding/data-structures/03-string.md` → "Parsing
 
 ### 3.5 Monotonic stack — contribution counting `🎯 T2`
 
-Full walkthroughs with code: [`coding/data-structures/05-stack.md` → "Contribution Counting — L4 additions"](data-structures/05-stack.md#contribution-counting--l4-additions).
+Full walkthroughs with code: [`coding/data-structures/05-stack.md` → "Monotonic Stack — Next Greater/Smaller"](data-structures/05-stack.md#monotonic-stack--next-greatersmaller) (Sum of Subarray Minimums) and "Arrays and Sequences" (Car Fleet).
 
 - **Sum of Subarray Minimums** `🎯 T2` · Medium
   - Key insight: for each element, count subarrays where it's the min: `left[i] * right[i] * a[i]` via prev-smaller / next-smaller. Use strict `<` one side, `<=` the other to avoid double-counting equals.
@@ -130,7 +141,7 @@ Full walkthroughs with code: [`coding/data-structures/05-stack.md` → "Contribu
 ### 3.7 DP — the L4 layer (on top of the L3 T2 list)
 
 - **Longest Increasing Path in Matrix** — see §3.3; the canonical "DP meets graphs" bridge.
-- **Maximum Profit in Job Scheduling** `🎯 T2` · Hard — [walkthrough](algorithms/15-dynamic-programming.md#dp--binary-search--l4-addition)
+- **Maximum Profit in Job Scheduling** `🎯 T2` · Hard — [walkthrough](algorithms/15-dynamic-programming.md#dp-on-sequences)
   - Key insight: sort by end; `dp[i] = max(dp[i-1], profit + dp[bisect(ends, start)])`. DP + binary search composition — very Google.
 - **Partition to K Equal Sum Subsets** `🎯 T2` · Medium — [walkthrough](algorithms/12-backtracking.md#partition-to-k-equal-sum-subsets--t2)
   - Key insight: backtracking filling one bucket at a time + pruning (sort desc, skip equal failures). Mention bitmask-DP exists; don't implement it.

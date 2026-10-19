@@ -3,53 +3,34 @@ tags: [coding, data-structures, array]
 topic: array
 difficulty: mixed
 ---
-
 # Array Problems — Deep Dive
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked array problems grouped by technique: two pointers, sliding window, Kadane, partitioning, Boyer-Moore, difference array, prefix sum.
+> **You'll be able to:** Solve the T1 array set cold in ≤25 min each.
+> **Prereqs:** Array lecture · **Pair with:** [Array lecture](../../01-data-structures/01-array.md) · **Time:** 4–6 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [Two Pointers](#two-pointers) · [Sliding Window](#sliding-window) · [Kadane's Algorithm](#kadanes-algorithm) · [Dutch National Flag / Partitioning](#dutch-national-flag--partitioning) · [Boyer-Moore Voting](#boyer-moore-voting) · [Difference Array](#difference-array) · [Miscellaneous Array Techniques](#miscellaneous-array-techniques) · [Matrix](#matrix) · [Prefix Sum](#prefix-sum)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Two Sum (hash map variant)](#two-sum-hash-map-variant--t1) · [Best Time to Buy and Sell Stock](#best-time-to-buy-and-sell-stock--t2) · [Maximum Subarray](#maximum-subarray--t2) · [Product of Array Except Self](#product-of-array-except-self--t2) · [Merge Intervals](#merge-intervals-lc-56--t2) · [Insert Interval](#insert-interval-lc-57--t2) · [Sort Colors](#sort-colors--t1) · [Next Permutation](#next-permutation--t2) · [Rotate Image](#rotate-image-lc-48)
+> **Template:** Kadane: `cur = max(x, cur + x); best = max(best, cur)`.
+> **Template:** Prefix/suffix pass: left products into `ans`, then multiply by a running right product — O(1) extra space.
+> **Gotchas:** All-negative input for Kadane (init with `a[0]`, not 0) · in-place matrix ops: transpose then reverse rows · Next Permutation: find pivot from the right, swap with the next larger, **reverse** the suffix · difference arrays for range-add.
 
 ---
 
 ## Two Pointers
 
+---
+
 ### Two Sum (sorted variant) `⚡ T1`
 
 > [!example] Problem
-> Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-> You may assume that each input would have exactly one solution, and you may not use the same element twice.
-> You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,7,11,15], target = 9
-> Output: [0,1]
-> Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,2,4], target = 6
-> Output: [1,2]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,3], target = 6
-> Output: [0,1]
-> ```
-> 
-> **Constraints:**
-> - 2 <= nums.length <= 10^4
-> - -10^9 <= nums[i] <= 10^9
-> - -10^9 <= target <= 10^9
-> - Only one valid answer exists.
+> Same problem as [Two Sum](02-hashing.md#two-sum--t1) — this section covers the alternative approach only.
 
 > [!info] Approach
 > **Two Pointers on sorted array.** The array is sorted — we can exploit this. A pair either has too-small a sum (advance left) or too-large a sum (advance right). No pair is missed because every skip is provably invalid. Two pointers at opposite ends converging inward based on sum comparison. `l=0, r=n-1`. If `numbers[l] + numbers[r] == target`, done. If sum < target, `l++` (we need larger). If sum > target, `r--` (we need smaller). The sorted invariant guarantees we never skip valid pairs.
@@ -84,390 +65,37 @@ difficulty: mixed
 
 ### 3Sum `⚡ T1`
 
-> [!example] Problem
-> Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
-> Notice that the solution set must not contain duplicate triplets.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [-1,0,1,2,-1,-4]
-> Output: [[-1,-1,2],[-1,0,1]]
-> Explanation: 
-> nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
-> nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
-> nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
-> The distinct triplets are [-1,0,1] and [-1,-1,2].
-> Notice that the order of the output and the order of the triplets does not matter.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,1]
-> Output: []
-> Explanation: The only possible triplet does not sum up to 0.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,0,0]
-> Output: [[0,0,0]]
-> Explanation: The only possible triplet sums up to 0.
-> ```
-> 
-> **Constraints:**
-> - 3 <= nums.length <= 3000
-> - -10^5 <= nums[i] <= 10^5
-
-> [!info] Approach
-> **Fix + Two Pointers.** Brute force O(n³) is too slow. Fixing one element reduces it to a 2Sum on the remaining sorted suffix. Sort once, fix `nums[i]`, run two pointers on `i+1..n-1`. Sort. For each `i`, if `nums[i] > 0` break (sorted — no triplet can sum to 0). Skip duplicate `i`. Run two-pointer on the suffix. On match, skip duplicate `left` and `right` before advancing both. Three deduplication sites: `i`, `left`, `right`.
-
-> In an interview: sorting is what makes the duplicate skipping and early break safe, so this pattern is usually the cleanest solution in interviews.
-
-> [!note]- Python Solution
-> ```python
-> def three_sum(nums):
->     nums.sort()
->     result = []
->     for i in range(len(nums) - 2):
->         if nums[i] > 0:
->             break
->         if i > 0 and nums[i] == nums[i - 1]:
->             continue
->         l, r = i + 1, len(nums) - 1
->         while l < r:
->             s = nums[i] + nums[l] + nums[r]
->             if s == 0:
->                 result.append([nums[i], nums[l], nums[r]])
->                 while l < r and nums[l] == nums[l + 1]:
->                     l += 1
->                 while l < r and nums[r] == nums[r - 1]:
->                     r -= 1
->                 l += 1
->                 r -= 1
->             elif s < 0:
->                 l += 1
->             else:
->                 r -= 1
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n²), Space O(1) extra (output excluded).
-
-> [!tip] Edge cases
-> - If the array has fewer than 3 elements, return `[]`.
-> - After sorting, all-positive arrays can exit immediately once the first fixed element becomes positive.
-
-> [!tip] Alternatives
-> - Hash set for third element: O(n²) time, O(n) space. Harder deduplication logic.
-> - Brute force O(n³): never acceptable.
+> Full walkthrough: [3Sum (LC 15)](../algorithms/03-two-pointers.md#3sum-lc-15--t1).
 
 ---
 
 ### 3Sum Closest `⚡ T1`
 
-> [!example] Problem
-> Given an integer array nums of length n and an integer target, find three integers in nums such that the sum is closest to target.
-> Return the sum of the three integers.
-> You may assume that each input would have exactly one solution.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [-1,2,1,-4], target = 1
-> Output: 2
-> Explanation: The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,0,0], target = 1
-> Output: 0
-> Explanation: The sum that is closest to the target is 0. (0 + 0 + 0 = 0).
-> ```
-> 
-> **Constraints:**
-> - 3 <= nums.length <= 500
-> - -1000 <= nums[i] <= 1000
-> - -10^4 <= target <= 10^4
-
-> [!info] Approach
-> **Sort + Two Pointers with closest tracking.** Same sorted + two-pointer framework as 3Sum, but instead of equality we track the minimum distance. Track `closest` as best sum seen. After computing current sum, advance `l` or `r` to pull sum toward target. Sort. For each `i`, two-pointer on suffix. Compute `s = nums[i]+nums[l]+nums[r]`. Update `closest` if `|s - target| < |closest - target|`. If `s < target`, `l++`. If `s > target`, `r--`. If exact match, return immediately.
-
-> [!note]- Python Solution
-> ```python
-> def three_sum_closest(nums, target):
->     nums.sort()
->     closest = nums[0] + nums[1] + nums[2]
->     for i in range(len(nums) - 2):
->         l, r = i + 1, len(nums) - 1
->         while l < r:
->             s = nums[i] + nums[l] + nums[r]
->             if abs(s - target) < abs(closest - target):
->                 closest = s
->             if s < target:
->                 l += 1
->             elif s > target:
->                 r -= 1
->             else:
->                 return s
->     return closest
-> ```
-
-> [!success] Complexity
-> Time O(n²), Space O(1).
-
-> [!tip] Edge cases
-> - Initialize `closest` from the first three numbers so negative targets and large magnitudes work naturally.
-> - If you find an exact match, return immediately — it is already optimal.
-
-> [!tip] Alternatives
-> - Brute force O(n³): always infeasible. No O(n log n) solution known for the general case.
+> Full walkthrough: [3Sum Closest (LC 16)](../algorithms/03-two-pointers.md#3sum-closest-lc-16--t1).
 
 ---
 
 ### 4Sum `⚡ T1`
 
-> [!example] Problem
-> Given an array nums of n integers, return an array of all the unique quadruplets [nums[a], nums[b], nums[c], nums[d]] such that:
-> You may return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,0,-1,0,-2,2], target = 0
-> Output: [[-2,-1,1,2],[-2,0,0,2],[-1,0,0,1]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,2,2,2,2], target = 8
-> Output: [[2,2,2,2]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 200
-> - -10^9 <= nums[i] <= 10^9
-> - -10^9 <= target <= 10^9
-
-> [!info] Approach
-> **Two nested loops + Two Pointers.** Generalizes 3Sum by adding one more fixed element. Fix two elements (i, j) and run two pointers on the rest. Two nested loops fix first two elements; two pointers find the last two. Deduplicate at all four levels. Sort. Outer loop `i`, inner loop `j = i+1`. Skip duplicate `i` and `j`. Two pointers `l=j+1, r=n-1`. Same pointer logic as 3Sum. Early termination: if the smallest possible sum for the current `i` is already too large, break; if the largest possible sum is still too small, continue.
-
-> [!note]- Python Solution
-> ```python
-> def four_sum(nums, target):
->     nums.sort()
->     n = len(nums)
->     result = []
->     for i in range(n - 3):
->         if i > 0 and nums[i] == nums[i - 1]:
->             continue
->         for j in range(i + 1, n - 2):
->             if j > i + 1 and nums[j] == nums[j - 1]:
->                 continue
->             l, r = j + 1, n - 1
->             while l < r:
->                 s = nums[i] + nums[j] + nums[l] + nums[r]
->                 if s == target:
->                     result.append([nums[i], nums[j], nums[l], nums[r]])
->                     while l < r and nums[l] == nums[l + 1]:
->                         l += 1
->                     while l < r and nums[r] == nums[r - 1]:
->                         r -= 1
->                     l += 1
->                     r -= 1
->                 elif s < target:
->                     l += 1
->                 else:
->                     r -= 1
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n³), Space O(1) extra.
-
-> [!tip] Edge cases
-> - Four numbers can overflow 32-bit arithmetic in some languages; use a wider type if needed.
-> - Deduplicate at each level in the order `i`, `j`, `l`, `r` to avoid repeated quadruplets.
-
-> [!tip] Alternatives
-> - Hash map approach: O(n²) average using pair-sum hash map. Complex deduplication; O(n²) space. Rarely worth it over the clean O(n³) two-pointer.
+> Full walkthrough: [4Sum (LC 18)](../algorithms/03-two-pointers.md#4sum-lc-18--t1).
 
 ---
 
 ### Container with Most Water `⚡ T1`
 
-> [!example] Problem
-> You are given an integer array height of length n. There are n vertical lines drawn such that the two endpoints of the ith line are (i, 0) and (i, height[i]).
-> Find two lines that together with the x-axis form a container, such that the container contains the most water.
-> Return the maximum amount of water a container can store.
-> Notice that you may not slant the container.
-> 
-> **Example 1:**
-> ```
-> Input: height = [1,8,6,2,5,4,8,3,7]
-> Output: 49
-> Explanation: The above vertical lines are represented by array [1,8,6,2,5,4,8,3,7]. In this case, the max area of water (blue section) the container can contain is 49.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: height = [1,1]
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - n == height.length
-> - 2 <= n <= 10^5
-> - 0 <= height[i] <= 10^4
-
-> [!info] Approach
-> **Two Pointers — advance the shorter line.** Area = min(height[l], height[r]) × (r - l). To maximize, we must consider both height and width. Brute force O(n²) tries all pairs. Two pointers. The width decreases as pointers converge, so we must compensate with greater height. `l=0, r=n-1`. Compute area. Always advance the pointer pointing to the shorter line — moving the taller line can never increase `min(h[l], h[r])` while width also decreases.
-
-> [!note]- Python Solution
-> ```python
-> def max_area(height):
->     l, r = 0, len(height) - 1
->     best = 0
->     while l < r:
->         area = min(height[l], height[r]) * (r - l)
->         best = max(best, area)
->         if height[l] <= height[r]:
->             l += 1
->         else:
->             r -= 1
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Brute force O(n²): check all pairs. Never acceptable.
-> - Moving the taller pointer is also correct but suboptimal — both converge. Only advancing the shorter is the standard proof-based argument.
+> Full walkthrough: [Container With Most Water (LC 11)](../algorithms/03-two-pointers.md#container-with-most-water-lc-11--t1).
 
 ---
 
 ### Trapping Rain Water `⚡ T1`
 
-> [!example] Problem
-> Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
-> 
-> **Example 1:**
-> ```
-> Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
-> Output: 6
-> Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: height = [4,2,0,3,2,5]
-> Output: 9
-> ```
-> 
-> **Constraints:**
-> - n == height.length
-> - 1 <= n <= 2 * 10^4
-> - 0 <= height[i] <= 10^5
-
-> [!info] Approach
-> **Two Pointers — binding constraint side.** Water at index `i` is bounded by `min(max_left, max_right) - height[i]`. We need left-max and right-max for every position. Two pointers eliminating the need for prefix/suffix arrays. The side with the smaller max is the binding constraint. `l=0, r=n-1`, `l_max=r_max=0`. If `l_max <= r_max`, the left side is the constraint, so water at `l` is `l_max - height[l]` and we advance `l`. Otherwise, the right side is the constraint, so water at `r` is `r_max - height[r]` and we decrement `r`.
-
-> [!note]- Python Solution
-> ```python
-> def trap(height):
->     l, r = 0, len(height) - 1
->     l_max = r_max = 0
->     water = 0
->     while l < r:
->         if l_max <= r_max:
->             l_max = max(l_max, height[l])
->             water += l_max - height[l]
->             l += 1
->         else:
->             r_max = max(r_max, height[r])
->             water += r_max - height[r]
->             r -= 1
->     return water
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Edge cases
-> - Empty arrays or arrays with fewer than 3 bars trap no water.
-> - Flat or monotonic terrain also returns 0; the algorithm naturally handles both.
-
-> [!tip] Alternatives
-> - Prefix/suffix max arrays: O(n) time, O(n) space. More intuitive, same time.
-> - Monotonic stack: O(n) time, O(n) space. Computes water layer by layer horizontally. Useful for the histogram variant.
+> Full walkthrough: [Trapping Rain Water (LC 42)](../algorithms/03-two-pointers.md#trapping-rain-water-lc-42--t1).
 
 ---
 
 ### Remove Duplicates from Sorted Array `⚡ T1`
 
-> [!example] Problem
-> Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place such that each unique element appears only once. The relative order of the elements should be kept the same. Then return the number of unique elements in nums.
-> Consider the number of unique elements of nums to be k, to get accepted, you need to do the following things:
-> Custom Judge:
-> The judge will test your solution with the following code:
-> If all assertions pass, then your solution will be accepted.
-> 
-> **Example 1:**
-> ```
-> int[] nums = [...]; // Input array
-> int[] expectedNums = [...]; // The expected answer with correct length
-> 
-> int k = removeDuplicates(nums); // Calls your implementation
-> 
-> assert k == expectedNums.length;
-> for (int i = 0; i < k; i++) {
->     assert nums[i] == expectedNums[i];
-> }
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,1,2]
-> Output: 2, nums = [1,2,_]
-> Explanation: Your function should return k = 2, with the first two elements of nums being 1 and 2 respectively.
-> It does not matter what you leave beyond the returned k (hence they are underscores).
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,0,1,1,1,2,2,3,3,4]
-> Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
-> Explanation: Your function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively.
-> It does not matter what you leave beyond the returned k (hence they are underscores).
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 3 * 10^4
-> - -100 <= nums[i] <= 100
-> - nums is sorted in non-decreasing order.
-
-> [!info] Approach
-> **Two Pointers — slow/fast write pattern.** Sorted guarantees duplicates are adjacent. We need one pointer tracking the write position (valid prefix) and one scanning forward. Two pointers — `slow` marks next write index, `fast` scans for new values. `slow=1`. For `fast` in `1..n-1`: if `nums[fast] != nums[slow-1]`, write `nums[slow] = nums[fast]`, `slow++`. Return `slow`.
-
-> [!note]- Python Solution
-> ```python
-> def remove_duplicates(nums):
->     if not nums:
->         return 0
->     slow = 1
->     for fast in range(1, len(nums)):
->         if nums[fast] != nums[slow - 1]:
->             nums[slow] = nums[fast]
->             slow += 1
->     return slow
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Python `list(dict.fromkeys(nums))`: O(n), but creates new list — violates in-place constraint.
-> - Using a set: O(n) space, doesn't exploit sorted order.
+> Full walkthrough: [Remove Duplicates from Sorted Array (LC 26)](../algorithms/03-two-pointers.md#remove-duplicates-from-sorted-array-lc-26--t1).
 
 ---
 
@@ -540,111 +168,17 @@ difficulty: mixed
 
 ## Sliding Window
 
+---
+
 ### Max Consecutive Ones III `⚡ T1`
 
-> [!example] Problem
-> Given a binary array nums and an integer k, return the maximum number of consecutive 1's in the array if you can flip at most k 0's.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,1,0,0,0,1,1,1,1,0], k = 2
-> Output: 6
-> Explanation: [1,1,1,0,0,1,1,1,1,1,1]
-> Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,0,1,1,0,0,1,1,1,0,1,1,0,0,0,1,1,1,1], k = 3
-> Output: 10
-> Explanation: [0,0,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1]
-> Bolded numbers were flipped from 0 to 1. The longest subarray is underlined.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - nums[i] is either 0 or 1.
-> - 0 <= k <= nums.length
-
-> [!info] Approach
-> **Variable sliding window — zero count tracking.** We want the longest window containing at most `k` zeros. This is monotone: a larger window is valid as long as zero-count ≤ k. Variable sliding window tracking zero count. Expand `r`. If `nums[r] == 0`, increment zero count. If zeros > k, shrink `l` until zeros ≤ k (moving `l` past a zero decrements zero count). Track `r - l + 1` as window size.
-
-> [!note]- Python Solution
-> ```python
-> def longest_ones(nums, k):
->     l = zeros = best = 0
->     for r in range(len(nums)):
->         if nums[r] == 0:
->             zeros += 1
->         while zeros > k:
->             if nums[l] == 0:
->                 zeros -= 1
->             l += 1
->         best = max(best, r - l + 1)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Prefix sum counting zeros: O(n) time, O(n) space. Overkill for this structure.
-> - The window can only grow (never shrink smaller than `best`) — optimization: replace `while` with `if` to achieve O(n) with fixed-size window advance.
+> Full walkthrough: [Max Consecutive Ones III (LC 1004)](../algorithms/04-sliding-window.md#max-consecutive-ones-iii-lc-1004--t1).
 
 ---
 
 ### Subarrays with K Different Integers `⚡ T1`
 
-> [!example] Problem
-> Given an integer array nums and an integer k, return the number of good subarrays of nums.
-> A good array is an array where the number of different integers in that array is exactly k.
-> A subarray is a contiguous part of an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,1,2,3], k = 2
-> Output: 7
-> Explanation: Subarrays formed with exactly 2 different integers: [1,2], [2,1], [1,2], [2,3], [1,2,1], [2,1,2], [1,2,1,2]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,2,1,3,4], k = 3
-> Output: 3
-> Explanation: Subarrays formed with exactly 3 different integers: [1,2,1,3], [2,1,3], [1,3,4].
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^4
-> - 1 <= nums[i], k <= nums.length
-
-> [!info] Approach
-> **Exactly-k = at_most(k) − at_most(k−1).** Sliding window with exact count is non-monotone — a window can become invalid as it grows but also as elements fall out. Direct counting is intractable. Transform "exactly k" to "at most k" − "at most k−1". The "at most k" function is monotone. `at_most(k)` counts subarrays with ≤ k distinct integers. Use standard sliding window: expand right, if distinct count > k shrink left, add `r - l + 1` (all subarrays ending at `r` and starting at `l..r`). Answer = `at_most(k) - at_most(k-1)`.
-
-> [!note]- Python Solution
-> ```python
-> def subarrays_with_k_distinct(nums, k):
->     def at_most(k):
->         count = {}
->         l = result = 0
->         for r, x in enumerate(nums):
->             count[x] = count.get(x, 0) + 1
->             while len(count) > k:
->                 count[nums[l]] -= 1
->                 if count[nums[l]] == 0:
->                     del count[nums[l]]
->                 l += 1
->             result += r - l + 1
->         return result
-> 
->     return at_most(k) - at_most(k - 1)
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Direct exact-k sliding window with two pointers marking left boundary range: O(n), same complexity, more complex implementation.
+> Full walkthrough: [Subarrays with K Different Integers (LC 992)](../algorithms/04-sliding-window.md#subarrays-with-k-different-integers-lc-992--t1).
 
 ---
 
@@ -734,6 +268,9 @@ difficulty: mixed
 > - -30 <= nums[i] <= 30
 > - The input is generated such that answer[i] is guaranteed to fit in a 32-bit integer.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Prefix/suffix without division · **Gotcha:** **Zeros** — one zero → all zero except that index; two zeros → all zero. **No division** constraint.
+
 > [!info] Approach
 > **Two-pass left/right product accumulation.** Division is disallowed (and breaks on zeros). We can compute left-product prefix and right-product suffix. Two-pass: first build left products into output, then multiply by right products on a second right-to-left pass using a running variable. Pass 1: `output[i] = product of nums[0..i-1]`. Pass 2: maintain `right = 1`, scan right to left, multiply `output[i] *= right`, then `right *= nums[i]`.
 
@@ -764,6 +301,8 @@ difficulty: mixed
 
 ## Kadane's Algorithm
 
+---
+
 ### Maximum Subarray `🎯 T2`
 
 > [!example] Problem
@@ -793,6 +332,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= nums.length <= 10^5
 > - -10^4 <= nums[i] <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "max contiguous sum" · **Gotcha:** All-negative input → init with `nums[0]`, not 0
 
 > [!info] Approach
 > **Kadane's algorithm — local reset on negative prefix.** At each position, either start a new subarray here or extend the current one — whichever is larger. The decision is local and optimal. Kadane's algorithm: `cur = max(nums[i], cur + nums[i])`. This captures "reset if current prefix hurts". Initialize `cur = best = nums[0]` (handles all-negative case). For each subsequent element: `cur = max(x, cur + x)`. Update `best = max(best, cur)`.
@@ -855,57 +397,11 @@ difficulty: mixed
 
 ## Dutch National Flag / Partitioning
 
+---
+
 ### Sort Colors `⚡ T1`
 
-> [!example] Problem
-> Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects of the same color are adjacent, with the colors in the order red, white, and blue.
-> We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
-> You must solve this problem without using the library's sort function.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,0,2,1,1,0]
-> Output: [0,0,1,1,2,2]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,0,1]
-> Output: [0,1,2]
-> ```
-> 
-> **Constraints:**
-> - n == nums.length
-> - 1 <= n <= 300
-> - nums[i] is either 0, 1, or 2.
-
-> [!info] Approach
-> **Dutch National Flag — three-pointer partition.** We can't use comparison sort and achieve O(n) with O(1) space in one pass. Three distinct values → three-way partition. Dutch National Flag algorithm: three pointers maintain invariant regions: `[0..lo)` are 0s, `[lo..mid)` are 1s, `(hi..n-1]` are 2s. `[mid..hi]` is unexamined. `lo=0, mid=0, hi=n-1`. While `mid <= hi`: if `nums[mid]==0`, swap with `lo`, advance both; if `nums[mid]==1`, advance `mid`; if `nums[mid]==2`, swap with `hi`, decrement `hi` — do NOT advance `mid` (swapped element from `hi` is unexamined).
-
-> [!note]- Python Solution
-> ```python
-> def sort_colors(nums):
->     lo = mid = 0
->     hi = len(nums) - 1
->     while mid <= hi:
->         if nums[mid] == 0:
->             nums[lo], nums[mid] = nums[mid], nums[lo]
->             lo += 1
->             mid += 1
->         elif nums[mid] == 1:
->             mid += 1
->         else:
->             nums[mid], nums[hi] = nums[hi], nums[mid]
->             hi -= 1
->             # mid stays — swapped element from hi is unexamined
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Count 0s, 1s, 2s and overwrite: two passes, O(n) time, O(1) space. Simpler but two passes.
-> - `nums.sort()`: O(n log n). Never acceptable when O(n) exists.
+> Full walkthrough: [Sort Colors (LC 75)](../algorithms/03-two-pointers.md#sort-colors-lc-75--t1).
 
 ---
 
@@ -954,6 +450,8 @@ difficulty: mixed
 ---
 
 ## Boyer-Moore Voting
+
+---
 
 ### Majority Element `🎯 T2`
 
@@ -1071,13 +569,15 @@ difficulty: mixed
 
 ## Difference Array
 
+---
+
 ### Difference Array Pattern
 
 > When you need to apply many range updates `[l, r] += val` and then query final values, the naive approach is O(n) per update — O(n × q) total for q updates. Difference array makes each update O(1) and reconstruction O(n), giving O(q + n) overall. Build `diff[]` where `diff[i] = arr[i] - arr[i-1]`. To add `val` to range `[l, r]`: `diff[l] += val`, `diff[r+1] -= val`. Reconstruct prefix sum to get the final array. Initialize `diff = [0] * (n + 1)`. For each update `(l, r, val)`: `diff[l] += val; diff[r+1] -= val`. After all updates, compute prefix sum of `diff` to get the result array.
 
 ---
 
-### Car Pooling
+### Car Pooling `🎯 T2`
 
 > [!example] Problem
 > There is a car with capacity empty seats. The vehicle only drives east (i.e., it cannot turn around and drive west).
@@ -1267,155 +767,23 @@ difficulty: mixed
 
 ## Miscellaneous Array Techniques
 
+---
+
 ### Best Time to Buy and Sell Stock `🎯 T2`
 
-> [!example] Problem
-> You are given an array prices where prices[i] is the price of a given stock on the ith day.
-> You want to maximize your profit by choosing a single day to buy one stock and choosing a different day in the future to sell that stock.
-> Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit, return 0.
-> 
-> **Example 1:**
-> ```
-> Input: prices = [7,1,5,3,6,4]
-> Output: 5
-> Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6-1 = 5.
-> Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: prices = [7,6,4,3,1]
-> Output: 0
-> Explanation: In this case, no transactions are done and the max profit = 0.
-> ```
-> 
-> **Constraints:**
-> - 1 <= prices.length <= 10^5
-> - 0 <= prices[i] <= 10^4
-
-> [!info] Approach
-> Track the minimum price seen so far. Profit at day `i` = `prices[i] - min_so_far`. The best sell day for any buy day is always the global minimum to the left. Single pass — maintain `min_price` and `max_profit`. `min_price = inf, max_profit = 0`. For each price: `min_price = min(min_price, price)`, `max_profit = max(max_profit, price - min_price)`.
-
-> [!note]- Python Solution
-> ```python
-> def max_profit(prices):
->     min_price = float('inf')
->     max_profit = 0
->     for price in prices:
->         min_price = min(min_price, price)
->         max_profit = max(max_profit, price - min_price)
->     return max_profit
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - DP: `dp[i] = max(dp[i-1], prices[i] - min_prices[i])` — same logic made explicit. O(n) time, O(n) space.
-> - Two-pass: first pass builds prefix-min array, second pass computes max profit. O(n) time, O(n) space. Same idea, less elegant.
-> - Brute force O(n²): check all (buy, sell) pairs. Never acceptable.
+> Full walkthrough: [Best Time to Buy and Sell Stock (All Variants)](../algorithms/15-dynamic-programming.md#best-time-to-buy-and-sell-stock-all-variants--t2).
 
 ---
 
 ### Move Zeroes `⚡ T1`
 
-> [!example] Problem
-> Given an integer array nums, move all 0's to the end of it while maintaining the relative order of the non-zero elements.
-> Note that you must do this in-place without making a copy of the array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [0,1,0,3,12]
-> Output: [1,3,12,0,0]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0]
-> Output: [0]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^4
-> - -2^{31} <= nums[i] <= 2^{31} - 1
-
-> [!info] Approach
-> We need to compact non-zero elements to the front, preserving order, without allocating extra space. Two-pointer — `slow` tracks the next write position for non-zero elements; `fast` scans forward. `slow = 0`. For each `fast`: if `nums[fast] != 0`, set `nums[slow] = nums[fast]`, `slow++`. After the loop, zero out `nums[slow..n-1]`.
-
-> [!note]- Python Solution
-> ```python
-> def move_zeroes(nums):
->     slow = 0
->     for fast in range(len(nums)):
->         if nums[fast] != 0:
->             nums[slow] = nums[fast]
->             slow += 1
->     for i in range(slow, len(nums)):
->         nums[i] = 0
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Swap variant: swap `nums[slow]` and `nums[fast]` instead of overwrite — avoids the second zero-fill pass but does more swaps. Correct when the array is sparse in non-zeros.
-> - `nums.sort(key=lambda x: x == 0)`: O(n log n), not in-place in CPython, loses relative order if not stable (it is stable in Python, but still O(n log n) — worse).
+> Full walkthrough: [Move Zeroes (LC 283)](../algorithms/03-two-pointers.md#move-zeroes-lc-283--t1).
 
 ---
 
 ### Two Sum (hash map variant) `⚡ T1`
 
-> [!example] Problem
-> Given an array of integers nums and an integer target, return indices of the two numbers such that they add up to target.
-> You may assume that each input would have exactly one solution, and you may not use the same element twice.
-> You can return the answer in any order.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,7,11,15], target = 9
-> Output: [0,1]
-> Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,2,4], target = 6
-> Output: [1,2]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,3], target = 6
-> Output: [0,1]
-> ```
-> 
-> **Constraints:**
-> - 2 <= nums.length <= 10^4
-> - -10^9 <= nums[i] <= 10^9
-> - -10^9 <= target <= 10^9
-> - Only one valid answer exists.
-
-> [!info] Approach
-> **Hash map complement lookup.** Unsorted array → can't use two pointers (no sorted invariant). We need O(1) complement lookup. Hash map storing `value → index`. Single pass: check if complement exists before recording current. For each `(i, x)`: compute `complement = target - x`. If in map, return `[map[complement], i]`. Else record `x → i`. Checking before recording ensures we don't use same index twice.
-
-> [!note]- Python Solution
-> ```python
-> def two_sum(nums, target):
->     seen = {}  # value -> index
->     for i, x in enumerate(nums):
->         complement = target - x
->         if complement in seen:
->             return [seen[complement], i]
->         seen[x] = i
->     return []
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Sort + two pointers: O(n log n) time, O(1) space but loses original indices unless you store them.
-> - Brute force O(n²): never.
+> Full walkthrough: [Two Sum](02-hashing.md#two-sum--t1).
 
 ---
 
@@ -1441,6 +809,9 @@ difficulty: mixed
 > - n == matrix[i].length
 > - 1 <= m, n <= 10
 > - -100 <= matrix[i][j] <= 100
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "print in spiral order" · **Gotcha:** Re-check `top <= bot` / `left <= right` before the reverse passes
 
 > [!info] Approach
 > **Boundary shrinking — four-direction cycling.** Spiral traversal has four directions cycling with shrinking boundaries. Maintain four boundary pointers: `top, bottom, left, right`. Traverse right, down, left, up, then shrink boundaries inward. While `top <= bottom and left <= right`: traverse right along `top` row, `top++`; traverse down along `right` col, `right--`; if `top <= bottom`, traverse left along `bottom` row, `bottom--`; if `left <= right`, traverse up along `left` col, `left++`. The inner checks prevent double-counting for single row/col cases.
@@ -1501,6 +872,9 @@ difficulty: mixed
 > - n == matrix[0].length
 > - 1 <= m, n <= 200
 > - -2^{31} <= matrix[i][j] <= 2^{31} - 1
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "O(1) extra space" · **Gotcha:** Separate flag for whether col 0 itself had a zero
 
 > [!info] Approach
 > **Use first row/col as markers — O(1) space.** Marking naively while iterating spreads zeros incorrectly. We must first record which rows/cols to zero, then apply. O(1) space trick: use the first row and first column as markers. Handle them last. Record if row 0 or col 0 should be zeroed (check for existing zeros). For all other cells, if `matrix[i][j] == 0`, set `matrix[i][0] = 0` and `matrix[0][j] = 0`. Then zero out rows and cols using those markers. Finally handle row 0 and col 0 separately.
@@ -1660,214 +1034,89 @@ difficulty: mixed
 
 ### Jump Game (LC 55) `🎯 T2`
 
-> [!example] Problem
-> You are given an integer array nums. You are initially positioned at the array's first index, and each element in the array represents your maximum jump length at that position.
-> Return true if you can reach the last index, or false otherwise.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,3,1,1,4]
-> Output: true
-> Explanation: Jump 1 step from index 0 to 1, then 3 steps to the last index.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,2,1,0,4]
-> Output: false
-> Explanation: You will always arrive at index 3 no matter what. Its maximum jump length is 0, which makes it impossible to reach the last index.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^4
-> - 0 <= nums[i] <= 10^5
-
-> [!info] Approach
-> **Greedy — track farthest reachable index.** We don't need to know which path reaches the end, only whether any path does. A greedy max-reach scan is sufficient. Single pass maintaining `reach = max index reachable so far`. If current index `i > reach`, we're stuck. `reach = 0`. For each `i` in `0..n-1`: if `i > reach`, return False. Update `reach = max(reach, i + nums[i])`. If `reach >= n-1` at any point, return True.
-
-> [!note]- Python Solution
-> ```python
-> def can_jump(nums):
->     reach = 0
->     for i, v in enumerate(nums):
->         if i > reach:
->             return False
->         reach = max(reach, i + v)
->     return True
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - DP `dp[i] = True if reachable`: O(n²) worst case (inner loop per position). Correct but slow.
-> - Backward scan (find last "good" index): O(n), same greedy idea in reverse.
+> Full walkthrough: [Jump Game (can reach?)](../algorithms/16-greedy.md#jump-game-can-reach--t2).
 
 ---
 
 ### Gas Station (LC 134) `🎯 T2`
 
+> Full walkthrough: [Gas Station](../algorithms/16-greedy.md#gas-station--t2).
+
+---
+
+### First Missing Positive (LC 41)
+
 > [!example] Problem
-> There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
-> You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
-> Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique.
+> Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
+> You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space.
 > 
 > **Example 1:**
 > ```
-> Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+> Input: nums = [1,2,0]
 > Output: 3
-> Explanation:
-> Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
-> Travel to station 4. Your tank = 4 - 1 + 5 = 8
-> Travel to station 0. Your tank = 8 - 2 + 1 = 7
-> Travel to station 1. Your tank = 7 - 3 + 2 = 6
-> Travel to station 2. Your tank = 6 - 4 + 3 = 5
-> Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
-> Therefore, return 3 as the starting index.
+> Explanation: The numbers in the range [1,2] are all in the array.
 > ```
 > 
 > **Example 2:**
 > ```
-> Input: gas = [2,3,4], cost = [3,4,3]
-> Output: -1
-> Explanation:
-> You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
-> Let's start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
-> Travel to station 0. Your tank = 4 - 3 + 2 = 3
-> Travel to station 1. Your tank = 3 - 3 + 3 = 3
-> You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
-> Therefore, you can't travel around the circuit once no matter where you start.
+> Input: nums = [3,4,-1,1]
+> Output: 2
+> Explanation: 1 is in the array but 2 is missing.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [7,8,9,11,12]
+> Output: 1
+> Explanation: The smallest positive integer 1 is missing.
 > ```
 > 
 > **Constraints:**
-> - n == gas.length == cost.length
-> - 1 <= n <= 10^5
-> - 0 <= gas[i], cost[i] <= 10^4
-> - The input is generated such that the answer is unique.
+> - 1 <= nums.length <= 10^5
+> - -2^{31} <= nums[i] <= 2^{31} - 1
 
 > [!info] Approach
-> **Greedy — reset start on deficit.** If total gas < total cost, no solution exists. Otherwise, a solution always exists. The greedy key: if we can't reach station `j` starting from `start`, then no station between `start` and `j` can be a valid start either (they would start with less surplus). Single pass tracking cumulative surplus. Reset start candidate whenever cumulative drops below zero. `total = 0, tank = 0, start = 0`. For each `i`: `tank += gas[i] - cost[i]`, `total += gas[i] - cost[i]`. If `tank < 0`, set `start = i + 1`, reset `tank = 0`. Return `start` if `total >= 0` else `-1`.
+> **Index-as-hash — cyclic placement of values in range [1, n].** Any value outside [1, n] is irrelevant (answer is in [1, n+1]). We can treat the array itself as a hash table mapping value `v` to index `v-1`. Place each value `v` in [1, n] at index `v-1` by swapping. After rearrangement, the first index `i` where `nums[i] != i+1` gives answer `i+1`. Swap phase: for each `i`, while `1 <= nums[i] <= n` and `nums[nums[i]-1] != nums[i]`, swap `nums[i]` with `nums[nums[i]-1]`. Scan phase: return first `i+1` where `nums[i] != i+1`, else return `n+1`.
 
 > [!note]- Python Solution
 > ```python
-> def can_complete_circuit(gas, cost):
->     total = tank = start = 0
->     for i in range(len(gas)):
->         diff = gas[i] - cost[i]
->         tank += diff
->         total += diff
->         if tank < 0:
->             start = i + 1
->             tank = 0
->     return start if total >= 0 else -1
+> def first_missing_positive(nums):
+>     n = len(nums)
+>     # Place each number in its correct bucket
+>     for i in range(n):
+>         while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:
+>             correct = nums[i] - 1
+>             nums[i], nums[correct] = nums[correct], nums[i]
+>     # Find first position where value is wrong
+>     for i in range(n):
+>         if nums[i] != i + 1:
+>             return i + 1
+>     return n + 1
 > ```
 
 > [!success] Complexity
 > Time O(n), Space O(1).
 
 > [!tip] Alternatives
-> - Brute force: try each starting station — O(n²). Too slow.
-> - Two-pointer circular simulation: equivalent logic, no asymptotic improvement.
+> - Hash set of positives, scan 1..n+1: O(n) time, O(n) space. Simpler but violates space constraint.
+> - Sign-flip marking (negating values): O(n) time, O(1) space. Requires two clean-up passes; works but swapping approach is cleaner.
+> - The while-loop swap looks O(n²) but is O(n) amortized — each element is swapped into its correct slot at most once.
 
 ---
 
 ## Matrix
 
+---
+
 ### Rotate Image (LC 48)
 
-> [!example] Problem
-> You are given an n x n 2D matrix representing an image, rotate the image by 90 degrees (clockwise).
-> You have to rotate the image in-place, which means you have to modify the input 2D matrix directly. DO NOT allocate another 2D matrix and do the rotation.
-> 
-> **Example 1:**
-> ```
-> Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
-> Output: [[7,4,1],[8,5,2],[9,6,3]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
-> Output: [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
-> ```
-> 
-> **Constraints:**
-> - n == matrix.length == matrix[i].length
-> - 1 <= n <= 20
-> - -1000 <= matrix[i][j] <= 1000
-
-> [!info] Approach
-> **Transpose then reverse each row.** A 90° clockwise rotation of a matrix equals: transpose (swap `matrix[i][j]` with `matrix[j][i]`) followed by reversing each row. Both operations are O(n²) and in-place. Step 1: Transpose — swap upper-triangle elements across the main diagonal. Step 2: Reverse each row. Transpose: `for i in range(n): for j in range(i+1, n): swap matrix[i][j] and matrix[j][i]`. Reverse: `for row in matrix: row.reverse()`.
-
-> [!note]- Python Solution
-> ```python
-> def rotate(matrix):
->     n = len(matrix)
->     # Transpose
->     for i in range(n):
->         for j in range(i + 1, n):
->             matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
->     # Reverse each row
->     for row in matrix:
->         row.reverse()
-> ```
-
-> [!success] Complexity
-> Time O(n²), Space O(1).
-
-> [!tip] Alternatives
-> - Four-way simultaneous swap per cell: O(n²) time, O(1) space. Rotates groups of 4 in a single pass — no transpose step. Harder to index correctly.
-> - Counterclockwise 90°: transpose then reverse each column (or reverse rows then transpose).
-> - 180°: reverse each row then reverse the matrix rows order.
+> Full walkthrough: [Rotate Image](04-matrix.md#rotate-image--t2).
 
 ---
 
 ### Merge Intervals (LC 56) `🎯 T2`
 
-> [!example] Problem
-> Given an array of intervals where intervals[i] = [starti, endi], merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
-> 
-> **Example 1:**
-> ```
-> Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
-> Output: [[1,6],[8,10],[15,18]]
-> Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: intervals = [[1,4],[4,5]]
-> Output: [[1,5]]
-> Explanation: Intervals [1,4] and [4,5] are considered overlapping.
-> ```
-> 
-> **Constraints:**
-> - 1 <= intervals.length <= 10^4
-> - intervals[i].length == 2
-> - 0 <= starti <= endi <= 10^4
-
-> [!info] Approach
-> **Sort by start, linear merge scan.** After sorting by start time, overlapping intervals are adjacent. We only need to check if the current interval overlaps with the last merged one. Sort, then greedily extend the last merged interval or append a new one. Sort by `start`. Initialize `merged = [intervals[0]]`. For each subsequent interval: if `interval.start <= merged[-1].end`, merge by updating `merged[-1].end = max(merged[-1].end, interval.end)`. Else append.
-
-> [!note]- Python Solution
-> ```python
-> def merge(intervals):
->     intervals.sort(key=lambda x: x[0])
->     merged = [intervals[0]]
->     for start, end in intervals[1:]:
->         if start <= merged[-1][1]:
->             merged[-1][1] = max(merged[-1][1], end)
->         else:
->             merged.append([start, end])
->     return merged
-> ```
-
-> [!success] Complexity
-> Time O(n log n), Space O(n).
-
-> [!tip] Alternatives
-> - Without sorting: O(n²) — check every pair. Never acceptable.
-> - Event-based (sweep line): same O(n log n). More general but more code.
+> Full walkthrough: [Merge Intervals](../algorithms/16-greedy.md#merge-intervals--t2).
 
 ---
 
@@ -1937,344 +1186,23 @@ difficulty: mixed
 
 ### Non-overlapping Intervals (LC 435) `🎯 T2`
 
-> [!example] Problem
-> Given an array of intervals intervals where intervals[i] = [starti, endi], return the minimum number of intervals you need to remove to make the rest of the intervals non-overlapping.
-> Note that intervals which only touch at a point are non-overlapping. For example, [1, 2] and [2, 3] are non-overlapping.
-> 
-> **Example 1:**
-> ```
-> Input: intervals = [[1,2],[2,3],[3,4],[1,3]]
-> Output: 1
-> Explanation: [1,3] can be removed and the rest of the intervals are non-overlapping.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: intervals = [[1,2],[1,2],[1,2]]
-> Output: 2
-> Explanation: You need to remove two [1,2] to make the rest of the intervals non-overlapping.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: intervals = [[1,2],[2,3]]
-> Output: 0
-> Explanation: You don't need to remove any of the intervals since they're already non-overlapping.
-> ```
-> 
-> **Constraints:**
-> - 1 <= intervals.length <= 10^5
-> - intervals[i].length == 2
-> - -5 * 10^4 <= starti < endi <= 5 * 10^4
-
-> [!info] Approach
-> **Greedy — sort by end, keep earliest-ending non-conflicting interval.** Classic interval scheduling maximization (keep max non-overlapping intervals). Minimum removals = n − max kept. The greedy is: always keep the interval that ends earliest — it leaves the most room for future intervals. Sort by end time. Greedily keep an interval if it starts at or after the previous kept interval's end. Sort by `end`. `prev_end = -inf, kept = 0`. For each interval: if `start >= prev_end`, keep it (`kept++`, update `prev_end = end`). Else skip (remove it). Answer = `n - kept`.
-
-> [!note]- Python Solution
-> ```python
-> def erase_overlap_intervals(intervals):
->     intervals.sort(key=lambda x: x[1])
->     prev_end = float('-inf')
->     kept = 0
->     for start, end in intervals:
->         if start >= prev_end:
->             kept += 1
->             prev_end = end
->     return len(intervals) - kept
-> ```
-
-> [!success] Complexity
-> Time O(n log n), Space O(1).
-
-> [!tip] Alternatives
-> - Sort by start, keep track of min end among conflicting: equivalent logic, less intuitive.
-> - DP `dp[i]` = max intervals ending at i: O(n²). Too slow.
-> - Key insight: sort by end (not start) for greedy interval scheduling.
-
----
-
-## Miscellaneous (Continued)
-
-### First Missing Positive (LC 41)
-
-> [!example] Problem
-> Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
-> You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,0]
-> Output: 3
-> Explanation: The numbers in the range [1,2] are all in the array.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,4,-1,1]
-> Output: 2
-> Explanation: 1 is in the array but 2 is missing.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [7,8,9,11,12]
-> Output: 1
-> Explanation: The smallest positive integer 1 is missing.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -2^{31} <= nums[i] <= 2^{31} - 1
-
-> [!info] Approach
-> **Index-as-hash — cyclic placement of values in range [1, n].** Any value outside [1, n] is irrelevant (answer is in [1, n+1]). We can treat the array itself as a hash table mapping value `v` to index `v-1`. Place each value `v` in [1, n] at index `v-1` by swapping. After rearrangement, the first index `i` where `nums[i] != i+1` gives answer `i+1`. Swap phase: for each `i`, while `1 <= nums[i] <= n` and `nums[nums[i]-1] != nums[i]`, swap `nums[i]` with `nums[nums[i]-1]`. Scan phase: return first `i+1` where `nums[i] != i+1`, else return `n+1`.
-
-> [!note]- Python Solution
-> ```python
-> def first_missing_positive(nums):
->     n = len(nums)
->     # Place each number in its correct bucket
->     for i in range(n):
->         while 1 <= nums[i] <= n and nums[nums[i] - 1] != nums[i]:
->             correct = nums[i] - 1
->             nums[i], nums[correct] = nums[correct], nums[i]
->     # Find first position where value is wrong
->     for i in range(n):
->         if nums[i] != i + 1:
->             return i + 1
->     return n + 1
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Hash set of positives, scan 1..n+1: O(n) time, O(n) space. Simpler but violates space constraint.
-> - Sign-flip marking (negating values): O(n) time, O(1) space. Requires two clean-up passes; works but swapping approach is cleaner.
-> - The while-loop swap looks O(n²) but is O(n) amortized — each element is swapped into its correct slot at most once.
-
----
-
-## See Also
-
-[[sliding-window]] | [[two-pointers]] | [[binary-search]] | [[hashing]] | [[sorting]]
-### First Missing Positive
-
-> [!example] Problem
-> Given an unsorted integer array nums. Return the smallest positive integer that is not present in nums.
-> You must implement an algorithm that runs in O(n) time and uses O(1) auxiliary space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,0]
-> Output: 3
-> Explanation: The numbers in the range [1,2] are all in the array.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,4,-1,1]
-> Output: 2
-> Explanation: 1 is in the array but 2 is missing.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [7,8,9,11,12]
-> Output: 1
-> Explanation: The smallest positive integer 1 is missing.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -2^{31} <= nums[i] <= 2^{31} - 1
-
-> [!info] Approach
-> Values in `[1..n]` can be placed into their correct indices in-place. Anything outside that range can be ignored. Cyclic sort: keep swapping `nums[i]` into position `nums[i] - 1` while it is in range and not already placed. After placement, scan left to right; the first index `i` where `nums[i] != i + 1` gives the answer.
-
-> [!note]- Python Solution
-> ```python
-> def first_missing_positive(nums):
->     n = len(nums)
->     i = 0
->     while i < n:
->         x = nums[i]
->         if 1 <= x <= n and nums[x - 1] != x:
->             nums[i], nums[x - 1] = nums[x - 1], nums[i]
->         else:
->             i += 1
->     for i, x in enumerate(nums):
->         if x != i + 1:
->             return i + 1
->     return n + 1
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) extra space.
-
-> [!tip] Alternatives
-> A hash set is simpler but uses O(n) extra space; cyclic sort is the canonical follow-up proof question.
+> Full walkthrough: [Non-overlapping Intervals (Minimum number to remove)](../algorithms/16-greedy.md#non-overlapping-intervals-minimum-number-to-remove--t2).
 
 ---
 
 ## Prefix Sum
 
+---
+
 ### Subarray Sum Equals K (with negative numbers) `⚡ T1`
 
-> [!example] Problem
-> Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
-> A subarray is a contiguous non-empty sequence of elements within an array.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,1,1], k = 2
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,2,3], k = 3
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2 * 10^4
-> - -1000 <= nums[i] <= 1000
-> - -10^7 <= k <= 10^7
-
-> [!info] Approach
-> Two-pointer/sliding-window breaks with negatives. Prefix sums let us reframe: subarray `[i+1..j]` sums to `k` iff `prefix[j] - prefix[i] == k`, i.e., `prefix[i] == prefix[j] - k`. Track prefix sum frequency in a hash map. For each new prefix sum, check how many prior prefix sums equal `current - k`. Initialize map with `{0: 1}` (empty prefix). Walk the array accumulating `running_sum`; add `count_map[running_sum - k]` to the answer; then increment `count_map[running_sum]`.
-
-> [!note]- Python Solution
-> ```python
-> def subarray_sum(nums, k):
->     count_map = {0: 1}
->     running_sum = 0
->     total = 0
->     for num in nums:
->         running_sum += num
->         needed = running_sum - k
->         total += count_map.get(needed, 0)
->         count_map[running_sum] = count_map.get(running_sum, 0) + 1
->     return total
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Brute force O(n²) with nested loops checking all subarrays — works but too slow.
-> - Prefix sum array without hash map: still O(n²) for lookup.
-> - Key insight: the `{0: 1}` initialization handles the case where a prefix starting from index 0 already sums to `k`.
+> Full walkthrough: [Subarray Sum Equals K](02-hashing.md#subarray-sum-equals-k--t1).
 
 ---
 
 ### Contiguous Array (Equal 0s and 1s) `⚡ T1`
 
-> [!example] Problem
-> Given a binary array nums, return the maximum length of a contiguous subarray with an equal number of 0 and 1.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [0,1]
-> Output: 2
-> Explanation: [0, 1] is the longest contiguous subarray with an equal number of 0 and 1.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,0]
-> Output: 2
-> Explanation: [0, 1] (or [1, 0]) is a longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [0,1,1,1,1,1,0,0,0]
-> Output: 6
-> Explanation: [1,1,1,0,0,0] is the longest contiguous subarray with equal number of 0 and 1.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - nums[i] is either 0 or 1.
-
-> [!info] Approach
-> Replace 0 with -1. Now "equal 0s and 1s" becomes "subarray sum = 0", which is exactly the prefix sum problem. Track the first index at which each prefix sum occurs. When a prefix sum repeats, the subarray between the two occurrences has sum 0. Initialize `{0: -1}`. For each index, compute prefix sum (treating 0 as -1). If seen before, update `max_len = max(max_len, i - first_seen[prefix])`. Otherwise, store `first_seen[prefix] = i`.
-
-> [!note]- Python Solution
-> ```python
-> def find_max_length(nums):
->     first_seen = {0: -1}
->     prefix = 0
->     max_len = 0
->     for i, num in enumerate(nums):
->         prefix += 1 if num == 1 else -1
->         if prefix in first_seen:
->             max_len = max(max_len, i - first_seen[prefix])
->         else:
->             first_seen[prefix] = i
->     return max_len
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(n).
-
-> [!tip] Alternatives
-> - Brute force O(n²) — enumerate all subarrays and count 0s/1s.
-> - Key insight: storing only the *first* occurrence of each prefix sum maximises the subarray length.
-
----
-
-### Product of Array Except Self (no division)
-
-> [!example] Problem
-> Given an integer array nums, return an array answer such that answer[i] is equal to the product of all the elements of nums except nums[i].
-> The product of any prefix or suffix of nums is guaranteed to fit in a 32-bit integer.
-> You must write an algorithm that runs in O(n) time and without using the division operation.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,2,3,4]
-> Output: [24,12,8,6]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [-1,1,0,-3,3]
-> Output: [0,0,9,0,0]
-> ```
-> 
-> **Constraints:**
-> - 2 <= nums.length <= 10^5
-> - -30 <= nums[i] <= 30
-> - The input is generated such that answer[i] is guaranteed to fit in a 32-bit integer.
-
-> [!info] Approach
-> Division breaks on zeros. Without it, for each position we need the product of everything to the left and to the right. Two passes. First pass (left to right) builds the running left-product into the output array. Second pass (right to left) multiplies in the running right-product in-place. `output[i]` after left pass = product of `nums[0..i-1]`. Then walk right to left with a `right_product` variable, multiply `output[i] *= right_product`, then `right_product *= nums[i]`.
-
-> [!note]- Python Solution
-> ```python
-> def product_except_self(nums):
->     n = len(nums)
->     output = [1] * n
->     left_product = 1
->     for i in range(n):
->         output[i] = left_product
->         left_product *= nums[i]
->     right_product = 1
->     for i in range(n - 1, -1, -1):
->         output[i] *= right_product
->         right_product *= nums[i]
->     return output
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1) extra (output array doesn't count).
-
-> [!tip] Alternatives
-> - With division: count zeros separately, handle zero/two-zeros edge cases. More complex logic.
-> - Three arrays (left products, right products, output): O(n) space but same idea, just less elegant.
+> Full walkthrough: [Contiguous Array (LC 525)](02-hashing.md#contiguous-array-lc-525--t1).
 
 ---
 

@@ -3,8 +3,18 @@ module: 03-patterns
 topic: How to Think — first-principles pattern intuition
 tags: [patterns, intuition, first-principles, google-l3, l4]
 ---
-
 # How to Think — Building Pattern Intuition from First Principles
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** The reasoning machine behind every pattern: four ways algorithms get faster, the solve loop, constraints as hints, unsticking moves, and each pattern derived from first principles.
+> **You'll be able to:** Reconstruct a pattern you forgot from its invariant, instead of recalling it.
+> **Prereqs:** Basic DS knowledge · **Pair with:** [Pattern ladders](PATTERN_LADDERS.md) · [Interview judgment](INTERVIEW_JUDGMENT.md) · **Time:** 3 h
+
+**Sections:** [1. There are only four ways an algorithm gets faster](#1-there-are-only-four-ways-an-algorithm-gets-faster) · [2. The solve loop (run this every single time)](#2-the-solve-loop-run-this-every-single-time) · [3. Constraints are the answer key](#3-constraints-are-the-answer-key) · [4. When you are truly stuck — the seven moves](#4-when-you-are-truly-stuck--the-seven-moves) · [Hashing — buy O(1) answers to "have I seen it?"](#hashing--buy-o1-answers-to-have-i-seen-it) · [Two Pointers — discard candidates with a one-line proof](#two-pointers--discard-candidates-with-a-one-line-proof) · [Sliding Window — two pointers where the answer is a range](#sliding-window--two-pointers-where-the-answer-is-a-range) · [Prefix Sums & Difference Arrays — answer ranges by subtracting](#prefix-sums--difference-arrays--answer-ranges-by-subtracting) · [Binary Search — bisect a monotone predicate, not an array](#binary-search--bisect-a-monotone-predicate-not-an-array) · [Stacks & Monotonic Stacks — deferred work, resolved most-recent-first](#stacks--monotonic-stacks--deferred-work-resolved-most-recent-first) · [Heaps — a changing collection where only the extreme matters](#heaps--a-changing-collection-where-only-the-extreme-matters) · [Linked Lists — pointer surgery under an invariant](#linked-lists--pointer-surgery-under-an-invariant) · [Trees & Recursion — trust the contract, don't trace the calls](#trees--recursion--trust-the-contract-dont-trace-the-calls) · [Tries — pay for each prefix once](#tries--pay-for-each-prefix-once) · [Graphs — the skill is modeling; the algorithms are a lookup table](#graphs--the-skill-is-modeling-the-algorithms-are-a-lookup-table) · [See Also](#see-also)
+
+---
 
 > [!IMPORTANT]
 > **What this file is.** Every other file in this repo tells you *what* the patterns are. This one builds the machine in your head that **derives** them. Read a chapter, close the file, and re-derive the pattern on paper from its core question — if you can't, re-read. The goal: given a problem you have never seen, you reconstruct the right approach from reasoning, not recall.
@@ -471,11 +481,11 @@ Genuinely hard interview problems are rarely a *new* idea — they're two chapte
 | LFU Cache | hash map | frequency-bucketed ordered dicts |
 | Minimum Days to X | binary search on answer | greedy/BFS feasibility check |
 
-When stuck on a hard problem, explicitly ask: *"is there an inner subproblem here I already know?"* — usually the inner one is a T1 pattern, and identifying it cracks the outer shell.
+When stuck on a hard problem, explicitly ask: *"is there an inner subproblem here I already know?"* — usually the inner one is a T1 pattern, and identifying it cracks the outer shell. Quick lookup of common pairings: [patterns-master § Hybrid Patterns](patterns-master.md#hybrid-patterns--t2).
 
 ## The escalation grammar (what follow-ups will be)
 
-Every follow-up an interviewer asks is one of five transformations. Pre-compute your answers for each T1 problem you know — this table is the L4 bar in one place:
+Every follow-up an interviewer asks is one of five transformations. Pre-compute your answers for each T1 problem you know — this table is the L4 bar in one place (concrete per-family chains: [patterns-master § Follow-Up Chains](patterns-master.md#follow-up-chains--interview-progression--t1)):
 
 | Transformation | What it does to your solution | Standard response |
 |---|---|---|

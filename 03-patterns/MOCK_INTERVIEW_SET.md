@@ -3,8 +3,18 @@ module: 03-patterns
 topic: Mock Interview Problem Set
 tags: [patterns, mock-interview, google-l3]
 ---
-
 # Google L3 — 25-Problem Mock Interview Set
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** 25 mock problems ranked by Google frequency, a scoring guide, warm-up recall, weak-area drills, L4 follow-up chains.
+> **You'll be able to:** Simulate real rounds and measure readiness.
+> **Prereqs:** Finish T1 topics · **Pair with:** [Interview judgment](INTERVIEW_JUDGMENT.md) · **Time:** 25 × 45 min
+
+**Sections:** [Tier 1: Must Solve Cleanly (No Hints)](#tier-1-must-solve-cleanly-no-hints) · [Tier 2: Build Fluency (Aim for Clean First Attempt)](#tier-2-build-fluency-aim-for-clean-first-attempt) · [Tier 3: Stretch Problems (Common at Google, Separates Offers)](#tier-3-stretch-problems-common-at-google-separates-offers) · [Mock Interview Scoring Guide](#mock-interview-scoring-guide) · [Quick Pattern Recall (For Warm-Up Before Each Session)](#quick-pattern-recall-for-warm-up-before-each-session) · [Weak Area Drill List](#weak-area-drill-list) · [L4 (SDE-2) Mock Rounds — follow-up chains](#l4-sde-2-mock-rounds--follow-up-chains) · [See Also](#see-also)
+
+---
 
 > [!IMPORTANT]
 > **How to use this file**: Do these 25 problems **cold** (no notes, 35–45 min per problem). They are ranked by Google L3 frequency. If you can solve all 25 cleanly, you are ready. Do them in order — early problems unlock the patterns you need for later ones.

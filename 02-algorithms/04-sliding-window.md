@@ -3,42 +3,23 @@ module: 02-algorithms
 topic: Sliding Window
 tags: [algorithms, sliding-window]
 ---
+# Sliding Window
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Fixed and variable windows, frequency-map windows, the 'exactly K = atMost(K) − atMost(K−1)' trick, monotonic deque for window max/min.
+> **You'll be able to:** Write the expand-right / shrink-left template from memory; know when windows fail (negatives → prefix sum); handle 'exactly K' counts.
+> **Prereqs:** Arrays, hashing, two pointers · **Pair with:** [Sliding window problems](../coding/algorithms/04-sliding-window.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY Sliding Window exists
-├── Brute-force O(n²) / O(n³) over all subarrays is too slow
-│   ├── Adjacent subarrays share n-1 elements — recomputing from scratch wastes work
-│   └── Maintain a running aggregate; update it in O(1) per step
-WHAT it is
-├── Two pointers [left, right] defining a contiguous subarray/substring
-│   ├── Fixed window: right - left == k always; slide both by 1 each step
-│   └── Variable window: expand right greedily; shrink left when constraint violated
-HOW it works
-├── Expand right by 1 → update window state (sum, freq map, count)
-│   ├── While constraint violated → shrink from left by 1, update state
-│   └── Record answer at each valid [left, right] → O(n) total
-WHEN to use
-├── "longest / shortest subarray/substring satisfying condition" → variable window
-├── "maximum sum / average over k elements" → fixed window O(n)
-└── "number of subarrays with at most K distinct" → sliding window + at-most trick
-WHAT can go wrong
-├── Off-by-one on window size: right - left + 1 vs right - left
-├── Not shrinking left far enough → window state stale / constraint still violated
-└── Hashmap not cleaned up when left advances → incorrect frequency counts
-DECISION
-└── Contiguous subarray + monotone constraint → sliding window O(n); non-contiguous → two-pointers or DP
-```
+**Sections:** [Core Idea](#core-idea) · [When to Use](#when-to-use) · [Variant 1: Fixed-Size Window](#variant-1-fixed-size-window) · [Variant 2: Variable-Size Window (Expand Right, Shrink Left)](#variant-2-variable-size-window-expand-right-shrink-left) · [Extension: With Frequency Map](#extension-with-frequency-map) · [Extension: Monotonic Deque (Sliding Window Max/Min)](#extension-monotonic-deque-sliding-window-maxmin) · [Complexity Summary](#complexity-summary) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Evaluate a property of every contiguous subarray in better than O(n²) time.
 - **Core insight**: Moving the window by one position changes exactly two elements (add right+1, remove left) — maintain state incrementally rather than recomputing.
@@ -46,12 +27,9 @@ DECISION
 - **Why it works**: Each element enters the window once and leaves once → O(n) pointer movements total regardless of window size.
 - **Where it breaks**: Non-contiguous subsets, or constraints that are not monotone (adding more elements doesn't consistently worsen/improve) — the shrink step becomes ambiguous.
 
-
-
-
 ---
 
-# Sliding Window
+### One-Page Map
 
 ```
 [SLIDING WINDOW — MINDMAP]
@@ -79,20 +57,21 @@ DECISION
 ├── COMPLEXITY
 │   ├── Time:  O(N) — left and right each traverse array once
 │   └── Space: O(K) or O(charset) for frequency map
-├── TRIGGER PATTERNS (when to use)
-│   ├── "Longest subarray/substring with at most K distinct" → variable window
-│   ├── "Maximum sum subarray of size K" → fixed window
-│   ├── "Minimum window substring containing all chars of T" → shortest valid
-│   ├── "Exactly K" → convert to atMost(K) - atMost(K-1)
-│   ├── "No repeating characters" → window + last-seen index map
-│   └── "Permutation of pattern in string" → fixed window with freq map
-└── GOTCHAS
-    ├── "Exactly K" is hard — reframe as difference of two at-most problems
-    ├── Char frequency map: decrement on left exit, only shrink when map invalid
-    ├── Negative numbers invalidate fixed-window sum assumption → use Kadane's instead
-    ├── Right pointer is inclusive — window length = right - left + 1
-    └── For character windows, reset is O(charset) not O(1) — account for it
+└── TRIGGER PATTERNS (when to use)
+    ├── "Longest subarray/substring with at most K distinct" → variable window
+    ├── "Maximum sum subarray of size K" → fixed window
+    ├── "Minimum window substring containing all chars of T" → shortest valid
+    ├── "Exactly K" → convert to atMost(K) - atMost(K-1)
+    ├── "No repeating characters" → window + last-seen index map
+    └── "Permutation of pattern in string" → fixed window with freq map
 ```
+
+> [!warning] Common mistakes
+> - "Exactly K" is hard — reframe as difference of two at-most problems
+> - Char frequency map: decrement on left exit, only shrink when map invalid
+> - Negative numbers invalidate fixed-window sum assumption → use Kadane's instead
+> - Right pointer is inclusive — window length = right - left + 1
+> - For character windows, reset is O(charset) not O(1) — account for it
 
 ## When to Use
 
@@ -314,6 +293,9 @@ def max_sliding_window(nums, k):
 | Fixed-size | O(n) | O(1) or O(k) |
 | Variable-size | O(n) amortized | O(window size) |
 | Monotonic deque | O(n) | O(k) |
+
+> [!note] Why variable-size is O(n), not O(n²)
+> `right` advances n times and `left` only ever moves forward, so it advances at most n times **in total** across all iterations — the inner `while` is 2n pointer moves amortized, not n per outer step. Same argument for the monotonic deque: each index is pushed once and popped at most once.
 
 ---
 

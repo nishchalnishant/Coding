@@ -3,44 +3,30 @@ module: 01-data-structures
 topic: Stack
 tags: [data-structures, stack]
 ---
+# Stack — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** LIFO and what it buys you: matching/nesting, expression evaluation, undo, and the monotonic stack for next-greater / histogram / contribution counting.
+> **You'll be able to:** Spot 'nearest greater/smaller' and nesting problems instantly; write the monotonic stack loop and explain its amortised O(N).
+> **Prereqs:** Arrays · **Pair with:** [Stack problems](../coding/data-structures/05-stack.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                 │                │               │               │
-  [Recursion and      [LIFO abstract   [push to top;  [expression       [stack overflow
-   expression         data type;        pop from top;  parsing, DFS,     on deep recursion;
-   parsing require    backed by         peek is O(1);  undo/redo,        monotonic stack
-   last-in-first-     array or linked   all ops O(1)   backtracking,     misuse if invariant
-   out semantics]     list]             amortized]     call frames]      not maintained]
-       │                 │                │
-  [real-world:        [invariant:      [monotonic stack: maintain
-   stack of plates    top always        increasing/decreasing order
-   — only access      points to most    to find next greater/smaller
-   the top]           recent element]   element in O(n) total]
-       ↓
-[Decision: Stack vs alternatives]
-  ├── vs Queue       → LIFO vs FIFO; stack for DFS/backtrack, queue for BFS/levels
-  ├── vs Recursion   → explicit stack avoids call-stack overflow, same semantics
-  └── vs Deque       → deque generalizes stack; use stack when LIFO is all you need
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Many algorithms (expression eval, DFS, undo) need to process the most recently seen item first — LIFO ordering.
 - **Core insight**: Restricting access to one end (the top) enforces LIFO and enables O(1) push/pop without any shifting.
 - **Invariant**: The top element is always the most recently pushed, not-yet-popped element.
 - **Why it's fast**: Push/pop only touch the top pointer — no traversal, no rebalancing, O(1) always.
 - **Where it breaks**: Unbounded recursion overflows the call stack; monotonic stack loses its invariant if push/pop conditions are wrong; not suitable when you need arbitrary access.
 
-# Stack — L3 Core
+### One-Page Map
 
 ```
 [STACK]
@@ -85,9 +71,6 @@ WHY stacks exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 
 LIFO (Last In, First Out) structure. L3 focus: **monotonic stack** for "next greater/smaller" in O(N), expression parsing, and the deque extension for sliding window problems.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -120,11 +103,11 @@ LIFO (Last In, First Out) structure. L3 focus: **monotonic stack** for "next gre
 - Monotonic relationships: next greater element, largest rectangle, daily temperatures.
 - Expression evaluation with operator precedence (Basic Calculator variants).
 
-**Common mistakes:**
-- Not checking `not stack` before calling `pop()` or accessing `stack[-1]` — causes `IndexError`.
-- Confusing push/pop order when simulating a process — trace through a small example first.
-- Storing values instead of indices on the stack — you lose position info needed for distance or result-array filling.
-- Not resetting the stack between test cases in batch-input problems.
+> [!warning] Common mistakes
+> - Not checking `not stack` before calling `pop()` or accessing `stack[-1]` — causes `IndexError`.
+> - Confusing push/pop order when simulating a process — trace through a small example first.
+> - Storing values instead of indices on the stack — you lose position info needed for distance or result-array filling.
+> - Not resetting the stack between test cases in batch-input problems.
 
 ---
 
@@ -148,6 +131,16 @@ LIFO (Last In, First Out) structure. L3 focus: **monotonic stack** for "next gre
 
 > [!TIP]
 > Think of a monotonic stack as a bouncer at a club — when a new VIP arrives (larger element), the bouncer kicks out everyone shorter in the line before them. The kicked-out elements have found their "next greater"; the VIP takes their place. This is why each element is pushed and popped exactly once: O(N) total.
+
+**Trace — Next Greater on `[2, 1, 5, 3]`** (stack holds values for readability; code stores indices):
+
+```mermaid
+flowchart LR
+  s1["i=0 · push 2<br/>stack [2]"] --> s2["i=1 · 1 < 2, push<br/>stack [2, 1]"]
+  s2 --> s3["i=2 · 5 pops 1, 2<br/>NGE(1)=5, NGE(2)=5<br/>stack [5]"]
+  s3 --> s4["i=3 · 3 < 5, push<br/>stack [5, 3]"]
+  s4 --> s5["end · leftovers → -1"]
+```
 
 ```python
 def next_greater_element(nums: list[int]) -> list[int]:
@@ -173,6 +166,18 @@ def daily_temperatures(temps: list[int]) -> list[int]:
 
 > [!CAUTION]
 > Always store **indices** on the stack, not values. You need the index to compute distances (`i - j`) or to fill the result array. Storing values loses position information.
+
+**Dry run** — `next_greater_element([2, 1, 2, 4, 3])` (stack shows indices, values in parentheses):
+
+| `i` | `nums[i]` | Pops (`result[j] = nums[i]`) | Stack after | `result` |
+|---|---|---|---|---|
+| 0 | 2 | — | `[0(2)]` | `[-1,-1,-1,-1,-1]` |
+| 1 | 1 | — (1 < 2, no pop) | `[0(2), 1(1)]` | `[-1,-1,-1,-1,-1]` |
+| 2 | 2 | `1(1)` → `result[1]=2`; stop at `0(2)` (equal, not smaller) | `[0(2), 2(2)]` | `[-1,2,-1,-1,-1]` |
+| 3 | 4 | `2(2)` → `result[2]=4`, `0(2)` → `result[0]=4` | `[3(4)]` | `[4,2,4,-1,-1]` |
+| 4 | 3 | — | `[3(4), 4(3)]` | `[4,2,4,-1,-1]` |
+
+Values on the stack stay non-increasing from bottom to top. Indices left on the stack at the end have no next greater element, so they keep `-1`. The strict `<` matters at `i=2`: equal values do not pop each other.
 
 #### Common Variants & Twists
 1. **Next Greater Element II (Circular Array Twist) `🎯 T2`**:
@@ -347,34 +352,27 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- **Valid Parentheses `🎯 T2`** — Push opens; pop on close; check match.
-- **Min Stack `🎯 T2`** — Parallel min-tracking stack.
-- **Implement Queue using Stacks** — Two stacks: push to in-stack; pop lazy-moves to out-stack.
+- **[Valid Parentheses](../coding/data-structures/05-stack.md#valid-parentheses--t2) `🎯 T2`** — Push opens; pop on close; check match.
+- **[Min Stack](../coding/data-structures/05-stack.md#min-stack--t2) `🎯 T2`** — Parallel min-tracking stack.
+- **[Implement Queue using Stacks](../coding/data-structures/05-stack.md#implement-queue-using-stacks) `🎯 T2`** — Two stacks: push to in-stack; pop lazy-moves to out-stack.
 
 ### Medium
-- **Daily Temperatures `🎯 T2`** — Decreasing monotonic stack of indices.
-- **Next Greater Element II `🎯 T2`** (circular) — Process `2N` indices with `% N`.
-- **Evaluate RPN** — Operand stack; on operator, pop two and push result.
-- **Decode String** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
-- **Exclusive Time of Functions** — Stack of `(id, start)`; pause inner on nested start.
-- **Simplify Path** — Split by `/`; stack with `..` logic.
+- **[Daily Temperatures](../coding/data-structures/05-stack.md#daily-temperatures--t2) `🎯 T2`** — Decreasing monotonic stack of indices.
+- **[Next Greater Element II](../coding/data-structures/05-stack.md#next-greater-element-ii--t2) `🎯 T2`** (circular) — Process `2N` indices with `% N`.
+- **[Evaluate RPN](../coding/data-structures/05-stack.md#evaluate-reverse-polish-notation--t2) `🎯 T2`** — Operand stack; on operator, pop two and push result.
+- **[Decode String](../coding/algorithms/09-recursion.md#decode-string-recursive) `🎯 T2`** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
+- **[Exclusive Time of Functions](../coding/data-structures/05-stack.md#exclusive-time-of-functions) `🎯 T2`** — Stack of `(id, start)`; pause inner on nested start.
+- **[Simplify Path](../coding/data-structures/05-stack.md#simplify-path) `🎯 T2`** — Split by `/`; stack with `..` logic.
 
 ### Hard
-- **Largest Rectangle in Histogram `🎯 T2`** — Monotonic increasing stack; sentinel `0`.
-- **Maximal Rectangle** — Histogram per row + above.
-- **Trapping Rain Water `⚡ T1`** — Monotonic stack or two-pointer; stack explains "why" better.
-- **Basic Calculator I/II/III** — Two-stack or single stack with sign tracking.
-- **Maximum Frequency Stack** — FreqStack: push increments freq; pop from highest-freq bucket.
+- **[Trapping Rain Water](../coding/data-structures/05-stack.md#trapping-rain-water-stack-approach--t1) `⚡ T1`** — Monotonic stack or two-pointer; stack explains "why" better.
+- **[Largest Rectangle in Histogram](../coding/data-structures/05-stack.md#largest-rectangle-in-histogram--t2) `🎯 T2`** — Monotonic increasing stack; sentinel `0`.
+- **[Maximal Rectangle](../coding/data-structures/05-stack.md#maximal-rectangle--t2) `🎯 T2`** — Histogram per row + above.
+- **Basic Calculator [I](../coding/data-structures/05-stack.md#basic-calculator-i) / [II](../coding/data-structures/05-stack.md#basic-calculator-ii) / [III](../coding/data-structures/05-stack.md#basic-calculator-iii) `🎯 T2`** — Two-stack or single stack with sign tracking.
+- **[Maximum Frequency Stack](../coding/data-structures/05-stack.md#maximum-frequency-stack) `💤 T3`** — FreqStack: push increments freq; pop from highest-freq bucket.
 
 ---
 
@@ -447,4 +445,3 @@ Maintain a running `result` and `sign` (1 or -1).
 
 **Why must neighbors be pushed onto the stack in reverse order during iterative DFS?** #flashcard
 Because stacks are Last-In-First-Out (LIFO). To process nodes from left to right (same order as recursion), you must push them onto the stack from right to left so the leftmost neighbor ends up at the top of the stack and is popped first.
-

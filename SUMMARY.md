@@ -4,13 +4,9 @@
 
 ## Start Here
 * [Overview](README.md)
-* [**How to Think — pattern intuition from first principles** *(NEW)*](03-patterns/HOW_TO_THINK.md)
-* [**Recursion & DP Masterclass** *(NEW)*](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
-* [**Interview Judgment — proofs & live decisions** *(NEW)*](03-patterns/INTERVIEW_JUDGMENT.md)
-* [**Pattern Ladders — learn by deriving** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
 * [L3 Roadmap (4-week plan)](coding/l3-google-roadmap.md)
-* [**L4 (SDE-2) Delta** *(NEW)*](coding/l4-sde2-delta.md)
-* [**SDE-3 / Senior Delta** *(NEW)*](coding/sde3-senior-delta.md)
+* [**L4 (SDE-2) Delta**](coding/l4-sde2-delta.md)
+* [**SDE-3 / Senior Delta**](coding/sde3-senior-delta.md)
 * [**L3 Cheatsheet**](00-L3-EXECUTION-META/L3_CHEATSHEET.md) *(pacing, constraints, decision guide, edge cases, what to skip)*
 * [Problem Index](questions.md)
 * [Flowcharts](FLOWCHARTS.md)
@@ -28,7 +24,7 @@
 * [Array](01-data-structures/01-array.md)
 * [Hashing](01-data-structures/02-hashing.md)
 * [String](01-data-structures/03-string.md)
-* [**Matrix / Grid** *(NEW)*](01-data-structures/04-matrix.md)
+* [**Matrix / Grid**](01-data-structures/04-matrix.md)
 * [Stack](01-data-structures/05-stack.md)
 * [Queue](01-data-structures/06-queue.md)
 * [Linked List](01-data-structures/07-linked-list.md)
@@ -42,7 +38,7 @@
 
 ## Algorithms
 * [L3 Index & Must-Solve List](02-algorithms/README.md)
-* [**String Algorithms** *(NEW)*](02-algorithms/02-string-algorithms.md)
+* [**String Algorithms**](02-algorithms/02-string-algorithms.md)
 * [Two Pointers](02-algorithms/03-two-pointers.md)
 * [Sliding Window](02-algorithms/04-sliding-window.md)
 * [Binary Search](02-algorithms/11-binary-search.md)
@@ -53,8 +49,8 @@
 * [Dynamic Programming](02-algorithms/15-dynamic-programming.md)
 * [Recursion](02-algorithms/09-recursion.md)
 * [Recursion → DP Bridge](02-algorithms/10-recursion-to-dp.md)
-* [**Bit Manipulation** *(NEW)*](02-algorithms/17-bit-manipulation.md)
-* [**Math & Number Theory** *(NEW)*](02-algorithms/18-math-and-number-theory.md)
+* [**Bit Manipulation**](02-algorithms/17-bit-manipulation.md)
+* [**Math & Number Theory**](02-algorithms/18-math-and-number-theory.md)
 * [Algorithm Decision Tree](02-algorithms/algorithm_tree.md)
 
 ---
@@ -67,7 +63,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Array](coding/data-structures/01-array.md)
 * [Hashing](coding/data-structures/02-hashing.md)
 * [String](coding/data-structures/03-string.md)
-* [**Matrix / Grid** *(NEW)*](coding/data-structures/04-matrix.md)
+* [**Matrix / Grid**](coding/data-structures/04-matrix.md)
 * [Stack](coding/data-structures/05-stack.md)
 * [Queue](coding/data-structures/06-queue.md)
 * [Linked List](coding/data-structures/07-linked-list.md)
@@ -75,7 +71,7 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [Trie](coding/data-structures/09-trie.md)
 * [Heap](coding/data-structures/10-heap.md)
 * [Graph](coding/data-structures/13-graph.md)
-* [**Design a Data Structure (L4)** *(NEW)*](coding/data-structures/14-design.md)
+* [**Design a Data Structure (L4)**](coding/data-structures/14-design.md)
 
 ### Algorithms
 * [Two Pointers](coding/algorithms/03-two-pointers.md)
@@ -94,13 +90,13 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 
 ## Patterns & Revision
 * [Patterns Index](03-patterns/README.md)
-* [**How to Think — first-principles guide** *(NEW)*](03-patterns/HOW_TO_THINK.md)
-* [**Recursion & DP Masterclass** *(NEW)*](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
-* [**Interview Judgment — proofs & live decisions** *(NEW)*](03-patterns/INTERVIEW_JUDGMENT.md)
-* [**Pattern Ladders** *(NEW)*](03-patterns/PATTERN_LADDERS.md)
+* [**How to Think — first-principles guide**](03-patterns/HOW_TO_THINK.md)
+* [**Recursion & DP Masterclass**](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
+* [**Interview Judgment — proofs & live decisions**](03-patterns/INTERVIEW_JUDGMENT.md)
+* [**Pattern Ladders**](03-patterns/PATTERN_LADDERS.md)
 * [Patterns Master](03-patterns/patterns-master.md)
-* [**Mock Interview Set (25 Problems)** *(NEW)*](03-patterns/MOCK_INTERVIEW_SET.md)
-* [**Senior Follow-Up Chains** *(NEW)*](03-patterns/SENIOR_FOLLOWUPS.md)
+* [**Mock Interview Set (25 Problems)**](03-patterns/MOCK_INTERVIEW_SET.md)
+* [**Senior Follow-Up Chains**](03-patterns/SENIOR_FOLLOWUPS.md)
 * [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
 * [Leetcode Variants](03-patterns/leetcode-variants.md)
 * [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
@@ -118,4 +114,3 @@ Companion to [Mind Map](MINDMAP.md) — full problem walkthroughs.
 * [**Behavioral + Googliness — complete guide**](04-behavioral/BEHAVIORAL_GOOGLINESS.md)
 * [Behavioral Index & attribute map](04-behavioral/README.md)
 
-## L3 Meta (coding/)

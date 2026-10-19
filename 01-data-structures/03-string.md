@@ -3,46 +3,30 @@ module: 01-data-structures
 topic: String
 tags: [data-structures, string]
 ---
+# Strings — Data Structure Deep-Dive
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Strings as immutable char arrays: frequency maps, palindromes, sliding window on chars, parsing; then an advanced section on pattern matching (KMP / Rabin-Karp / Z).
+> **You'll be able to:** Solve anagram / palindrome / substring-window problems in O(N); avoid O(N²) string concatenation; know when a pattern-matching algorithm is worth it.
+> **Prereqs:** Arrays, hashing · **Pair with:** [String problems](../coding/data-structures/03-string.md) · [String algorithms](../02-algorithms/02-string-algorithms.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY string algorithms exist → WHAT strings are → HOW they work → WHEN to use → WHAT can go wrong
-       │                             │                  │               │               │
-  [Naive substring search         [immutable array    [sliding window: [pattern match,  [O(n×m) naive
-   is O(n×m); many problems        of characters;      two pointers    anagram detect,  search TLEs on
-   reduce to string matching,      encoding matters    over chars;     palindrome,      large inputs;
-   palindromes, anagrams —         (ASCII vs UTF-8     hashing for     longest without  off-by-one in
-   need specialized techniques]    affects indexing)]  rolling hash;   repeat, KMP/     two-pointer
-                                                        KMP failure     Rabin-Karp]     window updates]
-       │                             │                  │
-  [real-world:                    [invariant:         [KMP: precompute failure
-   grep, DNA sequence               string index is    function (proper prefix = suffix)
-   matching, search engine          byte offset not    to skip O(m) work on mismatch;
-   autocomplete]                    char offset in     Rabin-Karp: rolling hash O(1)
-                                    multibyte]         slide; Z-function: O(n) prefix match]
-       ↓
-[Decision: String technique vs alternatives]
-  ├── vs Trie          → trie for prefix/dictionary queries; sliding window for substrings
-  ├── vs KMP vs Rabin-Karp → KMP O(n+m) worst case; R-K O(n) avg but hash collision risk
-  └── vs Suffix Array  → suffix array for all substring queries; KMP for single pattern match
-```
+**Sections:** [Core Idea](#core-idea) · [Mental Model](#mental-model) · [Core Properties](#core-properties) · [Key Patterns](#key-patterns) · [Canonical Problems](#canonical-problems) · [Common Mistakes](#common-mistakes) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Pattern Matching Quick Reference](#3-pattern-matching-quick-reference) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Naive pattern matching checks all O(n×m) positions; string problems need O(n) or O(n+m) techniques.
 - **Core insight**: Precompute structure (KMP failure function, rolling hash, Z-array) to avoid redundant comparisons on mismatch — reuse already-matched information.
 - **Invariant**: In a valid sliding window, the window contains exactly the characters satisfying the constraint; expanding/shrinking maintains the invariant.
 - **Why it's fast**: KMP's failure function means each character is processed at most twice total — O(n+m) not O(n×m); rolling hash updates in O(1) per slide.
 - **Where it breaks**: Multibyte encodings (UTF-8) make character indexing non-trivial; rolling hash has collision probability; KMP's failure function precomputation is easy to implement incorrectly.
 
-# Strings — Data Structure Deep-Dive
+### One-Page Map
 
 ```
 [STRINGS (DATA STRUCTURE) — MINDMAP]
@@ -115,9 +99,6 @@ A string is an **immutable array of characters**. Every array technique applies 
 | Concatenation in loop | O(n²) | Use `"".join(list)` instead |
 | String comparison | O(n) | Character by character |
 | Sort characters | O(n log n) | Or O(n) with counting sort |
-
-
-
 
 ---
 
@@ -381,11 +362,11 @@ Arrays of characters with immutability constraints. L3 expects: KMP for O(N+M) p
 - The "string" is really a number sequence — treat as array, not string (different algorithms apply).
 - Concatenating strings in a loop — O(N²) in Python/Java; use `''.join(parts)` or `StringBuilder`.
 
-**Common mistakes.**
-- Python string immutability: concatenation in a loop is O(N²) — always use list accumulation + `''.join()`.
-- KMP LPS off-by-one: `lps[length - 1]` on mismatch, not `lps[length]`; `lps[0]` is always 0.
-- Not handling Unicode vs ASCII — 26-char frequency array breaks for Unicode; use `Counter` or dict.
-- Confusing substring (contiguous, sliding window) with subsequence (non-contiguous, DP on two strings).
+> [!warning] Common mistakes
+> - Python string immutability: concatenation in a loop is O(N²) — always use list accumulation + `''.join()`.
+> - KMP LPS off-by-one: `lps[length - 1]` on mismatch, not `lps[length]`; `lps[0]` is always 0.
+> - Not handling Unicode vs ASCII — 26-char frequency array breaks for Unicode; use `Counter` or dict.
+> - Confusing substring (contiguous, sliding window) with subsequence (non-contiguous, DP on two strings).
 
 ---
 
@@ -700,25 +681,25 @@ class Trie:
 ## 4. Common Interview Problems
 
 ### Easy
-- **Valid Palindrome `🎯 T2`** — Two pointers; skip non-alphanumeric; compare `lower()`.
-- **Valid Anagram `🎯 T2`** — `Counter(s) == Counter(t)` or sort both.
-- **Longest Common Prefix** — Vertical scan or binary search on length.
+- **[Valid Palindrome](../coding/data-structures/03-string.md#valid-palindrome--t2) `🎯 T2`** — Two pointers; skip non-alphanumeric; compare `lower()`.
+- **[Valid Anagram](../coding/data-structures/03-string.md#valid-anagram--t2) `🎯 T2`** — `Counter(s) == Counter(t)` or sort both.
+- **[Longest Common Prefix](../coding/data-structures/03-string.md#longest-common-prefix) `🎯 T2`** — Vertical scan or binary search on length.
 
 ### Medium
-- **Longest Substring Without Repeating Chars** — Sliding window + last-seen index map.
-- **Longest Palindromic Substring `🎯 T2`** — Expand from center; O(N²).
-- Group Anagrams — `sorted(word)` or 26-count tuple as key.
-- **Find All Anagrams in String** — Fixed-size sliding window + counter comparison.
-- **Encode and Decode Strings `🎯 T2`** — Length-prefixed encoding: `f"{len(s)}#{s}"`.
-- **Longest Palindromic Subsequence `🎯 T2`** — DP or LCS with `reversed(s)`.
+- **[Longest Substring Without Repeating Chars](../coding/data-structures/03-string.md#longest-substring-without-repeating-characters--t1) `⚡ T1`** — Sliding window + last-seen index map.
+- **[Group Anagrams](../coding/data-structures/03-string.md#group-anagrams--t1) `⚡ T1`** — `sorted(word)` or 26-count tuple as key.
+- **[Find All Anagrams in String](../coding/data-structures/03-string.md#find-all-anagrams-in-a-string--t1) `⚡ T1`** — Fixed-size sliding window + counter comparison.
+- **[Longest Palindromic Substring](../coding/data-structures/03-string.md#longest-palindromic-substring--t1) `⚡ T1`** — Expand from center; O(N²).
+- **[Encode and Decode Strings](../coding/data-structures/03-string.md#encode-and-decode-strings--t2) `🎯 T2`** — Length-prefixed encoding: `f"{len(s)}#{s}"`.
+- **[Longest Palindromic Subsequence](../coding/algorithms/15-dynamic-programming.md#longest-palindromic-subsequence--t2) `🎯 T2`** — DP or LCS with `reversed(s)`.
 
 ### Hard
-- Minimum Window Substring — Sliding window + `have`/`required` count logic.
-- **Edit Distance `🎯 T2`** — 2D DP; space-optimize to 1D rolling array.
-- **Implement strStr() (KMP)** — Build LPS; scan without backtracking text pointer.
-- **Regular Expression Matching** — 2D DP; handle `*` = zero or more of preceding.
-- **Wildcard Matching** — DP; `*` matches any sequence including empty.
-- **Distinct Subsequences `🎯 T2`** — Count ways to form T as subsequence of S.
+- **[Minimum Window Substring](../coding/data-structures/03-string.md#minimum-window-substring--t1) `⚡ T1`** — Sliding window + `have`/`required` count logic.
+- **[Edit Distance](../coding/algorithms/15-dynamic-programming.md#edit-distance--t2) `🎯 T2`** — 2D DP; space-optimize to 1D rolling array.
+- **[Distinct Subsequences](../coding/algorithms/02-string-algorithms.md#distinct-subsequences-lc-115--t2) `🎯 T2`** — Count ways to form T as subsequence of S.
+- **[Implement strStr() (KMP)](../coding/data-structures/03-string.md#implement-strstr-kmp) `🎯 T2`** — Build LPS; scan without backtracking text pointer.
+- **[Regular Expression Matching](../coding/algorithms/02-string-algorithms.md#regular-expression-matching-lc-10) `🎯 T2`** — 2D DP; handle `*` = zero or more of preceding.
+- **[Wildcard Matching](../coding/algorithms/02-string-algorithms.md#wildcard-matching-lc-44) `🎯 T2`** — DP; `*` matches any sequence including empty.
 
 ---
 
@@ -726,7 +707,7 @@ class Trie:
 
 | Question | Pattern | Click Moment | Core Logic | Trickiness / Gotchas |
 | :--- | :--- | :--- | :--- | :--- |
-| **Longest Palindromic Substring `🎯 T2`** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
+| **Longest Palindromic Substring `⚡ T1`** | Expand Around Center | "Longest contiguous palindrome" | Expand around each of 2N-1 centers | Even-length palindromes need `expand(i, i+1)` — don't only check `expand(i, i)`. |
 | **Longest Palindromic Subsequence `🎯 T2`** | "Longest non-contiguous palindrome" | DP or `LCS(s, reversed(s))` | Subsequence ≠ substring; LCS reduction is the cleanest approach. |
 | **Min Window Substring** | "Smallest window containing all of T" | Expand right; shrink left while `have==required` | `have` tracks saturation (== need[ch]), not total count. Unicode: use full Counter, not 26-char array. |
 | **Substring with Concatenation** | "Window containing all words exactly once" | Fixed word-length window; multiset word comparison | Multiple occurrences of same word require multiset, not set. O(N×W×K) with rolling word-hash. |
@@ -767,8 +748,6 @@ class Trie:
 
 ---
 
-
-
 ## See also
 
 - [array.md](./01-array.md) — sliding window and two pointers on numeric arrays
@@ -790,13 +769,12 @@ Strings in Python are immutable. Doing `s += char` copies the entire string at e
 
 **What is the difference in sliding window state-tracking between checking for "longest substring without repeating characters" vs "minimum window substring"?** #flashcard
 - **Longest substring**: Track character indices in a map. Jump the left pointer `left = max(left, char_idx[ch] + 1)` on duplicates.
-- **Minimum window `⚡ T1`**: Maintain a frequency target `need` and current count `window`. Increment a `have` tracker when `window[ch] == need[ch]` and expand/shrink based on `have == len(need)`.
+- **[Minimum window](../coding/data-structures/03-string.md#minimum-window-substring--t1) `⚡ T1`**: Maintain a frequency target `need` and current count `window`. Increment a `have` tracker when `window[ch] == need[ch]` and expand/shrink based on `have == len(need)`.
 
 **How do you find the longest palindromic substring in O(N^2) time and O(1) space, and what are the two centers to consider?** #flashcard
 Iterate through the string and treat each index as a center. Expand outward while characters match. You must expand from two distinct centers at each index $i$:
 1. **Odd-length center**: `expand(i, i)`
 2. **Even-length center**: `expand(i, i+1)`
-
 
 **Find pattern P in text T efficiently — what technique, and why?** #flashcard
 KMP, O(N+M); build LPS array first.

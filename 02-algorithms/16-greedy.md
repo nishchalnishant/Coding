@@ -3,52 +3,30 @@ module: 02-algorithms
 topic: Greedy
 tags: [algorithms, greedy]
 ---
+# Greedy Algorithms — L3 Gold Standard
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** When greedy is correct (exchange argument, greedy-stays-ahead), interval scheduling/merging, jump games, gas station, task scheduler, sorting-based greedy.
+> **You'll be able to:** Prove (or disprove with a counterexample) a greedy choice before coding it; solve the interval family with sort + one pass.
+> **Prereqs:** Sorting · **Pair with:** [Greedy problems](../coding/algorithms/16-greedy.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
-       │                │              │               │               │
-  [DP explores all      [make the      [sort by key    [interval       [greedy works
-   subproblems (too      locally        criterion;      scheduling,     only when greedy
-   slow); greedy         optimal choice iterate once    jump game,      choice property
-   collapses to          at each step   making locally  coin change     holds — easy to
-   O(n log n) when       without        best decision;  (canonical),    convince yourself
-   local → global        reconsidering  prove: exchange Huffman coding, it works when
-   optimality holds]     previous       argument shows  Kruskal's MST,  it doesn't;
-                         choices]       no swap helps]  activity select] counterexamples
-                                                                         on coin change
-                                                                         (non-canonical)]
-       │                │              │
-  [real-world:          [greedy choice [exchange argument proof:
-   hiring cheapest       property: a    assume optimal ≠ greedy;
-   qualified worker      greedy choice  show swapping one element
-   first; Huffman        is always part toward greedy solution
-   encoding compresses   of some        doesn't worsen result;
-   by making frequent    optimal        by induction, greedy = optimal]
-   chars shortest]       solution]
-       ↓
-[Decision: Greedy vs DP vs alternatives]
-  ├── vs DP         → greedy O(n log n) when greedy-choice property provable; DP when not
-  ├── vs Backtrack  → backtrack when greedy fails; greedy never undoes choices
-  └── vs Network Flow → flow for matching/assignment; greedy approximation otherwise
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview: The L3 Bar](#1-concept-overview-the-l3-bar) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. L3 Deep Dives](#3-l3-deep-dives) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [The Coach's Dialogue: Mastering the "Greedy" Mindset](#the-coachs-dialogue-mastering-the-greedy-mindset) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: DP examines all O(2^n) subsets in naive form; when local optimal choices always lead to global optimum, we can skip enumeration entirely.
 - **Core insight**: The greedy choice property guarantees that making the locally best decision at each step is always part of some globally optimal solution — proven by the exchange argument.
 - **Invariant**: After each greedy step, the remaining subproblem is a valid smaller instance of the same problem (optimal substructure).
 - **Why it's fast**: One pass (after optional sorting) — O(n) or O(n log n) total; no recursion tree, no memoization table.
 - **Where it breaks**: Fails when local optimum ≠ global optimum (e.g., coin change with non-canonical denominations like {1,3,4} for target 6 — greedy gives 4+1+1=3 coins, DP gives 3+3=2 coins).
 
-# Greedy Algorithms — L3 Gold Standard
+### One-Page Map
 
 ```
 [GREEDY ALGORITHMS — MINDMAP]
@@ -83,9 +61,6 @@ WHY greedy works → WHAT it is → HOW it works → WHEN to use → WHAT can go
 
 Make the **locally optimal choice** at each step; prove it leads to a **global optimum**. L3 expects: proof intuition (exchange argument or "stays ahead"), knowing when greedy fails, and choosing between greedy and DP under pressure.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -116,11 +91,11 @@ Make the **locally optimal choice** at each step; prove it leads to a **global o
 - 0/1 knapsack — greedy on value-density fails; fractional knapsack works.
 - If you cannot articulate an exchange argument or "greedy stays ahead" proof — try DP first.
 
-**Common mistakes.**
-- Sorting by the wrong key — intervals need end-time sort for maximum non-overlapping, start-time for merging.
-- Assuming greedy works without a proof — always construct a potential counterexample first.
-- Applying greedy to 0/1 knapsack (fractional knapsack is greedy; 0/1 is not).
-- Missing the `max(formula, len(tasks))` cap in task scheduler — when task variety fills all idle slots.
+> [!warning] Common mistakes
+> - Sorting by the wrong key — intervals need end-time sort for maximum non-overlapping, start-time for merging.
+> - Assuming greedy works without a proof — always construct a potential counterexample first.
+> - Applying greedy to 0/1 knapsack (fractional knapsack is greedy; 0/1 is not).
+> - Missing the `max(formula, len(tasks))` cap in task scheduler — when task variety fills all idle slots.
 
 ---
 
@@ -192,6 +167,44 @@ def min_arrows_to_burst_balloons(points: list[list[int]]) -> int:
 
 ---
 ```
+
+### Intervals & Sweep Line — Merge, Count Overlap `⚡ T1`
+
+> **The Click Moment**: input is a list of `[start, end]` pairs and the question asks to **merge**, **insert**, **count max overlap** ("min rooms", "max concurrent"), or **remove fewest**. Sort first; then one linear pass.
+
+**Which sort key?** Merge/insert/count overlap → **sort by start**. Keep-max-non-overlapping / min arrows → **sort by end** (exchange argument above).
+
+```python
+def merge(intervals):                       # Merge Intervals ⚡ T1 — O(N log N)
+    intervals.sort()
+    out = [intervals[0]]
+    for s, e in intervals[1:]:
+        if s <= out[-1][1]:                 # overlap (touching counts)
+            out[-1][1] = max(out[-1][1], e) # max(): handles [1,10] ⊇ [2,3]
+        else:
+            out.append([s, e])
+    return out
+
+def max_overlap(intervals):                 # Meeting Rooms II 🎯 T2 — sweep line
+    events = []
+    for s, e in intervals:
+        events += [(s, 1), (e, -1)]
+    events.sort()                           # (t,-1) before (t,1): an end frees the room first
+    cur = best = 0
+    for _, d in events:
+        cur += d; best = max(best, cur)
+    return best
+```
+
+| Problem shape | Technique | Boundary rule |
+|---|---|---|
+| Merge / insert | Sort by start, extend `max(end)` | `s <= prev_end` merges (touching overlaps) |
+| Max concurrent / min rooms | Sweep events **or** min-heap of ends | End before start at equal time |
+| Remove fewest / max kept | Sort by end, keep earliest finish | Overlap iff `s < last_end` |
+| Min arrows | Sort by end | New arrow iff `s > arrow` (strict) |
+| Many range adds, read once | Difference array (`+v` at l, `−v` at r+1) | See [array lecture](../01-data-structures/01-array.md) |
+
+**Trap:** `>` vs `>=` decides whether touching intervals overlap. Read the problem's definition and test it on `[1,2],[2,3]` before coding. Full problem table: [Algorithms index → Intervals](README.md#intervals).
 
 ### Jump Game — Reachability
 
@@ -446,24 +459,24 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 ## 4. Common Interview Problems
 
 ### Easy
-- **Assign Cookies** — Sort kids and cookies; two-pointer greedy matching.
-- **Largest Perimeter Triangle** — Sort descending; first triple where `a < b + c`.
+- **[Assign Cookies](../coding/algorithms/16-greedy.md#assign-cookies-lc-455) `🎯 T2`** — Sort kids and cookies; two-pointer greedy matching.
+- **[Largest Perimeter Triangle](../coding/algorithms/16-greedy.md#largest-perimeter-triangle-lc-976) `🎯 T2`** — Sort descending; first triple where `a < b + c`.
 
 ### Medium
-- **Jump Game I `🎯 T2`** — Track `farthest`; O(N) single pass.
-- Jump Game II — Greedy BFS levels; O(N).
-- Non-overlapping Intervals — Sort by end; keep non-overlapping.
+- **[Task Scheduler](../coding/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`** — Formula or heap simulation.
+- **[Jump Game I](../coding/algorithms/16-greedy.md#jump-game-can-reach--t2) `🎯 T2`** — Track `farthest`; O(N) single pass.
 - **Meeting Rooms II** `🎯 T2` — Min-heap of end times; active room count = heap size.
-- Gas Station — Running tank; reset start on deficit.
-- Task Scheduler — Formula or heap simulation.
-- **Partition Labels** — Last occurrence map; sweep and cut.
-- **Candy `🎯 T2`** — Two-pass: left-right then right-left.
-- **Minimum Arrows to Burst Balloons** — Sort by end; shoot at end of each new balloon.
+- **[Candy](../coding/algorithms/16-greedy.md#candy-lc-135--t2) `🎯 T2`** — Two-pass: left-right then right-left.
+- **[Jump Game II](../coding/algorithms/16-greedy.md#jump-game-ii-minimum-jumps--t2) `🎯 T2`** — Greedy BFS levels; O(N).
+- **[Non-overlapping Intervals](../coding/algorithms/16-greedy.md#non-overlapping-intervals-minimum-number-to-remove--t2) `🎯 T2`** — Sort by end; keep non-overlapping.
+- **[Gas Station](../coding/algorithms/16-greedy.md#gas-station--t2) `🎯 T2`** — Running tank; reset start on deficit.
+- **[Partition Labels](../coding/algorithms/16-greedy.md#partition-labels-lc-763) `🎯 T2`** — Last occurrence map; sweep and cut.
+- **[Minimum Arrows to Burst Balloons](../coding/algorithms/16-greedy.md#minimum-number-of-arrows-to-burst-balloons) `🎯 T2`** — Sort by end; shoot at end of each new balloon.
 
 ### Hard
-- **Minimum Refueling Stops `⚡ T1`** — Max-heap of reachable fuel; refuel largest when tank runs dry.
-- **IPO (Maximize Capital) `⚡ T1`** — Sort by capital; max-heap of available profits.
-- **Smallest Range Covering K Lists** — K-way merge + greedy window shrink.
+- **[Minimum Refueling Stops](../coding/data-structures/10-heap.md#minimum-refueling-stops-lc-871--t1) `⚡ T1`** — Max-heap of reachable fuel; refuel largest when tank runs dry.
+- **[IPO (Maximize Capital)](../coding/algorithms/16-greedy.md#ipo-maximize-capital-lc-502--t1) `⚡ T1`** — Sort by capital; max-heap of available profits.
+- **[Smallest Range Covering K Lists](../coding/data-structures/10-heap.md#smallest-range-covering-elements-from-k-lists-heap-variant--t1) `⚡ T1`** — K-way merge + greedy window shrink.
 
 ---
 
@@ -514,7 +527,7 @@ def find_maximized_capital(k: int, w: int, profits: list[int], capital: list[int
 
 ---
 
-## 🎙️ The Coach's Dialogue: Mastering the "Greedy" Mindset
+## The Coach's Dialogue: Mastering the "Greedy" Mindset
 
 **Student:** "Coach, I'm always scared to use Greedy. I feel like I'm taking a gamble that might fail on a weird edge case. How do I *know* it's greedy?"
 

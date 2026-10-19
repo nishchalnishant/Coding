@@ -3,10 +3,22 @@ module: root
 topic: Flowcharts
 tags: [root, flowcharts, l3]
 ---
+# Flowcharts — ASCII only (Google L3)
 
 ← [L3 Roadmap](coding/l3-google-roadmap.md) · [Mindmap (problems + hints)](MINDMAP.md) · [DS index](01-data-structures/README.md) · [Algorithms index](02-algorithms/README.md)
 
-# Flowcharts — ASCII only (Google L3)
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** ASCII flowcharts: problem → pattern in 60 s, study paths for DS / algorithms / DP / recursion / patterns / behavioral, the practice loop.
+> **You'll be able to:** Navigate the repo and pick a pattern visually.
+> **Prereqs:** None · **Pair with:** [Mindmap](MINDMAP.md) · **Time:** 15 min
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Master — Problem → Pattern (60-second)](#master--problem--pattern-60-second) · [00 — Start Here (L3)](#00--start-here-l3) · [01 — Data Structures (study path)](#01--data-structures-study-path) · [02 — Algorithms (study path)](#02--algorithms-study-path) · [02 — Dynamic Programming (L3 core)](#02--dynamic-programming-l3-core) · [02 — Recursion (L3 core)](#02--recursion-l3-core) · [03 — Patterns & Revision](#03--patterns--revision) · [04 — Behavioral (required at L3)](#04--behavioral-required-at-l3) · [Practice loop (L3)](#practice-loop-l3)
+
+---
+
 _Each block = one topic file · pattern triggers · canonical problems · complexity_
 
 ---

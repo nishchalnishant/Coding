@@ -3,50 +3,30 @@ module: 02-algorithms
 topic: Sorting
 tags: [algorithms, sorting]
 ---
+# Sorting — L3 Gold Standard
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Comparison sorts (merge, quick, heap), counting/bucket sort, stability, quickselect, custom comparators, and sorting as a pre-processing step (intervals, two pointers, greedy).
+> **You'll be able to:** Know the cost and stability of each sort; write merge sort and quickselect; recognise when 'sort first' unlocks an O(N log N) solution.
+> **Prereqs:** Arrays, recursion · **Pair with:** [Sorting problems](../coding/algorithms/00-sorting.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY sorting exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
-       │                  │              │               │               │
-  [Many problems         [rearranging   [comparison     [binary search  [comparison
-   reduce to sorted       elements in    sorts: O(n log  prereq, interval sort lower
-   order: binary          monotone       n) lower bound  merge, dedup,   bound O(n log n)
-   search, interval       order by       by information  two-pointer     broken by
-   merge, top-K,          key; stable    theory; merge   technique,      non-comparison
-   closest pair]          = equal keys   sort: divide,   top-K (use      sorts on wrong
-                          preserve       sort, merge;    heap instead)]  data type; stable
-                          original order] quicksort: pivot]               sort for multi-key]
-       │                  │              │
-  [real-world:           [lower bound:  [counting/radix sort: O(n+k)
-   sort contacts by       O(n log n)     for bounded integers; beats
-   name; merge sorted     provable from  O(n log n) when k = O(n);
-   external files;        decision tree  bucket sort: O(n) avg for
-   sort events for        height ≥ log(n!) uniform distribution]
-   timeline processing]   = n log n]
-       ↓
-[Decision: Which sort to use]
-  ├── General purpose    → Timsort (Python/Java) — O(n log n), stable, adaptive
-  ├── Memory constrained → Heapsort — O(n log n), O(1) space, not stable
-  ├── Integer keys 0..k  → Counting/Radix sort — O(n+k)
-  └── Stable + linked    → Merge sort — O(n log n), O(n) space, stable
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Algorithm Overview](#1-algorithm-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. L3 Deep Dives](#3-l3-deep-dives) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Unordered data requires O(n) scan for every query; sorting pays O(n log n) once to enable O(log n) queries forever.
 - **Core insight**: Comparison-based sorting has a provable O(n log n) lower bound (decision tree has ≥ n! leaves, height ≥ log(n!)); non-comparison sorts bypass this by exploiting key structure.
 - **Invariant**: After sorting, element at index i ≤ element at index i+1 for all i; stable sort additionally preserves original relative order of equal-key elements.
 - **Why it's fast**: Merge sort divides the problem into two halves each time — T(n) = 2T(n/2) + O(n) solves to O(n log n) by master theorem.
 - **Where it breaks**: Non-comparison sorts (counting, radix) break if keys aren't bounded integers; unstable sorts (heapsort, quicksort) break multi-key sort correctness; quicksort degrades to O(n²) on already-sorted input without pivot randomization.
 
-# Sorting — L3 Gold Standard
+### One-Page Map
 
 ```
 [SORTING — MINDMAP]
@@ -83,9 +63,6 @@ WHY sorting exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 
 Arranging data to optimize subsequent operations. Senior interviews focus on **algorithm selection reasoning**, stability under constraints, external sorting for data > RAM, and parallel implementations.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -119,11 +96,11 @@ Arranging data to optimize subsequent operations. Senior interviews focus on **a
 - Using naive pivot QuickSort on nearly-sorted input — degrades to O(N²); always randomize.
 - Using unstable sort when equal-element relative order matters (e.g., stable sort by secondary key).
 
-**Common mistakes.**
-- Unstable sort when equal-element order matters — Python's `sorted()` / `.sort()` are TimSort (stable); Java's `Arrays.sort` on objects is also stable, but on primitives uses dual-pivot QuickSort (unstable).
-- Naive last-element pivot in QuickSort on sorted input — O(N²) worst case; always randomize.
-- Applying counting sort when K >> N — the O(K) space dominates and kills performance.
-- Interval problems: sorting by start vs end — merging intervals uses start; maximum non-overlapping uses end.
+> [!warning] Common mistakes
+> - Unstable sort when equal-element order matters — Python's `sorted()` / `.sort()` are TimSort (stable); Java's `Arrays.sort` on objects is also stable, but on primitives uses dual-pivot QuickSort (unstable).
+> - Naive last-element pivot in QuickSort on sorted input — O(N²) worst case; always randomize.
+> - Applying counting sort when K >> N — the O(K) space dominates and kills performance.
+> - Interval problems: sorting by start vs end — merging intervals uses start; maximum non-overlapping uses end.
 
 ---
 
@@ -478,15 +455,15 @@ For distributed sort (MapReduce model):
 ## 4. Common Interview Problems
 
 ### Medium
-- Merge Intervals — Sort by start time; sweep and merge.
-- Kth Largest Element — QuickSelect O(N) avg or min-heap O(N log K).
-- **Sort Colors `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
-- **Largest Number** — Custom comparator: `a+b > b+a`.
-- **Meeting Rooms II** — Sort starts and ends separately; two-pointer sweep for peak overlap.
+- **[Sort Colors](../coding/algorithms/03-two-pointers.md#sort-colors-lc-75--t1) `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
+- **[Kth Largest Element](../coding/algorithms/00-sorting.md#kth-largest-element-in-a-stream-lc-703--t1) `⚡ T1`** — QuickSelect O(N) avg or min-heap O(N log K).
+- **[Merge Intervals](../coding/algorithms/16-greedy.md#merge-intervals--t2) `🎯 T2`** — Sort by start time; sweep and merge.
+- **[Largest Number](../coding/algorithms/00-sorting.md#largest-number-custom-comparator) `🎯 T2`** — Custom comparator: `a+b > b+a`.
+- **[Meeting Rooms II](../coding/algorithms/00-sorting.md#meeting-rooms-ii-lc-253) `🎯 T2`** — Sort starts and ends separately; two-pointer sweep for peak overlap.
 
 ### Hard
-- **Maximum Gap** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
-- **Russian Doll Envelopes** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
+- **[Maximum Gap](../coding/algorithms/00-sorting.md#maximum-gap-bucket-sort) `🎯 T2`** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
+- **[Russian Doll Envelopes](../coding/algorithms/15-dynamic-programming.md#russian-doll-envelopes-lc-354) `🎯 T2`** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
 
 ---
 

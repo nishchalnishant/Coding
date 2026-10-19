@@ -3,13 +3,21 @@ tags: [coding, data-structures, design]
 topic: design-a-data-structure
 difficulty: mixed
 ---
-
 # Design-a-Data-Structure Problems (L4 signature family)
 
-> [!abstract] Tier Legend (L4 tiers)
-> `⚡ T1` — **Must Master**: the Google L4 design family. Every problem here is "support ops X/Y/Z in O(1) or O(log n)".
-> `🎯 T2` — **Build Fluidity**: know the composition cold; edge cases matter less.
->
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Design-a-data-structure problems: support operations X/Y/Z in O(1) / O(log n) by composing maps, lists, heaps and sets.
+> **You'll be able to:** Compose structures so each covers the other's weakness; state per-operation cost.
+> **Prereqs:** Hashing, linked list, heap · **Pair with:** [Design ladder](../../03-patterns/PATTERN_LADDERS.md#ladder-12--design-a-data-structure-l4-signature) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Design Interview Checklist](#design-interview-checklist)
+
+---
+
+> [!note] L4 signature family
 > Derivation ladder for this family: [Pattern Ladders — Ladder 12](../../03-patterns/PATTERN_LADDERS.md#ladder-12--design-a-data-structure-l4-signature).
 > Already covered elsewhere: **Min Stack** → [stack](05-stack.md), **LRU Cache** → [linked list](07-linked-list.md), **Kth Largest in Stream / Find Median** → [heap](10-heap.md).
 
@@ -255,6 +263,9 @@ difficulty: mixed
 
 > [!example] Problem
 > Like LRU, but evict the **least frequently used** key; break frequency ties by least *recently* used. `get` and `put` in O(1).
+
+> [!tip] Recognize · Gotcha
+> **Signal:** freq + LRU within freq · **Gotcha:** **Tie** LRU — **second** priority; **O(1)** requires careful structure.
 
 > [!info] Approach
 > Three synced parts: `key → (val, freq)`; `freq → OrderedDict of keys` (each an LRU list within that frequency); and `min_freq`. On any access, move the key from bucket `f` to `f+1`; if bucket `min_freq` emptied, `min_freq += 1`. On insert, evict the LRU key of bucket `min_freq` if full, then set `min_freq = 1`. It's LRU plus one more dimension — derive it from LRU, don't recall it.

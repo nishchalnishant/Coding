@@ -5,9 +5,18 @@ tags: [patterns, topic-questions-logic-and-tricks]
 ---
 # Topic Questions — Logic, Patterns, and Trickiness
 
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Canonical questions for every topic, why they're asked, the core logic, and the trap in each.
+> **You'll be able to:** Recall the key insight and gotcha for any canonical problem in seconds.
+> **Prereqs:** Lecture files · **Pair with:** [Questions index](../questions.md) · **Time:** 2 h (lookup afterwards)
+> **How to use:** reference — read once, then use as a lookup.
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Arrays, two pointers, sliding window, prefix sum](#arrays-two-pointers-sliding-window-prefix-sum) · [Hashing & frequency](#hashing--frequency) · [Linked lists](#linked-lists) · [Stack & queue](#stack--queue) · [Trees & BST](#trees--bst) · [Heap & priority queue](#heap--priority-queue) · [Binary search](#binary-search) · [Graphs](#graphs) · [Disjoint Set Union (DSU)](#disjoint-set-union-dsu) · [Dynamic programming](#dynamic-programming) · [Greedy](#greedy) · [Backtracking](#backtracking) · [Trie](#trie) · [Bit manipulation](#bit-manipulation) · [Math & number theory](#math--number-theory) · [See also](#see-also)
+
+---
 
 This guide lists **canonical interview questions** by topic, **why** they appear, the **core solution logic**, and **what makes them tricky** (gotchas, wrong turns, follow-ups). Use with the full topic files in [data-structures/](../01-data-structures/README.md) and [algorithms/](../02-algorithms/README.md).
 

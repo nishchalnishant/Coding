@@ -1,17 +1,18 @@
 # Recursion — Complete Reference
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Recursion from first principles: the 4-step recipe, 8 recursion patterns (subsets, permutations, divide & combine, tree/graph DFS, N-Queens, memo bridge), common bugs and complexity.
+> **You'll be able to:** Design any recursion by stating base case, choice and contract; draw the call tree to get complexity; know when to switch to iteration or memoization.
+> **Prereqs:** None · **Pair with:** [Recursion problems](../coding/algorithms/09-recursion.md) · [Recursion & DP masterclass](../03-patterns/RECURSION_AND_DP_MASTERCLASS.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-
-
+**Sections:** [Core Idea](#core-idea) · [Pattern Taxonomy](#pattern-taxonomy) · [Theory & Mental Models](#theory--mental-models) · [Universal Recursion Recipe (Aditya Verma 4-Step)](#universal-recursion-recipe-aditya-verma-4-step) · [Pattern Map](#pattern-map) · [Pattern 1 — Include / Exclude (Subsets)](#pattern-1--include--exclude-subsets) · [Pattern 2 — Permutations](#pattern-2--permutations) · [Pattern 3 — IP/OP String Building](#pattern-3--ipop-string-building) · [Pattern 4 — Divide & Combine](#pattern-4--divide--combine) · [Pattern 5 — Mathematical Recursion](#pattern-5--mathematical-recursion) · [Pattern 6 — Tree / Graph DFS](#pattern-6--tree--graph-dfs) · [Pattern 7 — N-Queens / Constraint Satisfaction](#pattern-7--n-queens--constraint-satisfaction) · [Pattern 8 — Memoization Bridge](#pattern-8--memoization-bridge) · [Combination Problems — Complete Family](#combination-problems--complete-family) · [Graph Recursion — DFS-Based Algorithms](#graph-recursion--dfs-based-algorithms) · [String Recursion — Parsing, Matching & Manipulation](#string-recursion--parsing-matching--manipulation) · [Tree Recursion — Advanced Patterns](#tree-recursion--advanced-patterns) · [Recursion → Memoization → Tabulation](#recursion--memoization--tabulation) · [Common Bugs — The 15](#common-bugs--the-15) · [Complexity Cheatsheet](#complexity-cheatsheet) · [L3 Interview Communication Framework](#l3-interview-communication-framework) · [When NOT to Use Recursion](#when-not-to-use-recursion) · [Signal → Pattern Map](#signal--pattern-map) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
 ---
 
-## First-Principles Map
+## Core Idea
 
 ```
 WHY Recursion exists
@@ -56,7 +57,7 @@ WHAT can go wrong
 
 ---
 
-## L3 Gold Standard Mindmap
+## Pattern Taxonomy
 
 ```
 RECURSION
@@ -77,19 +78,20 @@ RECURSION
 │   ├── Tuple → (rob, skip), (is_bst, size, min, max)
 │   └── Global + local → diameter, max path sum
 │
-├── OPTIMIZATIONS
-│   ├── Memoize overlapping subproblems → top-down DP
-│   ├── Convert to iterative → avoid stack overflow
-│   ├── Prune early → backtracking (remaining < 0, constraint violated)
-│   └── Space optimize after tabulation → rolling array
-│
-└── GOTCHAS
-    ├── Always snapshot path[:] not path
-    ├── Mark visited BEFORE recursing (graphs)
-    ├── Directed cycle: 3-color (white/gray/black), not just visited
-    ├── Duplicate dedup: i > start (not i > 0) for combos
-    └── Permutation dedup: not used[i-1] (not used[i])
+└── OPTIMIZATIONS
+    ├── Memoize overlapping subproblems → top-down DP
+    ├── Convert to iterative → avoid stack overflow
+    ├── Prune early → backtracking (remaining < 0, constraint violated)
+    └── Space optimize after tabulation → rolling array
 ```
+
+> [!warning] Common mistakes
+> - Appending `path` instead of `path[:]` — every result aliases the same list and ends up empty.
+> - Graph DFS: marking visited *after* recursing — revisits and infinite loops.
+> - Directed cycle detection with a plain `visited` set — needs 3 colors (white/gray/black).
+> - Combination dedup with `i > 0` instead of `i > start` — drops valid combos that reuse a value at a deeper level.
+> - Permutation dedup with `used[i-1]` instead of `not used[i-1]`.
+> - Full list → [Common Bugs — The 15](#common-bugs--the-15).
 
 ---
 
@@ -1388,83 +1390,55 @@ if j + 1 < len(p) and p[j+1] == '*':
 
 ---
 
-## Questions Bank — Tiered Drill
+## Interview Questions — Logic & Trickiness
 
-### Level 1: Foundation (Branching & Choice)
-
-| Problem | Pattern | Key Insight |
-| :--- | :--- | :--- |
-| Subsets (Power Set) | Include/Exclude | 2 choices per element: `2^N` |
-| Permutations | Choice-based | Pick any unused element; `N!` |
-| Binary Tree Paths | Structural DFS | Leaf is base case; pass path string |
-| Merge Sort | Divide & Conquer | Split until size 1; merge results |
-| Fibonacci | Mathematical | `f(n) = f(n-1) + f(n-2)` |
-
-### Level 2: L3 Standard (Pruning & Constraints)
-
-| Problem | Pattern | The Twist |
-| :--- | :--- | :--- |
-| Combination Sum | Unbounded Choice | Can reuse same element: `recurse(i)` not `i+1` |
-| Combination Sum II | Duplicate Input | Sort + skip sibling duplicates: `if j>i and nums[j]==nums[j-1]` |
-| Generate Parentheses | Validity Guard | Add `(` if `open < n`, `)` if `close < open` |
-| Word Search | Grid Backtracking | Mark `board[r][c]` visited; restore on undo |
-| Palindrome Partitioning | String Splitting | Only recurse if prefix is a palindrome |
-| Letter Case Permutation | IP/OP | Branch on alpha; skip digits |
-
-### Level 3: L3 / Staff Level (Constraint Satisfaction)
-
-| Problem | Pattern | Complexity / Optimization |
-| :--- | :--- | :--- |
-| N-Queens | Board Backtracking | Column and diagonal clash sets |
-| Sudoku Solver | Matrix Search | Fill empty cells; 9 branches each; early exit on first valid |
-| Word Search II | Trie + Backtracking | Use Trie to prune multiple word searches into one DFS |
-| Unique Binary Search Trees II | Structural D&C | Build all left/right combos for each root `k` |
-| Expression Add Operators | Mathematical Search | Handle `*` precedence by tracking `prev_added` |
-| Robot Room Cleaner | State-Space Search | Track `(r, c)` in set; move + rotate; spiral-out |
-
-### Full Interview Questions Table
-
-| Problem | LC # | Pattern | Click Moment | Gotcha |
-| :--- | :--- | :--- | :--- | :--- |
-| Subsets | 78 | Include/Exclude | Record at every node (not just leaves) | Record before loop, not inside |
-| Subsets II | 90 | Include/Exclude + dedup | Sort + skip same value at same level | `j > start` allows same value in different levels |
-| Permutations | 46 | Used-set | Pick any unused each time | Mark used before recurse; unmark after |
-| Permutations II | 47 | Used-set + dedup | Sort + `not used[i-1]` guard | `not used[i-1]` = sibling skip, not ancestor |
-| Combinations | 77 | Start index | Prune: loop to `n-(k-len)+1` | Pruning bound is `n - (k-len) + 2` |
-| Combination Sum I | 39 | Unlimited reuse | `backtrack(i, ...)` — same index | Sort + `break` when over remaining |
-| Combination Sum II | 40 | Each once, dups | `backtrack(i+1, ...)` + skip guard | `i > start` not `i > 0` for skip |
-| Combination Sum III | 216 | K digits 1–9 | Both `len==k` AND `remaining==0` at base | Range is 1..9 |
-| Combination Sum IV | 377 | Order matters → DP | Amount outer loop → counts permutations | Really unbounded knapsack with order |
-| Phone Letter Combos | 17 | IP/OP | Map each digit; build all strings | Empty digits → `[]` not `['']` |
-| Restore IP Addresses | 93 | Partition + validate | Exactly 4 parts; break on leading zero or > 255 | `len > 1 and segment[0]=='0'` |
-| Generate Parentheses | 22 | IP/OP + guard | Add `(` if `open < n`, `)` if `close < open` | Both counts needed |
-| N-Queens | 51 | Backtracking | Column + two diagonal sets | Use sets for O(1) clash check |
-| Flood Fill | 733 | DFS in-place | Spread to same-colored neighbors | Check `original == color` first |
-| Number of Islands | 200 | DFS flood | Sink each island cell to `'#'` | 4-directional only |
-| Clone Graph | 133 | DFS + memo | Register clone before recursing | Use original node as key (not val) |
-| Course Schedule | 207 | 3-color cycle | Back edge = color==1 | `color==2` = already safe |
-| Course Schedule II | 210 | Topo sort DFS | Add after all descendants | Reverse order at end |
-| All Paths Source→Target | 797 | DFS backtrack | DAG: no visited set needed | Snapshot `path[:]` |
-| Max Area of Island | 695 | DFS + area count | Return `1 + sum(dfs neighbors)` | Mark visited BEFORE recursing |
-| Surrounded Regions | 130 | Reverse DFS | Mark border-connected safe first | 3 states: X, O, S |
-| Regular Expression | 10 | Memoized recursion | `*` = zero-or-more of PRECEDING | Zero-occurrence: `dp(i, j+2)` |
-| Wildcard Matching | 44 | Memoized recursion | `*` standalone matches any sequence | `dp(i+1,j)`: consume; `dp(i,j+1)`: `*` empty |
-| Expression Add Operators | 282 | Backtracking | Track `prev` for multiplication undo | Leading zeros: break not continue |
-| Decode String | 394 | Recursive descent | `[` triggers recursion; `]` returns | Pass and return index `i` |
-| Word Search | 79 | DFS backtracking | Mark cell `'#'`; restore after | Restore even on failure |
-| Palindrome Partitioning | 131 | Backtracking | Try all splits; add if palindrome | Precompute `is_pal[i][j]` |
-| Path Sum I | 112 | Tree DFS pass-down | Subtract `node.val` each level | Leaf check: `not left AND not right` |
-| Path Sum II | 113 | Tree DFS + backtrack | Backtrack: `path.pop()` on return | Must snapshot `path[:]` |
-| Path Sum III | 437 | Prefix sum on tree | `prefix_count[curr - target]` | Undo prefix count on return |
-| Max Path Sum | 124 | Global + local | Clip negatives: `max(gain(...), 0)` | Update global inside; return single arm |
-| Validate BST | 98 | Pass-down range | Pass valid `(lo, hi)` range | Check full ancestry, not just parent |
-| LCA BST | 235 | BST divergence | Both < root → go left; both > root → go right | Use val comparisons |
-| LCA General | 236 | Sentinel propagation | Both non-null → current is LCA | Check `root == p or root == q` first |
-| Serialize/Deserialize | 297 | Preorder + iter | Use `iter()` for stateful tokens | `'#'` for nulls |
-| House Robber III | 337 | Tuple return | `(rob_this, skip_this)` | Return pair; preserve both choices |
-| Kth Smallest BST | 230 | Inorder + count | Inorder = sorted; stop at k | Short-circuit after kth found |
-| Word Break | 139 | Memoized recursion | `frozenset` word dict; `lru_cache` | O(2^N) without memo |
-| Coin Change | 322 | Memoized recursion | `rem < 0 → inf`; min over coins | Forward loop = unbounded in tabulation |
+| Question | Variant | Click moment | Core logic | Gotchas |
+|---|---|---|---|---|
+| ⚡ T1 · Medium — Word Search (LC 79) | Grid backtracking | "does the word exist in the grid" | Mark cell `'#'`, recurse 4 ways, restore | Restore even on failure |
+| ⚡ T1 · Hard — Word Search II (LC 212) | Trie + backtracking | Many words, one grid | One DFS walks the trie; prune dead branches | Clear `word` at the node once found to avoid duplicates |
+| ⚡ T1 · Easy — Flood Fill (LC 733) | DFS in place | "recolor connected region" | Spread to same-colored neighbors | `original == color` → return early, or it loops forever |
+| ⚡ T1 · Medium — Number of Islands (LC 200) | DFS flood | Count connected `'1'` blobs | Sink each island cell to `'#'` | 4-directional only |
+| ⚡ T1 · Medium — Max Area of Island (LC 695) | DFS + area count | Largest blob | Return `1 + sum(dfs(neighbors))` | Mark visited BEFORE recursing |
+| ⚡ T1 · Medium — Clone Graph (LC 133) | DFS + memo | Deep copy with cycles | Register clone before recursing | Key by original node, not `val` |
+| ⚡ T1 · Medium — Course Schedule (LC 207) | 3-color cycle | "can all courses finish" | Back edge = neighbor is gray | `color==2` = already safe, skip |
+| ⚡ T1 · Medium — Course Schedule II (LC 210) | Topo sort DFS | "return an order" | Append node after all descendants | Reverse the post-order at the end |
+| 🎯 T2 · Medium — Subsets (LC 78) | Include/Exclude | "all subsets" | Record at every node, not only leaves | `2^N` outputs — say it before coding |
+| 🎯 T2 · Medium — Subsets II (LC 90) | Include/Exclude + dedup | Duplicates in input | Sort; skip same value at same level | `i > start`, not `i > 0` |
+| 🎯 T2 · Medium — Permutations (LC 46) | Used-set | "all orderings" | Pick any unused element each level | Unmark `used[i]` after recursing |
+| 🎯 T2 · Medium — Permutations II (LC 47) | Used-set + dedup | Orderings with duplicates | Sort + `if i>0 and nums[i]==nums[i-1] and not used[i-1]: continue` | `not used[i-1]` = sibling skip, not ancestor |
+| 🎯 T2 · Medium — Combinations (LC 77) | Start index | "choose k of 1..n" | Loop from `start`; recurse `i+1` | Prune: loop only to `n-(k-len)+1` |
+| 🎯 T2 · Medium — Combination Sum (LC 39) | Unlimited reuse | Reuse allowed | Recurse `backtrack(i, ...)` — same index | Sort + `break` once over remaining |
+| 🎯 T2 · Medium — Combination Sum II (LC 40) | Each once, dup input | No reuse, duplicates | Recurse `i+1` + sibling-skip guard | `i > start` not `i > 0` |
+| 🎯 T2 · Medium — Combination Sum III (LC 216) | K digits 1–9 | Fixed count + target | Base: `len==k` AND `remaining==0` | Range is 1..9 only |
+| 🎯 T2 · Medium — Combination Sum IV (LC 377) | Order matters → DP | "count", order distinct | Amount outer loop = counts permutations | It's DP, not backtracking — enumerating TLEs |
+| 🎯 T2 · Medium — Letter Combinations (LC 17) | IP/OP | Digit → letters | One level per digit | Empty input → `[]`, not `['']` |
+| 🎯 T2 · Medium — Letter Case Permutation (LC 784) | IP/OP | Toggle case | Branch on letters; pass digits through | Only letters branch |
+| 🎯 T2 · Medium — Restore IP Addresses (LC 93) | Partition + validate | Exactly 4 parts | Try lengths 1–3 per part | Reject leading zero (`len>1 and s[0]=='0'`) and `>255` |
+| 🎯 T2 · Medium — Generate Parentheses (LC 22) | IP/OP + guard | "all valid strings" | `(` if `open < n`; `)` if `close < open` | Both counts needed |
+| 🎯 T2 · Medium — Palindrome Partitioning (LC 131) | Partition | "all palindrome splits" | Recurse only when the prefix is a palindrome | Precompute `is_pal[i][j]` |
+| 🎯 T2 · Hard — N-Queens (LC 51) | Constraint satisfaction | Place one per row | Column + `r-c` + `r+c` sets | Sets give O(1) clash check |
+| 🎯 T2 · Hard — Sudoku Solver (LC 37) | Constraint satisfaction | Fill blanks | 9 branches per cell; return on first valid | Return `True` up the stack to stop |
+| 🎯 T2 · Easy — Binary Tree Paths (LC 257) | Tree DFS pass-down | "all root-to-leaf paths" | Pass path down; record at leaf | Leaf = no left AND no right |
+| 🎯 T2 · Easy — Path Sum (LC 112) | Tree DFS pass-down | Root-to-leaf target | Subtract `node.val` per level | Leaf check, not null check |
+| 🎯 T2 · Medium — Path Sum II (LC 113) | Tree DFS + backtrack | "all paths" | `path.pop()` on return | Snapshot `path[:]` |
+| 🎯 T2 · Medium — Path Sum III (LC 437) | Prefix sum on tree | Any downward path | `count[curr - target]` | Decrement prefix count on return |
+| 🎯 T2 · Hard — Binary Tree Max Path Sum (LC 124) | Global + local | Path may bend | Clip negatives: `max(gain(child), 0)` | Update global with both arms; return one arm |
+| 🎯 T2 · Medium — Validate BST (LC 98) | Pass-down range | BST property | Pass `(lo, hi)` down | Check whole ancestry, not just the parent |
+| 🎯 T2 · Medium — LCA of BST (LC 235) | BST divergence | BST + two nodes | Both < root → left; both > → right; else root | Compare values |
+| 🎯 T2 · Medium — LCA of Binary Tree (LC 236) | Sentinel propagation | General tree | Both sides non-null → current is LCA | Check `root in (p, q)` first |
+| 🎯 T2 · Medium — Kth Smallest in BST (LC 230) | Inorder + count | "k-th smallest" | Inorder is sorted; stop at k | Short-circuit once found |
+| 🎯 T2 · Hard — Serialize/Deserialize (LC 297) | Preorder + iterator | Round-trip a tree | Preorder with `'#'` for nulls | Use `iter()` for stateful token reads |
+| 🎯 T2 · Medium — House Robber III (LC 337) | Tuple return | Adjacent-parent constraint | Return `(rob_this, skip_this)` | Returning one value loses a choice |
+| 🎯 T2 · Medium — Unique BSTs II (LC 95) | Structural D&C | "all structurally unique BSTs" | For each root `k`, combine left × right lists | `[None]` for empty range, not `[]` |
+| 🎯 T2 · Medium — All Paths Source→Target (LC 797) | DFS backtrack | DAG, all paths | DFS with path stack | DAG → no visited set needed; snapshot path |
+| 🎯 T2 · Medium — Surrounded Regions (LC 130) | Reverse DFS | "capture enclosed" | Mark border-connected `O` safe first | 3 states: X, O, safe |
+| 🎯 T2 · Medium — Decode String (LC 394) | Recursive descent | Nested brackets | `[` recurses; `]` returns | Pass and return index `i` |
+| 🎯 T2 · Medium — Word Break (LC 139) | Memoized recursion | "can it be segmented" | `dp(i)` = any word matches at `i` and `dp(i+len)` | O(2^N) without memo |
+| 🎯 T2 · Medium — Coin Change (LC 322) | Memoized recursion | Min coins | `rem < 0 → inf`; min over coins | Return `-1` when result is `inf` |
+| 🎯 T2 · Hard — Regular Expression Matching (LC 10) | Memoized recursion | `.` and `*` | `*` = zero or more of the PRECEDING char | Zero-occurrence branch: `dp(i, j+2)` |
+| 🎯 T2 · Hard — Wildcard Matching (LC 44) | Memoized recursion | `?` and `*` | `*` matches any sequence | `dp(i+1,j)` consumes; `dp(i,j+1)` = empty `*` |
+| 🎯 T2 · Hard — Expression Add Operators (LC 282) | Backtracking | Insert `+ - *` | Track `prev` operand to undo for `*` | Leading zero → `break`, not `continue` |
+| 💤 T3 · Hard — Robot Room Cleaner (LC 489) | State-space search | Unknown grid, robot API | Track `(r, c)` visited; move, rotate, back off | Must physically back out after each branch |
 
 ---
 

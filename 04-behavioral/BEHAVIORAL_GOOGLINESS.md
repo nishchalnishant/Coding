@@ -3,12 +3,21 @@ module: 04-behavioral
 topic: Behavioral Googliness
 tags: [behavioral, behavioral-googliness]
 ---
-# First-Principles Map — Google Behavioral & Googliness
+# Behavioral + Googliness — Google L3
 
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Google's four attributes, the STAR template, an 8-story bank, weak vs strong story depth, question types, follow-ups, red flags, day-of checklists.
+> **You'll be able to:** Answer any behavioral question with a specific, measurable story mapped to an attribute.
+> **Prereqs:** None · **Pair with:** [Behavioral index](README.md) · **Time:** 3–4 h (writing your stories)
+> **How to use:** reference — read once, then use as a lookup.
+
+**Sections:** [First-Principles Map](#first-principles-map) · [First-Principles Breakdown](#first-principles-breakdown) · [The Four Google Attributes](#the-four-google-attributes) · [STAR Story Template](#star-story-template) · [Story Bank — Prepare These 8](#story-bank--prepare-these-8) · [Story Depth Guide — Weak vs Strong](#story-depth-guide--weak-vs-strong) · [Question → Attribute Map](#question--attribute-map) · [Question Types — What They're Actually Probing](#question-types--what-theyre-actually-probing) · [Common Follow-Ups](#common-follow-ups) · [ML / AI Behavioral Prompts](#ml--ai-behavioral-prompts) · [10-Question Self-Assessment](#10-question-self-assessment) · [Red Flags in Behavioral Rounds](#red-flags-in-behavioral-rounds) · [Rapid Prep Checklist](#rapid-prep-checklist) · [Googliness Quick Checklist (Interview Day)](#googliness-quick-checklist-interview-day) · [Final Review Order (30 min before)](#final-review-order-30-min-before) · [Final Mental Model](#final-mental-model)
+
+---
+
+## First-Principles Map
 
 ```
 WHY Behavioral rounds exist at Google
@@ -69,8 +78,6 @@ WHAT can go wrong
 - **Where it breaks:** If the story bank doesn't cover all four Google attributes, you'll have gaps that get exposed when the interviewer probes your least-covered area.
 
 ---
-
-# Behavioral + Googliness — Google L3
 
 Google evaluates every candidate on four attributes. This file covers all four with signal phrases, anti-patterns, and STAR story guidance.
 

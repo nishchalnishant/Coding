@@ -3,46 +3,30 @@ module: 01-data-structures
 topic: Heap
 tags: [data-structures, heap]
 ---
+# Heap / Priority Queue — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Binary heaps and priority queues: heapify cost, top-K, K-way merge, two-heap median, scheduling, heap-driven Dijkstra.
+> **You'll be able to:** Choose heap vs sort vs quickselect for top-K; handle max-heap in Python (negation / tuples); write two-heap median and K-way merge.
+> **Prereqs:** Arrays, tree · **Pair with:** [Heap problems](../coding/data-structures/10-heap.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY heaps exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                │                │               │               │
-  [Need the min or    [complete binary  [heap property: [top-K, Dijkstra,[heapify on push
-   max element fast   tree stored as    parent ≤ child   Prim's, median   is O(log n) not
-   from a dynamic     flat array;       (min-heap);      stream, task     O(1); sorted
-   set — sorted       parent(i)=(i-1)/2 insert + sift-up; scheduling,    access is O(n
-   array is O(log n)  left=2i+1,        extract-min +    K-way merge]     log n), not O(1);
-   insert but O(n)    right=2i+2]       sift-down; O(log n)]              no O(1) search]
-   extract]                │
-       │               [invariant:      [heapify from array: O(n) —
-  [real-world:         every parent     NOT O(n log n); sift-down from
-   hospital triage —   dominates its    middle saves half the work;
-   urgent first,       children; root   key insight for heap sort]
-   not arrival order]  is global min]
-       ↓
-[Decision: Heap vs alternatives]
-  ├── vs Sorted Array → heap O(log n) insert vs O(n); sorted array O(1) access
-  ├── vs BST          → BST has O(log n) for all ops + ordered iteration; heap only min/max
-  └── vs Bucket Sort  → bucket for known range; heap for unknown/dynamic priorities
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Repeatedly need the minimum (or maximum) from a changing set — a sorted array is too slow to update.
 - **Core insight**: Partial order (only parent ≤ children) is sufficient to find min in O(1) and maintain in O(log n) — no need for full sort.
 - **Invariant**: Every parent dominates (≤ in min-heap) both children; root is always the global minimum.
 - **Why it's fast**: The tree height is log n (complete binary tree), so any sift operation touches at most log n nodes.
 - **Where it breaks**: Arbitrary search is O(n) — heap does not support "find element X" efficiently; no way to iterate in sorted order without O(n log n) repeated extraction.
 
-# Heap / Priority Queue — L3 Core
+### One-Page Map
 
 ```
 [HEAP / PRIORITY QUEUE]
@@ -87,9 +71,6 @@ WHY heaps exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 
 Complete binary tree with the heap property: parent ≤ children (min-heap) or parent ≥ children (max-heap). The canonical data structure for "always extract the current best" in O(log N).
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -124,11 +105,11 @@ Complete binary tree with the heap property: parent ≤ children (min-heap) or p
 - K-way merge of sorted lists/arrays.
 - Priority scheduling — always process the highest-priority available task.
 
-**Common mistakes:**
-- Python's `heapq` is min-heap only — negate values to simulate max-heap; negate again on pop.
-- Not including a unique tie-breaker in tuples — comparing non-comparable objects (e.g., `ListNode`) raises `TypeError`.
-- Calling `heapq.heapify()` on a non-list or forgetting to call it after bulk construction with `append`.
-- Using lazy deletion incorrectly — must check if the popped element is still valid before processing.
+> [!warning] Common mistakes
+> - Python's `heapq` is min-heap only — negate values to simulate max-heap; negate again on pop.
+> - Not including a unique tie-breaker in tuples — comparing non-comparable objects (e.g., `ListNode`) raises `TypeError`.
+> - Calling `heapq.heapify()` on a non-list or forgetting to call it after bulk construction with `append`.
+> - Using lazy deletion incorrectly — must check if the popped element is still valid before processing.
 
 ---
 
@@ -142,7 +123,7 @@ Complete binary tree with the heap property: parent ≤ children (min-heap) or p
 | Left child of i | `2 * i + 1` |
 | Right child of i | `2 * i + 2` |
 
-- **Insert `🎯 T2`**: Append, then bubble up — swap with parent while heap property violated. O(log N).
+- **Insert**: Append, then bubble up — swap with parent while heap property violated. O(log N).
 - **Extract-min/max**: Swap root with last element, pop last, bubble down — swap with the better child. O(log N).
 - **Heapify (build from array)**: Start from last non-leaf, bubble each down. O(N) — not O(N log N).
 
@@ -319,32 +300,25 @@ def ipo_maximize_capital(k: int, w: int, profits: list[int], capital: list[int])
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- **Kth Largest in Stream** — Min-heap of size K; push and pop if overflows.
-- **Last Stone Weight** — Max-heap; pop two, push difference if non-zero.
+- **[Kth Largest in Stream](../coding/data-structures/10-heap.md#kth-largest-element-in-a-stream--t1) `⚡ T1`** — Min-heap of size K; push and pop if overflows.
+- **[Last Stone Weight](../coding/data-structures/10-heap.md#last-stone-weight--t1) `⚡ T1`** — Max-heap; pop two, push difference if non-zero.
 
 ### Medium
-- **K Closest Points to Origin `⚡ T1`** — Max-heap of size K on squared distance (avoid sqrt).
-- **Top K Frequent Elements `⚡ T1`** — Count with map; min-heap on `(freq, key)` of size K, or bucket sort.
-- **Reorganize String `⚡ T1`** — Max-heap by frequency; place most frequent not equal to previous.
-- **Task Scheduler `⚡ T1`** — Math: `(max_freq - 1) * (n + 1) + count_of_max_freq`, capped at `len(tasks)`.
-- **Find Median from Data Stream `⚡ T1`** — Two heaps with rebalancing.
+- **[K Closest Points to Origin](../coding/data-structures/10-heap.md#k-closest-points-to-origin--t1) `⚡ T1`** — Max-heap of size K on squared distance (avoid sqrt).
+- **[Top K Frequent Elements](../coding/data-structures/02-hashing.md#top-k-frequent-elements--t1) `⚡ T1`** — Count with map; min-heap on `(freq, key)` of size K, or bucket sort.
+- **[Reorganize String](../coding/data-structures/10-heap.md#reorganize-string-lc-767--t1) `⚡ T1`** — Max-heap by frequency; place most frequent not equal to previous.
+- **[Task Scheduler](../coding/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`** — Math: `(max_freq - 1) * (n + 1) + count_of_max_freq`, capped at `len(tasks)`.
+- **[Find Median from Data Stream](../coding/algorithms/00-sorting.md#find-median-from-data-stream-lc-295--t1) `⚡ T1`** — Two heaps with rebalancing.
 
 ### Hard
-- **Merge K Sorted Lists `⚡ T1`** — K-way merge; handle empty lists; tie-break with list index.
-- **Sliding Window Median `⚡ T1`** — Two heaps + lazy deletion counter.
-- **IPO (Maximize Capital) `⚡ T1`** — Sort by capital; max-heap of unlocked profits.
-- **Smallest Range Covering K Lists** — K-way merge tracking `[min, max]` of current window.
-- **Furthest Building `⚡ T1`** — Greedy: min-heap of climbs assigned ladders; fall back to bricks.
+- **[Merge K Sorted Lists](../coding/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — K-way merge; handle empty lists; tie-break with list index.
+- **[Sliding Window Median](../coding/data-structures/10-heap.md#sliding-window-median--t1) `⚡ T1`** — Two heaps + lazy deletion counter.
+- **[IPO (Maximize Capital)](../coding/data-structures/10-heap.md#ipo-maximize-capital--t1) `⚡ T1`** — Sort by capital; max-heap of unlocked profits.
+- **[Furthest Building](../coding/data-structures/10-heap.md#furthest-building-you-can-reach--t1) `⚡ T1`** — Greedy: min-heap of climbs assigned ladders; fall back to bricks.
+- **[Smallest Range Covering K Lists](../coding/data-structures/10-heap.md#smallest-range-covering-elements-from-k-lists-heap-variant--t1) `⚡ T1`** — K-way merge tracking `[min, max]` of current window.
 
 ---
 
@@ -400,9 +374,9 @@ Heapify runs bottom-up (calling sift-down on all internal nodes from index $N//2
 
 **How does the Two-Heap pattern find the running median of a data stream in O(log N) insert and O(1) find time?** #flashcard
 Maintain a max-heap for the lower half of values and a min-heap for the upper half.
-- **Insert `🎯 T2`**: Push to max-heap, pop max-heap top and push to min-heap.
+- **Insert**: Push to max-heap, pop max-heap top and push to min-heap.
 - **Rebalance**: If `len(min_heap) > len(max_heap)`, pop min-heap top and push to max-heap. This keeps sizes balanced (max-heap size equal to or 1 larger than min-heap).
-- **Find `⚡ T1`**: If odd total size, median is the top of max-heap. If even, median is the average of both tops.
+- **Find**: If odd total size, median is the top of max-heap. If even, median is the average of both tops.
 
 **What is the time and space complexity of using a min-heap of size K to find the K-th largest element in a stream of N elements?** #flashcard
 - **Time Complexity**: $O(N \log K)$ because we push each of the $N$ elements into the heap and pop when its size exceeds $K$ (taking $\log K$ time per element).
@@ -413,4 +387,3 @@ Negate the priority values before pushing and negate them again after popping (e
 
 **Explain the mechanism and complexity of K-way merging of sorted arrays using a heap.** #flashcard
 Push the first element of each of the $K$ arrays into a min-heap as `(val, array_index, element_index)`. Pop the minimum element, append it to the result, and push the next element from the same `array_index` to the heap (incrementing `element_index`). Time: $O(N \log K)$ where $N$ is the total elements; Space: $O(K)$ for the heap.
-

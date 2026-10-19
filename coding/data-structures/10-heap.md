@@ -3,14 +3,25 @@ tags: [coding, data-structures, heap]
 topic: heap
 difficulty: mixed
 ---
-
 # Heap Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked heap problems: top-K, scheduling/reorganization, K-way merge, Dijkstra-style.
+> **You'll be able to:** Choose the heap key and size correctly; code top-K and K-way merge cold.
+> **Prereqs:** Heap lecture · **Pair with:** [Heap lecture](../../01-data-structures/10-heap.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Heap Interview Checklist](#heap-interview-checklist) · [Top-K Pattern](#top-k-pattern) · [Scheduling / Reorganization](#scheduling--reorganization) · [K-Way Merge](#k-way-merge) · [Dijkstra / Graph](#dijkstra--graph) · [Heap Applications](#heap-applications)
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Kth Largest Element in an Array](#kth-largest-element-in-an-array--t1) · [Kth Largest Element in a Stream](#kth-largest-element-in-a-stream--t1) · [K Closest Points to Origin](#k-closest-points-to-origin--t1) · [Top K Frequent Words](#top-k-frequent-words--t1) · [Merge K Sorted Lists](#merge-k-sorted-lists--t1) · [Sliding Window Median](#sliding-window-median--t1) · [Furthest Building You Can Reach](#furthest-building-you-can-reach--t1) · [Reorganize String](#reorganize-string-lc-767--t1) · [IPO (Maximize Capital)](#ipo-maximize-capital--t1)
+> **Template:** Top-K: min-heap of size `k`; `heappush`, then `heappop` if `len > k` → O(n log k).
+> **Template:** K-way merge: push `(val, list_idx, elem_idx)` heads; pop min, push its successor.
+> **Gotchas:** Python `heapq` is min-only — negate for max · ties: add an index tiebreaker so heap never compares objects · Quickselect is average O(n) but say worst O(n²) · Top K Frequent Words needs reverse-lex tiebreak.
+
+---
 
 ## Heap Interview Checklist
 
@@ -20,12 +31,11 @@ difficulty: mixed
 - For k-way merge problems, seed the heap with one candidate from each sorted source.
 - Tie-break rules matter; many heap bugs come from the secondary key, not the heap itself.
 
-
-
-
 ---
 
 ## Top-K Pattern
+
+---
 
 ### Kth Largest Element in a Stream `⚡ T1`
 
@@ -169,6 +179,9 @@ difficulty: mixed
 > - 1 <= k <= points.length <= 10^4
 > - -10^4 <= xi, yi <= 10^4
 
+> [!failure] Tempting wrong approach
+> `sqrt` distances plus a heap of all n points. Compare squared distances and keep a size-k max-heap (negated keys).
+
 > [!info] Approach
 > Want the `k` smallest by distance without fully sorting n points. Max-heap of size `k` on squared distance (no sqrt needed — monotone with distance). For each point compute `x²+y²`. Push `(-dist, x, y)` onto a max-heap. If size exceeds `k`, pop the farthest. Remaining heap contains the `k` closest.
 
@@ -284,6 +297,9 @@ difficulty: mixed
 > - 1 <= k <= nums.length <= 10^5
 > - -10^4 <= nums[i] <= 10^4
 
+> [!failure] Tempting wrong approach
+> Full sort — O(n log n) signals you didn't think. Use a size-k min-heap (O(n log k)) or quickselect (O(n) average).
+
 > [!info] Approach
 > Sorting is O(n log n) but we only need one order-statistic. A size-k min-heap scans once. Min-heap of size exactly `k`. After processing all elements, the root is the k-th largest. For each number, push to heap. If heap exceeds size `k`, pop the minimum. Root after full pass is the answer in O(1).
 
@@ -362,6 +378,8 @@ difficulty: mixed
 ---
 
 ## Scheduling / Reorganization
+
+---
 
 ### Sliding Window Median `⚡ T1`
 
@@ -539,7 +557,50 @@ difficulty: mixed
 
 ---
 
+### Single-Threaded CPU (LC 1834) `🎯 T2`
+
+> [!example] Problem
+> `tasks[i] = [enqueueTime, processingTime]`. A single CPU, when idle, picks the available task with the **shortest processing time** (ties → smallest index) and runs it to completion. Return the processing order. **Medium.**
+>
+> ```
+> Input: [[1,2],[2,4],[3,2],[4,1]]  →  [0,2,3,1]
+> Input: [[7,10],[7,12],[7,5],[7,4],[7,2]]  →  [4,3,2,0,1]
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "pick smallest duration among tasks available at current time" · **Gotcha:** when the heap is empty, **jump** `time` to the next task's enqueue time — never simulate tick by tick (times reach 10⁹).
+
+> [!info] Approach
+> **Key insight:** two orderings at once — arrivals sorted by enqueue time (pointer), and available tasks ordered by `(duration, index)` (min-heap). Loop: push every task with `enqueue ≤ time`; if the heap is empty, fast-forward; else pop, record, `time += duration`. Same shape as IPO and Meeting Rooms with a heap.
+
+> [!note]- Python Solution
+> ```python
+> import heapq
+> def get_order(tasks):
+>     order = sorted(range(len(tasks)), key=lambda i: tasks[i][0])
+>     heap, res, time, i = [], [], 0, 0
+>     while len(res) < len(tasks):
+>         if not heap and time < tasks[order[i]][0]:
+>             time = tasks[order[i]][0]                 # CPU idle: jump
+>         while i < len(order) and tasks[order[i]][0] <= time:
+>             j = order[i]; heapq.heappush(heap, (tasks[j][1], j)); i += 1
+>         d, j = heapq.heappop(heap)
+>         res.append(j); time += d
+>     return res
+> ```
+
+> [!success] Complexity
+> **TC**: O(n log n) — sort + each task pushed/popped once | **SC**: O(n).
+
+> [!tip] Alternatives
+> Sorting tasks in place loses original indices — sort an index list (as above) or tuples `(enq, dur, idx)`.
+
+---
+
+
 ## K-Way Merge
+
+---
 
 ### Merge K Sorted Lists `⚡ T1`
 
@@ -580,6 +641,12 @@ difficulty: mixed
 > - -10^4 <= lists[i][j] <= 10^4
 > - lists[i] is sorted in ascending order.
 > - The sum of lists[i].length will not exceed 10^4.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Smallest among K heads" · **Gotcha:** Tie-break: include `list_id` as second element to avoid comparing nodes.
+
+> [!failure] Tempting wrong approach
+> Merging lists one at a time into the result — O(k·N). Use a heap of heads (O(N log k)) or pairwise divide-and-conquer.
 
 > [!info] Approach
 > Naive pairwise merge is O(nk). We want O(n log k) by always extracting the global minimum across k list heads. Min-heap of size k holds one `(value, list_id, node)` tuple per list. Pop gives the global min; push the next node from that list. Seed heap with head of each non-null list. Use `list_id` as tie-breaker to avoid comparing `ListNode` objects (not comparable in Python).
@@ -678,55 +745,7 @@ difficulty: mixed
 
 ### Kth Smallest Element in a Sorted Matrix `⚡ T1`
 
-> [!example] Problem
-> Given an n x n matrix where each of the rows and columns is sorted in ascending order, return the kth smallest element in the matrix.
-> Note that it is the kth smallest element in the sorted order, not the kth distinct element.
-> You must find a solution with a memory complexity better than O(n2).
-> 
-> **Example 1:**
-> ```
-> Input: matrix = [[1,5,9],[10,11,13],[12,13,15]], k = 8
-> Output: 13
-> Explanation: The elements in the matrix are [1,5,9,10,11,12,13,13,15], and the 8th smallest number is 13
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: matrix = [[-5]], k = 1
-> Output: -5
-> ```
-> 
-> **Constraints:**
-> - n == matrix.length == matrix[i].length
-> - 1 <= n <= 300
-> - -10^9 <= matrix[i][j] <= 10^9
-> - All the rows and columns of matrix are guaranteed to be sorted in non-decreasing order.
-> - 1 <= k <= n2
-
-> [!info] Approach
-> Each row is a sorted list — this is K-way merge of n sorted arrays. Min-heap seeded with the first element of each row. Pop `k` times; each pop advances the column in that row. Push `(matrix[i][0], i, 0)` for all `i`. Pop k-1 times advancing `(matrix[i][j+1], i, j+1)`. The k-th pop is the answer.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> >
-> def kth_smallest(matrix, k):
->     n = len(matrix)
->     heap = [(matrix[i][0], i, 0) for i in range(n)]
->     heapq.heapify(heap)
->     val = 0
->     for _ in range(k):
->         val, i, j = heapq.heappop(heap)
->         if j + 1 < n:
->             heapq.heappush(heap, (matrix[i][j + 1], i, j + 1))
->     return val
-> ```
-
-> [!success] Complexity
-> Time O(k log n); Space O(n).
-
-> [!tip] Alternatives
-> Binary search on value range — O(n log(max - min)) with O(n) count function. Better when k is close to n².
+> Full walkthrough: [Kth Smallest Element in a Sorted Matrix (LC 378)](../algorithms/11-binary-search.md#kth-smallest-element-in-a-sorted-matrix-lc-378--t1).
 
 ---
 
@@ -865,75 +884,11 @@ difficulty: mixed
 
 ## Dijkstra / Graph
 
+---
+
 ### Path with Minimum Effort `⚡ T1`
 
-> [!example] Problem
-> You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
-> A route's effort is the maximum absolute difference in heights between two consecutive cells of the route.
-> Return the minimum effort required to travel from the top-left cell to the bottom-right cell.
-> 
-> **Example 1:**
-> ```
-> Input: heights = [[1,2,2],[3,8,2],[5,3,5]]
-> Output: 2
-> Explanation: The route of [1,3,5,3,5] has a maximum absolute difference of 2 in consecutive cells.
-> This is better than the route of [1,2,2,2,5], where the maximum absolute difference is 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: heights = [[1,2,3],[3,8,4],[5,3,5]]
-> Output: 1
-> Explanation: The route of [1,2,3,4,5] has a maximum absolute difference of 1 in consecutive cells, which is better than route [1,3,5,3,5].
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: heights = [[1,2,1,1,1],[1,2,1,2,1],[1,2,1,2,1],[1,2,1,2,1],[1,1,1,2,1]]
-> Output: 0
-> Explanation: This route does not require any effort.
-> ```
-> 
-> **Constraints:**
-> - rows == heights.length
-> - columns == heights[i].length
-> - 1 <= rows, columns <= 100
-> - 1 <= heights[i][j] <= 10^6
-
-> [!info] Approach
-> Minimizing the maximum edge weight along a path — modified Dijkstra where "dist" is the bottleneck edge. Min-heap of `(effort, row, col)`. `effort` = max diff seen so far on the current path. Relax: new effort = `max(current_effort, abs(neighbor_height - current_height))`. Push `(0, 0, 0)`. For each pop, update neighbors with `max(effort, abs diff)`. Skip if already visited at a better effort.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> >
-> def minimum_effort_path(heights):
->     rows, cols = len(heights), len(heights[0])
->     dist = [[float('inf')] * cols for _ in range(rows)]
->     dist[0][0] = 0
->     heap = [(0, 0, 0)]
->     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
->     while heap:
->         effort, r, c = heapq.heappop(heap)
->         if r == rows - 1 and c == cols - 1:
->             return int(effort)
->         if effort > dist[r][c]:
->             continue
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < rows and 0 <= nc < cols:
->                 new_effort = max(effort, abs(heights[nr][nc] - heights[r][c]))
->                 if new_effort < dist[nr][nc]:
->                     dist[nr][nc] = new_effort
->                     heapq.heappush(heap, (new_effort, nr, nc))
->     return 0
-> ```
-
-> [!success] Complexity
-> Time O(m*n log(m*n)); Space O(m*n).
-
-> [!tip] Alternatives
-> Binary search on effort + BFS/DFS reachability check — O(m*n log(max_height)). Union-Find on edges sorted by weight — O(E log E), finds the answer when source and dest become connected.
+> Full walkthrough: [Path with Minimum Effort (LC 1631)](13-graph.md#path-with-minimum-effort-lc-1631--t1).
 
 ---
 
@@ -1072,73 +1027,9 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[sorting]] | [[graph-algorithms]] | [[sliding-window]] | [[two-pointers]]
-### Smallest Range Covering Elements from K Lists `⚡ T1`
-
-> [!example] Problem
-> You have k lists of sorted integers in non-decreasing order. Find the smallest range that includes at least one number from each of the k lists.
-> We define the range [a, b] is smaller than range [c, d] if b - a < d - c or a < c if b - a == d - c.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [[4,10,15,24,26],[0,9,12,20],[5,18,22,30]]
-> Output: [20,24]
-> Explanation: 
-> List 1: [4, 10, 15, 24,26], 24 is in range [20,24].
-> List 2: [0, 9, 12, 20], 20 is in range [20,24].
-> List 3: [5, 18, 22, 30], 22 is in range [20,24].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [[1,2,3],[1,2,3],[1,2,3]]
-> Output: [1,1]
-> ```
-> 
-> **Constraints:**
-> - nums.length == k
-> - 1 <= k <= 3500
-> - 1 <= nums[i].length <= 50
-> - -10^5 <= nums[i][j] <= 10^5
-> - nums[i] is sorted in non-decreasing order.
-
-> [!info] Approach
-> To keep a valid range, we must always know the current minimum and maximum among the chosen elements from each list. Keep one pointer per list and a min-heap of the current heads. Track the current maximum separately. Pop the smallest value from the heap, update the best range, advance that list, and push the next value. Stop when one list is exhausted.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> 
-> def smallest_range(nums):
->     heap = []
->     current_max = float("-inf")
->     for i, arr in enumerate(nums):
->         heapq.heappush(heap, (arr[0], i, 0))
->         current_max = max(current_max, arr[0])
->     best = [float("-inf"), float("inf")]
->     while len(heap) == len(nums):
->         current_min, list_idx, elem_idx = heapq.heappop(heap)
->         if current_max - current_min < best[1] - best[0]:
->             best = [current_min, current_max]
->         if elem_idx + 1 == len(nums[list_idx]):
->             break
->         next_val = nums[list_idx][elem_idx + 1]
->         current_max = max(current_max, next_val)
->         heapq.heappush(heap, (next_val, list_idx, elem_idx + 1))
->     return best
-> ```
-
-> [!success] Complexity
-> O(N log k) time where `N` is the total number of pushed elements; O(k) space.
-
-> [!tip] Alternatives
-> Sliding a window over the flattened sorted values is harder; the heap is the canonical solution for k sorted lists.
+## Heap Applications
 
 ---
-
-## Heap Applications
 
 ### Reorganize String (LC 767) `⚡ T1`
 
@@ -1161,6 +1052,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= s.length <= 500
 > - s consists of lowercase English letters.
+
+> [!failure] Tempting wrong approach
+> One pass interleaving characters by frequency order without re-checking — breaks when the top count dominates. Max-heap: place the top, hold it out one turn. Impossible iff `maxfreq > (n + 1) // 2`.
 
 > [!info] Approach
 > Greedy: always place the most frequent remaining character, as long as it is not the same as the last placed character. A max-heap efficiently gives us the most frequent character at each step. Use a max-heap of `(-count, char)`. At each step, pop the most frequent character. If it matches the last placed character, pop the second most frequent instead (or return "" if no second exists), then push the first back. Alternate approach (cleaner): pop the top character, append it, push the previous character back (if count > 0). This naturally avoids placing the same character twice in a row.
@@ -1274,4 +1168,5 @@ difficulty: mixed
 
 ## See Also
 
+[[sorting]] | [[graph-algorithms]] | [[sliding-window]] | [[two-pointers]]
 [[sorting]] | [[greedy]] | [[sliding-window]] | [[two-pointers]]

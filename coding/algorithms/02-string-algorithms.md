@@ -3,19 +3,25 @@ tags: [coding, algorithms, string-algorithms]
 topic: String Algorithms
 difficulty: mixed
 ---
+# String Algorithms
 
 ← [Concept deep-dive](../../02-algorithms/02-string-algorithms.md) · [Algorithms index](../../02-algorithms/README.md)
 
-# String Algorithms
+## What this covers
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+> [!abstract] In this file
+> **Covers:** Worked pattern-matching problems: KMP, Rabin-Karp, Z-function, palindrome algorithms, suffix/trie-based, string windows.
+> **You'll be able to:** Apply rolling hash / KMP when brute force is too slow.
+> **Prereqs:** String algorithms lecture · **Pair with:** [String algorithms lecture](../../02-algorithms/02-string-algorithms.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [KMP (Knuth-Morris-Pratt)](#kmp-knuth-morris-pratt) · [Rabin-Karp (Rolling Hash)](#rabin-karp-rolling-hash) · [Z-Function / Z-Algorithm](#z-function--z-algorithm) · [Palindrome Algorithms](#palindrome-algorithms) · [Suffix Array / Trie Based](#suffix-array--trie-based) · [Sliding Window on Strings](#sliding-window-on-strings)
 
-
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Longest Palindromic Substring](#longest-palindromic-substring--t1) · [Palindromic Substrings — Count](#palindromic-substrings--count) · [Permutation in String](#permutation-in-string--t1) · [Implement KMP — Failure Function + Search](#implement-kmp--failure-function--search) · [Implement Rabin-Karp](#implement-rabin-karp) · [Longest Happy Prefix](#longest-happy-prefix--t2) · [Shortest Palindrome](#shortest-palindrome)
+> **Template:** Expand around center: `2n-1` centers, `while l >= 0 and r < n and s[l] == s[r]: l -= 1; r += 1`.
+> **Template:** KMP `lps`: on mismatch `length = lps[length-1]` (cascade), never reset to 0.
+> **Gotchas:** Even-length centers (`i, i+1`) · Rabin-Karp: verify on hash hit; precompute `base^(m-1) mod p` · Shortest Palindrome needs the `#` separator · Manacher is `💤 T3` — mention only if asked.
 
 ---
 
@@ -228,6 +234,9 @@ difficulty: mixed
 > **Constraints:**
 > - 2 <= s.length <= 3 * 10^4
 > - s consists of lowercase English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Monotone in length · **Gotcha:** Use a large mod / double hash; verify on hit
 
 > [!info] Approach
 > Checking all substrings for duplicates is O(n³). We need a smarter search space reduction. Binary search on length L. For each L, use rolling hash to collect all length-L substring hashes in a set; if any hash appears twice (and verification confirms no collision), a duplicate of length L exists. Binary search `[1, n-1]`. `check(L)`: slide window of size L, compute hash in O(1) per step, store in set. If duplicate found, record it; search larger L. If not, search smaller. Total: O(n log n).
@@ -571,6 +580,9 @@ difficulty: mixed
 > Output: "bb"
 > ```
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "longest palindrome" · **Gotcha:** Must try even centers; track `(start, len)` not substrings
+
 > [!info] Approach — O(n²) expand-around-center (default)
 > For each center (n odd centers + n-1 even centers), expand while characters match. Track best. This is the expected L3 answer.
 
@@ -743,6 +755,9 @@ difficulty: mixed
 > [!example] Problem
 > Count the number of distinct substrings in string `s` (including empty string is sometimes excluded — confirm per problem).
 
+> [!tip] Recognize · Gotcha
+> **Gotcha:** Suffix trie has O(N²) nodes; suffix array with LCP is O(N log N) — mention tradeoff
+
 > [!info] Approach
 > Total substrings = n(n+1)/2. Duplicates arise when multiple suffixes share a common prefix. The LCP array captures exactly this overlap. Build suffix array SA (sorted order of all suffixes). Build LCP array via Kasai's algorithm: `LCP[i]` = longest common prefix between `SA[i]` and `SA[i-1]`. Each suffix contributes `(n - SA[i]) - LCP[i]` new distinct substrings (total length minus the shared prefix already counted). Distinct substrings = `n(n+1)/2 - sum(LCP)`.
 
@@ -866,146 +881,11 @@ difficulty: mixed
 
 ### Permutation in String `⚡ T1`
 
-> [!example] Problem
-> Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
-> In other words, return true if one of s1's permutations is the substring of s2.
-> 
-> **Example 1:**
-> ```
-> Input: s1 = "ab", s2 = "eidbaooo"
-> Output: true
-> Explanation: s2 contains one permutation of s1 ("ba").
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s1 = "ab", s2 = "eidboaoo"
-> Output: false
-> ```
-> 
-> **Constraints:**
-> - 1 <= s1.length, s2.length <= 10^4
-> - s1 and s2 consist of lowercase English letters.
-
-> [!info] Approach
-> A permutation of `s1` is any arrangement of its characters; we need a window in `s2` with the same character frequencies. Fixed-size sliding window of size `len(s1)`. Compare character frequency arrays. When `matches == 26`, a permutation is found. Track `matches` = number of characters (out of 26) where window frequency equals s1 frequency. Slide window: add right char, remove left char, update `matches` accordingly. Avoids O(26) comparison per step.
-
-> [!note]- Python Solution
-> ```python
-> def check_inclusion(s1, s2):
->     if len(s1) > len(s2):
->         return False
->     need = [0] * 26
->     have = [0] * 26
->     for c in s1:
->         need[ord(c) - ord('a')] += 1
-> 
->     matches = sum(1 for i in range(26) if need[i] == 0)  # chars not needed start matched
-> 
->     def update(c, delta):
->         nonlocal matches
->         idx = ord(c) - ord('a')
->         old = have[idx]
->         have[idx] += delta
->         new = have[idx]
->         if old == need[idx]:
->             matches -= 1   # was matched, now not
->         if new == need[idx]:
->             matches += 1   # now matched
->         return matches
-> 
->     k = len(s1)
->     for i in range(k):
->         update(s2[i], 1)
->     if matches == 26:
->         return True
->     for i in range(k, len(s2)):
->         update(s2[i], 1)
->         update(s2[i - k], -1)
->         if matches == 26:
->             return True
->     return False
-> ```
-
-> [!success] Complexity
-> Time O(|s1| + |s2|) | Space O(1) (26-element arrays).
-
-> [!tip] Alternatives
-> Sort both: O(n log n), only works for single query. Counter comparison per window: O(26n) = O(n) with worse constant.
-
----
+> Full walkthrough: [Permutation in String (LC 567)](04-sliding-window.md#permutation-in-string-lc-567--t1).
 
 ### Regular Expression Matching (LC 10)
 
-> [!example] Problem
-> Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:
-> The matching should cover the entire input string (not partial).
-> 
-> **Example 1:**
-> ```
-> Input: s = "aa", p = "a"
-> Output: false
-> Explanation: "a" does not match the entire string "aa".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aa", p = "a*"
-> Output: true
-> Explanation: '*' means zero or more of the preceding element, 'a'. Therefore, by repeating 'a' once, it becomes "aa".
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "ab", p = ".*"
-> Output: true
-> Explanation: ".*" means "zero or more (*) of any character (.)".
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 20
-> - 1 <= p.length <= 20
-> - s contains only lowercase English letters.
-> - p contains only lowercase English letters, '.', and '*'.
-> - It is guaranteed for each appearance of the character '*', there will be a previous valid character to match.
-
-> [!info] Approach
-> `'*'` creates a choice — use the preceding element 0 times (skip `pattern[i-1]` and `'*'`) or 1+ times (consume `s[j]` if it matches). These choices overlap across subproblems → DP. `dp[i][j]` = True if `s[:i]` matches `p[:j]`.
-
->   - Base: `dp[0][0] = True`. `dp[0][j] = True` if `p[j-1] == '*'` and `dp[0][j-2] == True` (star eliminates the preceding element).
->   - Transition: if `p[j-1] in {s[i-1], '.'}`: `dp[i][j] = dp[i-1][j-1]`.
->   - Else if `p[j-1] == '*'`: `dp[i][j] = dp[i][j-2]` (zero uses) OR (`dp[i-1][j]` if `p[j-2] in {s[i-1], '.'}`) (one or more uses).
-
-> [!note]- Python Solution
-> ```python
-> def is_match(s, p):
->     m, n = len(s), len(p)
->     dp = [[False] * (n + 1) for _ in range(m + 1)]
->     dp[0][0] = True
->     # Base: patterns like a*, a*b*, a*b*c* can match empty string
->     for j in range(2, n + 1):
->         if p[j - 1] == '*':
->             dp[0][j] = dp[0][j - 2]
-> >
->     for i in range(1, m + 1):
->         for j in range(1, n + 1):
->             if p[j - 1] in {s[i - 1], '.'}:
->                 dp[i][j] = dp[i - 1][j - 1]
->             elif p[j - 1] == '*':
->                 dp[i][j] = dp[i][j - 2]  # zero uses of preceding element
->                 if p[j - 2] in {s[i - 1], '.'}:
->                     dp[i][j] = dp[i][j] or dp[i - 1][j]  # one+ uses
->     return dp[m][n]
-> ```
-
-> [!success] Complexity
-> Time O(m·n) | Space O(m·n). Space reducible to O(n) with rolling row.
-
-> [!tip] Alternatives
-> - Recursive with memoization: same O(m·n), often cleaner logic — top-down avoids filling unused states.
-> - NFA simulation: O(m·n) advanced, treats `'*'` as epsilon transitions; naturally handles complex patterns but harder to code in interviews.
-
----
+> Full walkthrough: [Regular Expression Matching](15-dynamic-programming.md#regular-expression-matching).
 
 ### Wildcard Matching (LC 44)
 
@@ -1038,6 +918,9 @@ difficulty: mixed
 > - 0 <= s.length, p.length <= 2000
 > - s contains only lowercase English letters.
 > - p contains only lowercase English letters, '?' or '*'.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** `?` and `*` · **Gotcha:** `dp(i+1,j)` consumes; `dp(i,j+1)` = empty `*`
 
 > [!info] Approach
 > `'*'` can match any sequence — creates branching over all possible lengths. DP avoids recomputing overlapping subproblems. `dp[i][j]` = True if `s[:i]` matches `p[:j]`.
@@ -1076,70 +959,7 @@ difficulty: mixed
 
 ### Distinct Subsequences (LC 115) `🎯 T2`
 
-> [!example] Problem
-> Given two strings s and t, return the number of distinct subsequences of s which equals t.
-> The test cases are generated so that the answer fits on a 32-bit signed integer.
-> 
-> **Example 1:**
-> ```
-> Input: s = "rabbbit", t = "rabbit"
-> Output: 3
-> Explanation:
-> As shown below, there are 3 ways you can generate "rabbit" from s.
-> rabbbit
-> rabbbit
-> rabbbit
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "babgbag", t = "bag"
-> Output: 5
-> Explanation:
-> As shown below, there are 5 ways you can generate "bag" from s.
-> babgbag
-> babgbag
-> babgbag
-> babgbag
-> babgbag
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length, t.length <= 1000
-> - s and t consist of English letters.
-
-> [!info] Approach
-> At each character of `s`, we choose to include it (matching `t[j]`) or skip it. These choices create overlapping subproblems → DP. `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`.
-
->   - Base: `dp[i][0] = 1` for all i (empty `t` matched by any prefix of `s`). `dp[0][j] = 0` for j > 0.
->   - Transition: if `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use this char OR skip it).
->   - Else: `dp[i][j] = dp[i-1][j]` (must skip `s[i-1]`).
-
-> [!note]- Python Solution
-> ```python
-> def num_distinct(s, t):
->     m, n = len(s), len(t)
->     # Space-optimized 1D DP (process j in reverse to avoid overwrite)
->     dp = [0] * (n + 1)
->     dp[0] = 1  # empty t matched by empty prefix
-> >
->     for i in range(1, m + 1):
->         # Traverse right to left to use values from dp[i-1][...]
->         for j in range(n, 0, -1):
->             if s[i - 1] == t[j - 1]:
->                 dp[j] += dp[j - 1]
->         # dp[0] stays 1 (empty t always matchable)
->     return dp[n]
-> ```
-
-> [!success] Complexity
-> Time O(m·n) | Space O(n) with 1D optimization.
-
-> [!tip] Alternatives
-> - Memoized recursion: same O(m·n) — `dfs(i, j)` returns ways to form `t[j:]` from `s[i:]`; cleaner top-down logic.
-> - Early termination: if `len(s) - i < len(t) - j`, return 0 (impossible to match remaining t).
-
----
+> Full walkthrough: [Distinct Subsequences](15-dynamic-programming.md#distinct-subsequences--t2).
 
 ### Shortest Palindrome
 
@@ -1162,6 +982,9 @@ difficulty: mixed
 > **Constraints:**
 > - 0 <= s.length <= 5 * 10^4
 > - s consists of lowercase English letters only.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "prepend fewest chars" · **Gotcha:** Separator prevents overlap past `s`
 
 > [!info] Approach
 > We need the longest palindromic prefix. Once we know that prefix, the remaining suffix must be reversed and prepended. Build a KMP prefix table on `s + '#' + reverse(s)` to find the longest prefix of `s` that matches a suffix of the reversed string. The LPS value at the end gives the longest palindromic prefix length. Prepend the reverse of the remaining suffix.

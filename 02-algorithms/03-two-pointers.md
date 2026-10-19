@@ -3,46 +3,23 @@ module: 02-algorithms
 topic: Two Pointers
 tags: [algorithms, two-pointers]
 ---
+# Two Pointers
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Three variants: converging (sorted pairs), fast/slow (cycles, middle), same-direction write pointer (in-place filtering, partition).
+> **You'll be able to:** Identify which variant applies; justify each pointer move with a one-line 'why this can't skip the answer' proof.
+> **Prereqs:** Arrays, sorting · **Pair with:** [Two-pointer problems](../coding/algorithms/03-two-pointers.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY Two Pointers exists
-├── Brute-force pair enumeration is O(n²) — too slow for n ≥ 10⁵
-│   ├── Sorted order creates monotone structure: moving one pointer predictably affects the other
-│   └── Eliminate invalid pairs in O(1) instead of checking all combinations
-WHAT it is
-├── Two indices moving through a sequence, together encoding the current candidate
-│   ├── Opposite ends: left=0, right=n-1, converge inward (2-sum, container with most water)
-│   └── Same direction: slow/fast (cycle detection, remove duplicates, nth-from-end)
-HOW it works
-├── Opposite-ends pattern (sorted array required)
-│   ├── sum < target → move left rightward (increase sum)
-│   ├── sum > target → move right leftward (decrease sum)
-│   └── sum == target → record; advance both
-├── Fast/slow pattern (linked list or array)
-│   ├── fast advances 2, slow advances 1 → meet in cycle if one exists
-│   └── Separate by k: advance fast k steps first, then move both
-WHEN to use
-├── "pair / triplet summing to target in sorted array" → opposite-ends O(n)
-├── "detect cycle in linked list" → Floyd's fast/slow O(n) O(1)
-└── "remove duplicates / partition in-place" → slow/fast write pointer O(n)
-WHAT can go wrong
-├── Using on unsorted array for sum problems → correctness breaks (sort first)
-├── Infinite loop: forgetting to advance both pointers on match
-└── Triplet/k-sum: not deduplicating pointers → duplicate results
-DECISION
-└── Sorted array + pair/triplet constraint → two pointers O(n); unsorted + O(n) needed → hashmap instead
-```
+**Sections:** [Core Idea](#core-idea) · [When to Use](#when-to-use) · [Variant 1: Converging Pointers (Opposite Ends)](#variant-1-converging-pointers-opposite-ends) · [Variant 2: Fast / Slow Pointers (Floyd's)](#variant-2-fast--slow-pointers-floyds) · [Variant 3: Same-Direction Pointers](#variant-3-same-direction-pointers) · [Complexity Summary](#complexity-summary) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Find pairs or partition a sequence in O(n) without nested loops, by exploiting sorted order or pointer separation.
 - **Core insight**: In a sorted array, the sum of arr[left] + arr[right] is monotonically controlled — moving one pointer has a guaranteed directional effect on the sum.
@@ -50,12 +27,9 @@ DECISION
 - **Why it works**: Each pointer moves at most n steps in one direction → O(n) total comparisons for the whole search.
 - **Where it breaks**: Unsorted data (sort first, adding O(n log n)); problems requiring non-contiguous or multi-pass pairing where pointer convergence doesn't cover all candidates.
 
-
-
-
 ---
 
-# Two Pointers
+### One-Page Map
 
 ```
 [TWO POINTERS — MINDMAP]
@@ -84,21 +58,22 @@ DECISION
 ├── COMPLEXITY
 │   ├── Time:  O(N) — each pointer moves at most N steps total
 │   └── Space: O(1) — no auxiliary structure
-├── TRIGGER PATTERNS (when to use)
-│   ├── "Sorted array" + "find pair with sum = target" → opposite ends
-│   ├── "Remove duplicates / move zeros in-place" → slow/fast same dir
-│   ├── "Palindrome check" → opposite ends meeting middle
-│   ├── "Container with most water / trapping rain water" → opposite ends
-│   ├── "3Sum / 4Sum" → fix outer loop, two-pointer inner
-│   ├── "Linked list: cycle, middle, kth from end" → fast/slow pointers
-│   └── "Merge two sorted arrays" → two-pointer merge
-└── GOTCHAS
-    ├── Only works on sorted input for pair-sum variant — sort first if needed
-    ├── Duplicate handling: skip duplicates after recording answer to avoid repeats
-    ├── Linked list cycle: Floyd's — fast moves 2, slow moves 1; meet ≠ cycle start
-    ├── Off-by-one: use left < right (not <=) to avoid processing same element twice
-    └── 3Sum time is O(N²) — sort + two-pointer inner; not O(N)
+└── TRIGGER PATTERNS (when to use)
+    ├── "Sorted array" + "find pair with sum = target" → opposite ends
+    ├── "Remove duplicates / move zeros in-place" → slow/fast same dir
+    ├── "Palindrome check" → opposite ends meeting middle
+    ├── "Container with most water / trapping rain water" → opposite ends
+    ├── "3Sum / 4Sum" → fix outer loop, two-pointer inner
+    ├── "Linked list: cycle, middle, kth from end" → fast/slow pointers
+    └── "Merge two sorted arrays" → two-pointer merge
 ```
+
+> [!warning] Common mistakes
+> - Only works on sorted input for pair-sum variant — sort first if needed
+> - Duplicate handling: skip duplicates after recording answer to avoid repeats
+> - Linked list cycle: Floyd's — fast moves 2, slow moves 1; meet ≠ cycle start
+> - Off-by-one: use left < right (not <=) to avoid processing same element twice
+> - 3Sum time is O(N²) — sort + two-pointer inner; not O(N)
 
 ## When to Use
 

@@ -3,14 +3,25 @@ tags: [coding, data-structures, queue]
 topic: queue
 difficulty: mixed
 ---
-
 # Queue Problems
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked queue problems: monotonic deque, BFS (single/multi-source), topological sort, queue design, scheduling.
+> **You'll be able to:** Write BFS and deque solutions fluently.
+> **Prereqs:** Queue lecture · **Pair with:** [Queue lecture](../../01-data-structures/06-queue.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Queue Patterns to Recognize](#queue-patterns-to-recognize) · [Monotonic Deque](#monotonic-deque) · [BFS / Level-order](#bfs--level-order) · [BFS Multi-Source](#bfs-multi-source) · [BFS Single-Source](#bfs-single-source) · [Topological Sort (Kahn's BFS)](#topological-sort-kahns-bfs) · [Design](#design) · [Priority Queue / Heap](#priority-queue--heap)
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Sliding Window Maximum](#sliding-window-maximum--t1) · [Binary Tree Level Order Traversal](#binary-tree-level-order-traversal--t2) · [Binary Tree Right Side View](#binary-tree-right-side-view--t2) · [01 Matrix](#01-matrix--t1) · [Shortest Path in Binary Matrix](#shortest-path-in-binary-matrix--t1) · [Open the Lock](#open-the-lock--t1) · [Course Schedule](#course-schedule--t1) · [Find Median from Data Stream](#find-median-from-data-stream--t1) · [Task Scheduler](#task-scheduler--t1)
+> **Template:** Monotonic deque: pop back while `a[dq[-1]] <= a[i]`; pop front when `dq[0] <= i - k`; answer is `a[dq[0]]`.
+> **Template:** Two heaps for median: max-heap low half (negated), min-heap high half, rebalance so `len(lo) - len(hi) ∈ {0, 1}`.
+> **Gotchas:** Use `collections.deque`, never `list.pop(0)` · deque stores indices so you can expire by position · BFS shortest path = distance at first pop of target · Alien Dictionary: prefix-longer-word case → invalid.
+
+---
 
 ## Queue Patterns to Recognize
 
@@ -21,114 +32,21 @@ difficulty: mixed
 - **Kahn's BFS:** Use when the queue stores zero in-degree nodes for topological ordering or cycle detection.
 - **Common pitfalls:** Mark visited when enqueuing, snapshot the queue size for level order, and always handle stale deque entries before using the front element.
 
-
-
-
 ---
 
 ## Monotonic Deque
 
+---
+
 ### Sliding Window Maximum `⚡ T1`
 
-> [!example] Problem
-> You are given an array of integers nums, there is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
-> Return the max sliding window.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
-> Output: [3,3,5,5,6,7]
-> Explanation: 
-> Window position                Max
-> ---------------               -----
-> [1  3  -1] -3  5  3  6  7       3
->  1 [3  -1  -3] 5  3  6  7       3
->  1  3 [-1  -3  5] 3  6  7       5
->  1  3  -1 [-3  5  3] 6  7       5
->  1  3  -1  -3 [5  3  6] 7       6
->  1  3  -1  -3  5 [3  6  7]      7
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1], k = 1
-> Output: [1]
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-> - 1 <= k <= nums.length
-
-> [!info] Approach
-> Naive O(nk) rescans the window on every step; we need O(n). A deque that is always sorted descending by value. The front is always the max of the current window. For each index `i` — (1) evict from the back any index whose value ≤ `nums[i]` (they are dominated and can never be future maxima; using `<=` also drops older duplicates); (2) evict from the front if it has fallen outside the window; (3) append `i`; (4) once `i >= k-1`, the front of the deque is the answer. Each index is enqueued and dequeued at most once → O(n) total.
-
-> - **EDGE CASES:** `k = 1` returns the original array; `k = len(nums)` returns a single maximum.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def max_sliding_window(nums, k):
->     dq: deque[int] = deque()   # stores indices
->     values are monotonically decreasing
->     result = []
->     for i, x in enumerate(nums):
->         # remove dominated indices from back
->         while dq and nums[dq[-1]] <= x:
->             dq.pop()
->         dq.append(i)
->         # remove expired index from front
->         if dq[0] < i - k + 1:
->             dq.popleft()
->         if i >= k - 1:
->             result.append(nums[dq[0]])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n) — each index pushed/popped once. Space O(k).
-
-> [!tip] Alternatives
-> - Max-heap with lazy deletion: O(n log n) — simpler to write but asymptotically worse.
-> - Segment tree: O(n log n) build + O(log n) per query — overkill for a contiguous sliding window.
+> Full walkthrough: [Sliding Window Maximum (LC 239)](../algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1).
 
 ---
 
 ### Sliding Window Minimum
 
-> [!example] Problem
-> Same as Sliding Window Maximum but return the minimum of each window of size `k`.
-
-> [!info] Approach
-> Same argument — need O(n), not O(nk). Monotonic increasing deque (front = minimum). Identical to the maximum variant; flip one comparison — evict from the back when `nums[back] >= x` instead of `<=`. The front always holds the index of the current window minimum. Using `>=` keeps the deque short by discarding older duplicates.
-
-> - **EDGE CASES:** `k = 1` returns the original array; duplicate values are safe because the deque stores indices, not values.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def min_sliding_window(nums, k):
->     dq: deque[int] = deque()   # indices
->     values monotonically increasing
->     result = []
->     for i, x in enumerate(nums):
->         while dq and nums[dq[-1]] >= x:
->             dq.pop()
->         dq.append(i)
->         if dq[0] < i - k + 1:
->             dq.popleft()
->         if i >= k - 1:
->             result.append(nums[dq[0]])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(k).
-
-> [!tip] Alternatives
-> Same as Sliding Window Maximum. The only change is the eviction comparison on the back.
+> Full walkthrough: [Sliding Window Minimum (LC variant)](../algorithms/04-sliding-window.md#sliding-window-minimum-lc-variant).
 
 ---
 
@@ -201,69 +119,7 @@ difficulty: mixed
 
 ### Jump Game VI (DP + Sliding Window Max) `🎯 T2`
 
-> [!example] Problem
-> You are given a 0-indexed integer array nums and an integer k.
-> You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
-> You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
-> Return the maximum score you can get.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,-1,-2,4,-7,3], k = 2
-> Output: 7
-> Explanation: You can choose your jumps forming the subsequence [1,-1,4,3] (underlined above). The sum is 7.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [10,-5,-2,4,0,3], k = 3
-> Output: 17
-> Explanation: You can choose your jumps forming the subsequence [10,4,3] (underlined above). The sum is 17.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,-5,-20,4,-1,3,-6,-3], k = 2
-> Output: 0
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length, k <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-
-> [!info] Approach
-> Naive DP `dp[i] = nums[i] + max(dp[i-k..i-1])` is O(nk) — the inner max over a window of size k is expensive. DP with a monotonic decreasing deque to maintain `max(dp[i-k..i-1])` in O(1) per step. `dp[i] = nums[i] + max(dp[j] for j in range(max(0, i-k), i))`. Use a deque of indices in decreasing `dp` value order. Before computing `dp[i]`, evict indices outside the window `[i-k, i-1]` from the front. The front of the deque is `argmax` dp in the window.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def max_result(nums, k):
->     n = len(nums)
->     dp = [0] * n
->     dp[0] = nums[0]
->     dq: deque[int] = deque([0])   # indices
->     dp values decreasing
-> >
->     for i in range(1, n):
->         # evict out-of-window front
->         while dq and dq[0] < i - k:
->             dq.popleft()
->         dp[i] = nums[i] + dp[dq[0]]
->         # maintain decreasing invariant on back
->         while dq and dp[dq[-1]] <= dp[i]:
->             dq.pop()
->         dq.append(i)
-> >
->     return dp[n - 1]
-> ```
-
-> [!success] Complexity
-> Time O(n). Space O(n) for dp, O(k) for deque.
-
-> [!tip] Alternatives
-> - Max-heap: O(n log n) — store `(-dp[i], i)`, skip stale indices. Simpler to code, worse asymptotically.
-> - Segment tree range-max: O(n log n) — overkill here.
+> Full walkthrough: [Jump Game VI (LC 1696)](../algorithms/04-sliding-window.md#jump-game-vi-lc-1696--t2).
 
 ---
 
@@ -321,6 +177,8 @@ difficulty: mixed
 ---
 
 ## BFS / Level-order
+
+---
 
 ### Binary Tree Level Order Traversal `🎯 T2`
 
@@ -463,146 +321,17 @@ difficulty: mixed
 
 ## BFS Multi-Source
 
+---
+
 ### 01 Matrix `⚡ T1`
 
-> [!example] Problem
-> Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
-> The distance between two cells sharing a common edge is 1.
-> 
-> **Example 1:**
-> ```
-> Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
-> Output: [[0,0,0],[0,1,0],[0,0,0]]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
-> Output: [[0,0,0],[0,1,0],[1,2,1]]
-> ```
-> 
-> **Constraints:**
-> - m == mat.length
-> - n == mat[i].length
-> - 1 <= m, n <= 10^4
-> - 1 <= m * n <= 10^4
-> - mat[i][j] is either 0 or 1.
-> - There is at least one 0 in mat.
-
-> [!info] Approach
-> Running BFS from each `1` independently is O((m×n)²) — too slow. All `0` cells are sources; they spread distance simultaneously. Multi-source BFS seeded with all `0` cells at distance 0. Initialize all `0` cells with distance 0 in the queue. Initialize all `1` cells with `inf`. BFS outward — first time a `1` cell is reached sets its distance. BFS guarantees minimum distance.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def update_matrix(mat):
->     rows, cols = len(mat), len(mat[0])
->     dist = [[float('inf')] * cols for _ in range(rows)]
->     queue: deque[tuple[int, int]] = deque()
->     for r in range(rows):
->         for c in range(cols):
->             if mat[r][c] == 0:
->                 dist[r][c] = 0
->                 queue.append((r, c))
->     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
->     while queue:
->         r, c = queue.popleft()
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < rows and 0 <= nc < cols and dist[nr][nc] > dist[r][c] + 1:
->                 dist[nr][nc] = dist[r][c] + 1
->                 queue.append((nr, nc))
->     return dist
-> ```
-
-> [!success] Complexity
-> Time O(m × n). Space O(m × n).
-
-> [!tip] Alternatives
-> - BFS from each `1` separately: O((m×n)²) — correct, too slow.
-> - DP in two passes (top-left, then bottom-right): O(m×n) with O(1) extra space — cleaner but harder to generalize.
+> Full walkthrough: [01 Matrix (LC 542)](13-graph.md#01-matrix-lc-542--t1).
 
 ---
 
 ### Walls and Gates `⚡ T1`
 
-> [!example] Problem
-> You are given an `m x n` grid `rooms` initialized with these three possible values.
-> 
-> 	
-> - `-1` A wall or an obstacle.
-> 	
-> - `0` A gate.
-> 	
-> - `INF` Infinity means an empty room. We use the value `2^31 - 1 = 2147483647` to represent `INF` as you may assume that the distance to a gate is less than `2147483647`.
-> 
-> Fill each empty room with the distance to *its nearest gate*. If it is impossible to reach a gate, it should be filled with `INF`.
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input:** rooms = [[2147483647,-1,0,2147483647],[2147483647,2147483647,2147483647,-1],[2147483647,-1,2147483647,-1],[0,-1,2147483647,2147483647]]
-> **Output:** [[3,-1,0,1],[2,2,1,-1],[1,-1,2,-1],[0,-1,3,4]]
-> 
-> ```
-> 
-> Example 2:
-> 
-> ```
-> 
-> **Input:** rooms = [[-1]]
-> **Output:** [[-1]]
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `m == rooms.length`
-> 	
-> - `n == rooms[i].length`
-> 	
-> - `1 <= m, n <= 250`
-> 	
-> - `rooms[i][j]` is `-1`, `0`, or `2^31 - 1`.
-
-> [!info] Approach
-> Starting BFS from each room to find the nearest gate is O(G × m × n). Starting from all gates simultaneously is O(m × n). Multi-source BFS from all gates. Enqueue all cells with value `0` (gates). BFS outward — each `INF` cell reached gets distance = parent's distance + 1. Walls (`-1`) are never enqueued or updated.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def walls_and_gates(rooms):
->     INF = 2**31 - 1
->     rows, cols = len(rooms), len(rooms[0])
->     queue: deque[tuple[int, int]] = deque()
->     for r in range(rows):
->         for c in range(cols):
->             if rooms[r][c] == 0:
->                 queue.append((r, c))
->     dirs = [(0, 1), (0, -1), (1, 0), (-1, 0)]
->     while queue:
->         r, c = queue.popleft()
->         for dr, dc in dirs:
->             nr, nc = r + dr, c + dc
->             if 0 <= nr < rows and 0 <= nc < cols and rooms[nr][nc] == INF:
->                 rooms[nr][nc] = rooms[r][c] + 1
->                 queue.append((nr, nc))
-> ```
-
-> [!success] Complexity
-> Time O(m × n). Space O(m × n).
-
-> [!tip] Alternatives
-> - BFS per gate: O(G × m × n) — correct, strictly worse.
-> - Dijkstra: All edge weights = 1, so BFS suffices. Dijkstra adds log factor unnecessarily.
+> Full walkthrough: [Walls and Gates (LC 286)](13-graph.md#walls-and-gates-lc-286--t1).
 
 ---
 
@@ -680,6 +409,12 @@ difficulty: mixed
 > - 1 <= n <= 100
 > - grid[i][j] is 0 or 1
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Min path in 0-grid, 8 directions" · **Gotcha:** Return -1 if `grid[0][0]` or `grid[n-1][n-1]` is 1. Mark visited before enqueue (not after dequeue) to avoid TLE.
+
+> [!failure] Tempting wrong approach
+> DFS tracking the min — explores exponentially many paths. BFS is shortest in an unweighted grid; mark visited on *enqueue*, not dequeue.
+
 > [!info] Approach
 > All edges have equal weight (each step costs 1), so BFS gives the shortest path. Single-source BFS from `(0,0)` over open (value `0`) cells. If start or end is `1`, return -1 immediately. BFS with 8 directions. The first time `(n-1, n-1)` is dequeued, return the current distance + 1.
 
@@ -755,6 +490,9 @@ difficulty: mixed
 > 	
 > - `0 <= |x| + |y| <= 300`
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Min knight moves in infinite chessboard" · **Gotcha:** Symmetry: work in first quadrant `(abs(x), abs(y))` — 4x fewer states to explore.
+
 > [!info] Approach
 > All moves have cost 1; BFS gives the minimum number of moves. BFS from `(0,0)` with 8 knight-move directions. Exploit symmetry to search in the first quadrant only, reducing state space by 4×. Reflect `(x, y)` to `(|x|, |y|)` — knight distances are symmetric. BFS from `(0,0)` inside a bounded box `[-2..x+2] × [-2..y+2]`; the `+2` buffer handles the small detours needed near the origin.
 
@@ -790,6 +528,8 @@ difficulty: mixed
 ---
 
 ## BFS Single-Source
+
+---
 
 ### Open the Lock `⚡ T1`
 
@@ -830,6 +570,9 @@ difficulty: mixed
 > - target will not be in the list deadends.
 > - target and deadends[i] consist of digits only.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Min turns to reach target combination from 0000" · **Gotcha:** Bidirectional BFS reduces search space dramatically for this problem.
+
 > [!info] Approach
 > Each lock state is a node; each valid turn is an edge with weight 1. Shortest path → BFS. BFS on the 4-digit string state space. Each state has 8 neighbors (4 wheels × 2 directions). Mark deadends and the start as visited before BFS begins. The first time `target` is reached, return the current depth.
 
@@ -869,74 +612,7 @@ difficulty: mixed
 
 ### Bus Routes
 
-> [!example] Problem
-> You are given an array routes representing bus routes where routes[i] is a bus route that the ith bus repeats forever.
-> You will start at the bus stop source (You are not on any bus initially), and you want to go to the bus stop target. You can travel between bus stops by buses only.
-> Return the least number of buses you must take to travel from source to target. Return -1 if it is not possible.
-> 
-> **Example 1:**
-> ```
-> Input: routes = [[1,2,7],[3,6,7]], source = 1, target = 6
-> Output: 2
-> Explanation: The best strategy is take the first bus to the bus stop 7, then take the second bus to the bus stop 6.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: routes = [[7,12],[4,5,15],[6],[15,19],[9,12,13]], source = 15, target = 12
-> Output: -1
-> ```
-> 
-> **Constraints:**
-> - 1 <= routes.length <= 500.
-> - 1 <= routes[i].length <= 10^5
-> - All the values of routes[i] are unique.
-> - sum(routes[i].length) <= 10^5
-> - 0 <= routes[i][j] < 10^6
-> - 0 <= source, target < 10^6
-
-> [!info] Approach
-> BFS over stops would revisit stops on the same route repeatedly. Model buses (routes) as nodes, not stops — each bus is taken at cost 1. BFS where each state is a bus route index, not a stop. Build `stop → [bus_indices]` map. BFS starts from all buses that include `source`. For each bus dequeued, visit all its stops; if `target` is reached, return bus count. For each stop on this bus, enqueue all other buses that serve it and haven't been visited. Mark buses as visited to avoid re-boarding.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque, defaultdict
-> >
-> def num_buses_to_destination(routes, source, target):
->     if source == target:
->         return 0
->     stop_to_buses = defaultdict(list)
->     for bus_idx, route in enumerate(routes):
->         for stop in route:
->             stop_to_buses[stop].append(bus_idx)
-> >
->     visited_buses = set()
->     visited_stops = {source}
->     queue: deque[tuple[int, int]] = deque()  # (bus_index, buses_taken)
->     for bus in stop_to_buses[source]:
->         queue.append((bus, 1))
->         visited_buses.add(bus)
-> >
->     while queue:
->         bus, count = queue.popleft()
->         for stop in routes[bus]:
->             if stop == target:
->                 return count
->             if stop not in visited_stops:
->                 visited_stops.add(stop)
->                 for next_bus in stop_to_buses[stop]:
->                     if next_bus not in visited_buses:
->                         visited_buses.add(next_bus)
->                         queue.append((next_bus, count + 1))
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(sum of route lengths). Space O(sum of route lengths).
-
-> [!tip] Alternatives
-> - BFS over stops with state `(stop, buses_used)`: correct but revisits stops on the same route — slower.
-> - Dijkstra: all edges have weight 1 so BFS suffices.
+> Full walkthrough: [Bus Routes](13-graph.md#bus-routes--t2).
 
 ---
 
@@ -944,6 +620,9 @@ difficulty: mixed
 
 > [!example] Problem
 > Given an `m × n` grid of `0` (free) and `1` (obstacle), you can eliminate at most `k` obstacles. Return the minimum steps from `(0,0)` to `(m-1, n-1)`, or -1 if impossible.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Min steps allowing K obstacle removals" · **Gotcha:** State space is `R × C × (K+1)` — mark visited per `(r, c, k)` not just `(r, c)`.
 
 > [!info] Approach
 > Standard BFS doesn't capture how many eliminations have been used — two paths to the same cell may have different remaining `k`. The state must include `k`. BFS with 3D state `(row, col, remaining_k)`. Enqueue `(0, 0, k)` with 0 steps. For each cell, try all 4 neighbors — if a neighbor is free, step to it; if it's an obstacle and `remaining_k > 0`, step to it and decrement `k`. Mark `(r, c, k)` as visited — not just `(r, c)`.
@@ -988,74 +667,7 @@ difficulty: mixed
 
 ### Cheapest Flights Within K Stops
 
-> [!example] Problem
-> There are n cities connected by some number of flights. You are given an array flights where flights[i] = [fromi, toi, pricei] indicates that there is a flight from city fromi to city toi with cost pricei.
-> You are also given three integers src, dst, and k, return the cheapest price from src to dst with at most k stops. If there is no such route, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: n = 4, flights = [[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src = 0, dst = 3, k = 1
-> Output: 700
-> Explanation:
-> The graph is shown above.
-> The optimal path with at most 1 stop from city 0 to 3 is marked in red and has cost 100 + 600 = 700.
-> Note that the path through cities [0,1,2,3] is cheaper but is invalid because it uses 2 stops.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 1
-> Output: 200
-> Explanation:
-> The graph is shown above.
-> The optimal path with at most 1 stop from city 0 to 2 is marked in red and has cost 100 + 100 = 200.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: n = 3, flights = [[0,1,100],[1,2,100],[0,2,500]], src = 0, dst = 2, k = 0
-> Output: 500
-> Explanation:
-> The graph is shown above.
-> The optimal path with no stops from city 0 to 2 is marked in red and has cost 500.
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 100
-> - 0 <= flights.length <= (n * (n - 1) / 2)
-> - flights[i].length == 3
-> - 0 <= fromi, toi < n
-> - fromi != toi
-> - 1 <= pricei <= 10^4
-> - There will not be any multiple flights between two cities.
-> - 0 <= src, dst, k < n
-> - src != dst
-
-> [!info] Approach
-> Standard Dijkstra may revisit a node via a longer path that uses fewer stops, blocking a cheaper path that needs more stops. The stop count is part of the state. BFS level-by-level (level = number of stops used). At each level, update costs. Use Bellman-Ford with exactly `k+1` relaxation rounds. Maintain `prices[node]` = cheapest price to reach `node` using at most `current_round` hops. Use a copy of prices per round to avoid using within-round updates.
-
-> [!note]- Python Solution
-> ```python
-> def find_cheapest_price(n, flights, src, dst, k):
->     prices = [float('inf')] * n
->     prices[src] = 0
-> >
->     for _ in range(k + 1):   # at most k+1 edges = k stops
->         temp = prices[:]
->         for u, v, w in flights:
->             if prices[u] != float('inf') and prices[u] + w < temp[v]:
->                 temp[v] = prices[u] + w
->         prices = temp
-> >
->     return prices[dst] if prices[dst] != float('inf') else -1
-> ```
-
-> [!success] Complexity
-> Time O(k × E) where E = number of flights. Space O(n).
-
-> [!tip] Alternatives
-> - Dijkstra with state `(cost, node, stops)`: O(E log(n × k)). Valid, slightly faster for dense graphs.
-> - BFS level-by-level over price: same as above, slightly different framing.
+> Full walkthrough: [Cheapest Flights Within K Stops](../algorithms/13-graph-algorithms.md#cheapest-flights-within-k-stops--t1).
 
 ---
 
@@ -1096,6 +708,9 @@ difficulty: mixed
 > - 0 <= arr[i] < arr.length
 > - 0 <= start < arr.length
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Reach any index with value 0 via jumps ±arr[i]" · **Gotcha:** DFS also works but BFS gives shortest path to zero if needed as follow-up.
+
 > [!info] Approach
 > We need to determine reachability — BFS from `start` explores all reachable indices. BFS treating indices as graph nodes; edges are the two jump targets. Enqueue `start`. For each index, compute both jump targets. If in bounds and unvisited, enqueue. Return True immediately if a target index has value 0.
 
@@ -1131,6 +746,8 @@ difficulty: mixed
 
 ## Topological Sort (Kahn's BFS)
 
+---
+
 ### Course Schedule `⚡ T1`
 
 > [!example] Problem
@@ -1159,6 +776,12 @@ difficulty: mixed
 > - prerequisites[i].length == 2
 > - 0 <= ai, bi < numCourses
 > - All the pairs prerequisites[i] are unique.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Detect cycle in prerequisites" · **Gotcha:** Edge direction: `prereq → course`, not `course → prereq`.
+
+> [!failure] Tempting wrong approach
+> DFS with a plain visited set — it flags cross edges into finished nodes as cycles. Use 3 states (unvisited / on-stack / done) or Kahn's indegree count.
 
 > [!info] Approach
 > The prerequisites form a directed graph; a cycle makes it impossible to finish all courses. Kahn's algorithm detects cycles via in-degree tracking. Topological sort using BFS (Kahn's algorithm). If all nodes are processed, the graph is a DAG (no cycle). Build adjacency list and in-degree array. Enqueue all nodes with in-degree 0. For each dequeued node, decrement neighbors' in-degrees; enqueue any that reach 0. Count processed nodes — if count equals `numCourses`, return True.
@@ -1247,6 +870,9 @@ difficulty: mixed
 > 	
 > - `words[i]` consists of only lowercase English letters.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Infer char ordering from sorted words" · **Gotcha:** Invalid input: `"abc"` before `"ab"` — detect and return `""`.
+
 > [!info] Approach
 > Comparing adjacent words in the sorted list reveals ordering constraints between characters (directed edges). The full ordering is a topological sort of these constraints. Build a directed graph from character ordering constraints. Run Kahn's BFS topological sort. For each adjacent word pair, find the first differing character — that gives an edge. If word A is a prefix of word B but appears after B, return `""` (invalid). Run Kahn's BFS. If all characters are processed, the BFS output is the alien alphabet order.
 
@@ -1295,87 +921,11 @@ difficulty: mixed
 
 ## Design
 
+---
+
 ### Design Hit Counter
 
-> [!example] Problem
-> Design a hit counter which counts the number of hits received in the past `5` minutes (i.e., the past `300` seconds).
-> 
-> Your system should accept a `timestamp` parameter (**in seconds** granularity), and you may assume that calls are being made to the system in chronological order (i.e., `timestamp` is monotonically increasing). Several hits may arrive roughly at the same time.
-> 
-> Implement the `HitCounter` class:
-> 
-> 	
-> - `HitCounter()` Initializes the object of the hit counter system.
-> 	
-> - `void hit(int timestamp)` Records a hit that happened at `timestamp` (**in seconds**). Several hits may happen at the same `timestamp`.
-> 	
-> - `int getHits(int timestamp)` Returns the number of hits in the past 5 minutes from `timestamp` (i.e., the past `300` seconds).
-> 
->  
-> 
-> Example 1:
-> 
-> ```
-> 
-> **Input**
-> ["HitCounter", "hit", "hit", "hit", "getHits", "hit", "getHits", "getHits"]
-> [[], [1], [2], [3], [4], [300], [300], [301]]
-> **Output**
-> [null, null, null, null, 3, null, 4, 3]
-> 
-> **Explanation**
-> HitCounter hitCounter = new HitCounter();
-> hitCounter.hit(1);       // hit at timestamp 1.
-> hitCounter.hit(2);       // hit at timestamp 2.
-> hitCounter.hit(3);       // hit at timestamp 3.
-> hitCounter.getHits(4);   // get hits at timestamp 4, return 3.
-> hitCounter.hit(300);     // hit at timestamp 300.
-> hitCounter.getHits(300); // get hits at timestamp 300, return 4.
-> hitCounter.getHits(301); // get hits at timestamp 301, return 3.
-> 
-> ```
-> 
->  
-> 
-> **Constraints:**
-> 
-> 	
-> - `1 <= timestamp <= 2 * 10^9`
-> 	
-> - All the calls are being made to the system in chronological order (i.e., `timestamp` is monotonically increasing).
-> 	
-> - At most `300` calls will be made to `hit` and `getHits`.
-> 
->  
-> 
-> **Follow up:** What if the number of hits per second could be huge? Does your design scale?
-
-> [!info] Approach
-> Hits older than 300 seconds are never useful again. A queue naturally evicts stale hits from the front. Deque of timestamps. At each operation, evict timestamps older than `timestamp - 300`. `hit`: append timestamp. `getHits`: evict front while `front <= timestamp - 300`, then return `len(deque)`. This assumes calls arrive with non-decreasing timestamps, which is the usual interview contract.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> class HitCounter:
->     def __init__(self):
->         self._q: deque[int] = deque()
-> >
->     def hit(self, timestamp):
->         self._q.append(timestamp)
-> >
->     def get_hits(self, timestamp):
->         while self._q and self._q[0] <= timestamp - 300:
->             self._q.popleft()
->         return len(self._q)
-> ```
-
-> [!success] Complexity
-> Time O(1) amortized per operation (each hit added/removed at most once). Space O(hits in last 300s).
-
-> [!tip] Alternatives
-> - Circular array of size 300: store `(count, timestamp)` per second bucket — O(1) time, O(300) fixed space. Better for high-throughput systems where many hits share the same second.
-> - Follow-up: if hits come in multi-threaded, use locks around the deque operations.
+> Full walkthrough: [Design Hit Counter](14-design.md#design-hit-counter--t1).
 
 ---
 
@@ -1412,6 +962,9 @@ difficulty: mixed
 > - 1 <= k <= 1000
 > - 0 <= value <= 1000
 > - At most 3000 calls will be made to enQueue, deQueue, Front, Rear, isEmpty, and isFull.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Bounded FIFO with O(1) all ops" · **Gotcha:** Use `size` counter over wasted-slot trick — cleaner. Thread-safety follow-up: add a mutex around enqueue/dequeue.
 
 > [!info] Approach
 > A plain list wastes space as the front pointer drifts forward. Modular arithmetic wraps pointers around, reusing vacated slots. Fixed-size array with `front`, `size`, and `capacity`. Rear index = `(front + size) % cap`. Using a `size` counter eliminates the ambiguity between full and empty (the "wasted slot" problem). Enqueue writes to `(front + size) % cap` and increments size. Dequeue advances `front` by 1 (mod cap) and decrements size.
@@ -1508,6 +1061,9 @@ difficulty: mixed
 > 	
 > - At most `10^4` calls will be made to `next`.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Average of last k values in O(1)" · **Gotcha:** Float division. Python `deque(maxlen=k)` auto-evicts but you still need the running sum — don't recompute.
+
 > [!info] Approach
 > Recomputing the sum from scratch on each insertion is O(size). Maintain a running sum and update it incrementally in O(1). Fixed-size deque with a running sum. Append each new value to the deque and add to sum. If the deque exceeds `size`, pop from the front and subtract from sum. Return `sum / len(deque)`.
 
@@ -1566,6 +1122,9 @@ difficulty: mixed
 > - Each test case will call ping with strictly increasing values of t.
 > - At most 10^4 calls will be made to ping.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Count requests in last 3000ms window" · **Gotcha:** Deque size = answer; no need to count separately.
+
 > [!info] Approach
 > Old timestamps outside the window are never useful again. A deque lets us discard them from the front in O(1). Deque storing timestamps. At each `ping`, evict all timestamps < `t - 3000` from the front. Deque size = answer. Append `t`. Pop from front while `front < t - 3000`. Return `len(deque)`.
 
@@ -1621,6 +1180,9 @@ difficulty: mixed
 > - At most 100 calls will be made to push, pop, top, and empty.
 > - All the calls to pop and top are valid.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "LIFO from one FIFO" · **Gotcha:** `push` is O(N); `pop` and `top` are O(1) — opposite of stack-from-queues.
+
 > [!info] Approach
 > A queue is FIFO; to make the most recently pushed element accessible first, we must rotate older elements behind the new one after each push. Single queue. After each `push(x)`, rotate the queue by popping from the front and re-appending, `len(q) - 1` times — x is now at the front. Push is O(n); pop and top are O(1). (Trade-off: opposite of queue-from-stacks.)
 
@@ -1657,7 +1219,70 @@ difficulty: mixed
 
 ---
 
+### Design Circular Deque
+
+> [!example] Problem
+> Design your implementation of the circular double-ended queue (deque).
+> Implement the MyCircularDeque class
+> 
+> **Example 1:**
+> ```
+> Input
+> ["MyCircularDeque", "insertLast", "insertLast", "insertFront", "insertFront", "getRear", "isFull", "deleteLast", "insertFront", "getFront"]
+> [[3], [1], [2], [3], [4], [], [], [], [4], []]
+> Output
+> [null, true, true, true, false, 2, true, true, true, 4]
+> 
+> Explanation
+> MyCircularDeque myCircularDeque = new MyCircularDeque(3);
+> myCircularDeque.insertLast(1);  // return True
+> myCircularDeque.insertLast(2);  // return True
+> myCircularDeque.insertFront(3); // return True
+> myCircularDeque.insertFront(4); // return False, the queue is full.
+> myCircularDeque.getRear();      // return 2
+> myCircularDeque.isFull();       // return True
+> myCircularDeque.deleteLast();   // return True
+> myCircularDeque.insertFront(4); // return True
+> myCircularDeque.getFront();     // return 4
+> ```
+> 
+> **Constraints:**
+> - 1 <= k <= 1000
+> - 0 <= value <= 1000
+> - At most 2000 calls will be made to insertFront, insertLast, deleteFront, deleteLast, getFront, getRear, isEmpty, isFull.
+
+> [!info] Approach
+> A circular buffer lets us use O(1) index arithmetic without shifting elements. Maintain `front`, `rear`, `size`, and an array of capacity `k`. Update indices with modulo arithmetic. For example, moving left uses `(idx - 1 + k) % k` and moving right uses `(idx + 1) % k`.
+
+> [!note]- Python Solution
+> ```python
+> class MyCircularDeque:
+>     def __init__(self, k):
+>         self.arr = [0] * k
+>         self.k = k
+>         self.front = 0
+>         self.size = 0
+> 
+>     def insert_front(self, value):
+>         if self.isFull():
+>             return False
+>         self.front = (self.front - 1 + self.k) % self.k
+>         self.arr[self.front] = value
+>         self.size += 1
+>         return True
+> ```
+
+> [!success] Complexity
+> O(1) for every operation, O(k) space.
+
+> [!tip] Alternatives
+> Linked-list deque is easier to generalize but has more pointer overhead than a circular array.
+
+---
+
 ## Priority Queue / Heap
+
+---
 
 ### Task Scheduler `⚡ T1`
 
@@ -1693,6 +1318,9 @@ difficulty: mixed
 > - 1 <= tasks.length <= 10^4
 > - tasks[i] is an uppercase English letter.
 > - 0 <= n <= 100
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Math + greedy · **Gotcha:** **Idle slots** formula; **cap** at `len(tasks)` if enough tasks fill gaps.
 
 > [!info] Approach
 > We always want to execute the most frequent remaining task next (greedy). A max-heap gives the most frequent task in O(log k). When a task is on cooldown, it sits in a queue until it can be re-used. Max-heap of `(-count, task)` + cooldown queue of `(count_after_use, available_at_time)`. Build frequency map; push all `(-count,)` entries to the heap. At each time tick: if the cooldown queue front is ready (available_at <= time), push it back onto the heap. If the heap is non-empty, pop and execute the most frequent task, push it to the cooldown queue with updated count. Otherwise, idle. Increment time.
@@ -1759,6 +1387,9 @@ difficulty: mixed
 > - There will be at least one element in the data structure before calling findMedian.
 > - At most 5 * 10^4 calls will be made to addNum and findMedian.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Two heaps · **Gotcha:** **Rebalance** after each insert; **even** median = average of two tops.
+
 > [!info] Approach
 > Sorting on every query is O(n log n). Maintaining two heaps — a max-heap of the lower half and a min-heap of the upper half — lets us access the median in O(1). `lo` = max-heap (lower half), `hi` = min-heap (upper half). Invariant: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`. The median is `lo[0]` (odd count) or `(lo[0] + hi[0]) / 2` (even count). `addNum`: push to `lo` (negate for max-heap), then balance by moving `lo`'s max to `hi` if `lo[0] > hi[0]` or sizes diverge. Rebalance so `lo` is never smaller than `hi`.
 
@@ -1798,217 +1429,9 @@ difficulty: mixed
 
 ---
 
-## See Also
-
-[[stack]] | [[graph]] | [[sliding-window]] | [[binary-search]]
-### Design Circular Deque
-
-> [!example] Problem
-> Design your implementation of the circular double-ended queue (deque).
-> Implement the MyCircularDeque class
-> 
-> **Example 1:**
-> ```
-> Input
-> ["MyCircularDeque", "insertLast", "insertLast", "insertFront", "insertFront", "getRear", "isFull", "deleteLast", "insertFront", "getFront"]
-> [[3], [1], [2], [3], [4], [], [], [], [4], []]
-> Output
-> [null, true, true, true, false, 2, true, true, true, 4]
-> 
-> Explanation
-> MyCircularDeque myCircularDeque = new MyCircularDeque(3);
-> myCircularDeque.insertLast(1);  // return True
-> myCircularDeque.insertLast(2);  // return True
-> myCircularDeque.insertFront(3); // return True
-> myCircularDeque.insertFront(4); // return False, the queue is full.
-> myCircularDeque.getRear();      // return 2
-> myCircularDeque.isFull();       // return True
-> myCircularDeque.deleteLast();   // return True
-> myCircularDeque.insertFront(4); // return True
-> myCircularDeque.getFront();     // return 4
-> ```
-> 
-> **Constraints:**
-> - 1 <= k <= 1000
-> - 0 <= value <= 1000
-> - At most 2000 calls will be made to insertFront, insertLast, deleteFront, deleteLast, getFront, getRear, isEmpty, isFull.
-
-> [!info] Approach
-> A circular buffer lets us use O(1) index arithmetic without shifting elements. Maintain `front`, `rear`, `size`, and an array of capacity `k`. Update indices with modulo arithmetic. For example, moving left uses `(idx - 1 + k) % k` and moving right uses `(idx + 1) % k`.
-
-> [!note]- Python Solution
-> ```python
-> class MyCircularDeque:
->     def __init__(self, k):
->         self.arr = [0] * k
->         self.k = k
->         self.front = 0
->         self.size = 0
-> 
->     def insert_front(self, value):
->         if self.isFull():
->             return False
->         self.front = (self.front - 1 + self.k) % self.k
->         self.arr[self.front] = value
->         self.size += 1
->         return True
-> ```
-
-> [!success] Complexity
-> O(1) for every operation, O(k) space.
-
-> [!tip] Alternatives
-> Linked-list deque is easier to generalize but has more pointer overhead than a circular array.
-
----
-
-## Sliding Window with Queue
-
 ### Sliding Window Median (LC 480) `⚡ T1`
 
-> [!example] Problem
-> The median is the middle value in an ordered integer list. If the size of the list is even, there is no middle value. So the median is the mean of the two middle values.
-> You are given an integer array nums and an integer k. There is a sliding window of size k which is moving from the very left of the array to the very right. You can only see the k numbers in the window. Each time the sliding window moves right by one position.
-> Return the median array for each window in the original array. Answers within 10-5 of the actual value will be accepted.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,-1,-3,5,3,6,7], k = 3
-> Output: [1.00000,-1.00000,-1.00000,3.00000,5.00000,6.00000]
-> Explanation: 
-> Window position                Median
-> ---------------                -----
-> [1  3  -1] -3  5  3  6  7        1
->  1 [3  -1  -3] 5  3  6  7       -1
->  1  3 [-1  -3  5] 3  6  7       -1
->  1  3  -1 [-3  5  3] 6  7        3
->  1  3  -1  -3 [5  3  6] 7        5
->  1  3  -1  -3  5 [3  6  7]       6
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,2,3,4,2,3,1,4,2], k = 3
-> Output: [2.00000,3.00000,3.00000,3.00000,2.00000,3.00000,2.00000]
-> ```
-> 
-> **Constraints:**
-> - 1 <= k <= nums.length <= 10^5
-> - -2^{31} <= nums[i] <= 2^{31} - 1
-
-> [!info] Approach
-> Recalculating the median from scratch for each window is O(k log k) per step — too slow. Maintaining two heaps (like the "Find Median from Data Stream" problem) allows O(log k) updates, but removal of the outgoing element requires lazy deletion. Use a max-heap `lo` (lower half) and min-heap `hi` (upper half). On each step, add the incoming element and lazy-delete the outgoing element. Rebalance heaps after each operation. Lazy deletion: track counts of "dead" elements in each heap. When computing the median, first pop any dead elements from the heap tops. Balance rule: `len(lo) == len(hi)` or `len(lo) == len(hi) + 1`.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> from collections import defaultdict
-> >
-> def median_sliding_window(nums, k):
->     lo = []   # max-heap (negated), lower half
->     hi = []   # min-heap, upper half
->     dead = defaultdict(int)
->     result = []
-> >
->     def push(x):
->         heapq.heappush(lo, -x)
->         heapq.heappush(hi, -heapq.heappop(lo))
->         if len(hi) > len(lo):
->             heapq.heappush(lo, -heapq.heappop(hi))
-> >
->     def prune(heap, is_max):
->         while heap and dead[(-heap[0] if is_max else heap[0])] > 0:
->             val = -heapq.heappop(heap) if is_max else heapq.heappop(heap)
->             dead[val] -= 1
-> >
->     for i, num in enumerate(nums):
->         push(num)
->         if i >= k:
->             out = nums[i - k]
->             dead[out] += 1
->             prune(lo, is_max=True)
->             prune(hi, is_max=False)
->             if len(lo) - len(hi) > 1:
->                 heapq.heappush(hi, -heapq.heappop(lo))
->             elif len(hi) > len(lo):
->                 heapq.heappush(lo, -heapq.heappop(hi))
->         if i >= k - 1:
->             prune(lo, is_max=True)
->             if k % 2 == 1:
->                 result.append(float(-lo[0]))
->             else:
->                 result.append((-lo[0] + hi[0]) / 2.0)
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(n log k), Space O(n).
-
-> [!tip] Alternatives
-> - `SortedList` from `sortedcontainers`: O(log k) insert and delete, O(1) median access — cleaner code but not standard library.
-> - Segment tree on compressed values: O(n log n) with precise deletion, no lazy bookkeeping.
-> - Key insight: lazy deletion works because dead elements only affect the heap top when computing the median; they stay valid otherwise.
-
----
-
-## Scheduling
-
-### Task Scheduler with Cooldown (LC 621) `⚡ T1`
-
-> [!example] Problem
-> You are given an array of CPU tasks, each labeled with a letter from A to Z, and a number n. Each CPU interval can be idle or allow the completion of one task. Tasks can be completed in any order, but there's a constraint: there has to be a gap of at least n intervals between two tasks with the same label.
-> Return the minimum number of CPU intervals required to complete all tasks.
-> 
-> **Example 1:**
-> ```
-> Input: tasks = ["A","A","A","B","B","B"], n = 2
-> Output: 8
-> Explanation: A possible sequence is: A -> B -> idle -> A -> B -> idle -> A -> B.
-> After completing task A, you must wait two intervals before doing A again. The same applies to task B. In the 3 rd interval, neither A nor B can be done, so you idle. By the 4 th interval, you can do A again as 2 intervals have passed.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: tasks = ["A","C","A","B","D","B"], n = 1
-> Output: 6
-> Explanation: A possible sequence is: A -> B -> C -> D -> A -> B.
-> With a cooling interval of 1, you can repeat a task after just one other task.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: tasks = ["A","A","A", "B","B","B"], n = 3
-> Output: 10
-> Explanation: A possible sequence is: A -> B -> idle -> idle -> A -> B -> idle -> idle -> A -> B.
-> There are only two types of tasks, A and B, which need to be separated by 3 intervals. This leads to idling twice between repetitions of these tasks.
-> ```
-> 
-> **Constraints:**
-> - 1 <= tasks.length <= 10^4
-> - tasks[i] is an uppercase English letter.
-> - 0 <= n <= 100
-
-> [!info] Approach
-> The bottleneck is the most frequent task — it dictates the minimum frame length. Tasks can be arranged in cycles of length `n+1`; less frequent tasks or idle slots fill the gaps. Count task frequencies. The answer is `max(total_tasks, (max_freq - 1) * (n + 1) + count_of_tasks_with_max_freq)`. Count frequencies with a Counter. `max_freq` = highest frequency. `max_count` = number of tasks that share that frequency. Formula accounts for `max_freq - 1` complete cycles, each of length `n+1`, plus the final partial cycle of `max_count` tasks.
-
-> [!note]- Python Solution
-> ```python
-> from collections import Counter
-> >
-> def least_interval(tasks, n):
->     freq = Counter(tasks)
->     max_freq = max(freq.values())
->     max_count = sum(1 for f in freq.values() if f == max_freq)
->     slots_needed = (max_freq - 1) * (n + 1) + max_count
->     return max(len(tasks), slots_needed)
-> ```
-
-> [!success] Complexity
-> Time O(n) where n = number of tasks, Space O(1) (26 letters max).
-
-> [!tip] Alternatives
-> - Greedy simulation with a max-heap and cooldown queue: at each step, pick the most frequent available task. Enqueue tasks back after their cooldown expires. O(n * cycles) but demonstrates the scheduling more concretely.
-> - The formula is the cleanest O(n) solution; the heap simulation is useful to explain the intuition.
+> Full walkthrough: [Sliding Window Median](10-heap.md#sliding-window-median--t1).
 
 ---
 

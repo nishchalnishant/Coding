@@ -3,47 +3,30 @@ module: 01-data-structures
 topic: Graphs
 tags: [data-structures, graphs]
 ---
+# Graphs (Data Structure) — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Graph representations, BFS/DFS, cycle detection, topological sort, bipartite check; then shortest paths (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal/Prim).
+> **You'll be able to:** Model a word/grid/state problem as a graph; pick the right traversal or shortest-path algorithm from edge weights; detect cycles in directed vs undirected graphs.
+> **Prereqs:** Queue, stack, recursion, heap · **Pair with:** [Graph problems](../coding/data-structures/13-graph.md) · [Graph algorithm problems](../coding/algorithms/13-graph-algorithms.md) · [Union-Find](../02-algorithms/14-union-find.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY graphs exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                 │                │               │               │
-  [Many real problems   [V vertices +    [adjacency list: [social networks,[DFS on cyclic
-   are pairwise         E edges; directed O(V+E) space;    route finding,  graph infinite
-   relationships —       or undirected;   matrix: O(V²)   dependency      loops without
-   no hierarchy,         weighted or      space O(1) edge  resolution,     visited set;
-   no fixed order;       unweighted;      check; traversal: course schedule, adjacency matrix
-   trees are just        can have cycles] BFS/DFS from     network flow]   too large for
-   restricted graphs]                     any start node]                  sparse graphs]
-       │                 │                │
-  [real-world:          [invariant:      [BFS: O(V+E), level order,
-   road map — cities     all edges must   shortest path (unweighted);
-   as nodes,             connect vertices DFS: O(V+E), cycle detect,
-   roads as edges]       in V; no self-   topological sort (DAG);
-                         loops (usually)] connected components: union-find O(α)]
-       ↓
-[Decision: Adjacency List vs Matrix vs alternatives]
-  ├── vs Adj Matrix  → list O(V+E) space for sparse; matrix O(1) edge check
-  ├── vs Tree        → tree = acyclic connected graph; add cycle → graph
-  └── vs Union-Find  → UF for connected components only; graph for full traversal
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. Weighted & Advanced Algorithms](#3-weighted--advanced-algorithms) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Pairwise relationships (friendships, roads, dependencies) can't be modeled by trees or flat arrays — need arbitrary connectivity.
 - **Core insight**: Separating vertices (entities) from edges (relationships) lets you model any network topology.
 - **Invariant**: Every edge connects two vertices in V; directed edges have a defined source and sink.
 - **Why it's fast**: Adjacency list stores only existing edges — O(V+E) space instead of O(V²), critical for sparse real-world graphs.
 - **Where it breaks**: Cycle detection requires explicit visited tracking; DFS on large graphs overflows the call stack; dense graphs make adjacency lists slower than matrices for edge lookups.
 
-# Graphs (Data Structure) — L3 Core
+### One-Page Map
 
 ```
 [GRAPH]
@@ -104,9 +87,6 @@ WHY graphs exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 
 Vertices (nodes) + Edges (connections). L3 focus: correct representation choice, clean traversal templates, multi-source BFS, topological sort, and knowing when each algorithm applies.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -140,11 +120,11 @@ Vertices (nodes) + Edges (connections). L3 focus: correct representation choice,
 - Grid problems — treat each cell as a node, 4/8 neighbors as edges (implicit graph).
 - Cycle detection in directed graphs (build order, deadlock detection).
 
-**Common mistakes:**
-- Forgetting to handle disconnected graphs — always iterate over all nodes to start BFS/DFS from each unvisited one.
-- Recursive DFS stack overflow on large graphs (>10K nodes) — use iterative DFS with explicit stack.
-- Treating undirected graph as directed — adding edge only one direction causes connectivity bugs.
-- Marking visited after dequeue (BFS) instead of before enqueue — causes duplicate processing and TLE.
+> [!warning] Common mistakes
+> - Forgetting to handle disconnected graphs — always iterate over all nodes to start BFS/DFS from each unvisited one.
+> - Recursive DFS stack overflow on large graphs (>10K nodes) — use iterative DFS with explicit stack.
+> - Treating undirected graph as directed — adding edge only one direction causes connectivity bugs.
+> - Marking visited after dequeue (BFS) instead of before enqueue — causes duplicate processing and TLE.
 
 ---
 
@@ -319,6 +299,19 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
     return len(topological_sort_kahn(n, edges)) < n
 ```
 
+**Dry run — Kahn's**, `n = 5`, edges `0→1, 0→2, 1→3, 2→3, 3→4`. Initial `in_degree = [0,1,1,2,1]`:
+
+| Pop `u` | Decrement | Newly 0 → enqueue | `queue` after | `in_degree` after | `order` |
+|---|---|---|---|---|---|
+| — | — | `0` | `[0]` | `[0,1,1,2,1]` | `[]` |
+| 0 | 1, 2 | `1`, `2` | `[1, 2]` | `[0,0,0,2,1]` | `[0]` |
+| 1 | 3 | — (3 still has 1) | `[2]` | `[0,0,0,1,1]` | `[0,1]` |
+| 2 | 3 | `3` | `[3]` | `[0,0,0,0,1]` | `[0,1,2]` |
+| 3 | 4 | `4` | `[4]` | `[0,0,0,0,0]` | `[0,1,2,3]` |
+| 4 | — | — | `[]` | — | `[0,1,2,3,4]` ✅ |
+
+**Cycle case:** add edge `4→1`. Node 1 starts with in-degree 2 and only drops to 1, so the queue empties after `order = [0, 2]`. Then `len(order) < n`, so a cycle exists. A queue holding more than one node (as after popping 0) means more than one valid order exists. That is the Sequence Reconstruction check below.
+
 #### Common Variants & Twists
 1. **Alien Dictionary `⚡ T1`**:
    - **What (The Problem & Goal):** Given a sorted list of alien words, derive the lexicographical order of their alphabet.
@@ -340,73 +333,7 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
-
-### Easy / Medium (High Frequency)
-- Number of Islands — DFS/BFS flood fill; count calls to unvisited `1`.
-- **Flood Fill `⚡ T1`** — BFS/DFS from `(sr, sc)`; recolor connected component.
-- Rotting Oranges — Multi-source BFS from all rotten oranges at distance 0; count levels.
-- Course Schedule — Kahn's topo sort; cycle ⟺ `len(order) < n`.
-- Clone Graph — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
-- **Surrounded Regions `⚡ T1`** — Flood fill from border `O`s to mark safe; flip remaining interior `O`→`X`.
-- **Max Area of Island `⚡ T1`** — DFS/BFS; return max area across all components.
-
-### Hard / Stretch (Common at Google)
-- Word Ladder — BFS; neighbors = one-letter edits in word set; remove visited words.
-- Alien Dictionary — Build directed edges from adjacent word pairs; topo sort all characters.
-- **Pacific Atlantic Water Flow `⚡ T1`** — Reverse BFS: which cells can reach Pacific? Atlantic? Intersect.
-- **Network Delay Time** — Dijkstra from source; answer = max dist if all nodes reached.
-
----
-
-## Interview Questions — Logic & Trickiness
-
-| Question | Click Moment | Core Logic | Trickiness / Gotchas |
-| :--- | :--- | :--- | :--- |
-| **Number of Islands `⚡ T1`** | "Count connected components in grid" | DFS/BFS; mark visited by sinking (`'1'→'0'`) | 4-dir vs 8-dir neighbors — confirm with interviewer. Recursion overflow on large grids. |
-| **Flood Fill `⚡ T1`** | "Recolor connected region" | BFS/DFS from `(sr,sc)`; only spread to same original color | Skip if `newColor == oldColor` — avoids infinite loop. |
-| **Rotting Oranges `⚡ T1`** | "Simultaneous spread, minimum time" | Multi-source BFS; count fresh oranges; return levels-1 | Track fresh count — if fresh remain after BFS, return -1 (unreachable). |
-| **Course Schedule `⚡ T1`** | "Detect cycle in prerequisites" | Kahn's topo; cycle ⟺ `len(order) < n` | Edge direction: `prereq → course`, not `course → prereq`. |
-| **Clone Graph `⚡ T1`** | "Deep copy graph with cycles" | Map `old→clone`; DFS/BFS; create clone before recursing | Cycles require the map before recursion — avoids infinite loop. |
-| **Surrounded Regions `⚡ T1`** | "Flip interior isolated regions" | BFS from border O's to mark safe; flip rest | Don't BFS from every interior `O` — O(R²C²) vs O(RC) from borders. |
-| **Word Ladder `⚡ T1`** | "Shortest transformation sequence" | BFS; each word's neighbors = one-letter edits in dict | Remove words from set as visited — prevents revisit. Bidirectional BFS for follow-up. |
-| **Alien Dictionary `⚡ T1`** | "Infer char ordering from sorted words" | Extract edges from first mismatch in adjacent words; topo | Invalid input: `"abc"` before `"ab"` — detect and return `""`. |
-| **Pacific Atlantic Flow** | "Which cells reach both oceans?" | Reverse BFS from each ocean's border; intersect reachable sets | Reverse means: "can water flow here from the border?" — go uphill. |
-| **Find if Path Exists `⚡ T1`** [E] | "Is there a path from source to destination?" | BFS/DFS or Union-Find; mark visited | Union-Find: check `find(source) == find(destination)` after all union ops. |
-| **Find Center of Star Graph** [E] | "Node connected to all others in star" | Center appears in both of the first two edges | Any common node in `edges[0]` and `edges[1]` is the center — O(1). |
-| **Employee Importance** [E] | "Total importance of employee and all subordinates" | BFS/DFS from root employee; accumulate importance | Build id→employee map first; then BFS on subordinate ids. |
-| **All Paths From Source to Target `⚡ T1`** [M] | "All paths in DAG from 0 to n-1" | DFS with backtracking; no visited set needed (DAG guarantees no cycles) | No cycle → no need for visited set; append path on reaching target. |
-| **Is Graph Bipartite? `⚡ T1`** [M] | "2-color graph with no monochromatic edge" | BFS/DFS; alternate colors; conflict = not bipartite | Disconnected graph: run BFS/DFS from every unvisited node. |
-| **Minimum Number of Vertices to Reach All Nodes `⚡ T1`** [M] | "In DAG, find nodes with no incoming edges" | Count in-degrees; nodes with in-degree 0 are the answer | Any node reachable from another has in-degree ≥ 1 — not a required start. |
-| **Network Delay Time** [M] | "All nodes reachable in shortest time" | Dijkstra from source; answer = max of all shortest distances | Return -1 if any node unreachable (`dist == inf`). |
-| **Find Eventual Safe States `⚡ T1`** [M] | "Nodes that don't lead to a cycle" | Reverse edges; topo sort via Kahn's; nodes in topo = safe | Alternatively: DFS with 3-color (white/gray/black); gray = cycle. |
-| **Redundant Connection `⚡ T1`** [M] | "Edge creating cycle in undirected graph" | Union-Find; first edge where `find(u) == find(v)` is redundant | If multiple redundant edges exist, return the last one (rightmost in input). |
-| **Minimum Spanning Tree (Kruskal's) `⚡ T1`** [M] | "Min total edge weight connecting all nodes" | Sort edges by weight; add if no cycle (Union-Find) | Edge count of MST = N-1; stop early when you've added N-1 edges. |
-| **Longest Path in DAG** [H] | "Maximum length path in directed acyclic graph" | Topo sort + DP; `dp[node] = max(dp[neighbor] + 1)` | Only works on DAGs — cycles make this undefined. Use memo + DFS for top-down. |
-| **Swim in Rising Water** [H] | "Min time to reach bottom-right as water rises" | Binary search on answer + BFS feasibility; or Dijkstra treating elevation as cost | Dijkstra approach: `dist[r][c]` = min max-elevation path to `(r,c)`. |
-
----
-
-## Quick Revision Triggers
-
-- If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.
-- If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.
-- If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.
-- If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.
-- If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.
-- If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
-- If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.
-
-
-
-## Advanced Graph Algorithms
+## 3. Weighted & Advanced Algorithms
 
 ### Dijkstra — Non-Negative Weighted Shortest Path
 
@@ -415,6 +342,9 @@ def has_cycle_directed(n: int, edges: list[tuple[int,int]]) -> bool:
 
 > [!TIP]
 > Dijkstra is like a GPS that always recalculates from your cheapest unvisited waypoint — always expand the node you can reach most cheaply, not the one you added first. The min-heap enforces this ordering. A "stale entry" arises when you find a cheaper path to a node after it was already pushed onto the heap; the guard `if d > dist[u]: continue` discards those old records rather than re-processing the node at a higher cost.
+
+> [!note] Why lazy Dijkstra is O(E log V)
+> Each edge relaxation pushes at most once → ≤ E heap entries, so ≤ E pops at O(log E) each. Since E ≤ V², log E ≤ 2 log V → **O(E log V)**. Stale entries cost only the pop + one comparison, which is why skipping decrease-key loses nothing asymptotically.
 
 ```python
 import heapq
@@ -468,6 +398,8 @@ def bellman_ford(edges: list[tuple[int,int,int]], n: int, start: int) -> tuple[l
     return dist, has_negative_cycle
 ```
 
+Early exit: if a full round relaxes nothing, `break` — distances are final. After round `i`, `dist[v]` = shortest path using ≤ `i` edges (this is what makes the K-stops variant work).
+
 #### Common Variants & Twists
 1. **Cheapest Flights Within K Stops**:
    - **What (The Problem & Goal):** Find the cheapest price from source to destination with at most `k` stops.
@@ -504,37 +436,6 @@ def floyd_warshall(n: int, edges: list[tuple[int, int, int]]) -> list[list[float
 
 > [!TIP]
 > **Negative cycle detection**: After running the algorithm, if `dist[i][i] < 0` for any `i`, the graph contains a negative cycle.
-
----
-
-### Topological Sort — Kahn's Algorithm
-
-> [!IMPORTANT]
-> **The Click Moment**: "**Ordering with dependencies**" — OR — "**build order**" — OR — "**course schedule `⚡ T1`** (can all courses be taken?)" — OR — "detect cycle in directed graph". Kahn's: maintain in-degree; process zero-in-degree nodes; cycle exists if not all nodes are processed.
-
-```python
-def kahn_topo_sort(n: int, edges: list[tuple[int,int]]) -> list[int]:
-    adj = defaultdict(list)
-    in_degree = [0] * n
-    for u, v in edges:
-        adj[u].append(v)
-        in_degree[v] += 1
-    queue = deque(i for i in range(n) if in_degree[i] == 0)
-    order = []
-    while queue:
-        u = queue.popleft()
-        order.append(u)
-        for v in adj[u]:
-            in_degree[v] -= 1
-            if in_degree[v] == 0:
-                queue.append(v)
-    return order if len(order) == n else []  # [] = cycle detected
-```
-
-#### Common Variants & Twists
-1. **Alien Dictionary**:
-   - **What (The Problem & Goal):** Deriving character ordering from a sorted list of words in an alien language.
-   - **How (Intuition & Mental Model):** Compare adjacent words to find the first character mismatch (e.g., "word1[i]" vs "word2[i]"). This gives a directed edge `word1[i] -> word2[i]`. Build the graph of characters and run Kahn's algorithm. If the number of sorted characters is less than the number of unique characters, a cycle exists (invalid dictionary).
 
 ---
 
@@ -631,9 +532,7 @@ def prim_mst(n: int, adj: dict) -> int:
    - **What (The Problem & Goal):** Connect all points in a 2D plane with minimum cost, where cost between points is Manhattan distance.
    - **How (Intuition & Mental Model):** This is an MST problem on a complete graph (O(V^2) edges). Kruskal's would be O(V^2 log V). Prim's with a simple array (instead of a heap) is O(V^2), which is better for dense graphs.
 
----
-
-## 3. Advanced Patterns
+### Grid & Bidirectional BFS
 
 > [!TIP]
 > **Grid problems**: Each cell is a node; 4-directional neighbors are edges. Don't construct an explicit adjacency list — use a `get_neighbors(r, c)` function inline. Multi-source BFS (all `0`s at once) solves "distance to nearest 0" and "walls and gates" in O(R×C).
@@ -641,28 +540,7 @@ def prim_mst(n: int, adj: dict) -> int:
 > [!TIP]
 > **Bidirectional BFS**: For problems with a known source and target (Word Ladder, 6-degrees of separation), expand from both ends simultaneously. Meet in the middle. Explored nodes shrink from O(b^d) to O(b^(d/2)) where b = branching factor. Google Maps uses bidirectional Dijkstra for shortest route queries.
 
----
-
-## 4. L3 Deep Dives
-
-### Scalability: Distributed Shortest Path
-
-> [!TIP]
-> **Pregel (Google, 2010)**: Graph computation framework where each vertex computes its state and sends messages to neighbors. Dijkstra's becomes: each vertex maintains `dist`, sends `(dist + edge_weight)` to neighbors, updates if a better value arrives. Converges in O(diameter) supersteps. Handles trillion-edge graphs by partitioning across thousands of machines.
->
-> **Delta-stepping**: A parallelizable variant of Dijkstra that processes a "bucket" of vertices with distance in `[d, d+Δ]` simultaneously, then advances to the next bucket. Implemented in Boost Graph Library and used in high-performance computing.
-
-### Scalability: Graph Streaming
-
-> [!TIP]
-> When the graph is too large to store (social network with 1 billion edges): use **streaming algorithms** that process each edge once and maintain O(polylog N) state. For connectivity: maintain a random spanning forest using sketches (union-find on the stream). For approximate shortest paths: maintain a distance oracle with O(N^(1+1/k)) space and O(k) query time.
-
-### Concurrency: Lock-Free Graph Traversal
-
-> [!TIP]
-> Concurrent BFS: divide the frontier into shards; each thread processes its shard in parallel. Synchronize on the next frontier with a concurrent queue or `ConcurrentLinkedQueue`. Challenge: avoiding duplicate processing — use a `ConcurrentHashMap` as the visited set with `putIfAbsent` as the atomic gate.
-
-### Trade-offs: Graph Algorithm Selection
+### Algorithm Selection Table
 
 | Constraint | Algorithm | Why |
 | :--- | :--- | :--- |
@@ -676,44 +554,62 @@ def prim_mst(n: int, adj: dict) -> int:
 
 ---
 
+## 4. Common Interview Problems
 
+### Easy / Medium (High Frequency)
+- **[Flood Fill](../coding/data-structures/13-graph.md#flood-fill--t1) `⚡ T1`** — BFS/DFS from `(sr, sc)`; recolor connected component.
+- **[Surrounded Regions](../coding/data-structures/13-graph.md#surrounded-regions--t1) `⚡ T1`** — Flood fill from border `O`s to mark safe; flip remaining interior `O`→`X`.
+- **[Max Area of Island](../coding/data-structures/13-graph.md#max-area-of-island--t1) `⚡ T1`** — DFS/BFS; return max area across all components.
+- **[Number of Islands](../coding/data-structures/13-graph.md#number-of-islands-bfs--t1) `⚡ T1`** — DFS/BFS flood fill; count calls to unvisited `1`.
+- **[Rotting Oranges](../coding/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten oranges at distance 0; count levels.
+- **[Course Schedule](../coding/data-structures/06-queue.md#course-schedule--t1) `⚡ T1`** — Kahn's topo sort; cycle ⟺ `len(order) < n`.
+- **[Clone Graph](../coding/data-structures/13-graph.md#clone-graph--t1) `⚡ T1`** — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
 
-## Bellman-Ford Algorithm
-
-> [!IMPORTANT]
-> **When to use:** Dijkstra fails when edges have **negative weights**. Bellman-Ford handles them. Also use for **K-hop shortest paths** (flight problems with at most K stops).
-
-Relax **all** edges exactly **V-1** times. After round `i`, `dist[v]` holds the shortest path using at most `i` edges.
-
-**Negative Cycle Detection**: After V-1 rounds, do one more pass. If any edge can still relax, a negative cycle exists.
-
-```python
-def bellman_ford(n, edges, src):
-    INF = float('inf')
-    dist = [INF] * n
-    dist[src] = 0
-    for _ in range(n - 1):
-        updated = False
-        for u, v, w in edges:
-            if dist[u] != INF and dist[u] + w < dist[v]:
-                dist[v] = dist[u] + w
-                updated = True
-        if not updated:
-            break
-    for u, v, w in edges:
-        if dist[u] != INF and dist[u] + w < dist[v]:
-            return []   # negative cycle
-    return dist
-```
-
-**K-Hop variant** (Cheapest Flights in K Stops): run only K+1 rounds and snapshot `dist` before each round (`temp = dist.copy()`) to prevent same-round chaining.
-
-| | Value |
-|---|---|
-| Time | O(V · E) |
-| Space | O(V) |
+### Hard / Stretch (Common at Google)
+- **[Pacific Atlantic Water Flow](../coding/data-structures/13-graph.md#pacific-atlantic-water-flow--t1) `⚡ T1`** — Reverse BFS: which cells can reach Pacific? Atlantic? Intersect.
+- **[Word Ladder](../coding/data-structures/13-graph.md#word-ladder--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words.
+- **[Alien Dictionary](../coding/algorithms/00-sorting.md#alien-dictionary-lc-269--t1) `⚡ T1`** — Build directed edges from adjacent word pairs; topo sort all characters.
+- **[Network Delay Time](../coding/data-structures/13-graph.md#network-delay-time-dijkstras) `🎯 T2`** — Dijkstra from source; answer = max dist if all nodes reached.
 
 ---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Click Moment | Core Logic | Trickiness / Gotchas |
+| :--- | :--- | :--- | :--- |
+| **Number of Islands `⚡ T1`** | "Count connected components in grid" | DFS/BFS; mark visited by sinking (`'1'→'0'`) | 4-dir vs 8-dir neighbors — confirm with interviewer. Recursion overflow on large grids. |
+| **Flood Fill `⚡ T1`** | "Recolor connected region" | BFS/DFS from `(sr,sc)`; only spread to same original color | Skip if `newColor == oldColor` — avoids infinite loop. |
+| **Rotting Oranges `⚡ T1`** | "Simultaneous spread, minimum time" | Multi-source BFS; count fresh oranges; return levels-1 | Track fresh count — if fresh remain after BFS, return -1 (unreachable). |
+| **Course Schedule `⚡ T1`** | "Detect cycle in prerequisites" | Kahn's topo; cycle ⟺ `len(order) < n` | Edge direction: `prereq → course`, not `course → prereq`. |
+| **Clone Graph `⚡ T1`** | "Deep copy graph with cycles" | Map `old→clone`; DFS/BFS; create clone before recursing | Cycles require the map before recursion — avoids infinite loop. |
+| **Surrounded Regions `⚡ T1`** | "Flip interior isolated regions" | BFS from border O's to mark safe; flip rest | Don't BFS from every interior `O` — O(R²C²) vs O(RC) from borders. |
+| **Word Ladder `⚡ T1`** | "Shortest transformation sequence" | BFS; each word's neighbors = one-letter edits in dict | Remove words from set as visited — prevents revisit. Bidirectional BFS for follow-up. |
+| **Alien Dictionary `⚡ T1`** | "Infer char ordering from sorted words" | Extract edges from first mismatch in adjacent words; topo | Invalid input: `"abc"` before `"ab"` — detect and return `""`. |
+| **Pacific Atlantic Flow** | "Which cells reach both oceans?" | Reverse BFS from each ocean's border; intersect reachable sets | Reverse means: "can water flow here from the border?" — go uphill. |
+| **Find if Path Exists `⚡ T1`** [E] | "Is there a path from source to destination?" | BFS/DFS or Union-Find; mark visited | Union-Find: check `find(source) == find(destination)` after all union ops. |
+| **Find Center of Star Graph** [E] | "Node connected to all others in star" | Center appears in both of the first two edges | Any common node in `edges[0]` and `edges[1]` is the center — O(1). |
+| **Employee Importance** [E] | "Total importance of employee and all subordinates" | BFS/DFS from root employee; accumulate importance | Build id→employee map first; then BFS on subordinate ids. |
+| **All Paths From Source to Target `⚡ T1`** [M] | "All paths in DAG from 0 to n-1" | DFS with backtracking; no visited set needed (DAG guarantees no cycles) | No cycle → no need for visited set; append path on reaching target. |
+| **Is Graph Bipartite? `⚡ T1`** [M] | "2-color graph with no monochromatic edge" | BFS/DFS; alternate colors; conflict = not bipartite | Disconnected graph: run BFS/DFS from every unvisited node. |
+| **Minimum Number of Vertices to Reach All Nodes `⚡ T1`** [M] | "In DAG, find nodes with no incoming edges" | Count in-degrees; nodes with in-degree 0 are the answer | Any node reachable from another has in-degree ≥ 1 — not a required start. |
+| **Network Delay Time** [M] | "All nodes reachable in shortest time" | Dijkstra from source; answer = max of all shortest distances | Return -1 if any node unreachable (`dist == inf`). |
+| **Find Eventual Safe States `⚡ T1`** [M] | "Nodes that don't lead to a cycle" | Reverse edges; topo sort via Kahn's; nodes in topo = safe | Alternatively: DFS with 3-color (white/gray/black); gray = cycle. |
+| **Redundant Connection `⚡ T1`** [M] | "Edge creating cycle in undirected graph" | Union-Find; first edge where `find(u) == find(v)` is redundant | If multiple redundant edges exist, return the last one (rightmost in input). |
+| **Minimum Spanning Tree (Kruskal's) `⚡ T1`** [M] | "Min total edge weight connecting all nodes" | Sort edges by weight; add if no cycle (Union-Find) | Edge count of MST = N-1; stop early when you've added N-1 edges. |
+| **Longest Path in DAG** [H] | "Maximum length path in directed acyclic graph" | Topo sort + DP; `dp[node] = max(dp[neighbor] + 1)` | Only works on DAGs — cycles make this undefined. Use memo + DFS for top-down. |
+| **Swim in Rising Water** [H] | "Min time to reach bottom-right as water rises" | Binary search on answer + BFS feasibility; or Dijkstra treating elevation as cost | Dijkstra approach: `dist[r][c]` = min max-elevation path to `(r,c)`. |
+
+---
+
+## Quick Revision Triggers
+
+- If the problem says "shortest path" in an unweighted graph → think BFS; first reach = shortest path by definition.
+- If the problem says "count connected components" or "flood fill a region" → think DFS/BFS iterating over all unvisited nodes.
+- If the problem says "course schedule", "task ordering", or "detect cycle in directed graph" → think Kahn's Topological Sort; cycle iff `len(order) < n`.
+- If the problem says "spread simultaneously from multiple sources" (rotten oranges, walls and gates) → think Multi-Source BFS; enqueue all sources at distance 0.
+- If the problem says "all cells reach both ocean/boundary" → think Reverse BFS from each boundary; intersect reachable sets.
+- If the problem gives a grid → treat it as implicit graph; no explicit adjacency list needed; use `DIRS_4 = [(1,0),(-1,0),(0,1),(0,-1)]`.
+- If DFS risks stack overflow on a large graph → use iterative DFS with explicit stack; mention `sys.setrecursionlimit` tradeoff to interviewer.
 
 ## See also
 
@@ -747,7 +643,6 @@ Nodes are categorized into three states:
 - **Gray (1)**: Active (currently in the recursion stack).
 - **Black (2)**: Fully processed (DFS completed for this node and all its descendants).
 A cycle is detected if a neighbor is found in the **Gray** state during traversal.
-
 
 **Shortest path, unweighted graph — what technique, and why?** #flashcard
 BFS (level-by-level guarantees minimum hops).

@@ -5,6 +5,17 @@ tags: [behavioral, index]
 ---
 # Behavioral — Google L3
 
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Entry point for behavioral prep and the question → attribute map.
+> **You'll be able to:** Know what each behavioral question is probing.
+> **Prereqs:** None · **Pair with:** [Behavioral guide](BEHAVIORAL_GOOGLINESS.md) · **Time:** 10 min
+
+**Sections:** [First-Principles Map](#first-principles-map) · [First-Principles Breakdown](#first-principles-breakdown)
+
+---
+
 **Everything lives in [`BEHAVIORAL_GOOGLINESS.md`](./BEHAVIORAL_GOOGLINESS.md)** — attributes, STAR, story bank, question types, follow-ups, red flags, interview-day checklist.
 
 This file is the index + the question→attribute decision map.

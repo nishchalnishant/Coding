@@ -3,24 +3,47 @@ tags: [coding, algorithms, dynamic-programming]
 topic: Dynamic Programming
 difficulty: mixed
 ---
-
 # Dynamic Programming — Problem Reference by Pattern
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked DP problems by pattern: linear, knapsack, LCS, grid, stock state machine, LIS, string DP, bitmask, interval, DP + binary search.
+> **You'll be able to:** Derive state/transition for unseen DP problems and space-optimise.
+> **Prereqs:** DP lecture · **Pair with:** [DP lecture](../../02-algorithms/15-dynamic-programming.md) · [Recursion → DP](../../02-algorithms/10-recursion-to-dp.md) · **Time:** 6–8 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Linear DP (1-D)](#linear-dp-1-d) · [0/1 Knapsack](#01-knapsack) · [Unbounded Knapsack](#unbounded-knapsack) · [LCS Family](#lcs-family) · [Grid DP](#grid-dp) · [State Machine DP (Stock Problems)](#state-machine-dp-stock-problems) · [Longest Increasing Subsequence (LIS) Family](#longest-increasing-subsequence-lis-family) · [String DP](#string-dp) · [Bitmask DP](#bitmask-dp) · [DP on Sequences](#dp-on-sequences) · [Interval DP](#interval-dp)
+
+> [!abstract]- Problem index (39)
+> **Linear DP (1-D):** [Climbing Stairs](#climbing-stairs--t2) · [Min Cost Climbing Stairs](#min-cost-climbing-stairs--t2) · [House Robber](#house-robber--t2) · [House Robber II (Circular)](#house-robber-ii-circular--t2) · [Maximum Subarray (Kadane's — DP view)](#maximum-subarray-kadanes--dp-view--t2) · [Word Break](#word-break--t2) · [Decode Ways](#decode-ways--t2)  
+> **0/1 Knapsack:** [Subset Sum Problem](#subset-sum-problem--t2) · [Partition Equal Subset Sum](#partition-equal-subset-sum--t2) · [Last Stone Weight II](#last-stone-weight-ii--t1)  
+> **Unbounded Knapsack:** [Coin Change (Min Coins)](#coin-change-min-coins--t2) · [Coin Change II (Total Ways)](#coin-change-ii-total-ways--t2) · [Combination Sum IV (LC 377)](#combination-sum-iv-lc-377--t2) · [Perfect Squares](#perfect-squares--t2)  
+> **LCS Family:** [Longest Common Subsequence](#longest-common-subsequence--t2) · [Edit Distance](#edit-distance--t2) · [Longest Palindromic Subsequence](#longest-palindromic-subsequence--t2) · [Minimum ASCII Delete Sum for Two Strings](#minimum-ascii-delete-sum-for-two-strings--t2) · [Minimum Window Subsequence (LC 727)](#minimum-window-subsequence-lc-727--t2)  
+> **Grid DP:** [Unique Paths](#unique-paths--t1) · [Unique Paths II (With Obstacles)](#unique-paths-ii-with-obstacles--t2) · [Minimum Path Sum](#minimum-path-sum--t1) · [Maximal Square](#maximal-square--t2)  
+> **State Machine DP (Stock Problems):** [Best Time to Buy and Sell Stock (All Variants)](#best-time-to-buy-and-sell-stock-all-variants--t2) · [Best Time to Buy and Sell Stock with Cooldown (LC 309)](#best-time-to-buy-and-sell-stock-with-cooldown-lc-309--t2) · [Stock with Transaction Fee](#stock-with-transaction-fee)  
+> **Longest Increasing Subsequence (LIS) Family:** [Longest Increasing Subsequence](#longest-increasing-subsequence--t1) · [Number of LIS](#number-of-lis)  
+> **String DP:** [Distinct Subsequences](#distinct-subsequences--t2) · [Interleaving String](#interleaving-string--t2) · [Regular Expression Matching](#regular-expression-matching)  
+> **Bitmask DP:** [Partition to K Equal Subset Sums](#partition-to-k-equal-subset-sums--t2)  
+> **DP on Sequences:** [Jump Game II](#jump-game-ii--t2) · [Maximum Product Subarray](#maximum-product-subarray--t2) · [Longest Common Substring](#longest-common-substring) · [Russian Doll Envelopes (LC 354)](#russian-doll-envelopes-lc-354) · [Maximum Profit in Job Scheduling](#maximum-profit-in-job-scheduling--t2)  
+> **Interval DP:** [Matrix Chain Multiplication](#matrix-chain-multiplication) · [Burst Balloons (LC 312)](#burst-balloons-lc-312--t2)  
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Climbing Stairs](#climbing-stairs--t2) · [House Robber](#house-robber--t2) · [Coin Change (Min Coins)](#coin-change-min-coins--t2) · [Coin Change II (Total Ways)](#coin-change-ii-total-ways--t2) · [Partition Equal Subset Sum](#partition-equal-subset-sum--t2) · [Longest Increasing Subsequence](#longest-increasing-subsequence--t1) · [Longest Common Subsequence](#longest-common-subsequence--t2) · [Edit Distance](#edit-distance--t2) · [Unique Paths](#unique-paths--t1) · [Word Break](#word-break--t2)
+> **Template:** Define `dp[i]` in one sentence → recurrence → base case → fill order → answer cell. Say all five before coding.
+> **Template:** Knapsack 1-D: 0/1 iterates capacity **backwards**; unbounded iterates **forwards**. Coin Change II: coins outer = combinations; amount outer = permutations.
+> **Gotchas:** Off-by-one in `dp` size (`n+1` for prefix-length states) · unreachable states must be `inf`, not `0` · LIS O(n log n) tails array is not the actual subsequence · start top-down memo if the recurrence isn't obvious, then convert.
+
+---
 
 > [!info] First Principles
 > Use DP when the same subproblem shows up again and the best overall answer is built from best sub-answers. Write the recurrence first, set base cases, fill the table in an order where dependencies are ready, then shrink space if you only need the last row or two.
 
-
-
-
 ---
 
 ## Linear DP (1-D)
+
+---
 
 ### Climbing Stairs `🎯 T2`
 
@@ -49,6 +72,9 @@ difficulty: mixed
 > 
 > **Constraints:**
 > - 1 <= n <= 45
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "ways to reach step n" · **Gotcha:** Base `dp[1]=1, dp[2]=2`; roll two variables
 
 > [!info] Approach
 > reaching step `i` from step `i-1` or `i-2` creates overlapping recursive calls. `dp[i]` = number of ways to reach step `i`. `dp[i] = dp[i-1] + dp[i-2]`; base `dp[0]=1, dp[1]=1`. This is Fibonacci. Space collapses to two variables.
@@ -153,6 +179,9 @@ difficulty: mixed
 > - 1 <= nums.length <= 100
 > - 0 <= nums[i] <= 400
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "no two adjacent" · **Gotcha:** Two-variable rolling
+
 > [!info] Approach
 > robbing house `i` forbids `i-1`; the optimal decision at each house depends on the optimal result two positions back. `dp[i]` = max money from houses `0..i`. `dp[i] = max(dp[i-1], dp[i-2] + nums[i])`; base `dp[0]=nums[0]`, `dp[1]=max(nums[0],nums[1])`.
 
@@ -204,6 +233,9 @@ difficulty: mixed
 > - 1 <= nums.length <= 100
 > - 0 <= nums[i] <= 1000
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Circular street · **Gotcha:** `n == 1` → `nums[0]`
+
 > [!info] Approach
 > Circular constraint means house 0 and house n-1 can't both be robbed. Reduce to two linear subproblems that are mutually exclusive. `max(rob(0..n-2), rob(1..n-1))` — run linear House Robber twice.
 
@@ -231,52 +263,7 @@ difficulty: mixed
 
 ### Maximum Subarray (Kadane's — DP view) `🎯 T2`
 
-> [!example] Problem
-> Given an integer array nums, find the subarray with the largest sum, and return its sum.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
-> Output: 6
-> Explanation: The subarray [4,-1,2,1] has the largest sum 6.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1]
-> Output: 1
-> Explanation: The subarray [1] has the largest sum 1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [5,4,-1,7,8]
-> Output: 23
-> Explanation: The subarray [5,4,-1,7,8] has the largest sum 23.
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-
-> [!info] Approach
-> max subarray ending at `i` depends on whether extending the previous subarray or restarting gives a larger value. `dp[i]` = max subarray sum ending at index `i`. `dp[i] = max(nums[i], dp[i-1] + nums[i])`; answer = `max(dp)`. Collapses to one variable.
-
-> [!note]- Python Solution
-> ```python
-> def max_sub_array(nums):
->     best = curr = nums[0]
->     for x in nums[1:]:
->         curr = max(x, curr + x)
->         best = max(best, curr)
->     return best
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> D&C approach O(n log n) — cross-midpoint expansion, useful for explaining recurrence. Prefix sum with running minimum gives the same result.
+> Full walkthrough: [Maximum Subarray](../data-structures/01-array.md#maximum-subarray--t2).
 
 ---
 
@@ -313,6 +300,9 @@ difficulty: mixed
 > - 1 <= wordDict[i].length <= 20
 > - s and wordDict[i] consist of only lowercase English letters.
 > - All the strings of wordDict are unique.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "can the string be segmented" · **Gotcha:** Use a set; cap `j` by max word length
 
 > [!info] Approach
 > `s[0..i]` is breakable if any split `s[0..j]` is breakable and `s[j+1..i]` is in the dictionary. Subproblems overlap at shared prefixes. `dp[i]` = True if `s[0..i-1]` is breakable. `dp[i] = any(dp[j] and s[j:i] in word_set)` for `j` in `[i-max_len, i)`. Base: `dp[0]=True`.
@@ -385,6 +375,9 @@ difficulty: mixed
 > - 1 <= s.length <= 100
 > - s contains only digits and may contain leading zero(s).
 
+> [!tip] Recognize · Gotcha
+> **Signal:** One- or two-digit branch · **Gotcha:** `'0'` alone is invalid; `"06"` is not 6
+
 > [!info] Approach
 > each position can be decoded as 1 or 2 digits; choices overlap across prefixes. `dp[i]` = number of decodings of `s[0..i-1]`. add `dp[i-1]` if `s[i-1] != '0'`; add `dp[i-2]` if `10 ≤ s[i-2:i] ≤ 26`. Base: `dp[0]=1`.
 
@@ -411,6 +404,8 @@ difficulty: mixed
 ---
 
 ## 0/1 Knapsack
+
+---
 
 ### Subset Sum Problem `🎯 T2`
 
@@ -461,6 +456,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= nums.length <= 200
 > - 1 <= nums[i] <= 100
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "split into two equal halves" · **Gotcha:** Odd total → False immediately
 
 > [!info] Approach
 > Equal partition iff one subset sums to `total/2`. Reduces to subset-sum with `T = total // 2`. Same as Subset Sum with `target = sum(nums) // 2`. Odd total → return False immediately. Then run 0/1 knapsack DP.
@@ -544,6 +542,8 @@ difficulty: mixed
 
 ## Unbounded Knapsack
 
+---
+
 ### Coin Change (Min Coins) `🎯 T2`
 
 > [!example] Problem
@@ -574,6 +574,12 @@ difficulty: mixed
 > - 1 <= coins.length <= 12
 > - 1 <= coins[i] <= 2^{31} - 1
 > - 0 <= amount <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "fewest coins" · **Gotcha:** Init `inf`, `dp[0] = 0`; return `-1` if still `inf`
+
+> [!failure] Tempting wrong approach
+> Greedy largest-coin-first — coins `[1,3,4]`, amount 6 gives 4+1+1 (3 coins), optimal is 3+3 (2).
 
 > [!info] Approach
 > Coins are reusable → unbounded knapsack. Overlapping subproblems: the optimal solution for amount `i` reuses optimal solutions for `i - coin`. `dp[i]` = min coins to make amount `i`. `dp[i] = min(dp[i-c] + 1)` for each coin `c ≤ i`; forward sweep (reuse allowed). Base: `dp[0]=0`, rest `inf`.
@@ -636,6 +642,9 @@ difficulty: mixed
 > - All the values of coins are unique.
 > - 0 <= amount <= 5000
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "number of combinations" · **Gotcha:** Amount outer counts permutations (LC 377)
+
 > [!info] Approach
 > Combinations require each denomination to be processed once, not per position. Loop coins outer, amounts inner. `dp[i]` = number of combination ways to make amount `i`. Outer loop over coins; inner forward sweep: `dp[i] += dp[i-c]`. This ensures [1,2] and [2,1] are the same combination.
 
@@ -657,6 +666,42 @@ difficulty: mixed
 > Swapping loop order counts permutations (ordered sequences) — different problem. 2D DP clarifies the derivation.
 
 ---
+
+### Combination Sum IV (LC 377) `🎯 T2`
+
+> [!example] Problem
+> Distinct positive `nums`, a `target`. Count the **ordered** sequences (repetition allowed) that sum to `target`. **Medium.**
+>
+> ```
+> Input: nums = [1,2,3], target = 4  →  7
+> (1,1,1,1) (1,1,2) (1,2,1) (2,1,1) (2,2) (1,3) (3,1)
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "count", and different orderings count separately · **Gotcha:** it's DP, not backtracking — enumerating the 7 sequences generalizes to exponential output and TLEs.
+
+> [!info] Approach
+> **Key insight:** order matters → put the **amount in the outer loop**. `dp[t]` = number of sequences summing to `t`; the last number picked is any `x ≤ t`, so `dp[t] = Σ dp[t − x]`. Swapping the loops (coins outer) gives Coin Change II's unordered count — the single most-asked contrast.
+
+> [!note]- Python Solution
+> ```python
+> def combination_sum4(nums, target):
+>     dp = [1] + [0] * target          # one way to make 0: pick nothing
+>     for t in range(1, target + 1):   # amount OUTER → ordered
+>         for x in nums:
+>             if x <= t:
+>                 dp[t] += dp[t - x]
+>     return dp[target]
+> ```
+
+> [!success] Complexity
+> **TC**: O(target · |nums|) | **SC**: O(target).
+
+> [!tip] Alternatives
+> Top-down `@cache def f(t): return t == 0 or sum(f(t-x) for x in nums if x <= t)`. **Follow-up (negatives allowed):** unbounded cycles → infinite answers; must cap sequence length.
+
+---
+
 
 ### Perfect Squares `🎯 T2`
 
@@ -708,6 +753,8 @@ difficulty: mixed
 
 ## LCS Family
 
+---
+
 ### Longest Common Subsequence `🎯 T2`
 
 > [!example] Problem
@@ -739,6 +786,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= text1.length, text2.length <= 1000
 > - text1 and text2 consist of only lowercase English characters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** 2D DP · **Gotcha:** **Space** O(min(m,n)) possible; **empty** string base.
 
 > [!info] Approach
 > Matching characters at positions `i,j` yields a subproblem on the remaining suffixes; these sub-results are reused. `dp[i][j]` = LCS length of `s1[0..i-1]` and `s2[0..j-1]`. If `s1[i-1]==s2[j-1]`: `dp[i][j] = dp[i-1][j-1]+1`; else `max(dp[i-1][j], dp[i][j-1])`. Space: roll to one row.
@@ -797,6 +847,9 @@ difficulty: mixed
 > - 0 <= word1.length, word2.length <= 500
 > - word1 and word2 consist of lowercase English letters.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "min ops to convert" · **Gotcha:** Base row/col = `i` / `j`, not 0
+
 > [!info] Approach
 > Three operations at each mismatch create overlapping subproblems on shorter string pairs. `dp[i][j]` = edit distance between `word1[0..i-1]` and `word2[0..j-1]`. If chars match: `dp[i-1][j-1]`; else `1 + min(replace=dp[i-1][j-1], delete=dp[i-1][j], insert=dp[i][j-1])`. Base: `dp[i][0]=i`, `dp[0][j]=j`.
 
@@ -847,6 +900,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= s.length <= 1000
 > - s consists only of lowercase English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** `LCS(s, rev(s))` shortcut · **Gotcha:** Single chars: `dp[i][i] = 1` base case
 
 > [!info] Approach
 > A palindrome is its own reverse; LPS(s) = LCS(s, reverse(s)). Both overlapping subproblems. `dp[i][j]` = LPS length in `s[i..j]`. If `s[i]==s[j]`: `dp[i][j] = dp[i+1][j-1]+2`; else `max(dp[i+1][j], dp[i][j-1])`. Fill diagonals outward (length 1→2→…→n).
@@ -1016,7 +1072,9 @@ difficulty: mixed
 
 ## Grid DP
 
-### Unique Paths `🎯 T2`
+---
+
+### Unique Paths `⚡ T1`
 
 > [!example] Problem
 > There is a robot on an m x n grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot tries to move to the bottom-right corner (i.e., grid[m - 1][n - 1]). The robot can only move either down or right at any point in time.
@@ -1041,6 +1099,9 @@ difficulty: mixed
 > 
 > **Constraints:**
 > - 1 <= m, n <= 100
+
+> [!tip] Recognize · Gotcha
+> **Signal:** `dp[r][c] = dp[r-1][c] + dp[r][c-1]` · **Gotcha:** Base row/col = all 1s
 
 > [!info] Approach
 > Each cell is reachable from exactly above or left; paths to any cell = sum of paths to two neighbors — overlapping. `dp[j]` = paths to column `j` of current row (rolling 1D array). `dp[j] += dp[j-1]` for each row. Base: all 1s initially (single path along edges).
@@ -1093,6 +1154,9 @@ difficulty: mixed
 > - 1 <= m, n <= 100
 > - obstacleGrid[i][j] is 0 or 1.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Set `dp[r][c] = 0` when obstacle · **Gotcha:** Re-check first row/col early
+
 > [!info] Approach
 > Same grid DP but obstacle cells have zero paths and block propagation downstream. `dp[j]` = paths to `(i,j)` treating blocked cells as 0. Same recurrence; set `dp[j]=0` when `obstacleGrid[i][j]==1`. Careful with first row/col initialization.
 
@@ -1119,7 +1183,7 @@ difficulty: mixed
 
 ---
 
-### Minimum Path Sum `🎯 T2`
+### Minimum Path Sum `⚡ T1`
 
 > [!example] Problem
 > Given a m x n grid filled with non-negative numbers, find a path from top left to bottom right, which minimizes the sum of all numbers along its path.
@@ -1143,6 +1207,9 @@ difficulty: mixed
 > - n == grid[i].length
 > - 1 <= m, n <= 200
 > - 0 <= grid[i][j] <= 200
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "min cost, right/down" · **Gotcha:** Init first row/col as prefix sums
 
 > [!info] Approach
 > Min-cost path to `(i,j)` = grid value + min of cost from above or left — overlapping. `dp[j]` = min cost to reach column `j` of current row. `dp[j] = grid[i][j] + min(dp[j], dp[j-1])`. Initialize first row as prefix sums.
@@ -1198,6 +1265,9 @@ difficulty: mixed
 > - 1 <= m, n <= 300
 > - matrix[i][j] is '0' or '1'.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Extend bottom-right corner · **Gotcha:** `matrix` is `str`, cast to int
+
 > [!info] Approach
 > A square of side `k` at `(i,j)` requires squares of side `k-1` at three adjacent neighbors — optimal substructure with overlapping sub-rectangles. `dp[i][j]` = side of largest all-1s square with bottom-right at `(i,j)`. If `matrix[i][j]=='1'`: `dp[i][j] = min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1]) + 1`. Roll to two rows or 1D.
 
@@ -1224,6 +1294,8 @@ difficulty: mixed
 ---
 
 ## State Machine DP (Stock Problems)
+
+---
 
 ### Best Time to Buy and Sell Stock (All Variants) `🎯 T2`
 
@@ -1309,10 +1381,17 @@ difficulty: mixed
 
 ---
 
-### Stock with Cooldown
+### Best Time to Buy and Sell Stock with Cooldown (LC 309) `🎯 T2`
 
 > [!example] Problem
-> Unlimited transactions; must rest 1 day after selling.
+> Unlimited transactions; after selling you must rest 1 day before buying again. **Medium.**
+>
+> ```
+> Input: [1,2,3,0,2]  →  3   (buy, sell, cooldown, buy, sell)
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "cooldown" / "must wait after selling" → state machine · **Gotcha:** update all three states from the **previous** day's values (tuple assignment) — sequential updates leak today's sale into today's buy.
 
 > [!info] Approach
 > Three states model the constraint: holding, just sold (cooldown), resting. Transitions connect states across days. `held` = best profit when holding; `sold` = best on day of sell; `rest` = best when not holding and not in cooldown. `held = max(held, rest - price)`, `sold = held + price`, `rest = max(rest, sold)`.
@@ -1358,6 +1437,8 @@ difficulty: mixed
 
 ## Longest Increasing Subsequence (LIS) Family
 
+---
+
 ### Longest Increasing Subsequence `⚡ T1`
 
 > [!example] Problem
@@ -1385,6 +1466,12 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= nums.length <= 2500
 > - -10^4 <= nums[i] <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** LIS O(n log n) · **Gotcha:** **Strictly** increasing vs **non-decreasing** changes binary search.
+
+> [!failure] Tempting wrong approach
+> Greedy "extend if larger than the last taken" — `[3,4,1,2,3]` gives 2, true LIS is 3. Use O(n²) DP or patience sorting (O(n log n)).
 
 > [!info] Approach
 > Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n). `tails[i]` = smallest tail element of all increasing subsequences of length `i+1` seen so far. For each `x` in `nums`, binary search `tails` for the first element `>= x`. If found, replace it with `x`; otherwise append `x`. Answer = `len(tails)`.
@@ -1447,6 +1534,8 @@ difficulty: mixed
 
 ## String DP
 
+---
+
 ### Distinct Subsequences `🎯 T2`
 
 > [!example] Problem
@@ -1480,6 +1569,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= s.length, t.length <= 1000
 > - s and t consist of English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Add ways when chars match · **Gotcha:** `dp[i][0] = 1` (empty t always subseq)
 
 > [!info] Approach
 > At each position we either use `s[i]` to match `t[j]` or we skip it; both branches must be counted. `dp[i][j]` = number of ways to form `t[:j]` from `s[:i]`. If `s[i-1] == t[j-1]`: `dp[i][j] = dp[i-1][j-1] + dp[i-1][j]` (use or skip). Else: `dp[i][j] = dp[i-1][j]`. Base: `dp[i][0] = 1` for all `i`.
@@ -1539,6 +1631,9 @@ difficulty: mixed
 > - 0 <= s1.length, s2.length <= 100
 > - 0 <= s3.length <= 200
 > - s1, s2, and s3 consist of lowercase English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Two sources for each `s3` char · **Gotcha:** Check `m+n == len(s3)` first
 
 > [!info] Approach
 > At each position in `s3` we choose whether the next character comes from `s1` or `s2`; overlapping subproblems arise. `dp[i][j]` = true if `s3[:i+j]` can be formed from `s1[:i]` and `s2[:j]`. `dp[i][j] = (dp[i-1][j] and s1[i-1]==s3[i+j-1]) or (dp[i][j-1] and s2[j-1]==s3[i+j-1])`. Base: `dp[0][0] = True`.
@@ -1603,6 +1698,9 @@ difficulty: mixed
 > - p contains only lowercase English letters, '.', and '*'.
 > - It is guaranteed for each appearance of the character '*', there will be a previous valid character to match.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** `*` = zero-or-more of PRECEDING char · **Gotcha:** Base case: leading `a*b*` matches `""`
+
 > [!info] Approach
 > `*` introduces branching — match zero occurrences (skip pattern pair) or one-or-more — creating overlapping sub-problems. `dp[i][j]` = true if `s[:i]` matches `p[:j]`. If `p[j-1] == '*'`: `dp[i][j] = dp[i][j-2]` (zero uses) or `(dp[i-1][j] and (p[j-2]=='.' or p[j-2]==s[i-1]))` (one+ uses). Else: `dp[i][j] = dp[i-1][j-1] and (p[j-1]=='.' or p[j-1]==s[i-1])`.
 
@@ -1635,10 +1733,15 @@ difficulty: mixed
 
 ## Bitmask DP
 
+---
+
 ### Partition to K Equal Subset Sums `🎯 T2`
 
 > [!example] Problem
 > Given `nums` and integer `k`, return true if the array can be partitioned into `k` subsets each with equal sum (LC 698).
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Can array be split into K equal-sum subsets?" · **Gotcha:** Sort descending first — places large elements first and prunes faster. Skip identical-value buckets at same depth.
 
 > [!info] Approach
 > Subset assignment is NP-hard in general but `n ≤ 16` makes 2^n bitmask DP feasible. `dp[mask]` = true if the elements indicated by `mask` can be perfectly distributed into some number of full buckets. `target = total / k`. Iterate all masks in order. For each set mask, compute `current_sum = sum of selected elements % target`. Try adding each unselected element; if it fits, `dp[mask | (1<<i)] = True`. Answer = `dp[(1<<n)-1]`.
@@ -1680,51 +1783,11 @@ difficulty: mixed
 
 ## DP on Sequences
 
+---
+
 ### Jump Game II `🎯 T2`
 
-> [!example] Problem
-> You are given a 0-indexed array of integers nums of length n. You are initially positioned at nums[0].
-> Each element nums[i] represents the maximum length of a forward jump from index i. In other words, if you are at nums[i], you can jump to any nums[i + j] where:
-> Return the minimum number of jumps to reach nums[n - 1]. The test cases are generated such that you can reach nums[n - 1].
-> 
-> **Example 1:**
-> ```
-> Input: nums = [2,3,1,1,4]
-> Output: 2
-> Explanation: The minimum number of jumps to reach the last index is 2. Jump 1 step from index 0 to 1, then 3 steps to the last index.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [2,3,0,1,4]
-> Output: 2
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 10^4
-> - 0 <= nums[i] <= 1000
-> - It's guaranteed that you can reach nums[n - 1].
-
-> [!info] Approach
-> Greedy DP: at each jump, greedily extend to the farthest reachable index. Counting jumps only when forced to jump. Track `current_end` (end of current jump range) and `farthest` (max reachable from within range). Iterate; update `farthest = max(farthest, i + nums[i])`. When `i == current_end` and not at last index: increment jumps, set `current_end = farthest`.
-
-> [!note]- Python Solution
-> ```python
-> def jump(nums):
->     jumps = current_end = farthest = 0
->     for i in range(len(nums) - 1):
->         farthest = max(farthest, i + nums[i])
->         if i == current_end:
->             jumps += 1
->             current_end = farthest
->     return jumps
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> O(n) DP: `dp[i] = min jumps to reach i`; update via `dp[j] = min(dp[j], dp[i]+1)` for `j` in `[i+1, i+nums[i]]`. Greedy is simpler and equivalent.
+> Full walkthrough: [Jump Game II (minimum jumps)](16-greedy.md#jump-game-ii-minimum-jumps--t2).
 
 ---
 
@@ -1807,7 +1870,6 @@ difficulty: mixed
 
 ---
 
-
 ### Russian Doll Envelopes (LC 354)
 
 > [!example] Problem
@@ -1833,6 +1895,9 @@ difficulty: mixed
 > - 1 <= envelopes.length <= 10^5
 > - envelopes[i].length == 2
 > - 1 <= wi, hi <= 10^5
+
+> [!tip] Recognize · Gotcha
+> **Signal:** 2D nesting · **Gotcha:** Descending `h` blocks equal widths nesting
 
 > [!info] Approach
 > If we sort by width, this becomes LIS on heights. But with equal widths, we can't include two envelopes (a wider envelope can't fit inside one of the same width). Fix: sort by `(width asc, height desc)` — the descending height ensures equal-width envelopes can never form an increasing subsequence. Sort by `(w asc, h desc)`. Extract heights. Run patience sort (O(n log n) LIS) on heights. `bisect_left` on the `tails` array — same as LC 300 LIS.
@@ -1862,9 +1927,39 @@ difficulty: mixed
 
 ---
 
+### Maximum Profit in Job Scheduling `🎯 T2`
+
+> [!example] Problem
+> Given jobs as `(startTime, endTime, profit)`, pick non-overlapping jobs maximizing total profit. Jobs ending at t and starting at t don't overlap.
+
+> [!info] Approach
+> Weighted interval scheduling — greedy fails because profits are arbitrary, so it's DP. Sort jobs by **end time**; let `dp[i]` = best profit using the first i jobs. For job i: skip it (`dp[i-1]`) or take it (`profit + dp[j]` where j = count of jobs ending `≤ start_i`, found with `bisect_right` on the sorted ends). The DP + binary-search composition is exactly the "combine two T1 patterns" move Google L4 rounds test.
+
+> [!note]- Python Solution
+> ```python
+> import bisect
+> >
+> def jobScheduling(startTime, endTime, profit):
+>     jobs = sorted(zip(endTime, startTime, profit))
+>     ends = [e for e, _, _ in jobs]
+>     dp = [0] * (len(jobs) + 1)
+>     for i, (e, s, p) in enumerate(jobs):
+>         j = bisect.bisect_right(ends, s, 0, i)
+>         dp[i + 1] = max(dp[i], dp[j] + p)
+>     return dp[-1]
+> ```
+
+> [!success] Complexity
+> Time O(n log n); Space O(n).
+
+> [!warning] Gotcha
+> `bisect_right` (not `bisect_left`) because a job ending exactly at `s` is compatible. Limit the search to `[0, i)` — searching the whole array can "find" the current job. State the greedy counter-example (one long high-profit job vs many short ones) before writing the DP.
+
 ---
 
 ## Interval DP
+
+---
 
 ### Matrix Chain Multiplication
 
@@ -1903,6 +1998,9 @@ difficulty: mixed
 > [!example] Problem
 > Given `n` balloons with values `nums[i]`, bursting balloon `i` earns `nums[left] * nums[i] * nums[right]` coins (adjacent *remaining* balloons). Maximize total coins after bursting all balloons. [H]
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Interval DP · **Gotcha:** **Multiply** `nums[i]*nums[k]*nums[j]` — **add** boundary 1s as sentinels.
+
 > [!info] Approach
 > Thinking forward ("which balloon do I burst first?") fails because bursting changes adjacency unpredictably. Think **backward**: fix which balloon `k` is burst **last** in the open interval `(i, j)`. When `k` is last, its neighbors are the fixed boundaries `i` and `j`, so it earns `nums[i] * nums[k] * nums[j]`. Pad the array with 1s on both ends. `dp[i][j]` = max coins from bursting everything strictly between `i` and `j`: `dp[i][j] = max over k in (i, j) of dp[i][k] + dp[k][j] + nums[i] * nums[k] * nums[j]`. Fill by increasing interval length.
 
@@ -1929,39 +2027,6 @@ difficulty: mixed
 > - Same last-action-in-interval trick: Remove Boxes (LC 546), Strange Printer (LC 664), Minimum Cost to Merge Stones — all `💤 T3` at L3.
 
 ---
-
-## DP + Binary Search — L4 addition
-
-### Maximum Profit in Job Scheduling `🎯 T2`
-
-> [!example] Problem
-> Given jobs as `(startTime, endTime, profit)`, pick non-overlapping jobs maximizing total profit. Jobs ending at t and starting at t don't overlap.
-
-> [!info] Approach
-> Weighted interval scheduling — greedy fails because profits are arbitrary, so it's DP. Sort jobs by **end time**; let `dp[i]` = best profit using the first i jobs. For job i: skip it (`dp[i-1]`) or take it (`profit + dp[j]` where j = count of jobs ending `≤ start_i`, found with `bisect_right` on the sorted ends). The DP + binary-search composition is exactly the "combine two T1 patterns" move Google L4 rounds test.
-
-> [!note]- Python Solution
-> ```python
-> import bisect
-> >
-> def jobScheduling(startTime, endTime, profit):
->     jobs = sorted(zip(endTime, startTime, profit))
->     ends = [e for e, _, _ in jobs]
->     dp = [0] * (len(jobs) + 1)
->     for i, (e, s, p) in enumerate(jobs):
->         j = bisect.bisect_right(ends, s, 0, i)
->         dp[i + 1] = max(dp[i], dp[j] + p)
->     return dp[-1]
-> ```
-
-> [!success] Complexity
-> Time O(n log n); Space O(n).
-
-> [!warning] Gotcha
-> `bisect_right` (not `bisect_left`) because a job ending exactly at `s` is compatible. Limit the search to `[0, i)` — searching the whole array can "find" the current job. State the greedy counter-example (one long high-profit job vs many short ones) before writing the DP.
-
----
-
 
 ## See Also
 

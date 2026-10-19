@@ -2,8 +2,18 @@
 tags: [patterns, intuition, curriculum, ladders]
 topic: Pattern Ladders — derive each pattern instead of memorizing problems
 ---
-
 # Pattern Ladders — Intuition-First Curriculum
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Twelve graded problem ladders (sliding window → design) that make you derive each pattern rather than memorise problems.
+> **You'll be able to:** Solve unseen variants of each pattern by climbing from the base case.
+> **Prereqs:** How to think · **Pair with:** [How to think](HOW_TO_THINK.md) · **Time:** 2–3 weeks of practice
+
+**Sections:** [The study protocol (non-negotiable)](#the-study-protocol-non-negotiable) · [Ladder 1 — Sliding Window](#ladder-1--sliding-window) · [Ladder 2 — Two Pointers (converging)](#ladder-2--two-pointers-converging) · [Ladder 3 — Binary Search (on index → on answer)](#ladder-3--binary-search-on-index--on-answer) · [Ladder 4 — Hashing for O(n) lookups](#ladder-4--hashing-for-on-lookups) · [Ladder 5 — BFS / DFS on grids & graphs](#ladder-5--bfs--dfs-on-grids--graphs) · [Ladder 6 — Monotonic Stack](#ladder-6--monotonic-stack) · [Ladder 7 — Heaps & Top-K](#ladder-7--heaps--top-k) · [Ladder 8 — Shortest Path Beyond BFS](#ladder-8--shortest-path-beyond-bfs) · [Ladder 9 — Recursion → Backtracking](#ladder-9--recursion--backtracking) · [Ladder 10 — Recursion → DP](#ladder-10--recursion--dp) · [Ladder 11 — Intervals & Sweep](#ladder-11--intervals--sweep) · [Ladder 12 — Design-a-Data-Structure (L4 signature)](#ladder-12--design-a-data-structure-l4-signature) · [After the ladders](#after-the-ladders)
+
+---
 
 > **The problem this file solves:** the rest of the repo is organized topic-first with per-problem "key insights." That builds *recognition*, which fails on unseen problems. This file builds *derivation*: for each pattern you learn one **invariant** (the reason the pattern works), then climb a ladder of problems where each rung changes exactly **one thing** from the previous. When the interview problem is new, you don't search memory for a lookalike — you check which invariant applies.
 >

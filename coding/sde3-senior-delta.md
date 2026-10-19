@@ -2,8 +2,19 @@
 tags: [sde3, senior, roadmap, delta]
 topic: SDE-3 / Senior Delta — what changes on top of the L4 base
 ---
-
 # SDE-3 / Senior FAANG Delta — Upgrade Layer
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** What changes at SDE-3/senior: grading dimensions, bare-`T3` senior promotions, senior-only variants, behavioral delta.
+> **You'll be able to:** Know which follow-ups a senior loop expects on top of the L4 bar.
+> **Prereqs:** L4 delta · **Pair with:** [L4 delta](l4-sde2-delta.md) · [Senior follow-ups](../03-patterns/SENIOR_FOLLOWUPS.md) · **Time:** 20 min
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](l3-google-roadmap.md#tier-legend))
+
+**Sections:** [1. What actually changes at senior level](#1-what-actually-changes-at-senior-level) · [2. Tier promotions (L4 → Senior)](#2-tier-promotions-l4--senior) · [3. Senior-only problems / variants (not in L3 or L4 tracks)](#3-senior-only-problems--variants-not-in-l3-or-l4-tracks) · [4. Senior-relevant behavioral delta](#4-senior-relevant-behavioral-delta) · [5. How this plugs into the existing tracks](#5-how-this-plugs-into-the-existing-tracks)
+
+---
 
 > **How to use this file:** Everything in the L3 base ([`l3-google-roadmap.md`](l3-google-roadmap.md)) and the L4 delta ([`l4-sde2-delta.md`](l4-sde2-delta.md)) is still the foundation — senior loops draw from the *same* topic pool. This file lists only what **changes again**: the senior bar, `T3` tier promotions, and the problems/variants neither prior track covers. Study L3 → L4 first; layer this on top last.
 

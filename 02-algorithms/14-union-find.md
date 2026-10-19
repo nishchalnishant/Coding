@@ -3,51 +3,31 @@ module: 02-algorithms
 topic: Union Find
 tags: [algorithms, union-find]
 ---
+# Union-Find (Disjoint Set Union) — L3 Gold Standard
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Disjoint Set Union with path compression + union by rank, connectivity counting, cycle detection in undirected graphs, Kruskal's MST, offline union.
+> **You'll be able to:** Write DSU in 10 lines; choose DSU vs BFS/DFS for dynamic connectivity; explain the near-O(1) amortised cost.
+> **Prereqs:** Graphs · **Pair with:** [Union-Find problems](../coding/algorithms/14-union-find.md) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY Union-Find exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
-       │                     │               │               │               │
-  [Checking if two nodes    [forest of       [find: follow   [connected      [naive find
-   are connected across a    trees where      parent pointers  components,     O(n) without
-   dynamic graph with many   each tree =      to root;         cycle detect    path compress;
-   union operations is       one component;   union: link      in Kruskal,     wrong parent
-   O(n) without structure;   each node has    one root to      number of       update in
-   BFS/DFS is O(V+E) per     parent pointer;  another; path    islands,        weighted union
-   query]                    root is          compression +    accounts merge, corrupts ranks;
-                             representative]  union by rank    redundant       can't undo
-                                              → O(α(n)) ≈ O(1)] connections]   unions]
-       │                     │               │
-  [real-world:              [invariant:      [path compression: on find,
-   Kruskal's MST;            all nodes in     set every node's parent
-   percolation problem;      same component   directly to root; amortizes
-   friend circles;           have same root   over m operations to
-   accounts linked by        after find;      O(m α(n)) total where
-   shared emails]            root.parent=root] α(n) ≤ 4 for all practical n]
-       ↓
-[Decision: Union-Find vs alternatives]
-  ├── vs BFS/DFS      → UF O(α) per query after O(n) build; BFS O(V+E) per query
-  ├── vs Adjacency +  → UF only answers "same component?"; graph answers "path?"
-      BFS
-  └── vs Segment Tree → ST for range queries; UF for set membership/merge
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. L3 Deep Dives](#3-l3-deep-dives) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Repeated "are A and B connected?" queries on a graph with dynamic edge additions require either O(V+E) BFS each time or a structure that maintains component identity incrementally.
 - **Core insight**: Represent each component as a tree with a canonical root (representative); union = merge two trees; find = navigate to root. Path compression makes subsequent finds near-O(1).
 - **Invariant**: All nodes in the same connected component share the same root after `find`; `root.parent == root` uniquely identifies a component.
 - **Why it's fast**: Path compression + union by rank gives amortized O(α(n)) per operation — α is the inverse Ackermann function, effectively ≤ 4 for any practical input size.
+- **Proof sketch you can say out loud**: union by rank alone → a root of rank `r` has ≥ `2^r` nodes (rank only grows when two equal-rank trees merge, doubling size), so depth ≤ log₂ n and find is O(log n). Path compression on top flattens every path it walks, bringing the amortized bound down to O(α(n)) — state that result, don't derive it.
 - **Where it breaks**: Cannot support "undo" (split a component) without rollback tricks; only answers "same component?" not "what is the path?"; naive implementation without both optimizations degrades to O(log n) or O(n).
 
-# Union-Find (Disjoint Set Union) — L3 Gold Standard
+### One-Page Map
 
 ```
 [UNION-FIND (DSU) — MINDMAP]
@@ -81,9 +61,6 @@ WHY Union-Find exists → WHAT it is → HOW it works → WHEN to use → WHAT c
 
 Near-O(1) amortized connectivity. L3 focus: correct optimizations (path compression + union by rank), DSU variants (weighted ratios, rollback), Kruskal's MST, and distributed dynamic connectivity.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -116,11 +93,11 @@ Near-O(1) amortized connectivity. L3 focus: correct optimizations (path compress
 - Directed graphs — DSU is for undirected connectivity; use DFS/topological sort for SCCs.
 - You need the actual path between nodes — DSU only answers "same component?", not "what is the path?".
 
-**Common mistakes.**
-- Calling `find` without path compression — correct but degrades to O(N) without it; always use both optimizations together.
-- Union by value rather than by rank — degrades tree balance to O(N) height.
-- Not initializing `parent[i] = i` for all nodes — uninitialized parent causes infinite loops in `find`.
-- Forgetting to check `find(u) != find(v)` before union in Kruskal — adding a cycle edge inflates MST cost.
+> [!warning] Common mistakes
+> - Calling `find` without path compression — correct but degrades to O(N) without it; always use both optimizations together.
+> - Union by value rather than by rank — degrades tree balance to O(N) height.
+> - Not initializing `parent[i] = i` for all nodes — uninitialized parent causes infinite loops in `find`.
+> - Forgetting to check `find(u) != find(v)` before union in Kruskal — adding a cycle edge inflates MST cost.
 
 ---
 
@@ -168,6 +145,35 @@ class DSU:
 
     def component_size(self, x: int) -> int:
         return self.size[self.find(x)]
+```
+
+**Dry run — path compression.** Start from a worst-case chain `4 → 3 → 2 → 1 → 0`. Without union by rank you get this from naive `parent[x] = y` unions. Call `find(4)`:
+
+| Step | Call stack | Action | `parent` after |
+|---|---|---|---|
+| 0 | — | initial chain | `[0, 0, 1, 2, 3]` |
+| 1 | `find(4) → find(3) → find(2) → find(1) → find(0)` | descend until `parent[0] == 0` (root) | unchanged |
+| 2 | unwinding `find(1)` | `parent[1] = 0` (already) | `[0, 0, 1, 2, 3]` |
+| 3 | unwinding `find(2)` | `parent[2] = 0` | `[0, 0, 0, 2, 3]` |
+| 4 | unwinding `find(3)` | `parent[3] = 0` | `[0, 0, 0, 0, 3]` |
+| 5 | unwinding `find(4)` | `parent[4] = 0` | `[0, 0, 0, 0, 0]` |
+
+One O(depth) call flattens the whole path, so every later `find` on 1–4 is O(1). Union by rank stops chains like this from forming at all. Together the two give O(α(n)).
+
+```mermaid
+flowchart LR
+  subgraph Before["before find(4)"]
+    direction BT
+    n4[4] --> n3[3] --> n2[2] --> n1[1] --> n0((0))
+  end
+  subgraph After["after find(4)"]
+    direction BT
+    m1[1] --> m0((0))
+    m2[2] --> m0
+    m3[3] --> m0
+    m4[4] --> m0
+  end
+  Before --> After
 ```
 
 #### Common Variants & Twists
@@ -355,17 +361,17 @@ class RollbackDSU:
 ## 4. Common Interview Problems
 
 ### Medium (High Frequency)
-- **Number of Connected Components** — DSU; initialize `components = n`; decrement on successful union.
-- **Redundant Connection `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
-- **Accounts Merge `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
-- **Graph Valid Tree `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
-- **Satisfiability of Equations** — Union all `==` pairs first; then check all `!=` pairs.
+- **[Redundant Connection](../coding/data-structures/13-graph.md#redundant-connection--t1) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
+- **[Accounts Merge](../coding/algorithms/14-union-find.md#accounts-merge-email-graph--t1) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
+- **[Graph Valid Tree](../coding/algorithms/14-union-find.md#graph-valid-tree--t1) `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
+- **[Satisfiability of Equations](../coding/algorithms/14-union-find.md#satisfiability-of-equality-equations--t1) `⚡ T1`** — Union all `==` pairs first; then check all `!=` pairs.
+- **[Number of Connected Components](../coding/algorithms/14-union-find.md#number-of-connected-components-in-an-undirected-graph) `🎯 T2`** — DSU; initialize `components = n`; decrement on successful union.
 
 ### Hard
-- **Number of Islands II `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
-- **Minimize Malware Spread** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
-- **Evaluate Division** — Weighted DSU; ratios as edge weights; query accumulates product path.
-- **Smallest String With Swaps** — DSU on index pairs; sort characters lexicographically within each component.
+- **[Number of Islands II](../coding/algorithms/14-union-find.md#number-of-islands-ii--t1) `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
+- **[Evaluate Division](../coding/algorithms/14-union-find.md#evaluate-division-weighted-dsu) `⚡ T1`** — Weighted DSU; ratios as edge weights; query accumulates product path.
+- **[Smallest String With Swaps](../coding/algorithms/14-union-find.md#smallest-string-with-swaps-lc-1202) `🎯 T2`** — DSU on index pairs; sort characters lexicographically within each component.
+- **[Minimize Malware Spread](../coding/algorithms/14-union-find.md#minimize-malware-spread) `💤 T3`** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
 
 ---
 

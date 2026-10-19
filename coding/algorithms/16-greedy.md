@@ -3,23 +3,33 @@ tags: [coding, algorithms, greedy]
 topic: Greedy Algorithms
 difficulty: mixed
 ---
-
 # Greedy Algorithms — Problem Compendium
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked greedy problems: interval scheduling, jump/coverage, string/array greedy, sorting-based greedy, sweep line.
+> **You'll be able to:** Justify each greedy choice in one sentence before coding.
+> **Prereqs:** Greedy lecture · **Pair with:** [Greedy lecture](../../02-algorithms/16-greedy.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Interval Greedy](#interval-greedy) · [Simple Greedy](#simple-greedy) · [Jump / Coverage Greedy](#jump--coverage-greedy) · [String / Array Greedy](#string--array-greedy) · [Sorting-Based Greedy](#sorting-based-greedy)
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Merge Intervals](#merge-intervals--t2) · [Non-overlapping Intervals (Minimum number to remove)](#non-overlapping-intervals-minimum-number-to-remove--t2) · [Meeting Rooms II](#meeting-rooms-ii) · [Minimum Number of Arrows to Burst Balloons](#minimum-number-of-arrows-to-burst-balloons) · [Jump Game (can reach?)](#jump-game-can-reach--t2) · [Jump Game II (minimum jumps)](#jump-game-ii-minimum-jumps--t2) · [Gas Station](#gas-station--t2) · [Partition Labels](#partition-labels-lc-763) · [Reorganize String](#reorganize-string--t1)
+> **Template:** Interval scheduling: sort by **end**, take an interval if `start >= last_end` (max non-overlapping = n − min removals).
+> **Template:** Merge: sort by **start**, extend `cur_end = max(cur_end, e)` while overlapping.
+> **Gotchas:** Greedy needs a one-line exchange argument — say it, or switch to DP · end-sort vs start-sort is the whole problem · touching endpoints (`<` vs `<=`) — ask · Gas Station: total < 0 ⇒ −1; else restart after any negative prefix.
+
+---
 
 Greedy works when a locally optimal choice at each step provably leads to a globally optimal solution (greedy-choice property + optimal substructure). Proof strategy: exchange argument — show any solution deviating from the greedy choice can be transformed into the greedy solution without worsening it. If no such argument holds, use DP.
-
-
-
 
 ---
 
 ## Interval Greedy
+
+---
 
 ### Merge Intervals `🎯 T2`
 
@@ -44,6 +54,9 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > - 1 <= intervals.length <= 10^4
 > - intervals[i].length == 2
 > - 0 <= starti <= endi <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Overlapping ranges" · **Gotcha:** Update `end = max(end, next_end)`, not just `next_end`.
 
 > [!info] Approach
 > In arbitrary order, overlaps can't be detected without O(n²) pair checks. Sorting by start makes all overlapping intervals adjacent — one linear scan suffices. Sort by start; maintain a running merged interval; extend its end if current interval overlaps. `merged[-1][1] = max(merged[-1][1], end)` when `start ≤ merged[-1][1]`.
@@ -100,6 +113,9 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > - 1 <= intervals.length <= 10^5
 > - intervals[i].length == 2
 > - -5 * 10^4 <= starti < endi <= 5 * 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Min removals · **Gotcha:** **Sort by end** not start — **counterexample** if start sort.
 
 > [!info] Approach
 > Equivalent to maximizing the number of non-overlapping intervals kept (classic Activity Selection). Exchange argument: among all intervals overlapping with the current boundary, keeping the one with the earliest end leaves maximum room — any other choice can only tighten the constraint. Sort by end time. Greedily keep intervals that don't overlap with the last kept interval. Count removals. Track `last_end`; if `start >= last_end`, keep (update last_end = end); else remove (increment count).
@@ -247,72 +263,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-### Video Stitching
-
-> [!example] Problem
-> You are given a series of video clips from a sporting event that lasted time seconds. These video clips can be overlapping with each other and have varying lengths.
-> Each video clip is described by an array clips where clips[i] = [starti, endi] indicates that the ith clip started at starti and ended at endi.
-> We can cut these clips into segments freely.
-> Return the minimum number of clips needed so that we can cut the clips into segments that cover the entire sporting event [0, time]. If the task is impossible, return -1.
-> 
-> **Example 1:**
-> ```
-> Input: clips = [[0,2],[4,6],[8,10],[1,9],[1,5],[5,9]], time = 10
-> Output: 3
-> Explanation: We take the clips [0,2], [8,10], [1,9]; a total of 3 clips.
-> Then, we can reconstruct the sporting event as follows:
-> We cut [1,9] into segments [1,2] + [2,8] + [8,9].
-> Now we have segments [0,2] + [2,8] + [8,10] which cover the sporting event [0, 10].
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: clips = [[0,1],[1,2]], time = 5
-> Output: -1
-> Explanation: We cannot cover [0,5] with only [0,1] and [1,2].
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: clips = [[0,1],[6,8],[0,2],[5,6],[0,4],[0,3],[6,7],[1,3],[4,7],[1,4],[2,5],[2,6],[3,4],[4,5],[5,7],[6,9]], time = 9
-> Output: 3
-> Explanation: We can take clips [0,4], [4,7], and [6,9].
-> ```
-> 
-> **Constraints:**
-> - 1 <= clips.length <= 100
-> - 0 <= starti <= endi <= 100
-> - 1 <= time <= 100
-
-> [!info] Approach
-> Coverage problem — must reach position `time` from 0. At each step, greedily pick the clip that extends coverage furthest from the current boundary. This is the interval covering (Jump Game) variant applied to intervals. Sort clips by start. Sweep: at each "current coverage end," find the clip starting ≤ current end that extends furthest. Advance coverage; increment clip count. Two pointers: `cur_end` (coverage end), `farthest` (best extension seen). When current clip starts > cur_end, coverage has a gap — return -1.
-
-> [!note]- Python Solution
-> ```python
-> def video_stitching(clips, time):
->     clips.sort()
->     cur_end = farthest = 0
->     count = 0
->     i = 0
->     while cur_end < time:
->         while i < len(clips) and clips[i][0] <= cur_end:
->             farthest = max(farthest, clips[i][1])
->             i += 1
->         if farthest == cur_end:  # gap — no progress possible
->             return -1
->         cur_end = farthest
->         count += 1
->     return count
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(1) space.
-
-> [!tip] Alternatives
-> DP: `dp[i]` = min clips to cover `[0, i]` — O(n * time). BFS level-by-level. Both O(n * time) which may exceed greedy for large time values.
-
----
-
 ### Minimum Taps to Open to Water a Garden
 
 > [!example] Problem
@@ -380,7 +330,115 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
+### Interval List Intersections `⚡ T1`
+
+**Problem**: Two lists of sorted, disjoint intervals. Return their intersections.
+
+**Key Insight**: Two pointers. Candidate intersection = `[max(starts), min(ends)]`, real iff `start <= end`. Advance whichever interval **ends first** — it can't intersect anything else.
+
+```python
+def intervalIntersection(A, B):
+    res, i, j = [], 0, 0
+    while i < len(A) and j < len(B):
+        s = max(A[i][0], B[j][0])
+        e = min(A[i][1], B[j][1])
+        if s <= e:
+            res.append([s, e])
+        if A[i][1] < B[j][1]:
+            i += 1
+        else:
+            j += 1
+    return res
+```
+
+**TC**: O(m + n) | **SC**: O(1) extra | Same "advance the smaller end" move as merge sort's merge step.
+
+---
+
+### My Calendar I `⚡ T1`
+
+**Problem**: `book(start, end)` succeeds only if the event doesn't double-book with any prior booking. Bookings arrive online.
+
+**Key Insight**: The *online* version of interval overlap. Keep a sorted list of bookings; conflict iff the symmetric overlap test fires against a neighbor. With `SortedList`, bisect to find the insertion point and check only the two neighbors — O(log n). A plain list with a linear scan is acceptable if you state it's O(n).
+
+```python
+from sortedcontainers import SortedList
+
+class MyCalendar:
+    def __init__(self):
+        self.cal = SortedList()
+
+    def book(self, start, end):
+        i = self.cal.bisect_right((start, end))
+        if i > 0 and self.cal[i-1][1] > start:
+            return False
+        if i < len(self.cal) and self.cal[i][0] < end:
+            return False
+        self.cal.add((start, end))
+        return True
+```
+
+**TC**: O(log n) per booking | **SC**: O(n)
+
+---
+
+### My Calendar II `🎯 T2`
+
+**Problem**: Same, but allow double-booking; reject only **triple** bookings.
+
+**Key Insight**: Keep two lists: `bookings` and `overlaps` (regions already booked twice). A new event causes a triple booking iff it intersects anything in `overlaps`. Otherwise, add its intersections with `bookings` to `overlaps`, then add it to `bookings`. Generalization to "at most k" = sweep line with a diff map (My Calendar III).
+
+```python
+class MyCalendarTwo:
+    def __init__(self):
+        self.bookings = []
+        self.overlaps = []
+
+    def book(self, start, end):
+        for s, e in self.overlaps:
+            if start < e and s < end:
+                return False
+        for s, e in self.bookings:
+            if start < e and s < end:
+                self.overlaps.append((max(start, s), min(end, e)))
+        self.bookings.append((start, end))
+        return True
+```
+
+**TC**: O(n) per booking | **SC**: O(n)
+
+---
+
+### Car Pooling `🎯 T2`
+
+> Full walkthrough: [Car Pooling](../data-structures/01-array.md#car-pooling--t2) — difference array, not greedy; listed here because it is often confused with Meeting Rooms II.
+
+---
+
+### Employee Free Time `🎯 T2`
+
+**Problem**: Each employee has a sorted list of working intervals. Return the finite intervals where **everyone** is free.
+
+**Key Insight**: Individual ownership doesn't matter — flatten all intervals, sort by start, merge; the **gaps between merged blocks** are the common free time. K-way heap merge saves the sort if lists are long (say it as the follow-up).
+
+```python
+def employeeFreeTime(schedule):
+    ivals = sorted((iv.start, iv.end) for emp in schedule for iv in emp)
+    res, end = [], ivals[0][1]
+    for s, e in ivals[1:]:
+        if s > end:
+            res.append((end, s))
+        end = max(end, e)
+    return res
+```
+
+**TC**: O(n log n) | **SC**: O(n) | Related: Merge Intervals (this is its "invert the output" twin)
+
+---
+
 ## Simple Greedy
+
+---
 
 ### Assign Cookies (LC 455)
 
@@ -483,7 +541,40 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
+### Best Time to Buy and Sell Stock II (LC 122) `⚡ T1`
+
+> [!example] Problem
+> `prices[i]` is the price on day `i`. Unlimited transactions, at most one share held at a time; you may buy and sell on the same day. Return max profit. **Medium.**
+>
+> ```
+> Input: [7,1,5,3,6,4]  →  7   (buy 1 sell 5, buy 3 sell 6)
+> Input: [1,2,3,4,5]    →  4   (one long hold == four one-day gains)
+> Input: [7,6,4,3,1]    →  0
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "as many transactions as you like" · **Gotcha:** don't hunt for valley/peak pairs explicitly — summing every positive `p[i] − p[i−1]` is the same number and has no off-by-one risk.
+
+> [!info] Approach
+> **Key insight:** any profitable hold from day `a` to day `b` equals the sum of the day-to-day deltas between them, so collecting every positive delta is optimal and never worse than any schedule. **Exchange argument:** a schedule that skips a positive delta can add that one-day trade without conflicting with anything.
+
+> [!note]- Python Solution
+> ```python
+> def max_profit(prices):
+>     return sum(max(0, prices[i] - prices[i - 1]) for i in range(1, len(prices)))
+> ```
+
+> [!success] Complexity
+> **TC**: O(n) | **SC**: O(1).
+
+> [!tip] Alternatives
+> State-machine DP `hold = max(hold, cash − p)`, `cash = max(cash, hold + p)` — same answer, and it is the form that extends to cooldown / fee / k transactions ([all variants](15-dynamic-programming.md#best-time-to-buy-and-sell-stock-all-variants--t2)).
+
+---
+
 ## Jump / Coverage Greedy
+
+---
 
 ### Jump Game (can reach?) `🎯 T2`
 
@@ -508,6 +599,9 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > **Constraints:**
 > - 1 <= nums.length <= 10^4
 > - 0 <= nums[i] <= 10^5
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Can you reach the end?" · **Gotcha:** O(N) — not DP. Greedy works because reaching farther never hurts.
 
 > [!info] Approach
 > At any reachable index i, all indices up to `i + nums[i]` are also reachable — the reachable set is always a contiguous prefix `[0, max_reach]`. Track the frontier; if current index exceeds it, the last index is unreachable. Track `max_reach = max(i + nums[i])` for all reachable i. If `i > max_reach` at any point, return False. Single pass; early exit the moment current index exceeds max_reach.
@@ -556,6 +650,9 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > - 0 <= nums[i] <= 1000
 > - It's guaranteed that you can reach nums[n - 1].
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Min jumps · **Gotcha:** **O(n)** single pass; **Jump Game I** is only reachability (different).
+
 > [!info] Approach
 > At each "jump boundary," we must take a new jump. Exchange argument: among all positions reachable in the current jump, choosing the one that extends furthest is always optimal — picking any shorter reach can only worsen future options. Maintain `cur_end` (end of current jump range) and `farthest` (max reach seen so far). When `i == cur_end`, take a jump: increment count, advance `cur_end = farthest`. Loop only to `n-2` (last index doesn't need a jump from it).
 
@@ -581,65 +678,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ### Jump Game VI (DP + Deque) `🎯 T2`
 
-> [!example] Problem
-> You are given a 0-indexed integer array nums and an integer k.
-> You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
-> You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
-> Return the maximum score you can get.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,-1,-2,4,-7,3], k = 2
-> Output: 7
-> Explanation: You can choose your jumps forming the subsequence [1,-1,4,3] (underlined above). The sum is 7.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [10,-5,-2,4,0,3], k = 3
-> Output: 17
-> Explanation: You can choose your jumps forming the subsequence [10,4,3] (underlined above). The sum is 17.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,-5,-20,4,-1,3,-6,-3], k = 2
-> Output: 0
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length, k <= 10^5
-> - -10^4 <= nums[i] <= 10^4
-
-> [!info] Approach
-> `dp[i] = max(dp[i-1..i-k]) + nums[i]`. Naively O(nk); sliding window maximum via monotone deque gives O(n) per step, O(n) total. Maintain a max-deque over a window of size k. `dp[i] = deque_max + nums[i]`. Deque stores indices in decreasing dp-value order; pop front when out of window, pop back when dp[i-1] ≥ dp[deque.back()].
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def max_result(nums, k):
->     n = len(nums)
->     dp = [0] * n
->     dp[0] = nums[0]
->     dq: deque[int] = deque([0])  # monotone deque of indices, decreasing dp value
->     for i in range(1, n):
->         # Remove out-of-window indices
->         while dq and dq[0] < i - k:
->             dq.popleft()
->         dp[i] = dp[dq[0]] + nums[i]
->         # Maintain decreasing order in deque
->         while dq and dp[dq[-1]] <= dp[i]:
->             dq.pop()
->         dq.append(i)
->     return dp[n - 1]
-> ```
-
-> [!success] Complexity
-> O(n) time, O(n) space.
-
-> [!tip] Alternatives
-> Segment tree for range max: O(n log n). Priority queue (max-heap): O(n log n). Sparse table for static range max: O(n log n) build, O(1) query — but dp array is dynamic.
+> Full walkthrough: [Jump Game VI (LC 1696)](04-sliding-window.md#jump-game-vi-lc-1696--t2).
 
 ---
 
@@ -702,57 +741,7 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ### Reorganize String `⚡ T1`
 
-> [!example] Problem
-> Given a string s, rearrange the characters of s so that any two adjacent characters are not the same.
-> Return any possible rearrangement of s or return "" if not possible.
-> 
-> **Example 1:**
-> ```
-> Input: s = "aab"
-> Output: "aba"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "aaab"
-> Output: ""
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 500
-> - s consists of lowercase English letters.
-
-> [!info] Approach
-> Impossible if any character appears more than `⌈n/2⌉` times. Otherwise, greedy: always place the most frequent available character that isn't the same as the previous one. Max-heap by frequency. At each step, pop the most frequent, append, and re-push after cooldown. Track `prev` (last placed char) — if top of heap == prev, temporarily swap with second-most-frequent.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> from collections import Counter
-> 
-> def reorganize_string(s):
->     freq = Counter(s)
->     if max(freq.values()) > (len(s) + 1) // 2:
->         return ""
->     heap = [(-cnt, char) for char, cnt in freq.items()]
->     heapq.heapify(heap)
->     result = []
->     prev_cnt, prev_char = 0, ""
->     while heap:
->         cnt, char = heapq.heappop(heap)
->         result.append(char)
->         if prev_cnt < 0:
->             heapq.heappush(heap, (prev_cnt, prev_char))
->         prev_cnt, prev_char = cnt + 1, char  # cnt is negative
->         +1 decrements count
->     return "".join(result)
-> ```
-
-> [!success] Complexity
-> O(n log k) where k = distinct chars ≤ 26, effectively O(n).
-
-> [!tip] Alternatives
-> Even-index placement: place highest-frequency chars at indices 0,2,4,..., then fill odd indices. O(n log n) to sort, O(n) placement.
+> Full walkthrough: [Reorganize String (LC 767)](../data-structures/10-heap.md#reorganize-string-lc-767--t1).
 
 ---
 
@@ -850,420 +839,6 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 > Sort by frequency; place at even then odd indices (valid for k=2). For general k, chunk-fill approach.
 
 ---
-
-## String / Array Greedy
-
-### Gas Station `🎯 T2`
-
-> [!example] Problem
-> There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
-> You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
-> Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique.
-> 
-> **Example 1:**
-> ```
-> Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
-> Output: 3
-> Explanation:
-> Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
-> Travel to station 4. Your tank = 4 - 1 + 5 = 8
-> Travel to station 0. Your tank = 8 - 2 + 1 = 7
-> Travel to station 1. Your tank = 7 - 3 + 2 = 6
-> Travel to station 2. Your tank = 6 - 4 + 3 = 5
-> Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
-> Therefore, return 3 as the starting index.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: gas = [2,3,4], cost = [3,4,3]
-> Output: -1
-> Explanation:
-> You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
-> Let's start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
-> Travel to station 0. Your tank = 4 - 3 + 2 = 3
-> Travel to station 1. Your tank = 3 - 3 + 3 = 3
-> You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
-> Therefore, you can't travel around the circuit once no matter where you start.
-> ```
-> 
-> **Constraints:**
-> - n == gas.length == cost.length
-> - 1 <= n <= 10^5
-> - 0 <= gas[i], cost[i] <= 10^4
-> - The input is generated such that the answer is unique.
-
-> [!info] Approach
-> Two insights: (1) If total gas < total cost, no solution. (2) If solution exists, the starting point is the index after the last point where cumulative tank went negative. Proof: any station between `start` and the negative-tank point would inherit a deficit. Track running tank. When tank < 0, reset to 0 and update start = i+1. Single pass. Feasibility check built into the same pass via total sum.
-
-> [!note]- Python Solution
-> ```python
-> def can_complete_circuit(gas, cost):
->     if sum(gas) < sum(cost):
->         return -1
->     tank = start = 0
->     for i in range(len(gas)):
->         tank += gas[i] - cost[i]
->         if tank < 0:
->             tank = 0
->             start = i + 1
->     return start
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Brute force O(n²): try each start. Prefix sum: find index after global minimum of `diff` prefix sums — equivalent.
-
----
-
-### Trapping Rain Water (greedy view) `⚡ T1`
-
-> [!example] Problem
-> Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
-> 
-> **Example 1:**
-> ```
-> Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
-> Output: 6
-> Explanation: The above elevation map (black section) is represented by array [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rain water (blue section) are being trapped.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: height = [4,2,0,3,2,5]
-> Output: 9
-> ```
-> 
-> **Constraints:**
-> - n == height.length
-> - 1 <= n <= 2 * 10^4
-> - 0 <= height[i] <= 10^5
-
-> [!info] Approach
-> Water at position i is bounded by `min(max_left[i], max_right[i]) - height[i]`. Two-pointer greedy: the side with the smaller max bound determines water for its current position — we can process it without knowing the other side's remaining values. Two pointers `lo, hi`. Water trapped at `lo` = `left_max - height[lo]` if `left_max < right_max`. Process the side with the smaller max. Advance the pointer with the smaller current boundary; maintain running max for each side.
-
-> [!note]- Python Solution
-> ```python
-> def trap(height):
->     lo, hi = 0, len(height) - 1
->     left_max = right_max = 0
->     water = 0
->     while lo < hi:
->         if height[lo] <= height[hi]:
->             if height[lo] >= left_max:
->                 left_max = height[lo]
->             else:
->                 water += left_max - height[lo]
->             lo += 1
->         else:
->             if height[hi] >= right_max:
->                 right_max = height[hi]
->             else:
->                 water += right_max - height[hi]
->             hi -= 1
->     return water
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> Precompute left_max and right_max arrays: O(n) time and space, two passes. Monotone stack: O(n) time and space, layer-by-layer approach.
-
----
-
-### GCD of Strings
-
-> [!example] Problem
-> Find the largest string `t` that divides both `str1` and `str2` (t + t + ... = str1 and str2).
-
-> [!info] Approach
-> A GCD string must divide both strings. If `str1 + str2 == str2 + str1`, a GCD exists with length `gcd(len(str1), len(str2))`. This is the string analog of the Euclidean algorithm: the GCD of two strings is a repeated unit, and its length is `gcd(len1, len2)`. Check concatenation equality; if valid, return `str1[:gcd(len(str1), len(str2))]`. `math.gcd(m, n)`.
-
-> [!note]- Python Solution
-> ```python
-> from math import gcd
-> 
-> def gcd_of_strings(str1, str2):
->     if str1 + str2 != str2 + str1:
->         return ""
->     return str1[:gcd(len(str1), len(str2))]
-> ```
-
-> [!success] Complexity
-> O(m+n) time (string concatenation and comparison), O(m+n) space.
-
-> [!tip] Alternatives
-> Euclidean-style recursion: `gcd(str1, str2)` = `gcd(str2, str1[len(str2):])` when str2 is a prefix of str1 — O(log(min(m,n))) recursive steps, but string slicing is O(n) per step.
-
----
-
-### Connect Sticks (Huffman / Min Cost)
-
-> [!example] Problem
-> Connect all sticks into one. Cost of connecting two sticks = their sum. Minimize total cost.
-
-> [!info] Approach
-> Each stick's length contributes to the total cost once per merge it participates in. Longer sticks participating in fewer merges reduces cost. Always merging the two shortest sticks minimizes total cost — this is Huffman coding's greedy insight. Min-heap. Repeatedly pop two smallest, combine, push the result, accumulate cost. n-1 merges; each O(log n); total O(n log n).
-
-> [!note]- Python Solution
-> ```python
-> def connect_sticks(sticks):
->     heapq.heapify(sticks)
->     total = 0
->     while len(sticks) > 1:
->         a = heapq.heappop(sticks)
->         b = heapq.heappop(sticks)
->         cost = a + b
->         total += cost
->         heapq.heappush(sticks, cost)
->     return total
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(n) space.
-
-> [!tip] Alternatives
-> Sort and simulate: O(n log n), but each merge changes the array — re-sorting after each step is O(n² log n). Heap is the only practical approach.
-
----
-
-### Minimum Difference After Operations
-
-> [!example] Problem
-> (Minimum Difference Between Largest and Smallest Value in Three Moves / variant) — Minimize the difference between max and min of an array after removing exactly k elements (3 moves variant: remove from either end).
-
-> [!info] Approach
-> After removing k elements, we keep n-k elements. The minimum range of n-k consecutive elements in sorted order gives the answer. Sorting exposes this: after sort, optimal removal strategy is to remove `i` elements from the left and `k-i` from the right for i in 0..k. Sort; try all (i, k-i) splits for i in 0..k; answer = min(nums[n-1-(k-i)] - nums[i]). For 3 moves: 4 splits — (0,3),(1,2),(2,1),(3,0).
-
-> [!note]- Python Solution
-> ```python
-> def min_difference(nums):
->     n = len(nums)
->     if n <= 4:
->         return 0
->     nums.sort()
->     return min(nums[n - 1 - (3 - i)] - nums[i] for i in range(4))
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(1) space.
-
-> [!tip] Alternatives
-> Without sort, find the 4 smallest and 4 largest: O(n) using partial sort. For general k: same O(n log n) sort + O(k) scan.
-
----
-
-### Partition Labels (LC 763)
-
-> [!example] Problem
-> You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part. For example, the string "ababcc" can be partitioned into ["abab", "cc"], but partitions such as ["aba", "bcc"] or ["ab", "ab", "cc"] are invalid.
-> Note that the partition is done so that after concatenating all the parts in order, the resultant string should be s.
-> Return a list of integers representing the size of these parts.
-> 
-> **Example 1:**
-> ```
-> Input: s = "ababcbacadefegdehijhklij"
-> Output: [9,7,8]
-> Explanation:
-> The partition is "ababcbaca", "defegde", "hijhklij".
-> This is a partition so that each letter appears in at most one part.
-> A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits s into less parts.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "eccbbbbdec"
-> Output: [10]
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 500
-> - s consists of lowercase English letters.
-
-> [!info] Approach
-> Each character must stay in one partition — it determines the right boundary of the partition containing its first occurrence. Last occurrence map + greedy sweep. Build last[c] = last index of character c. Sweep left to right. Maintain current partition end = max(last[c] for c in current partition). When i == end: partition complete, record size, start new.
-
-> [!note]- Python Solution
-> ```python
-> def partition_labels(s):
->     last = {c: i for i, c in enumerate(s)}
->     result = []
->     start = end = 0
->     for i, c in enumerate(s):
->         end = max(end, last[c])
->         if i == end:
->             result.append(end - start + 1)
->             start = i + 1
->     return result
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space (at most 26 distinct characters).
-
-> [!tip] Alternatives
-> Sort intervals by start, merge overlapping — same effect. Union-Find grouping characters — O(n α(n)), overkill.
-
----
-
-## Sorting-Based Greedy
-
-### Queue Reconstruction by Height (LC 406)
-
-> [!example] Problem
-> You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
-> Reconstruct and return the queue that is represented by the input array people. The returned queue should be formatted as an array queue, where queue[j] = [hj, kj] is the attributes of the jth person in the queue (queue[0] is the person at the front of the queue).
-> 
-> **Example 1:**
-> ```
-> Input: people = [[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]
-> Output: [[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]
-> Explanation:
-> Person 0 has height 5 with no other people taller or the same height in front.
-> Person 1 has height 7 with no other people taller or the same height in front.
-> Person 2 has height 5 with two persons taller or the same height in front, which is person 0 and 1.
-> Person 3 has height 6 with one person taller or the same height in front, which is person 1.
-> Person 4 has height 4 with four people taller or the same height in front, which are people 0, 1, 2, and 3.
-> Person 5 has height 7 with one person taller or the same height in front, which is person 1.
-> Hence [[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]] is the reconstructed queue.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: people = [[6,0],[5,0],[4,0],[3,2],[2,2],[1,4]]
-> Output: [[4,0],[5,0],[2,2],[3,2],[1,4],[6,0]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= people.length <= 2000
-> - 0 <= hi <= 10^6
-> - 0 <= ki < people.length
-> - It is guaranteed that the queue can be reconstructed.
-
-> [!info] Approach
-> Taller people are invisible to shorter ones for the k-count. So place taller people first — their relative order is determined by k alone. Inserting shorter people later doesn't affect any already-placed taller person's k value. Sort by height descending (ties: k ascending). Insert each person at index k into the result list. `result.insert(k, person)` — O(n) per insert, but n is small enough; taller people already placed are unaffected by later insertions.
-
-> [!note]- Python Solution
-> ```python
-> def reconstruct_queue(people):
->     # Sort: tallest first; among same height, smallest k first
->     people.sort(key=lambda x: (-x[0], x[1]))
->     result = []
->     for person in people:
->         result.insert(person[1], person)
->     return result
-> ```
-
-> [!success] Complexity
-> O(n² ) time (n insertions each O(n)), O(n) space. For n ≤ 2000 (LC constraint) this is fine.
-
-> [!tip] Alternatives
-> BIT/segment tree to find the k-th empty slot: O(n log n). Linked list for O(1) insert at position after O(n) traversal.
-
----
-
-### IPO (Maximize Capital, LC 502) `⚡ T1`
-
-> [!example] Problem
-> Suppose LeetCode will start its IPO soon. In order to sell a good price of its shares to Venture Capital, LeetCode would like to work on some projects to increase its capital before the IPO. Since it has limited resources, it can only finish at most k distinct projects before the IPO. Help LeetCode design the best way to maximize its total capital after finishing at most k distinct projects.
-> You are given n projects where the ith project has a pure profit profits[i] and a minimum capital of capital[i] is needed to start it.
-> Initially, you have w capital. When you finish a project, you will obtain its pure profit and the profit will be added to your total capital.
-> Pick a list of at most k distinct projects from given projects to maximize your final capital, and return the final maximized capital.
-> The answer is guaranteed to fit in a 32-bit signed integer.
-> 
-> **Example 1:**
-> ```
-> Input: k = 2, w = 0, profits = [1,2,3], capital = [0,1,1]
-> Output: 4
-> Explanation: Since your initial capital is 0, you can only start the project indexed 0.
-> After finishing it you will obtain profit 1 and your capital becomes 1.
-> With capital 1, you can either start the project indexed 1 or the project indexed 2.
-> Since you can choose at most 2 projects, you need to finish the project indexed 2 to get the maximum capital.
-> Therefore, output the final maximized capital, which is 0 + 1 + 3 = 4.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: k = 3, w = 0, profits = [1,2,3], capital = [0,1,2]
-> Output: 6
-> ```
-> 
-> **Constraints:**
-> - 1 <= k <= 10^5
-> - 0 <= w <= 10^9
-> - n == profits.length
-> - n == capital.length
-> - 1 <= n <= 10^5
-> - 0 <= profits[i] <= 10^4
-> - 0 <= capital[i] <= 10^9
-
-> [!info] Approach
-> At each step, among all affordable projects, the greedy optimal is to pick the highest-profit one — taking less profit now can't help unlock better future projects than taking more profit. This is provable by exchange argument. Min-heap sorted by capital requirement (to find newly affordable projects efficiently). Max-heap of profits of all currently affordable projects. Sort projects by capital. For each of k steps: push all projects with `capital[i] ≤ W` into max-heap; pop the most profitable; add to W. If max-heap empty, can't proceed.
-
-> [!note]- Python Solution
-> ```python
-> import heapq
-> 
-> def find_maximized_capital(k, w, profits, capital):
->     # Min-heap by capital requirement
->     projects = sorted(zip(capital, profits))
->     available = []  # max-heap (negate profits)
->     i = 0
->     for _ in range(k):
->         # Unlock all projects affordable with current capital w
->         while i < len(projects) and projects[i][0] <= w:
->             heapq.heappush(available, -projects[i][1])
->             i += 1
->         if not available:
->             break  # no affordable project
->         w += -heapq.heappop(available)
->     return w
-> ```
-
-> [!success] Complexity
-> O(n log n) time (sorting + heap ops), O(n) space.
-
-> [!tip] Alternatives
-> Brute force O(k * n): scan all projects each step. Sorting + binary search to find boundary: already implicit in the two-heap approach.
-
-### Activity Selection (Maximum Non-Overlapping Intervals)
-
-> [!example] Problem
-> Given intervals, select the maximum number of non-overlapping intervals you can keep.
-
-> [!info] Approach
-> Greedy by earliest finishing time leaves the most room for future intervals. Sort by end time and always keep the next interval whose start is at least the end of the last kept interval. Track `last_end`; when `start >= last_end`, keep the interval and update `last_end = end`.
-
-> [!note]- Python Solution
-> ```python
-> def activity_selection(intervals):
->     intervals.sort(key=lambda x: x[1])
->     count = 0
->     last_end = float("-inf")
->     for start, end in intervals:
->         if start >= last_end:
->             count += 1
->             last_end = end
->     return count
-> ```
-
-> [!success] Complexity
-> O(n log n) time, O(1) extra space.
-
-> [!tip] Alternatives
-> Sorting by start does not maximize the count; earliest end is the greedy key.
-
----
-
-## See Also
-
-[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]]
-
----
-
-## Greedy — Interval and Coverage Problems
 
 ### Video Stitching (LC 1024)
 
@@ -1402,10 +977,313 @@ Greedy works when a locally optimal choice at each step provably leads to a glob
 
 ---
 
-## See Also (Extended)
+## String / Array Greedy
 
-[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]] | [[sliding-window]]
+---
 
+### Gas Station `🎯 T2`
+
+> [!example] Problem
+> There are n gas stations along a circular route, where the amount of gas at the ith station is gas[i].
+> You have a car with an unlimited gas tank and it costs cost[i] of gas to travel from the ith station to its next (i + 1)th station. You begin the journey with an empty tank at one of the gas stations.
+> Given two integer arrays gas and cost, return the starting gas station's index if you can travel around the circuit once in the clockwise direction, otherwise return -1. If there exists a solution, it is guaranteed to be unique.
+> 
+> **Example 1:**
+> ```
+> Input: gas = [1,2,3,4,5], cost = [3,4,5,1,2]
+> Output: 3
+> Explanation:
+> Start at station 3 (index 3) and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+> Travel to station 4. Your tank = 4 - 1 + 5 = 8
+> Travel to station 0. Your tank = 8 - 2 + 1 = 7
+> Travel to station 1. Your tank = 7 - 3 + 2 = 6
+> Travel to station 2. Your tank = 6 - 4 + 3 = 5
+> Travel to station 3. The cost is 5. Your gas is just enough to travel back to station 3.
+> Therefore, return 3 as the starting index.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: gas = [2,3,4], cost = [3,4,3]
+> Output: -1
+> Explanation:
+> You can't start at station 0 or 1, as there is not enough gas to travel to the next station.
+> Let's start at station 2 and fill up with 4 unit of gas. Your tank = 0 + 4 = 4
+> Travel to station 0. Your tank = 4 - 3 + 2 = 3
+> Travel to station 1. Your tank = 3 - 3 + 3 = 3
+> You cannot travel back to station 2, as it requires 4 unit of gas but you only have 3.
+> Therefore, you can't travel around the circuit once no matter where you start.
+> ```
+> 
+> **Constraints:**
+> - n == gas.length == cost.length
+> - 1 <= n <= 10^5
+> - 0 <= gas[i], cost[i] <= 10^4
+> - The input is generated such that the answer is unique.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Circular greedy · **Gotcha:** **Proof** — if sum ≥ 0 solution exists; **O(n)** single pass.
+
+> [!info] Approach
+> Two insights: (1) If total gas < total cost, no solution. (2) If solution exists, the starting point is the index after the last point where cumulative tank went negative. Proof: any station between `start` and the negative-tank point would inherit a deficit. Track running tank. When tank < 0, reset to 0 and update start = i+1. Single pass. Feasibility check built into the same pass via total sum.
+
+> [!note]- Python Solution
+> ```python
+> def can_complete_circuit(gas, cost):
+>     if sum(gas) < sum(cost):
+>         return -1
+>     tank = start = 0
+>     for i in range(len(gas)):
+>         tank += gas[i] - cost[i]
+>         if tank < 0:
+>             tank = 0
+>             start = i + 1
+>     return start
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space.
+
+> [!tip] Alternatives
+> Brute force O(n²): try each start. Prefix sum: find index after global minimum of `diff` prefix sums — equivalent.
+
+---
+
+### Trapping Rain Water (greedy view) `⚡ T1`
+
+> Full walkthrough: [Trapping Rain Water (LC 42)](03-two-pointers.md#trapping-rain-water-lc-42--t1).
+
+---
+
+### GCD of Strings
+
+> [!example] Problem
+> Find the largest string `t` that divides both `str1` and `str2` (t + t + ... = str1 and str2).
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "If a common divisor exists, `s+t == t+s`" · **Gotcha:** Check the concat equality first — avoids checking all divisors
+
+> [!info] Approach
+> A GCD string must divide both strings. If `str1 + str2 == str2 + str1`, a GCD exists with length `gcd(len(str1), len(str2))`. This is the string analog of the Euclidean algorithm: the GCD of two strings is a repeated unit, and its length is `gcd(len1, len2)`. Check concatenation equality; if valid, return `str1[:gcd(len(str1), len(str2))]`. `math.gcd(m, n)`.
+
+> [!note]- Python Solution
+> ```python
+> from math import gcd
+> 
+> def gcd_of_strings(str1, str2):
+>     if str1 + str2 != str2 + str1:
+>         return ""
+>     return str1[:gcd(len(str1), len(str2))]
+> ```
+
+> [!success] Complexity
+> O(m+n) time (string concatenation and comparison), O(m+n) space.
+
+> [!tip] Alternatives
+> Euclidean-style recursion: `gcd(str1, str2)` = `gcd(str2, str1[len(str2):])` when str2 is a prefix of str1 — O(log(min(m,n))) recursive steps, but string slicing is O(n) per step.
+
+---
+
+### Connect Sticks (Huffman / Min Cost)
+
+> [!example] Problem
+> Connect all sticks into one. Cost of connecting two sticks = their sum. Minimize total cost.
+
+> [!info] Approach
+> Each stick's length contributes to the total cost once per merge it participates in. Longer sticks participating in fewer merges reduces cost. Always merging the two shortest sticks minimizes total cost — this is Huffman coding's greedy insight. Min-heap. Repeatedly pop two smallest, combine, push the result, accumulate cost. n-1 merges; each O(log n); total O(n log n).
+
+> [!note]- Python Solution
+> ```python
+> def connect_sticks(sticks):
+>     heapq.heapify(sticks)
+>     total = 0
+>     while len(sticks) > 1:
+>         a = heapq.heappop(sticks)
+>         b = heapq.heappop(sticks)
+>         cost = a + b
+>         total += cost
+>         heapq.heappush(sticks, cost)
+>     return total
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(n) space.
+
+> [!tip] Alternatives
+> Sort and simulate: O(n log n), but each merge changes the array — re-sorting after each step is O(n² log n). Heap is the only practical approach.
+
+---
+
+### Minimum Difference After Operations
+
+> [!example] Problem
+> (Minimum Difference Between Largest and Smallest Value in Three Moves / variant) — Minimize the difference between max and min of an array after removing exactly k elements (3 moves variant: remove from either end).
+
+> [!info] Approach
+> After removing k elements, we keep n-k elements. The minimum range of n-k consecutive elements in sorted order gives the answer. Sorting exposes this: after sort, optimal removal strategy is to remove `i` elements from the left and `k-i` from the right for i in 0..k. Sort; try all (i, k-i) splits for i in 0..k; answer = min(nums[n-1-(k-i)] - nums[i]). For 3 moves: 4 splits — (0,3),(1,2),(2,1),(3,0).
+
+> [!note]- Python Solution
+> ```python
+> def min_difference(nums):
+>     n = len(nums)
+>     if n <= 4:
+>         return 0
+>     nums.sort()
+>     return min(nums[n - 1 - (3 - i)] - nums[i] for i in range(4))
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(1) space.
+
+> [!tip] Alternatives
+> Without sort, find the 4 smallest and 4 largest: O(n) using partial sort. For general k: same O(n log n) sort + O(k) scan.
+
+---
+
+### Partition Labels (LC 763)
+
+> [!example] Problem
+> You are given a string s. We want to partition the string into as many parts as possible so that each letter appears in at most one part. For example, the string "ababcc" can be partitioned into ["abab", "cc"], but partitions such as ["aba", "bcc"] or ["ab", "ab", "cc"] are invalid.
+> Note that the partition is done so that after concatenating all the parts in order, the resultant string should be s.
+> Return a list of integers representing the size of these parts.
+> 
+> **Example 1:**
+> ```
+> Input: s = "ababcbacadefegdehijhklij"
+> Output: [9,7,8]
+> Explanation:
+> The partition is "ababcbaca", "defegde", "hijhklij".
+> This is a partition so that each letter appears in at most one part.
+> A partition like "ababcbacadefegde", "hijhklij" is incorrect, because it splits s into less parts.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "eccbbbbdec"
+> Output: [10]
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 500
+> - s consists of lowercase English letters.
+
+> [!info] Approach
+> Each character must stay in one partition — it determines the right boundary of the partition containing its first occurrence. Last occurrence map + greedy sweep. Build last[c] = last index of character c. Sweep left to right. Maintain current partition end = max(last[c] for c in current partition). When i == end: partition complete, record size, start new.
+
+> [!note]- Python Solution
+> ```python
+> def partition_labels(s):
+>     last = {c: i for i, c in enumerate(s)}
+>     result = []
+>     start = end = 0
+>     for i, c in enumerate(s):
+>         end = max(end, last[c])
+>         if i == end:
+>             result.append(end - start + 1)
+>             start = i + 1
+>     return result
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) space (at most 26 distinct characters).
+
+> [!tip] Alternatives
+> Sort intervals by start, merge overlapping — same effect. Union-Find grouping characters — O(n α(n)), overkill.
+
+---
+
+## Sorting-Based Greedy
+
+---
+
+### Queue Reconstruction by Height (LC 406)
+
+> [!example] Problem
+> You are given an array of people, people, which are the attributes of some people in a queue (not necessarily in order). Each people[i] = [hi, ki] represents the ith person of height hi with exactly ki other people in front who have a height greater than or equal to hi.
+> Reconstruct and return the queue that is represented by the input array people. The returned queue should be formatted as an array queue, where queue[j] = [hj, kj] is the attributes of the jth person in the queue (queue[0] is the person at the front of the queue).
+> 
+> **Example 1:**
+> ```
+> Input: people = [[7,0],[4,4],[7,1],[5,0],[6,1],[5,2]]
+> Output: [[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]]
+> Explanation:
+> Person 0 has height 5 with no other people taller or the same height in front.
+> Person 1 has height 7 with no other people taller or the same height in front.
+> Person 2 has height 5 with two persons taller or the same height in front, which is person 0 and 1.
+> Person 3 has height 6 with one person taller or the same height in front, which is person 1.
+> Person 4 has height 4 with four people taller or the same height in front, which are people 0, 1, 2, and 3.
+> Person 5 has height 7 with one person taller or the same height in front, which is person 1.
+> Hence [[5,0],[7,0],[5,2],[6,1],[4,4],[7,1]] is the reconstructed queue.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: people = [[6,0],[5,0],[4,0],[3,2],[2,2],[1,4]]
+> Output: [[4,0],[5,0],[2,2],[3,2],[1,4],[6,0]]
+> ```
+> 
+> **Constraints:**
+> - 1 <= people.length <= 2000
+> - 0 <= hi <= 10^6
+> - 0 <= ki < people.length
+> - It is guaranteed that the queue can be reconstructed.
+
+> [!info] Approach
+> Taller people are invisible to shorter ones for the k-count. So place taller people first — their relative order is determined by k alone. Inserting shorter people later doesn't affect any already-placed taller person's k value. Sort by height descending (ties: k ascending). Insert each person at index k into the result list. `result.insert(k, person)` — O(n) per insert, but n is small enough; taller people already placed are unaffected by later insertions.
+
+> [!note]- Python Solution
+> ```python
+> def reconstruct_queue(people):
+>     # Sort: tallest first; among same height, smallest k first
+>     people.sort(key=lambda x: (-x[0], x[1]))
+>     result = []
+>     for person in people:
+>         result.insert(person[1], person)
+>     return result
+> ```
+
+> [!success] Complexity
+> O(n² ) time (n insertions each O(n)), O(n) space. For n ≤ 2000 (LC constraint) this is fine.
+
+> [!tip] Alternatives
+> BIT/segment tree to find the k-th empty slot: O(n log n). Linked list for O(1) insert at position after O(n) traversal.
+
+---
+
+### IPO (Maximize Capital, LC 502) `⚡ T1`
+
+> Full walkthrough: [IPO (Maximize Capital)](../data-structures/10-heap.md#ipo-maximize-capital--t1).
+
+---
+
+### Activity Selection (Maximum Non-Overlapping Intervals)
+
+> [!example] Problem
+> Given intervals, select the maximum number of non-overlapping intervals you can keep.
+
+> [!info] Approach
+> Greedy by earliest finishing time leaves the most room for future intervals. Sort by end time and always keep the next interval whose start is at least the end of the last kept interval. Track `last_end`; when `start >= last_end`, keep the interval and update `last_end = end`.
+
+> [!note]- Python Solution
+> ```python
+> def activity_selection(intervals):
+>     intervals.sort(key=lambda x: x[1])
+>     count = 0
+>     last_end = float("-inf")
+>     for start, end in intervals:
+>         if start >= last_end:
+>             count += 1
+>             last_end = end
+>     return count
+> ```
+
+> [!success] Complexity
+> O(n log n) time, O(1) extra space.
+
+> [!tip] Alternatives
+> Sorting by start does not maximize the count; earliest end is the greedy key.
+
+---
 
 ### Hand of Straights `🎯 T2`
 
@@ -1429,123 +1307,9 @@ def isNStraightHand(hand, groupSize):
 
 **TC**: O(n log n) | **SC**: O(n) | Related: Task Scheduler (same greedy idea)
 
-
 ---
 
-## Intervals & Sweep — L4 additions
+## See Also
 
-> The L4 interval family beyond Merge / Insert / Non-overlapping (covered above and in [array](../data-structures/01-array.md)). Derivation ladder: [Pattern Ladders — Ladder 11](../../03-patterns/PATTERN_LADDERS.md#ladder-11--intervals--sweep). Overlap test to burn in: `start_A < end_B and start_B < end_A`.
-
-### Interval List Intersections `⚡ T1`
-
-**Problem**: Two lists of sorted, disjoint intervals. Return their intersections.
-
-**Key Insight**: Two pointers. Candidate intersection = `[max(starts), min(ends)]`, real iff `start <= end`. Advance whichever interval **ends first** — it can't intersect anything else.
-
-```python
-def intervalIntersection(A, B):
-    res, i, j = [], 0, 0
-    while i < len(A) and j < len(B):
-        s = max(A[i][0], B[j][0])
-        e = min(A[i][1], B[j][1])
-        if s <= e:
-            res.append([s, e])
-        if A[i][1] < B[j][1]:
-            i += 1
-        else:
-            j += 1
-    return res
-```
-
-**TC**: O(m + n) | **SC**: O(1) extra | Same "advance the smaller end" move as merge sort's merge step.
-
-### My Calendar I `⚡ T1`
-
-**Problem**: `book(start, end)` succeeds only if the event doesn't double-book with any prior booking. Bookings arrive online.
-
-**Key Insight**: The *online* version of interval overlap. Keep a sorted list of bookings; conflict iff the symmetric overlap test fires against a neighbor. With `SortedList`, bisect to find the insertion point and check only the two neighbors — O(log n). A plain list with a linear scan is acceptable if you state it's O(n).
-
-```python
-from sortedcontainers import SortedList
-
-class MyCalendar:
-    def __init__(self):
-        self.cal = SortedList()
-
-    def book(self, start, end):
-        i = self.cal.bisect_right((start, end))
-        if i > 0 and self.cal[i-1][1] > start:
-            return False
-        if i < len(self.cal) and self.cal[i][0] < end:
-            return False
-        self.cal.add((start, end))
-        return True
-```
-
-**TC**: O(log n) per booking | **SC**: O(n)
-
-### My Calendar II `🎯 T2`
-
-**Problem**: Same, but allow double-booking; reject only **triple** bookings.
-
-**Key Insight**: Keep two lists: `bookings` and `overlaps` (regions already booked twice). A new event causes a triple booking iff it intersects anything in `overlaps`. Otherwise, add its intersections with `bookings` to `overlaps`, then add it to `bookings`. Generalization to "at most k" = sweep line with a diff map (My Calendar III).
-
-```python
-class MyCalendarTwo:
-    def __init__(self):
-        self.bookings = []
-        self.overlaps = []
-
-    def book(self, start, end):
-        for s, e in self.overlaps:
-            if start < e and s < end:
-                return False
-        for s, e in self.bookings:
-            if start < e and s < end:
-                self.overlaps.append((max(start, s), min(end, e)))
-        self.bookings.append((start, end))
-        return True
-```
-
-**TC**: O(n) per booking | **SC**: O(n)
-
-### Car Pooling `🎯 T2`
-
-**Problem**: Trips `[passengers, from, to]` and a capacity. Can all trips be served by one car driving east?
-
-**Key Insight**: Difference array over stops — `+p` at pickup, `-p` at drop-off — then prefix-scan and check the running load never exceeds capacity. Same events trick as Meeting Rooms II, but bounded stop range makes an array beat sorting.
-
-```python
-def carPooling(trips, capacity):
-    diff = [0] * 1001
-    for p, s, e in trips:
-        diff[s] += p
-        diff[e] -= p
-    load = 0
-    for d in diff:
-        load += d
-        if load > capacity:
-            return False
-    return True
-```
-
-**TC**: O(n + range) | **SC**: O(range) | Drop-off is exclusive: subtract at `e`, not `e+1`.
-
-### Employee Free Time `🎯 T2`
-
-**Problem**: Each employee has a sorted list of working intervals. Return the finite intervals where **everyone** is free.
-
-**Key Insight**: Individual ownership doesn't matter — flatten all intervals, sort by start, merge; the **gaps between merged blocks** are the common free time. K-way heap merge saves the sort if lists are long (say it as the follow-up).
-
-```python
-def employeeFreeTime(schedule):
-    ivals = sorted((iv.start, iv.end) for emp in schedule for iv in emp)
-    res, end = [], ivals[0][1]
-    for s, e in ivals[1:]:
-        if s > end:
-            res.append((end, s))
-        end = max(end, e)
-    return res
-```
-
-**TC**: O(n log n) | **SC**: O(n) | Related: Merge Intervals (this is its "invert the output" twin)
+[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]]
+[[dynamic-programming]] | [[sorting]] | [[heap]] | [[binary-search]] | [[sliding-window]]

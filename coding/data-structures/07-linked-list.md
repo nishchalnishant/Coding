@@ -3,14 +3,25 @@ tags: [coding, data-structures, linked-list]
 topic: linked-list
 difficulty: mixed
 ---
-
 # Linked List — Problem Deep Dives
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked linked-list problems: reversal, fast/slow, cycle detection, merge/sort, copy, LRU design.
+> **You'll be able to:** Do pointer surgery without losing nodes; dry-run on 0/1/2-node lists.
+> **Prereqs:** Linked list lecture · **Pair with:** [Linked list lecture](../../01-data-structures/07-linked-list.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [In-Place Reversal](#in-place-reversal) · [Fast / Slow Pointers](#fast--slow-pointers) · [Floyd's Cycle Detection](#floyds-cycle-detection) · [Merge / Sorting](#merge--sorting) · [Copy / Design](#copy--design) · [Other Manipulation](#other-manipulation)
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Reverse Linked List](#reverse-linked-list--t2) · [Merge Two Sorted Lists](#merge-two-sorted-lists--t2) · [Linked List Cycle II](#linked-list-cycle-ii--t2) · [Remove Nth Node From End of List](#remove-nth-node-from-end-of-list--t2) · [Reorder List](#reorder-list--t2) · [Copy List with Random Pointer](#copy-list-with-random-pointer--t2) · [LRU Cache](#lru-cache--t2) · [Reverse Nodes in K-Group](#reverse-nodes-in-k-group--t2)
+> **Template:** Reverse: `prev, cur = None, head; while cur: cur.next, prev, cur = prev, cur, cur.next`.
+> **Template:** Dummy head whenever the head can change; fast/slow for middle (`while fast and fast.next`).
+> **Gotchas:** Save `next` before rewiring · cycle start: reset one pointer to head after meeting, move both by 1 · Nth from end: advance fast `n+1` from dummy · LRU: dict maps key → node, never key → value.
+
+---
 
 **Core invariants to internalize:**
 - Singly linked: each node holds `val` + `next`. No backward traversal.
@@ -33,12 +44,11 @@ difficulty: mixed
 - `k = 1`, `k > length`, or `left == right`.
 - Cycles absent vs present; duplicate values vs duplicate nodes.
 
-
-
-
 ---
 
 ## In-Place Reversal
+
+---
 
 ### Reverse Linked List `🎯 T2`
 
@@ -66,6 +76,9 @@ difficulty: mixed
 > **Constraints:**
 > - The number of nodes in the list is the range [0, 5000].
 > - -5000 <= Node.val <= 5000
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Pointer rewiring · **Gotcha:** **Recursive** uses O(n) stack; **null** head.
 
 > [!info] Approach
 > **Three-pointer iterative reversal.** We cannot reverse without visiting every node. The question is whether we need O(n) space (recursion stack) or O(1). Iteratively reversing edges is O(1) space. Three-pointer technique maintaining invariant: `prev` is the fully-reversed prefix, `curr` is the unprocessed suffix head. Save `nxt = curr.next` before overwriting. Set `curr.next = prev`. Advance `prev = curr`, `curr = nxt`. When `curr` is None, `prev` is the new head. Watch the order carefully: save `next` before rewiring or you lose the rest of the list.
@@ -337,6 +350,8 @@ difficulty: mixed
 
 ## Fast / Slow Pointers
 
+---
+
 ### Linked List Cycle `🎯 T2`
 
 > [!example] Problem
@@ -369,6 +384,9 @@ difficulty: mixed
 > - The number of the nodes in the list is in the range [0, 10^4].
 > - -10^5 <= Node.val <= 10^5
 > - pos is -1 or a valid index in the linked-list.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Floyd; meet proves cycle · **Gotcha:** Check `fast` and `fast.next` before advancing.
 
 > [!info] Approach
 > **Floyd's fast/slow pointer cycle detection.** Without Floyd's, you'd need to store all visited nodes in a hash set — O(n) space. Floyd's uses two pointers that must meet inside a cycle. Fast moves 2 steps, slow moves 1. If they ever point to the same node, a cycle exists. If fast reaches null, no cycle. Start both at `head`. Loop: `slow = slow.next`, `fast = fast.next.next`. Check `slow is fast` (identity, not equality). If `fast` or `fast.next` is None, exit — no cycle. The identity check matters whenever node values can repeat.
@@ -585,6 +603,9 @@ difficulty: mixed
 > **Constraints:**
 > - 1 <= n <= 2^{31} - 1
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Sum of squares of digits — detect cycle" · **Gotcha:** Unhappy numbers always converge to 4 — can short-circuit on 4
+
 > [!info] Approach
 > **Floyd's cycle detection on the implicit sequence.** The sequence either terminates at 1 or enters a cycle. Instead of tracking all seen numbers in a hash set (O(n) space), we apply Floyd's on the sequence `f(n), f(f(n)), ...` where `f` computes the digit-square sum. Fast pointer applies `f` twice per step, slow applies once. If they meet at 1 → happy. If they meet at any other value → cycle, not happy. Define `digit_square_sum`. Run slow/fast until `slow == fast`. If the meeting value is 1, return True. Else return False.
 
@@ -615,6 +636,8 @@ difficulty: mixed
 ---
 
 ## Floyd's Cycle Detection
+
+---
 
 ### Linked List Cycle II `🎯 T2`
 
@@ -649,6 +672,9 @@ difficulty: mixed
 > - -10^5 <= Node.val <= 10^5
 > - pos is -1 or a valid index in the linked-list.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** Floyd + math · **Gotcha:** **Why entry?** — length algebra; **wrong**: restarting only fast from meet.
+
 > [!info] Approach
 > **Floyd's two-phase cycle entry detection.** Detection alone is O(1) space. Finding the entry requires a mathematical insight from Floyd's algorithm. After slow/fast meet inside cycle, reset one pointer to head. Advance both at speed 1. Their meeting point is the cycle entry. Phase 1 — slow and fast meet after slow travels distance `d+c`, fast travels `d+c+L` (one full cycle extra), where `d` = head-to-entry, `c` = entry-to-meeting, `L` = cycle length. This implies `d = L - c = d'` (distance from meeting point back to entry). Phase 2 — slow resets to head, both advance 1 step at a time → they meet at the entry.
 
@@ -681,66 +707,13 @@ difficulty: mixed
 
 ### Find the Duplicate Number (Floyd's variant) `🎯 T2`
 
-> [!example] Problem
-> Given an array of integers nums containing n + 1 integers where each integer is in the range [1, n] inclusive.
-> There is only one repeated number in nums, return this repeated number.
-> You must solve the problem without modifying the array nums and using only constant extra space.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,4,2,2]
-> Output: 2
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [3,1,3,4,2]
-> Output: 3
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [3,3,3,3,3]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - 1 <= n <= 10^5
-> - nums.length == n + 1
-> - 1 <= nums[i] <= n
-> - All the integers in nums appear only once except for precisely one integer which appears two or more times.
-
-> [!info] Approach
-> **Floyd's on implicit linked list defined by array values.** Values in [1, n] define an implicit linked list: `next(i) = nums[i]`. Index 0 is the entry point (not part of cycle since all values ≥ 1). The duplicate value creates two pointers to the same node — the cycle entry. Floyd's cycle detection on the implicit graph. Phase 1 finds the meeting point inside cycle; Phase 2 finds the cycle entry = duplicate. Identical to Linked List Cycle II but operating on array indices. `slow = nums[slow]`, `fast = nums[nums[fast]]`. After meeting, reset `slow = nums[0]` (not 0, because the linked list starts from `nums[0]`).
-
-> [!note]- Python Solution
-> ```python
-> def find_duplicate(nums):
->     slow = fast = nums[0]
->     # Phase 1: find intersection
->     while True:
->         slow = nums[slow]
->         fast = nums[nums[fast]]
->         if slow == fast:
->             break
->     # Phase 2: find cycle entry (duplicate)
->     slow = nums[0]
->     while slow != fast:
->         slow = nums[slow]
->         fast = nums[fast]
->     return slow
-> ```
-
-> [!success] Complexity
-> Time O(n), Space O(1).
-
-> [!tip] Alternatives
-> - Binary search on value range (pigeonhole): O(n log n) time, O(1) space. Count values ≤ mid; if count > mid, duplicate is in [1..mid].
-> - XOR / sum math: only works if exactly one number appears exactly twice; fails for multiple duplicates.
+> Full walkthrough: [Find the Duplicate Number](01-array.md#find-the-duplicate-number--t2).
 
 ---
 
 ## Merge / Sorting
+
+---
 
 ### Merge Two Sorted Lists `🎯 T2`
 
@@ -771,6 +744,9 @@ difficulty: mixed
 > - The number of nodes in both lists is in the range [0, 50].
 > - -100 <= Node.val <= 100
 > - Both list1 and list2 are sorted in non-decreasing order.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Dummy node · **Gotcha:** **In-place** vs new list; **dummy** avoids null head cases.
 
 > [!info] Approach
 > **Dummy head + two-pointer merge.** Two-pointer merge from merge sort. A dummy head eliminates the special case of "what is the initial head of the result?" Compare heads of both lists, attach the smaller, advance that pointer. Append the remaining non-empty list. `dummy → result chain`. `curr` pointer builds the result. While both `l1` and `l2` non-null: attach smaller, advance it. After loop, attach the non-null remainder.
@@ -949,6 +925,8 @@ difficulty: mixed
 
 ## Copy / Design
 
+---
+
 ### Copy List with Random Pointer `🎯 T2`
 
 > [!example] Problem
@@ -981,6 +959,9 @@ difficulty: mixed
 > - 0 <= n <= 1000
 > - -10^4 <= Node.val <= 10^4
 > - Node.random is null or is pointing to some node in the linked list.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Old→new map · **Gotcha:** **O(n)** space; **O(1)** space trick exists (interleave nodes) — bonus for senior.
 
 > [!info] Approach
 > **Hash map original→clone, two-pass wiring.** Copying `next` is easy. `random` points to arbitrary nodes — we need to map original nodes to their clones to set `random` correctly. Hash map `original → clone`. Two passes: first create all clones, second assign `next` and `random` using the map. Pass 1: iterate and create `{node: ListNode(node.val)}` for all nodes. Pass 2: for each original node, set `clone.next = map[node.next]`, `clone.random = map[node.random]`. Mapping `None → None` keeps the wiring concise.
@@ -1051,6 +1032,12 @@ difficulty: mixed
 > - 0 <= value <= 10^5
 > - At most 2 * 10^5 calls will be made to get and put.
 
+> [!tip] Recognize · Gotcha
+> **Signal:** HashMap + DLL · **Gotcha:** **Doubly linked** for O(1) remove; **dummy head/tail** simplifies edges. Thread-safety follow-up at senior level.
+
+> [!failure] Tempting wrong approach
+> A list with `remove()` (O(n)), or a dict alone (no recency order). Use a hashmap + doubly linked list with sentinels (or `OrderedDict.move_to_end`).
+
 > [!info] Approach
 > **Doubly linked list + hash map.** We need O(1) access (hash map) and O(1) eviction/promotion (doubly linked list). Neither alone suffices. Doubly linked list for recency order (MRU at head, LRU at tail) + hash map for O(1) node lookup by key. Dummy head and dummy tail eliminate all edge cases in `_remove` and `_insert_front`. On `get`: remove from current position, insert at front, return value. On `put`: if key exists, remove old; create new node, insert at front, update map; if over capacity, remove LRU (tail.prev), delete from map.
 
@@ -1112,6 +1099,8 @@ difficulty: mixed
 ---
 
 ## Other Manipulation
+
+---
 
 ### Add Two Numbers
 
@@ -1619,158 +1608,3 @@ difficulty: mixed
 > [!tip] Alternatives
 > - DFS with a stack: push `next_node` before recursing into `child`. O(depth) stack space. Conceptually cleaner but O(1) iterative is preferred.
 > - Recursion: `flatten(child)` returns child_tail; splice. O(depth) call stack.
-
----
-
-### Rotate List
-
-> [!example] Problem
-> Given the head of a linked list, rotate the list to the right by k places.
-> 
-> **Example 1:**
-> ```
-> Input: head = [1,2,3,4,5], k = 2
-> Output: [4,5,1,2,3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: head = [0,1,2], k = 4
-> Output: [2,0,1]
-> ```
-> 
-> **Constraints:**
-> - The number of nodes in the list is in the range [0, 500].
-> - -100 <= Node.val <= 100
-> - 0 <= k <= 2 * 10^9
-
-> [!info] Approach
-> A rotation just changes where the tail reconnects to the head. Once you know the list length, you can convert the problem into a cut point. Make the list circular, compute `k % n`, and cut at the new tail. Find tail and length, connect tail to head, advance to the new tail `n - k - 1` steps from the head, then break the cycle.
-
-> [!note]- Python Solution
-> ```python
-> def rotate_right(head, k):
->     if not head or not head.next or k == 0:
->         return head
->     tail = head
->     n = 1
->     while tail.next:
->         tail = tail.next
->         n += 1
->     k %= n
->     if k == 0:
->         return head
->     tail.next = head
->     steps = n - k - 1
->     new_tail = head
->     for _ in range(steps):
->         new_tail = new_tail.next
->     new_head = new_tail.next
->     new_tail.next = None
->     return new_head
-> ```
-
-> [!success] Complexity
-> O(n) time, O(1) space.
-
-> [!tip] Alternatives
-> The same “make circular then break” trick is useful for other rotation-style linked list problems.
-
----
-
-## Design
-
-### LRU Cache (Doubly Linked List + Hash Map) `🎯 T2`
-
-> [!example] Problem
-> Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
-> Implement the LRUCache class:
-> The functions get and put must each run in O(1) average time complexity.
-> 
-> **Example 1:**
-> ```
-> Input
-> ["LRUCache", "put", "put", "get", "put", "get", "put", "get", "get", "get"]
-> [[2], [1, 1], [2, 2], [1], [3, 3], [2], [4, 4], [1], [3], [4]]
-> Output
-> [null, null, null, 1, null, -1, null, -1, 3, 4]
-> 
-> Explanation
-> LRUCache lRUCache = new LRUCache(2);
-> lRUCache.put(1, 1); // cache is {1=1}
-> lRUCache.put(2, 2); // cache is {1=1, 2=2}
-> lRUCache.get(1);    // return 1
-> lRUCache.put(3, 3); // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-> lRUCache.get(2);    // returns -1 (not found)
-> lRUCache.put(4, 4); // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-> lRUCache.get(1);    // return -1 (not found)
-> lRUCache.get(3);    // return 3
-> lRUCache.get(4);    // return 4
-> ```
-> 
-> **Constraints:**
-> - 1 <= capacity <= 3000
-> - 0 <= key <= 10^4
-> - 0 <= value <= 10^5
-> - At most 2 * 10^5 calls will be made to get and put.
-
-> [!info] Approach
-> A hash map gives O(1) lookup but can't track recency. A doubly linked list lets us move any node to the head (most recently used) in O(1) using pointers. Together they solve both requirements. Maintain a dict `key -> node`. The DLL has a sentinel head (most recent) and tail (least recent). On every access, unlink the node and re-insert it just after the head. `get`: if key missing return -1, else move node to front and return value. `put`: if key exists update value and move to front; if new key and at capacity, remove the node just before the tail (LRU), then insert new node at front.
-
-> [!note]- Python Solution
-> ```python
-> class Node:
->     def __init__(self, key=0, val=0):
->         self.key = key
->         self.val = val
->         self.prev = None
->         self.next = None
-> >
-> class LRUCache:
->     def __init__(self, capacity):
->         self.cap = capacity
->         self.cache = {}
->         self.head = Node()   # most recent sentinel
->         self.tail = Node()   # least recent sentinel
->         self.head.next = self.tail
->         self.tail.prev = self.head
-> >
->     def _remove(self, node):
->         node.prev.next = node.next
->         node.next.prev = node.prev
-> >
->     def _insert_front(self, node):
->         node.next = self.head.next
->         node.prev = self.head
->         self.head.next.prev = node
->         self.head.next = node
-> >
->     def get(self, key):
->         if key not in self.cache:
->             return -1
->         node = self.cache[key]
->         self._remove(node)
->         self._insert_front(node)
->         return node.val
-> >
->     def put(self, key, value):
->         if key in self.cache:
->             self._remove(self.cache[key])
->         node = Node(key, value)
->         self.cache[key] = node
->         self._insert_front(node)
->         if len(self.cache) > self.cap:
->             lru = self.tail.prev
->             self._remove(lru)
->             del self.cache[lru.key]
-> ```
-
-> [!success] Complexity
-> Time O(1) per get/put, Space O(capacity).
-
-> [!tip] Alternatives
-> - Python `OrderedDict`: `move_to_end` + `popitem(last=False)` gives the same O(1) behavior in 10 lines, but interviewers expect you to implement the DLL.
-> - Array-based approaches: O(n) per operation — too slow.
-
----
-

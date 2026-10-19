@@ -3,46 +3,30 @@ module: 01-data-structures
 topic: Hashing
 tags: [data-structures, hashing]
 ---
+# Hashing — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** How hash maps/sets work (hashing, collisions, load factor), and the four interview uses: complement lookup, frequency count, prefix-sum + map, canonical-key grouping.
+> **You'll be able to:** Turn an O(N²) pair search into O(N) with a map; choose the right key (sorted tuple, count signature, prefix sum); state worst-case vs average costs.
+> **Prereqs:** Arrays · **Pair with:** [Hashing problems](../coding/data-structures/02-hashing.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can go wrong
-       │                  │               │               │               │
-  [O(1) lookup by key  [deterministic  [hash(key) →    [frequency      [hash collisions
-   is impossible with   function maps   index in array;  count, cache,   degrade to O(n);
-   arrays (unknown      arbitrary key   collision        two-sum, anagram poor hash
-   key space) or        to bounded       handled by       detection,      function clusters
-   trees (O(log n))]    integer index]   chaining or      grouping,       keys; worst-case
-                                         open addressing]  LRU cache]      is always O(n)]
-       │                  │               │
-  [real-world:          [invariant:     [load factor α = n/m;
-   dictionary —          same key always  resize when α > 0.7;
-   word → page           same bucket;     amortized O(1) insert;
-   number in O(1)]       hash is          chaining: O(1+α) lookup;
-                         deterministic]   open addressing: O(1/(1-α))]
-       ↓
-[Decision: HashMap vs alternatives]
-  ├── vs Array        → hash for arbitrary key types; array for integer 0..n index
-  ├── vs BST/TreeMap  → hash O(1) avg vs BST O(log n); BST supports range queries
-  └── vs Trie         → trie for prefix operations; hash for exact key lookup
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Need O(1) lookup for arbitrary key types (strings, objects) — arrays only handle integer indices in a known range.
 - **Core insight**: A good hash function uniformly distributes keys across buckets, making collision probability O(1/m) per pair — effectively O(1) lookup.
 - **Invariant**: Same key always hashes to the same bucket; the hash function is deterministic and stable during a session.
 - **Why it's fast**: With low load factor, expected chain length is ≈1 — lookup touches ~1 element regardless of table size.
 - **Where it breaks**: Adversarial inputs can force all keys to one bucket (hash DoS); ordering is lost; worst-case is O(n); non-hashable types (mutable lists) cannot be keys.
 
-# Hashing — L3 Core
+### One-Page Map
 
 ```
 [HASHING — MINDMAP]
@@ -94,9 +78,6 @@ WHY hashing exists → WHAT it is → HOW it works → WHEN to use → WHAT can 
 
 Map keys to indices via hash function for O(1) average lookup/insert/delete. L3: collision strategies, load factor tuning, consistent hashing for distributed systems, and bloom filters.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -129,11 +110,11 @@ Map keys to indices via hash function for O(1) average lookup/insert/delete. L3:
 - O(1) membership test — set lookups vs linear scan.
 - Sliding window character counts — track window state with a frequency map.
 
-**Common mistakes:**
-- Using mutable objects (lists, dicts) as keys — raises `TypeError`; convert to `tuple` first.
-- Not initializing `seen = {0: 1}` or `first_seen = {0: -1}` in prefix-sum hash map patterns.
-- Comparing floats as dict keys — floating point imprecision makes equality unreliable.
-- Forgetting that Python `dict` preserves insertion order (3.7+) — can be an asset or a surprise.
+> [!warning] Common mistakes
+> - Using mutable objects (lists, dicts) as keys — raises `TypeError`; convert to `tuple` first.
+> - Not initializing `seen = {0: 1}` or `first_seen = {0: -1}` in prefix-sum hash map patterns.
+> - Comparing floats as dict keys — floating point imprecision makes equality unreliable.
+> - Forgetting that Python `dict` preserves insertion order (3.7+) — can be an asset or a surprise.
 
 ---
 
@@ -343,33 +324,26 @@ class RandomizedSet:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- Two Sum — Complement map; single pass.
-- **Valid Anagram `🎯 T2`** — `Counter(s) == Counter(t)`.
-- **First Unique Character** — `Counter`; find first with count 1.
+- **[Two Sum](../coding/data-structures/02-hashing.md#two-sum--t1) `⚡ T1`** — Complement map; single pass.
+- **[Valid Anagram](../coding/data-structures/03-string.md#valid-anagram--t2) `🎯 T2`** — `Counter(s) == Counter(t)`.
+- **[First Unique Character](../coding/data-structures/02-hashing.md#first-unique-character-in-a-string) `🎯 T2`** — `Counter`; find first with count 1.
 
 ### Medium
-- Group Anagrams — `sorted(word)` or count-tuple as key.
-- Subarray Sum Equals K — Prefix sum + count map; `seen = {0:1}`.
-- Longest Consecutive Sequence — Set lookup; only start chain from `x` if `x-1` not in set.
-- LRU Cache — Map + DLL; dummy head/tail.
-- **Insert Delete GetRandom O(1) `⚡ T1`** — Map + array; swap-with-last on delete.
-- **Contiguous Array (equal 0/1)** — Map `0→-1`; prefix sum + first-seen map.
+- **[Insert Delete GetRandom O(1)](../coding/data-structures/02-hashing.md#insert-delete-getrandom-o1--t1) `⚡ T1`** — Map + array; swap-with-last on delete.
+- **[Group Anagrams](../coding/data-structures/03-string.md#group-anagrams--t1) `⚡ T1`** — `sorted(word)` or count-tuple as key.
+- **[Subarray Sum Equals K](../coding/data-structures/02-hashing.md#subarray-sum-equals-k--t1) `⚡ T1`** — Prefix sum + count map; `seen = {0:1}`.
+- **[Longest Consecutive Sequence](../coding/data-structures/02-hashing.md#longest-consecutive-sequence--t1) `⚡ T1`** — Set lookup; only start chain from `x` if `x-1` not in set.
+- **[Contiguous Array (equal 0/1)](../coding/data-structures/02-hashing.md#contiguous-array-lc-525--t1) `⚡ T1`** — Map `0→-1`; prefix sum + first-seen map.
+- **[LRU Cache](../coding/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — Map + DLL; dummy head/tail.
 
 ### Hard
-- **Minimum Window Substring `⚡ T1`** — Sliding window + need/have count maps.
-- **Substring with Concatenation of All Words** — Fixed word-length window; multiset comparison.
-- **Max Points on a Line** — Slope map with `gcd` normalization; handle vertical lines.
-- **Design HashMap** — Chaining with prime-sized bucket array; handle resize.
+- **[Minimum Window Substring](../coding/algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1) `⚡ T1`** — Sliding window + need/have count maps.
+- **[Design HashMap](../coding/data-structures/02-hashing.md#design-hashmap--t1) `⚡ T1`** — Chaining with prime-sized bucket array; handle resize.
+- **[Substring with Concatenation of All Words](../coding/data-structures/02-hashing.md#substring-with-concatenation-of-all-words) `💤 T3`** — Fixed word-length window; multiset comparison.
+- **[Max Points on a Line](../coding/data-structures/02-hashing.md#max-points-on-a-line) `💤 T3`** — Slope map with `gcd` normalization; handle vertical lines.
 
 ---
 
@@ -422,7 +396,7 @@ class RandomizedSet:
 
 **Explain the Swap-with-Last optimization used to support O(1) getRandom alongside O(1) insert and delete.** #flashcard
 Combine a dynamic array `list` and a hash map `val_to_idx` mapping values to their array index:
-- **Insert `🎯 T2`**: Append value to `list`, record its index in `val_to_idx`.
+- **Insert**: Append value to `list`, record its index in `val_to_idx`.
 - **Delete**: Retrieve the target index `idx` from `val_to_idx`. Swap the element at `idx` with the last element of `list` in $O(1)$. Update the index of the swapped element in `val_to_idx`, delete the target from the map, and pop the last element from `list`.
 - **GetRandom**: Return a random element from `list` in $O(1)$ by generating an index in range.
 
@@ -443,4 +417,3 @@ The load factor is the ratio $\alpha = \frac{\text{number of elements}}{\text{nu
 
 - **Trade-off**: It can yield false positives (stating an element is present when it is not) but never false negatives.
 - **Limitation**: Elements cannot be easily deleted, and the actual values are not stored.
-

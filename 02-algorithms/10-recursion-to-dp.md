@@ -1,10 +1,16 @@
 # Recursion → DP — The Conversion Bridge
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** The mechanical bridge from brute-force recursion → memoization → tabulation → space-optimised DP, with 15 worked conversions.
+> **You'll be able to:** Convert any recursive solution into top-down and bottom-up DP; pick the iteration order from the recurrence's dependencies.
+> **Prereqs:** Recursion ([masterclass](../03-patterns/RECURSION_AND_DP_MASTERCLASS.md) if it hasn't clicked yet — this file is the drill reference, not the lesson) · **Pair with:** [DP lecture](15-dynamic-programming.md) · [DP problems](../coding/algorithms/15-dynamic-programming.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [One-Page Map](#one-page-map) · [Quick Revision Triggers](#quick-revision-triggers) · [Overlap in One Picture (Climbing Stairs)](#overlap-in-one-picture-climbing-stairs) · [Iteration Order Cheat Sheet](#iteration-order-cheat-sheet) · [Top-Down vs Bottom-Up — When to Use Which](#top-down-vs-bottom-up--when-to-use-which) · [Templates](#templates) · [Worked Examples — Full Pipeline](#worked-examples--full-pipeline) · [15-Problem Conversion Reference](#15-problem-conversion-reference) · [Common Conversion Bugs](#common-conversion-bugs) · [Interview Script (say this out loud)](#interview-script-say-this-out-loud) · [Final Mental Model](#final-mental-model) · [Flashcards](#flashcards)
+
+---
 
 **Companion files:** [recursion.md](./09-recursion.md) (write the recurrence) · [dynamic-programming.md](./15-dynamic-programming.md) (pattern catalog + bugs)
 
@@ -17,12 +23,9 @@ Recursive brute force  →  memo (top-down)  →  tabulate (bottom-up)  →  com
 
 If you can execute those four moves on demand, most classic DP questions become engineering — not memorization.
 
-
-
-
 ---
 
-## First-Principles Map
+## One-Page Map
 
 ```
 WHY this bridge exists
@@ -106,6 +109,25 @@ The #1 bottom-up bug is filling a cell before its dependencies exist. Use this t
 | `f(r, c)` grid paths | `r+1`, `c+1` | `r` **0→m**, `c` **0→n** | top and left neighbors |
 
 **Rule:** List what `dp[state]` reads on the RHS. Those cells must already be filled when you write `state`.
+
+**Dry-run trace — why 1D direction matters.** One item of weight `2`, capacity `4`, `dp[w]` = "can we hit weight `w`?", start `dp = [T, F, F, F, F]`, update `dp[w] |= dp[w-2]`:
+
+| Loop | `w` visited | Reads | `dp` after step | Meaning |
+|---|---|---|---|---|
+| **Forward** (unbounded) | 2 | `dp[0]=T` | `[T,F,T,F,F]` | |
+| | 3 | `dp[1]=F` | `[T,F,T,F,F]` | |
+| | 4 | `dp[2]=T` ← *written this pass* | `[T,F,T,F,T]` | item used **twice** — right for Coin Change, wrong for 0/1 |
+| **Backward** (0/1) | 4 | `dp[2]=F` (old row) | `[T,F,F,F,F]` | |
+| | 3 | `dp[1]=F` | `[T,F,F,F,F]` | |
+| | 2 | `dp[0]=T` | `[T,F,T,F,F]` | item used **once** ✅ |
+
+Backward iteration means every `dp[w - wt]` you read is still the *previous item's* value — the 1D array is impersonating row `i-1`. Forward iteration reads cells already updated for item `i`, which is exactly "reuse allowed."
+
+> [!warning] Common mistakes
+> - Filling a cell before its dependencies — derive the order from the recursive calls (table above), never by habit.
+> - Wrong 1D loop direction for knapsack (trace above).
+> - Skipping the border row/col when converting memo → table.
+> Full symptom → fix list: [Common Conversion Bugs](#common-conversion-bugs).
 
 ---
 

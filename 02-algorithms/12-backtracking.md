@@ -3,43 +3,23 @@ module: 02-algorithms
 topic: Backtracking
 tags: [algorithms, backtracking]
 ---
+# Backtracking — L3 Gold Standard
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** The choose / explore / un-choose template, subsets/combinations/permutations, deduplication, pruning strategies, board search (N-Queens, Sudoku, Word Search).
+> **You'll be able to:** Write the universal template; dedupe with sort + skip; estimate branching-factor complexity; prune early.
+> **Prereqs:** Recursion · **Pair with:** [Backtracking problems](../coding/algorithms/12-backtracking.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY Backtracking exists
-├── Need to explore combinatorial search spaces exhaustively
-│   ├── Cannot enumerate all solutions upfront (exponential count)
-│   └── Constraint satisfaction prunes invalid branches early
-WHAT it is
-├── Depth-first systematic enumeration with undo
-│   ├── At each step: choose → explore → unchoose
-│   └── State is fully restored on backtrack (invariant)
-HOW it works
-├── Recursive DFS over decision tree
-│   ├── Base case: solution complete → record/return
-│   ├── Pruning: constraint violated → return immediately
-│   └── Undo: reverse the choice before next sibling
-WHEN to use
-├── "all combinations / permutations / subsets" → backtracking
-├── Constraint satisfaction (N-Queens, Sudoku) → backtracking + pruning
-└── "does a valid assignment exist?" → backtracking with early exit
-WHAT can go wrong
-├── Missing undo step → state corruption across branches
-├── Pruning too late → TLE on large inputs
-└── Revisiting same element → need used[] or index tracking
-DECISION
-└── Search space is a decision tree with hard constraints → backtracking; if subproblems overlap → DP instead
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. The Universal Template](#2-the-universal-template) · [3. Core Patterns & Click Moments](#3-core-patterns--click-moments) · [4. Advanced Pruning Strategies](#4-advanced-pruning-strategies) · [5. Complexity Reference](#5-complexity-reference) · [5. L3 Deep Dives](#5-l3-deep-dives) · [6. Common Interview Problems](#6-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Deduplication Template `⚡ T1`](#deduplication-template--t1) · [The Coach's Dialogue: The Art of the "Undo"](#the-coachs-dialogue-the-art-of-the-undo) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Enumerate valid solutions in a combinatorial space too large to build explicitly.
 - **Core insight**: Incrementally build a candidate; abandon it the moment a constraint is violated (prune early, not late).
@@ -47,12 +27,9 @@ DECISION
 - **Why it works**: DFS visits every branch exactly once; pruning skips entire subtrees in O(1) per pruned node.
 - **Where it breaks**: Overlapping subproblems (use DP); pure enumeration with no pruning degenerates to brute-force O(n!).
 
-
-
-
 ---
 
-# Backtracking — L3 Gold Standard
+### One-Page Map
 
 ```
 [BACKTRACKING — MINDMAP]
@@ -116,11 +93,11 @@ Build solutions incrementally; **backtrack** when constraints fail. DFS over the
 - N > 20 with subset-tracking — use bitmask DP instead.
 - Subproblems repeat — add memoization to convert to top-down DP.
 
-**Common mistakes.**
-- Not undoing state after the recursive call — mutations leak across branches (the #1 bug).
-- Forgetting to copy the current path before appending to results (`path[:]` not `path`).
-- Starting index confusion: combinations use a `start` index to avoid going backwards; permutations do not.
-- Wrong base case — returning too early (missing valid paths) or too late (infinite recursion).
+> [!warning] Common mistakes
+> - Not undoing state after the recursive call — mutations leak across branches (the #1 bug).
+> - Forgetting to copy the current path before appending to results (`path[:]` not `path`).
+> - Starting index confusion: combinations use a `start` index to avoid going backwards; permutations do not.
+> - Wrong base case — returning too early (missing valid paths) or too late (infinite recursion).
 
 ---
 
@@ -546,22 +523,22 @@ def dfs_iterative(start, choices):
 ## 6. Common Interview Problems
 
 ### Easy
-- **Subsets** — Include/exclude each index; `start` index prevents duplicates.
-- **Letter Combinations of Phone Number** — Cartesian product via DFS.
+- **[Subsets](../coding/algorithms/12-backtracking.md#subsets-power-set--t2) `🎯 T2`** — Include/exclude each index; `start` index prevents duplicates.
+- **[Letter Combinations of Phone Number](../coding/algorithms/12-backtracking.md#letter-combinations-of-a-phone-number--t2) `🎯 T2`** — Cartesian product via DFS.
 
 ### Medium
-- **Permutations / Permutations II** — Unused set; sort + skip for duplicates.
-- **Combination Sum / II** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
-- **Word Search** — Grid DFS with in-place marking.
-- **Palindrome Partitioning** — Precompute palindrome table; O(1) check per partition.
-- **Generate Parentheses** — Track open/close counts; prune when `close > open`.
+- **[Word Search](../coding/algorithms/12-backtracking.md#word-search-all-occurrences--t1) `⚡ T1`** — Grid DFS with in-place marking.
+- **[Permutations](../coding/algorithms/12-backtracking.md#permutations--t2) / [Permutations II](../coding/algorithms/12-backtracking.md#permutations-ii-with-duplicates--t2) `🎯 T2`** — Unused set; sort + skip for duplicates.
+- **[Combination Sum / II](../coding/algorithms/12-backtracking.md#combination-sum-ii-01--no-reuse--t2) `🎯 T2`** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
+- **[Palindrome Partitioning](../coding/algorithms/12-backtracking.md#palindrome-partitioning--t2) `🎯 T2`** — Precompute palindrome table; O(1) check per partition.
+- **[Generate Parentheses](../coding/algorithms/12-backtracking.md#generate-parentheses--t2) `🎯 T2`** — Track open/close counts; prune when `close > open`.
 
 ### Hard
-- **N-Queens** — Column + diagonal sets; bitmask variant for speed.
-- **Sudoku Solver** — MRV heuristic (cell with fewest valid digits first).
-- **Word Search II** — Trie of all words + backtracking; prune when no trie prefix matches.
-- **Remove Invalid Parentheses** — BFS by removal count; or backtracking with min-removal pruning.
-- **Expression Add Operators** — Backtrack with last-operand tracking for `*` precedence.
+- **[Word Search II](../coding/algorithms/09-recursion.md#word-search-ii-trie--backtracking--t1) `⚡ T1`** — Trie of all words + backtracking; prune when no trie prefix matches.
+- **[N-Queens](../coding/algorithms/12-backtracking.md#n-queens--t2) `🎯 T2`** — Column + diagonal sets; bitmask variant for speed.
+- **[Sudoku Solver](../coding/algorithms/12-backtracking.md#sudoku-solver--t2) `🎯 T2`** — MRV heuristic (cell with fewest valid digits first).
+- **[Expression Add Operators](../coding/algorithms/12-backtracking.md#expression-add-operators-lc-282) `🎯 T2`** — Backtrack with last-operand tracking for `*` precedence.
+- **[Remove Invalid Parentheses](../coding/algorithms/12-backtracking.md#remove-invalid-parentheses) `💤 T3`** — BFS by removal count; or backtracking with min-removal pruning.
 
 ---
 
@@ -668,7 +645,7 @@ backtrack([])
 
 ---
 
-## 🎙️ The Coach's Dialogue: The Art of the "Undo"
+## The Coach's Dialogue: The Art of the "Undo"
 
 **Student:** "Coach, every time I write backtracking, I feel like I'm losing track of the state. It’s like trying to remember five different versions of the same reality."
 

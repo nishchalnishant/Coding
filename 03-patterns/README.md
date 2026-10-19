@@ -1,42 +1,35 @@
-## First-Principles Breakdown
-
-- **Root problem:** Interviews test pattern recognition, not creative problem-solving from scratch; every problem is a known template with a problem-specific twist applied on top.
-- **Core insight:** Signal words and constraint sizes together uniquely narrow the pattern space — recognizing both reduces candidate patterns from ~15 to 1-2 in under 60 seconds.
-- **Invariant:** The correct pattern is always determined by the problem's structural property (contiguity, ordering, connectivity, optimization) — not by the domain (trees, graphs, strings are surface).
-- **Why it works:** Each pattern is a proven algorithmic shape that matches exactly one class of structural property; once matched, the template provides a correct starting frame and known complexity.
-- **Where it breaks:** Forcing a mismatched pattern (DFS for shortest path, greedy without exchange property) produces either wrong answers or wrong complexity, neither fixable without restarting.
-
 # Patterns — Index
 
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Which pattern guide answers which question, and a pattern → lecture-file cross-reference.
+> **You'll be able to:** Know which pattern guide to open and when.
+> **Prereqs:** None · **Pair with:** [Patterns master](patterns-master.md) · **Time:** 10 min
+> **How to use:** reference — read once, then use as a lookup.
 
-Pattern recognition is the skill that separates L4 from L3. The goal: hear a problem, identify the pattern in under 60 seconds, and begin with the right structure.
+**Sections:** [Core Resources](#core-resources) · [Pattern → Topic Cross-Reference](#pattern--topic-cross-reference) · [60-Second Pattern Recognition](#60-second-pattern-recognition)
 
 ---
 
 ## Core Resources
 
-| Resource | What's in it |
-|----------|-------------|
-| [`patterns-master.md`](./patterns-master.md) | **Primary guide.** 60-second recognition triggers for all major patterns. Read this first. |
-| [`HOW_TO_THINK.md`](./HOW_TO_THINK.md) | First-principles derivation of every pattern — build intuition instead of memorizing |
-| [`RECURSION_AND_DP_MASTERCLASS.md`](./RECURSION_AND_DP_MASTERCLASS.md) | Teacher-voice course: recursion → memoization → bottom-up DP |
-| [`INTERVIEW_JUDGMENT.md`](./INTERVIEW_JUDGMENT.md) | Live-interview decisions: correctness arguments, pivoting, using hints, recovery |
-| [`PATTERN_LADDERS.md`](./PATTERN_LADDERS.md) | Problem ladders per pattern — learn by deriving each rung from the last |
-| [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | Question bank: per-topic canonical problems with core logic + trickiness |
-| [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Final revision: complexity sound bites, topic capsules, day-before schedule |
-| [`MOCK_INTERVIEW_SET.md`](./MOCK_INTERVIEW_SET.md) | 25 timed mock problems with rubric |
-| [`leetcode-variants.md`](./leetcode-variants.md) | Narrative walkthroughs of follow-up/variant questions |
-| [`02-algorithms/03-two-pointers.md`](../02-algorithms/03-two-pointers.md) | All three two-pointer variants with templates + 8 canonical problems |
-| [`02-algorithms/04-sliding-window.md`](../02-algorithms/04-sliding-window.md) | Fixed + variable window, monotonic deque, 8 canonical problems |
-| [`02-algorithms/11-binary-search.md`](../02-algorithms/11-binary-search.md) | Standard, rotated, BS-on-answer, 2D matrix, 10 canonical problems |
-| [`15-dynamic-programming.md`](../02-algorithms/15-dynamic-programming.md) | DP paradigms: 1D, 2D, grid, knapsack, LCS |
-| [`12-backtracking.md`](../02-algorithms/12-backtracking.md) | Backtracking template + pruning strategies |
-| [`13-graph.md`](../01-data-structures/13-graphs.md) | BFS, DFS, topological sort, shortest path |
-| [`MINDMAP.md`](../MINDMAP.md) | T1/T2 problem index with one-line hints (`coding/`) |
+Each guide answers one question. Open the one that matches what you need right now.
+
+| Your question | File | Mode |
+|---|---|---|
+| "Which pattern is this?" — triggers, decision trees, pivots | [`patterns-master.md`](./patterns-master.md) | Lookup |
+| "Why does this pattern work / how do I re-derive it?" | [`HOW_TO_THINK.md`](./HOW_TO_THINK.md) | Read once, in order |
+| "I can't design recursion or DP states" | [`RECURSION_AND_DP_MASTERCLASS.md`](./RECURSION_AND_DP_MASTERCLASS.md) | Lesson, in order |
+| "Give me graded practice for one pattern" | [`PATTERN_LADDERS.md`](./PATTERN_LADDERS.md) | Practice (weeks) |
+| "The interviewer changed the problem — now what?" | [`leetcode-variants.md`](./leetcode-variants.md) | Read once |
+| "What's the trap in canonical problem X?" | [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | Lookup |
+| "Commit or pivot? How do I use a hint?" | [`INTERVIEW_JUDGMENT.md`](./INTERVIEW_JUDGMENT.md) | Read once, reread before mocks |
+| "Am I ready?" — timed problems + rubric | [`MOCK_INTERVIEW_SET.md`](./MOCK_INTERVIEW_SET.md) | Practice |
+| "Interview is in 7 days / 48 h / tomorrow" | [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Plan |
+| "What follow-ups will a senior interviewer ask?" | [`SENIOR_FOLLOWUPS.md`](./SENIOR_FOLLOWUPS.md) | L4+/senior only |
+
+Outside this folder: [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) (round clock, Big-O, edge cases) · [MINDMAP](../MINDMAP.md) (problem-name → hint recall) · [questions.md](../questions.md) (find a walkthrough) · [FLOWCHARTS](../FLOWCHARTS.md) (visual study paths).
 
 ---
 

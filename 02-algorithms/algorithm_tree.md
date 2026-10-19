@@ -3,8 +3,22 @@ module: 02-algorithms
 topic: Algorithm Tree
 tags: [algorithms, algorithm-tree]
 ---
+# The Algorithm Tree: Your Strategic Map
 
 ← [Algorithms index](./README.md) · 🗺 [L3 Cheatsheet — Decision Guide](../00-L3-EXECUTION-META/L3_CHEATSHEET.md)
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** A one-page decision tree mapping problem signals to the algorithm family that solves them.
+> **You'll be able to:** Narrow an unseen problem to 1–2 candidate algorithms in under a minute.
+> **Prereqs:** Skim the algorithm files first · **Pair with:** [Algorithms index](README.md) · [DS tree](../01-data-structures/ds_tree.md) · **Time:** 20 min
+> **How to use:** reference — read once, then use as a lookup.
+
+**Sections:** [First-Principles Map](#first-principles-map) · [First-Principles Breakdown](#first-principles-breakdown) · [1. Sorting & Partitioning](#1-sorting--partitioning) · [2. Searching & Binary Search](#2-searching--binary-search) · [3. Strings & Pattern Matching](#3-strings--pattern-matching) · [4. Union-Find (Disjoint Set Union)](#4-union-find-disjoint-set-union) · [4b. Graph Traversal & Shortest Path](#4b-graph-traversal--shortest-path) · [5. Dynamic Programming](#5-dynamic-programming) · [6. Recursion & Backtracking](#6-recursion--backtracking) · [7. Greedy Algorithms](#7-greedy-algorithms) · [8. Out of L3 scope (skip)](#8-out-of-l3-scope-skip) · [How to use this tree](#how-to-use-this-tree)
+
+---
+
 ## First-Principles Map
 
 ```text
@@ -78,13 +92,6 @@ DECISION — problem signal → algorithm family
 - **Invariant:** Problem signal (dependency, optimization, exhaustive, connectivity, sorted) maps 1-to-1 to an algorithm family; constraint size (n ≤ 20 vs 10^5) narrows to the specific variant within the family.
 - **Why it works:** Templates encode proven solutions with known correctness guarantees and complexity bounds — the only work is identifying the match and applying the problem-specific twist.
 - **Where it breaks:** Applying backtracking on DP problems produces exponential solutions; applying greedy without a valid exchange argument produces wrong answers — both are unrecoverable within the interview window.
-
-# The Algorithm Tree: Your Strategic Map
-
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, use it as a lookup.
-> Not a coding practice file. Do not deep-study it like a topic file.
-
 
 If the Data Structure Tree was your "Toolkit," this is your **"Battle Plan."** Most candidates panic because they try to solve every problem from scratch. We don't do that. We recognize the **Pattern**, apply the **Template**, and then handle the **Twist.**
 

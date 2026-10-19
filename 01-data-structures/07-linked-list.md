@@ -3,43 +3,30 @@ module: 01-data-structures
 topic: Linked List
 tags: [data-structures, linked-list]
 ---
+# Linked List — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Pointer manipulation under invariants: dummy head, in-place reversal, fast/slow (middle, cycle, Floyd), merge, copy with random pointer, LRU (map + DLL).
+> **You'll be able to:** Reverse/merge/split lists without losing nodes; prove Floyd's cycle-start step; build LRU cache in O(1).
+> **Prereqs:** None · **Pair with:** [Linked list problems](../coding/data-structures/07-linked-list.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                      │                 │                │               │
-  [Arrays require O(n)    [nodes holding     [pointer chain:  [O(1) front/    [no random access;
-   shift on insert;        value + pointer    traversal is      back insert;    cache-unfriendly;
-   pre-allocating is       to next node;      pointer follow    LRU cache;      cycle causes
-   wasteful if size        doubly-linked       O(n)]            iterator        infinite loop]
-   unknown]                adds prev pointer]                   patterns]
-       │                      │                 │
-  [real-world analogy:    [invariant: last   [O(1) insert at known pointer;
-   train cars —            node.next = null;  O(n) search; O(n) delete
-   add/remove car          head points to     without tail pointer for end]
-   without moving others]  first element]
-       ↓
-[Decision: Linked List vs alternatives]
-  ├── vs Array      → insert/delete O(1) vs O(n); but no O(1) random access
-  ├── vs Deque      → deque is array-backed linked list hybrid; better cache
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Arrays pay O(n) to insert/delete mid-sequence because everything must shift.
 - **Core insight**: Indirection through pointers decouples element position from memory location — splice in O(1) by rewiring two pointers.
 - **Invariant**: Every node reachable from head via next; tail.next = null (singly); head.prev = null (doubly).
 - **Why it's fast**: Insert/delete at a known node is O(1) — just pointer surgery; no memory movement.
 - **Where it breaks**: Sequential access only (O(n) to reach index k); pointer overhead doubles memory vs array; poor cache locality kills performance on large lists.
 
-# Linked List — L3 Core
+### One-Page Map
 
 ```
 [LINKED LIST]
@@ -86,9 +73,6 @@ WHY linked lists exist → WHAT they are → HOW they work → WHEN to use → W
 
 A linear data structure where nodes are stored in non-contiguous memory, connected via next pointers. L3 expects: clean in-place pointer manipulation, cycle detection with proof, DLL-based design problems, and trade-offs vs arrays.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -123,11 +107,11 @@ A linear data structure where nodes are stored in non-contiguous memory, connect
 - No random access needed — only sequential traversal.
 - Memory allocation pattern where contiguous blocks are unavailable.
 
-**Common mistakes:**
-- Losing the `head` reference by not using a dummy node when the head may be deleted.
-- Forgetting to update the `tail` pointer on insert at the tail end.
-- Null-pointer dereference on empty list — always guard `if not head` before accessing `head.next`.
-- Off-by-one in reversal — saving `curr.next` after overwriting it instead of before.
+> [!warning] Common mistakes
+> - Losing the `head` reference by not using a dummy node when the head may be deleted.
+> - Forgetting to update the `tail` pointer on insert at the tail end.
+> - Null-pointer dereference on empty list — always guard `if not head` before accessing `head.next`.
+> - Off-by-one in reversal — saving `curr.next` after overwriting it instead of before.
 
 ---
 
@@ -174,6 +158,24 @@ def reverse_between(head, left: int, right: int):
         pre.next = nxt
     return dummy.next
 ```
+
+**One iteration of the reversal** (`prev = A`, `curr = B`):
+
+```mermaid
+flowchart LR
+  subgraph Before
+    direction LR
+    a1[A] --> b1[B] --> c1[C] --> d1[...]
+  end
+  subgraph After["After: nxt = C · B.next = A · prev = B · curr = C"]
+    direction LR
+    b2[B] --> a2[A]
+    c2[C] --> d2[...]
+  end
+  Before --> After
+```
+
+The `B → C` link is cut, which is why `nxt` must be saved first. After the cut, `C` is reachable only through `nxt`.
 
 > [!CAUTION]
 > **The #1 linked list bug**: Forgetting to save `curr.next` before overwriting `curr.next = prev`. Once you do `curr.next = prev`, you've lost the reference to the rest of the list. Always `nxt = curr.next` as the **first line** inside the loop.
@@ -362,33 +364,26 @@ class LRUCache:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- Reverse Linked List — Three-pointer iterative; recursive is shorter but O(N) stack.
-- **Linked List Cycle `🎯 T2`** — Fast & slow; `O is O` identity check.
-- **Merge Two Sorted Lists `🎯 T2`** — Dummy head; two-pointer merge.
+- **[Linked List Cycle](../coding/data-structures/07-linked-list.md#linked-list-cycle--t2) `🎯 T2`** — Fast & slow; `O is O` identity check.
+- **[Merge Two Sorted Lists](../coding/data-structures/07-linked-list.md#merge-two-sorted-lists--t2) `🎯 T2`** — Dummy head; two-pointer merge.
+- **[Reverse Linked List](../coding/data-structures/07-linked-list.md#reverse-linked-list--t2) `🎯 T2`** — Three-pointer iterative; recursive is shorter but O(N) stack.
 
 ### Medium
-- Remove Nth From End — Fast advances N steps first; both advance together until fast.next is null.
-- Copy List with Random Pointer — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
-- **Palindrome Linked List** — Find middle, reverse second half, compare, restore.
-- **Add Two Numbers** — Digit-by-digit sum with carry; handle length mismatch.
-- **Reorder List `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
-- **Swap Nodes in Pairs** — Reverse every two nodes; dummy node simplifies head case.
+- **[Reorder List](../coding/data-structures/07-linked-list.md#reorder-list--t2) `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
+- **[Remove Nth From End](../coding/data-structures/07-linked-list.md#remove-nth-node-from-end-of-list--t2) `🎯 T2`** — Fast advances N steps first; both advance together until fast.next is null.
+- **[Copy List with Random Pointer](../coding/data-structures/07-linked-list.md#copy-list-with-random-pointer--t2) `🎯 T2`** — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
+- **[Palindrome Linked List](../coding/data-structures/07-linked-list.md#palindrome-linked-list--t2) `🎯 T2`** — Find middle, reverse second half, compare, restore.
+- **[Add Two Numbers](../coding/data-structures/07-linked-list.md#add-two-numbers) `🎯 T2`** — Digit-by-digit sum with carry; handle length mismatch.
+- **[Swap Nodes in Pairs](../coding/data-structures/07-linked-list.md#swap-nodes-in-pairs) `🎯 T2`** — Reverse every two nodes; dummy node simplifies head case.
 
 ### Hard
-- Merge K Sorted Lists — Min-heap of K nodes; or divide-and-conquer pairwise merge.
-- LRU Cache — DLL + hash map; dummy head/tail to avoid edge cases.
-- **Reverse K-Group** — Recursion or iterative; check K nodes exist before reversing.
-- **Sort List** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
+- **[Merge K Sorted Lists](../coding/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — Min-heap of K nodes; or divide-and-conquer pairwise merge.
+- **[LRU Cache](../coding/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — DLL + hash map; dummy head/tail to avoid edge cases.
+- **[Reverse K-Group](../coding/data-structures/07-linked-list.md#reverse-nodes-in-k-group--t2) `🎯 T2`** — Recursion or iterative; check K nodes exist before reversing.
+- **[Sort List](../coding/data-structures/07-linked-list.md#sort-list--t2) `🎯 T2`** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
 
 ---
 
@@ -461,4 +456,3 @@ Since `ListNode` objects are not comparable, pushing `(node.val, node)` will rai
 **Describe the two-phase pointer mechanics of Floyd's Cycle Detection for finding the entry point of a loop.** #flashcard
 - **Phase 1**: Advance `slow` by 1 and `fast` by 2 until they meet at intersection $I$ inside the cycle.
 - **Phase 2**: Reset `slow` to `head` and leave `fast` at $I$. Advance both by 1 step. They will meet exactly at the cycle entry point.
-

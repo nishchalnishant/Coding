@@ -3,17 +3,23 @@ tags: [coding, algorithms, union-find]
 topic: Union-Find (DSU)
 difficulty: mixed
 ---
-
 # Union-Find — Problem Deep Dives
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked DSU problems: template, connectivity, weighted DSU, Kruskal, offline union, grid DSU.
+> **You'll be able to:** Spot DSU problems and code the template in 2 min.
+> **Prereqs:** Union-Find lecture · **Pair with:** [Union-Find lecture](../../02-algorithms/14-union-find.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [DSU Template](#dsu-template) · [Basic Union-Find](#basic-union-find) · [Weighted / Ranked Union-Find](#weighted--ranked-union-find) · [MST (Kruskal's)](#mst-kruskals) · [Dynamic / Offline Union-Find](#dynamic--offline-union-find) · [DSU for Other Problems](#dsu-for-other-problems) · [Directed Graph Union-Find](#directed-graph-union-find) · [Grid / Coordinate Union-Find](#grid--coordinate-union-find) · [Weighted / Partial Swap Union-Find](#weighted--partial-swap-union-find) · [Connectivity With Constraints](#connectivity-with-constraints)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Number of Connected Components in an Undirected Graph](#number-of-connected-components-in-an-undirected-graph) · [Graph Valid Tree](#graph-valid-tree--t1) · [Accounts Merge (Email Graph)](#accounts-merge-email-graph--t1) · [Satisfiability of Equality Equations](#satisfiability-of-equality-equations--t1) · [Number of Islands II](#number-of-islands-ii--t1) · [Redundant Connection II (LC 685, Directed Graph)](#redundant-connection-ii-lc-685-directed-graph--t1) · [Making a Large Island](#making-a-large-island--t1) · [Min Cost to Connect All Points](#min-cost-to-connect-all-points)
+> **Template:** `def find(x): while p[x] != x: p[x] = p[p[x]]; x = p[x]; return x` · `union` returns `False` if already joined — that is your cycle detector.
+> **Template:** Kruskal: sort edges by weight, union if `find(u) != find(v)`, stop at `n-1` edges.
+> **Gotchas:** Always compare roots, never `p[u] == p[v]` · track `components -= 1` on successful union · Graph Valid Tree = exactly `n-1` edges AND no cycle · map non-integer keys (emails, cells) to ids first.
 
 ---
 
@@ -60,6 +66,8 @@ difficulty: mixed
 ---
 
 ## Basic Union-Find
+
+---
 
 ### Number of Connected Components in an Undirected Graph
 
@@ -220,6 +228,9 @@ difficulty: mixed
 > 	
 > - There are no self-loops or repeated edges.
 
+> [!failure] Tempting wrong approach
+> Checking only "no cycle" — a forest also has none. Also require exactly `n - 1` edges (equivalently, one component).
+
 > [!info] Approach
 > A valid tree on `n` nodes has exactly `n-1` edges and no cycles — equivalently, it is connected and acyclic. DSU cycle detection + single-component check. Short-circuit if `len(edges) != n-1`. Process edges; if any union returns `False` (cycle) → not a tree.
 
@@ -302,6 +313,8 @@ difficulty: mixed
 
 ## Weighted / Ranked Union-Find
 
+---
+
 ### Accounts Merge (Email Graph) `⚡ T1`
 
 > [!example] Problem
@@ -332,6 +345,9 @@ difficulty: mixed
 > - 1 <= accounts[i][j].length <= 30
 > - accounts[i][0] consists of English letters.
 > - accounts[i][j] (for j > 0) is a valid email.
+
+> [!failure] Tempting wrong approach
+> Merging by account name — different people share names. Union on emails; names are only labels.
 
 > [!info] Approach
 > Emails are the identity key, not names. Accounts sharing any email are the same person — transitive merging is DSU. DSU over all unique emails (map each to integer index). Union all emails within an account. Group by DSU root; sort per group. Map `email → index`. For each account, union the first email with all subsequent ones. After all unions, group indices by root.
@@ -378,124 +394,10 @@ difficulty: mixed
 
 ---
 
-### Smallest String With Swaps
-
-> [!example] Problem
-> You are given a string s, and an array of pairs of indices in the string pairs where pairs[i] = [a, b] indicates 2 indices(0-indexed) of the string.
-> You can swap the characters at any pair of indices in the given pairs any number of times.
-> Return the lexicographically smallest string that s can be changed to after using the swaps.
-> 
-> **Example 1:**
-> ```
-> Input: s = "dcab", pairs = [[0,3],[1,2]]
-> Output: "bacd"
-> Explaination: 
-> Swap s[0] and s[3], s = "bcad"
-> Swap s[1] and s[2], s = "bacd"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "dcab", pairs = [[0,3],[1,2],[0,2]]
-> Output: "abcd"
-> Explaination: 
-> Swap s[0] and s[3], s = "bcad"
-> Swap s[0] and s[2], s = "acbd"
-> Swap s[1] and s[2], s = "abcd"
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "cba", pairs = [[0,1],[1,2]]
-> Output: "abc"
-> Explaination: 
-> Swap s[0] and s[1], s = "bca"
-> Swap s[1] and s[2], s = "bac"
-> Swap s[0] and s[1], s = "abc"
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^5
-> - 0 <= pairs.length <= 10^5
-> - 0 <= pairs[i][0], pairs[i][1] < s.length
-> - s only contains lower case English letters.
-
-> [!info] Approach
-> Swap pairs are transitive — if `(0,1)` and `(1,2)` are pairs, all three indices form one free-rearrangement group. DSU finds these components. Union all paired indices. Within each component, sort characters, assign smallest first. Group indices by DSU root. For each group, collect and sort characters; assign back to sorted index positions.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def smallest_string_with_swaps(s, pairs):
->     n = len(s)
->     dsu = DSU(n)
->     for u, v in pairs:
->         dsu.union(u, v)
-> 
->     root_to_indices = defaultdict(list)
->     for i in range(n):
->         root_to_indices[dsu.find(i)].append(i)
-> 
->     result = list(s)
->     for indices in root_to_indices.values():
->         chars = sorted(s[i] for i in indices)
->         for i, c in zip(sorted(indices), chars):
->             result[i] = c
-> 
->     return "".join(result)
-> ```
-
-> [!success] Complexity
-> Time O((N + E)·α(N) + N·log N), Space O(N).
-
-> [!tip] Alternatives
-> BFS/DFS to find connected components of index pairs. Same complexity.
-
----
-
 ### Evaluate Division (Weighted DSU)
 
 > [!example] Problem
-> You are given an array of variable pairs equations and an array of real numbers values, where equations[i] = [Ai, Bi] and values[i] represent the equation Ai / Bi = values[i]. Each Ai or Bi is a string that represents a single variable.
-> You are also given some queries, where queries[j] = [Cj, Dj] represents the jth query where you must find the answer for Cj / Dj = ?.
-> Return the answers to all queries. If a single answer cannot be determined, return -1.0.
-> Note: The input is always valid. You may assume that evaluating the queries will not result in division by zero and that there is no contradiction.
-> Note: The variables that do not occur in the list of equations are undefined, so the answer cannot be determined for them.
-> 
-> **Example 1:**
-> ```
-> Input: equations = [["a","b"],["b","c"]], values = [2.0,3.0], queries = [["a","c"],["b","a"],["a","e"],["a","a"],["x","x"]]
-> Output: [6.00000,0.50000,-1.00000,1.00000,-1.00000]
-> Explanation: 
-> Given: a / b = 2.0, b / c = 3.0
-> queries are: a / c = ?, b / a = ?, a / e = ?, a / a = ?, x / x = ? 
-> return: [6.0, 0.5, -1.0, 1.0, -1.0 ]
-> note: x is undefined => -1.0
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: equations = [["a","b"],["b","c"],["bc","cd"]], values = [1.5,2.5,5.0], queries = [["a","c"],["c","b"],["bc","cd"],["cd","bc"]]
-> Output: [3.75000,0.40000,5.00000,0.20000]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: equations = [["a","b"]], values = [0.5], queries = [["a","b"],["b","a"],["a","c"],["x","y"]]
-> Output: [0.50000,2.00000,-1.00000,-1.00000]
-> ```
-> 
-> **Constraints:**
-> - 1 <= equations.length <= 20
-> - equations[i].length == 2
-> - 1 <= Ai.length, Bi.length <= 5
-> - values.length == equations.length
-> - 0.0 < values[i] <= 20.0
-> - 1 <= queries.length <= 20
-> - queries[i].length == 2
-> - 1 <= Cj.length, Dj.length <= 5
-> - Ai, Bi, Cj, Dj consist of lower case English letters and digits.
+> Same problem as [Evaluate Division (LC 399)](13-graph-algorithms.md#evaluate-division-lc-399) — this section covers the alternative approach only.
 
 > [!info] Approach
 > Variables are nodes; edges are ratios. If `A/B = k` and `B/C = m`, then `A/C = k·m` — path product. Weighted DSU accumulates products along compressed paths. `weight[x]` = `value(x) / value(root(x))`. On `find`, accumulate product. On `union(A, B, k)`, adjust root weights for consistency. Query `C/D`: if same root, answer = `weight[C] / weight[D]`.
@@ -551,6 +453,8 @@ difficulty: mixed
 ---
 
 ## MST (Kruskal's)
+
+---
 
 ### Min Cost to Connect All Points
 
@@ -668,39 +572,14 @@ difficulty: mixed
 
 ## Dynamic / Offline Union-Find
 
+---
+
 ### Number of Islands II `⚡ T1`
 
 > [!example] Problem
-> Given an m x n 2D binary grid grid which represents a map of '1's (land) and '0's (water), return the number of islands.
-> An island is surrounded by water and is formed by connecting adjacent lands horizontally or vertically. You may assume all four edges of the grid are all surrounded by water.
-> 
-> **Example 1:**
-> ```
-> Input: grid = [
->   ["1","1","1","1","0"],
->   ["1","1","0","1","0"],
->   ["1","1","0","0","0"],
->   ["0","0","0","0","0"]
-> ]
-> Output: 1
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: grid = [
->   ["1","1","0","0","0"],
->   ["1","1","0","0","0"],
->   ["0","0","1","0","0"],
->   ["0","0","0","1","1"]
-> ]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - m == grid.length
-> - n == grid[i].length
-> - 1 <= m, n <= 300
-> - grid[i][j] is '0' or '1'.
+> An `m x n` grid starts as all water. `positions[i] = [r, c]` turns cell `(r, c)` into land. After each operation return the number of islands (4-directionally connected land).
+>
+> **Example:** `m=3, n=3, positions=[[0,0],[0,1],[1,2],[2,1]]` → `[1,1,2,3]`
 
 > [!info] Approach
 > Islands are connected components growing dynamically. Re-running BFS is O(M·N) per operation. DSU handles each addition in O(α) — orders of magnitude faster. DSU on 2D grid encoded as `r*cols + c`. On `addLand`, increment component count, then union with adjacent land cells. Track which cells are land (set). Skip duplicate additions. DSU's `union` automatically decrements component count on merge.
@@ -725,8 +604,7 @@ difficulty: mixed
 >             nr, nc = r + dr, c + dc
 >             nidx = nr * n + nc
 >             if 0 <= nr < m and 0 <= nc < n and nidx in land:
->                 dsu.union(idx, nidx)  # merges components
->                 decrements count
+>                 dsu.union(idx, nidx)  # merges components, decrements count
 >         result.append(dsu.components)
 > 
 >     return result
@@ -820,34 +698,12 @@ difficulty: mixed
 
 ## DSU for Other Problems
 
+---
+
 ### Longest Consecutive Sequence (DSU Approach) `⚡ T1`
 
 > [!example] Problem
-> Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
-> You must write an algorithm that runs in O(n) time.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [100,4,200,1,3,2]
-> Output: 4
-> Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,3,7,2,5,8,4,6,0,1]
-> Output: 9
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,0,1,2]
-> Output: 3
-> ```
-> 
-> **Constraints:**
-> - 0 <= nums.length <= 10^5
-> - -10^9 <= nums[i] <= 10^9
+> Same problem as [Longest Consecutive Sequence](../data-structures/02-hashing.md#longest-consecutive-sequence--t1) — this section covers the alternative approach only.
 
 > [!info] Approach
 > `x` and `x+1` belong to the same consecutive run — union them. The largest component size is the answer. Map each value to an index; union `x` with `x+1` if `x+1` exists. Max component size = answer. Build `val → index` map. For each value, if `val+1` exists, union their indices.
@@ -878,39 +734,7 @@ difficulty: mixed
 ### Path with Maximum Probability (Weighted DSU)
 
 > [!example] Problem
-> You are given an undirected weighted graph of n nodes (0-indexed), represented by an edge list where edges[i] = [a, b] is an undirected edge connecting the nodes a and b with a probability of success of traversing that edge succProb[i].
-> Given two nodes start and end, find the path with the maximum probability of success to go from start to end and return its success probability.
-> If there is no path from start to end, return 0. Your answer will be accepted if it differs from the correct answer by at most 1e-5.
-> 
-> **Example 1:**
-> ```
-> Input: n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.5,0.5,0.2], start = 0, end = 2
-> Output: 0.25000
-> Explanation: There are two paths from start to end, one having a probability of success = 0.2 and the other has 0.5 * 0.5 = 0.25.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: n = 3, edges = [[0,1],[1,2],[0,2]], succProb = [0.5,0.5,0.3], start = 0, end = 2
-> Output: 0.30000
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: n = 3, edges = [[0,1]], succProb = [0.5], start = 0, end = 2
-> Output: 0.00000
-> Explanation: There is no path between 0 and 2.
-> ```
-> 
-> **Constraints:**
-> - 2 <= n <= 10^4
-> - 0 <= start, end < n
-> - start != end
-> - 0 <= a, b < n
-> - a != b
-> - 0 <= succProb.length == edges.length <= 2*10^4
-> - 0 <= succProb[i] <= 1
-> - There is at most one edge between every two nodes.
+> Same problem as [Path with Maximum Probability](13-graph-algorithms.md#path-with-maximum-probability) — this section covers the alternative approach only.
 
 > [!info] Approach
 > For general graphs Dijkstra (max-heap variant) is canonical and handles multiple alternate paths. Weighted DSU works on trees — only one path exists between any two nodes. Weighted DSU where `weight[x]` = probability of `x` relative to its root. Query: `weight[start] / weight[end]` if same root. `union(A, B, p)`: adjust root weight so `weight[A] / weight[B] = p`. Valid only when graph is a tree.
@@ -953,7 +777,9 @@ difficulty: mixed
 
 ## Directed Graph Union-Find
 
-### Redundant Connection II `⚡ T1`
+---
+
+### Redundant Connection II (LC 685, Directed Graph) `⚡ T1`
 
 > [!example] Problem
 > In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
@@ -981,54 +807,59 @@ difficulty: mixed
 > - ui != vi
 
 > [!info] Approach
-> In a directed tree (rooted), every non-root has in-degree 1. The extra edge creates either (a) a node with in-degree 2, or (b) a cycle with all in-degrees 1, or (c) both. These three cases need separate handling. First detect any node with in-degree 2 — candidates `cand1` (first edge into it) and `cand2` (second edge). Then run DSU on all edges, skipping `cand2` if it exists. If a cycle forms, the redundant edge is `cand1` (if cand2 exists) or the cycle-forming edge (if no cand2). Pass 1: record in-degree-2 candidates. Pass 2: DSU union excluding `cand2`. If no cycle detected with `cand2` excluded → return `cand2`. If cycle detected and `cand1` exists → return `cand1`. If cycle and no candidate → return the cycle edge.
+> In a directed rooted tree, every node except the root has exactly one parent. Adding an edge creates either: (a) a node with two parents, or (b) a cycle, or both. We must identify which case applies and choose the correct redundant edge. First pass: find any node with two incoming edges (`cand1`, `cand2`). If found, one of them is the answer. Second pass: use Union-Find ignoring one candidate. If a cycle forms, the other candidate (or the cycle-forming edge) is the answer.
+
+>   1. Scan edges; track `parent` for each node. If a node already has a parent, record `cand1 = prev_edge`, `cand2 = current_edge` and skip `cand2`.
+>   2. Run Union-Find on remaining edges. If a cycle forms and `cand1` exists, return `cand1`; else return the cycle edge. If no cycle and `cand2` exists, return `cand2`.
 
 > [!note]- Python Solution
 > ```python
 > def find_redundant_directed_connection(edges):
 >     n = len(edges)
->     in_degree = [0] * (n + 1)
->     for u, v in edges:
->         in_degree[v] += 1
-> 
->     # Identify candidates: edges pointing to a node with in-degree 2
+>     parent = list(range(n + 1))
 >     cand1 = cand2 = None
+>     node_parent = {}
+>     filtered = []
 >     for u, v in edges:
->         if in_degree[v] == 2:
->             if cand1 is None:
->                 cand1 = [u, v]
->             else:
->                 cand2 = [u, v]
-> 
->     def has_cycle_excluding(skip):
->         dsu = DSU(n + 1)
->         for u, v in edges:
->             if [u, v] == skip:
->                 continue
->             if not dsu.union(u, v):
->                 return [u, v]
->         return None
-> 
->     if cand2:
->         # Try excluding cand2; if no cycle → cand2 is answer, else cand1
->         if has_cycle_excluding(cand2) is None:
->             return cand2
+>         if v in node_parent:
+>             cand1 = [node_parent[v], v]
+>             cand2 = [u, v]
 >         else:
->             return cand1
->     else:
->         # No in-degree-2 node; the cycle-forming edge is the answer
->         return has_cycle_excluding(None)
+>             node_parent[v] = u
+>             filtered.append([u, v])
+> >
+>     def find(x):
+>         while parent[x] != x:
+>             parent[x] = parent[parent[x]]
+>             x = parent[x]
+>         return x
+> >
+>     def union(u, v):
+>         pu = find(u)
+>         pv = find(v)
+>         if pu == pv:
+>             return False
+>         parent[pu] = pv
+>         return True
+> >
+>     for u, v in filtered:
+>         if not union(u, v):
+>             return cand1 if cand1 else [u, v]
+>     return cand2
 > ```
 
 > [!success] Complexity
-> Time O(N·α(N)) ≈ O(N), Space O(N).
+> Time O(E α(E)), Space O(E).
 
 > [!tip] Alternatives
-> Tarjan's SCC — overkill. DFS cycle detection on the directed graph — works but messier to get all three cases right. DSU with two-pass candidate detection is the cleanest.
+> - Pure DFS cycle detection: works but harder to correctly handle the "two parents" case.
+> - Key insight: the two cases (double-parent vs pure cycle) require different edge choices; the filtering step separates them cleanly.
 
 ---
 
 ## Grid / Coordinate Union-Find
+
+---
 
 ### Most Stones Removed with Same Row or Column
 
@@ -1110,6 +941,8 @@ difficulty: mixed
 
 ## Weighted / Partial Swap Union-Find
 
+---
+
 ### Minimize Hamming Distance After Swap Operations
 
 > [!example] Problem
@@ -1186,7 +1019,95 @@ difficulty: mixed
 
 ---
 
+### Smallest String With Swaps (LC 1202)
+
+> [!example] Problem
+> You are given a string s, and an array of pairs of indices in the string pairs where pairs[i] = [a, b] indicates 2 indices(0-indexed) of the string.
+> You can swap the characters at any pair of indices in the given pairs any number of times.
+> Return the lexicographically smallest string that s can be changed to after using the swaps.
+> 
+> **Example 1:**
+> ```
+> Input: s = "dcab", pairs = [[0,3],[1,2]]
+> Output: "bacd"
+> Explaination: 
+> Swap s[0] and s[3], s = "bcad"
+> Swap s[1] and s[2], s = "bacd"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "dcab", pairs = [[0,3],[1,2],[0,2]]
+> Output: "abcd"
+> Explaination: 
+> Swap s[0] and s[3], s = "bcad"
+> Swap s[0] and s[2], s = "acbd"
+> Swap s[1] and s[2], s = "abcd"
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "cba", pairs = [[0,1],[1,2]]
+> Output: "abc"
+> Explaination: 
+> Swap s[0] and s[1], s = "bca"
+> Swap s[1] and s[2], s = "bac"
+> Swap s[0] and s[1], s = "abc"
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - 0 <= pairs.length <= 10^5
+> - 0 <= pairs[i][0], pairs[i][1] < s.length
+> - s only contains lower case English letters.
+
+> [!info] Approach
+> Indices connected by swap pairs (directly or transitively) can be rearranged freely. Use Union-Find to group connected indices, then sort each group's characters and reassign them in sorted order to the smallest positions. Union all paired indices. Group indices by root. For each group, collect the characters at those indices, sort them, and reassign the sorted characters to the sorted indices. `collections.defaultdict(list)` — `groups[find(i)].append(i)` for all `i`. For each group, sort both the indices and the characters, then assign characters back.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> >
+> def smallest_string_with_swaps(s, pairs):
+>     n = len(s)
+>     parent = list(range(n))
+> >
+>     def find(x):
+>         while parent[x] != x:
+>             parent[x] = parent[parent[x]]
+>             x = parent[x]
+>         return x
+> >
+>     def union(x, y):
+>         parent[find(x)] = find(y)
+> >
+>     for u, v in pairs:
+>         union(u, v)
+> >
+>     groups = defaultdict(list)
+>     for i in range(n):
+>         groups[find(i)].append(i)
+> >
+>     result = list(s)
+>     for indices in groups.values():
+>         chars = sorted(result[i] for i in indices)
+>         for i, ch in zip(sorted(indices), chars):
+>             result[i] = ch
+>     return ''.join(result)
+> ```
+
+> [!success] Complexity
+> Time O((N + E) α(N) + N log N), Space O(N).
+
+> [!tip] Alternatives
+> - DFS/BFS to find connected components: same idea, same complexity, slightly more code.
+> - Key insight: any permutation of characters within a connected component is achievable via adjacent swaps through the union edges.
+
+---
+
 ## Connectivity With Constraints
+
+---
 
 ### Minimum Cost to Make at Least One Valid Path in a Grid
 
@@ -1605,245 +1526,4 @@ difficulty: mixed
 ## See Also
 
 [[graph]] | [[graph-algorithms]] | [[sorting]]
-### Accounts Merge `⚡ T1`
-
-> [!example] Problem
-> Given a list of accounts where each element accounts[i] is a list of strings, where the first element accounts[i][0] is a name, and the rest of the elements are emails representing emails of the account.
-> Now, we would like to merge these accounts. Two accounts definitely belong to the same person if there is some common email to both accounts. Note that even if two accounts have the same name, they may belong to different people as people could have the same name. A person can have any number of accounts initially, but all of their accounts definitely have the same name.
-> After merging the accounts, return the accounts in the following format: the first element of each account is the name, and the rest of the elements are emails in sorted order. The accounts themselves can be returned in any order.
-> 
-> **Example 1:**
-> ```
-> Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
-> Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
-> Explanation:
-> The first and second John's are the same person as they have the common email "johnsmith@mail.com".
-> The third John and Mary are different people as none of their email addresses are used by other accounts.
-> We could return these lists in any order, for example the answer [['Mary', 'mary@mail.com'], ['John', 'johnnybravo@mail.com'], 
-> ['John', 'john00@mail.com', 'john_newyork@mail.com', 'johnsmith@mail.com']] would still be accepted.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
-> Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
-> ```
-> 
-> **Constraints:**
-> - 1 <= accounts.length <= 1000
-> - 2 <= accounts[i].length <= 10
-> - 1 <= accounts[i][j].length <= 30
-> - accounts[i][0] consists of English letters.
-> - accounts[i][j] (for j > 0) is a valid email.
-
-> [!info] Approach
-> Shared emails create connected components. If two accounts share any email, they belong to the same merged group. Use DSU to union all emails in the same account. Then group emails by final root. Map each email to the first owner seen. When a new account contains an already-seen email, union the account’s emails together under that root.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> 
-> def accounts_merge(accounts):
->     parent = {}
-> 
->     def find(x):
->         parent.setdefault(x, x)
->         if parent[x] != x:
->             parent[x] = find(parent[x])
->         return parent[x]
-> 
->     def union(a, b):
->         parent[find(a)] = find(b)
-> 
->     email_to_name = {}
->     for account in accounts:
->         name = account[0]
->         first_email = account[1]
->         for email in account[1:]:
->             email_to_name[email] = name
->             union(first_email, email)
-> 
->     groups = defaultdict(list)
->     for email in email_to_name:
->         groups[find(email)].append(email)
-> 
->     return [[email_to_name[root]] + sorted(emails) for root, emails in groups.items()]
-> ```
-
-> [!success] Complexity
-> Roughly O(E α(E)) time for union-find plus sorting within each merged account; O(E) space.
-
-> [!tip] Alternatives
-> DFS on the email graph also works; DSU is often simpler to explain for merge-by-connection problems.
-
----
-
-## Union-Find — More Problems
-
-### Redundant Connection II (LC 685, Directed Graph) `⚡ T1`
-
-> [!example] Problem
-> In this problem, a rooted tree is a directed graph such that, there is exactly one node (the root) for which all other nodes are descendants of this node, plus every node has exactly one parent, except for the root node which has no parents.
-> The given input is a directed graph that started as a rooted tree with n nodes (with distinct values from 1 to n), with one additional directed edge added. The added edge has two different vertices chosen from 1 to n, and was not an edge that already existed.
-> The resulting graph is given as a 2D-array of edges. Each element of edges is a pair [ui, vi] that represents a directed edge connecting nodes ui and vi, where ui is a parent of child vi.
-> Return an edge that can be removed so that the resulting graph is a rooted tree of n nodes. If there are multiple answers, return the answer that occurs last in the given 2D-array.
-> 
-> **Example 1:**
-> ```
-> Input: edges = [[1,2],[1,3],[2,3]]
-> Output: [2,3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: edges = [[1,2],[2,3],[3,4],[4,1],[1,5]]
-> Output: [4,1]
-> ```
-> 
-> **Constraints:**
-> - n == edges.length
-> - 3 <= n <= 1000
-> - edges[i].length == 2
-> - 1 <= ui, vi <= n
-> - ui != vi
-
-> [!info] Approach
-> In a directed rooted tree, every node except the root has exactly one parent. Adding an edge creates either: (a) a node with two parents, or (b) a cycle, or both. We must identify which case applies and choose the correct redundant edge. First pass: find any node with two incoming edges (`cand1`, `cand2`). If found, one of them is the answer. Second pass: use Union-Find ignoring one candidate. If a cycle forms, the other candidate (or the cycle-forming edge) is the answer.
-
->   1. Scan edges; track `parent` for each node. If a node already has a parent, record `cand1 = prev_edge`, `cand2 = current_edge` and skip `cand2`.
->   2. Run Union-Find on remaining edges. If a cycle forms and `cand1` exists, return `cand1`; else return the cycle edge. If no cycle and `cand2` exists, return `cand2`.
-
-> [!note]- Python Solution
-> ```python
-> def find_redundant_directed_connection(edges):
->     n = len(edges)
->     parent = list(range(n + 1))
->     cand1 = cand2 = None
->     node_parent = {}
->     filtered = []
->     for u, v in edges:
->         if v in node_parent:
->             cand1 = [node_parent[v], v]
->             cand2 = [u, v]
->         else:
->             node_parent[v] = u
->             filtered.append([u, v])
-> >
->     def find(x):
->         while parent[x] != x:
->             parent[x] = parent[parent[x]]
->             x = parent[x]
->         return x
-> >
->     def union(u, v):
->         pu = find(u)
->         pv = find(v)
->         if pu == pv:
->             return False
->         parent[pu] = pv
->         return True
-> >
->     for u, v in filtered:
->         if not union(u, v):
->             return cand1 if cand1 else [u, v]
->     return cand2
-> ```
-
-> [!success] Complexity
-> Time O(E α(E)), Space O(E).
-
-> [!tip] Alternatives
-> - Pure DFS cycle detection: works but harder to correctly handle the "two parents" case.
-> - Key insight: the two cases (double-parent vs pure cycle) require different edge choices; the filtering step separates them cleanly.
-
----
-
-### Smallest String With Swaps (LC 1202)
-
-> [!example] Problem
-> You are given a string s, and an array of pairs of indices in the string pairs where pairs[i] = [a, b] indicates 2 indices(0-indexed) of the string.
-> You can swap the characters at any pair of indices in the given pairs any number of times.
-> Return the lexicographically smallest string that s can be changed to after using the swaps.
-> 
-> **Example 1:**
-> ```
-> Input: s = "dcab", pairs = [[0,3],[1,2]]
-> Output: "bacd"
-> Explaination: 
-> Swap s[0] and s[3], s = "bcad"
-> Swap s[1] and s[2], s = "bacd"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: s = "dcab", pairs = [[0,3],[1,2],[0,2]]
-> Output: "abcd"
-> Explaination: 
-> Swap s[0] and s[3], s = "bcad"
-> Swap s[0] and s[2], s = "acbd"
-> Swap s[1] and s[2], s = "abcd"
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: s = "cba", pairs = [[0,1],[1,2]]
-> Output: "abc"
-> Explaination: 
-> Swap s[0] and s[1], s = "bca"
-> Swap s[1] and s[2], s = "bac"
-> Swap s[0] and s[1], s = "abc"
-> ```
-> 
-> **Constraints:**
-> - 1 <= s.length <= 10^5
-> - 0 <= pairs.length <= 10^5
-> - 0 <= pairs[i][0], pairs[i][1] < s.length
-> - s only contains lower case English letters.
-
-> [!info] Approach
-> Indices connected by swap pairs (directly or transitively) can be rearranged freely. Use Union-Find to group connected indices, then sort each group's characters and reassign them in sorted order to the smallest positions. Union all paired indices. Group indices by root. For each group, collect the characters at those indices, sort them, and reassign the sorted characters to the sorted indices. `collections.defaultdict(list)` — `groups[find(i)].append(i)` for all `i`. For each group, sort both the indices and the characters, then assign characters back.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict
-> >
-> def smallest_string_with_swaps(s, pairs):
->     n = len(s)
->     parent = list(range(n))
-> >
->     def find(x):
->         while parent[x] != x:
->             parent[x] = parent[parent[x]]
->             x = parent[x]
->         return x
-> >
->     def union(x, y):
->         parent[find(x)] = find(y)
-> >
->     for u, v in pairs:
->         union(u, v)
-> >
->     groups = defaultdict(list)
->     for i in range(n):
->         groups[find(i)].append(i)
-> >
->     result = list(s)
->     for indices in groups.values():
->         chars = sorted(result[i] for i in indices)
->         for i, ch in zip(sorted(indices), chars):
->             result[i] = ch
->     return ''.join(result)
-> ```
-
-> [!success] Complexity
-> Time O((N + E) α(N) + N log N), Space O(N).
-
-> [!tip] Alternatives
-> - DFS/BFS to find connected components: same idea, same complexity, slightly more code.
-> - Key insight: any permutation of characters within a connected component is achievable via adjacent swaps through the union edges.
-
----
-
-## See Also (Extended)
-
 [[graph]] | [[sorting]] | [[backtracking]] | [[dynamic-programming]]

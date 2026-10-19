@@ -3,15 +3,23 @@ module: 02-algorithms
 topic: Math & Number Theory
 tags: [algorithms, math, number-theory]
 ---
+# Math & Number Theory — L3 Reference
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Know patterns cold.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Conceptual awareness only.
+## What this covers
 
-## First-Principles Map
+> [!abstract] In this file
+> **Covers:** Interview-depth math: digit tricks, GCD/LCM, primes and sieve, fast power, modular arithmetic, combinatorics, overflow.
+> **You'll be able to:** Handle digit/GCD/prime/mod problems quickly and avoid overflow and off-by-one in combinatorics.
+> **Prereqs:** None · **Pair with:** [Math questions](../03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md#math--number-theory) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [One-Page Map](#one-page-map) · [1. Integer & Digit Tricks](#1-integer--digit-tricks) · [2. Happy Number](#2-happy-number) · [3. GCD, LCM, and Euclidean Algorithm](#3-gcd-lcm-and-euclidean-algorithm) · [4. Prime Testing & Sieve](#4-prime-testing--sieve) · [5. Fast Power (Modular Exponentiation)](#5-fast-power-modular-exponentiation) · [6. Modular Arithmetic](#6-modular-arithmetic) · [7. Factorial & Combinatorics](#7-factorial--combinatorics) · [8. Roman Numerals & Number Conversion](#8-roman-numerals--number-conversion) · [9. Overflow & Edge Cases in Python](#9-overflow--edge-cases-in-python) · [Canonical Interview Problems](#canonical-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
+
+---
+
+## One-Page Map
 
 ```
 WHY math tricks exist → WHEN to use → WHAT can go wrong
@@ -26,9 +34,12 @@ WHY math tricks exist → WHEN to use → WHAT can go wrong
    beats derivation]
 ```
 
----
-
-# Math & Number Theory — L3 Reference
+> [!warning] Common mistakes
+> - Simulated 32-bit problems (Reverse Integer, atoi): Python won't overflow, so you must clamp/check against `[-2³¹, 2³¹−1]` yourself — see [§9](#9-overflow--edge-cases-in-python).
+> - Sieve: starting the inner loop at `2*i` (correct but slow) or at `i*i` with `i` running past `√n`; and forgetting 0 and 1 are not prime.
+> - Modular arithmetic: applying `% MOD` only at the end — intermediate products overflow in Java/C++; division needs a modular inverse, not `/`.
+> - `int(math.sqrt(x))` precision loss for large `x` — use `math.isqrt`.
+> - Negative operands: Python's `%` and `//` round toward −∞, unlike C++/Java.
 
 ---
 

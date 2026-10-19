@@ -3,8 +3,18 @@ module: 03-patterns
 topic: Interview Judgment — reasoning tools & live decision-making
 tags: [logic, proof, counterexamples, decision-making, interview-strategy, google-l3, l4]
 ---
-
 # Interview Judgment — Reasoning Tools & Live Decision-Making
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Reasoning tools (examples as experiments, invariants, quick proofs, feasibility estimates) and live decisions (commit vs pivot, hints, recovery, trade-offs).
+> **You'll be able to:** Make and justify decisions out loud during a 45-minute round.
+> **Prereqs:** How to think · **Pair with:** [How to think](HOW_TO_THINK.md) · [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) · **Time:** 1.5 h
+
+**Sections:** [A1. Examples are experiments — design them, don't just "try one"](#a1-examples-are-experiments--design-them-dont-just-try-one) · [A2. Invariants — the sentence that makes code correct by construction](#a2-invariants--the-sentence-that-makes-code-correct-by-construction) · [A3. The three proof moves you can actually run in 45 minutes](#a3-the-three-proof-moves-you-can-actually-run-in-45-minutes) · [A4. Estimate before you build — the 30-second feasibility check](#a4-estimate-before-you-build--the-30-second-feasibility-check) · [B1. Commit vs pivot — the explicit rule](#b1-commit-vs-pivot--the-explicit-rule) · [B2. Choosing between two plausible approaches](#b2-choosing-between-two-plausible-approaches) · [B3. Hints are data — decode them, don't survive them](#b3-hints-are-data--decode-them-dont-survive-them) · [B4. Recovery playbook — the three failure moments, scripted](#b4-recovery-playbook--the-three-failure-moments-scripted) · [B5. Trade-offs — always present them as a menu, never as a monologue](#b5-trade-offs--always-present-them-as-a-menu-never-as-a-monologue) · [B6. The judgment drill (how to train any of this)](#b6-the-judgment-drill-how-to-train-any-of-this) · [The one-card summary](#the-one-card-summary) · [See Also](#see-also)
+
+---
 
 > [!IMPORTANT]
 > **The missing layer this file adds.** [HOW_TO_THINK.md](HOW_TO_THINK.md) teaches you to *derive* patterns. [The L3 Cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) maps keywords → structures. Neither teaches the two skills that actually decide close interviews: **convincing yourself an idea is correct before spending 15 minutes coding it**, and **making good calls under uncertainty** — commit or pivot, which of two approaches, what to do with a hint, how to recover from a wrong path. Strong candidates don't fail because they lack patterns; they fail because they coded the wrong idea confidently or abandoned the right idea nervously. This file trains that judgment.

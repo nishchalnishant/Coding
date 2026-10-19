@@ -3,45 +3,30 @@ module: 01-data-structures
 topic: Queue
 tags: [data-structures, queue]
 ---
+# Queue — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** FIFO, deque, and circular buffer; BFS level order; multi-source BFS; monotonic deque for sliding-window max; Kahn's topological sort.
+> **You'll be able to:** Pick queue vs deque vs heap; write level-order BFS and sliding-window-max with a deque; explain why BFS gives shortest paths in unweighted graphs.
+> **Prereqs:** Arrays, stack · **Pair with:** [Queue problems](../coding/data-structures/06-queue.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                │                │               │               │
-  [BFS requires       [FIFO abstract   [enqueue at     [BFS level      [naive array
-   processing nodes   data type;        rear, dequeue   traversal,      queue wastes
-   in arrival order;  backed by         from front;     task scheduling, space (front
-   producers must     circular array    O(1) both ends; rate limiting,   pointer drifts);
-   decouple from      or doubly-        circular array  producer-       priority queue
-   consumers]         linked list]      avoids O(n)     consumer]       ≠ FIFO queue]
-       │                │                │
-  [real-world:        [invariant:      [monotonic deque: sliding
-   ticket queue —     front = oldest    window max/min in O(n)
-   first come,        element; rear =   by evicting from back when
-   first served]      newest]           new element dominates]
-       ↓
-[Decision: Queue vs alternatives]
-  ├── vs Stack        → FIFO vs LIFO; queue for BFS/levels, stack for DFS/backtrack
-  ├── vs Priority Queue → PQ dequeues by priority not arrival; use for Dijkstra/top-K
-  └── vs Deque        → deque is double-ended generalization; use for sliding window
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: BFS and producer-consumer patterns require processing in arrival order — FIFO semantics.
 - **Core insight**: Separate front (dequeue) and rear (enqueue) pointers on a circular buffer give O(1) both ends without shifting.
 - **Invariant**: Oldest element is always at front; newest at rear; no element is skipped.
 - **Why it's fast**: Circular array means enqueue/dequeue just move a pointer modulo capacity — no memory allocation per operation.
 - **Where it breaks**: Fixed-size circular buffer overflows; non-circular array wastes O(n) space as front drifts; priority queue semantics are confused with FIFO semantics.
 
-# Queue — L3 Core
+### One-Page Map
 
 ```
 [QUEUE]
@@ -88,9 +73,6 @@ WHY queues exist → WHAT they are → HOW they work → WHEN to use → WHAT ca
 
 FIFO ordered processing. L3 focus: BFS shortest path, monotonic deque for sliding-window max, two-stack queue, circular ring buffer, and lock-free queue design for production systems.
 
-
-
-
 ---
 
 ## Theory & Mental Models
@@ -123,11 +105,11 @@ FIFO ordered processing. L3 focus: BFS shortest path, monotonic deque for slidin
 - Task scheduling and producer-consumer patterns with bounded capacity.
 - Implementing a circular buffer with fixed memory footprint.
 
-**Common mistakes:**
-- Using `list.pop(0)` instead of `deque.popleft()` — silently O(N), causes TLE on large inputs.
-- Not checking empty before dequeue — causes `IndexError` or wrong behavior.
-- Confusing BFS queue (FIFO, shortest path) with DFS stack (LIFO, depth-first).
-- Marking visited after dequeue instead of before enqueue — leads to duplicate entries and TLE.
+> [!warning] Common mistakes
+> - Using `list.pop(0)` instead of `deque.popleft()` — silently O(N), causes TLE on large inputs.
+> - Not checking empty before dequeue — causes `IndexError` or wrong behavior.
+> - Confusing BFS queue (FIFO, shortest path) with DFS stack (LIFO, depth-first).
+> - Marking visited after dequeue instead of before enqueue — leads to duplicate entries and TLE.
 
 ---
 
@@ -364,28 +346,21 @@ class CircularQueue:
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy / Medium
-- **Rotten Oranges** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
-- **Word Ladder `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
-- **Sliding Window Maximum `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
-- **Design Circular Queue** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
-- **Moving Average from Data Stream** — Fixed-size deque + running sum; evict front when over capacity.
-- **01 Matrix `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
+- **[Word Ladder](../coding/algorithms/13-graph-algorithms.md#word-ladder-bfs-on-implicit-graph--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
+- **[Sliding Window Maximum](../coding/data-structures/06-queue.md#sliding-window-maximum--t1) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
+- **[01 Matrix](../coding/data-structures/06-queue.md#01-matrix--t1) `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
+- **[Rotten Oranges](../coding/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
+- **[Design Circular Queue](../coding/data-structures/06-queue.md#design-circular-queue) `🎯 T2`** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
+- **[Moving Average from Data Stream](../coding/data-structures/06-queue.md#moving-average-from-data-stream) `🎯 T2`** — Fixed-size deque + running sum; evict front when over capacity.
 
 ### Hard
-- **Sliding Window Minimum** — Same deque pattern; maintain increasing order (flip comparison).
-- **Maximum of Minimums of Every Window Size** — Monotonic stack for prev/next smaller element; fill answer array.
-- **Cheapest Flights Within K Stops** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
-- **Shortest Path in Binary Matrix `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
+- **[Shortest Path in Binary Matrix](../coding/data-structures/06-queue.md#shortest-path-in-binary-matrix--t1) `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
+- **[Cheapest Flights Within K Stops](../coding/data-structures/06-queue.md#cheapest-flights-within-k-stops) `⚡ T1`** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
+- **[Sliding Window Minimum](../coding/data-structures/06-queue.md#sliding-window-minimum) `🎯 T2`** — Same deque pattern; maintain increasing order (flip comparison).
+- **[Maximum of Minimums of Every Window Size](../coding/data-structures/06-queue.md#maximum-of-minimums-of-every-window-size) `💤 T3`** — Monotonic stack for prev/next smaller element; fill answer array.
 
 ---
 
@@ -456,4 +431,3 @@ Track array `cap`, current `size`, and `head` index.
 
 **Why is Multi-Source BFS preferred over running independent BFS from each source?** #flashcard
 Running independent BFS from $S$ sources takes $O(S \cdot (V + E))$ time. Multi-Source BFS enqueues all source nodes at distance 0 before starting, expanding all search fronts concurrently. This finds shortest distances to the nearest source for all nodes in a single $O(V + E)$ traversal.
-

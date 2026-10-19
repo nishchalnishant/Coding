@@ -3,8 +3,19 @@ module: 03-patterns
 topic: Recursion & DP Masterclass — from first call to bottom-up tables
 tags: [recursion, dp, memoization, top-down, bottom-up, teaching, google-l3, l4]
 ---
-
 # Recursion & DP Masterclass — Taught From Zero
+
+## What this covers
+
+> [!abstract] In this file
+> **Role:** the *first-read narrative lesson*; once it clicks, drill with the [conversion reference](../02-algorithms/10-recursion-to-dp.md) (templates, fill-order table, 15 conversions, bug table).
+> **Covers:** A from-zero lesson: what a call is, the leap of faith, overlapping subproblems, memoization, tabulation, state design, the bug catalog, a practice ladder.
+> **You'll be able to:** Design recursion and DP states for problems you haven't seen.
+> **Prereqs:** None · **Pair with:** [Recursion lecture](../02-algorithms/09-recursion.md) · [Recursion → DP reference](../02-algorithms/10-recursion-to-dp.md) · [DP lecture](../02-algorithms/15-dynamic-programming.md) · **Time:** 3 h
+
+**Sections:** [LESSON 1 — What a recursive call actually is](#lesson-1--what-a-recursive-call-actually-is) · [LESSON 2 — The five shapes of recursive problems](#lesson-2--the-five-shapes-of-recursive-problems) · [LESSON 3 — The disease: overlapping subproblems](#lesson-3--the-disease-overlapping-subproblems) · [LESSON 4 — Top-down DP (memoization), the production method](#lesson-4--top-down-dp-memoization-the-production-method) · [LESSON 5 — Bottom-up DP (tabulation): the same tree, walked in reverse](#lesson-5--bottom-up-dp-tabulation-the-same-tree-walked-in-reverse) · [LESSON 6 — State design: the actual hard part](#lesson-6--state-design-the-actual-hard-part) · [LESSON 7 — Top-down vs bottom-up: an actual decision procedure](#lesson-7--top-down-vs-bottom-up-an-actual-decision-procedure) · [LESSON 8 — The bug catalog (read before every mock)](#lesson-8--the-bug-catalog-read-before-every-mock) · [LESSON 9 — The practice ladder (in order, with the lesson each teaches)](#lesson-9--the-practice-ladder-in-order-with-the-lesson-each-teaches)
+
+---
 
 > [!IMPORTANT]
 > **How to read this file.** This is a lesson, not a reference. Read it in order — each section builds on the previous one, and the examples are the curriculum. Work every "✍️ Do this now" exercise on paper before reading past it; the file is designed so that skipping them makes later sections feel like magic, and doing them makes later sections feel obvious.

@@ -3,58 +3,23 @@ module: 02-algorithms
 topic: String Algorithms
 tags: [algorithms, string, kmp, rabin-karp, z-algorithm, manacher]
 ---
+# String Algorithms
 
 ← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know it conceptually; skip deep implementation.
+## What this covers
 
-> [!warning] L3 scope note
-> **Expand-around-center and rolling hash are the only two you must be able to write cold.** KMP and Z are "explain the idea, derive if pushed." Manacher and suffix arrays are `💤 T3` — recognize the name, state the complexity, move on. Reaching for Manacher when expand-around-center passes the constraints is a negative signal, not a positive one.
+> [!abstract] In this file
+> **Covers:** The four string-matching techniques: KMP failure function, Rabin-Karp rolling hash, Z-function, expand-around-center palindromes.
+> **You'll be able to:** Expand-around-center fluently; explain KMP/rolling hash well enough to use them when brute-force O(NM) is too slow.
+> **Prereqs:** Strings, hashing · **Pair with:** [String algorithm problems](../coding/algorithms/02-string-algorithms.md) · [String DS](../01-data-structures/03-string.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```text
-WHY String Algorithms exist
-├── Naive substring search is O(n·m) — recompares characters already known to match
-│   ├── After a mismatch, the naive shift throws away everything learned from the partial match
-│   └── The pattern's own self-similarity predicts how far it is safe to shift
-WHAT they are
-├── Preprocessing the PATTERN to skip redundant comparisons
-│   ├── KMP        — failure function: longest proper prefix that is also a suffix
-│   └── Z-function — for each i, length of longest substring at i matching a prefix of s
-├── Hashing the WINDOW so comparison is O(1)
-│   └── Rabin-Karp — rolling polynomial hash, updated in O(1) per shift
-└── Exploiting SYMMETRY around centers
-    ├── Expand-around-center — O(n²), the expected L3 answer
-    └── Manacher — O(n), reuses mirror information across centers
-HOW they work
-├── KMP: build lps[] in O(m), scan text once — on mismatch jump to lps[j-1], never rewind text
-├── Z:   build z[] in O(n) via a [l, r] window; concat pattern + '#' + text to search
-├── Rabin-Karp: hash(next) = (hash(cur) - s[l]·base^(m-1))·base + s[r]; verify on hash hit
-└── Manacher: insert '#' separators to make every palindrome odd-length, then mirror-reuse
-WHEN to use
-├── "find pattern in text", single pattern            → KMP or Z (both O(n+m))
-├── "longest duplicate/repeated substring"            → binary search on length + rolling hash
-├── "any anagram/permutation of p in s"               → sliding window + freq counts, not KMP
-├── "longest palindromic substring"                   → expand-around-center; Manacher only if pushed
-├── "shortest palindrome by prepending"               → KMP lps on s + '#' + reverse(s)
-└── "count distinct substrings"                       → suffix array/trie `💤 T3`
-WHAT can go wrong
-├── Rolling hash without verification → false positives on collision; always confirm the match
-├── Single modulus hash → adversarial anti-hash tests; use double hashing or a random base
-├── KMP lps off-by-one: lps[i] is a length, and the fallback is lps[j-1] not lps[j]
-├── Manacher written from memory under pressure → high bug rate for near-zero payoff at L3
-└── Reaching for KMP when a hashmap/sliding window solves it in fewer lines
-DECISION
-├── Fixed pattern, need O(n+m) worst case          → KMP (deterministic, no collisions)
-├── Multiple patterns / substring-set membership   → rolling hash or trie
-├── Palindromes                                    → expand-around-center first, always
-└── Constraint n ≤ 1000 → O(n²) passes; do not over-engineer
-```
+**Sections:** [Core Idea](#core-idea) · [The Four Techniques](#the-four-techniques) · [KMP — the failure function](#kmp--the-failure-function) · [Rabin-Karp — rolling hash](#rabin-karp--rolling-hash) · [Z-function](#z-function) · [Palindromes — start at the center](#palindromes--start-at-the-center) · [Decision Guide](#decision-guide) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 
 - **Root problem**: Locate or count structure inside a string faster than comparing every position against every offset.
 - **Core insight**: A string's own prefix/suffix self-similarity tells you how far you can safely shift after a mismatch — the pattern encodes its own skip table. Hashing attacks the same problem from the other side: make each comparison O(1) instead of reducing the number of comparisons.
@@ -64,7 +29,7 @@ DECISION
 
 ---
 
-# String Algorithms
+### One-Page Map
 
 ```
 [STRING ALGORITHMS — MINDMAP]
@@ -82,6 +47,13 @@ DECISION
     ├── Suffix array / suffix automaton
     └── Aho-Corasick (multi-pattern)
 ```
+
+> [!warning] Common mistakes
+> - Reaching for KMP when a frequency map or sliding window solves it — most "string" questions are hashing in disguise.
+> - Rabin-Karp without verifying the substring on a hash hit — collisions return wrong answers.
+> - Rolling hash: forgetting to precompute `base^(m-1) mod p`, or letting the subtraction go negative before `% p`.
+> - KMP `lps` build: on mismatch, setting `length = 0` instead of falling back to `lps[length-1]`.
+> - Expand-around-center: skipping the even-length centers (`i, i+1`) — misses `"abba"`.
 
 ## The Four Techniques
 
@@ -195,6 +167,20 @@ Expand-around-center is the expected answer. `2n-1` centers (n odd, n-1 even), e
 ---
 
 Practice → [`coding/algorithms/02-string-algorithms.md`](../coding/algorithms/02-string-algorithms.md) (tier-tagged walkthroughs)
+
+---
+
+## Interview Questions — Logic & Trickiness
+
+| Question | Variant | Click moment | Core logic | Gotchas |
+|---|---|---|---|---|
+| ⚡ T1 · Medium — Longest Palindromic Substring (LC 5) | Expand around center | "longest palindrome" | 2n−1 centers, expand while equal | Must try even centers; track `(start, len)` not substrings |
+| ⚡ T1 · Medium — Palindromic Substrings (LC 647) | Expand around center | "count palindromes" | Each successful expansion = +1 | Same even-center trap |
+| ⚡ T1 · Easy — Find the Index of First Occurrence (LC 28) | Pattern search | "find `needle` in `haystack`" | Built-in / naive is acceptable; KMP if asked for worst-case O(n+m) | Empty needle → 0 |
+| 🎯 T2 · Medium — Repeated DNA Sequences (LC 187) | Rolling hash / set | Fixed length 10 | Set of seen windows (or 2-bit encoding) | Add to output once, not per repeat |
+| 🎯 T2 · Hard — Shortest Palindrome (LC 214) | KMP lps | "prepend fewest chars" | `lps` of `s + '#' + rev(s)`; last value = longest palindromic prefix | Separator prevents overlap past `s` |
+| 🎯 T2 · Easy — Repeated Substring Pattern (LC 459) | lps / doubling | "built from a repeated unit" | `s in (s+s)[1:-1]`, or `n % (n - lps[-1]) == 0` | `lps[-1] == 0` → false |
+| 💤 T3 · Hard — Longest Duplicate Substring (LC 1044) | BS + Rabin-Karp | Monotone in length | Binary search length, rolling-hash window set | Use a large mod / double hash; verify on hit |
 
 ---
 

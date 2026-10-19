@@ -3,17 +3,23 @@ tags: [coding, algorithms, binary-search]
 topic: Binary Search
 difficulty: mixed
 ---
-
 # Binary Search — Problem Set
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked binary-search problems: bounds, search on answer, rotated arrays, peaks, median/order statistics.
+> **You'll be able to:** Define the monotone predicate and boundaries before writing the loop.
+> **Prereqs:** Binary search lecture · **Pair with:** [Binary search lecture](../../02-algorithms/11-binary-search.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [Lower Bound / Upper Bound](#lower-bound--upper-bound) · [Binary Search on Answer (Predicate Pattern)](#binary-search-on-answer-predicate-pattern) · [Rotated Sorted Array](#rotated-sorted-array) · [Peak Element](#peak-element) · [Median / Order Statistics](#median--order-statistics) · [Classic / Miscellaneous](#classic--miscellaneous)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Find First and Last Position](#find-first-and-last-position-lc-34--t1) · [Search in Rotated Sorted Array](#search-in-rotated-sorted-array-lc-33--t1) · [Find Minimum in Rotated Sorted Array](#find-minimum-in-rotated-sorted-array-lc-153--t1) · [Find Peak Element](#find-peak-element-lc-162--t1) · [Koko Eating Bananas](#koko-eating-bananas-lc-875--t1) · [Capacity To Ship Packages Within D Days](#capacity-to-ship-packages-within-d-days-lc-1011--t1) · [Split Array Largest Sum](#split-array-largest-sum-lc-410--t1) · [Median of Two Sorted Arrays](#median-of-two-sorted-arrays-lc-4--t1)
+> **Template:** First true: `lo, hi = 0, n; while lo < hi: mid = (lo + hi) // 2; if ok(mid): hi = mid else: lo = mid + 1; return lo`.
+> **Template:** Answer space: binary search the *answer* `x` when `feasible(x)` is monotone; `feasible` is usually a greedy O(n) scan.
+> **Gotchas:** Pick one invariant (`[lo, hi)` vs `[lo, hi]`) and never mix · `lo = mid` needs `mid = (lo + hi + 1) // 2` or it loops · rotated with duplicates → `hi -= 1` worst case O(n) · bounds of answer space: `max(a)` / `sum(a)`, not 0 / ∞.
 
 ---
 
@@ -104,6 +110,9 @@ difficulty: mixed
 > 
 > **Constraints:**
 > - 1 <= bad <= n <= 2^{31} - 1
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "first index where predicate flips" · **Gotcha:** `hi = mid - 1` skips the answer
 
 > [!info] Approach
 > The version sequence has a monotone predicate: False…False, True…True. First True is a lower bound problem. Binary search on `[1, n]`. If `isBadVersion(mid)` is True, the first bad version is at `mid` or earlier. `if isBadVersion(mid): hi = mid` (don't discard mid); else `lo = mid + 1`. Terminates at `lo == hi`.
@@ -240,6 +249,71 @@ difficulty: mixed
 
 ---
 
+### Find First and Last Position (LC 34) `⚡ T1`
+
+> [!example] Problem
+> Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
+> If target is not found in the array, return [-1, -1].
+> You must write an algorithm with O(log n) runtime complexity.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [5,7,7,8,8,10], target = 8
+> Output: [3,4]
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [5,7,7,8,8,10], target = 6
+> Output: [-1,-1]
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [], target = 0
+> Output: [-1,-1]
+> ```
+> 
+> **Constraints:**
+> - 0 <= nums.length <= 10^5
+> - -10^9 <= nums[i] <= 10^9
+> - nums is a non-decreasing array.
+> - -10^9 <= target <= 10^9
+
+> [!failure] Tempting wrong approach
+> Find any match, then scan outward — O(n) on an all-equal array. Run two lower-bound searches (`target` and `target + 1`).
+
+> [!info] Approach
+> Need leftmost and rightmost occurrence — two separate lower/upper bound searches. `bisect_left` gives the first index where `nums[i] >= target`; `bisect_right` gives the first index where `nums[i] > target` (so last occurrence = that - 1). First = lower_bound(target). If `nums[first] != target` → not found. Last = upper_bound(target) - 1.
+
+> [!note]- Python Solution
+> ```python
+> def search_range(nums, target):
+>     def lower_bound(val):
+>         lo, hi = 0, len(nums)
+>         while lo < hi:
+>             mid = lo + (hi - lo) // 2
+>             if nums[mid] < val:
+>                 lo = mid + 1
+>             else:
+>                 hi = mid
+>         return lo
+> 
+>     first = lower_bound(target)
+>     if first == len(nums) or nums[first] != target:
+>         return [-1, -1]
+>     last = lower_bound(target + 1) - 1
+>     return [first, last]
+> ```
+
+> [!success] Complexity
+> O(log n) time, O(1) space. Two binary search passes.
+
+> [!tip] Alternatives
+> `bisect.bisect_left` / `bisect.bisect_right` from stdlib; single linear scan O(n) trivial but not O(log n).
+
+---
+
 ## Binary Search on Answer (Predicate Pattern)
 
 > [!info] Approach
@@ -277,6 +351,12 @@ difficulty: mixed
 > - 1 <= piles.length <= 10^4
 > - piles.length <= h <= 10^9
 > - 1 <= piles[i] <= 10^9
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "minimum speed such that…" · **Gotcha:** Ceiling division; `lo = 1` not 0
+
+> [!failure] Tempting wrong approach
+> Binary searching indices of `piles`, or float `ceil(p / k)`. Search the answer space `[1, max(piles)]` with integer `(p + k - 1) // k`.
 
 > [!info] Approach
 > Larger `k` → fewer hours needed. Monotone: if speed `k` works, any speed `k' > k` also works. Binary search on `k`. Search `k` in `[1, max(piles)]`. Feasibility: `sum(ceil(p/k)) <= h`. `ceil(p/k)` without `math.ceil` → `-(-p // k)`. If feasible → `hi = mid` (try slower); else `lo = mid + 1`.
@@ -411,6 +491,12 @@ difficulty: mixed
 > - 1 <= nums.length <= 1000
 > - 0 <= nums[i] <= 10^6
 > - 1 <= k <= min(50, nums.length)
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Same shape as LC 1011 · **Gotcha:** Reset `curr = 0` then add `n`
+
+> [!failure] Tempting wrong approach
+> Greedy splits near `sum/k`, or presenting O(k·n²) DP as final. Binary search the answer in `[max(nums), sum(nums)]` with a greedy "pieces needed" check.
 
 > [!info] Approach
 > Larger allowed max-sum → easier to fit into `k` parts. Monotone predicate on the answer value. Binary search on `max_sum` in `[max(nums), sum(nums)]`. Feasibility: greedy partition counting. Greedily extend current subarray; when adding next element would exceed `max_sum`, start new part. If parts ≤ k → feasible.
@@ -594,6 +680,263 @@ difficulty: mixed
 
 ---
 
+### Minimum Number of Days to Make m Bouquets (LC 1482) `⚡ T1`
+
+> [!example] Problem
+> You are given an integer array bloomDay, an integer m and an integer k.
+> You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
+> The garden consists of n flowers, the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet.
+> Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
+> 
+> **Example 1:**
+> ```
+> Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
+> Output: 3
+> Explanation: Let us see what happened in the first three days. x means flower bloomed and _ means flower did not bloom in the garden.
+> We need 3 bouquets each should contain 1 flower.
+> After day 1: [x, _, _, _, _]   // we can only make one bouquet.
+> After day 2: [x, _, _, _, x]   // we can only make two bouquets.
+> After day 3: [x, _, x, _, x]   // we can make 3 bouquets. The answer is 3.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
+> Output: -1
+> Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers. We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
+> Output: 12
+> Explanation: We need 2 bouquets each should have 3 flowers.
+> Here is the garden after the 7 and 12 days:
+> After day 7: [x, x, x, x, _, x, x]
+> We can make one bouquet of the first three flowers that bloomed. We cannot make another bouquet from the last three flowers that bloomed because they are not adjacent.
+> After day 12: [x, x, x, x, x, x, x]
+> It is obvious that we can make two bouquets in different ways.
+> ```
+> 
+> **Constraints:**
+> - bloomDay.length == n
+> - 1 <= n <= 10^5
+> - 1 <= bloomDay[i] <= 10^9
+> - 1 <= m <= 10^6
+> - 1 <= k <= n
+
+> [!info] Approach
+> More days → more flowers bloomed → easier to form bouquets. Monotone predicate on day. Binary search on `day` in `[min(bloomDay), max(bloomDay)]`. Feasibility: scan the array counting consecutive bloomed flowers; form a bouquet every time we accumulate `k` in a row. Count bouquets formed; if `>= m` → feasible. Early exit: if `m * k > len(bloomDay)` → impossible.
+
+> [!note]- Python Solution
+> ```python
+> def min_days(bloomDay, m, k):
+>     n = len(bloomDay)
+>     if m * k > n:
+>         return -1
+> 
+>     def feasible(day):
+>         bouquets = consecutive = 0
+>         for d in bloomDay:
+>             if d <= day:
+>                 consecutive += 1
+>                 if consecutive == k:
+>                     bouquets += 1
+>                     consecutive = 0
+>             else:
+>                 consecutive = 0
+>         return bouquets >= m
+> 
+>     lo, hi = min(bloomDay), max(bloomDay)
+>     while lo < hi:
+>         mid = lo + (hi - lo) // 2
+>         if feasible(mid):
+>             hi = mid
+>         else:
+>             lo = mid + 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> O(n log(max_day)) time, O(1) space.
+
+> [!tip] Alternatives
+> None practical — greedy simulation alone is O(n · max_day); BS + greedy is the canonical approach.
+
+---
+
+### Aggressive Cows / Maximize Minimum Distance
+
+> [!example] Problem
+> Given stall positions and `k` cows, place the cows so the minimum distance between any two cows is as large as possible.
+
+> [!info] Approach
+> If a distance `d` works, any smaller distance also works. That monotonic predicate makes the answer searchable. Sort positions and binary search the answer `d`. The feasibility check greedily places each cow at the earliest valid stall. Place the first cow at the first stall, then keep placing the next cow at the first position with gap `>= d`.
+
+> [!note]- Python Solution
+> ```python
+> def aggressive_cows(positions, k):
+>     positions.sort()
+> 
+>     def can_place(distance):
+>         cows = 1
+>         last = positions[0]
+>         for pos in positions[1:]:
+>             if pos - last >= distance:
+>                 cows += 1
+>                 last = pos
+>                 if cows == k:
+>                     return True
+>         return False
+> 
+>     lo, hi = 1, positions[-1] - positions[0]
+>     while lo < hi:
+>         mid = lo + (hi - lo + 1) // 2
+>         if can_place(mid):
+>             lo = mid
+>         else:
+>             hi = mid - 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> O(n log R) time, where `R = positions[-1] - positions[0]`; O(1) extra space.
+
+> [!tip] Alternatives
+> Reuse this template for router placement, aggressive seating, and maximize-minimum-distance questions.
+
+---
+
+### Find K-th Smallest Pair Distance (LC 719) `⚡ T1`
+
+> [!example] Problem
+> The distance of a pair of integers a and b is defined as the absolute difference between a and b.
+> Given an integer array nums and an integer k, return the kth smallest distance among all the pairs nums[i] and nums[j] where 0 <= i < j < nums.length.
+> 
+> **Example 1:**
+> ```
+> Input: nums = [1,3,1], k = 1
+> Output: 0
+> Explanation: Here are all the pairs:
+> (1,3) -> 2
+> (1,1) -> 0
+> (3,1) -> 2
+> Then the 1st smallest distance pair is (1,1), and its distance is 0.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: nums = [1,1,1], k = 2
+> Output: 0
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: nums = [1,6,1], k = 3
+> Output: 5
+> ```
+> 
+> **Constraints:**
+> - n == nums.length
+> - 2 <= n <= 10^4
+> - 0 <= nums[i] <= 10^6
+> - 1 <= k <= n * (n - 1) / 2
+
+> [!info] Approach
+> The distance range is `[0, max(nums) - min(nums)]`. Binary search on the answer: for a candidate distance `mid`, count how many pairs have distance ≤ `mid` using a two-pointer scan on the sorted array. Sort the array. Binary search on `mid`. For each index `i`, find the leftmost `j` such that `nums[i] - nums[j] <= mid` using two pointers. The count of such pairs is `i - j`. `lo = 0`, `hi = nums[-1] - nums[0]`. Count pairs with distance ≤ `mid`: two-pointer `left` tracking the start of the window for each `right`. Return the smallest `mid` where `count >= k`.
+
+> [!note]- Python Solution
+> ```python
+> def smallest_distance_pair(nums, k):
+>     nums.sort()
+>     n = len(nums)
+> >
+>     def count_pairs(max_dist):
+>         count = 0
+>         left = 0
+>         for right in range(n):
+>             while nums[right] - nums[left] > max_dist:
+>                 left += 1
+>             count += right - left
+>         return count
+> >
+>     lo = 0
+>     hi = nums[-1] - nums[0]
+>     while lo < hi:
+>         mid = (lo + hi) // 2
+>         if count_pairs(mid) >= k:
+>             hi = mid
+>         else:
+>             lo = mid + 1
+>     return lo
+> ```
+
+> [!success] Complexity
+> Time O(n log n + n log W) where W = max distance. Space O(1).
+
+> [!tip] Alternatives
+> - Heap with all pairs: O(k log n²) — extremely slow.
+> - Counting sort on distances: O(n² + W) — too slow for large inputs.
+> - Key insight: "count pairs with distance ≤ mid" is the standard feasibility function for this binary search.
+
+---
+
+### Sqrt(x) — Integer Square Root (LC 69) `⚡ T1`
+
+> [!example] Problem
+> Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.
+> You must not use any built-in exponent function or operator.
+> 
+> **Example 1:**
+> ```
+> Input: x = 4
+> Output: 2
+> Explanation: The square root of 4 is 2, so we return 2.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: x = 8
+> Output: 2
+> Explanation: The square root of 8 is 2.82842..., and since we round it down to the nearest integer, 2 is returned.
+> ```
+> 
+> **Constraints:**
+> - 0 <= x <= 2^{31} - 1
+
+> [!info] Approach
+> Binary search on the answer: the answer lies in `[0, x]`. Find the largest integer `mid` such that `mid * mid <= x`. Classic binary search for the last True position in a boolean predicate `mid * mid <= x`. `lo = 0`, `hi = x`. While `lo <= hi`: `mid = (lo + hi) // 2`. If `mid * mid <= x` set `result = mid` and `lo = mid + 1`. Else `hi = mid - 1`.
+
+> [!note]- Python Solution
+> ```python
+> def my_sqrt(x):
+>     if x < 2:
+>         return x
+>     lo = 1
+>     hi = x // 2
+>     result = 1
+>     while lo <= hi:
+>         mid = lo + (hi - lo) // 2
+>         squared = mid * mid
+>         if squared == x:
+>             return mid
+>         if squared < x:
+>             result = mid
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(log x), Space O(1).
+
+> [!tip] Alternatives
+> - Newton's method: `x = x - (x*x - n) / (2*x)`. Converges in O(log log n) iterations — faster in practice.
+> - Bit manipulation: set bits from high to low, keep if result doesn't exceed target. O(log n) but less readable.
+
+---
+
 ## Rotated Sorted Array
 
 > [!info] Approach
@@ -633,6 +976,12 @@ difficulty: mixed
 > - All values of nums are unique.
 > - nums is an ascending array that is possibly rotated.
 > - -10^4 <= target <= 10^4
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Find sorted half · **Gotcha:** **Duplicates** in `nums[left]==nums[mid]==nums[right]` — **worst case O(n)**.
+
+> [!failure] Tempting wrong approach
+> Comparing `target` with `nums[mid]` alone. First decide which half is sorted (`nums[lo] <= nums[mid]`), then test whether `target` lies inside it.
 
 > [!info] Approach
 > Not fully sorted, but one half around any `mid` is always sorted. Use that to make a binary decision. Standard BS with an extra check — determine the sorted half, test if target is in it. If `nums[lo] <= nums[mid]`, left half `[lo, mid]` is sorted. If target in `[nums[lo], nums[mid])` → go left; else go right.
@@ -701,6 +1050,9 @@ difficulty: mixed
 > - -5000 <= nums[i] <= 5000
 > - All the integers of nums are unique.
 > - nums is sorted and rotated between 1 and n times.
+
+> [!failure] Tempting wrong approach
+> Comparing `nums[mid]` with `nums[lo]` — fails on unrotated input. Compare with `nums[hi]`: `nums[mid] > nums[hi]` means the min is right of `mid`.
 
 > [!info] Approach
 > Minimum is the rotation boundary. Compare `nums[mid]` with `nums[hi]`: if `nums[mid] > nums[hi]`, the minimum must be to the right. Binary search shrinking toward the minimum. Invariant: minimum is always in `[lo, hi]`. `if nums[mid] > nums[hi]: lo = mid + 1` else `hi = mid`. Do NOT compare with `nums[lo]`.
@@ -866,6 +1218,9 @@ difficulty: mixed
 > - 1 <= nums.length <= 1000
 > - -2^{31} <= nums[i] <= 2^{31} - 1
 > - nums[i] != nums[i + 1] for all valid i.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** No sort, but local slope is monotone guidance · **Gotcha:** Compare `mid` with `mid+1`, loop `lo < hi`
 
 > [!info] Approach
 > If `nums[mid] < nums[mid+1]`, the slope is ascending to the right — a peak must exist in `[mid+1, hi]`. Symmetric for descending slope. Invariant: a peak always exists in `[lo, hi]`. Shrink toward the uphill side. `if nums[mid] < nums[mid+1]: lo = mid + 1` else `hi = mid`. Terminates at `lo == hi` which is a peak.
@@ -1037,6 +1392,12 @@ difficulty: mixed
 > - 0 <= n <= 1000
 > - 1 <= m + n <= 2000
 > - -10^6 <= nums1[i], nums2[i] <= 10^6
+
+> [!tip] Recognize · Gotcha
+> **Signal:** O(log(min(m,n))) required · **Gotcha:** ±∞ sentinels at cut edges
+
+> [!failure] Tempting wrong approach
+> Merge and take the middle — correct, but O(m+n) misses the asked O(log min(m,n)). Binary search the partition of the shorter array.
 
 > [!info] Approach
 > Merging is O(m+n). The median partitions the combined array so the left half has `(m+n)//2` elements. Binary search on the partition in the smaller array. For each partition `i` in `nums1`, the partition `j = half - i` in `nums2` is determined. Valid when `max_left_A ≤ min_right_B` AND `max_left_B ≤ min_right_A`. If `max_left1 > min_right2` → partition too far right in nums1 → `hi = i - 1`; else `lo = i + 1`.
@@ -1258,153 +1619,6 @@ difficulty: mixed
 
 ---
 
-### Find First and Last Position (LC 34) `⚡ T1`
-
-> [!example] Problem
-> Given an array of integers nums sorted in non-decreasing order, find the starting and ending position of a given target value.
-> If target is not found in the array, return [-1, -1].
-> You must write an algorithm with O(log n) runtime complexity.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [5,7,7,8,8,10], target = 8
-> Output: [3,4]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [5,7,7,8,8,10], target = 6
-> Output: [-1,-1]
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [], target = 0
-> Output: [-1,-1]
-> ```
-> 
-> **Constraints:**
-> - 0 <= nums.length <= 10^5
-> - -10^9 <= nums[i] <= 10^9
-> - nums is a non-decreasing array.
-> - -10^9 <= target <= 10^9
-
-> [!info] Approach
-> Need leftmost and rightmost occurrence — two separate lower/upper bound searches. `bisect_left` gives the first index where `nums[i] >= target`; `bisect_right` gives the first index where `nums[i] > target` (so last occurrence = that - 1). First = lower_bound(target). If `nums[first] != target` → not found. Last = upper_bound(target) - 1.
-
-> [!note]- Python Solution
-> ```python
-> def search_range(nums, target):
->     def lower_bound(val):
->         lo, hi = 0, len(nums)
->         while lo < hi:
->             mid = lo + (hi - lo) // 2
->             if nums[mid] < val:
->                 lo = mid + 1
->             else:
->                 hi = mid
->         return lo
-> 
->     first = lower_bound(target)
->     if first == len(nums) or nums[first] != target:
->         return [-1, -1]
->     last = lower_bound(target + 1) - 1
->     return [first, last]
-> ```
-
-> [!success] Complexity
-> O(log n) time, O(1) space. Two binary search passes.
-
-> [!tip] Alternatives
-> `bisect.bisect_left` / `bisect.bisect_right` from stdlib; single linear scan O(n) trivial but not O(log n).
-
----
-
-### Minimum Number of Days to Make m Bouquets (LC 1482) `⚡ T1`
-
-> [!example] Problem
-> You are given an integer array bloomDay, an integer m and an integer k.
-> You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
-> The garden consists of n flowers, the ith flower will bloom in the bloomDay[i] and then can be used in exactly one bouquet.
-> Return the minimum number of days you need to wait to be able to make m bouquets from the garden. If it is impossible to make m bouquets return -1.
-> 
-> **Example 1:**
-> ```
-> Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
-> Output: 3
-> Explanation: Let us see what happened in the first three days. x means flower bloomed and _ means flower did not bloom in the garden.
-> We need 3 bouquets each should contain 1 flower.
-> After day 1: [x, _, _, _, _]   // we can only make one bouquet.
-> After day 2: [x, _, _, _, x]   // we can only make two bouquets.
-> After day 3: [x, _, x, _, x]   // we can make 3 bouquets. The answer is 3.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
-> Output: -1
-> Explanation: We need 3 bouquets each has 2 flowers, that means we need 6 flowers. We only have 5 flowers so it is impossible to get the needed bouquets and we return -1.
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
-> Output: 12
-> Explanation: We need 2 bouquets each should have 3 flowers.
-> Here is the garden after the 7 and 12 days:
-> After day 7: [x, x, x, x, _, x, x]
-> We can make one bouquet of the first three flowers that bloomed. We cannot make another bouquet from the last three flowers that bloomed because they are not adjacent.
-> After day 12: [x, x, x, x, x, x, x]
-> It is obvious that we can make two bouquets in different ways.
-> ```
-> 
-> **Constraints:**
-> - bloomDay.length == n
-> - 1 <= n <= 10^5
-> - 1 <= bloomDay[i] <= 10^9
-> - 1 <= m <= 10^6
-> - 1 <= k <= n
-
-> [!info] Approach
-> More days → more flowers bloomed → easier to form bouquets. Monotone predicate on day. Binary search on `day` in `[min(bloomDay), max(bloomDay)]`. Feasibility: scan the array counting consecutive bloomed flowers; form a bouquet every time we accumulate `k` in a row. Count bouquets formed; if `>= m` → feasible. Early exit: if `m * k > len(bloomDay)` → impossible.
-
-> [!note]- Python Solution
-> ```python
-> def min_days(bloomDay, m, k):
->     n = len(bloomDay)
->     if m * k > n:
->         return -1
-> 
->     def feasible(day):
->         bouquets = consecutive = 0
->         for d in bloomDay:
->             if d <= day:
->                 consecutive += 1
->                 if consecutive == k:
->                     bouquets += 1
->                     consecutive = 0
->             else:
->                 consecutive = 0
->         return bouquets >= m
-> 
->     lo, hi = min(bloomDay), max(bloomDay)
->     while lo < hi:
->         mid = lo + (hi - lo) // 2
->         if feasible(mid):
->             hi = mid
->         else:
->             lo = mid + 1
->     return lo
-> ```
-
-> [!success] Complexity
-> O(n log(max_day)) time, O(1) space.
-
-> [!tip] Alternatives
-> None practical — greedy simulation alone is O(n · max_day); BS + greedy is the canonical approach.
-
----
-
 ### Find K Closest Elements (LC 658) `⚡ T1`
 
 > [!example] Problem
@@ -1450,6 +1664,47 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Sort by distance O(n log n) — correct but loses sorted order and is slower; two-pointer shrink from both ends O(n - k) — simpler to reason about but O(n).
+
+---
+
+### Search a 2D Matrix (LC 74) `⚡ T1`
+
+> [!example] Problem
+> `m x n` matrix: each row sorted ascending, and each row's first element is greater than the previous row's last. Return whether `target` is present, in O(log(m·n)). **Medium.**
+>
+> ```
+> Input: matrix = [[1,3,5,7],[10,11,16,20],[23,30,34,60]], target = 3   →  true
+> Input: same matrix, target = 13                                       →  false
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** rows chain into one sorted sequence + "O(log(m·n))" · **Gotcha:** column count is `n`, so `mid → (mid // n, mid % n)` — dividing by `m` is the classic bug on non-square input.
+
+> [!info] Approach
+> **Key insight:** the two properties make the matrix a sorted 1-D array of length `m·n` stored row-major. Binary search over virtual indices `[0, m·n − 1]` and map each `mid` back to a cell. No flattening, O(1) space.
+
+> [!note]- Python Solution
+> ```python
+> def search_matrix(matrix, target):
+>     m, n = len(matrix), len(matrix[0])
+>     lo, hi = 0, m * n - 1
+>     while lo <= hi:
+>         mid = (lo + hi) // 2
+>         v = matrix[mid // n][mid % n]
+>         if v == target:
+>             return True
+>         if v < target:
+>             lo = mid + 1
+>         else:
+>             hi = mid - 1
+>     return False
+> ```
+
+> [!success] Complexity
+> **TC**: O(log(m·n)) | **SC**: O(1).
+
+> [!tip] Alternatives
+> Two-pass row-then-column search (below) — same bound, more code. Staircase from top-right is O(m + n) — that is the answer to **LC 240**, where rows don't chain.
 
 ---
 
@@ -1518,30 +1773,7 @@ difficulty: mixed
 ### Longest Increasing Subsequence — Length via BS (LC 300) `⚡ T1`
 
 > [!example] Problem
-> Given an integer array nums, return the length of the longest strictly increasing subsequence.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [10,9,2,5,3,7,101,18]
-> Output: 4
-> Explanation: The longest increasing subsequence is [2,3,7,101], therefore the length is 4.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [0,1,0,3,2,3]
-> Output: 4
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [7,7,7,7,7,7,7]
-> Output: 1
-> ```
-> 
-> **Constraints:**
-> - 1 <= nums.length <= 2500
-> - -10^4 <= nums[i] <= 10^4
+> Same problem as [Longest Increasing Subsequence](15-dynamic-programming.md#longest-increasing-subsequence--t1) — this section covers the alternative approach only.
 
 > [!info] Approach
 > Patience sorting uses a `tails` array where `tails[i]` is the smallest tail of all LIS of length `i+1`. `tails` is always sorted → binary search for insertion point. For each element, `bisect_left(tails, num)` gives the position to replace (or extend if at end). The length of `tails` at the end is the LIS length. If `num > tails[-1]` → append (extend LIS). Else → replace `tails[pos]` = num (maintain smallest tails for future options).
@@ -1606,180 +1838,6 @@ difficulty: mixed
 
 > [!tip] Alternatives
 > Store timestamps and values in two parallel lists to `bisect_right` on timestamps alone — avoids the tuple sentinel trick. Follow-up to expect: what changes if timestamps are NOT increasing? (insort → O(n) set, or sort lazily on first get.)
-
----
-
-### Aggressive Cows / Maximize Minimum Distance
-
-> [!example] Problem
-> Given stall positions and `k` cows, place the cows so the minimum distance between any two cows is as large as possible.
-
-> [!info] Approach
-> If a distance `d` works, any smaller distance also works. That monotonic predicate makes the answer searchable. Sort positions and binary search the answer `d`. The feasibility check greedily places each cow at the earliest valid stall. Place the first cow at the first stall, then keep placing the next cow at the first position with gap `>= d`.
-
-> [!note]- Python Solution
-> ```python
-> def aggressive_cows(positions, k):
->     positions.sort()
-> 
->     def can_place(distance):
->         cows = 1
->         last = positions[0]
->         for pos in positions[1:]:
->             if pos - last >= distance:
->                 cows += 1
->                 last = pos
->                 if cows == k:
->                     return True
->         return False
-> 
->     lo, hi = 1, positions[-1] - positions[0]
->     while lo < hi:
->         mid = lo + (hi - lo + 1) // 2
->         if can_place(mid):
->             lo = mid
->         else:
->             hi = mid - 1
->     return lo
-> ```
-
-> [!success] Complexity
-> O(n log R) time, where `R = positions[-1] - positions[0]`; O(1) extra space.
-
-> [!tip] Alternatives
-> Reuse this template for router placement, aggressive seating, and maximize-minimum-distance questions.
-
----
-
-## Binary Search on Answer — More Problems
-
-### Find K-th Smallest Pair Distance (LC 719) `⚡ T1`
-
-> [!example] Problem
-> The distance of a pair of integers a and b is defined as the absolute difference between a and b.
-> Given an integer array nums and an integer k, return the kth smallest distance among all the pairs nums[i] and nums[j] where 0 <= i < j < nums.length.
-> 
-> **Example 1:**
-> ```
-> Input: nums = [1,3,1], k = 1
-> Output: 0
-> Explanation: Here are all the pairs:
-> (1,3) -> 2
-> (1,1) -> 0
-> (3,1) -> 2
-> Then the 1st smallest distance pair is (1,1), and its distance is 0.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: nums = [1,1,1], k = 2
-> Output: 0
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: nums = [1,6,1], k = 3
-> Output: 5
-> ```
-> 
-> **Constraints:**
-> - n == nums.length
-> - 2 <= n <= 10^4
-> - 0 <= nums[i] <= 10^6
-> - 1 <= k <= n * (n - 1) / 2
-
-> [!info] Approach
-> The distance range is `[0, max(nums) - min(nums)]`. Binary search on the answer: for a candidate distance `mid`, count how many pairs have distance ≤ `mid` using a two-pointer scan on the sorted array. Sort the array. Binary search on `mid`. For each index `i`, find the leftmost `j` such that `nums[i] - nums[j] <= mid` using two pointers. The count of such pairs is `i - j`. `lo = 0`, `hi = nums[-1] - nums[0]`. Count pairs with distance ≤ `mid`: two-pointer `left` tracking the start of the window for each `right`. Return the smallest `mid` where `count >= k`.
-
-> [!note]- Python Solution
-> ```python
-> def smallest_distance_pair(nums, k):
->     nums.sort()
->     n = len(nums)
-> >
->     def count_pairs(max_dist):
->         count = 0
->         left = 0
->         for right in range(n):
->             while nums[right] - nums[left] > max_dist:
->                 left += 1
->             count += right - left
->         return count
-> >
->     lo = 0
->     hi = nums[-1] - nums[0]
->     while lo < hi:
->         mid = (lo + hi) // 2
->         if count_pairs(mid) >= k:
->             hi = mid
->         else:
->             lo = mid + 1
->     return lo
-> ```
-
-> [!success] Complexity
-> Time O(n log n + n log W) where W = max distance. Space O(1).
-
-> [!tip] Alternatives
-> - Heap with all pairs: O(k log n²) — extremely slow.
-> - Counting sort on distances: O(n² + W) — too slow for large inputs.
-> - Key insight: "count pairs with distance ≤ mid" is the standard feasibility function for this binary search.
-
----
-
-### Sqrt(x) — Integer Square Root (LC 69) `⚡ T1`
-
-> [!example] Problem
-> Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer should be non-negative as well.
-> You must not use any built-in exponent function or operator.
-> 
-> **Example 1:**
-> ```
-> Input: x = 4
-> Output: 2
-> Explanation: The square root of 4 is 2, so we return 2.
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: x = 8
-> Output: 2
-> Explanation: The square root of 8 is 2.82842..., and since we round it down to the nearest integer, 2 is returned.
-> ```
-> 
-> **Constraints:**
-> - 0 <= x <= 2^{31} - 1
-
-> [!info] Approach
-> Binary search on the answer: the answer lies in `[0, x]`. Find the largest integer `mid` such that `mid * mid <= x`. Classic binary search for the last True position in a boolean predicate `mid * mid <= x`. `lo = 0`, `hi = x`. While `lo <= hi`: `mid = (lo + hi) // 2`. If `mid * mid <= x` set `result = mid` and `lo = mid + 1`. Else `hi = mid - 1`.
-
-> [!note]- Python Solution
-> ```python
-> def my_sqrt(x):
->     if x < 2:
->         return x
->     lo = 1
->     hi = x // 2
->     result = 1
->     while lo <= hi:
->         mid = lo + (hi - lo) // 2
->         squared = mid * mid
->         if squared == x:
->             return mid
->         if squared < x:
->             result = mid
->             lo = mid + 1
->         else:
->             hi = mid - 1
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(log x), Space O(1).
-
-> [!tip] Alternatives
-> - Newton's method: `x = x - (x*x - n) / (2*x)`. Converges in O(log log n) iterations — faster in practice.
-> - Bit manipulation: set bits from high to low, keep if result doesn't exceed target. O(log n) but less readable.
 
 ---
 

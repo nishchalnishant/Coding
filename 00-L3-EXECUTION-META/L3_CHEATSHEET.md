@@ -1,5 +1,16 @@
 # Google L3 Execution & Meta Cheatsheet
 
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Round execution: the 45-minute plan, constraint → Big-O table, decision keywords, Python essentials, universal edge cases, Big-O reference, what to skip at L3.
+> **You'll be able to:** Run every round on the same clock and pick the target complexity from N.
+> **Prereqs:** None · **Pair with:** [Interview judgment](../03-patterns/INTERVIEW_JUDGMENT.md) · [L3 roadmap](../coding/l3-google-roadmap.md) · **Time:** 20 min (reread before every mock)
+
+**Sections:** [1. 45-Minute Execution Plan](#1-45-minute-execution-plan) · [2. Constraint Analysis (N=10^5 → O(N) or O(N log N))](#2-constraint-analysis-n105--on-or-on-log-n) · [3. Decision Guide & Keywords](#3-decision-guide--keywords) · [4. Python Whiteboarding Essentials](#4-python-whiteboarding-essentials) · [5. Universal Edge Cases](#5-universal-edge-cases) · [6. Big-O Reference](#6-big-o-reference) · [7. Complexity Gotchas](#7-complexity-gotchas) · [8. What to Skip at L3](#8-what-to-skip-at-l3)
+
+---
+
 ## 1. 45-Minute Execution Plan
 - **Min 0-5 (Clarify & De-risk):** Listen, repeat, clarify edge cases (empty, negative, cycles, memory), write a custom tricky example.
 - **Min 5-15 (Design):** State brute force, reverse-engineer constraints, pitch optimal solution (draw it out). Get green light before coding.

@@ -3,15 +3,21 @@ tags: [l3-google, matrix, grid, bfs, dfs, dp]
 topic: Matrix / Grid Problems
 difficulty: mixed
 ---
+# Matrix / Grid — Problem Walkthroughs
 
 ← [Concept deep-dive](../../01-data-structures/04-matrix.md) · [Data Structures index](../../01-data-structures/README.md)
 
-# Matrix / Grid — Problem Walkthroughs
+## What this covers
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **Must Master**: Appear in nearly every Google loop.
-> `🎯 T2` — **Build Fluency**: Important but less frequent.
-> `💤 T3` — **Skip at L3**: Overkill.
+> [!abstract] In this file
+> **Covers:** Worked grid problems: islands, multi-source BFS, shortest path in grid, in-place transforms, grid DP, 2D prefix sum.
+> **You'll be able to:** Write grid BFS/DFS and grid DP cleanly under time pressure.
+> **Prereqs:** Matrix lecture · **Pair with:** [Matrix lecture](../../01-data-structures/04-matrix.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Traversal Foundations](#traversal-foundations) · [Number of Islands `⚡ T1`](#number-of-islands--t1) · [Walls and Gates `⚡ T1`](#walls-and-gates--t1) · [Shortest Path in Binary Matrix `⚡ T1`](#shortest-path-in-binary-matrix--t1) · [Rotting Oranges `⚡ T1`](#rotting-oranges--t1) · [Spiral Matrix `🎯 T2`](#spiral-matrix--t2) · [Rotate Image `🎯 T2`](#rotate-image--t2) · [Set Matrix Zeroes `🎯 T2`](#set-matrix-zeroes--t2) · [Unique Paths `⚡ T1`](#unique-paths--t1) · [Minimum Path Sum `⚡ T1`](#minimum-path-sum--t1) · [Maximal Square `🎯 T2`](#maximal-square--t2) · [2D Prefix Sum `🎯 T2`](#2d-prefix-sum--t2) · [Pattern Summary](#pattern-summary) · [DP on the Grid (Memoized DFS)](#dp-on-the-grid-memoized-dfs)
+
+---
 
 Grid problems are graphs in disguise. Every cell is a node; edges connect 4-directional (or 8-directional) neighbors. BFS = shortest path (unweighted); DFS = connectivity, exhaustive search.
 
@@ -39,6 +45,8 @@ def bfs_grid(grid, start_r, start_c):
 ```
 
 **Mark visited on enqueue, not dequeue** — prevents the same cell from being added to the queue multiple times.
+
+**TC**: O(R·C) — each cell enqueued at most once, 4 neighbor checks each | **SC**: O(R·C) for `visited` + queue (worst case a full frontier).
 
 ---
 
@@ -457,15 +465,17 @@ def uniquePathsWithObstacles(grid):
 - Graph algorithms: [`coding/algorithms/13-graph-algorithms.md`](../algorithms/13-graph-algorithms.md)
 - DP patterns: [`coding/algorithms/15-dynamic-programming.md`](../algorithms/15-dynamic-programming.md)
 
-
 ---
 
-## DP on the Grid — L4 addition
+## DP on the Grid (Memoized DFS)
 
 ### Longest Increasing Path in a Matrix `⚡ T1`
 
 > [!example] Problem
 > Given an integer matrix, return the length of the longest strictly increasing path (4-directional moves).
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Strictly increasing ⇒ DAG · **Gotcha:** A visited set is unnecessary *because* of the strict order
 
 > [!info] Approach
 > The canonical "DP meets graphs" bridge. The strictly-increasing rule makes the move graph a **DAG** — no cycles are possible, so DFS needs **no visited set**, only a memo: `memo[(r,c)]` = longest path starting here = `1 + max over strictly-greater neighbors`. Say the DAG observation explicitly; it's the insight being tested.

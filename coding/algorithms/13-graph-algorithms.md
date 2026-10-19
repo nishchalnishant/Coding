@@ -3,21 +3,29 @@ tags: [coding, algorithms, graph-algorithms]
 topic: Graph Algorithms
 difficulty: mixed
 ---
-
 # Graph Algorithms — Problem Deep Dives
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop. Do not move on until these are reflexive.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: Highly probable; know the core patterns cold. Edge cases matter less.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Know what it is conceptually; skip deep implementation practice.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Worked graph-algorithm problems: Dijkstra, Bellman-Ford, Kahn's topological sort, cycle detection, 0-1 BFS, multi-source BFS, Prim's MST, coloring.
+> **You'll be able to:** Choose and code the right shortest-path / ordering algorithm.
+> **Prereqs:** Graph lecture · **Pair with:** [Graph lecture](../../01-data-structures/13-graphs.md) · [Graph problems](../data-structures/13-graph.md) · **Time:** 4 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../l3-google-roadmap.md#tier-legend))
 
+**Sections:** [Dijkstra's Algorithm](#dijkstras-algorithm) · [Bellman-Ford](#bellman-ford) · [Topological Sort (BFS — Kahn's)](#topological-sort-bfs--kahns) · [Strongly Connected Components / Bridges](#strongly-connected-components--bridges) · [Cycle Detection in Directed Graph](#cycle-detection-in-directed-graph) · [Eulerian Path](#eulerian-path) · [0-1 BFS](#0-1-bfs) · [Multi-source BFS / Special BFS](#multi-source-bfs--special-bfs) · [Minimum Spanning Tree — Prim's Algorithm](#minimum-spanning-tree--prims-algorithm) · [Graph Coloring](#graph-coloring)
 
-
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Network Delay Time](#network-delay-time) · [Cheapest Flights Within K Stops](#cheapest-flights-within-k-stops--t1) · [Path with Maximum Probability](#path-with-maximum-probability) · [Find Eventual Safe States (Reverse Graph / Kahn's)](#find-eventual-safe-states-reverse-graph--kahns--t1) · [Word Ladder (BFS on Implicit Graph)](#word-ladder-bfs-on-implicit-graph--t1) · [Detect Cycle in Directed Graph (DFS 3-Color)](#detect-cycle-in-directed-graph-dfs-3-color) · [Min Cost to Connect All Points](#min-cost-to-connect-all-points-lc-1584)
+> **Template:** Dijkstra: `heap = [(0, src)]; while heap: d, u = heappop(heap); if d > dist[u]: continue; relax neighbors`.
+> **Template:** K-limited paths: Bellman-Ford for `K+1` rounds, relaxing from a **copy** of last round's `dist`.
+> **Gotchas:** Dijkstra fails with negative edges · Cheapest Flights: plain Dijkstra on cost is wrong — the state must include stops · BFS beats Dijkstra on unit weights · `💤 T3` here (Tarjan, TSP bitmask): name only.
 
 ---
 
 ## Dijkstra's Algorithm
+
+---
 
 ### Network Delay Time
 
@@ -51,6 +59,9 @@ difficulty: mixed
 > - ui != vi
 > - 0 <= wi <= 100
 > - All the pairs (ui, vi) are unique. (i.e., no multiple edges.)
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "All nodes reachable in shortest time" · **Gotcha:** Return -1 if any node unreachable (`dist == inf`).
 
 > [!info] Approach
 > Shortest paths from a single source with non-negative weights. Each node's final distance must be optimal before we use it to relax neighbors. Greedy SSSP — always expand the globally cheapest unvisited node. Min-heap of `(dist, node)`. Lazy deletion guard `if d > dist[u]: continue` discards stale heap entries. Answer = `max(dist.values())`; if any node has `inf` distance, return `-1`.
@@ -260,11 +271,52 @@ difficulty: mixed
 > [!info] Approach
 > Bellman-Ford (next section) is the usual answer. Dijkstra also works if state is `(cost, node, stops_used)` — you can't ignore stop count. Push `(cost, node, stops)` on a heap, skip when stops exceed K, and mark visited per `(node, stops)` pair.
 
+**TC**: O(E·K · log(E·K)) — state space is `(node, stops)`, up to `N·(K+1)` states, each relaxing its out-edges | **SC**: O(N·K).
+
 See full Bellman-Ford solution in the next section.
 
 ---
 
 ## Bellman-Ford
+
+---
+
+### Bellman-Ford (Negative Weights)
+
+> [!example] Problem
+> Given a directed weighted graph that may contain negative edges, find shortest paths from a source and detect negative cycles reachable from it.
+
+> [!info] Approach
+> Dijkstra does not work with negative edges. Bellman-Ford relaxes every edge `V-1` times, which is enough for shortest paths in a graph with no negative cycles. Initialize distances to infinity except the source. Repeatedly relax all edges. One more pass detects a negative cycle. If `dist[u] + w < dist[v]`, update `dist[v]`. After `V-1` passes, if any edge can still relax, a negative cycle exists.
+
+> [!note]- Python Solution
+> ```python
+> def bellman_ford(n, edges, int, int]], source):
+>     dist = [float("inf")] * n
+>     dist[source] = 0
+>     for _ in range(n - 1):
+>         updated = False
+>         for u, v, w in edges:
+>             if dist[u] != float("inf") and dist[u] + w < dist[v]:
+>                 dist[v] = dist[u] + w
+>                 updated = True
+>         if not updated:
+>             break
+>     has_negative_cycle = False
+>     for u, v, w in edges:
+>         if dist[u] != float("inf") and dist[u] + w < dist[v]:
+>             has_negative_cycle = True
+>             break
+>     return dist, has_negative_cycle
+> ```
+
+> [!success] Complexity
+> O(VE) time, O(V) space.
+
+> [!tip] Alternatives
+> For graphs with only non-negative edges, Dijkstra is faster; for DAGs, topological relaxation is linear.
+
+---
 
 ### Find the City with the Smallest Number of Neighbors at a Threshold Distance (Floyd-Warshall)
 
@@ -343,7 +395,128 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
+### Cheapest Flights Within K Stops `⚡ T1`
+
+> [!example] Problem
+> There are `n` cities connected by `flights` where `flights[i] = [from, to, price]`. Given src, dst, and an integer `k`, return the **cheapest price** from `src` to `dst` with at most `k` stops. Return `-1` if no such route exists.
+>
+> ```
+> Input: n=4, flights=[[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src=0, dst=3, k=1
+> Output: 700  (0→1→3, 1 stop)
+> ```
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Bellman-Ford / relax k times · **Gotcha:** **K stops** = at most `K+1` edges; **negative** edges not allowed in Dijkstra variant.
+
+> [!failure] Tempting wrong approach
+> Plain Dijkstra with one `dist[node]` — it discards a pricier path with fewer stops that may be the only valid one. Use Bellman-Ford for K+1 rounds on a *copy* of `dist`, or Dijkstra keyed on `(node, stops)`.
+
+> [!info] Approach — Bellman-Ford (K+1 rounds)
+> "At most k stops" means at most **k+1 edges**. Run Bellman-Ford for exactly k+1 rounds.
+>
+> **The copy trick:** Before each round, snapshot `dist` into `temp`. Relax edges using the *old* `dist` values, write updates into `temp`. Without this, a single round could chain 2+ hops, violating the k-stop constraint.
+>
+> **Key insight:** After round `i`, `dist[v]` = cheapest price to reach v using at most `i` edges.
+
+> [!note]- Python Solution — Bellman-Ford
+> ```python
+> def findCheapestPrice(n, flights, src, dst, k):
+>     INF = float('inf')
+>     dist = [INF] * n
+>     dist[src] = 0
+>
+>     for _ in range(k + 1):          # k stops = k+1 edges
+>         temp = dist.copy()           # critical: snapshot before round
+>         for u, v, price in flights:
+>             if dist[u] != INF:
+>                 temp[v] = min(temp[v], dist[u] + price)
+>         dist = temp
+>
+>     return dist[dst] if dist[dst] != INF else -1
+> ```
+
+> [!note]- Python Solution — Dijkstra with State
+> ```python
+> import heapq
+>
+> def findCheapestPrice(n, flights, src, dst, k):
+>     adj = {}
+>     for u, v, w in flights:
+>         adj.setdefault(u, []).append((v, w))
+>
+>     # (cost, node, stops_remaining)
+>     heap = [(0, src, k + 1)]
+>     best = {}   # (node, stops_remaining) -> min cost seen
+>
+>     while heap:
+>         cost, node, stops = heapq.heappop(heap)
+>         if node == dst:
+>             return cost
+>         if stops == 0:
+>             continue
+>         if (node, stops) in best and best[(node, stops)] <= cost:
+>             continue
+>         best[(node, stops)] = cost
+>         for nei, w in adj.get(node, []):
+>             heapq.heappush(heap, (cost + w, nei, stops - 1))
+>
+>     return -1
+> ```
+
+> [!success] Complexity
+> - Bellman-Ford: Time O(k · E), Space O(n).
+> - Dijkstra: Time O(E log(n · k)), Space O(n · k).
+
+> [!tip] Edge Cases / Alternatives
+> - `k = 0` means direct flight only — Bellman-Ford runs exactly 1 round.
+> - Dijkstra is faster in practice but needs state `(node, stops_remaining)` to track hop count — standard Dijkstra without this state would ignore the k-stop constraint.
+> - Bellman-Ford copy trick: if you update `dist` in-place during a round, you can chain unlimited hops within that round.
+
+---
+
+### Detect Negative Cycle `🎯 T2`
+
+> [!example] Problem
+> Given a weighted directed graph, determine whether it contains a **negative weight cycle** (a cycle whose total edge weight is negative).
+
+> [!info] Approach
+> Run standard Bellman-Ford for **V-1** rounds to compute shortest paths from an arbitrary source. Then do **one more relaxation pass**: if any edge `(u, v, w)` still satisfies `dist[u] + w < dist[v]`, a negative cycle is reachable — the cycle allows paths to be shortened indefinitely.
+>
+> For graphs that may be disconnected, add a virtual source node with a zero-weight edge to every node; this ensures all nodes are reachable.
+
+> [!note]- Python Solution
+> ```python
+> def has_negative_cycle(n, edges):
+>     """edges: list of (u, v, weight), nodes 0-indexed"""
+>     INF = float('inf')
+>     dist = [0] * n              # start all at 0: handles disconnected graphs
+>                                  # (equivalent to a virtual source → all nodes)
+>
+>     for _ in range(n - 1):
+>         for u, v, w in edges:
+>             if dist[u] + w < dist[v]:
+>                 dist[v] = dist[u] + w
+>
+>     # V-th relaxation: if anything improves, negative cycle exists
+>     for u, v, w in edges:
+>         if dist[u] + w < dist[v]:
+>             return True
+>
+>     return False
+> ```
+
+> [!success] Complexity
+> Time O(V · E), Space O(V).
+
+> [!tip] Edge Cases / Alternatives
+> - Initialising `dist` to all zeros (rather than INF) is a standard trick that handles disconnected graphs without a real source node.
+> - Floyd-Warshall detects negative cycles differently: after the algorithm, check if any `dist[i][i] < 0`.
+
+---
+
 ## Topological Sort (BFS — Kahn's)
+
+---
 
 ### Sequence Reconstruction (Check Unique Topo Order)
 
@@ -556,6 +729,8 @@ See full Bellman-Ford solution in the next section.
 
 ## Strongly Connected Components / Bridges
 
+---
+
 ### Critical Connections in a Network (Tarjan's Bridges) `💤 T3`
 
 > [!example] Problem
@@ -660,6 +835,9 @@ See full Bellman-Ford solution in the next section.
 > - The graph may contain self-loops.
 > - The number of edges in the graph will be in the range [1, 4 * 10^4].
 
+> [!tip] Recognize · Gotcha
+> **Signal:** "Nodes that don't lead to a cycle" · **Gotcha:** Alternatively: DFS with 3-color (white/gray/black); gray = cycle.
+
 > [!info] Approach
 > Unsafe nodes are those on or leading to cycles. In the reversed graph, terminal nodes (out-degree 0 in original) have in-degree 0. Topological sort on the reversed graph pulls in nodes that only lead to "safe" destinations. Reverse all edges. Kahn's BFS — nodes with out-degree 0 in original become sources. `outdegree[u]` = original out-degree. Initialize queue with `outdegree[u] == 0`. When a node is processed safe, decrement predecessors' outdegree; add them if 0.
 
@@ -700,6 +878,8 @@ See full Bellman-Ford solution in the next section.
 ---
 
 ## Cycle Detection in Directed Graph
+
+---
 
 ### Detect Cycle in Directed Graph (DFS 3-Color)
 
@@ -746,6 +926,8 @@ See full Bellman-Ford solution in the next section.
 ---
 
 ## Eulerian Path
+
+---
 
 ### Reconstruct Itinerary (Hierholzer's)
 
@@ -810,87 +992,17 @@ See full Bellman-Ford solution in the next section.
 
 ## 0-1 BFS
 
+---
+
 ### Open the Lock (Unweighted BFS Variant) `⚡ T1`
 
-> [!example] Problem
-> You have a lock in front of you with 4 circular wheels. Each wheel has 10 slots: '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'. The wheels can rotate freely and wrap around: for example we can turn '9' to be '0', or '0' to be '9'. Each move consists of turning one wheel one slot.
-> The lock initially starts at '0000', a string representing the state of the 4 wheels.
-> You are given a list of deadends dead ends, meaning if the lock displays any of these codes, the wheels of the lock will stop turning and you will be unable to open it.
-> Given a target representing the value of the wheels that will unlock the lock, return the minimum total number of turns required to open the lock, or -1 if it is impossible.
-> 
-> **Example 1:**
-> ```
-> Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
-> Output: 6
-> Explanation: 
-> A sequence of valid moves would be "0000" -> "1000" -> "1100" -> "1200" -> "1201" -> "1202" -> "0202".
-> Note that a sequence like "0000" -> "0001" -> "0002" -> "0102" -> "0202" would be invalid,
-> because the wheels of the lock become stuck after the display becomes the dead end "0102".
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: deadends = ["8888"], target = "0009"
-> Output: 1
-> Explanation: We can turn the last wheel in reverse to move from "0000" -> "0009".
-> ```
-> 
-> **Example 3:**
-> ```
-> Input: deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
-> Output: -1
-> Explanation: We cannot reach the target without getting stuck.
-> ```
-> 
-> **Constraints:**
-> - 1 <= deadends.length <= 500
-> - deadends[i].length == 4
-> - target.length == 4
-> - target will not be in the list deadends.
-> - target and deadends[i] consist of digits only.
-
-> [!info] Approach
-> Each combination is a node; 8 neighbors (each of 4 digits ±1 mod 10). Unweighted BFS finds minimum turns. BFS on the implicit graph of 10,000 states. Encode combinations as strings. Skip deadends. Mark visited by adding to a set. Start with `"0000"` — if it's a deadend, return -1 immediately.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> 
-> def open_lock(deadends, target):
->     dead = set(deadends)
->     if "0000" in dead:
->         return -1
->     if target == "0000":
->         return 0
-> 
->     visited = {"0000"}
->     q: deque[tuple[str, int]] = deque([("0000", 0)])
-> 
->     while q:
->         state, turns = q.popleft()
->         for i in range(4):
->             d = int(state[i])
->             for delta in (-1, 1):
->                 new_d = (d + delta) % 10
->                 new_state = state[:i] + str(new_d) + state[i+1:]
->                 if new_state == target:
->                     return turns + 1
->                 if new_state not in visited and new_state not in dead:
->                     visited.add(new_state)
->                     q.append((new_state, turns + 1))
-> 
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(10^4 · 4) = O(1) effectively bounded, Space O(10^4).
-
-> [!tip] Alternatives
-> Bidirectional BFS — expand from both `"0000"` and `target`; reduces branching factor from O(b^d) to O(b^(d/2)).
+> Full walkthrough: [Open the Lock](../data-structures/06-queue.md#open-the-lock--t1).
 
 ---
 
 ## Multi-source BFS / Special BFS
+
+---
 
 ### Word Ladder (BFS on Implicit Graph) `⚡ T1`
 
@@ -920,6 +1032,12 @@ See full Bellman-Ford solution in the next section.
 > - beginWord, endWord, and wordList[i] consist of lowercase English letters.
 > - beginWord != endWord
 > - All the words in wordList are unique.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Minimum transformation steps" · **Gotcha:** Remove word from set when visited — prevents revisit and cycles. Bidirectional BFS halves explored nodes for follow-up.
+
+> [!failure] Tempting wrong approach
+> Building edges by comparing every word pair — O(N²·L). Try 26 letters per position (or wildcard buckets) and remove words from the set when enqueued.
 
 > [!info] Approach
 > Nodes = words, edges = one-letter-apart pairs. Unweighted BFS gives shortest path. The graph is implicit — never enumerate all pairs (O(N²·L)) — instead generate neighbors by substitution. BFS where each level = one transformation. For each word, try replacing each position with `a-z` and check against the word set. Remove visited words from `word_set` immediately (not just a visited set) to prevent revisits efficiently.
@@ -1115,74 +1233,126 @@ See full Bellman-Ford solution in the next section.
 
 ---
 
-## Minimum Spanning Tree — Prim's Algorithm
-
-### Min Cost to Connect All Points (LC 1584)
+### Shortest Path Visiting All Nodes (LC 847) `💤 T3`
 
 > [!example] Problem
-> You are given an array points representing integer coordinates of some points on a 2D-plane, where points[i] = [xi, yi].
-> The cost of connecting two points [xi, yi] and [xj, yj] is the manhattan distance between them: |xi - xj| + |yi - yj|, where |val| denotes the absolute value of val.
-> Return the minimum cost to make all points connected. All points are connected if there is exactly one simple path between any two points.
+> You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
+> Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
 > 
 > **Example 1:**
 > ```
-> Input: points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
-> Output: 20
-> Explanation: 
-> 
-> We can connect the points as shown above to get the minimum cost of 20.
-> Notice that there is a unique path between every pair of points.
+> Input: graph = [[1,2,3],[0],[0],[0]]
+> Output: 4
+> Explanation: One possible path is [1,0,2,0,3]
 > ```
 > 
 > **Example 2:**
 > ```
-> Input: points = [[3,12],[-2,5],[-4,1]]
-> Output: 18
+> Input: graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]
+> Output: 4
+> Explanation: One possible path is [0,1,4,2,3]
 > ```
 > 
 > **Constraints:**
-> - 1 <= points.length <= 1000
-> - -10^6 <= xi, yi <= 10^6
-> - All pairs (xi, yi) are distinct.
+> - n == graph.length
+> - 1 <= n <= 12
+> - 0 <= graph[i].length < n
+> - graph[i] does not contain i.
+> - If graph[a] contains b, then graph[b] contains a.
+> - The input graph is always connected.
 
 > [!info] Approach
-> MST problem on a dense graph (n² edges). Prim's is natural here — always extend the current MST by the cheapest reachable new node. Greedy — maintain a min-heap of `(cost, node)` for nodes not yet in the MST. Always pick the cheapest edge into the unvisited set. Start from node 0. Min-heap stores `(cost, node)`. Pop cheapest; if already visited, skip. Add its cost to total. Push all unvisited neighbors with Manhattan distance as cost. Repeat until all n nodes visited.
+> This is TSP-like. With n ≤ 12, use BFS with bitmask state: `(node, visited_mask)`. BFS gives the shortest path. There are `n * 2^n` states — manageable for small n. Initialize queue with all `(node, 1 << node)` for every node (start from any node). BFS until `mask == (1 << n) - 1` (all visited). Visited set: `{(node, mask)}`. Dequeue state, try all neighbours. Update mask with `mask | (1 << neighbour)`.
 
 > [!note]- Python Solution
 > ```python
-> import heapq
-> 
-> def min_cost_connect_points(points):
->     n = len(points)
->     visited = [False] * n
->     heap = [(0, 0)]   # (cost, node index)
->     total = 0
->     count = 0
-> 
->     while count < n:
->         cost, u = heapq.heappop(heap)
->         if visited[u]:
->             continue
->         visited[u] = True
->         total += cost
->         count += 1
->         for v in range(n):
->             if not visited[v]:
->                 dist = abs(points[u][0] - points[v][0]) + abs(points[u][1] - points[v][1])
->                 heapq.heappush(heap, (dist, v))
-> 
->     return total
+> from collections import deque
+> >
+> def shortest_path_length(graph):
+>     n = len(graph)
+>     full_mask = (1 << n) - 1
+>     if n == 1:
+>         return 0
+>     queue = deque()
+>     visited = set()
+>     for i in range(n):
+>         mask = 1 << i
+>         queue.append((i, mask, 0))
+>         visited.add((i, mask))
+>     while queue:
+>         node, mask, dist = queue.popleft()
+>         for neighbor in graph[node]:
+>             new_mask = mask | (1 << neighbor)
+>             if new_mask == full_mask:
+>                 return dist + 1
+>             if (neighbor, new_mask) not in visited:
+>                 visited.add((neighbor, new_mask))
+>                 queue.append((neighbor, new_mask, dist + 1))
+>     return -1
 > ```
 
 > [!success] Complexity
-> Time O(n² log n), Space O(n²).
+> Time O(n * 2^n), Space O(n * 2^n).
 
 > [!tip] Alternatives
-> Kruskal's O(n² log n) — generate all n² edges, sort, Union-Find; same asymptotic. Prim's with array (no heap) is O(n²) — optimal for dense graphs; track `min_cost[v]` as the minimum edge into v from current MST.
+> - DP with bitmask (like TSP): `dp[mask][node]` = shortest path visiting exactly the nodes in mask and ending at `node`. Fills in O(n² * 2^n). BFS is simpler for unweighted graphs.
+
+---
+
+### Travelling Salesman Problem — Bitmask DP `💤 T3`
+
+> [!example] Problem
+> Given `n` cities and a distance matrix, find the shortest route that visits every city exactly once and returns to the starting city. Classic TSP.
+
+> [!info] Approach
+> Brute force is O(n!). Bitmask DP reduces to O(n² * 2^n) — tractable for n ≤ 20. `dp[mask][i]` = minimum cost to reach city `i` having visited exactly the cities in `mask`. Transition: for each unvisited city `j`, `dp[mask | (1<<j)][j] = min(..., dp[mask][i] + dist[i][j])`. Start with `dp[1][0] = 0` (started at city 0). Answer: `min(dp[full_mask][i] + dist[i][0])` for all `i`.
+
+> [!note]- Python Solution
+> ```python
+> def tsp(dist):
+>     n = len(dist)
+>     full_mask = (1 << n) - 1
+>     INF = float('inf')
+>     dp = [[INF] * n for _ in range(1 << n)]
+>     dp[1][0] = 0
+>     for mask in range(1 << n):
+>         for i in range(n):
+>             if dp[mask][i] == INF:
+>                 continue
+>             if not (mask >> i & 1):
+>                 continue
+>             for j in range(n):
+>                 if mask >> j & 1:
+>                     continue
+>                 new_mask = mask | (1 << j)
+>                 if dp[new_mask][j] > dp[mask][i] + dist[i][j]:
+>                     dp[new_mask][j] = dp[mask][i] + dist[i][j]
+>     return min(dp[full_mask][i] + dist[i][0] for i in range(n))
+> ```
+
+> [!success] Complexity
+> Time O(n² * 2^n), Space O(n * 2^n).
+
+> [!tip] Alternatives
+> - Held-Karp algorithm: same DP, just the classic name. O(n² * 2^n) is optimal for exact TSP.
+> - For approximate TSP: Christofides' algorithm (1.5x approximation), or 2-opt local search for large instances.
+> - Pattern shared with: Shortest Path Visiting All Nodes (LC 847), painting fence with k colors.
+
+---
+
+## Minimum Spanning Tree — Prim's Algorithm
+
+---
+
+### Min Cost to Connect All Points (LC 1584)
+
+> Full walkthrough: [Min Cost to Connect All Points](14-union-find.md#min-cost-to-connect-all-points).
 
 ---
 
 ## Graph Coloring
+
+---
 
 ### M-Coloring Problem (Backtracking)
 
@@ -1259,350 +1429,4 @@ See full Bellman-Ford solution in the next section.
 ## See Also
 
 [[graph]] | [[union-find]] | [[dynamic-programming]] | [[binary-search]]
-### Bellman-Ford (Negative Weights)
-
-> [!example] Problem
-> Given a directed weighted graph that may contain negative edges, find shortest paths from a source and detect negative cycles reachable from it.
-
-> [!info] Approach
-> Dijkstra does not work with negative edges. Bellman-Ford relaxes every edge `V-1` times, which is enough for shortest paths in a graph with no negative cycles. Initialize distances to infinity except the source. Repeatedly relax all edges. One more pass detects a negative cycle. If `dist[u] + w < dist[v]`, update `dist[v]`. After `V-1` passes, if any edge can still relax, a negative cycle exists.
-
-> [!note]- Python Solution
-> ```python
-> def bellman_ford(n, edges, int, int]], source):
->     dist = [float("inf")] * n
->     dist[source] = 0
->     for _ in range(n - 1):
->         updated = False
->         for u, v, w in edges:
->             if dist[u] != float("inf") and dist[u] + w < dist[v]:
->                 dist[v] = dist[u] + w
->                 updated = True
->         if not updated:
->             break
->     has_negative_cycle = False
->     for u, v, w in edges:
->         if dist[u] != float("inf") and dist[u] + w < dist[v]:
->             has_negative_cycle = True
->             break
->     return dist, has_negative_cycle
-> ```
-
-> [!success] Complexity
-> O(VE) time, O(V) space.
-
-> [!tip] Alternatives
-> For graphs with only non-negative edges, Dijkstra is faster; for DAGs, topological relaxation is linear.
-
----
-
-## Graph Algorithms — More Problems
-
-### Shortest Path Visiting All Nodes (LC 847) `💤 T3`
-
-> [!example] Problem
-> You have an undirected, connected graph of n nodes labeled from 0 to n - 1. You are given an array graph where graph[i] is a list of all the nodes connected with node i by an edge.
-> Return the length of the shortest path that visits every node. You may start and stop at any node, you may revisit nodes multiple times, and you may reuse edges.
-> 
-> **Example 1:**
-> ```
-> Input: graph = [[1,2,3],[0],[0],[0]]
-> Output: 4
-> Explanation: One possible path is [1,0,2,0,3]
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: graph = [[1],[0,2,4],[1,3,4],[2],[1,2]]
-> Output: 4
-> Explanation: One possible path is [0,1,4,2,3]
-> ```
-> 
-> **Constraints:**
-> - n == graph.length
-> - 1 <= n <= 12
-> - 0 <= graph[i].length < n
-> - graph[i] does not contain i.
-> - If graph[a] contains b, then graph[b] contains a.
-> - The input graph is always connected.
-
-> [!info] Approach
-> This is TSP-like. With n ≤ 12, use BFS with bitmask state: `(node, visited_mask)`. BFS gives the shortest path. There are `n * 2^n` states — manageable for small n. Initialize queue with all `(node, 1 << node)` for every node (start from any node). BFS until `mask == (1 << n) - 1` (all visited). Visited set: `{(node, mask)}`. Dequeue state, try all neighbours. Update mask with `mask | (1 << neighbour)`.
-
-> [!note]- Python Solution
-> ```python
-> from collections import deque
-> >
-> def shortest_path_length(graph):
->     n = len(graph)
->     full_mask = (1 << n) - 1
->     if n == 1:
->         return 0
->     queue = deque()
->     visited = set()
->     for i in range(n):
->         mask = 1 << i
->         queue.append((i, mask, 0))
->         visited.add((i, mask))
->     while queue:
->         node, mask, dist = queue.popleft()
->         for neighbor in graph[node]:
->             new_mask = mask | (1 << neighbor)
->             if new_mask == full_mask:
->                 return dist + 1
->             if (neighbor, new_mask) not in visited:
->                 visited.add((neighbor, new_mask))
->                 queue.append((neighbor, new_mask, dist + 1))
->     return -1
-> ```
-
-> [!success] Complexity
-> Time O(n * 2^n), Space O(n * 2^n).
-
-> [!tip] Alternatives
-> - DP with bitmask (like TSP): `dp[mask][node]` = shortest path visiting exactly the nodes in mask and ending at `node`. Fills in O(n² * 2^n). BFS is simpler for unweighted graphs.
-
----
-
-### Word Ladder II (LC 126) `⚡ T1`
-
-> [!example] Problem
-> A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words beginWord -> s1 -> s2 -> ... -> sk such that:
-> Given two words, beginWord and endWord, and a dictionary wordList, return all the shortest transformation sequences from beginWord to endWord, or an empty list if no such sequence exists. Each sequence should be returned as a list of the words [beginWord, s1, s2, ..., sk].
-> 
-> **Example 1:**
-> ```
-> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
-> Output: [["hit","hot","dot","dog","cog"],["hit","hot","lot","log","cog"]]
-> Explanation: There are 2 shortest transformation sequences:
-> "hit" -> "hot" -> "dot" -> "dog" -> "cog"
-> "hit" -> "hot" -> "lot" -> "log" -> "cog"
-> ```
-> 
-> **Example 2:**
-> ```
-> Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
-> Output: []
-> Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
-> ```
-> 
-> **Constraints:**
-> - 1 <= beginWord.length <= 5
-> - endWord.length == beginWord.length
-> - 1 <= wordList.length <= 500
-> - wordList[i].length == beginWord.length
-> - beginWord, endWord, and wordList[i] consist of lowercase English letters.
-> - beginWord != endWord
-> - All the words in wordList are unique.
-> - The sum of all shortest transformation sequences does not exceed 10^5.
-
-> [!info] Approach
-> BFS finds shortest path length. To reconstruct all paths, store the parent map during BFS (which words at the previous level can reach each word at the current level), then DFS backwards from `endWord` to `beginWord`. BFS layer by layer. For each word at the current layer, generate all one-letter mutations. If mutation is in the word set and not visited, add it to the next layer and record the parent. After BFS, DFS from endWord using the parent map to reconstruct paths. Remove words from `word_set` only after the full layer is processed — prevents cutting off valid same-layer paths.
-
-> [!note]- Python Solution
-> ```python
-> from collections import defaultdict, deque
-> >
-> def find_ladders(beginWord, endWord, wordList):
->     word_set = set(wordList)
->     if endWord not in word_set:
->         return []
->     parents = defaultdict(set)
->     layer = {beginWord}
->     found = False
->     while layer and not found:
->         word_set -= layer
->         next_layer = set()
->         for word in layer:
->             for i in range(len(word)):
->                 for c in 'abcdefghijklmnopqrstuvwxyz':
->                     new_word = word[:i] + c + word[i+1:]
->                     if new_word in word_set:
->                         next_layer.add(new_word)
->                         parents[new_word].add(word)
->                         if new_word == endWord:
->                             found = True
->         layer = next_layer
->     if not found:
->         return []
->     result = []
->     def dfs(word, path):
->         if word == beginWord:
->             result.append(list(reversed(path)))
->             return
->         for parent in parents[word]:
->             path.append(parent)
->             dfs(parent, path)
->             path.pop()
->     dfs(endWord, [endWord])
->     return result
-> ```
-
-> [!success] Complexity
-> Time O(M² * N) where M = word length, N = wordList size. Space O(M * N).
-
-> [!tip] Alternatives
-> - Bidirectional BFS: expand from both ends, meet in the middle. Halves the search depth — significant speedup in practice.
-> - Key pitfall: removing words from the set only after the entire layer is processed — otherwise words reachable from multiple same-layer words get cut prematurely.
-
----
-
-### Travelling Salesman Problem — Bitmask DP `💤 T3`
-
-> [!example] Problem
-> Given `n` cities and a distance matrix, find the shortest route that visits every city exactly once and returns to the starting city. Classic TSP.
-
-> [!info] Approach
-> Brute force is O(n!). Bitmask DP reduces to O(n² * 2^n) — tractable for n ≤ 20. `dp[mask][i]` = minimum cost to reach city `i` having visited exactly the cities in `mask`. Transition: for each unvisited city `j`, `dp[mask | (1<<j)][j] = min(..., dp[mask][i] + dist[i][j])`. Start with `dp[1][0] = 0` (started at city 0). Answer: `min(dp[full_mask][i] + dist[i][0])` for all `i`.
-
-> [!note]- Python Solution
-> ```python
-> def tsp(dist):
->     n = len(dist)
->     full_mask = (1 << n) - 1
->     INF = float('inf')
->     dp = [[INF] * n for _ in range(1 << n)]
->     dp[1][0] = 0
->     for mask in range(1 << n):
->         for i in range(n):
->             if dp[mask][i] == INF:
->                 continue
->             if not (mask >> i & 1):
->                 continue
->             for j in range(n):
->                 if mask >> j & 1:
->                     continue
->                 new_mask = mask | (1 << j)
->                 if dp[new_mask][j] > dp[mask][i] + dist[i][j]:
->                     dp[new_mask][j] = dp[mask][i] + dist[i][j]
->     return min(dp[full_mask][i] + dist[i][0] for i in range(n))
-> ```
-
-> [!success] Complexity
-> Time O(n² * 2^n), Space O(n * 2^n).
-
-> [!tip] Alternatives
-> - Held-Karp algorithm: same DP, just the classic name. O(n² * 2^n) is optimal for exact TSP.
-> - For approximate TSP: Christofides' algorithm (1.5x approximation), or 2-opt local search for large instances.
-> - Pattern shared with: Shortest Path Visiting All Nodes (LC 847), painting fence with k colors.
-
----
-
-## Bellman-Ford Problems
-
-### Cheapest Flights Within K Stops `⚡ T1`
-
-> [!example] Problem
-> There are `n` cities connected by `flights` where `flights[i] = [from, to, price]`. Given src, dst, and an integer `k`, return the **cheapest price** from `src` to `dst` with at most `k` stops. Return `-1` if no such route exists.
->
-> ```
-> Input: n=4, flights=[[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]], src=0, dst=3, k=1
-> Output: 700  (0→1→3, 1 stop)
-> ```
-
-> [!info] Approach — Bellman-Ford (K+1 rounds)
-> "At most k stops" means at most **k+1 edges**. Run Bellman-Ford for exactly k+1 rounds.
->
-> **The copy trick:** Before each round, snapshot `dist` into `temp`. Relax edges using the *old* `dist` values, write updates into `temp`. Without this, a single round could chain 2+ hops, violating the k-stop constraint.
->
-> **Key insight:** After round `i`, `dist[v]` = cheapest price to reach v using at most `i` edges.
-
-> [!note]- Python Solution — Bellman-Ford
-> ```python
-> def findCheapestPrice(n, flights, src, dst, k):
->     INF = float('inf')
->     dist = [INF] * n
->     dist[src] = 0
->
->     for _ in range(k + 1):          # k stops = k+1 edges
->         temp = dist.copy()           # critical: snapshot before round
->         for u, v, price in flights:
->             if dist[u] != INF:
->                 temp[v] = min(temp[v], dist[u] + price)
->         dist = temp
->
->     return dist[dst] if dist[dst] != INF else -1
-> ```
-
-> [!note]- Python Solution — Dijkstra with State
-> ```python
-> import heapq
->
-> def findCheapestPrice(n, flights, src, dst, k):
->     adj = {}
->     for u, v, w in flights:
->         adj.setdefault(u, []).append((v, w))
->
->     # (cost, node, stops_remaining)
->     heap = [(0, src, k + 1)]
->     best = {}   # (node, stops_remaining) -> min cost seen
->
->     while heap:
->         cost, node, stops = heapq.heappop(heap)
->         if node == dst:
->             return cost
->         if stops == 0:
->             continue
->         if (node, stops) in best and best[(node, stops)] <= cost:
->             continue
->         best[(node, stops)] = cost
->         for nei, w in adj.get(node, []):
->             heapq.heappush(heap, (cost + w, nei, stops - 1))
->
->     return -1
-> ```
-
-> [!success] Complexity
-> - Bellman-Ford: Time O(k · E), Space O(n).
-> - Dijkstra: Time O(E log(n · k)), Space O(n · k).
-
-> [!tip] Edge Cases / Alternatives
-> - `k = 0` means direct flight only — Bellman-Ford runs exactly 1 round.
-> - Dijkstra is faster in practice but needs state `(node, stops_remaining)` to track hop count — standard Dijkstra without this state would ignore the k-stop constraint.
-> - Bellman-Ford copy trick: if you update `dist` in-place during a round, you can chain unlimited hops within that round.
-
----
-
-### Detect Negative Cycle `🎯 T2`
-
-> [!example] Problem
-> Given a weighted directed graph, determine whether it contains a **negative weight cycle** (a cycle whose total edge weight is negative).
-
-> [!info] Approach
-> Run standard Bellman-Ford for **V-1** rounds to compute shortest paths from an arbitrary source. Then do **one more relaxation pass**: if any edge `(u, v, w)` still satisfies `dist[u] + w < dist[v]`, a negative cycle is reachable — the cycle allows paths to be shortened indefinitely.
->
-> For graphs that may be disconnected, add a virtual source node with a zero-weight edge to every node; this ensures all nodes are reachable.
-
-> [!note]- Python Solution
-> ```python
-> def has_negative_cycle(n, edges):
->     """edges: list of (u, v, weight), nodes 0-indexed"""
->     INF = float('inf')
->     dist = [0] * n              # start all at 0: handles disconnected graphs
->                                  # (equivalent to a virtual source → all nodes)
->
->     for _ in range(n - 1):
->         for u, v, w in edges:
->             if dist[u] + w < dist[v]:
->                 dist[v] = dist[u] + w
->
->     # V-th relaxation: if anything improves, negative cycle exists
->     for u, v, w in edges:
->         if dist[u] + w < dist[v]:
->             return True
->
->     return False
-> ```
-
-> [!success] Complexity
-> Time O(V · E), Space O(V).
-
-> [!tip] Edge Cases / Alternatives
-> - Initialising `dist` to all zeros (rather than INF) is a standard trick that handles disconnected graphs without a real source node.
-> - Floyd-Warshall detects negative cycles differently: after the algorithm, check if any `dist[i][i] < 0`.
-
----
-
-## See Also
-
 [[graph]] | [[dynamic-programming]] | [[union-find]] | [[binary-search]]

@@ -3,8 +3,20 @@ module: 01-data-structures
 topic: Ds Tree
 tags: [data-structures, ds-tree]
 ---
+# The Data Structure Tree: Your Tactical Toolkit
 
 ← [Data structures index](./README.md) · 🗺 [L3 Cheatsheet — Decision Guide](../00-L3-EXECUTION-META/L3_CHEATSHEET.md)
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** A one-page decision tree mapping problem signals to the data structure (and core operations) that fits.
+> **You'll be able to:** Pick the data structure for an unseen problem from its required operations and costs.
+> **Prereqs:** Skim the DS files first · **Pair with:** [DS index](README.md) · [Algorithm tree](../02-algorithms/algorithm_tree.md) · **Time:** 20 min
+
+**Sections:** [First-Principles Map](#first-principles-map) · [First-Principles Breakdown](#first-principles-breakdown) · [1. Arrays & Hashing](#1-arrays--hashing) · [2. Linked Lists](#2-linked-lists) · [3. Stacks & Queues](#3-stacks--queues) · [4. Trees (Binary, BST, N-ary)](#4-trees-binary-bst-n-ary) · [5. Heaps (Priority Queues)](#5-heaps-priority-queues) · [6. Graphs](#6-graphs) · [7. Matrices & Grids](#7-matrices--grids) · [8. Advanced Structures (L3 Core)](#8-advanced-structures-l3-core) · [How to use this tree](#how-to-use-this-tree)
+
+---
 
 ## First-Principles Map
 
@@ -77,8 +89,6 @@ DECISION — access pattern → DS (tactical lookup table)
 - **Invariant:** The dominant operation determines the DS; secondary operations determine variants (e.g., max-heap vs min-heap, segment tree vs BIT, deque vs queue).
 - **Why it works:** Each DS encodes a structural invariant (heap property, BST ordering, trie prefix path, LIFO stack discipline) that makes its target operation cheap by definition.
 - **Where it breaks:** Over-engineering (segment tree when prefix sum suffices) wastes interview time; under-engineering (array where hash needed) produces TLE — both are failure modes.
-
-# The Data Structure Tree: Your Tactical Toolkit
 
 > [!NOTE]
 > This file is a **reference / meta document** — read it once, use it as a lookup during revision.

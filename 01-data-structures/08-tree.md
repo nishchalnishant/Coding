@@ -3,46 +3,30 @@ module: 01-data-structures
 topic: Tree
 tags: [data-structures, tree]
 ---
+# Tree — L3 Core
 
 ← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
-## First-Principles Map
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** Binary trees and BSTs: DFS orders, BFS levels, the 'return-value contract' recursion style, LCA, tree DP, BST invariants, serialization.
+> **You'll be able to:** Solve any tree problem by defining what each recursive call returns; validate/search a BST in O(h); choose DFS vs BFS by what the answer needs.
+> **Prereqs:** Recursion · **Pair with:** [Tree problems](../coding/data-structures/08-tree.md) · [Recursion](../02-algorithms/09-recursion.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-```
-WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can go wrong
-       │                │                │               │               │
-  [Hierarchical data  [acyclic           [BST: left <    [file systems,  [unbalanced BST
-   can't be stored     connected graph;   root < right;   expression     degrades to O(n)
-   in flat arrays;     parent has 0+      traversal:      trees, DOM,     linked list;
-   sorted search       children; nodes    in/pre/post     autocomplete,   off-by-one in
-   needs O(log n)      form a rooted      order; height   sorted sets,    recursion base
-   insert+lookup]      hierarchy]         determines      priority queue] cases]
-       │                │                │
-  [real-world:        [invariant        [BST ops O(h): h=log n balanced,
-   org chart —         (BST): for every   h=n worst; AVL/Red-Black
-   CEO → VP → Mgr]    node x: all left   keep h=O(log n) via rotations;
-                       subtree < x.val    n-ary tree BFS uses queue,
-                       < all right]       DFS uses stack/recursion]
-       ↓
-[Decision: Tree vs alternatives]
-  ├── vs HashMap      → tree supports range queries + ordered iteration; hash O(1) exact
-  ├── vs Heap         → heap O(1) min/max but no search; BST O(log n) all ops + order
-  └── vs Trie         → trie for string prefix; BST for ordered comparable keys
-```
+**Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
-## First-Principles Breakdown
+---
+
+## Core Idea
 - **Root problem**: Flat structures can't represent hierarchy; sorted arrays pay O(n) for insert to maintain order.
 - **Core insight**: BST invariant (left < root < right) halves the search space at every node — O(log n) search without rebuilding.
 - **Invariant**: In a BST, every node's left subtree contains only smaller values and right subtree only larger values.
 - **Why it's fast**: A balanced tree of n nodes has height log₂n — binary search through levels, touching only log n nodes per operation.
 - **Where it breaks**: Without balancing (AVL/RB), repeated sorted insertions produce a O(n)-height linked list; recursion depth can overflow call stack on skewed trees.
 
-# Tree — L3 Core
+### One-Page Map
 
 ```
 [TREE]
@@ -76,7 +60,7 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 │   ├── AVL: strict |balance_factor| ≤ 1, O(log N) guaranteed; more rotations
 │   ├── Red-Black: looser balance, O(log N) amortized; fewer rotations (used in std::map, TreeMap)
 │   ├── B-Tree: wide branching, disk-friendly, used in databases/filesystems
-│   └── Segment Tree / Fenwick: range query/update trees (see separate files)
+│   └── Segment Tree / Fenwick: range query/update trees — 💤 out of L3 scope (L3_CHEATSHEET §8)
 ├── COMPLEXITY
 │   ├── Time — BST search/insert/delete: O(log N) balanced, O(N) worst (skewed)
 │   ├── Time — traversal (all nodes): O(N)
@@ -91,9 +75,6 @@ WHY trees exist → WHAT they are → HOW they work → WHEN to use → WHAT can
 ```
 
 Hierarchical structure: root, parent-child relationships, leaves. L3 expects: all traversals (including O(1) space Morris), BST invariants, LCA derivation, Tree DP returning multiple values, and serialization.
-
-
-
 
 ---
 
@@ -128,11 +109,11 @@ Hierarchical structure: root, parent-child relationships, leaves. L3 expects: al
 - Level-order / BFS problems where level structure matters.
 - Serialization/deserialization of structured data.
 
-**Common mistakes:**
-- Confusing height and depth: height of a node = max edges to a leaf below it; depth = edges from root to that node.
-- Forgetting null checks before accessing `node.left` or `node.right` in recursion.
-- BST validation checking only immediate children (not global bounds) — always pass `(lo, hi)` range down.
-- Returning single value from tree DP when two values are needed (e.g., rob/skip, gain/path).
+> [!warning] Common mistakes
+> - Confusing height and depth: height of a node = max edges to a leaf below it; depth = edges from root to that node.
+> - Forgetting null checks before accessing `node.left` or `node.right` in recursion.
+> - BST validation checking only immediate children (not global bounds) — always pass `(lo, hi)` range down.
+> - Returning single value from tree DP when two values are needed (e.g., rob/skip, gain/path).
 
 ---
 
@@ -198,6 +179,17 @@ def lca_bst(root, p, q):
 
 > [!IMPORTANT]
 > **The Click Moment**: "Maximum/minimum **path sum `🎯 T2`** from any node to any node" — OR — "**diameter `🎯 T2`** of a tree" — OR — "**camera** coverage" — OR — any problem where the optimal solution through a node depends on both subtrees. The pattern: return a **tuple** of values from each DFS call instead of relying on a global variable per call.
+
+**What flows where** (Max Path Sum): each call returns *one arm* up, but records the *bent* path in the global.
+
+```mermaid
+flowchart BT
+  L["left subtree<br/>returns left_gain"] -->|"max(0, ·)"| N["node<br/>best = max(best, val + L + R)"]
+  R["right subtree<br/>returns right_gain"] -->|"max(0, ·)"| N
+  N -->|"returns val + max(L, R)<br/>(one arm only)"| P["parent"]
+```
+
+Returning `val + L + R` to the parent is the classic bug: the parent would extend a path that already forks.
 
 ```python
 def max_path_sum(root) -> int:
@@ -428,35 +420,28 @@ def deserialize(data: str):
 
 ---
 
-## 3. Production Context (L3 Note)
-
-> [!NOTE]
-> Distributed systems details (consistent hashing, lock-free structures, bloom filters, skip lists, etc.) are **L3+ system design** topics. For Google L3 coding interviews, focus on the patterns in sections 1–2 and the interview problems below.
-
----
-
-## 4. Common Interview Problems
+## 3. Common Interview Problems
 
 ### Easy
-- Invert Binary Tree — Swap children at each node; recursive or BFS.
-- **Symmetric Tree `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
-- **Maximum Depth `🎯 T2`** — `1 + max(depth(left), depth(right))`.
+- **[Symmetric Tree](../coding/data-structures/08-tree.md#symmetric-tree--t2) `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
+- **[Maximum Depth](../coding/data-structures/08-tree.md#maximum-depth-of-binary-tree--t2) `🎯 T2`** — `1 + max(depth(left), depth(right))`.
+- **[Invert Binary Tree](../coding/data-structures/08-tree.md#invert-binary-tree--t2) `🎯 T2`** — Swap children at each node; recursive or BFS.
 
 ### Medium
-- Validate BST — Pass `(min, max)` bounds down.
-- LCA of Binary Tree — "Both sides non-null" = LCA found.
-- Kth Smallest in BST — Iterative inorder; stop at K.
-- **Binary Tree Level Order `🎯 T2`** — BFS; separate levels by queue-size snapshot.
-- **Diameter of Binary Tree `🎯 T2`** — Postorder height; update global `left + right`.
-- **House Robber III `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
-- **Flatten Binary Tree to Linked List `🎯 T2`** — Morris-like threading; preorder rewiring.
+- **[Binary Tree Level Order](../coding/data-structures/06-queue.md#binary-tree-level-order-traversal--t2) `🎯 T2`** — BFS; separate levels by queue-size snapshot.
+- **[Diameter of Binary Tree](../coding/data-structures/08-tree.md#diameter-of-binary-tree--t2) `🎯 T2`** — Postorder height; update global `left + right`.
+- **[House Robber III](../coding/data-structures/08-tree.md#house-robber-iii--t2) `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
+- **[Flatten Binary Tree to Linked List](../coding/data-structures/08-tree.md#flatten-binary-tree-to-linked-list--t2) `🎯 T2`** — Morris-like threading; preorder rewiring.
+- **[Validate BST](../coding/data-structures/08-tree.md#validate-binary-search-tree--t2) `🎯 T2`** — Pass `(min, max)` bounds down.
+- **[LCA of Binary Tree](../coding/data-structures/08-tree.md#lowest-common-ancestor-of-a-binary-tree--t2) `🎯 T2`** — "Both sides non-null" = LCA found.
+- **[Kth Smallest in BST](../coding/data-structures/08-tree.md#kth-smallest-element-in-a-bst--t2) `🎯 T2`** — Iterative inorder; stop at K.
 
 ### Hard
-- Serialize and Deserialize — Preorder with `N` markers.
-- Binary Tree Max Path Sum — Tree DP; `max(0, child)` to drop negatives.
-- **Binary Tree Cameras `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
-- **Recover BST `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
-- **Vertical Order Traversal `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
+- **[Binary Tree Cameras](../coding/data-structures/08-tree.md#binary-tree-cameras-lc-968--t2) `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
+- **[Recover BST](../coding/data-structures/08-tree.md#recover-binary-search-tree-lc-99) `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
+- **[Vertical Order Traversal](../coding/data-structures/08-tree.md#vertical-order-traversal-of-a-binary-tree--t2) `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
+- **[Serialize and Deserialize](../coding/data-structures/08-tree.md#serialize-and-deserialize-binary-tree--t2) `🎯 T2`** — Preorder with `N` markers.
+- **[Binary Tree Max Path Sum](../coding/data-structures/08-tree.md#binary-tree-maximum-path-sum--t2) `🎯 T2`** — Tree DP; `max(0, child)` to drop negatives.
 
 ---
 
@@ -531,4 +516,3 @@ Use Tree DP with a global max tracker. At each node:
 
 **Why is preorder/postorder traversal with null markers preferred over inorder traversal for tree serialization?** #flashcard
 Inorder traversal is not unique; multiple distinct trees can produce the same inorder sequence, even with null markers. Preorder or postorder traversal with null markers records structural parent-child relationships uniquely, allowing unambiguous reconstruction.
-

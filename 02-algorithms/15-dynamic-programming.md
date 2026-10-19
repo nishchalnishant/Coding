@@ -1,17 +1,18 @@
 # Dynamic Programming — Complete Guide
 
-> [!abstract] L3 Google Interview — Tier Legend
-> `⚡ T1` — **TIER 1 · Must Master**: High-yield Google L3 favorites. These appear in nearly every loop.
-> `🎯 T2` — **TIER 2 · Build Fluidity**: This file is core Tier 2 material. Know patterns cold; skip niche edge cases.
-> `💤 T3` — **TIER 3 · Skim or Skip**: Overkill for L3. Conceptual awareness only.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** The universal DP recipe and nine patterns: linear, 0/1 knapsack, unbounded knapsack, LCS, LIS, Kadane, interval (MCM), grid, tree DP.
+> **You'll be able to:** Classify a DP problem into a pattern in 30 s; define state + transition + base case + order; space-optimise 2D → 1D.
+> **Prereqs:** Recursion, recursion → DP · **Pair with:** [DP problems](../coding/algorithms/15-dynamic-programming.md) · [Recursion → DP bridge](10-recursion-to-dp.md) · **Time:** 4–5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
 
-
-
+**Sections:** [Core Idea](#core-idea) · [The Universal DP Recipe](#the-universal-dp-recipe) · [Pattern Taxonomy](#pattern-taxonomy) · [Pattern Map — Choose in 30 Seconds](#pattern-map--choose-in-30-seconds) · [Signal → Pattern Quick Reference](#signal--pattern-quick-reference) · [Theory](#theory) · [Implementations](#implementations) · [Variations](#variations) · [Theory](#theory) · [Implementations](#implementations) · [Knapsack → Subset Sum Reductions](#knapsack--subset-sum-reductions) · [Variations](#variations) · [Theory](#theory) · [Implementations](#implementations) · [Variations](#variations) · [Theory](#theory) · [Implementations](#implementations) · [LCS-Family Derivations](#lcs-family-derivations) · [Key Differences: Substring vs Subsequence](#key-differences-substring-vs-subsequence) · [Theory](#theory) · [Implementations](#implementations) · [LIS-Family Problems](#lis-family-problems) · [Theory](#theory) · [Implementations](#implementations) · [Kadane Variations](#kadane-variations) · [Theory](#theory) · [Implementations](#implementations) · [Interval DP Variations](#interval-dp-variations) · [Theory & Mental Model](#theory--mental-model) · [Implementations](#implementations) · [Space Optimization Rules](#space-optimization-rules) · [Grid DP Interview Questions](#grid-dp-interview-questions) · [Theory](#theory) · [Implementations](#implementations) · [Tree DP Variations](#tree-dp-variations) · [Theory](#theory) · [Implementations](#implementations) · [Bitmask DP Problems](#bitmask-dp-problems) · [Theory](#theory) · [Implementations](#implementations) · [Stock Variants Table](#stock-variants-table) · [Theory](#theory) · [Part A — Palindrome Problems](#part-a--palindrome-problems) · [Part B — Pattern Matching DP](#part-b--pattern-matching-dp) · [String & Palindrome DP Interview Questions](#string--palindrome-dp-interview-questions) · [Space Optimization Patterns](#space-optimization-patterns) · [L3 Interview Communication Framework (8-Step)](#l3-interview-communication-framework-8-step) · [When NOT to Use DP](#when-not-to-use-dp) · [Complexity Quick Reference](#complexity-quick-reference) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
 ---
 
-## First-Principles Map
+## Core Idea
 
 ```
 WHY Dynamic Programming exists
@@ -49,6 +50,14 @@ DECISION
 - **Why it works:** Memoization converts an exponential recursion tree into a DAG where each node is solved exactly once.
 - **Where it breaks:** Greedy counter-examples exist whenever a locally optimal choice forecloses a globally better path.
 
+> [!warning] Common mistakes
+> - State missing a dimension (e.g., "transactions left", "holding stock") — two different subproblems collide in one cell.
+> - Base case wrong or uninitialised — `0` vs `inf` vs `-inf` decides whether min/max propagates garbage.
+> - 1D-compressed knapsack with the wrong loop direction — 0/1 must iterate capacity **backward**, unbounded **forward** ([trace](10-recursion-to-dp.md#iteration-order-cheat-sheet)).
+> - Loop order for counting — coins-outer counts combinations, amount-outer counts permutations.
+> - Returning `dp[n-1]` when the answer is `max(dp)` (LIS, Kadane-style "ends at i" states).
+> - Rolling-variable updates that overwrite a value still needed this iteration (Stock Cooldown, Max Product).
+
 ---
 
 ## The Universal DP Recipe
@@ -68,9 +77,18 @@ Step 4 — Optimize space (rolling array / two variables)
 
 **Transition direction:** Bottom-up fills small subproblems first. Choose loop order so when you compute `dp[i][w]`, every value on the RHS is already filled.
 
+```mermaid
+flowchart LR
+  D["dp[i-1][j-1]<br/>diagonal: match / replace"] --> X(("dp[i][j]"))
+  U["dp[i-1][j]<br/>up: skip s[i] / delete"] --> X
+  Lf["dp[i][j-1]<br/>left: skip t[j] / insert"] --> X
+```
+
+Grid DP (LCS, Edit Distance, Unique Paths) reads only up, left and diagonal. Row-major order (`i` outer, `j` inner) has all three ready. The same arrows show why one rolling row suffices, as long as you save the old `dp[j-1]` (the diagonal) before overwriting it.
+
 ---
 
-## L3 Gold Standard Mental Map
+## Pattern Taxonomy
 
 ```
 DP
@@ -98,12 +116,13 @@ DP
 ├── Bitmask DP: dp[mask][node] for N ≤ 20
 │   ├── TSP, Shortest Path All Nodes
 │   └── Smallest Sufficient Team, Stickers
+├── Digit DP: dp[pos][tight][...]
 │   ├── Count integers in [L,R] with property
 │   └── Monotone digits, No consecutive same
 ├── Stock State Machine: dp[i][k][holding]
 │   ├── Single/unlimited/k-transaction variants
 │   └── Cooldown (3 states), Fee
-└── Advanced: CHT, D&C DP, Knuth, SOS, Slope Trick
+└── Out of scope (L3/L4): CHT, D&C DP, Knuth, SOS, Slope Trick
 ```
 
 ---
@@ -116,7 +135,7 @@ DP
 | Pick items (unlimited copies) to hit capacity | **Unbounded Knapsack** |
 | `dp[i]` depends on `dp[i-1]`, `dp[i-2]` | **Fibonacci / Linear** |
 | Two sequences — align and match | **LCS family** |
-| One sequence — longest increasing / longest chain | **LIS `🎯 T2`** |
+| One sequence — longest increasing / longest chain | **LIS `⚡ T1`** |
 | Best subarray ending at `i` | **Kadane** |
 | Split interval `[i,j]` at every `k` | **MCM / Interval DP** |
 | Subtree answers combined at root | **DP on Trees** |
@@ -593,7 +612,6 @@ def matrix_chain_multiplication(dims: list[int]) -> int:
                 dp[i][j] = min(dp[i][j], cost)
     return dp[1][n]
 
-
 def palindrome_partition_min_cuts(s: str) -> int:
     n = len(s)
     is_pal = [[False] * n for _ in range(n)]
@@ -746,7 +764,7 @@ def find_paths(m: int, n: int, max_move: int, start_row: int, start_col: int) ->
 
 | Problem | LC # | Pattern | Click Moment | Gotcha |
 | :--- | :--- | :--- | :--- | :--- |
-| **Unique Paths `🎯 T2`** | 62 | Forward DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Base row/col = all 1s |
+| **Unique Paths `⚡ T1`** | 62 | Forward DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Base row/col = all 1s |
 | **Unique Paths II `🎯 T2`** | 63 | Forward DP with obstacles | Set `dp[r][c] = 0` when obstacle | Re-check first row/col early |
 | **Min Path Sum** | 64 | Forward DP | Grid values as cost; minimize | Init top row and left col first |
 | **Triangle** | 120 | Bottom-up reverse | Start from last row, merge upward | Can reuse last row as `dp` |
@@ -1146,7 +1164,7 @@ def is_match_wildcard(s: str, p: str) -> bool:
 
 | Problem | LC # | Pattern | Click Moment | Gotcha |
 | :--- | :--- | :--- | :--- | :--- |
-| **Longest Palindromic Substring `🎯 T2`** | 5 | Expand center | `is_pal[i][j]` filled by length | Expand-around-center is O(1) space |
+| **Longest Palindromic Substring `⚡ T1`** | 5 | Expand center | `is_pal[i][j]` filled by length | Expand-around-center is O(1) space |
 | **Longest Palindromic Subsequence `🎯 T2`** | 516 | Interval DP | `LCS(s, rev(s))` shortcut | Single chars: `dp[i][i] = 1` base case |
 | **Min Insertions for Palindrome** | 1312 | LPS reduction | `len - LPS` | Equivalent to min deletions |
 | **Count Palindromic Substrings** | 647 | Expand-center | Count from each center | 2n-1 centers |
@@ -1247,87 +1265,45 @@ When given a DP problem in an interview:
 
 ---
 
-## Interview Questions Bank
+## Interview Questions — Logic & Trickiness
 
-### Level 1 — Foundation (Pattern Recognition)
+Ordered tier-first, then by pattern. Pattern sections above hold the code; this table is the drill sheet.
 
-| Problem | Pattern | Key Insight |
-| :--- | :--- | :--- |
-| **Climbing Stairs `🎯 T2`** | Linear DP | Fibonacci: `dp[i] = dp[i-1] + dp[i-2]` |
-| **Min Cost Climbing Stairs** | Linear DP | `dp[i] = cost[i] + min(dp[i-1], dp[i-2])` |
-| **Subset Sum Problem `🎯 T2`** | 0/1 Knapsack | `dp[i][j]` = is sum `j` possible with first `i` items? |
-| **Coin Change (Min Coins) `🎯 T2`** | Unbounded Knapsack | `dp[i] = 1 + min(dp[i - coin])` |
-| **Longest Common Subsequence `🎯 T2`** | LCS | `s1[i] == s2[j] ? 1 + diag : max(top, left)` |
-| **Maximum Subarray (Kadane) `🎯 T2`** | Kadane | `best = max(x, best + x)` |
-
-### Level 2 — L3 Standard
-
-| Problem | Pattern | The Twist |
-| :--- | :--- | :--- |
-| **Partition Equal Subset Sum `🎯 T2`** | 0/1 Knapsack | Target = `total_sum / 2` |
-| **Target Sum `🎯 T2`** | 0/1 Knapsack | Math: `P - N = target` → `2P = target + total` |
-| **Coin Change II (Total Ways) `🎯 T2`** | Unbounded Knapsack | `dp[i] += dp[i - coin]` (coins outer = combinations) |
-| **Edit Distance `🎯 T2`** | LCS Family | Three choices: insert, delete, replace |
-| **Longest Palindromic Subsequence `🎯 T2`** | LCS Family | `LCS(s, reverse(s))` |
-| **House Robber II `🎯 T2`** | Linear DP | Circular constraint: two passes exclude ends |
-| **Maximal Square `🎯 T2`** | Grid DP | `min(3 neighbors) + 1` |
-| **Word Break `🎯 T2`** | Linear DP | `dp[i] = any(dp[j] and s[j:i] in dict)` |
-| **LIS `🎯 T2`** | LIS | O(N log N) with patience sort |
-| **Russian Doll Envelopes** | LIS | Sort (w asc, h desc); LIS on h |
-
-### Level 3 — L3 / Staff Level
-
-| Problem | Pattern | Complexity / Optimization |
-| :--- | :--- | :--- |
-| **Numbers At Most N Given Digit Set** | **Binary Tree Maximum Path Sum `🎯 T2`** | Tree DP | Single-arm gain vs full-path through node |
-| **Stock with Cooldown** | State Machine | 3 states: `hold`, `sold`, `rest` |
-| **Cherry Pickup II** | Grid DP | Two travelers 3D→2D compression |
-| **Palindrome Partitioning III `🎯 T2`** | 2D DP + cost | Cost function `cost(l,r)` memoized |
-| **Stone Game III** | Minimax DP | `dp[i]` = score advantage; Alice/Bob generalized |
-| **Jump Game VI `🎯 T2`** | Deque Optimization | Monotonic deque; O(N) |
-
----
-
-## All-Pattern Interview Questions Table
-
-| Question | Pattern | Core Logic | Trickiness |
-| :--- | :--- | :--- | :--- |
-| **0/1 Knapsack** | 0/1 Knapsack | `dp[i][w] = max(skip, take)` | Backward inner loop in 1D |
-| **Subset Sum `🎯 T2`** | 0/1 Knapsack | Boolean `dp[sum]` | `dp[0] = True`; empty subset valid |
-| **Partition Equal Subset `🎯 T2`** | 0/1 Knapsack | Subset sum to `total//2` | Odd total → False immediately |
-| **Target Sum (±) `🎯 T2`** | 0/1 Knapsack | Count subsets to `(total+target)//2` | Parity + impossibility check |
-| **Coin Change I `🎯 T2`** | Unbounded | `dp[w] = min(dp[w], 1 + dp[w-c])` | Forward loop; init rest to `inf` |
-| **Coin Change II `🎯 T2`** | Unbounded | `dp[w] += dp[w-c]`; coins outer | Coin outer = combinations |
-| **Climbing Stairs `🎯 T2`** | Fibonacci | `dp[i] = dp[i-1] + dp[i-2]` | Base: `dp[1]=1, dp[2]=2` |
-| **House Robber `🎯 T2`** | Fibonacci | `dp[i] = max(dp[i-1], nums[i]+dp[i-2])` | Two-variable rolling |
-| **House Robber II `🎯 T2`** | Fibonacci | Two passes: exclude first or last | Only one of first/last can be robbed |
-| **Decode Ways `🎯 T2`** | Fibonacci | One-digit + two-digit branches | `'0'` alone invalid |
-| **LCS `🎯 T2`** | LCS | Match → `dp[i-1][j-1]+1`; else `max` | 1-indexed table |
-| **Edit Distance `🎯 T2`** | LCS | Replace=diagonal+1; insert/delete=axis+1 | All three ops; full base case |
-| **LPS** | LCS | `LCS(s, reversed(s))` | Elegant reduction |
-| **LIS O(N²)** | LIS | `dp[i] = 1 + max(dp[j])` | Answer = `max(dp)` not `dp[n-1]` |
-| **LIS O(N log N)** | LIS (patience) | `bisect_left` on `tails` | `tails` ≠ actual LIS |
-| **Russian Doll Envelopes** | LIS | Sort (w asc, h desc); LIS on h | Descending h prevents same-width |
-| **Max Subarray (Kadane)** | Kadane | `end_here = max(x, end_here+x)` | Start fresh when extending worse |
-| **Max Product Subarray** | Kadane | Track `cur_max` and `cur_min` | Negative × negative = positive |
-| **Circular Subarray Max** | Kadane | `max(straight, total - min_subarray)` | All-negative edge case |
-| **Palindrome Partitioning II `🎯 T2`** | Interval DP | Precompute palindrome table first | `is_pal[0][i]` → no cut needed |
-| **Unique Paths `🎯 T2`** | Grid DP | `dp[r][c] = dp[r-1][c] + dp[r][c-1]` | Init row 0 and col 0 to 1 |
-| **Min Path Sum** | Grid DP | Accumulate costs | Init first row/col explicitly |
-| **Dungeon Game** | Grid DP | Reverse fill: need successor values | Forward is impossible |
-| **Maximal Square `🎯 T2`** | Grid DP | `min(left, top, diag) + 1` | Entry is a string; cast to int |
-| **House Robber III `🎯 T2`** | Tree DP | `dfs → (rob, skip)` | Return pair from DFS |
-| **Max Path Sum `🎯 T2`** | Tree DP | Ignore negative subtrees | Global max updated per node |
-| **Binary Tree Cameras `🎯 T2`** | Tree DP | 3 states: covered/has_camera/not_covered | Root NOT_COVERED needs +1 |
-| **Stock I** | State Machine | Greedy: track min price | Edge case: empty array |
-| **Stock II** | State Machine | `hold, free` two states | Unlimited transactions |
-| **Stock III** | State Machine | `buy1, sell1, buy2, sell2` | Chain sell1 into buy2 |
-| **Stock IV** | State Machine | `dp[k][0/1]` backward k-loop | Forward k causes reuse |
-| **Stock Cooldown** | State Machine | 3 states; save `prev_sold` | Same-iteration update bug |
-| **Egg Drop** | Inverted DP | `dp[m][k] = dp[m-1][k-1]+1+dp[m-1][k]` | Invert: max floors per moves |
-| **Knight Probability** | Probability DP | Propagate forward | Off-board just discarded |
-| **Stone Game III** | Game / Minimax | Advantage DP | Take 1/2/3; score − opponent |
-| **Jump Game VI `🎯 T2`** | Deque Opt | Monotonic deque for window max | Pop front when expired |
+| Question | Variant | Click moment | Core logic | Gotchas |
+| :--- | :--- | :--- | :--- | :--- |
+| **LIS (LC 300) `⚡ T1`** · M | LIS | "longest increasing, not contiguous" | O(N²) `dp[i] = 1 + max(dp[j])`; O(N log N) `bisect_left` on `tails` | Answer is `max(dp)`, not `dp[-1]`; `tails` is not the LIS itself |
+| **Climbing Stairs (LC 70) `🎯 T2`** · E | Fibonacci | "ways to reach step n" | `dp[i] = dp[i-1] + dp[i-2]` | Base `dp[1]=1, dp[2]=2`; roll two variables |
+| **House Robber (LC 198) `🎯 T2`** · M | Fibonacci | "no two adjacent" | `dp[i] = max(dp[i-1], nums[i] + dp[i-2])` | Two-variable rolling |
+| **House Robber II (LC 213) `🎯 T2`** · M | Fibonacci | Circular street | Run LC 198 on `[1:]` and `[:-1]`, take max | `n == 1` → `nums[0]` |
+| **Decode Ways (LC 91) `🎯 T2`** · M | Fibonacci | One- or two-digit branch | `dp[i] += dp[i-1]` if `s[i-1] != '0'`; `+= dp[i-2]` if `10 ≤ s[i-2:i] ≤ 26` | `'0'` alone is invalid; `"06"` is not 6 |
+| **Maximum Subarray (LC 53) `🎯 T2`** · M | Kadane | "max contiguous sum" | `cur = max(x, cur + x)` | All-negative input → init with `nums[0]`, not 0 |
+| **Max Product Subarray (LC 152) `🎯 T2`** · M | Kadane | Signs flip | Track `cur_max` and `cur_min`; swap on negative | Update both from the *old* values |
+| **Coin Change (LC 322) `🎯 T2`** · M | Unbounded knapsack | "fewest coins" | `dp[w] = min(dp[w], 1 + dp[w-c])`, forward loop | Init `inf`, `dp[0] = 0`; return `-1` if still `inf` |
+| **Coin Change II (LC 518) `🎯 T2`** · M | Unbounded knapsack | "number of combinations" | `dp[w] += dp[w-c]`, **coins outer** | Amount outer counts permutations (LC 377) |
+| **Partition Equal Subset Sum (LC 416) `🎯 T2`** · M | 0/1 knapsack | "split into two equal halves" | Subset-sum to `total // 2`, **backward** inner loop | Odd total → False immediately |
+| **Target Sum (LC 494) `🎯 T2`** · M | 0/1 knapsack | "assign ± signs" | `P − N = t`, `P + N = total` ⇒ count subsets to `(total + t) / 2` | Parity and `abs(t) > total` checks |
+| **Word Break (LC 139) `🎯 T2`** · M | Linear DP | "can the string be segmented" | `dp[i] = any(dp[j] and s[j:i] in words)` | Use a set; cap `j` by max word length |
+| **Unique Paths (LC 62) `⚡ T1`** · M | Grid DP | "paths, right/down only" | `dp[r][c] = up + left` | Row 0 and col 0 are all 1 |
+| **Minimum Path Sum (LC 64) `⚡ T1`** · M | Grid DP | "min cost, right/down" | `grid[r][c] + min(up, left)` | Init first row/col as prefix sums |
+| **Maximal Square (LC 221) `🎯 T2`** · M | Grid DP | "largest square of 1s" | `1 + min(left, top, diag)` | Cells are strings; return side² |
+| **LCS (LC 1143) `🎯 T2`** · M | LCS | Two sequences, align | Match → `diag + 1`; else `max(top, left)` | 1-indexed table, row/col 0 = 0 |
+| **Edit Distance (LC 72) `🎯 T2`** · M | LCS | "min ops to convert" | Match → `diag`; else `1 + min(diag, top, left)` | Base row/col = `i` / `j`, not 0 |
+| **Longest Palindromic Subsequence (LC 516) `🎯 T2`** · M | LCS / interval | Subsequence + palindrome | `LCS(s, s[::-1])`, or interval `dp[i][j]` | Fill `i` from `n-1` down |
+| **Palindrome Partitioning II (LC 132) `🎯 T2`** · H | Interval + linear | "min cuts" | Precompute `is_pal`; `cuts[i] = min(cuts[j-1] + 1)` | `is_pal[0][i]` → 0 cuts |
+| **House Robber III (LC 337) `🎯 T2`** · M | Tree DP | Adjacent = parent/child | DFS returns `(rob, skip)` | Plain memo on node works but the pair is cleaner |
+| **Binary Tree Max Path Sum (LC 124) `🎯 T2`** · H | Tree DP | Path may bend once | Return single-arm gain; update global with both arms | Clamp negative arms to 0 |
+| **Stock II / Cooldown (LC 122 / 309) `🎯 T2`** · M | State machine | "buy/sell with rule" | States `hold`, `sold`, `rest` | Use previous-day values — save before overwrite |
+| **Russian Doll Envelopes (LC 354) `🎯 T2`** · H | LIS | 2D nesting | Sort `(w asc, h desc)`, LIS on `h` | Descending `h` blocks equal widths nesting |
+| **Dungeon Game (LC 174) `🎯 T2`** · H | Grid DP (reverse) | "minimum initial health" | Fill from bottom-right: `max(1, min(right, down) − cell)` | Forward fill is wrong — need successor values |
+| **Jump Game VI (LC 1696) `🎯 T2`** · M | DP + monotonic deque | `dp[i] = nums[i] + max(window)` | Deque of indices with decreasing `dp` | Pop front when out of window |
+| **Max Circular Subarray (LC 918) `💤 T3`** · M | Kadane | Wrap-around | `max(straight, total − min_subarray)` | All-negative → return straight max |
+| **Stock III / IV (LC 123 / 188) `💤 T3`** · H | State machine | "at most k transactions" | `buy[k]`, `sell[k]` chains | Iterate `k` backward in 1D or you reuse a sale |
+| **Binary Tree Cameras (LC 968) `🎯 T2`** · H | Tree DP / greedy | Cover all nodes | 3 states: covered / has-camera / not-covered | Root not-covered needs +1 |
+| **Stone Game III (LC 1406) `💤 T3`** · H | Minimax | Take 1–3 stones | `dp[i] = max(sum(take) − dp[i+k])` | Score *difference*, not raw score |
+| **Super Egg Drop (LC 887) `💤 T3`** · H | Inverted DP | Moves × eggs | `f[m][k] = f[m-1][k-1] + 1 + f[m-1][k]` | Invert: max floors coverable with m moves |
+| **Knight Probability (LC 688) `💤 T3`** · M | Probability DP | "probability stays on board" | Propagate forward k steps, ×1/8 | Off-board mass is dropped |
+| **Cherry Pickup II (LC 1463) `💤 T3`** · H | Grid DP, 2 walkers | Two robots, same row | `dp[r][c1][c2]`, roll over `r` | `c1 == c2` counts once |
+| **Numbers At Most N Given Digit Set (LC 902) `💤 T3`** · H | Digit DP | "count ≤ N" | Shorter lengths + `tight` walk on N's digits | Stop when a digit of N isn't in the set |
 
 ---
 

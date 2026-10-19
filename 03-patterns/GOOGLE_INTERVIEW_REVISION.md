@@ -3,11 +3,19 @@ module: 03-patterns
 topic: Google Interview Revision
 tags: [patterns, google-interview-revision]
 ---
+# Google Coding Interview — Foundations Revision Guide
 
-> [!note] L3 Reference Document
-> This file is a **reference / meta document** — read it once, then use it as a lookup.
-> It is NOT a coding practice file. Do not deep-study it like a topic file.
+## What this covers
 
+> [!abstract] In this file
+> **Covers:** The revision plan: one-page recall, topic-by-topic revision links, communication tips, revision schedules, post-interview steps.
+> **You'll be able to:** Run a structured final-week and day-before revision.
+> **Prereqs:** Most topics done · **Pair with:** [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) · [Flowcharts](../FLOWCHARTS.md) · **Time:** 1 h
+> **How to use:** reference — read once, then use as a lookup.
+
+**Sections:** [First-Principles Breakdown](#first-principles-breakdown) · [Part A — One-Page Quick Recall (Cheatsheet)](#part-a--one-page-quick-recall-cheatsheet) · [Part B — Topic-by-Topic Revision (with links)](#part-b--topic-by-topic-revision-with-links) · [Part C — Communication (how to sound clear at Google)](#part-c--communication-how-to-sound-clear-at-google) · [Part D — Revision schedules](#part-d--revision-schedules) · [Part E — After the interview](#part-e--after-the-interview) · [Related repo resources](#related-repo-resources) · [Document map (foundations)](#document-map-foundations)
+
+---
 
 ## First-Principles Breakdown
 
@@ -19,11 +27,9 @@ tags: [patterns, google-interview-revision]
 
 ---
 
-# Google Coding Interview — Foundations Revision Guide
-
 Use this document for **focused revision** before your Google interview. It complements the full topic files in [01-data-structures](../01-data-structures/README.md) and [02-algorithms](../02-algorithms/README.md). Read **Part A** the day before; use **Part B** by topic; follow **Part C** for communication; use **Part D** for timing.
 
-**Per-topic drill:** Every file under `01-data-structures/` and `02-algorithms/` includes an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
+**Per-topic drill:** Most files under `01-data-structures/` and `02-algorithms/` include an **Interview Questions — Logic & Trickiness** section (canonical problems + core logic + gotchas). Cross-topic index: [TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md).
 
 ---
 
@@ -55,35 +61,10 @@ Sound bites — say them exactly like this:
 - “Binary search on answer: O(N) check per mid × O(log range) mids → **O(N log range)**.”
 - Sliding window: usually **O(N)** time.
 
-### Edge cases to always mention
+### Edge cases & complexity table
 
-- Empty array/string; single element; all same; negative numbers; overflow in sum/product.
-- Graph: disconnected; self-loop; 0 or 1 node.
-- Tree: empty tree; single node; skewed tree.
-
-### Pattern → core idea → complexity
-
-Recognition triggers ("what do I hear that means sliding window?") are in
-[`patterns-master.md` § Quick Decision Trees](./patterns-master.md#quick-decision-trees).
-This table is the interview-day recall of **the mechanic and the number to say out loud**:
-
-| Pattern | Core idea | Time |
-|---------|-----------|------|
-| Hash map | Key → count or index | O(n) avg |
-| Prefix + map | Count of `prefix - K` | O(n) |
-| Sliding window | Expand j, shrink i while invalid | O(n) |
-| Two pointers | left/right or slow/fast | O(n) or O(n²) |
-| Kadane | `cur = max(x, cur+x)` | O(n) |
-| BFS | Queue + visited | O(V+E) |
-| DFS | Stack/recursion + visited | O(V+E) |
-| Topo sort | Kahn (in-degree) or DFS post | O(V+E) |
-| Dijkstra | Min-heap of (dist, node) | O((V+E)log V) |
-| Union-Find | find + union | ~O(1) amortized |
-| Heap | Size-K min-heap or push all heads | O(n log k) |
-| Binary search on answer | `valid(mid)` + search range | O(n log range) |
-| Monotonic stack | Pop while smaller | O(n) |
-| Tree DP | Postorder, return up value | O(n) |
-| 2D DP | `dp[i][j]` from three neighbors | O(nm) |
+Single-sourced in the cheatsheet — reread them there, not here:
+[edge cases](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#5-universal-edge-cases) · [pattern → time/space table](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#6-big-o-reference) · [pattern triggers](./patterns-master.md#quick-decision-trees).
 
 ### Open with / Close with
 
@@ -244,7 +225,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ### Night before
 
-- Skim **Part A** and **edge cases**.
+- Skim **Part A** and the [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) (edge cases, Big-O).
 - Do **not** cram new topics; review **one** problem per weak area only.
 - Prepare 2–3 questions for your interviewers (team, code review, on-call).
 
