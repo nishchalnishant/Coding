@@ -52,6 +52,7 @@ tags: [striver, a2z, dsa, course-notes]
 | 30 | [Strings (Advanced Algo)](30-strings-advanced/README.md) | ✅ 9/9 |
 | 31 | [Maths](31-maths/README.md) | ✅ 5/5 |
 | 32 | [Beyond the Sheet](32-beyond-the-sheet/README.md) *(enrichment, not in the course)* | ✅ 4/4 |
+| 33 | [SDE 2 Interview Preparation](33-sde2-interview-prep/README.md) *(interview enrichment, not in the course)* | ✅ 6 lessons |
 
 ---
 
@@ -63,6 +64,8 @@ tags: [striver, a2z, dsa, course-notes]
 | [Problem index](PROBLEM_INDEX.md) | Every note in one table, by part and category |
 | [Pattern triggers](PATTERN_TRIGGERS.md) | "Constraint or phrase in the prompt → technique → where it's taught" |
 | [Master cheat sheet](MASTER_CHEATSHEET.md) | All part cheat sheets on one page for last-day revision |
+| [SDE 2 interview prep](33-sde2-interview-prep/README.md) | System design, low-level design, core CS, interview execution and behavioral prep |
+| [Problem recognition mind map](MIND_MAP.md) | Prompt shape → likely topic → common problem type and solving approach |
 
 ---
 

@@ -1,6 +1,6 @@
 ---
 module: striver
-topic: Study plan — 16-week order through all 32 parts with revision checkpoints
+topic: Study plan — 16-week order through all 33 parts with revision checkpoints
 tags: [striver, plan, revision]
 ---
 # Study Plan
@@ -9,7 +9,7 @@ tags: [striver, plan, revision]
 
 > [!abstract] How to use this
 > The plan runs 16 weeks at about 2 hours a day, covering 506 notes. Each week is **theory first, then problems, then a checkpoint**.
-> - **Compressed (8 weeks):** merge each pair of weeks and skip Parts 3–4.
+> - **Compressed (8 weeks):** merge each pair of weeks and skip Parts 3–4. Add Part 33 as a parallel interview-readiness track during the final 4 weeks.
 > - **Already fluent in a language:** skim Parts 1–7 in 2 days.
 > - **Rule:** don't move on until you pass the checkpoint, meaning you can solve two random problems from the block in time without notes.
 
@@ -67,6 +67,7 @@ Mark a problem **mastered** after you pass it at +21. Keep the log in one table:
 | 14 | [28](28-dynamic-programming/README.md) (1D, grid, subsequences) | ~27 | Recursion → memo → table → space | [DP theory](28-dynamic-programming/01-dp-theory.md) |
 | 15 | [28](28-dynamic-programming/README.md) (strings, stocks, LIS, MCM, squares) | ~27 | DP on strings, state machines, interval DP | Part README |
 | 16 | [29](29-tries/README.md)–[32](32-beyond-the-sheet/README.md) | 25 | Tries, KMP/Z/hashing, sieve, modular arithmetic, advanced add-ons | [Trie theory](29-tries/01-trie-theory.md), [String matching](30-strings-advanced/01-string-hashing-and-matching-theory.md) |
+| 17 (parallel) | [33](33-sde2-interview-prep/README.md) | 6 lessons | Coding execution, core CS, LLD, system design, behavioral stories, mock interviews | [Practice plan](33-sde2-interview-prep/06-practice-plan.md) |
 
 **Priority order if time is short:** 14 → 16 → 22 → 23 → 24 → 27 → 28 → 19 → 26 → 18 → 21 → 25. Part 32 is for hard rounds and senior follow-ups only.
 
