@@ -2,7 +2,7 @@
 
 Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium problem each, 35–45 minutes. Dense notes, curated must-solve lists, no 500-problem grind.
 
-> **Segment trees & Fenwick trees are not L3 material** — do not drill them. Use prefix sum, deque, or heap instead. Details: [What to Skip at L3](00-L3-EXECUTION-META/L3_CHEATSHEET.md)
+> **Segment trees & Fenwick trees are not L3 material** — do not drill them. Use prefix sum, deque, or heap instead. Details: [What to Skip at L3](00-start-here/L3_CHEATSHEET.md)
 
 ---
 
@@ -12,14 +12,14 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 |---|---|---|
 | **Data structures** | array, hashing, string, matrix/grid, stack, queue/deque, linked list, tree/BST, trie, heap, graph | [`01-data-structures/`](01-data-structures/README.md) |
 | **Algorithms** | sorting, string matching, two pointers, sliding window, recursion, recursion → DP, binary search, backtracking, union-find, DP (9 patterns), greedy/intervals, bit manipulation & math (interview depth) | [`02-algorithms/`](02-algorithms/README.md) |
-| **Practice bank** | 128 walkthrough problems, tier-tagged, one file per topic + design-a-data-structure | [`coding/`](questions.md) |
+| **Practice bank** | 128 walkthrough problems, tier-tagged, one file per topic + design-a-data-structure | [`04-practice/`](04-practice/README.md) |
 | **Thinking & patterns** | first-principles derivation, pattern triggers, ladders, in-interview judgment, mocks | [`03-patterns/`](03-patterns/README.md) |
-| **Behavioral** | Googliness attributes, STAR story bank | [`04-behavioral/`](04-behavioral/README.md) |
-| **Round execution** | 45-min clock, constraint → Big-O, edge cases, what to skip | [L3 Cheatsheet](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
+| **Behavioral** | Googliness attributes, STAR story bank | [`05-behavioral/`](05-behavioral/README.md) |
+| **Round execution** | 45-min clock, constraint → Big-O, edge cases, what to skip | [L3 Cheatsheet](00-start-here/L3_CHEATSHEET.md) |
 
-**Not in scope:** system design, LLD, concurrency, SQL, **segment trees / Fenwick trees**, advanced graphs (Floyd-Warshall, Tarjan/SCC), bitmask/digit DP — see [What to Skip at L3](00-L3-EXECUTION-META/L3_CHEATSHEET.md).
+**Not in scope:** system design, LLD, concurrency, SQL, **segment trees / Fenwick trees**, advanced graphs (Floyd-Warshall, Tarjan/SCC), bitmask/digit DP — see [What to Skip at L3](00-start-here/L3_CHEATSHEET.md).
 
-**Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](coding/l3-google-roadmap.md#tier-legend)). L4/senior bars layer on top via the [L4 delta](coding/l4-sde2-delta.md) and [senior delta](coding/sde3-senior-delta.md).
+**Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](00-start-here/l3-google-roadmap.md#tier-legend)). L4/senior bars layer on top via the [L4 delta](00-start-here/l4-sde2-delta.md) and [senior delta](00-start-here/sde3-senior-delta.md).
 
 ---
 
@@ -30,7 +30,7 @@ Topic-first prep for **Google L3** coding loops: 4–5 rounds, one medium proble
 3. **Theory → techniques → templates**: the mental model, then code templates with complexity.
 4. **Interview questions, logic & traps**, then **Quick Revision Triggers** and flashcards.
 
-Each concept file (`01-`, `02-`) links to its practice file in `coding/` and the practice file links back.
+Each concept file (`01-`, `02-`) links to its practice file in `04-practice/` and the practice file links back.
 
 ---
 
@@ -38,13 +38,13 @@ Each concept file (`01-`, `02-`) links to its practice file in `coding/` and the
 
 | Step | Do | Link |
 |---|---|---|
-| 1 | Read the plan and the round clock | [L3 roadmap](coding/l3-google-roadmap.md) · [L3 Cheatsheet](00-L3-EXECUTION-META/L3_CHEATSHEET.md) |
+| 1 | Read the plan and the round clock | [L3 roadmap](00-start-here/l3-google-roadmap.md) · [L3 Cheatsheet](00-start-here/L3_CHEATSHEET.md) |
 | 2 | Learn how to derive patterns | [How to Think](03-patterns/HOW_TO_THINK.md) |
 | 3 | Per topic: lecture, then the practice file, T1 first | [DS index](01-data-structures/README.md) · [Algo index](02-algorithms/README.md) |
 | 4 | Recursion & DP from zero | [Masterclass](03-patterns/RECURSION_AND_DP_MASTERCLASS.md) |
 | 5 | Pressure-test with ladders and mocks | [Pattern Ladders](03-patterns/PATTERN_LADDERS.md) · [Mock set](03-patterns/MOCK_INTERVIEW_SET.md) · [Interview Judgment](03-patterns/INTERVIEW_JUDGMENT.md) |
-| 6 | Behavioral stories | [Behavioral + Googliness](04-behavioral/BEHAVIORAL_GOOGLINESS.md) |
-| 7 | Final week | [Revision guide](03-patterns/GOOGLE_INTERVIEW_REVISION.md) · [Mind map](MINDMAP.md) |
+| 6 | Behavioral stories | [Behavioral + Googliness](05-behavioral/BEHAVIORAL_GOOGLINESS.md) |
+| 7 | Final week | [Revision guide](03-patterns/GOOGLE_INTERVIEW_REVISION.md) · [Mind map](03-patterns/maps/mindmap.md) |
 
 ---
 
@@ -52,15 +52,16 @@ Each concept file (`01-`, `02-`) links to its practice file in `coding/` and the
 
 | What | Link |
 |------|------|
-| Mind map | [`MINDMAP.md`](MINDMAP.md) |
-| Flowcharts | [`FLOWCHARTS.md`](FLOWCHARTS.md) |
+| Mind map | [`mindmap.md`](03-patterns/maps/mindmap.md) |
+| Flowcharts | [`flowcharts.md`](03-patterns/maps/flowcharts.md) |
 | Pattern triggers | [`03-patterns/patterns-master.md`](03-patterns/patterns-master.md) |
-| Full problem index (128, by topic) | [`questions.md`](questions.md) |
+| Full problem index (128, by topic) | [`04-practice/README.md`](04-practice/README.md) |
 | Interview strategy / day-of revision | [`03-patterns/GOOGLE_INTERVIEW_REVISION.md`](03-patterns/GOOGLE_INTERVIEW_REVISION.md) |
-| L4 (SDE-2) delta | [`coding/l4-sde2-delta.md`](coding/l4-sde2-delta.md) |
-| SDE-3 / senior delta | [`coding/sde3-senior-delta.md`](coding/sde3-senior-delta.md) |
+| L4 (SDE-2) delta | [`00-start-here/l4-sde2-delta.md`](00-start-here/l4-sde2-delta.md) |
+| SDE-3 / senior delta | [`00-start-here/sde3-senior-delta.md`](00-start-here/sde3-senior-delta.md) |
 | Senior follow-up chains | [`03-patterns/SENIOR_FOLLOWUPS.md`](03-patterns/SENIOR_FOLLOWUPS.md) |
-| Weakness log / spaced revision / mock scoring | [`tracking/`](tracking/) |
+| Decision trees, pattern triggers, problem recognition | [`03-patterns/maps/`](03-patterns/maps/) |
+| Striver A2Z course notes (lesson-by-lesson) | [`striver-a2z/`](striver-a2z/README.md) |
 
 ### Flashcards (147 cards, spaced repetition)
 
@@ -88,4 +89,4 @@ Longest proper prefix of pattern[:i+1] that is also a suffix…
 | **3** | Trees, stacks, linked lists, union-find, greedy |
 | **4** | Core DP, backtracking, recursion + **4–6 timed mocks** + behavioral |
 
-Full daily plan: [`coding/l3-google-roadmap.md`](coding/l3-google-roadmap.md)
+Full daily plan: [`00-start-here/l3-google-roadmap.md`](00-start-here/l3-google-roadmap.md)

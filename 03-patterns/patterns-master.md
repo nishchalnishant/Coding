@@ -12,7 +12,7 @@ tags: [patterns, patterns-master]
 > **You'll be able to:** Map signal words + constraints to a pattern and know the pivot when the first idea fails.
 > **Prereqs:** Most lecture files · **Pair with:** [How to think](HOW_TO_THINK.md) · [Pattern ladders](PATTERN_LADDERS.md) · **Time:** 1.5 h
 > **How to use:** reference — read once, then use as a lookup.
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [First-Principles Breakdown](#first-principles-breakdown) · [Quick Decision Trees](#quick-decision-trees) · [Core Patterns](#core-patterns) · [If-Not-X-Then-Y (Pivot Logic)](#if-not-x-then-y-pivot-logic) · [Mental Model Shifts](#mental-model-shifts) · [60-Second Pre-Code Checklist](#60-second-pre-code-checklist) · [Critical Gotchas (Last-Minute Check)](#critical-gotchas-last-minute-check) · [Progression Cheatsheet: Brute Force → Optimization → Optimal](#progression-cheatsheet-brute-force--optimization--optimal) · [Implicit Graph Pattern ⚡ T1](#implicit-graph-pattern--t1) · [Follow-Up Chains — Interview Progression ⚡ T1](#follow-up-chains--interview-progression--t1) · [Hybrid Patterns 🎯 T2](#hybrid-patterns--t2) · [See Also](#see-also)
 
@@ -34,7 +34,7 @@ tags: [patterns, patterns-master]
 ### By Input Size (N)
 
 Constraint size → target complexity → algorithm family:
-[`L3_CHEATSHEET.md` § 2 Constraint Analysis](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#2-constraint-analysis-n105--on-or-on-log-n).
+[`L3_CHEATSHEET.md` § 2 Constraint Analysis](../00-start-here/L3_CHEATSHEET.md#2-constraint-analysis-n105--on-or-on-log-n).
 
 ### By Keyword/Constraint
 

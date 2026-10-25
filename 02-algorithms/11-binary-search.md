@@ -5,15 +5,15 @@ tags: [algorithms, binary-search]
 ---
 # Binary Search
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Binary search as 'find the boundary of a monotone predicate': exact match, lower/upper bound, rotated arrays, binary search on the answer, 2D matrix.
 > **You'll be able to:** Write one loop template that never infinite-loops; turn 'minimise the max / find smallest feasible K' into binary search on answer.
-> **Prereqs:** Arrays · **Pair with:** [Binary search problems](../coding/algorithms/11-binary-search.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays · **Pair with:** [Binary search problems](../04-practice/algorithms/11-binary-search.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [The Mental Model](#the-mental-model) · [Variant 1: Standard Binary Search (Exact Value + Bounds)](#variant-1-standard-binary-search-exact-value--bounds) · [Variant 2: Rotated Sorted Array](#variant-2-rotated-sorted-array) · [Variant 3: Binary Search on Answer](#variant-3-binary-search-on-answer) · [2D Binary Search (Sorted Matrix)](#2d-binary-search-sorted-matrix) · [Off-By-One Mental Model](#off-by-one-mental-model) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 

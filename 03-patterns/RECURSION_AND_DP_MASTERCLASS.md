@@ -376,7 +376,7 @@ Both compute the identical answer at identical asymptotic cost. Choose deliberat
 
 # LESSON 9 — The practice ladder (in order, with the lesson each teaches)
 
-Attempt each cold with the 5-step method — decision sentence and contract *on paper* — before any hints. Full walkthroughs: [`coding/algorithms/15-dynamic-programming.md`](../coding/algorithms/15-dynamic-programming.md); bridge drills: [`02-algorithms/10-recursion-to-dp.md`](../02-algorithms/10-recursion-to-dp.md).
+Attempt each cold with the 5-step method — decision sentence and contract *on paper* — before any hints. Full walkthroughs: [`04-practice/algorithms/15-dynamic-programming.md`](../04-practice/algorithms/15-dynamic-programming.md); bridge drills: [`02-algorithms/10-recursion-to-dp.md`](../02-algorithms/10-recursion-to-dp.md).
 
 | # | Problem | It teaches |
 |---|---|---|
@@ -416,4 +416,4 @@ Attempt each cold with the 5-step method — decision sentence and contract *on 
 - [HOW_TO_THINK.md](HOW_TO_THINK.md) — the Recursion → DP chapter in the full pattern framework
 - [PATTERN_LADDERS.md](PATTERN_LADDERS.md) — the DP ladder for graded pressure-testing
 - [`02-algorithms/09-recursion.md`](../02-algorithms/09-recursion.md) · [`02-algorithms/10-recursion-to-dp.md`](../02-algorithms/10-recursion-to-dp.md) · [`02-algorithms/15-dynamic-programming.md`](../02-algorithms/15-dynamic-programming.md) — topic deep-dives
-- [`coding/algorithms/15-dynamic-programming.md`](../coding/algorithms/15-dynamic-programming.md) — full problem walkthroughs
+- [`04-practice/algorithms/15-dynamic-programming.md`](../04-practice/algorithms/15-dynamic-programming.md) — full problem walkthroughs

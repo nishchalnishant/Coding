@@ -5,8 +5,8 @@
 > [!abstract] In this file
 > **Covers:** Index of every algorithm lecture, quick pattern triggers, and the must-solve list for algorithms.
 > **You'll be able to:** Know which file to open for any algorithm topic and which problems to solve first.
-> **Prereqs:** None · **Pair with:** [DS index](../01-data-structures/README.md) · [L3 roadmap](../coding/l3-google-roadmap.md) · **Time:** 10 min
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** None · **Pair with:** [DS index](../01-data-structures/README.md) · [L3 roadmap](../00-start-here/l3-google-roadmap.md) · **Time:** 10 min
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Index](#index) · [Sorting (Reference)](#sorting-reference) · [Advanced Graphs](#advanced-graphs) · [Union-Find (DSU)](#union-find-dsu) · [Intervals](#intervals) · [⚡ Quick Pattern Triggers — Algorithms](#-quick-pattern-triggers--algorithms) · [L3 Must-Solve Problems (algorithms)](#l3-must-solve-problems-algorithms)
 
@@ -48,64 +48,64 @@
         - Sliding window with character maps: decrement count on left exit; delete key when count reaches 0.
         - "Exactly K distinct" is NOT handled by a single window — use atMost trick.
     - Questions — Two Pointers `⚡ T1 / 🎯 T2`
-        - **[Two Sum II (Sorted Array)](../coding/algorithms/03-two-pointers.md#two-sum-ii--input-array-is-sorted-lc-167--t1) `⚡ T1`**
+        - **[Two Sum II (Sorted Array)](../04-practice/algorithms/03-two-pointers.md#two-sum-ii--input-array-is-sorted-lc-167--t1) `⚡ T1`**
             - Description: Given a 1-indexed sorted array, find two numbers that add up to target and return their positions.
             - Pattern: Converging two pointers
             - Key insight: sorted array → complement lives at the other end. Move `lo` if sum too small, `hi` if too large. O(N) O(1).
             - Gotcha: input is 1-indexed in LC 167 — return `[lo+1, hi+1]`.
-        - **[3Sum](../coding/algorithms/03-two-pointers.md#3sum-lc-15--t1) `⚡ T1`**
+        - **[3Sum](../04-practice/algorithms/03-two-pointers.md#3sum-lc-15--t1) `⚡ T1`**
             - Description: Given an integer array, find all unique triplets [a,b,c] such that a + b + c = 0.
             - Pattern: Sort + fix anchor + converging inner pointers
             - Key insight: sort first; fix `nums[i]`, two-pointer on `[i+1..n-1]`. Skip duplicate anchors and duplicate inner values after recording a triplet.
             - Gotcha: skip ALL equal values at each pointer level, not just one.
-        - **[Container With Most Water](../coding/algorithms/03-two-pointers.md#container-with-most-water-lc-11--t1) `⚡ T1`**
+        - **[Container With Most Water](../04-practice/algorithms/03-two-pointers.md#container-with-most-water-lc-11--t1) `⚡ T1`**
             - Description: Given n vertical lines with heights, find two lines that form a container holding the most water.
             - Pattern: Converging
             - Key insight: `area = min(h[lo], h[hi]) * (hi - lo)`. Always move the shorter side — the taller side can never make the `min()` larger.
             - Gotcha: moving the taller side never improves `min(h[lo], h[hi])`.
-        - **[Trapping Rain Water](../coding/algorithms/03-two-pointers.md#trapping-rain-water-lc-42--t1) `⚡ T1`**
+        - **[Trapping Rain Water](../04-practice/algorithms/03-two-pointers.md#trapping-rain-water-lc-42--t1) `⚡ T1`**
             - Description: Given an elevation map of bar heights, compute how much rainwater can be trapped after rain.
             - Pattern: Converging with running max
             - Key insight: water at `i` = `min(max_left, max_right) - h[i]`. Use two-pointer O(N) O(1): advance the side with the smaller `l_max`/`r_max`.
             - Gotcha: two-pointer is different from the stack solution — both are O(N).
-        - **[Sort Colors (Dutch National Flag)](../coding/algorithms/03-two-pointers.md#sort-colors-lc-75--t1) `⚡ T1`**
+        - **[Sort Colors (Dutch National Flag)](../04-practice/algorithms/03-two-pointers.md#sort-colors-lc-75--t1) `⚡ T1`**
             - Description: Given an array with values 0, 1, 2 (red/white/blue), sort it in-place in a single pass without using sort().
             - Pattern: Three pointers `lo, mid, hi`
             - Key insight: `0→swap with lo++`, `1→mid++`, `2→swap with hi--`. Do NOT increment `mid` after swapping with `hi` — newly swapped element is unchecked.
-        - **[Valid Palindrome II](../coding/data-structures/03-string.md#valid-palindrome-ii-lc-680--t2) `🎯 T2`**
+        - **[Valid Palindrome II](../04-practice/data-structures/03-string.md#valid-palindrome-ii-lc-680--t2) `🎯 T2`**
             - Description: Given string s, return true if it can become a palindrome by removing at most one character.
             - Pattern: Converging with one skip allowed
             - Key insight: on first mismatch, try skipping `left` or skipping `right`, then check if the remaining substring is a palindrome.
-        - **[Linked List Cycle](../coding/algorithms/03-two-pointers.md#linked-list-cycle-lc-141--t2) `🎯 T2`**
+        - **[Linked List Cycle](../04-practice/algorithms/03-two-pointers.md#linked-list-cycle-lc-141--t2) `🎯 T2`**
             - Description: Given head of a linked list, determine if it contains a cycle. Return true/false.
             - Pattern: Fast/slow — Floyd's
             - Key insight: fast 2 steps, slow 1 step. If they meet, cycle exists. Reset one to head, single-step both → meeting point = cycle entry.
-        - **[Longest Substring Without Repeating Chars](../coding/algorithms/04-sliding-window.md#longest-substring-without-repeating-characters-lc-3--t1) `⚡ T1`**
+        - **[Longest Substring Without Repeating Chars](../04-practice/algorithms/04-sliding-window.md#longest-substring-without-repeating-characters-lc-3--t1) `⚡ T1`**
             - Description: Find the length of the longest substring that contains no repeated characters.
             - Pattern: Variable sliding window
             - Key insight: `seen` dict maps char → last index. On duplicate, jump `left = seen[ch] + 1` (only if char is inside window: `seen[ch] >= left`).
-        - **[Minimum Window Substring](../coding/algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1) `⚡ T1`**
+        - **[Minimum Window Substring](../04-practice/algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1) `⚡ T1`**
             - Description: Given strings s and t, find the minimum window in s that contains every character in t (including duplicates).
             - Pattern: Variable sliding window + frequency map
             - Key insight: track `missing` count. Expand right to fulfill need; shrink left while `missing == 0` to minimize window. Record on valid shrink.
-        - **[Sliding Window Maximum](../coding/algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1) `⚡ T1`**
+        - **[Sliding Window Maximum](../04-practice/algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1) `⚡ T1`**
             - Description: Given an integer array and window size k, return the maximum value in each sliding window of size k.
             - Pattern: Monotonic deque
             - Key insight: deque stores indices in decreasing-value order. Front = max of current window. Pop from front when index is out of window; pop from back when new value is larger.
             - Gotcha: store indices, not values — you need indices to check if front is expired.
-        - **[Find All Anagrams in a String](../coding/algorithms/04-sliding-window.md#find-all-anagrams-in-a-string-lc-438--t1) `⚡ T1`**
+        - **[Find All Anagrams in a String](../04-practice/algorithms/04-sliding-window.md#find-all-anagrams-in-a-string-lc-438--t1) `⚡ T1`**
             - Description: Given strings s and p, find all starting indices in s where a substring is an anagram of p.
             - Pattern: Fixed sliding window (size = `len(p)`)
             - Key insight: window size is fixed. Use a match-count trick instead of comparing full Counter dicts each step.
-        - **[Permutation in String](../coding/algorithms/02-string-algorithms.md#permutation-in-string--t1) `⚡ T1`**
+        - **[Permutation in String](../04-practice/algorithms/02-string-algorithms.md#permutation-in-string--t1) `⚡ T1`**
             - Description: Given strings s1 and s2, return true if any permutation of s1 is a substring of s2.
             - Pattern: Fixed sliding window (same as anagram)
             - Key insight: same as anagram check — window = `len(s1)`. Return True if any window matches.
-        - **[Longest Repeating Character Replacement](../coding/algorithms/04-sliding-window.md#longest-repeating-character-replacement-lc-424--t1) `⚡ T1`**
+        - **[Longest Repeating Character Replacement](../04-practice/algorithms/04-sliding-window.md#longest-repeating-character-replacement-lc-424--t1) `⚡ T1`**
             - Description: Given string s and integer k, find the length of the longest substring where you can change at most k characters to all be the same letter.
             - Pattern: Variable sliding window
             - Key insight: window is valid if `(window_len - max_freq) <= k`. Shrink only when this condition is violated. It's OK if `max_freq` doesn't decrease on shrink — the answer only grows.
-        - **[Subarrays with K Distinct](../coding/algorithms/04-sliding-window.md#subarrays-with-k-different-integers-lc-992--t1) `🎯 T2`**
+        - **[Subarrays with K Distinct](../04-practice/algorithms/04-sliding-window.md#subarrays-with-k-different-integers-lc-992--t1) `🎯 T2`**
             - Description: Given an integer array and k, count subarrays with exactly k distinct integers.
             - Pattern: atMost trick
             - Key insight: `exactly(K) = atMost(K) - atMost(K-1)`. A single window cannot handle "exactly" because it's not monotone.
@@ -138,39 +138,39 @@
         | Maximize answer | lo | hi | `< ` | `lo = mid` (upper-mid) | `hi = mid-1` | `lo` |
 
     - Questions — Binary Search `⚡ T1 / 🎯 T2`
-        - **[Binary Search](../coding/algorithms/09-recursion.md#binary-search-recursive) `⚡ T1`**
+        - **[Binary Search](../04-practice/algorithms/09-recursion.md#binary-search-recursive) `⚡ T1`**
             - Description: Given a sorted array and a target, return the index of target or -1 if not found. Must run in O(log N).
             - Pattern: Exact match
             - Key insight: `lo <= hi`. Return `mid` on match, -1 on exhaustion. The template every other BS variant builds on.
-        - **[Search in Rotated Sorted Array](../coding/algorithms/11-binary-search.md#search-in-rotated-sorted-array-lc-33--t1) `⚡ T1`**
+        - **[Search in Rotated Sorted Array](../04-practice/algorithms/11-binary-search.md#search-in-rotated-sorted-array-lc-33--t1) `⚡ T1`**
             - Description: A sorted array has been rotated at an unknown pivot. Search for a target and return its index, or -1.
             - Pattern: Rotated BS
             - Key insight: Check which half is sorted (`nums[lo] <= nums[mid]`), then check if target falls in that half. Go there; otherwise, go to the other.
-        - **[Find Minimum in Rotated Sorted Array](../coding/algorithms/11-binary-search.md#find-minimum-in-rotated-sorted-array-lc-153--t1) `⚡ T1`**
+        - **[Find Minimum in Rotated Sorted Array](../04-practice/algorithms/11-binary-search.md#find-minimum-in-rotated-sorted-array-lc-153--t1) `⚡ T1`**
             - Description: A sorted array rotated at some pivot. Find and return the minimum element in O(log N).
             - Pattern: Rotated BS, `lo < hi`
             - Key insight: compare `nums[mid]` with `nums[hi]`. If `nums[mid] > nums[hi]`, min is in right half. Else `hi = mid` (mid could be the min).
-        - **[Koko Eating Bananas](../coding/algorithms/11-binary-search.md#koko-eating-bananas-lc-875--t1) `⚡ T1`**
+        - **[Koko Eating Bananas](../04-practice/algorithms/11-binary-search.md#koko-eating-bananas-lc-875--t1) `⚡ T1`**
             - Description: Koko has piles of bananas and h hours. Find the minimum eating speed k (bananas/hr) such that she can eat all bananas within h hours.
             - Pattern: BS on answer
             - Key insight: binary search on speed `k ∈ [1, max(piles)]`. `feasible(k)` = `sum(ceil(p/k) for p in piles) <= h`. Ceiling division: `math.ceil(p/k)` or `-((-p)//k)`.
-        - **[Capacity to Ship Packages Within D Days](../coding/algorithms/11-binary-search.md#capacity-to-ship-packages-within-d-days-lc-1011--t1) `⚡ T1`**
+        - **[Capacity to Ship Packages Within D Days](../04-practice/algorithms/11-binary-search.md#capacity-to-ship-packages-within-d-days-lc-1011--t1) `⚡ T1`**
             - Description: Given package weights and d days, find the minimum ship capacity to ship all packages in order within d days.
             - Pattern: BS on answer
             - Key insight: binary search on capacity `∈ [max(weights), sum(weights)]`. `feasible(cap)` = greedily simulate days needed; return `days <= D`.
-        - **[Search a 2D Matrix](../coding/algorithms/11-binary-search.md#search-a-2d-matrix-lc-74--t1) `⚡ T1`**
+        - **[Search a 2D Matrix](../04-practice/algorithms/11-binary-search.md#search-a-2d-matrix-lc-74--t1) `⚡ T1`**
             - Description: In an m×n matrix where each row is sorted and each row's first element is greater than the previous row's last, search for a target in O(log(m*n)).
             - Pattern: 2D BS (flattened)
             - Key insight: treat as 1D. `mid // n` = row, `mid % n` = col.
-        - **[Find Minimum in Rotated Sorted Array II (with duplicates)](../coding/algorithms/11-binary-search.md#find-minimum-in-rotated-sorted-array-ii-lc-154--t1) `🎯 T2`**
+        - **[Find Minimum in Rotated Sorted Array II (with duplicates)](../04-practice/algorithms/11-binary-search.md#find-minimum-in-rotated-sorted-array-ii-lc-154--t1) `🎯 T2`**
             - Description: A sorted array rotated at some pivot. Find and return the minimum element in O(log N).
             - Pattern: Rotated BS with edge case
             - Key insight: same as LC 153 but when `nums[lo] == nums[mid] == nums[hi]`, can't determine sorted half → `lo++; hi--`. Worst case O(N).
-        - **[Search in Rotated Sorted Array II (with duplicates)](../coding/algorithms/11-binary-search.md#search-in-rotated-sorted-array-ii-lc-81--t1) `🎯 T2`**
+        - **[Search in Rotated Sorted Array II (with duplicates)](../04-practice/algorithms/11-binary-search.md#search-in-rotated-sorted-array-ii-lc-81--t1) `🎯 T2`**
             - Description: A sorted array has been rotated at an unknown pivot. Search for a target and return its index, or -1.
             - Pattern: Rotated BS with edge case
             - Key insight: same as LC 33 but handle `nums[lo] == nums[mid]` → `lo++` to skip ambiguity.
-        - **[Time Based Key-Value Store](../coding/algorithms/11-binary-search.md#time-based-key-value-store-lc-981--t2) `🎯 T2`**
+        - **[Time Based Key-Value Store](../04-practice/algorithms/11-binary-search.md#time-based-key-value-store-lc-981--t2) `🎯 T2`**
             - Description: Design a key-value store where set(key, value, timestamp) stores a value and get(key, timestamp) returns the value with the largest timestamp <= given timestamp.
             - Pattern: BS on answer (within a sorted list)
             - Key insight: store `(timestamp, value)` pairs per key. On `get(key, timestamp)`, binary search the list for the largest timestamp `<= timestamp`. Use `upper_bound - 1`.
@@ -205,107 +205,107 @@
         - Unbounded Knapsack → iterate `w` **FORWARD** (low → high). Allows re-picking the same item.
         - Getting this backwards is the #1 knapsack bug.
     - Questions — DP `⚡ T1 / 🎯 T2`
-        - **[Climbing Stairs](../coding/algorithms/09-recursion.md#climbing-stairs-memoized-recursion--t2) `🎯 T2`**
+        - **[Climbing Stairs](../04-practice/algorithms/09-recursion.md#climbing-stairs-memoized-recursion--t2) `🎯 T2`**
             - Description: You can climb 1 or 2 steps at a time. How many distinct ways are there to reach the top of n stairs?
             - Pattern: Linear/Fibonacci
             - Key insight: `dp[i] = dp[i-1] + dp[i-2]`. Space-optimize to two variables `a, b`.
-        - **[House Robber](../coding/algorithms/15-dynamic-programming.md#house-robber--t2) `🎯 T2`**
+        - **[House Robber](../04-practice/algorithms/15-dynamic-programming.md#house-robber--t2) `🎯 T2`**
             - Description: Houses in a line. You cannot rob adjacent houses. Find the maximum money you can rob tonight.
             - Pattern: Linear
             - Key insight: `dp[i] = max(dp[i-1], nums[i] + dp[i-2])`. O(1) space with `prev2, prev1`.
-        - **[House Robber II](../coding/algorithms/15-dynamic-programming.md#house-robber-ii-circular--t2) `🎯 T2`**
+        - **[House Robber II](../04-practice/algorithms/15-dynamic-programming.md#house-robber-ii-circular--t2) `🎯 T2`**
             - Description: Same as House Robber but houses are arranged in a circle, so first and last are adjacent.
             - Pattern: Linear (circle trick)
             - Key insight: first and last houses are adjacent → can't rob both. Run linear robber twice: on `nums[:-1]` and `nums[1:]`. Take max.
-        - **[Decode Ways](../coding/algorithms/15-dynamic-programming.md#decode-ways--t2) `🎯 T2`**
+        - **[Decode Ways](../04-practice/algorithms/15-dynamic-programming.md#decode-ways--t2) `🎯 T2`**
             - Description: A digit string encodes letters where A=1..Z=26. Count the number of distinct ways to decode it.
             - Pattern: Linear
             - Key insight: at each position, try 1-digit decode (if `s[i] != '0'`) and 2-digit decode (if `10 <= int(s[i-2:i]) <= 26`). A leading `'0'` kills that branch.
-        - **[Partition Equal Subset Sum](../coding/algorithms/15-dynamic-programming.md#partition-equal-subset-sum--t2) `🎯 T2`**
+        - **[Partition Equal Subset Sum](../04-practice/algorithms/15-dynamic-programming.md#partition-equal-subset-sum--t2) `🎯 T2`**
             - Description: Given an integer array, determine if it can be partitioned into two subsets with equal sum.
             - Pattern: 0/1 Knapsack (boolean)
             - Key insight: Can we find a subset summing to `total // 2`? `dp[w] |= dp[w - num]`. Iterate `w` backward.
-        - **[Target Sum](../coding/algorithms/12-backtracking.md#target-sum--t2) `🎯 T2`**
+        - **[Target Sum](../04-practice/algorithms/12-backtracking.md#target-sum--t2) `🎯 T2`**
             - Description: Assign + or - to each element of an array. Count the number of ways the expression evaluates to target.
             - Pattern: 0/1 Knapsack (count)
             - Key insight: split into two subsets `P` and `N`. `P - N = target`, `P + N = total`. → `P = (total + target) / 2`. Count subsets summing to `P`. Parity check first: `(total + target) % 2 != 0` → 0 ways.
-        - **[Coin Change I](../coding/algorithms/15-dynamic-programming.md#coin-change-min-coins--t2) `🎯 T2`**
+        - **[Coin Change I](../04-practice/algorithms/15-dynamic-programming.md#coin-change-min-coins--t2) `🎯 T2`**
             - Description: Given coin denominations and an amount, find the minimum number of coins needed to make that amount. Return -1 if impossible.
             - Pattern: Unbounded Knapsack (minimize)
             - Key insight: `dp[w] = min(dp[w], 1 + dp[w - coin])`. `dp[0] = 0`, rest `inf`. Iterate coins outer, amount forward.
-        - **[Coin Change II](../coding/algorithms/15-dynamic-programming.md#coin-change-ii-total-ways--t2) `🎯 T2`**
+        - **[Coin Change II](../04-practice/algorithms/15-dynamic-programming.md#coin-change-ii-total-ways--t2) `🎯 T2`**
             - Description: Given coin denominations and an amount, count the number of distinct combinations of coins that sum to amount.
             - Pattern: Unbounded Knapsack (count combinations)
             - Key insight: `dp[w] += dp[w - coin]`. Coins outer → counts combinations (not permutations). `dp[0] = 1`.
-        - **[Longest Increasing Subsequence](../coding/algorithms/15-dynamic-programming.md#longest-increasing-subsequence--t1) `⚡ T1`**
+        - **[Longest Increasing Subsequence](../04-practice/algorithms/15-dynamic-programming.md#longest-increasing-subsequence--t1) `⚡ T1`**
             - Description: Find the length of the longest strictly increasing subsequence in an integer array.
             - Pattern: LIS
             - Key insight: O(N²): `dp[i] = 1 + max(dp[j] for j < i if nums[j] < nums[i])`. O(N log N): patience sort with `tails[]` and `bisect_left`.
-        - **[Edit Distance](../coding/algorithms/15-dynamic-programming.md#edit-distance--t2) `🎯 T2`**
+        - **[Edit Distance](../04-practice/algorithms/15-dynamic-programming.md#edit-distance--t2) `🎯 T2`**
             - Description: Given two strings, find the minimum number of insert, delete, or replace operations to convert word1 to word2.
             - Pattern: LCS family (2D string DP)
             - Key insight: `dp[i][j]` = min ops to convert `word1[:i]` to `word2[:j]`. Match → `dp[i-1][j-1]`. Else `1 + min(delete, insert, replace)`.
-        - **[Unique Paths](../coding/algorithms/15-dynamic-programming.md#unique-paths--t1) `⚡ T1`**
+        - **[Unique Paths](../04-practice/algorithms/15-dynamic-programming.md#unique-paths--t1) `⚡ T1`**
             - Description: In an m×n grid, count the number of distinct paths from the top-left to the bottom-right, moving only right or down.
             - Pattern: Grid DP
             - Key insight: `dp[r][c] = dp[r-1][c] + dp[r][c-1]`. Base: first row and column all 1s.
-        - **[Unique Paths II](../coding/algorithms/15-dynamic-programming.md#unique-paths-ii-with-obstacles--t2) `🎯 T2`**
+        - **[Unique Paths II](../04-practice/algorithms/15-dynamic-programming.md#unique-paths-ii-with-obstacles--t2) `🎯 T2`**
             - Description: Same as Unique Paths but some cells are blocked (marked 1). Count distinct unobstructed paths.
             - Pattern: Grid DP with obstacles
             - Key insight: same as above but `dp[r][c] = 0` if `grid[r][c] == 1`.
-        - **[Interleaving String](../coding/algorithms/15-dynamic-programming.md#interleaving-string--t2) `🎯 T2`**
+        - **[Interleaving String](../04-practice/algorithms/15-dynamic-programming.md#interleaving-string--t2) `🎯 T2`**
             - Description: Given s1, s2, and s3, return true if s3 can be formed by interleaving characters of s1 and s2 (preserving relative order of each).
             - Pattern: LCS family
             - Key insight: `dp[i][j] = True` if `s3[:i+j]` is formed by interleaving `s1[:i]` and `s2[:j]`. Check both branches in transition.
-        - **[House Robber III](../coding/data-structures/08-tree.md#house-robber-iii--t2) `🎯 T2`**
+        - **[House Robber III](../04-practice/data-structures/08-tree.md#house-robber-iii--t2) `🎯 T2`**
             - Description: Houses are nodes in a binary tree. Adjacent parent-child nodes cannot both be robbed. Maximize money robbed.
             - Pattern: Tree DP (post-order DFS)
             - Key insight: `dfs(node)` returns `(rob_node, skip_node)`. Parent combines: `rob = skip_left + skip_right + node.val`, `skip = max(left) + max(right)`.
-        - **[Palindrome Partitioning II](../coding/algorithms/12-backtracking.md#palindrome-partitioning-ii-minimum-cuts--t2) `🎯 T2`**
+        - **[Palindrome Partitioning II](../04-practice/algorithms/12-backtracking.md#palindrome-partitioning-ii-minimum-cuts--t2) `🎯 T2`**
             - Description: Return the minimum number of cuts to partition a string s so every substring is a palindrome.
             - Pattern: Interval DP
             - Key insight: precompute `is_pal[i][j]` in O(N²). Then `dp[i] = min(dp[j-1] + 1 for all j where s[j:i+1] is palindrome)`.
-        - **[Best Time to Buy and Sell Stock II](../coding/algorithms/16-greedy.md#best-time-to-buy-and-sell-stock-ii-lc-122--t1) `⚡ T1`**
+        - **[Best Time to Buy and Sell Stock II](../04-practice/algorithms/16-greedy.md#best-time-to-buy-and-sell-stock-ii-lc-122--t1) `⚡ T1`**
             - Description: You may buy and sell on any day (at most one share at a time, unlimited transactions). Maximize total profit.
             - Pattern: State machine DP
             - Key insight: unlimited transactions. At each day: hold state `max(prev_hold, prev_cash - price)`, cash state `max(prev_cash, prev_hold + price)`.
-        - **[Best Time to Buy and Sell Stock with Cooldown](../coding/algorithms/15-dynamic-programming.md#best-time-to-buy-and-sell-stock-with-cooldown-lc-309--t2) `🎯 T2`**
+        - **[Best Time to Buy and Sell Stock with Cooldown](../04-practice/algorithms/15-dynamic-programming.md#best-time-to-buy-and-sell-stock-with-cooldown-lc-309--t2) `🎯 T2`**
             - Description: After selling, you must wait one day before buying again. Maximize profit with unlimited transactions.
             - Pattern: State machine DP (3 states)
             - Key insight: three states: `held`, `sold` (cooldown), `rest`. Transitions: `held = max(held, rest - price)`, `sold = held + price`, `rest = max(rest, sold)`.
-        - **[Min Cost Climbing Stairs](../coding/algorithms/15-dynamic-programming.md#min-cost-climbing-stairs--t2) `🎯 T2`**
+        - **[Min Cost Climbing Stairs](../04-practice/algorithms/15-dynamic-programming.md#min-cost-climbing-stairs--t2) `🎯 T2`**
             - Description: Each step has a cost. You can start at step 0 or 1 and climb 1 or 2 steps. Find minimum cost to reach beyond the top.
             - Pattern: Linear
             - Key insight: `dp[i] = cost[i] + min(dp[i-1], dp[i-2])`. Answer is `min(dp[-1], dp[-2])`. Can start at step 0 or 1.
-        - **[Last Stone Weight II](../coding/algorithms/15-dynamic-programming.md#last-stone-weight-ii--t1) `⚡ T1`**
+        - **[Last Stone Weight II](../04-practice/algorithms/15-dynamic-programming.md#last-stone-weight-ii--t1) `⚡ T1`**
             - Description: Repeatedly smash any two stones, keeping the difference. Minimize the weight of the last remaining stone.
             - Pattern: 0/1 Knapsack
             - Key insight: minimize `|S1 - S2|` where `S1 + S2 = total`. Equivalent to subset sum to `total // 2`.
-        - **[Word Break](../coding/algorithms/12-backtracking.md#word-break-decision--backtracking--memo--t2) `🎯 T2`**
+        - **[Word Break](../04-practice/algorithms/12-backtracking.md#word-break-decision--backtracking--memo--t2) `🎯 T2`**
             - Description: Given a string s and a dictionary, return true if s can be segmented into one or more dictionary words.
             - Pattern: Linear DP + HashSet
             - Key insight: `dp[i] = True` if any `dp[j]` is True AND `s[j:i]` in word set; O(N²). Top-down DFS+memo cleaner for returning actual word break list.
-        - **[Maximal Square](../coding/algorithms/15-dynamic-programming.md#maximal-square--t2) `🎯 T2`**
+        - **[Maximal Square](../04-practice/algorithms/15-dynamic-programming.md#maximal-square--t2) `🎯 T2`**
             - Description: In a binary matrix of '0's and '1's, find the largest square containing only '1's and return its area.
             - Pattern: Grid DP
             - Key insight: `dp[r][c] = min(dp[r-1][c], dp[r][c-1], dp[r-1][c-1]) + 1` when cell is `'1'`. The minimum of three neighbors is the bottleneck. Answer = `max(dp)²`.
-        - **[Longest Common Subsequence](../coding/algorithms/15-dynamic-programming.md#longest-common-subsequence--t2) `🎯 T2`**
+        - **[Longest Common Subsequence](../04-practice/algorithms/15-dynamic-programming.md#longest-common-subsequence--t2) `🎯 T2`**
             - Description: Given two strings, find the length of their longest common subsequence (characters don't need to be contiguous).
             - Pattern: LCS 2D string DP (foundation for Edit Distance, SCS, LPS)
             - Key insight: `dp[i][j] = dp[i-1][j-1] + 1` if chars match; else `max(dp[i-1][j], dp[i][j-1])`. Fill row-by-row; O(MN) time, O(N) space.
-        - **[Longest Palindromic Subsequence](../coding/algorithms/15-dynamic-programming.md#longest-palindromic-subsequence--t2) `🎯 T2`**
+        - **[Longest Palindromic Subsequence](../04-practice/algorithms/15-dynamic-programming.md#longest-palindromic-subsequence--t2) `🎯 T2`**
             - Description: Find the length of the longest subsequence of a string that is a palindrome.
             - Pattern: LCS of s and reverse(s); or interval DP
             - Key insight: `dp[i][j] = dp[i+1][j-1] + 2` if `s[i]==s[j]`; else `max(dp[i+1][j], dp[i][j-1])`. Fill by increasing interval length.
-        - **[Burst Balloons](../coding/algorithms/15-dynamic-programming.md#burst-balloons-lc-312--t2) `🎯 T2`**
+        - **[Burst Balloons](../04-practice/algorithms/15-dynamic-programming.md#burst-balloons-lc-312--t2) `🎯 T2`**
             - Description: Given n balloons with values, bursting balloon i gives nums[i-1]*nums[i]*nums[i+1] coins. Maximize total coins.
             - Pattern: Interval DP — think "last balloon to burst"
             - Key insight: `dp[i][j]` = max coins bursting all in `(i,j)`. Fix k as the **last** to burst; `coins = nums[i]*nums[k]*nums[j]`. Add padding `nums[-1]=nums[n]=1`. Fill by interval length.
-        - **[Regular Expression Matching](../coding/algorithms/02-string-algorithms.md#regular-expression-matching-lc-10) `🎯 T2`**
+        - **[Regular Expression Matching](../04-practice/algorithms/02-string-algorithms.md#regular-expression-matching-lc-10) `🎯 T2`**
             - Description: Implement regex matching supporting '.' (any single char) and '*' (zero or more of preceding element). Must match the entire string.
             - Pattern: 2D string DP with `*` lookahead
             - Key insight: `p[j-1]=='*'` → either zero copies (`dp[i][j-2]`) or one+ copies if `p[j-2]` matches `s[i-1]` → `dp[i-1][j]`. `'.'` matches any single char.
-        - **[Combination Sum IV (Ordered Count)](../coding/algorithms/15-dynamic-programming.md#combination-sum-iv-lc-377--t2) `🎯 T2`**
+        - **[Combination Sum IV (Ordered Count)](../04-practice/algorithms/15-dynamic-programming.md#combination-sum-iv-lc-377--t2) `🎯 T2`**
             - Description: Given an array of distinct integers and a target, count the number of ordered combinations (permutations) that sum to target.
             - Pattern: Unbounded Knapsack — but amount is outer loop
             - Key insight: for **ordered** permutations, loop `amount` outer and `items` inner. This is opposite of Coin Change II (unordered combinations). `dp[0]=1`.
@@ -337,63 +337,63 @@
         - **Grid DFS:** Mark cell visited in-place (`board[r][c] = '#'`) to avoid a separate set. Restore after the recursive call.
         - **Pruning:** Always check feasibility before recursing. If `remaining_sum > sum(remaining_elements)`, return immediately. This is the difference between passing and TLE.
     - Questions — Backtracking `⚡ T1 / 🎯 T2`
-        - **[Subsets](../coding/algorithms/12-backtracking.md#subsets-power-set--t2) `🎯 T2`**
+        - **[Subsets](../04-practice/algorithms/12-backtracking.md#subsets-power-set--t2) `🎯 T2`**
             - Description: Given an array of distinct integers, return all possible subsets (the power set), including the empty set.
             - Pattern: Include/exclude with `start` index
             - Key insight: record `path[:]` at every node of the tree (not just leaves). `start` index prevents reverse-order duplicates.
-        - **[Subsets II (with duplicates)](../coding/algorithms/09-recursion.md#subsets-ii-lc-90--t2) `🎯 T2`**
+        - **[Subsets II (with duplicates)](../04-practice/algorithms/09-recursion.md#subsets-ii-lc-90--t2) `🎯 T2`**
             - Description: Given an array that may contain duplicates, return all unique subsets.
             - Pattern: Same as Subsets + dedup
             - Key insight: sort first; `if i > start and nums[i] == nums[i-1]: continue` skips duplicate siblings.
-        - **[Permutations](../coding/algorithms/12-backtracking.md#permutations--t2) `🎯 T2`**
+        - **[Permutations](../04-practice/algorithms/12-backtracking.md#permutations--t2) `🎯 T2`**
             - Description: Given an array of distinct integers, return all possible permutations.
             - Pattern: `used[]` array, no `start` index
             - Key insight: at each level, try every element not yet `used`. Record path when `len(path) == n`.
-        - **[Permutations II (with duplicates)](../coding/algorithms/09-recursion.md#permutations-ii-lc-47--t2) `🎯 T2`**
+        - **[Permutations II (with duplicates)](../04-practice/algorithms/09-recursion.md#permutations-ii-lc-47--t2) `🎯 T2`**
             - Description: Given an array that may contain duplicates, return all unique permutations.
             - Pattern: `used[]` + duplicate skip
             - Key insight: sort first. Skip `if nums[i] == nums[i-1] and not used[i-1]`. The `not used[i-1]` means the previous identical element was NOT used in this branch — so we're at the same recursion level, causing a duplicate.
-        - **[Combination Sum](../coding/algorithms/12-backtracking.md#combination-sum-unbounded--t2) `🎯 T2`**
+        - **[Combination Sum](../04-practice/algorithms/12-backtracking.md#combination-sum-unbounded--t2) `🎯 T2`**
             - Description: Given distinct candidates and a target, find all unique combinations where chosen numbers sum to target. Numbers may be reused.
             - Pattern: Combinations, reuse allowed
             - Key insight: pass `i` (not `i+1`) when recursing to allow picking the same element again. Prune when `remaining < 0`.
-        - **[Combination Sum II](../coding/algorithms/09-recursion.md#combination-sum-ii-no-reuse--t2) `🎯 T2`**
+        - **[Combination Sum II](../04-practice/algorithms/09-recursion.md#combination-sum-ii-no-reuse--t2) `🎯 T2`**
             - Description: Given candidates (may have duplicates) and a target, find all unique combinations summing to target. Each number used at most once.
             - Pattern: Combinations, no reuse, dedup
             - Key insight: sort + skip. Use `i+1` when recursing (no reuse). Skip `if i > start and nums[i] == nums[i-1]`.
-        - **[N-Queens](../coding/algorithms/12-backtracking.md#n-queens--t2) `🎯 T2`**
+        - **[N-Queens](../04-practice/algorithms/12-backtracking.md#n-queens--t2) `🎯 T2`**
             - Description: Place n queens on an n×n chessboard so no two queens attack each other. Return all valid board configurations.
             - Pattern: Constraint satisfaction, sets
             - Key insight: track `cols`, `diag1 (row+col)`, `diag2 (row-col)` as sets. O(1) validity check per cell. Only one queen per row, so recurse row by row.
-        - **[Word Search](../coding/algorithms/09-recursion.md#word-search-grid-backtracking--t1) `⚡ T1`**
+        - **[Word Search](../04-practice/algorithms/09-recursion.md#word-search-grid-backtracking--t1) `⚡ T1`**
             - Description: Given a 2D grid of characters and a word, determine if the word exists in the grid via adjacent (up/down/left/right) non-revisiting cells.
             - Pattern: Grid DFS + backtrack
             - Key insight: mark `board[r][c] = '#'` in-place before recursing; restore after. If any direction returns True, bubble it up.
-        - **[Palindrome Partitioning](../coding/algorithms/12-backtracking.md#palindrome-partitioning--t2) `🎯 T2`**
+        - **[Palindrome Partitioning](../04-practice/algorithms/12-backtracking.md#palindrome-partitioning--t2) `🎯 T2`**
             - Description: Given string s, return all possible ways to partition it so every substring in the partition is a palindrome.
             - Pattern: Include/exclude + validity guard
             - Key insight: precompute `is_pal[i][j]` in O(N²) so each check is O(1). Without precompute: O(N³). Never skip the precompute step.
-        - **[Generate Parentheses](../coding/algorithms/12-backtracking.md#generate-parentheses--t2) `🎯 T2`**
+        - **[Generate Parentheses](../04-practice/algorithms/12-backtracking.md#generate-parentheses--t2) `🎯 T2`**
             - Description: Given n, generate all combinations of n pairs of well-formed (balanced) parentheses.
             - Pattern: Decision tree with counts
             - Key insight: track `open` and `close` counts. Add `(` if `open < n`; add `)` if `close < open`. Prune all other branches.
-        - **[Letter Combinations of a Phone Number](../coding/algorithms/12-backtracking.md#letter-combinations-of-a-phone-number--t2) `🎯 T2`**
+        - **[Letter Combinations of a Phone Number](../04-practice/algorithms/12-backtracking.md#letter-combinations-of-a-phone-number--t2) `🎯 T2`**
             - Description: Given a digit string (2–9), return all possible letter combinations the digits could represent on a phone keypad.
             - Pattern: Cartesian product DFS
             - Key insight: at each digit, branch over all its mapped letters. Empty `digits` input → return `[]` (not `[""]`).
-        - **[Combinations](../coding/algorithms/09-recursion.md#combinations-lc-77--t2) `🎯 T2`**
+        - **[Combinations](../04-practice/algorithms/09-recursion.md#combinations-lc-77--t2) `🎯 T2`**
             - Description: Given n and k, return all combinations of k numbers chosen from 1 to n.
             - Pattern: `start` index, fixed path length
             - Key insight: stop recursing when `len(path) == k`. Pruning: `if n - start + 1 < k - len(path)`, not enough elements left.
-        - **[Target Sum](../coding/algorithms/12-backtracking.md#target-sum--t2) `🎯 T2`**
+        - **[Target Sum](../04-practice/algorithms/12-backtracking.md#target-sum--t2) `🎯 T2`**
             - Description: Assign + or - to each element of an array. Count the number of ways the expression evaluates to target.
             - Pattern: Include/exclude → also solvable as 0/1 Knapsack
             - Key insight: assign `+` or `-` to each element. Backtrack by trying both. Or reframe as count-subsets-with-sum `(total + target) / 2` using DP.
-        - **[Word Break II](../coding/algorithms/12-backtracking.md#word-break-ii--t2) `🎯 T2`**
+        - **[Word Break II](../04-practice/algorithms/12-backtracking.md#word-break-ii--t2) `🎯 T2`**
             - Description: Given string s and a dictionary, return all ways to segment s into a space-separated sequence of dictionary words.
             - Pattern: DFS + memoization
             - Key insight: memoize `start_index → [list of valid sentences]`. Without memo, exponential re-expansion. This is the bridge pattern from backtracking to top-down DP.
-        - **[Unique Paths III](../coding/algorithms/12-backtracking.md#unique-paths-iii--t2) `🎯 T2`**
+        - **[Unique Paths III](../04-practice/algorithms/12-backtracking.md#unique-paths-iii--t2) `🎯 T2`**
             - Description: In a grid, start at cell '1', reach cell '2', stepping on every non-obstacle cell exactly once. Count valid paths.
             - Pattern: Grid backtrack + visited counter
             - Key insight: count all non-obstacle empty squares. Only count a path when you reach the target AND all empty squares are visited. Track `remaining_empty` counter — O(1) check.
@@ -425,60 +425,60 @@
         - For large graphs, convert recursive DFS to iterative with explicit stack — Python's default limit is 1000.
         - Disconnected graphs: always wrap BFS/DFS in an outer loop over all unvisited nodes.
     - Questions — BFS / DFS `⚡ T1 / 🎯 T2`
-        - **[Number of Islands](../coding/algorithms/09-recursion.md#number-of-islands-lc-200--t1) `⚡ T1`**
+        - **[Number of Islands](../04-practice/algorithms/09-recursion.md#number-of-islands-lc-200--t1) `⚡ T1`**
             - Description: Given a 2D grid of '1' (land) and '0' (water), count the number of islands (connected components of land, 4-directional).
             - Pattern: DFS/BFS flood-fill, connected components
             - Key insight: for each unvisited `'1'`, run DFS/BFS marking all connected `'1'`s as `'0'`. Count how many times you start. No separate visited set needed — mark in-place.
-        - **[Clone Graph](../coding/algorithms/09-recursion.md#clone-graph-lc-133--t1) `⚡ T1`**
+        - **[Clone Graph](../04-practice/algorithms/09-recursion.md#clone-graph-lc-133--t1) `⚡ T1`**
             - Description: Given a reference to a node in an undirected connected graph, return a deep copy (clone) of the entire graph.
             - Pattern: DFS/BFS with old→new node map
             - Key insight: memo map `{old_node: new_node}` before recursing into neighbors to handle cycles. Without memo, infinite loop on any cycle.
-        - **[Pacific Atlantic Water Flow](../coding/data-structures/13-graph.md#pacific-atlantic-water-flow--t1) `⚡ T1`**
+        - **[Pacific Atlantic Water Flow](../04-practice/data-structures/13-graph.md#pacific-atlantic-water-flow--t1) `⚡ T1`**
             - Description: In an m×n height grid, water flows to 4-adjacent cells of equal or lesser height. Find all cells that can flow to both the Pacific (top/left) and Atlantic (bottom/right) ocean.
             - Pattern: Multi-source BFS from borders
             - Key insight: reverse the direction. BFS from all Pacific border cells; BFS from all Atlantic border cells. Return the intersection — cells in both visited sets.
-        - **[Course Schedule](../coding/data-structures/06-queue.md#course-schedule--t1) `⚡ T1`**
+        - **[Course Schedule](../04-practice/data-structures/06-queue.md#course-schedule--t1) `⚡ T1`**
             - Description: Given numCourses and a list of [course, prerequisite] pairs, determine if it's possible to finish all courses (i.e., no cycle).
             - Pattern: Kahn's topological sort / cycle detection
             - Key insight: build adjacency list; compute in-degrees. BFS from all 0-in-degree nodes. Cycle exists iff `len(order) < n`.
             - Gotcha: edge direction matters. `prereq → course` means course can be taken after prereq.
-        - **[Course Schedule II](../coding/algorithms/00-sorting.md#course-schedule-ii-lc-210--t1) `⚡ T1`**
+        - **[Course Schedule II](../04-practice/algorithms/00-sorting.md#course-schedule-ii-lc-210--t1) `⚡ T1`**
             - Description: Same as Course Schedule, but return one valid ordering of courses to take. Return [] if impossible.
             - Pattern: Kahn's + return order
             - Key insight: same as Course Schedule. If `len(order) == n`, return `order`; else return `[]`.
-        - **[Word Ladder](../coding/algorithms/13-graph-algorithms.md#word-ladder-bfs-on-implicit-graph--t1) `⚡ T1`**
+        - **[Word Ladder](../04-practice/algorithms/13-graph-algorithms.md#word-ladder-bfs-on-implicit-graph--t1) `⚡ T1`**
             - Description: Given beginWord, endWord, and a word list, find the length of the shortest transformation sequence where each step changes one letter and every intermediate word is in the list.
             - Pattern: BFS (unweighted shortest path)
             - Key insight: each word is a node; edge = one character difference. BFS level = transformation steps. Remove visited words from the set immediately to prevent revisiting.
-        - **[All Paths From Source to Target](../coding/data-structures/13-graph.md#all-paths-from-source-to-target--t1) `⚡ T1`**
+        - **[All Paths From Source to Target](../04-practice/data-structures/13-graph.md#all-paths-from-source-to-target--t1) `⚡ T1`**
             - Description: Given a DAG, find all paths from node 0 to node n-1. Return them in any order.
             - Pattern: DFS backtracking in a DAG
             - Key insight: DAG means no cycles — no visited set needed. DFS from source; append to results when target reached. Backtrack by popping from path.
-        - **[Is Graph Bipartite](../coding/data-structures/13-graph.md#is-graph-bipartite--t1) `⚡ T1`**
+        - **[Is Graph Bipartite](../04-practice/data-structures/13-graph.md#is-graph-bipartite--t1) `⚡ T1`**
             - Description: Given an undirected graph, determine if it can be 2-colored (bipartite) — i.e., no edge connects two same-colored nodes.
             - Pattern: BFS 2-coloring
             - Key insight: alternate colors `1 - current_color` for neighbors. If a neighbor already has the same color → not bipartite. Handle disconnected graphs with outer loop.
-        - **[Alien Dictionary](../coding/algorithms/00-sorting.md#alien-dictionary-lc-269--t1) `⚡ T1`**
+        - **[Alien Dictionary](../04-practice/algorithms/00-sorting.md#alien-dictionary-lc-269--t1) `⚡ T1`**
             - Description: Given a sorted list of alien-language words, derive the character ordering of the alien alphabet. Return '' if invalid.
             - Pattern: Kahn's topological sort on characters
             - Key insight: compare adjacent words to find the first mismatch → directed edge between those characters. Run Kahn's. Return `""` if cycle detected OR if `word1` is a prefix-violated prefix of `word2`.
-        - **[Network Delay Time (Dijkstra)](../coding/algorithms/13-graph-algorithms.md#network-delay-time) `🎯 T2`**
+        - **[Network Delay Time (Dijkstra)](../04-practice/algorithms/13-graph-algorithms.md#network-delay-time) `🎯 T2`**
             - Description: Given a directed weighted graph, a source k, and n nodes, find how long it takes for a signal to reach all nodes. Return -1 if unreachable.
             - Pattern: Dijkstra SSSP
             - Key insight: find `max(dist.values())`. If any node unreachable (`dist[v] == inf`), return -1.
-        - **[Cheapest Flights Within K Stops](../coding/algorithms/13-graph-algorithms.md#cheapest-flights-within-k-stops-dijkstra-variant) `⚡ T1`**
+        - **[Cheapest Flights Within K Stops](../04-practice/algorithms/13-graph-algorithms.md#cheapest-flights-within-k-stops-dijkstra-variant) `⚡ T1`**
             - Description: Given flights with costs, find the cheapest price from src to dst using at most k stops. Return -1 if no route.
             - Pattern: Modified Bellman-Ford (K+1 iterations)
             - Key insight: run exactly K+1 relaxations. Use a COPY of the distance array each iteration — prevents using more edges than allowed in one pass. Standard Dijkstra doesn't work because stop-count must be bounded.
-        - **[Redundant Connection](../coding/data-structures/13-graph.md#redundant-connection--t1) `⚡ T1`**
+        - **[Redundant Connection](../04-practice/data-structures/13-graph.md#redundant-connection--t1) `⚡ T1`**
             - Description: Given an undirected tree with one extra edge added (creating a cycle), find and return that redundant edge.
             - Pattern: Union-Find
             - Key insight: process edges one by one. The first edge where both endpoints are already in the same component creates the cycle — that's the redundant edge. Return the last one if multiple.
-        - **[Accounts Merge](../coding/algorithms/14-union-find.md#accounts-merge-email-graph--t1) `⚡ T1`**
+        - **[Accounts Merge](../04-practice/algorithms/14-union-find.md#accounts-merge-email-graph--t1) `⚡ T1`**
             - Description: Given a list of accounts [name, emails...], merge accounts sharing at least one email. Return sorted merged accounts.
             - Pattern: Union-Find on emails
             - Key insight: for each account, union all emails with the first email. After all unions, group emails by their root. Sort each group and prepend the account name.
-        - **[Graph Valid Tree](../coding/algorithms/14-union-find.md#graph-valid-tree--t1) `⚡ T1`**
+        - **[Graph Valid Tree](../04-practice/algorithms/14-union-find.md#graph-valid-tree--t1) `⚡ T1`**
             - Description: Given n nodes and a list of undirected edges, determine if the edges form a valid tree (connected, no cycles).
             - Pattern: Union-Find + edge count
             - Key insight: a valid tree has exactly `n-1` edges and no cycles. Check edge count first; then use Union-Find — if any edge creates a cycle, return False.
@@ -504,47 +504,47 @@
         - Task Scheduler: always apply the `max(formula, len(tasks))` cap — forgetting it fails when there's enough task variety.
         - Gas Station: the problem guarantees a unique valid start only when `sum(gas) >= sum(cost)`.
     - Questions — Greedy `⚡ T1 / 🎯 T2`
-        - **[Jump Game I](../coding/algorithms/16-greedy.md#jump-game-can-reach--t2) `🎯 T2`**
+        - **[Jump Game I](../04-practice/algorithms/16-greedy.md#jump-game-can-reach--t2) `🎯 T2`**
             - Description: Given an array where nums[i] is the max jump from index i, determine if you can reach the last index.
             - Pattern: Single-pass reach tracking
             - Key insight: track `farthest`. If `i > farthest`, current position is unreachable → return False. Update `farthest = max(farthest, i + nums[i])` at each step. O(N).
-        - **[Jump Game II](../coding/algorithms/15-dynamic-programming.md#jump-game-ii--t2) `🎯 T2`**
+        - **[Jump Game II](../04-practice/algorithms/15-dynamic-programming.md#jump-game-ii--t2) `🎯 T2`**
             - Description: Given an array where nums[i] is the max jump from index i (always reachable), return the minimum number of jumps to reach the last index.
             - Pattern: Greedy BFS levels
             - Key insight: treat as BFS levels. When `i == current_end`, you must make a jump → `jumps += 1`, `current_end = farthest`. Stop loop at `len(nums) - 2` (no need to jump from last).
-        - **[Gas Station](../coding/algorithms/16-greedy.md#gas-station--t2) `🎯 T2`**
+        - **[Gas Station](../04-practice/algorithms/16-greedy.md#gas-station--t2) `🎯 T2`**
             - Description: n gas stations in a circle with gas[i] available and cost[i] to travel to next. Find the starting station index to complete the circuit, or -1.
             - Pattern: Running deficit reset
             - Key insight: if `sum(gas) < sum(cost)`, return -1. Otherwise, reset `start = i + 1` whenever `tank < 0`. The unique valid start is after the last negative prefix.
-        - **[Task Scheduler](../coding/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`**
+        - **[Task Scheduler](../04-practice/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`**
             - Description: Given tasks (letters) and cooldown n (same task needs n intervals gap), find minimum total time to finish all tasks.
             - Pattern: Frequency formula
             - Key insight: `(max_freq - 1) * (n + 1) + count_max`. `max(formula, len(tasks))` handles the case where task variety fills all idle slots.
-        - **[Partition Labels](../coding/algorithms/16-greedy.md#partition-labels-lc-763) `🎯 T2`**
+        - **[Partition Labels](../04-practice/algorithms/16-greedy.md#partition-labels-lc-763) `🎯 T2`**
             - Description: Partition string s into as many parts as possible so each letter appears in at most one part. Return list of part lengths.
             - Pattern: Last-occurrence greedy sweep
             - Key insight: precompute `last[ch]` = last index of each character. Sweep: `end = max(end, last[ch])`. When `i == end`, cut the partition.
-        - **[Merge Intervals](../coding/algorithms/16-greedy.md#merge-intervals--t2) `🎯 T2`**
+        - **[Merge Intervals](../04-practice/algorithms/16-greedy.md#merge-intervals--t2) `🎯 T2`**
             - Description: Given a collection of intervals, merge all overlapping intervals and return the result.
             - Pattern: Sort by start, merge overlapping
             - Key insight: sort by start. If current interval starts before previous end → merge by extending end. Else push current.
-        - **[Non-overlapping Intervals](../coding/algorithms/16-greedy.md#non-overlapping-intervals-minimum-number-to-remove--t2) `🎯 T2`**
+        - **[Non-overlapping Intervals](../04-practice/algorithms/16-greedy.md#non-overlapping-intervals-minimum-number-to-remove--t2) `🎯 T2`**
             - Description: Given intervals, remove the minimum number of intervals so the rest are non-overlapping.
             - Pattern: Sort by end, count removals
             - Key insight: sort by end. Greedily keep non-overlapping (pick earliest-ending). Removals = total - kept. Return `total - kept`.
-        - **[Meeting Rooms II](../coding/algorithms/00-sorting.md#meeting-rooms-ii-lc-253) `🎯 T2`**
+        - **[Meeting Rooms II](../04-practice/algorithms/00-sorting.md#meeting-rooms-ii-lc-253) `🎯 T2`**
             - Description: Given meeting time intervals, find the minimum number of conference rooms required.
             - Pattern: Min-heap of end times
             - Key insight: sort by start. Use a min-heap of end times of active meetings. If the next meeting starts after the earliest ending meeting, reuse that room (pop and push new end). Else, open a new room. Answer = heap size.
-        - **[Minimum Arrows to Burst Balloons](../coding/algorithms/00-sorting.md#minimum-number-of-arrows-to-burst-balloons-lc-452) `🎯 T2`**
+        - **[Minimum Arrows to Burst Balloons](../04-practice/algorithms/00-sorting.md#minimum-number-of-arrows-to-burst-balloons-lc-452) `🎯 T2`**
             - Description: Balloons are represented by [x_start, x_end]. Find minimum arrows shot straight up (at any x) to burst all balloons.
             - Pattern: Sort by end
             - Key insight: sort balloons by end. Place arrow at `end` of first balloon. A new arrow is needed only when next balloon's `start > current arrow position`. Strict `>`.
-        - **[3Sum Closest](../coding/algorithms/03-two-pointers.md#3sum-closest-lc-16--t1) `⚡ T1`**
+        - **[3Sum Closest](../04-practice/algorithms/03-two-pointers.md#3sum-closest-lc-16--t1) `⚡ T1`**
             - Description: Given an integer array and target, find the triplet whose sum is closest to target. Return the sum.
             - Pattern: Sort + converging two pointers
             - Key insight: sort. Fix anchor `i`; converging inner pointers. Track `abs(sum - target)`. Update best when closer. Move pointers based on sum vs target direction.
-        - **[IPO (Maximize Capital)](../coding/algorithms/16-greedy.md#ipo-maximize-capital-lc-502--t1) `⚡ T1`**
+        - **[IPO (Maximize Capital)](../04-practice/algorithms/16-greedy.md#ipo-maximize-capital-lc-502--t1) `⚡ T1`**
             - Description: Given k projects each with a profit and minimum capital requirement, find max capital starting with w capital after completing at most k projects.
             - Pattern: Two-structure greedy (sorted array + max-heap)
             - Key insight: sort projects by capital. For each of K rounds: unlock all affordable projects into a max-heap of profits. Pop the highest profit. Repeat.
@@ -562,19 +562,19 @@
         - **GCD / LCM:** `gcd(a, b) = gcd(b, a % b)`. `lcm(a, b) = a * b // gcd(a, b)`.
         - **Happy Number:** Sum of squares of digits. Cycle detection → use fast/slow pointers or a set. Terminates at 1 (happy) or enters a cycle (not happy).
     - Questions — D&C / Math `⚡ T1 / 🎯 T2`
-        - **[Pow(x, n)](../coding/algorithms/09-recursion.md#powx-n--fast-exponentiation) `🎯 T2`**
+        - **[Pow(x, n)](../04-practice/algorithms/09-recursion.md#powx-n--fast-exponentiation) `🎯 T2`**
             - Description: Implement pow(x, n) — raise x to the power n — efficiently. Handle negative exponents.
             - Pattern: Fast exponentiation
             - Key insight: `x^n = (x^(n//2))^2`. Handle `n < 0`: return `(1/x)^(-n)`. O(log N).
-        - **[Maximum Subarray](../coding/algorithms/15-dynamic-programming.md#maximum-subarray-kadanes--dp-view--t2) `🎯 T2`**
+        - **[Maximum Subarray](../04-practice/algorithms/15-dynamic-programming.md#maximum-subarray-kadanes--dp-view--t2) `🎯 T2`**
             - Description: Find the contiguous subarray (at least one element) with the largest sum and return its sum.
             - Pattern: Kadane's algorithm (also solvable with D&C)
             - Key insight: `ending_here = max(nums[i], ending_here + nums[i])`. `global_max = max(global_max, ending_here)`. O(N) O(1).
-        - **[Merge K Sorted Lists](../coding/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`**
+        - **[Merge K Sorted Lists](../04-practice/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`**
             - Description: Merge k sorted linked lists into one sorted linked list and return it.
             - Pattern: D&C (or heap)
             - Key insight: D&C: pair up lists and merge pairs, repeat. O(N log K). Heap: push first node of each list into a min-heap; always pop the smallest and push its successor.
-        - **[Happy Number](../coding/data-structures/07-linked-list.md#happy-number) `⚡ T1`**
+        - **[Happy Number](../04-practice/data-structures/07-linked-list.md#happy-number) `⚡ T1`**
             - Description: A number is happy if repeatedly replacing it with the sum of squares of its digits eventually reaches 1. Determine if n is happy.
             - Pattern: Cycle detection (fast/slow or set)
             - Key insight: repeatedly replace `n` with sum of squares of its digits. If `n == 1` → happy. If you enter a cycle → not happy. Fastest: use a set to detect revisit.

@@ -5,15 +5,15 @@ tags: [data-structures, tree]
 ---
 # Tree — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Binary trees and BSTs: DFS orders, BFS levels, the 'return-value contract' recursion style, LCA, tree DP, BST invariants, serialization.
 > **You'll be able to:** Solve any tree problem by defining what each recursive call returns; validate/search a BST in O(h); choose DFS vs BFS by what the answer needs.
-> **Prereqs:** Recursion · **Pair with:** [Tree problems](../coding/data-structures/08-tree.md) · [Recursion](../02-algorithms/09-recursion.md) · **Time:** 2–3 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Recursion · **Pair with:** [Tree problems](../04-practice/data-structures/08-tree.md) · [Recursion](../02-algorithms/09-recursion.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -423,25 +423,25 @@ def deserialize(data: str):
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Symmetric Tree](../coding/data-structures/08-tree.md#symmetric-tree--t2) `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
-- **[Maximum Depth](../coding/data-structures/08-tree.md#maximum-depth-of-binary-tree--t2) `🎯 T2`** — `1 + max(depth(left), depth(right))`.
-- **[Invert Binary Tree](../coding/data-structures/08-tree.md#invert-binary-tree--t2) `🎯 T2`** — Swap children at each node; recursive or BFS.
+- **[Symmetric Tree](../04-practice/data-structures/08-tree.md#symmetric-tree--t2) `🎯 T2`** — Mirror check: `left.val == right.val` and recurse cross-ways.
+- **[Maximum Depth](../04-practice/data-structures/08-tree.md#maximum-depth-of-binary-tree--t2) `🎯 T2`** — `1 + max(depth(left), depth(right))`.
+- **[Invert Binary Tree](../04-practice/data-structures/08-tree.md#invert-binary-tree--t2) `🎯 T2`** — Swap children at each node; recursive or BFS.
 
 ### Medium
-- **[Binary Tree Level Order](../coding/data-structures/06-queue.md#binary-tree-level-order-traversal--t2) `🎯 T2`** — BFS; separate levels by queue-size snapshot.
-- **[Diameter of Binary Tree](../coding/data-structures/08-tree.md#diameter-of-binary-tree--t2) `🎯 T2`** — Postorder height; update global `left + right`.
-- **[House Robber III](../coding/data-structures/08-tree.md#house-robber-iii--t2) `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
-- **[Flatten Binary Tree to Linked List](../coding/data-structures/08-tree.md#flatten-binary-tree-to-linked-list--t2) `🎯 T2`** — Morris-like threading; preorder rewiring.
-- **[Validate BST](../coding/data-structures/08-tree.md#validate-binary-search-tree--t2) `🎯 T2`** — Pass `(min, max)` bounds down.
-- **[LCA of Binary Tree](../coding/data-structures/08-tree.md#lowest-common-ancestor-of-a-binary-tree--t2) `🎯 T2`** — "Both sides non-null" = LCA found.
-- **[Kth Smallest in BST](../coding/data-structures/08-tree.md#kth-smallest-element-in-a-bst--t2) `🎯 T2`** — Iterative inorder; stop at K.
+- **[Binary Tree Level Order](../04-practice/data-structures/06-queue.md#binary-tree-level-order-traversal--t2) `🎯 T2`** — BFS; separate levels by queue-size snapshot.
+- **[Diameter of Binary Tree](../04-practice/data-structures/08-tree.md#diameter-of-binary-tree--t2) `🎯 T2`** — Postorder height; update global `left + right`.
+- **[House Robber III](../04-practice/data-structures/08-tree.md#house-robber-iii--t2) `🎯 T2`** — Tree DP; return `(rob, skip)` pair.
+- **[Flatten Binary Tree to Linked List](../04-practice/data-structures/08-tree.md#flatten-binary-tree-to-linked-list--t2) `🎯 T2`** — Morris-like threading; preorder rewiring.
+- **[Validate BST](../04-practice/data-structures/08-tree.md#validate-binary-search-tree--t2) `🎯 T2`** — Pass `(min, max)` bounds down.
+- **[LCA of Binary Tree](../04-practice/data-structures/08-tree.md#lowest-common-ancestor-of-a-binary-tree--t2) `🎯 T2`** — "Both sides non-null" = LCA found.
+- **[Kth Smallest in BST](../04-practice/data-structures/08-tree.md#kth-smallest-element-in-a-bst--t2) `🎯 T2`** — Iterative inorder; stop at K.
 
 ### Hard
-- **[Binary Tree Cameras](../coding/data-structures/08-tree.md#binary-tree-cameras-lc-968--t2) `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
-- **[Recover BST](../coding/data-structures/08-tree.md#recover-binary-search-tree-lc-99) `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
-- **[Vertical Order Traversal](../coding/data-structures/08-tree.md#vertical-order-traversal-of-a-binary-tree--t2) `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
-- **[Serialize and Deserialize](../coding/data-structures/08-tree.md#serialize-and-deserialize-binary-tree--t2) `🎯 T2`** — Preorder with `N` markers.
-- **[Binary Tree Max Path Sum](../coding/data-structures/08-tree.md#binary-tree-maximum-path-sum--t2) `🎯 T2`** — Tree DP; `max(0, child)` to drop negatives.
+- **[Binary Tree Cameras](../04-practice/data-structures/08-tree.md#binary-tree-cameras-lc-968--t2) `🎯 T2`** — Tree DP; 3 states per node: covered/has-camera/uncovered.
+- **[Recover BST](../04-practice/data-structures/08-tree.md#recover-binary-search-tree-lc-99) `🎯 T2`** — Find two swapped nodes via inorder; `first` = node before first descent; `second` = last seen small node.
+- **[Vertical Order Traversal](../04-practice/data-structures/08-tree.md#vertical-order-traversal-of-a-binary-tree--t2) `🎯 T2`** — BFS with `(col, row, val)`; sort by col then row then val.
+- **[Serialize and Deserialize](../04-practice/data-structures/08-tree.md#serialize-and-deserialize-binary-tree--t2) `🎯 T2`** — Preorder with `N` markers.
+- **[Binary Tree Max Path Sum](../04-practice/data-structures/08-tree.md#binary-tree-maximum-path-sum--t2) `🎯 T2`** — Tree DP; `max(0, child)` to drop negatives.
 
 ---
 
@@ -487,7 +487,7 @@ def deserialize(data: str):
 
 ## See also
 
-- [Graph](../01-data-structures/13-graphs.md) — trees are acyclic connected graphs; BFS/DFS apply
+- [Graph](13-graphs.md) — trees are acyclic connected graphs; BFS/DFS apply
 - [Dynamic Programming](../02-algorithms/15-dynamic-programming.md) — Tree DP (postorder state propagation)
 - [Backtracking](../02-algorithms/12-backtracking.md) — path sum with backtracking
 - [Patterns Master](../03-patterns/patterns-master.md) — tree traversal pattern triggers

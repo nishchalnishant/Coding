@@ -5,15 +5,15 @@ tags: [data-structures, trie]
 ---
 # Trie (Prefix Tree)
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Prefix trees: insert/search/startsWith, autocomplete, Trie + backtracking (Word Search II), XOR trie for max-XOR pairs.
 > **You'll be able to:** Implement a trie in ~15 lines; recognise 'many words sharing prefixes' problems; prune a backtracking search with a trie.
-> **Prereqs:** Hashing, tree, backtracking · **Pair with:** [Trie problems](../coding/data-structures/09-trie.md) · **Time:** 1 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Hashing, tree, backtracking · **Pair with:** [Trie problems](../04-practice/data-structures/09-trie.md) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [Concept Overview](#concept-overview) · [Core Implementation](#core-implementation) · [Key Patterns](#key-patterns) · [Word Search II — Trie + Backtracking](#word-search-ii--trie--backtracking) · [XOR Trie — Maximum XOR Pair](#xor-trie--maximum-xor-pair) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Common Gotchas](#common-gotchas) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -404,7 +404,7 @@ def findMaximumXOR(nums: list[int]) -> int:
 ## See also
 
 - [backtracking.md](../02-algorithms/12-backtracking.md) — Word Search II uses Trie + backtracking together
-- MINDMAP.md — XOR Trie for max XOR pair
+- mindmap.md — XOR Trie for max XOR pair
 - [hashing.md](02-hashing.md) — alternative for exact word lookups when prefix search not needed
 
 ## Flashcards

@@ -126,7 +126,7 @@ Use this when a mock attempt reveals a gap:
 ## L4 (SDE-2) Mock Rounds — follow-up chains
 
 > [!IMPORTANT]
-> An L4 round is not one problem — it's a **chain**. Budget 45 min per round: base problem solved cleanly in ~20–25 min, then the interviewer escalates. Simulate that: solve the base, then *without a break* attempt each follow-up. A round "passes" only if you get through follow-up 1. Full L4 bar: [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md).
+> An L4 round is not one problem — it's a **chain**. Budget 45 min per round: base problem solved cleanly in ~20–25 min, then the interviewer escalates. Simulate that: solve the base, then *without a break* attempt each follow-up. A round "passes" only if you get through follow-up 1. Full L4 bar: [`00-start-here/l4-sde2-delta.md`](../00-start-here/l4-sde2-delta.md).
 
 | Round | Base (20–25 min) | Follow-up 1 | Follow-up 2 (stretch) |
 |---|---|---|---|

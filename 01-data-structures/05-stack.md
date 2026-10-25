@@ -5,15 +5,15 @@ tags: [data-structures, stack]
 ---
 # Stack — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** LIFO and what it buys you: matching/nesting, expression evaluation, undo, and the monotonic stack for next-greater / histogram / contribution counting.
 > **You'll be able to:** Spot 'nearest greater/smaller' and nesting problems instantly; write the monotonic stack loop and explain its amortised O(N).
-> **Prereqs:** Arrays · **Pair with:** [Stack problems](../coding/data-structures/05-stack.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays · **Pair with:** [Stack problems](../04-practice/data-structures/05-stack.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -355,24 +355,24 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Valid Parentheses](../coding/data-structures/05-stack.md#valid-parentheses--t2) `🎯 T2`** — Push opens; pop on close; check match.
-- **[Min Stack](../coding/data-structures/05-stack.md#min-stack--t2) `🎯 T2`** — Parallel min-tracking stack.
-- **[Implement Queue using Stacks](../coding/data-structures/05-stack.md#implement-queue-using-stacks) `🎯 T2`** — Two stacks: push to in-stack; pop lazy-moves to out-stack.
+- **[Valid Parentheses](../04-practice/data-structures/05-stack.md#valid-parentheses--t2) `🎯 T2`** — Push opens; pop on close; check match.
+- **[Min Stack](../04-practice/data-structures/05-stack.md#min-stack--t2) `🎯 T2`** — Parallel min-tracking stack.
+- **[Implement Queue using Stacks](../04-practice/data-structures/05-stack.md#implement-queue-using-stacks) `🎯 T2`** — Two stacks: push to in-stack; pop lazy-moves to out-stack.
 
 ### Medium
-- **[Daily Temperatures](../coding/data-structures/05-stack.md#daily-temperatures--t2) `🎯 T2`** — Decreasing monotonic stack of indices.
-- **[Next Greater Element II](../coding/data-structures/05-stack.md#next-greater-element-ii--t2) `🎯 T2`** (circular) — Process `2N` indices with `% N`.
-- **[Evaluate RPN](../coding/data-structures/05-stack.md#evaluate-reverse-polish-notation--t2) `🎯 T2`** — Operand stack; on operator, pop two and push result.
-- **[Decode String](../coding/algorithms/09-recursion.md#decode-string-recursive) `🎯 T2`** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
-- **[Exclusive Time of Functions](../coding/data-structures/05-stack.md#exclusive-time-of-functions) `🎯 T2`** — Stack of `(id, start)`; pause inner on nested start.
-- **[Simplify Path](../coding/data-structures/05-stack.md#simplify-path) `🎯 T2`** — Split by `/`; stack with `..` logic.
+- **[Daily Temperatures](../04-practice/data-structures/05-stack.md#daily-temperatures--t2) `🎯 T2`** — Decreasing monotonic stack of indices.
+- **[Next Greater Element II](../04-practice/data-structures/05-stack.md#next-greater-element-ii--t2) `🎯 T2`** (circular) — Process `2N` indices with `% N`.
+- **[Evaluate RPN](../04-practice/data-structures/05-stack.md#evaluate-reverse-polish-notation--t2) `🎯 T2`** — Operand stack; on operator, pop two and push result.
+- **[Decode String](../04-practice/algorithms/09-recursion.md#decode-string-recursive) `🎯 T2`** — Stack of `(prefix, repeat_count)` at `[`; unwind on `]`.
+- **[Exclusive Time of Functions](../04-practice/data-structures/05-stack.md#exclusive-time-of-functions) `🎯 T2`** — Stack of `(id, start)`; pause inner on nested start.
+- **[Simplify Path](../04-practice/data-structures/05-stack.md#simplify-path) `🎯 T2`** — Split by `/`; stack with `..` logic.
 
 ### Hard
-- **[Trapping Rain Water](../coding/data-structures/05-stack.md#trapping-rain-water-stack-approach--t1) `⚡ T1`** — Monotonic stack or two-pointer; stack explains "why" better.
-- **[Largest Rectangle in Histogram](../coding/data-structures/05-stack.md#largest-rectangle-in-histogram--t2) `🎯 T2`** — Monotonic increasing stack; sentinel `0`.
-- **[Maximal Rectangle](../coding/data-structures/05-stack.md#maximal-rectangle--t2) `🎯 T2`** — Histogram per row + above.
-- **Basic Calculator [I](../coding/data-structures/05-stack.md#basic-calculator-i) / [II](../coding/data-structures/05-stack.md#basic-calculator-ii) / [III](../coding/data-structures/05-stack.md#basic-calculator-iii) `🎯 T2`** — Two-stack or single stack with sign tracking.
-- **[Maximum Frequency Stack](../coding/data-structures/05-stack.md#maximum-frequency-stack) `💤 T3`** — FreqStack: push increments freq; pop from highest-freq bucket.
+- **[Trapping Rain Water](../04-practice/data-structures/05-stack.md#trapping-rain-water-stack-approach--t1) `⚡ T1`** — Monotonic stack or two-pointer; stack explains "why" better.
+- **[Largest Rectangle in Histogram](../04-practice/data-structures/05-stack.md#largest-rectangle-in-histogram--t2) `🎯 T2`** — Monotonic increasing stack; sentinel `0`.
+- **[Maximal Rectangle](../04-practice/data-structures/05-stack.md#maximal-rectangle--t2) `🎯 T2`** — Histogram per row + above.
+- **Basic Calculator [I](../04-practice/data-structures/05-stack.md#basic-calculator-i) / [II](../04-practice/data-structures/05-stack.md#basic-calculator-ii) / [III](../04-practice/data-structures/05-stack.md#basic-calculator-iii) `🎯 T2`** — Two-stack or single stack with sign tracking.
+- **[Maximum Frequency Stack](../04-practice/data-structures/05-stack.md#maximum-frequency-stack) `💤 T3`** — FreqStack: push increments freq; pop from highest-freq bucket.
 
 ---
 
@@ -416,7 +416,7 @@ def asteroid_collision(asteroids: list[int]) -> list[int]:
 ## See also
 
 - [Queue](06-queue.md) — monotonic deque for sliding window max/min
-- [Graph](../01-data-structures/13-graphs.md) — iterative DFS uses an explicit stack
+- [Graph](13-graphs.md) — iterative DFS uses an explicit stack
 - [Greedy](../02-algorithms/16-greedy.md) — some monotonic stack problems have greedy structure
 - [Patterns Master](../03-patterns/patterns-master.md) — monotonic stack pattern triggers
 

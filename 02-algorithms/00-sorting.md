@@ -5,15 +5,15 @@ tags: [algorithms, sorting]
 ---
 # Sorting — L3 Gold Standard
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Comparison sorts (merge, quick, heap), counting/bucket sort, stability, quickselect, custom comparators, and sorting as a pre-processing step (intervals, two pointers, greedy).
 > **You'll be able to:** Know the cost and stability of each sort; write merge sort and quickselect; recognise when 'sort first' unlocks an O(N log N) solution.
-> **Prereqs:** Arrays, recursion · **Pair with:** [Sorting problems](../coding/algorithms/00-sorting.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays, recursion · **Pair with:** [Sorting problems](../04-practice/algorithms/00-sorting.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Algorithm Overview](#1-algorithm-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. L3 Deep Dives](#3-l3-deep-dives) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -455,15 +455,15 @@ For distributed sort (MapReduce model):
 ## 4. Common Interview Problems
 
 ### Medium
-- **[Sort Colors](../coding/algorithms/03-two-pointers.md#sort-colors-lc-75--t1) `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
-- **[Kth Largest Element](../coding/algorithms/00-sorting.md#kth-largest-element-in-a-stream-lc-703--t1) `⚡ T1`** — QuickSelect O(N) avg or min-heap O(N log K).
-- **[Merge Intervals](../coding/algorithms/16-greedy.md#merge-intervals--t2) `🎯 T2`** — Sort by start time; sweep and merge.
-- **[Largest Number](../coding/algorithms/00-sorting.md#largest-number-custom-comparator) `🎯 T2`** — Custom comparator: `a+b > b+a`.
-- **[Meeting Rooms II](../coding/algorithms/00-sorting.md#meeting-rooms-ii-lc-253) `🎯 T2`** — Sort starts and ends separately; two-pointer sweep for peak overlap.
+- **[Sort Colors](../04-practice/algorithms/03-two-pointers.md#sort-colors-lc-75--t1) `⚡ T1`** — Dutch National Flag; single-pass three-pointer.
+- **[Kth Largest Element](../04-practice/algorithms/00-sorting.md#kth-largest-element-in-a-stream-lc-703--t1) `⚡ T1`** — QuickSelect O(N) avg or min-heap O(N log K).
+- **[Merge Intervals](../04-practice/algorithms/16-greedy.md#merge-intervals--t2) `🎯 T2`** — Sort by start time; sweep and merge.
+- **[Largest Number](../04-practice/algorithms/00-sorting.md#largest-number-custom-comparator) `🎯 T2`** — Custom comparator: `a+b > b+a`.
+- **[Meeting Rooms II](../04-practice/algorithms/00-sorting.md#meeting-rooms-ii-lc-253) `🎯 T2`** — Sort starts and ends separately; two-pointer sweep for peak overlap.
 
 ### Hard
-- **[Maximum Gap](../coding/algorithms/00-sorting.md#maximum-gap-bucket-sort) `🎯 T2`** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
-- **[Russian Doll Envelopes](../coding/algorithms/15-dynamic-programming.md#russian-doll-envelopes-lc-354) `🎯 T2`** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
+- **[Maximum Gap](../04-practice/algorithms/00-sorting.md#maximum-gap-bucket-sort) `🎯 T2`** — Bucket sort / pigeonhole: O(N) time, the gap must span at least one empty bucket.
+- **[Russian Doll Envelopes](../04-practice/algorithms/15-dynamic-programming.md#russian-doll-envelopes-lc-354) `🎯 T2`** — Sort by width ascending, then height **descending**; LIS on heights (prevents same-width stacking).
 
 ---
 

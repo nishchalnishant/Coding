@@ -5,15 +5,15 @@ tags: [data-structures, heap]
 ---
 # Heap / Priority Queue — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Binary heaps and priority queues: heapify cost, top-K, K-way merge, two-heap median, scheduling, heap-driven Dijkstra.
 > **You'll be able to:** Choose heap vs sort vs quickselect for top-K; handle max-heap in Python (negation / tuples); write two-heap median and K-way merge.
-> **Prereqs:** Arrays, tree · **Pair with:** [Heap problems](../coding/data-structures/10-heap.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays, tree · **Pair with:** [Heap problems](../04-practice/data-structures/10-heap.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -303,22 +303,22 @@ def ipo_maximize_capital(k: int, w: int, profits: list[int], capital: list[int])
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Kth Largest in Stream](../coding/data-structures/10-heap.md#kth-largest-element-in-a-stream--t1) `⚡ T1`** — Min-heap of size K; push and pop if overflows.
-- **[Last Stone Weight](../coding/data-structures/10-heap.md#last-stone-weight--t1) `⚡ T1`** — Max-heap; pop two, push difference if non-zero.
+- **[Kth Largest in Stream](../04-practice/data-structures/10-heap.md#kth-largest-element-in-a-stream--t1) `⚡ T1`** — Min-heap of size K; push and pop if overflows.
+- **[Last Stone Weight](../04-practice/data-structures/10-heap.md#last-stone-weight--t1) `⚡ T1`** — Max-heap; pop two, push difference if non-zero.
 
 ### Medium
-- **[K Closest Points to Origin](../coding/data-structures/10-heap.md#k-closest-points-to-origin--t1) `⚡ T1`** — Max-heap of size K on squared distance (avoid sqrt).
-- **[Top K Frequent Elements](../coding/data-structures/02-hashing.md#top-k-frequent-elements--t1) `⚡ T1`** — Count with map; min-heap on `(freq, key)` of size K, or bucket sort.
-- **[Reorganize String](../coding/data-structures/10-heap.md#reorganize-string-lc-767--t1) `⚡ T1`** — Max-heap by frequency; place most frequent not equal to previous.
-- **[Task Scheduler](../coding/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`** — Math: `(max_freq - 1) * (n + 1) + count_of_max_freq`, capped at `len(tasks)`.
-- **[Find Median from Data Stream](../coding/algorithms/00-sorting.md#find-median-from-data-stream-lc-295--t1) `⚡ T1`** — Two heaps with rebalancing.
+- **[K Closest Points to Origin](../04-practice/data-structures/10-heap.md#k-closest-points-to-origin--t1) `⚡ T1`** — Max-heap of size K on squared distance (avoid sqrt).
+- **[Top K Frequent Elements](../04-practice/data-structures/02-hashing.md#top-k-frequent-elements--t1) `⚡ T1`** — Count with map; min-heap on `(freq, key)` of size K, or bucket sort.
+- **[Reorganize String](../04-practice/data-structures/10-heap.md#reorganize-string-lc-767--t1) `⚡ T1`** — Max-heap by frequency; place most frequent not equal to previous.
+- **[Task Scheduler](../04-practice/data-structures/06-queue.md#task-scheduler--t1) `⚡ T1`** — Math: `(max_freq - 1) * (n + 1) + count_of_max_freq`, capped at `len(tasks)`.
+- **[Find Median from Data Stream](../04-practice/algorithms/00-sorting.md#find-median-from-data-stream-lc-295--t1) `⚡ T1`** — Two heaps with rebalancing.
 
 ### Hard
-- **[Merge K Sorted Lists](../coding/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — K-way merge; handle empty lists; tie-break with list index.
-- **[Sliding Window Median](../coding/data-structures/10-heap.md#sliding-window-median--t1) `⚡ T1`** — Two heaps + lazy deletion counter.
-- **[IPO (Maximize Capital)](../coding/data-structures/10-heap.md#ipo-maximize-capital--t1) `⚡ T1`** — Sort by capital; max-heap of unlocked profits.
-- **[Furthest Building](../coding/data-structures/10-heap.md#furthest-building-you-can-reach--t1) `⚡ T1`** — Greedy: min-heap of climbs assigned ladders; fall back to bricks.
-- **[Smallest Range Covering K Lists](../coding/data-structures/10-heap.md#smallest-range-covering-elements-from-k-lists-heap-variant--t1) `⚡ T1`** — K-way merge tracking `[min, max]` of current window.
+- **[Merge K Sorted Lists](../04-practice/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — K-way merge; handle empty lists; tie-break with list index.
+- **[Sliding Window Median](../04-practice/data-structures/10-heap.md#sliding-window-median--t1) `⚡ T1`** — Two heaps + lazy deletion counter.
+- **[IPO (Maximize Capital)](../04-practice/data-structures/10-heap.md#ipo-maximize-capital--t1) `⚡ T1`** — Sort by capital; max-heap of unlocked profits.
+- **[Furthest Building](../04-practice/data-structures/10-heap.md#furthest-building-you-can-reach--t1) `⚡ T1`** — Greedy: min-heap of climbs assigned ladders; fall back to bricks.
+- **[Smallest Range Covering K Lists](../04-practice/data-structures/10-heap.md#smallest-range-covering-elements-from-k-lists-heap-variant--t1) `⚡ T1`** — K-way merge tracking `[min, max]` of current window.
 
 ---
 
@@ -364,7 +364,7 @@ def ipo_maximize_capital(k: int, w: int, profits: list[int], capital: list[int])
 
 - [Sorting](../02-algorithms/00-sorting.md) — QuickSelect vs heap for top-K; external merge sort using K-way merge
 - [Queue](06-queue.md) — priority queue vs FIFO; blocking queue for concurrency
-- [Graph](../01-data-structures/13-graphs.md) — Dijkstra's algorithm uses a min-heap
+- [Graph](13-graphs.md) — Dijkstra's algorithm uses a min-heap
 - [Patterns Master](../03-patterns/patterns-master.md) — top-K and merge-K pattern triggers
 
 ## Flashcards

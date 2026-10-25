@@ -5,15 +5,15 @@ tags: [data-structures, graphs]
 ---
 # Graphs (Data Structure) — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Graph representations, BFS/DFS, cycle detection, topological sort, bipartite check; then shortest paths (Dijkstra, Bellman-Ford, 0-1 BFS) and MST (Kruskal/Prim).
 > **You'll be able to:** Model a word/grid/state problem as a graph; pick the right traversal or shortest-path algorithm from edge weights; detect cycles in directed vs undirected graphs.
-> **Prereqs:** Queue, stack, recursion, heap · **Pair with:** [Graph problems](../coding/data-structures/13-graph.md) · [Graph algorithm problems](../coding/algorithms/13-graph-algorithms.md) · [Union-Find](../02-algorithms/14-union-find.md) · **Time:** 3 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Queue, stack, recursion, heap · **Pair with:** [Graph problems](../04-practice/data-structures/13-graph.md) · [Graph algorithm problems](../04-practice/algorithms/13-graph-algorithms.md) · [Union-Find](../02-algorithms/14-union-find.md) · **Time:** 3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. Weighted & Advanced Algorithms](#3-weighted--advanced-algorithms) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -557,19 +557,19 @@ def prim_mst(n: int, adj: dict) -> int:
 ## 4. Common Interview Problems
 
 ### Easy / Medium (High Frequency)
-- **[Flood Fill](../coding/data-structures/13-graph.md#flood-fill--t1) `⚡ T1`** — BFS/DFS from `(sr, sc)`; recolor connected component.
-- **[Surrounded Regions](../coding/data-structures/13-graph.md#surrounded-regions--t1) `⚡ T1`** — Flood fill from border `O`s to mark safe; flip remaining interior `O`→`X`.
-- **[Max Area of Island](../coding/data-structures/13-graph.md#max-area-of-island--t1) `⚡ T1`** — DFS/BFS; return max area across all components.
-- **[Number of Islands](../coding/data-structures/13-graph.md#number-of-islands-bfs--t1) `⚡ T1`** — DFS/BFS flood fill; count calls to unvisited `1`.
-- **[Rotting Oranges](../coding/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten oranges at distance 0; count levels.
-- **[Course Schedule](../coding/data-structures/06-queue.md#course-schedule--t1) `⚡ T1`** — Kahn's topo sort; cycle ⟺ `len(order) < n`.
-- **[Clone Graph](../coding/data-structures/13-graph.md#clone-graph--t1) `⚡ T1`** — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
+- **[Flood Fill](../04-practice/data-structures/13-graph.md#flood-fill--t1) `⚡ T1`** — BFS/DFS from `(sr, sc)`; recolor connected component.
+- **[Surrounded Regions](../04-practice/data-structures/13-graph.md#surrounded-regions--t1) `⚡ T1`** — Flood fill from border `O`s to mark safe; flip remaining interior `O`→`X`.
+- **[Max Area of Island](../04-practice/data-structures/13-graph.md#max-area-of-island--t1) `⚡ T1`** — DFS/BFS; return max area across all components.
+- **[Number of Islands](../04-practice/data-structures/13-graph.md#number-of-islands-bfs--t1) `⚡ T1`** — DFS/BFS flood fill; count calls to unvisited `1`.
+- **[Rotting Oranges](../04-practice/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten oranges at distance 0; count levels.
+- **[Course Schedule](../04-practice/data-structures/06-queue.md#course-schedule--t1) `⚡ T1`** — Kahn's topo sort; cycle ⟺ `len(order) < n`.
+- **[Clone Graph](../04-practice/data-structures/13-graph.md#clone-graph--t1) `⚡ T1`** — DFS/BFS with `old → clone` map; create before traversing to handle cycles.
 
 ### Hard / Stretch (Common at Google)
-- **[Pacific Atlantic Water Flow](../coding/data-structures/13-graph.md#pacific-atlantic-water-flow--t1) `⚡ T1`** — Reverse BFS: which cells can reach Pacific? Atlantic? Intersect.
-- **[Word Ladder](../coding/data-structures/13-graph.md#word-ladder--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words.
-- **[Alien Dictionary](../coding/algorithms/00-sorting.md#alien-dictionary-lc-269--t1) `⚡ T1`** — Build directed edges from adjacent word pairs; topo sort all characters.
-- **[Network Delay Time](../coding/data-structures/13-graph.md#network-delay-time-dijkstras) `🎯 T2`** — Dijkstra from source; answer = max dist if all nodes reached.
+- **[Pacific Atlantic Water Flow](../04-practice/data-structures/13-graph.md#pacific-atlantic-water-flow--t1) `⚡ T1`** — Reverse BFS: which cells can reach Pacific? Atlantic? Intersect.
+- **[Word Ladder](../04-practice/data-structures/13-graph.md#word-ladder--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words.
+- **[Alien Dictionary](../04-practice/algorithms/00-sorting.md#alien-dictionary-lc-269--t1) `⚡ T1`** — Build directed edges from adjacent word pairs; topo sort all characters.
+- **[Network Delay Time](../04-practice/data-structures/13-graph.md#network-delay-time-dijkstras) `🎯 T2`** — Dijkstra from source; answer = max dist if all nodes reached.
 
 ---
 

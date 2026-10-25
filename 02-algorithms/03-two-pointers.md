@@ -5,15 +5,15 @@ tags: [algorithms, two-pointers]
 ---
 # Two Pointers
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Three variants: converging (sorted pairs), fast/slow (cycles, middle), same-direction write pointer (in-place filtering, partition).
 > **You'll be able to:** Identify which variant applies; justify each pointer move with a one-line 'why this can't skip the answer' proof.
-> **Prereqs:** Arrays, sorting · **Pair with:** [Two-pointer problems](../coding/algorithms/03-two-pointers.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays, sorting · **Pair with:** [Two-pointer problems](../04-practice/algorithms/03-two-pointers.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [When to Use](#when-to-use) · [Variant 1: Converging Pointers (Opposite Ends)](#variant-1-converging-pointers-opposite-ends) · [Variant 2: Fast / Slow Pointers (Floyd's)](#variant-2-fast--slow-pointers-floyds) · [Variant 3: Same-Direction Pointers](#variant-3-same-direction-pointers) · [Complexity Summary](#complexity-summary) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 

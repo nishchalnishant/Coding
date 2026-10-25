@@ -225,5 +225,5 @@ Time per rung, not per ladder: if a rung falls in 5 minutes, move on immediately
 ## After the ladders
 
 - Breadth pass: topic indexes [`01-data-structures/README.md`](../01-data-structures/README.md), [`02-algorithms/README.md`](../02-algorithms/README.md) — everything there should now feel like "rung 2 of a ladder I know."
-- Integration: [`MOCK_INTERVIEW_SET.md`](MOCK_INTERVIEW_SET.md) timed, plus the follow-up drill table in [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md#4-l4-6-week-schedule).
+- Integration: [`MOCK_INTERVIEW_SET.md`](MOCK_INTERVIEW_SET.md) timed, plus the follow-up drill table in [`00-start-here/l4-sde2-delta.md`](../00-start-here/l4-sde2-delta.md#4-l4-6-week-schedule).
 - If a mock problem stumps you, the postmortem question is never "which problem was this like?" — it's "**which invariant did I fail to test for?**" Log it.

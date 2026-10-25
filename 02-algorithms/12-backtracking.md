@@ -5,15 +5,15 @@ tags: [algorithms, backtracking]
 ---
 # Backtracking — L3 Gold Standard
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** The choose / explore / un-choose template, subsets/combinations/permutations, deduplication, pruning strategies, board search (N-Queens, Sudoku, Word Search).
 > **You'll be able to:** Write the universal template; dedupe with sort + skip; estimate branching-factor complexity; prune early.
-> **Prereqs:** Recursion · **Pair with:** [Backtracking problems](../coding/algorithms/12-backtracking.md) · **Time:** 2 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Recursion · **Pair with:** [Backtracking problems](../04-practice/algorithms/12-backtracking.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. The Universal Template](#2-the-universal-template) · [3. Core Patterns & Click Moments](#3-core-patterns--click-moments) · [4. Advanced Pruning Strategies](#4-advanced-pruning-strategies) · [5. Complexity Reference](#5-complexity-reference) · [5. L3 Deep Dives](#5-l3-deep-dives) · [6. Common Interview Problems](#6-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Deduplication Template `⚡ T1`](#deduplication-template--t1) · [The Coach's Dialogue: The Art of the "Undo"](#the-coachs-dialogue-the-art-of-the-undo) · [Flashcards](#flashcards)
 
@@ -523,22 +523,22 @@ def dfs_iterative(start, choices):
 ## 6. Common Interview Problems
 
 ### Easy
-- **[Subsets](../coding/algorithms/12-backtracking.md#subsets-power-set--t2) `🎯 T2`** — Include/exclude each index; `start` index prevents duplicates.
-- **[Letter Combinations of Phone Number](../coding/algorithms/12-backtracking.md#letter-combinations-of-a-phone-number--t2) `🎯 T2`** — Cartesian product via DFS.
+- **[Subsets](../04-practice/algorithms/12-backtracking.md#subsets-power-set--t2) `🎯 T2`** — Include/exclude each index; `start` index prevents duplicates.
+- **[Letter Combinations of Phone Number](../04-practice/algorithms/12-backtracking.md#letter-combinations-of-a-phone-number--t2) `🎯 T2`** — Cartesian product via DFS.
 
 ### Medium
-- **[Word Search](../coding/algorithms/12-backtracking.md#word-search-all-occurrences--t1) `⚡ T1`** — Grid DFS with in-place marking.
-- **[Permutations](../coding/algorithms/12-backtracking.md#permutations--t2) / [Permutations II](../coding/algorithms/12-backtracking.md#permutations-ii-with-duplicates--t2) `🎯 T2`** — Unused set; sort + skip for duplicates.
-- **[Combination Sum / II](../coding/algorithms/12-backtracking.md#combination-sum-ii-01--no-reuse--t2) `🎯 T2`** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
-- **[Palindrome Partitioning](../coding/algorithms/12-backtracking.md#palindrome-partitioning--t2) `🎯 T2`** — Precompute palindrome table; O(1) check per partition.
-- **[Generate Parentheses](../coding/algorithms/12-backtracking.md#generate-parentheses--t2) `🎯 T2`** — Track open/close counts; prune when `close > open`.
+- **[Word Search](../04-practice/algorithms/12-backtracking.md#word-search-all-occurrences--t1) `⚡ T1`** — Grid DFS with in-place marking.
+- **[Permutations](../04-practice/algorithms/12-backtracking.md#permutations--t2) / [Permutations II](../04-practice/algorithms/12-backtracking.md#permutations-ii-with-duplicates--t2) `🎯 T2`** — Unused set; sort + skip for duplicates.
+- **[Combination Sum / II](../04-practice/algorithms/12-backtracking.md#combination-sum-ii-01--no-reuse--t2) `🎯 T2`** — Unbounded (reuse `i`) vs 0/1 (advance `i+1`).
+- **[Palindrome Partitioning](../04-practice/algorithms/12-backtracking.md#palindrome-partitioning--t2) `🎯 T2`** — Precompute palindrome table; O(1) check per partition.
+- **[Generate Parentheses](../04-practice/algorithms/12-backtracking.md#generate-parentheses--t2) `🎯 T2`** — Track open/close counts; prune when `close > open`.
 
 ### Hard
-- **[Word Search II](../coding/algorithms/09-recursion.md#word-search-ii-trie--backtracking--t1) `⚡ T1`** — Trie of all words + backtracking; prune when no trie prefix matches.
-- **[N-Queens](../coding/algorithms/12-backtracking.md#n-queens--t2) `🎯 T2`** — Column + diagonal sets; bitmask variant for speed.
-- **[Sudoku Solver](../coding/algorithms/12-backtracking.md#sudoku-solver--t2) `🎯 T2`** — MRV heuristic (cell with fewest valid digits first).
-- **[Expression Add Operators](../coding/algorithms/12-backtracking.md#expression-add-operators-lc-282) `🎯 T2`** — Backtrack with last-operand tracking for `*` precedence.
-- **[Remove Invalid Parentheses](../coding/algorithms/12-backtracking.md#remove-invalid-parentheses) `💤 T3`** — BFS by removal count; or backtracking with min-removal pruning.
+- **[Word Search II](../04-practice/algorithms/09-recursion.md#word-search-ii-trie--backtracking--t1) `⚡ T1`** — Trie of all words + backtracking; prune when no trie prefix matches.
+- **[N-Queens](../04-practice/algorithms/12-backtracking.md#n-queens--t2) `🎯 T2`** — Column + diagonal sets; bitmask variant for speed.
+- **[Sudoku Solver](../04-practice/algorithms/12-backtracking.md#sudoku-solver--t2) `🎯 T2`** — MRV heuristic (cell with fewest valid digits first).
+- **[Expression Add Operators](../04-practice/algorithms/12-backtracking.md#expression-add-operators-lc-282) `🎯 T2`** — Backtrack with last-operand tracking for `*` precedence.
+- **[Remove Invalid Parentheses](../04-practice/algorithms/12-backtracking.md#remove-invalid-parentheses) `💤 T3`** — BFS by removal count; or backtracking with min-removal pruning.
 
 ---
 

@@ -5,15 +5,15 @@ tags: [data-structures, array]
 ---
 # Arrays — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Memory model of arrays, then the O(N) toolkit: two pointers, sliding window, prefix sum, difference array, Kadane, Dutch-flag partition, Boyer-Moore, binary search on answer.
 > **You'll be able to:** Pick the right array technique from the constraints in under a minute; write in-place index passes with no off-by-one bugs; explain why sliding window fails on negatives.
-> **Prereqs:** Big-O basics · **Pair with:** [Array problems](../coding/data-structures/01-array.md) · [Two pointers](../02-algorithms/03-two-pointers.md) · [Sliding window](../02-algorithms/04-sliding-window.md) · **Time:** 2–3 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Big-O basics · **Pair with:** [Array problems](../04-practice/data-structures/01-array.md) · [Two pointers](../02-algorithms/03-two-pointers.md) · [Sliding window](../02-algorithms/04-sliding-window.md) · **Time:** 2–3 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Technique Selection Guide](#1-technique-selection-guide) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -417,23 +417,23 @@ def find_duplicate(nums: list[int]) -> int:
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Two Sum](../coding/data-structures/01-array.md#two-sum-sorted-variant--t1) `⚡ T1`** — Hash map for complement; or two pointers if sorted.
-- **[Move Zeros](../coding/data-structures/01-array.md#move-zeroes--t1) `⚡ T1`** — Two-pointer: maintain `write_idx` for non-zeros.
-- **[Best Time to Buy/Sell Stock](../coding/data-structures/01-array.md#best-time-to-buy-and-sell-stock--t2) `🎯 T2`** — Track min so far; `profit = max(profit, price - min_price)`.
+- **[Two Sum](../04-practice/data-structures/01-array.md#two-sum-sorted-variant--t1) `⚡ T1`** — Hash map for complement; or two pointers if sorted.
+- **[Move Zeros](../04-practice/data-structures/01-array.md#move-zeroes--t1) `⚡ T1`** — Two-pointer: maintain `write_idx` for non-zeros.
+- **[Best Time to Buy/Sell Stock](../04-practice/data-structures/01-array.md#best-time-to-buy-and-sell-stock--t2) `🎯 T2`** — Track min so far; `profit = max(profit, price - min_price)`.
 
 ### Medium
-- **[Container with Most Water](../coding/data-structures/01-array.md#container-with-most-water--t1) `⚡ T1`** — Two pointers; advance the side with shorter height.
-- **[3Sum](../coding/data-structures/01-array.md#3sum--t1) `⚡ T1`** — Sort + fix one + two pointers; skip duplicates at all three sites.
-- **[Subarray Sum Equals K](../coding/data-structures/01-array.md#subarray-sum-equals-k-with-negative-numbers--t1) `⚡ T1`** — Prefix sum + count map; `seen[0] = 1`.
-- **[Jump Game](../coding/data-structures/01-array.md#jump-game-lc-55--t2) `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
-- **[Longest Subarray with K Distinct](../coding/algorithms/04-sliding-window.md#longest-substring-with-at-most-k-distinct-characters-lc-340) `🎯 T2`** — Sliding window + frequency map.
-- **[Product of Array Except Self](../coding/data-structures/01-array.md#product-of-array-except-self--t2) `🎯 T2`** — Prefix product from left × suffix product from right; O(1) extra space.
-- **[Next Permutation](../coding/data-structures/01-array.md#next-permutation--t2) `🎯 T2`** — Find rightmost descent, swap with next larger, reverse suffix.
+- **[Container with Most Water](../04-practice/data-structures/01-array.md#container-with-most-water--t1) `⚡ T1`** — Two pointers; advance the side with shorter height.
+- **[3Sum](../04-practice/data-structures/01-array.md#3sum--t1) `⚡ T1`** — Sort + fix one + two pointers; skip duplicates at all three sites.
+- **[Subarray Sum Equals K](../04-practice/data-structures/01-array.md#subarray-sum-equals-k-with-negative-numbers--t1) `⚡ T1`** — Prefix sum + count map; `seen[0] = 1`.
+- **[Jump Game](../04-practice/data-structures/01-array.md#jump-game-lc-55--t2) `🎯 T2`** — Track `farthest` reachable; unreachable if `i > farthest`.
+- **[Longest Subarray with K Distinct](../04-practice/algorithms/04-sliding-window.md#longest-substring-with-at-most-k-distinct-characters-lc-340) `🎯 T2`** — Sliding window + frequency map.
+- **[Product of Array Except Self](../04-practice/data-structures/01-array.md#product-of-array-except-self--t2) `🎯 T2`** — Prefix product from left × suffix product from right; O(1) extra space.
+- **[Next Permutation](../04-practice/data-structures/01-array.md#next-permutation--t2) `🎯 T2`** — Find rightmost descent, swap with next larger, reverse suffix.
 
 ### Hard
-- **[Sliding Window Maximum](../coding/algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1) `⚡ T1`** — Monotonic deque; O(N).
-- **[Trapping Rain Water](../coding/data-structures/01-array.md#trapping-rain-water--t1) `⚡ T1`** — Two pointers `l_max, r_max`; advance side with smaller max.
-- **[Median of Two Sorted Arrays](../coding/algorithms/11-binary-search.md#median-of-two-sorted-arrays-lc-4--t1) `⚡ T1`** — Binary search on partition of shorter array.
+- **[Sliding Window Maximum](../04-practice/algorithms/04-sliding-window.md#sliding-window-maximum-lc-239--t1) `⚡ T1`** — Monotonic deque; O(N).
+- **[Trapping Rain Water](../04-practice/data-structures/01-array.md#trapping-rain-water--t1) `⚡ T1`** — Two pointers `l_max, r_max`; advance side with smaller max.
+- **[Median of Two Sorted Arrays](../04-practice/algorithms/11-binary-search.md#median-of-two-sorted-arrays-lc-4--t1) `⚡ T1`** — Binary search on partition of shorter array.
 
 ---
 

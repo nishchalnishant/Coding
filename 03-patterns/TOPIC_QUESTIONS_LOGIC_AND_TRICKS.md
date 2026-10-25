@@ -10,9 +10,9 @@ tags: [patterns, topic-questions-logic-and-tricks]
 > [!abstract] In this file
 > **Covers:** Canonical questions for every topic, why they're asked, the core logic, and the trap in each.
 > **You'll be able to:** Recall the key insight and gotcha for any canonical problem in seconds.
-> **Prereqs:** Lecture files · **Pair with:** [Questions index](../questions.md) · **Time:** 2 h (lookup afterwards)
+> **Prereqs:** Lecture files · **Pair with:** [Questions index](../04-practice/README.md) · **Time:** 2 h (lookup afterwards)
 > **How to use:** reference — read once, then use as a lookup.
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Arrays, two pointers, sliding window, prefix sum](#arrays-two-pointers-sliding-window-prefix-sum) · [Hashing & frequency](#hashing--frequency) · [Linked lists](#linked-lists) · [Stack & queue](#stack--queue) · [Trees & BST](#trees--bst) · [Heap & priority queue](#heap--priority-queue) · [Binary search](#binary-search) · [Graphs](#graphs) · [Disjoint Set Union (DSU)](#disjoint-set-union-dsu) · [Dynamic programming](#dynamic-programming) · [Greedy](#greedy) · [Backtracking](#backtracking) · [Trie](#trie) · [Bit manipulation](#bit-manipulation) · [Math & number theory](#math--number-theory) · [See also](#see-also)
 
@@ -345,7 +345,7 @@ This guide lists **canonical interview questions** by topic, **why** they appear
 
 ## Segment Tree & Fenwick Tree `💤 T3` — out of L3 scope
 
-> Skip for L3 — see [What to Skip](../00-L3-EXECUTION-META/L3_CHEATSHEET.md). Kept here only for reference.
+> Skip for L3 — see [What to Skip](../00-start-here/L3_CHEATSHEET.md). Kept here only for reference.
 
 | Problem | Difficulty | Pattern | Key Insight |
 |---------|-----------|---------|-------------|

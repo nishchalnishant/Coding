@@ -1,0 +1,1434 @@
+---
+tags: [coding, data-structures, string]
+topic: String
+difficulty: mixed
+---
+# String Problems — Deep Dive
+
+## What this covers
+
+> [!abstract] In this file
+> **Covers:** Worked string problems: anagrams, palindromes, sliding window, encoding, parsing/simulation, pattern matching.
+> **You'll be able to:** Solve string window and parsing problems without index bugs.
+> **Prereqs:** String lecture · **Pair with:** [String lecture](../../01-data-structures/03-string.md) · **Time:** 4 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../../00-start-here/l3-google-roadmap.md#tier-legend))
+
+**Sections:** [Frequency Map / Anagram](#frequency-map--anagram) · [Two Pointers — Palindrome](#two-pointers--palindrome) · [Sliding Window](#sliding-window) · [Prefix Sum on Characters](#prefix-sum-on-characters) · [Encoding / Hashing](#encoding--hashing) · [Parsing / Simulation](#parsing--simulation) · [Two Pointers — Reverse / Subsequence](#two-pointers--reverse--subsequence) · [Pattern Matching](#pattern-matching) · [String Manipulation](#string-manipulation)
+
+> [!tip] If you only have 20 minutes
+> **Do these first:** [Valid Anagram](#valid-anagram--t2) · [Group Anagrams](#group-anagrams--t1) · [Valid Palindrome](#valid-palindrome--t2) · [Longest Substring Without Repeating Characters](#longest-substring-without-repeating-characters--t1) · [Longest Palindromic Substring](#longest-palindromic-substring--t1) · [Minimum Window Substring](#minimum-window-substring--t1) · [Encode and Decode Strings](#encode-and-decode-strings--t2) · [Decode String](#decode-string)
+> **Template:** Frequency key: `tuple(count[26])` or `''.join(sorted(s))` for grouping.
+> **Template:** Expand around center over `2n-1` centers: `expand(i, i)` and `expand(i, i+1)`.
+> **Gotchas:** Python strings are immutable — build with a list + `''.join` · Unicode/case/non-alnum rules — ask first · Encode/Decode: length-prefix (`len#str`), not a delimiter · most "string" problems are really hashing or sliding window.
+
+---
+
+Pattern tags: frequency map, two pointers, sliding window, hashing, parsing.
+
+---
+
+## Frequency Map / Anagram
+
+---
+
+### Valid Anagram `🎯 T2`
+
+> [!example] Problem
+> Given two strings s and t, return true if t is an anagram of s, and false otherwise.
+> 
+> **Example 1:**
+> ```
+> Input: s = "anagram", t = "nagaram"
+> Output: true
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "rat", t = "car"
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length, t.length <= 5 * 10^4
+> - s and t consist of lowercase English letters.
+
+> [!info] Approach
+> Two strings are anagrams iff they are identical after sorting. Sorting is O(n log n). We can do O(n) by comparing character frequency vectors. A 26-bucket frequency array (fixed alphabet) or a `Counter`. Two strings are anagrams iff their frequency maps are equal. Build `Counter(s)` and `Counter(t)`. Return `Counter(s) == Counter(t)`. For pure lowercase ASCII, use `[0]*26` and compare arrays — same asymptotic cost, better constant.
+
+> [!note]- Python Solution
+> ```python
+> from collections import Counter
+> 
+> def is_anagram(s, t):
+>     if len(s) != len(t):
+>         return False
+>     return Counter(s) == Counter(t)
+> 
+> # O(1) space variant for lowercase a-z only
+> def is_anagram_array(s, t):
+>     if len(s) != len(t):
+>         return False
+>     freq = [0] * 26
+>     for c in s:
+>         freq[ord(c) - ord('a')] += 1
+>     for c in t:
+>         freq[ord(c) - ord('a')] -= 1
+>     for f in freq:
+>         if not (f == 0):
+>             return False
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1) for fixed alphabet (26 buckets), O(n) for general `Counter`.
+
+> [!tip] Alternatives
+> - Sorting: `sorted(s) == sorted(t)` — O(n log n), simpler to write, correct for Unicode.
+> - XOR trick: works only if each character appears an even number of times — too restrictive for general anagram check.
+
+---
+
+### Group Anagrams `⚡ T1`
+
+> [!example] Problem
+> Given an array of strings strs, group the anagrams together. You can return the answer in any order.
+> 
+> **Example 1:**
+> ```
+> Input: strs = ["eat","tea","tan","ate","nat","bat"]
+> Output: [["bat"],["nat","tan"],["ate","eat","tea"]]
+> Explanation:
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: strs = [""]
+> Output: [[""]]
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: strs = ["a"]
+> Output: [["a"]]
+> ```
+> 
+> **Constraints:**
+> - 1 <= strs.length <= 10^4
+> - 0 <= strs[i].length <= 100
+> - strs[i] consists of lowercase English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "Same letters, group together" · **Gotcha:** 26-array fails for Unicode; `sorted` is O(K log K) vs O(K) count.
+
+> [!info] Approach
+> All anagrams share the same canonical form — their sorted version. Use that as a hash map key. HashMap from canonical key → list of anagrams. For pure lowercase ASCII, use a tuple of 26 frequency counts as key (avoids O(L log L) sort per word). For each word, compute `key = tuple(freq_array)` or `key = "".join(sorted(word))`. Append word to `groups[key]`. Return `list(groups.values())`.
+
+> [!note]- Python Solution
+> ```python
+> from collections import defaultdict
+> 
+> def group_anagrams(strs):
+>     groups = defaultdict(list)
+>     for word in strs:
+>         freq = [0] * 26
+>         for c in word:
+>             freq[ord(c) - ord('a')] += 1
+>         groups[tuple(freq)].append(word)
+>     return list(groups.values())
+> ```
+
+> [!success] Complexity
+> Time O(N × L) where N = number of words, L = max word length. Space O(N × L).
+
+> [!tip] Alternatives
+> - Sort-based key `sorted(word)`: O(N × L log L) — simpler but slower due to the sort.
+> - Prime product key: assign each letter a prime, key = product of primes for each char. O(N × L) but product overflows for long words — not safe.
+
+---
+
+### Find All Anagrams in a String `⚡ T1`
+
+> Full walkthrough: [Find All Anagrams in a String (LC 438)](../algorithms/04-sliding-window.md#find-all-anagrams-in-a-string-lc-438--t1).
+
+---
+
+## Two Pointers — Palindrome
+
+---
+
+### Valid Palindrome `🎯 T2`
+
+> [!example] Problem
+> A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers.
+> Given a string s, return true if it is a palindrome, or false otherwise.
+> 
+> **Example 1:**
+> ```
+> Input: s = "A man, a plan, a canal: Panama"
+> Output: true
+> Explanation: "amanaplanacanalpanama" is a palindrome.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "race a car"
+> Output: false
+> Explanation: "raceacar" is not a palindrome.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = " "
+> Output: true
+> Explanation: s is an empty string "" after removing non-alphanumeric characters.
+> Since an empty string reads the same forward and backward, it is a palindrome.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 2 * 10^5
+> - s consists only of printable ASCII characters.
+
+> [!info] Approach
+> After filtering to alphanumeric + lowercase, a palindrome reads the same forwards and backwards. Two pointers moving inward compare characters without allocating a filtered string. Left pointer starts at 0, right pointer starts at end. Skip non-alphanumeric characters. Compare lowercase versions. While `l < r`: skip `l` while not alphanumeric, skip `r` while not alphanumeric. If `s[l].lower() != s[r].lower()`, return False. Advance both pointers inward.
+
+> [!note]- Python Solution
+> ```python
+> def is_palindrome(s):
+>     l, r = 0, len(s) - 1
+>     while l < r:
+>         while l < r and not s[l].isalnum():
+>             l += 1
+>         while l < r and not s[r].isalnum():
+>             r -= 1
+>         if s[l].lower() != s[r].lower():
+>             return False
+>         l += 1
+>         r -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> - Filter then compare: `clean = [c.lower() for c in s if c.isalnum()]; return clean == clean[::-1]` — O(n) time, O(n) space, less elegant.
+> - Regex filter: `re.sub(r'[^a-z0-9]', '', s.lower())` then compare to its reverse — same complexity, cleaner for production code.
+
+---
+
+### Longest Palindromic Substring `⚡ T1`
+
+> Full walkthrough: [Longest Palindromic Substring](../algorithms/02-string-algorithms.md#longest-palindromic-substring--t1).
+
+---
+
+### Palindromic Substrings (Count All Palindromic Substrings)
+
+> Full walkthrough: [Palindromic Substrings — Count](../algorithms/02-string-algorithms.md#palindromic-substrings--count).
+
+---
+
+## Sliding Window
+
+---
+
+### Longest Substring Without Repeating Characters `⚡ T1`
+
+> Full walkthrough: [Longest Substring Without Repeating Characters (LC 3)](../algorithms/04-sliding-window.md#longest-substring-without-repeating-characters-lc-3--t1).
+
+---
+
+### Minimum Window Substring `⚡ T1`
+
+> Full walkthrough: [Minimum Window Substring (LC 76)](../algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1).
+
+---
+
+### Longest Repeating Character Replacement `⚡ T1`
+
+> Full walkthrough: [Longest Repeating Character Replacement (LC 424)](../algorithms/04-sliding-window.md#longest-repeating-character-replacement-lc-424--t1).
+
+---
+
+## Prefix Sum on Characters
+
+---
+
+### Prefix Sum on Characters Pattern
+
+> Count substrings satisfying a character-frequency constraint in O(n) using prefix sum + hash map — the exact same technique as numeric subarray sum problems. Map characters to numbers (e.g., vowel=1/non-vowel=0, or treat a binary string as 0/1). Build a running sum; use a hash map to count valid pairs. For "exactly k" problems use the at-most trick: `exactly(k) = atMost(k) - atMost(k-1)`. `prefix_count = {0: 1}; running = 0`. For each element: `running += value(element)`. `answer += prefix_count.get(running - target, 0)`. `prefix_count[running] += 1`.
+
+---
+
+### Number of Substrings Containing All Three Characters
+
+> [!example] Problem
+> Given a string s consisting only of characters a, b and c.
+> Return the number of substrings containing at least one occurrence of all these characters a, b and c.
+> 
+> **Example 1:**
+> ```
+> Input: s = "abcabc"
+> Output: 10
+> Explanation: The substrings containing at least one occurrence of the characters a, b and c are "abc", "abca", "abcab", "abcabc", "bca", "bcab", "bcabc", "cab", "cabc" and "abc" (again).
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "aaacb"
+> Output: 3
+> Explanation: The substrings containing at least one occurrence of the characters a, b and c are "aaacb", "aacb" and "acb".
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "abc"
+> Output: 1
+> ```
+> 
+> **Constraints:**
+> - 3 <= s.length <= 5 x 10^4
+> - s only consists of a, b or c characters.
+
+> [!info] Approach
+> For any right endpoint `r`, the valid left endpoints form a contiguous suffix — as soon as all three chars appear, every further-left start also works. Track the rightmost position where each character was last seen. Single pass tracking `last[a]`, `last[b]`, `last[c]` (most recent index of each). At each `r`, the number of valid starting points ending at `r` is `min(last_a, last_b, last_c) + 1` (all positions from 0 to that minimum). Maintain `last = [-1, -1, -1]` for a/b/c. For each `r`, update `last[ord(s[r]) - ord('a')] = r`. Add `min(last) + 1` to answer (clamped to 0 when any char unseen).
+
+> [!note]- Python Solution
+> ```python
+> def number_of_substrings(s):
+>     last = [-1, -1, -1]
+>     count = 0
+>     for r, ch in enumerate(s):
+>         last[ord(ch) - ord('a')] = r
+>         count += min(last) + 1   # -1 if any char unseen → contributes 0
+>     return count
+> >
+> # Alternative: prefix count approach
+> def number_of_substrings_prefix(s):
+>     from collections import Counter
+>     count = 0
+>     left = 0
+>     freq: Counter = Counter()
+>     for right, ch in enumerate(s):
+>         freq[ch] += 1
+>         while len(freq) == 3:
+>             count += len(s) - right
+>             freq[s[left]] -= 1
+>             if freq[s[left]] == 0:
+>                 del freq[s[left]]
+>             left += 1
+>     return count
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Sliding window (shrink-and-count): count all subarrays where window contains all 3 — same O(n), slightly more code.
+> - Brute force O(n²): for each (l, r), check if all 3 present using frequency map.
+
+---
+
+### Count Vowel Substrings of a Word
+
+> Full walkthrough: [Count Vowel Substrings of a Word (LC 2062)](../algorithms/04-sliding-window.md#count-vowel-substrings-of-a-word-lc-2062).
+
+---
+
+### Binary Subarrays With Sum
+
+> Full walkthrough: [Binary Subarrays with Sum (LC 930)](../algorithms/04-sliding-window.md#binary-subarrays-with-sum-lc-930).
+
+---
+
+### Subarray Sum Equals K (character version) `⚡ T1`
+
+> Full walkthrough: [Subarray Sum Equals K](02-hashing.md#subarray-sum-equals-k--t1).
+
+---
+
+## Encoding / Hashing
+
+---
+
+### Encode and Decode Strings `🎯 T2`
+
+> [!example] Problem
+> Design an algorithm to encode **a list of strings** to **a string**. The encoded string is then sent over the network and is decoded back to the original list of strings.
+> 
+> Machine 1 (sender) has the function:
+> 
+> ```
+> 
+> string encode(vector<string> strs) {
+>   // ... your code
+>   return encoded_string;
+> }
+> ```
+> 
+> Machine 2 (receiver) has the function:
+> 
+> ```
+> 
+> vector<string> decode(string s) {
+>   //... your code
+>   return strs;
+> }
+> 
+> ```
+> 
+> So Machine 1 does:
+> 
+> ```
+> 
+> string encoded_string = encode(strs);
+> 
+> ```
+> 
+> and Machine 2 does:
+> 
+> ```
+> 
+> vector<string> strs2 = decode(encoded_string);
+> 
+> ```
+> 
+> `strs2` in Machine 2 should be the same as `strs` in Machine 1.
+> 
+> Implement the `encode` and `decode` methods.
+> 
+> You are not allowed to solve the problem using any serialize methods (such as `eval`).
+> 
+>  
+> 
+> Example 1:
+> 
+> ```
+> 
+> **Input:** dummy_input = ["Hello","World"]
+> **Output:** ["Hello","World"]
+> **Explanation:**
+> Machine 1:
+> Codec encoder = new Codec();
+> String msg = encoder.encode(strs);
+> Machine 1 ---msg---> Machine 2
+> 
+> Machine 2:
+> Codec decoder = new Codec();
+> String[] strs = decoder.decode(msg);
+> 
+> ```
+> 
+> Example 2:
+> 
+> ```
+> 
+> **Input:** dummy_input = [""]
+> **Output:** [""]
+> 
+> ```
+> 
+>  
+> 
+> **Constraints:**
+> 
+> 	
+> - `1 <= strs.length <= 200`
+> 	
+> - `0 <= strs[i].length <= 200`
+> 	
+> - `strs[i]` contains any possible characters out of `256` valid ASCII characters.
+> 
+>  
+> 
+> **Follow up: **Could you write a generalized algorithm to work on any possible set of characters?
+
+> [!info] Approach
+> Simple delimiters (`,`, `#`) fail if the strings contain those characters. A length-prefix scheme is delimiter-free and unambiguous. Encode each string as `{length}#{string}`. The `#` here marks the end of the length field, not a content separator — the length tells us exactly how many bytes to read. Encode: for each string, emit `str(len(s)) + '#' + s`. Decode: read digits up to `#` to get length L; read exactly L characters as the next string; advance pointer past them; repeat.
+
+> [!note]- Python Solution
+> ```python
+> def encode(strs):
+>     return "".join(f"{len(s)}#{s}" for s in strs)
+> 
+> def decode(s):
+>     result = []
+>     i = 0
+>     while i < len(s):
+>         j = s.index('#', i)
+>         length = int(s[i:j])
+>         result.append(s[j + 1: j + 1 + length])
+>         i = j + 1 + length
+>     return result
+> ```
+
+> [!success] Complexity
+> Time O(total characters) for both encode and decode. Space O(total characters).
+
+> [!tip] Alternatives
+> - Escape-character scheme: prefix special chars with `\` — O(n) but encoding complexity grows with character set.
+> - Fixed-width length field (e.g., always 4 bytes big-endian): avoids the `#` separator entirely — used in binary protocols like protobuf.
+
+---
+
+### String Hashing (Duplicate Substring Detection)
+
+> [!example] Problem
+> Given string `s` and integer `length`, determine if any substring of that length appears more than once. (Foundation for "Longest Duplicate Substring" via binary search.)
+
+> [!info] Approach
+> Comparing every pair of substrings of length L is O(n × L) per comparison and O(n²L) total. A rolling hash computes each substring's hash in O(1) after O(n) preprocessing. Polynomial rolling hash: `hash(s[i..i+L-1]) = s[i] * base^(L-1) + s[i+1] * base^(L-2) + ... + s[i+L-1]`. Slide by subtracting the leftmost character's contribution and adding the rightmost — O(1) per step. Compute `hash(s[0..L-1])`. For each subsequent position, update the hash by the sliding formula. Store hashes in a set. On collision, verify with string comparison to rule out false positives.
+
+> [!note]- Python Solution
+> ```python
+> def has_duplicate_of_length(s, L):
+>     if L == 0:
+>         return True
+>     BASE, MOD = 31, (1 << 61) - 1   # Mersenne prime for low collision rate
+>     # Use Python's set of substrings for simplicity (avoids collision handling)
+>     seen = set()
+>     for i in range(len(s) - L + 1):
+>         sub = s[i:i + L]
+>         if sub in seen:
+>             return True
+>         seen.add(sub)
+>     return False
+> 
+> # Rolling hash variant — O(n) without substring creation
+> def has_duplicate_of_length_fast(s, L):
+>     """Returns start index of first duplicate or None."""
+>     BASE, MOD = 26, (1 << 61) - 1
+>     h = 0
+>     for c in s[:L]:
+>         h = (h * BASE + ord(c)) % MOD
+>     power = pow(BASE, L, MOD)
+>     seen = {h: 0}
+>     for i in range(1, len(s) - L + 1):
+>         h = (h * BASE - ord(s[i - 1]) * power + ord(s[i + L - 1])) % MOD
+>         if h in seen:
+>             # verify to handle collisions
+>             j = seen[h]
+>             if s[j:j + L] == s[i:i + L]:
+>                 return i
+>         seen[h] = i
+>     return None
+> ```
+
+> [!success] Complexity
+> Time O(n) per length check (amortized). Space O(n).
+
+> [!tip] Alternatives
+> - Suffix array + LCP array: O(n log n) build, O(1) per query — optimal for many length queries but complex to implement.
+> - Naive O(n²): store all substrings in a set — O(nL) per insertion due to string hashing; total O(n²L). Simpler, acceptable for small inputs.
+
+---
+
+## Parsing / Simulation
+
+---
+
+### String to Integer (atoi)
+
+> [!example] Problem
+> Implement the myAtoi(string s) function, which converts a string to a 32-bit signed integer.
+> The algorithm for myAtoi(string s) is as follows:
+> Return the integer as the final result.
+> 
+> **Example 1:**
+> ```
+> The underlined characters are what is read in and the caret is the current reader position.
+> Step 1: "42" (no characters read because there is no leading whitespace)
+>          ^
+> Step 2: "42" (no characters read because there is neither a '-' nor '+')
+>          ^
+> Step 3: "42" ("42" is read in)
+>            ^
+> ```
+> 
+> **Example 2:**
+> ```
+> Step 1: "   -042" (leading whitespace is read and ignored)
+>             ^
+> Step 2: "   -042" ('-' is read, so the result should be negative)
+>              ^
+> Step 3: "   -042" ("042" is read in, leading zeros ignored in the result)
+>                ^
+> ```
+> 
+> **Example 3:**
+> ```
+> Step 1: "1337c0d3" (no characters read because there is no leading whitespace)
+>          ^
+> Step 2: "1337c0d3" (no characters read because there is neither a '-' nor '+')
+>          ^
+> Step 3: "1337c0d3" ("1337" is read in; reading stops because the next character is a non-digit)
+>              ^
+> ```
+> 
+> **Example 4:**
+> ```
+> Step 1: "0-1" (no characters read because there is no leading whitespace)
+>          ^
+> Step 2: "0-1" (no characters read because there is neither a '-' nor '+')
+>          ^
+> Step 3: "0-1" ("0" is read in; reading stops because the next character is a non-digit)
+>           ^
+> ```
+> 
+> **Constraints:**
+> - 0 <= s.length <= 200
+> - s consists of English letters (lower-case and upper-case), digits (0-9), ' ', '+', '-', and '.'.
+
+> [!info] Approach
+> This is a state-machine / parsing problem. The transformation rules are explicit — model each parsing phase as a step. Sequential parsing: (1) strip leading whitespace, (2) read optional sign, (3) accumulate digits, (4) stop at first non-digit, (5) clamp to 32-bit range. Advance `i` past spaces. Read sign. Accumulate `result = result * 10 + digit` for each digit character. Before adding, check for overflow: if `result > (INT_MAX - digit) // 10`, clamp and return. Return `sign * result`.
+
+> [!note]- Python Solution
+> ```python
+> def my_atoi(s):
+>     INT_MAX = 2**31 - 1
+>     INT_MIN = -(2**31)
+>     i, n = 0, len(s)
+> 
+>     # 1. strip leading whitespace
+>     while i < n and s[i] == ' ':
+>         i += 1
+> 
+>     # 2. read optional sign
+>     sign = 1
+>     if i < n and s[i] in ('+', '-'):
+>         sign = -1 if s[i] == '-' else 1
+>         i += 1
+> 
+>     # 3. accumulate digits
+>     result = 0
+>     while i < n and s[i].isdigit():
+>         digit = int(s[i])
+>         # overflow check before multiplying
+>         if result > (INT_MAX - digit) // 10:
+>             return INT_MAX if sign == 1 else INT_MIN
+>         result = result * 10 + digit
+>         i += 1
+> 
+>     return sign * result
+> ```
+
+> [!success] Complexity
+> Time O(n). Space O(1).
+
+> [!tip] Alternatives
+> - Regex: `re.match(r'^\s*([+-]?\d+)', s)` — one line, but doesn't teach the parsing logic. Overflow must still be handled manually.
+> - `int()` with try/except: `int(s.strip())` — works for valid inputs only, not for atoi's partial-parse semantics.
+
+---
+
+### Longest Common Prefix
+
+> [!example] Problem
+> Write a function to find the longest common prefix string amongst an array of strings.
+> If there is no common prefix, return an empty string "".
+> 
+> **Example 1:**
+> ```
+> Input: strs = ["flower","flow","flight"]
+> Output: "fl"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: strs = ["dog","racecar","car"]
+> Output: ""
+> Explanation: There is no common prefix among the input strings.
+> ```
+> 
+> **Constraints:**
+> - 1 <= strs.length <= 200
+> - 0 <= strs[i].length <= 200
+> - strs[i] consists of only lowercase English letters if it is non-empty.
+
+> [!info] Approach
+> The longest common prefix is bounded by the shortest string. Compare column by column: the prefix ends at the first position where any string differs. Vertical scanning — for each character position `i`, check if all strings have the same character at `i`. Stop at the first mismatch or when any string ends. Take `strs[0]` as the reference. For each character index `i` in `strs[0]`, check every other string at position `i`. If any string is shorter than `i` or differs at `i`, return `strs[0][:i]`.
+
+> [!note]- Python Solution
+> ```python
+> def longest_common_prefix(strs):
+>     if not strs:
+>         return ""
+>     for i, char in enumerate(strs[0]):
+>         for s in strs[1:]:
+>             if i == len(s) or s[i] != char:
+>                 return strs[0][:i]
+>     return strs[0]
+> 
+> # Alternative: binary search on prefix length
+> def longest_common_prefix_binary_search(strs):
+>     def all_match(length):
+>         prefix = strs[0][:length]
+>         for s in strs[1:]:
+>             if s[:length] != prefix:
+>                 return False
+>         return True
+> 
+>     lo, hi = 0, min(len(s) for s in strs)
+>     while lo < hi:
+>         mid = (lo + hi + 1) // 2
+>         if allMatch(mid):
+>             lo = mid
+>         else:
+>             hi = mid - 1
+>     return strs[0][:lo]
+> ```
+
+> [!success] Complexity
+> Time O(S) where S = total characters across all strings (vertical scan terminates early). Space O(1).
+
+> [!tip] Alternatives
+> - Sort and compare first/last: `strs.sort()` then compare `strs[0]` and `strs[-1]` character by character — O(N log N + L). Sorting is overkill for the problem.
+> - Binary search on prefix length: O(S log L) — useful when L is very long and most strings share a long common prefix.
+> - Trie: O(S) build, O(1) LCP query if queried many times — overkill for a one-time query.
+
+---
+
+### Decode String
+
+> [!example] Problem
+> Given an encoded string, return its decoded string.
+> The encoding rule is: k[encoded_string], where the encoded_string inside the square brackets is being repeated exactly k times. Note that k is guaranteed to be a positive integer.
+> You may assume that the input string is always valid; there are no extra white spaces, square brackets are well-formed, etc. Furthermore, you may assume that the original data does not contain any digits and that digits are only for those repeat numbers, k. For example, there will not be input like 3a or 2[4].
+> The test cases are generated so that the length of the output will never exceed 105.
+> 
+> **Example 1:**
+> ```
+> Input: s = "3[a]2[bc]"
+> Output: "aaabcbc"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "3[a2[c]]"
+> Output: "accaccacc"
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "2[abc]3[cd]ef"
+> Output: "abcabccdcdcdef"
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 30
+> - s consists of lowercase English letters, digits, and square brackets '[]'.
+> - s is guaranteed to be a valid input.
+> - All the integers in s are in the range [1, 300].
+
+> [!tip] Recognize · Gotcha
+> **Signal:** Nested brackets · **Gotcha:** Pass and return index `i`
+
+> [!info] Approach
+> Nested brackets suggest a stack. When we hit `]`, we pop until `[` to find the current segment and its repeat count. Stack-based. Push characters as we scan. On `]`: pop characters until `[` to build the inner string, then pop digits to build the multiplier, push the repeated string back. Two stacks (`count_stack`, `string_stack`) or a single character stack. On digit: accumulate `k`. On `[`: push current string and k onto stacks, reset. On `]`: pop string and k, append `k * current_string` to the popped prefix.
+
+> [!note]- Python Solution
+> ```python
+> def decode_string(s):
+>     count_stack = []
+>     string_stack = []
+>     current = ""
+>     k = 0
+>     for ch in s:
+>         if ch.isdigit():
+>             k = k * 10 + int(ch)
+>         elif ch == '[':
+>             count_stack.append(k)
+>             string_stack.append(current)
+>             current = ""
+>             k = 0
+>         elif ch == ']':
+>             repeat = count_stack.pop()
+>             prefix = string_stack.pop()
+>             current = prefix + repeat * current
+>         else:
+>             current += ch
+>     return current
+> ```
+
+> [!success] Complexity
+> Time O(output length) — each character of the decoded string is written once. Space O(depth × max_segment_length).
+
+> [!tip] Alternatives
+> - Recursive descent parser: function returns decoded string and next index — elegant, same complexity.
+> - Regex iterative substitution: replace innermost `k[...]` repeatedly with `re.sub` — O(output × depth), slow for deep nesting.
+
+---
+
+### Compare Version Numbers
+
+> [!example] Problem
+> Given two version strings, version1 and version2, compare them. A version string consists of revisions separated by dots '.'. The value of the revision is its integer conversion ignoring leading zeros.
+> To compare version strings, compare their revision values in left-to-right order. If one of the version strings has fewer revisions, treat the missing revision values as 0.
+> Return the following
+> 
+> **Example 1:**
+> ```
+> Input: version1 = "1.2", version2 = "1.10"
+> Output: -1
+> Explanation:
+> version1's second revision is "2" and version2's second revision is "10": 2 < 10, so version1 < version2.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: version1 = "1.01", version2 = "1.001"
+> Output: 0
+> Explanation:
+> Ignoring leading zeroes, both "01" and "001" represent the same integer "1".
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: version1 = "1.0", version2 = "1.0.0.0"
+> Output: 0
+> Explanation:
+> version1 has less revisions, which means every missing revision are treated as "0".
+> ```
+> 
+> **Constraints:**
+> - 1 <= version1.length, version2.length <= 500
+> - version1 and version2 only contain digits and '.'.
+> - version1 and version2 are valid version numbers.
+> - All the given revisions in version1 and version2 can be stored in a 32-bit integer.
+
+> [!info] Approach
+> Split on `.` gives revision tokens. Parse each as an integer (handles leading zeros automatically). Compare pair by pair; missing revisions default to 0. Split both strings by `.`. Zip-extend to equal length with 0 padding. Compare integer values of corresponding revisions. `v1 = list(map(int, version1.split('.')))`. Pad shorter list with zeros. Compare element by element.
+
+> [!note]- Python Solution
+> ```python
+> def compare_version(version1, version2):
+>     v1 = list(map(int, version1.split('.')))
+>     v2 = list(map(int, version2.split('.')))
+>     # pad shorter version with zeros
+>     length = max(len(v1), len(v2))
+>     v1 += [0] * (length - len(v1))
+>     v2 += [0] * (length - len(v2))
+>     for a, b in zip(v1, v2):
+>         if a < b:
+>             return -1
+>         if a > b:
+>             return 1
+>     return 0
+> ```
+
+> [!success] Complexity
+> Time O(max(|v1|, |v2|)). Space O(max(|v1|, |v2|)).
+
+> [!tip] Alternatives
+> - Two-pointer without splitting: parse digits between dots manually — O(1) extra space, more code.
+> - `zip_longest` from itertools: cleaner padding — `from itertools import zip_longest; for a, b in zip_longest(v1, v2, fillvalue=0)`.
+
+---
+
+### Integer to English Words
+
+> [!example] Problem
+> Convert a non-negative integer num to its English words representation.
+> 
+> **Example 1:**
+> ```
+> Input: num = 123
+> Output: "One Hundred Twenty Three"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: num = 12345
+> Output: "Twelve Thousand Three Hundred Forty Five"
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: num = 1234567
+> Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+> ```
+> 
+> **Constraints:**
+> - 0 <= num <= 2^{31} - 1
+
+> [!info] Approach
+> Numbers follow a recursive pattern: every 3-digit group is described the same way, then suffixed with Billion/Million/Thousand. Handle the hundreds/tens/ones within each group using lookup tables. Define lookup tables for ones (1-19) and tens (20, 30, …, 90). `helper(n)` converts a number < 1000 to words. Iterate over billion/million/thousand groups. Process groups of 3 digits from largest to smallest. For each non-zero group, call `helper(group)` and append the appropriate suffix. Special-case 0.
+
+> [!note]- Python Solution
+> ```python
+> def number_to_words(num):
+>     if num == 0:
+>         return "Zero"
+> 
+>     ones = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+>             "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+>             "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"]
+>     tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty",
+>             "Sixty", "Seventy", "Eighty", "Ninety"]
+> 
+>     def helper(n):
+>         if n == 0:
+>             return ""
+>         elif n < 20:
+>             return ones[n] + " "
+>         elif n < 100:
+>             return tens[n // 10] + " " + helper(n % 10)
+>         else:
+>             return ones[n // 100] + " Hundred " + helper(n % 100)
+> 
+>     suffixes = [(10**9, "Billion"), (10**6, "Million"), (10**3, "Thousand"), (1, "")]
+>     result = ""
+>     for value, suffix in suffixes:
+>         if num >= value:
+>             result += helper(num // value)
+>             if suffix:
+>                 result += suffix + " "
+>             num %= value
+>     return result.strip()
+> ```
+
+> [!success] Complexity
+> Time O(log n) — at most ~10 groups of 3 digits. Space O(1) ignoring output.
+
+> [!tip] Alternatives
+> - Iterative with a stack: push word segments onto a stack, pop to assemble — same complexity, different code structure.
+> - Library: `num2words` in Python — correct but not allowed in interviews.
+
+---
+
+### Text Justification `⚡ T1`
+
+> [!example] Problem
+> Given words and maxWidth, format the text fully justified: each line packed greedily with as many words as fit, extra spaces distributed as evenly as possible with left gaps getting more. The last line (and any single-word line) is left-justified, padded right.
+
+> [!info] Approach
+> Zero algorithms, pure care — that's why Google asks it at L4. Two phases per line: greedy packing (a word fits if `current_length + len(line) + len(word) <= maxWidth`, where `len(line)` counts the mandatory single spaces), then space distribution: with `gaps = len(line) - 1`, hand out `maxWidth - length` spaces round-robin so the leftmost gaps get the extras. Handle the two left-justified cases (last line, single word) with `' '.join(...).ljust(maxWidth)`.
+
+> [!note]- Python Solution
+> ```python
+> def fullJustify(words, maxWidth):
+>     res, line, length = [], [], 0
+>     for w in words:
+>         if length + len(line) + len(w) > maxWidth:
+>             gaps = len(line) - 1 or 1
+>             for i in range(maxWidth - length):
+>                 line[i % gaps] += ' '
+>             res.append(''.join(line))
+>             line, length = [], 0
+>         line.append(w)
+>         length += len(w)
+>     res.append(' '.join(line).ljust(maxWidth))
+>     return res
+> ```
+
+> [!success] Complexity
+> Time O(total characters); Space O(maxWidth) working.
+
+> [!warning] Gotcha
+> The `or 1` makes a single-word line reuse the round-robin path (all spaces onto `line[0]`) — one branch instead of three. Dry-run the last line and a one-word line before declaring done; that's where everyone fails.
+
+---
+
+### Valid Number `🎯 T2`
+
+> [!example] Problem
+> Return whether a string is a valid number: optional sign, digits, at most one dot, at most one exponent (`e`/`E`) which must be preceded by a number and followed by an integer.
+
+> [!info] Approach
+> A hand-rolled state machine via three flags: `seen_digit`, `seen_dot`, `seen_exp`. Walk once; each character class checks its legality against the flags. The key rule: after `e`, **reset `seen_digit`** — the exponent needs its own digits. Enumerate the grammar out loud before coding; the interviewer is grading the enumeration.
+
+> [!note]- Python Solution
+> ```python
+> def isNumber(s):
+>     seen_digit = seen_dot = seen_exp = False
+>     for i, c in enumerate(s):
+>         if c.isdigit():
+>             seen_digit = True
+>         elif c in '+-':
+>             if i > 0 and s[i-1] not in 'eE':
+>                 return False
+>         elif c == '.':
+>             if seen_dot or seen_exp:
+>                 return False
+>             seen_dot = True
+>         elif c in 'eE':
+>             if seen_exp or not seen_digit:
+>                 return False
+>             seen_exp, seen_digit = True, False
+>         else:
+>             return False
+>     return seen_digit
+> ```
+
+> [!success] Complexity
+> Time O(n); Space O(1).
+
+> [!warning] Gotcha
+> A sign is only legal at index 0 or right after `e` — that single condition covers `"+-6"`, `"6+1"`, `"1e+5"` at once. Test set: `".1"` ✓, `"3."` ✓, `"e3"` ✗, `"1e"` ✗, `"."` ✗.
+
+---
+
+## Two Pointers — Reverse / Subsequence
+
+---
+
+### Reverse String
+
+> Full walkthrough: [Reverse String (LC 344)](../algorithms/03-two-pointers.md#reverse-string-lc-344).
+
+---
+
+### Is Subsequence
+
+> [!example] Problem
+> Given two strings s and t, return true if s is a subsequence of t, or false otherwise.
+> A subsequence of a string is a new string that is formed from the original string by deleting some (can be none) of the characters without disturbing the relative positions of the remaining characters. (i.e., "ace" is a subsequence of "abcde" while "aec" is not).
+> 
+> **Example 1:**
+> ```
+> Input: s = "abc", t = "ahbgdc"
+> Output: true
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "axc", t = "ahbgdc"
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 0 <= s.length <= 100
+> - 0 <= t.length <= 10^4
+> - s and t consist only of lowercase English letters.
+
+> [!info] Approach
+> Greedy two-pointer: advance through `t` trying to match characters of `s` in order. As soon as all of `s` is matched, return True. Pointer `i` for `s`, pointer `j` for `t`. Advance `j` always; advance `i` only when `s[i] == t[j]`. Return `i == len(s)`. Single pass through `t`. If `i` reaches `len(s)`, all characters matched — return True.
+
+> [!note]- Python Solution
+> ```python
+> def is_subsequence(s, t):
+>     i = 0
+>     for ch in t:
+>         if i < len(s) and ch == s[i]:
+>             i += 1
+>     return i == len(s)
+> 
+> # Follow-up: many queries with same t — preprocess t with binary search
+> from collections import defaultdict
+> import bisect
+> 
+> def is_subsequence_batch(s, t_index, list[int]]):
+>     """t_index: char -> sorted list of positions in t."""
+>     pos = 0
+>     for ch in s:
+>         if ch not in t_index:
+>             return False
+>         idx = bisect.bisect_left(t_index[ch], pos)
+>         if idx == len(t_index[ch]):
+>             return False
+>         pos = t_index[ch][idx] + 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(|t|) single query. O(|t|) preprocessing + O(|s| log |t|) per query for batch variant. Space O(1) / O(|t|).
+
+> [!tip] Alternatives
+> - Recursive with memoization: overkill for O(n) problem.
+> - DP table `dp[i][j]`: `dp[i][j] = True` if `s[:i]` is subseq of `t[:j]` — O(|s| × |t|) space, unnecessary.
+
+---
+
+## Pattern Matching
+
+---
+
+### Implement strStr (KMP)
+
+> [!example] Problem
+> Return the index of the first occurrence of `needle` in `haystack`. Return -1 if not present. (LC 28 — implement using KMP for O(n+m) worst case.)
+
+> [!info] Approach
+> Naive search is O(n×m) in the worst case (e.g., `haystack = "aaa…a"`, `needle = "aaa…ab"`). KMP preprocesses `needle` to build a failure function (also called LPS — Longest Proper Prefix which is also Suffix), enabling O(n+m) matching by never re-examining a haystack character. Build LPS array `lps[i]` = length of longest proper prefix of `needle[0..i]` that is also a suffix. During search, on mismatch at position `j`, jump `j = lps[j-1]` instead of resetting to 0. Build LPS: two pointers `len_ = 0, i = 1`. If `needle[i] == needle[len_]`, `lps[i] = len_ + 1; i++; len_++`. Else if `len_ > 0`, `len_ = lps[len_-1]`. Else `lps[i] = 0; i++`. Search: advance `i` (haystack), `j` (needle); on mismatch use `j = lps[j-1]`; when `j == len(needle)` record match.
+
+> [!note]- Python Solution
+> ```python
+> def str_str(haystack, needle):
+>     if not needle:
+>         return 0
+>     n, m = len(haystack), len(needle)
+> 
+>     # build LPS (failure function)
+>     lps = [0] * m
+>     len_ = 0
+>     i = 1
+>     while i < m:
+>         if needle[i] == needle[len_]:
+>             len_ += 1
+>             lps[i] = len_
+>             i += 1
+>         elif len_ > 0:
+>             len_ = lps[len_ - 1]
+>         else:
+>             lps[i] = 0
+>             i += 1
+> 
+>     # KMP search
+>     i = j = 0
+>     while i < n:
+>         if haystack[i] == needle[j]:
+>             i += 1
+>             j += 1
+>         if j == m:
+>             return i - j
+>         elif i < n and haystack[i] != needle[j]:
+>             if j > 0:
+>                 j = lps[j - 1]
+>             else:
+>                 i += 1
+>     return -1
+> ```
+
+> [!success] Complexity
+> Time O(n + m). Space O(m) for the LPS array.
+
+> [!tip] Alternatives
+> - Naive: `for i in range(n-m+1): if haystack[i:i+m] == needle: return i` — O(nm) worst case, fine for interviews unless pushed.
+> - Rabin-Karp rolling hash: O(n+m) average, O(nm) worst case without double hashing.
+> - Boyer-Moore: better practical performance (sub-linear on average) via bad-character and good-suffix heuristics.
+> - Python built-in: `haystack.find(needle)` — uses optimized C; not the point of this problem.
+
+---
+
+### Repeated Substring Pattern
+
+> [!example] Problem
+> Given a string s, check if it can be constructed by taking a substring of it and appending multiple copies of the substring together.
+> 
+> **Example 1:**
+> ```
+> Input: s = "abab"
+> Output: true
+> Explanation: It is the substring "ab" twice.
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "aba"
+> Output: false
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "abcabcabcabc"
+> Output: true
+> Explanation: It is the substring "abc" four times or the substring "abcabc" twice.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^4
+> - s consists of lowercase English letters.
+
+> [!tip] Recognize · Gotcha
+> **Signal:** "built from a repeated unit" · **Gotcha:** `lps[-1] == 0` → false
+
+> [!info] Approach
+> If `s` is a repetition of some pattern `p`, then `s + s` contains `s` starting at a position other than 0 or `len(s)`. This is because the doubled string `ss` can align `p` blocks to reconstruct `s` shifted by one period. Concatenate `s` with itself, check if `s` appears in `s[1:-1]` (exclude the trivial positions at index 0 and `len(s)`). `return s in (s + s)[1:-1]`. Alternatively, use KMP: build LPS array for `s`; if `lps[-1] > 0` and `len(s) % (len(s) - lps[-1]) == 0`, the pattern length is `len(s) - lps[-1]`.
+
+> [!note]- Python Solution
+> ```python
+> def repeated_substring_pattern(s):
+>     # O(n) via rotation trick
+>     return s in (s + s)[1:-1]
+> 
+> # KMP LPS approach — O(n) time, O(n) space
+> def repeated_substring_pattern_kmp(s):
+>     if not s:
+>         return False
+>     n = len(s)
+>     lps = [0] * n
+>     j = 0
+>     for i in range(1, n):
+>         while j > 0 and s[i] != s[j]:
+>             j = lps[j - 1]
+>         if s[i] == s[j]:
+>             j += 1
+>         lps[i] = j
+>     period = n - lps[-1]
+>     return lps[-1] > 0 and n % period == 0
+> ```
+
+> [!success] Complexity
+> Time O(n) — the rotation trick relies on optimized substring search. Space O(n).
+
+> [!tip] Alternatives
+> - Brute force: try every divisor length of `n`, check if repeating the prefix reconstructs `s` — O(n × d(n)) where d(n) is the number of divisors.
+
+---
+
+### Longest Happy Prefix
+
+> Full walkthrough: [Longest Happy Prefix](../algorithms/02-string-algorithms.md#longest-happy-prefix--t2).
+
+---
+
+## String Manipulation
+
+---
+
+### String Compression
+
+> [!example] Problem
+> Given an array of characters chars, compress it using the following algorithm:
+> Begin with an empty string s. For each group of consecutive repeating characters in chars:
+> The compressed string s should not be returned separately, but instead, be stored in the input character array chars. Note that group lengths that are 10 or longer will be split into multiple characters in chars.
+> After you are done modifying the input array, return the new length of the array.
+> You must write an algorithm that uses only constant extra space.
+> 
+> **Example 1:**
+> ```
+> Input: chars = ["a","a","b","b","c","c","c"]
+> Output: Return 6, and the first 6 characters of the input array should be: ["a","2","b","2","c","3"]
+> Explanation: The groups are "aa", "bb", and "ccc". This compresses to "a2b2c3".
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: chars = ["a"]
+> Output: Return 1, and the first character of the input array should be: ["a"]
+> Explanation: The only group is "a", which remains uncompressed since it's a single character.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: chars = ["a","b","b","b","b","b","b","b","b","b","b","b","b"]
+> Output: Return 4, and the first 4 characters of the input array should be: ["a","b","1","2"].
+> Explanation: The groups are "a" and "bbbbbbbbbbbb". This compresses to "ab12".
+> ```
+> 
+> **Constraints:**
+> - 1 <= chars.length <= 2000
+> - chars[i] is a lowercase English letter, uppercase English letter, digit, or symbol.
+
+> [!info] Approach
+> We need to write compressed output back into the same array, so one pointer reads runs and another pointer writes results. Scan each run of identical characters, write the character once, then write the count digits if the run length is greater than one. Maintain `read` and `write` pointers. For each run, count length and emit the character plus its decimal digits.
+
+> [!note]- Python Solution
+> ```python
+> def compress(chars):
+>     write = 0
+>     read = 0
+>     while read < len(chars):
+>         ch = chars[read]
+>         start = read
+>         while read < len(chars) and chars[read] == ch:
+>             read += 1
+>         chars[write] = ch
+>         write += 1
+>         count = read - start
+>         if count > 1:
+>             for digit in str(count):
+>                 chars[write] = digit
+>                 write += 1
+>     return write
+> ```
+
+> [!success] Complexity
+> O(n) time, O(1) extra space.
+
+> [!tip] Alternatives
+> This same read/write pointer idea is useful for deduplication, filtering, and in-place run-length encoding.
+
+---
+
+### Zigzag Conversion (LC 6)
+
+> [!example] Problem
+> The string "PAYPALISHIRING" is written in a zigzag pattern on a given number of rows like this: (you may want to display this pattern in a fixed font for better legibility)
+> And then read line by line: "PAHNAPLSIIGYIR"
+> Write the code that will take a string and make this conversion given a number of rows
+> 
+> **Example 1:**
+> ```
+> P   A   H   N
+> A P L S I I G
+> Y   I   R
+> ```
+> 
+> **Example 2:**
+> ```
+> string convert(string s, int numRows);
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "PAYPALISHIRING", numRows = 3
+> Output: "PAHNAPLSIIGYIR"
+> ```
+> 
+> **Example 4:**
+> ```
+> Input: s = "PAYPALISHIRING", numRows = 4
+> Output: "PINALSIGYAHRPI"
+> Explanation:
+> P     I    N
+> A   L S  I G
+> Y A   H R
+> P     I
+> ```
+> 
+> **Example 5:**
+> ```
+> Input: s = "A", numRows = 1
+> Output: "A"
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 1000
+> - s consists of English letters (lower-case and upper-case), ',' and '.'.
+> - 1 <= numRows <= 1000
+
+> [!info] Approach
+> Rather than simulating the 2D grid (wastes space), we can directly assign each character to its row number by tracking which row we're currently on and the direction we're moving. Maintain `numRows` string builders (one per row). Walk the characters, appending each to the current row's builder, while toggling direction at the top and bottom rows. Track `current_row` (starts at 0) and `direction` (+1 going down, -1 going up). Flip direction when `current_row == 0` or `current_row == numRows - 1`. Final answer = concatenation of all row strings.
+
+> [!note]- Python Solution
+> ```python
+> def convert(s, num_rows):
+>     if num_rows == 1 or num_rows >= len(s):
+>         return s
+>     rows = [''] * num_rows
+>     current_row = 0
+>     direction = -1
+>     for ch in s:
+>         rows[current_row] += ch
+>         if current_row == 0 or current_row == num_rows - 1:
+>             direction *= -1
+>         current_row += direction
+>     return ''.join(rows)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - Mathematical index formula: for each row `r`, characters fall at periodic positions. Row 0 and `numRows-1` have period `2*(numRows-1)`; middle rows have two characters per period. Direct but trickier to get indices right.
+
+---
+
+### Valid Palindrome II (LC 680) `🎯 T2`
+
+> [!example] Problem
+> Given a string s, return true if the s can be palindrome after deleting at most one character from it.
+> 
+> **Example 1:**
+> ```
+> Input: s = "aba"
+> Output: true
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "abca"
+> Output: true
+> Explanation: You could delete the character 'c'.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "abc"
+> Output: false
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^5
+> - s consists of lowercase English letters.
+
+> [!info] Approach
+> A standard two-pointer palindrome check stops at the first mismatch. At that point, removing either the left or right character might fix things — we just need to check both possibilities. Two pointers `left` and `right`. If characters match, move both inward. On mismatch, try removing `left` or removing `right` and check if the remainder is a palindrome. Helper `is_palindrome(l, r)` checks `s[l..r]`. Main: walk until mismatch, then return `is_palindrome(left+1, right) or is_palindrome(left, right-1)`.
+
+> [!note]- Python Solution
+> ```python
+> def valid_palindrome(s):
+>     def is_palindrome(left, right):
+>         while left < right:
+>             if s[left] != s[right]:
+>                 return False
+>             left += 1
+>             right -= 1
+>         return True
+> >
+>     left = 0
+>     right = len(s) - 1
+>     while left < right:
+>         if s[left] != s[right]:
+>             return is_palindrome(left + 1, right) or is_palindrome(left, right - 1)
+>         left += 1
+>         right -= 1
+>     return True
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(1).
+
+> [!tip] Alternatives
+> - Check all single-character deletions: O(n²) — correct but too slow.
+> - Key insight: once we find a mismatch, we only try removing one of the two mismatching characters — no need to try every position.
+
+---
+
+### Reverse Words in a String (LC 151)
+
+> [!example] Problem
+> Given an input string s, reverse the order of the words.
+> A word is defined as a sequence of non-space characters. The words in s will be separated by at least one space.
+> Return a string of the words in reverse order concatenated by a single space.
+> Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should only have a single space separating the words. Do not include any extra spaces.
+> 
+> **Example 1:**
+> ```
+> Input: s = "the sky is blue"
+> Output: "blue is sky the"
+> ```
+> 
+> **Example 2:**
+> ```
+> Input: s = "  hello world  "
+> Output: "world hello"
+> Explanation: Your reversed string should not contain leading or trailing spaces.
+> ```
+> 
+> **Example 3:**
+> ```
+> Input: s = "a good   example"
+> Output: "example good a"
+> Explanation: You need to reduce multiple spaces between two words to a single space in the reversed string.
+> ```
+> 
+> **Constraints:**
+> - 1 <= s.length <= 10^4
+> - s contains English letters (upper-case and lower-case), digits, and spaces ' '.
+> - There is at least one word in s.
+
+> [!info] Approach
+> Python's `split()` without arguments handles multiple spaces and strips leading/trailing whitespace. Reverse the resulting list and rejoin. Split on whitespace, reverse the list, join with single space. `words = s.split()` → `words.reverse()` → `return ' '.join(words)`.
+
+> [!note]- Python Solution
+> ```python
+> def reverse_words(s):
+>     words = s.split()
+>     words.reverse()
+>     return ' '.join(words)
+> ```
+
+> [!success] Complexity
+> Time O(n), Space O(n).
+
+> [!tip] Alternatives
+> - In-place (for C/C++): (1) reverse the entire string, (2) reverse each individual word, (3) remove extra spaces. O(n) time, O(1) space.
+> - Key distinction: LC 151 asks for reversed *word order*, not reversed characters within words.
+
+---
+
+## See Also
+
+[[two-pointers]] | [[sliding-window]] | [[hashing]] | [[string-algorithms]]

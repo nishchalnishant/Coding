@@ -10,14 +10,14 @@ tags: [patterns, senior, sde3, follow-ups]
 > [!abstract] In this file
 > **Covers:** Seven senior follow-up chains (count-vs-existence, streaming, update-heavy, memory-constrained, concurrency discussion, one-vs-all, 100× scale).
 > **You'll be able to:** Extend a solved problem along the follow-up axes a senior interviewer pushes.
-> **Prereqs:** Senior delta · **Pair with:** [Senior delta](../coding/sde3-senior-delta.md) · **Time:** 1 h
+> **Prereqs:** Senior delta · **Pair with:** [Senior delta](../00-start-here/sde3-senior-delta.md) · **Time:** 1 h
 
 **Sections:** [1. Count-vs-existence](#1-count-vs-existence) · [2. Streaming / online](#2-streaming--online) · [3. Update-heavy / deletion-heavy](#3-update-heavy--deletion-heavy) · [4. Memory-constrained](#4-memory-constrained) · [5. Concurrency discussion](#5-concurrency-discussion) · [6. One-vs-all](#6-one-vs-all) · [7. Scale-change (100x)](#7-scale-change-100x) · [See Also](#see-also)
 
 ---
 
 > [!IMPORTANT]
-> **How to use this file:** These are not new problems — they're the standard **third link** in a chain, attached by reference to existing T1/T2 bases from [`03-patterns/MOCK_INTERVIEW_SET.md`](MOCK_INTERVIEW_SET.md) and [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md). At senior level you should propose these escalations yourself before the interviewer asks. Full tier context: [`coding/sde3-senior-delta.md`](../coding/sde3-senior-delta.md).
+> **How to use this file:** These are not new problems — they're the standard **third link** in a chain, attached by reference to existing T1/T2 bases from [`03-patterns/MOCK_INTERVIEW_SET.md`](MOCK_INTERVIEW_SET.md) and [`00-start-here/l4-sde2-delta.md`](../00-start-here/l4-sde2-delta.md). At senior level you should propose these escalations yourself before the interviewer asks. Full tier context: [`00-start-here/sde3-senior-delta.md`](../00-start-here/sde3-senior-delta.md).
 
 ---
 
@@ -36,7 +36,7 @@ The cheapest senior escalation: "can you also tell me *how many*, not just wheth
 
 ## 2. Streaming / online
 
-Full base structures: [`coding/data-structures/10-heap.md`](../coding/data-structures/10-heap.md), [`coding/data-structures/14-design.md`](../coding/data-structures/14-design.md).
+Full base structures: [`04-practice/data-structures/10-heap.md`](../04-practice/data-structures/10-heap.md), [`04-practice/data-structures/14-design.md`](../04-practice/data-structures/14-design.md).
 
 | Base (offline, all data upfront) | Streaming follow-up | Key insight |
 |---|---|---|
@@ -105,5 +105,4 @@ The reflex being tested: does a complexity-class change trigger an unprompted re
 ## See Also
 
 - [MOCK_INTERVIEW_SET.md](MOCK_INTERVIEW_SET.md) — base problem set + L4 follow-up chains this file extends
-- [coding/sde3-senior-delta.md](../coding/sde3-senior-delta.md) — senior tier definitions and bar
-- [tracking/weakness-log.md](../tracking/weakness-log.md) — log which chain link you failed on
+- [00-start-here/sde3-senior-delta.md](../00-start-here/sde3-senior-delta.md) — senior tier definitions and bar

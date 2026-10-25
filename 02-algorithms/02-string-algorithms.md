@@ -5,15 +5,15 @@ tags: [algorithms, string, kmp, rabin-karp, z-algorithm, manacher]
 ---
 # String Algorithms
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** The four string-matching techniques: KMP failure function, Rabin-Karp rolling hash, Z-function, expand-around-center palindromes.
 > **You'll be able to:** Expand-around-center fluently; explain KMP/rolling hash well enough to use them when brute-force O(NM) is too slow.
-> **Prereqs:** Strings, hashing · **Pair with:** [String algorithm problems](../coding/algorithms/02-string-algorithms.md) · [String DS](../01-data-structures/03-string.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Strings, hashing · **Pair with:** [String algorithm problems](../04-practice/algorithms/02-string-algorithms.md) · [String DS](../01-data-structures/03-string.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [The Four Techniques](#the-four-techniques) · [KMP — the failure function](#kmp--the-failure-function) · [Rabin-Karp — rolling hash](#rabin-karp--rolling-hash) · [Z-function](#z-function) · [Palindromes — start at the center](#palindromes--start-at-the-center) · [Decision Guide](#decision-guide) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
@@ -166,7 +166,7 @@ Expand-around-center is the expected answer. `2n-1` centers (n odd, n-1 even), e
 
 ---
 
-Practice → [`coding/algorithms/02-string-algorithms.md`](../coding/algorithms/02-string-algorithms.md) (tier-tagged walkthroughs)
+Practice → [`04-practice/algorithms/02-string-algorithms.md`](../04-practice/algorithms/02-string-algorithms.md) (tier-tagged walkthroughs)
 
 ---
 

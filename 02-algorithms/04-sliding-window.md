@@ -5,15 +5,15 @@ tags: [algorithms, sliding-window]
 ---
 # Sliding Window
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Fixed and variable windows, frequency-map windows, the 'exactly K = atMost(K) − atMost(K−1)' trick, monotonic deque for window max/min.
 > **You'll be able to:** Write the expand-right / shrink-left template from memory; know when windows fail (negatives → prefix sum); handle 'exactly K' counts.
-> **Prereqs:** Arrays, hashing, two pointers · **Pair with:** [Sliding window problems](../coding/algorithms/04-sliding-window.md) · **Time:** 2 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays, hashing, two pointers · **Pair with:** [Sliding window problems](../04-practice/algorithms/04-sliding-window.md) · **Time:** 2 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [When to Use](#when-to-use) · [Variant 1: Fixed-Size Window](#variant-1-fixed-size-window) · [Variant 2: Variable-Size Window (Expand Right, Shrink Left)](#variant-2-variable-size-window-expand-right-shrink-left) · [Extension: With Frequency Map](#extension-with-frequency-map) · [Extension: Monotonic Deque (Sliding Window Max/Min)](#extension-monotonic-deque-sliding-window-maxmin) · [Complexity Summary](#complexity-summary) · [Canonical Problems](#canonical-problems) · [Edge Cases](#edge-cases) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 

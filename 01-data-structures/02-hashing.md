@@ -5,15 +5,15 @@ tags: [data-structures, hashing]
 ---
 # Hashing — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** How hash maps/sets work (hashing, collisions, load factor), and the four interview uses: complement lookup, frequency count, prefix-sum + map, canonical-key grouping.
 > **You'll be able to:** Turn an O(N²) pair search into O(N) with a map; choose the right key (sorted tuple, count signature, prefix sum); state worst-case vs average costs.
-> **Prereqs:** Arrays · **Pair with:** [Hashing problems](../coding/data-structures/02-hashing.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays · **Pair with:** [Hashing problems](../04-practice/data-structures/02-hashing.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -327,23 +327,23 @@ class RandomizedSet:
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Two Sum](../coding/data-structures/02-hashing.md#two-sum--t1) `⚡ T1`** — Complement map; single pass.
-- **[Valid Anagram](../coding/data-structures/03-string.md#valid-anagram--t2) `🎯 T2`** — `Counter(s) == Counter(t)`.
-- **[First Unique Character](../coding/data-structures/02-hashing.md#first-unique-character-in-a-string) `🎯 T2`** — `Counter`; find first with count 1.
+- **[Two Sum](../04-practice/data-structures/02-hashing.md#two-sum--t1) `⚡ T1`** — Complement map; single pass.
+- **[Valid Anagram](../04-practice/data-structures/03-string.md#valid-anagram--t2) `🎯 T2`** — `Counter(s) == Counter(t)`.
+- **[First Unique Character](../04-practice/data-structures/02-hashing.md#first-unique-character-in-a-string) `🎯 T2`** — `Counter`; find first with count 1.
 
 ### Medium
-- **[Insert Delete GetRandom O(1)](../coding/data-structures/02-hashing.md#insert-delete-getrandom-o1--t1) `⚡ T1`** — Map + array; swap-with-last on delete.
-- **[Group Anagrams](../coding/data-structures/03-string.md#group-anagrams--t1) `⚡ T1`** — `sorted(word)` or count-tuple as key.
-- **[Subarray Sum Equals K](../coding/data-structures/02-hashing.md#subarray-sum-equals-k--t1) `⚡ T1`** — Prefix sum + count map; `seen = {0:1}`.
-- **[Longest Consecutive Sequence](../coding/data-structures/02-hashing.md#longest-consecutive-sequence--t1) `⚡ T1`** — Set lookup; only start chain from `x` if `x-1` not in set.
-- **[Contiguous Array (equal 0/1)](../coding/data-structures/02-hashing.md#contiguous-array-lc-525--t1) `⚡ T1`** — Map `0→-1`; prefix sum + first-seen map.
-- **[LRU Cache](../coding/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — Map + DLL; dummy head/tail.
+- **[Insert Delete GetRandom O(1)](../04-practice/data-structures/02-hashing.md#insert-delete-getrandom-o1--t1) `⚡ T1`** — Map + array; swap-with-last on delete.
+- **[Group Anagrams](../04-practice/data-structures/03-string.md#group-anagrams--t1) `⚡ T1`** — `sorted(word)` or count-tuple as key.
+- **[Subarray Sum Equals K](../04-practice/data-structures/02-hashing.md#subarray-sum-equals-k--t1) `⚡ T1`** — Prefix sum + count map; `seen = {0:1}`.
+- **[Longest Consecutive Sequence](../04-practice/data-structures/02-hashing.md#longest-consecutive-sequence--t1) `⚡ T1`** — Set lookup; only start chain from `x` if `x-1` not in set.
+- **[Contiguous Array (equal 0/1)](../04-practice/data-structures/02-hashing.md#contiguous-array-lc-525--t1) `⚡ T1`** — Map `0→-1`; prefix sum + first-seen map.
+- **[LRU Cache](../04-practice/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — Map + DLL; dummy head/tail.
 
 ### Hard
-- **[Minimum Window Substring](../coding/algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1) `⚡ T1`** — Sliding window + need/have count maps.
-- **[Design HashMap](../coding/data-structures/02-hashing.md#design-hashmap--t1) `⚡ T1`** — Chaining with prime-sized bucket array; handle resize.
-- **[Substring with Concatenation of All Words](../coding/data-structures/02-hashing.md#substring-with-concatenation-of-all-words) `💤 T3`** — Fixed word-length window; multiset comparison.
-- **[Max Points on a Line](../coding/data-structures/02-hashing.md#max-points-on-a-line) `💤 T3`** — Slope map with `gcd` normalization; handle vertical lines.
+- **[Minimum Window Substring](../04-practice/algorithms/04-sliding-window.md#minimum-window-substring-lc-76--t1) `⚡ T1`** — Sliding window + need/have count maps.
+- **[Design HashMap](../04-practice/data-structures/02-hashing.md#design-hashmap--t1) `⚡ T1`** — Chaining with prime-sized bucket array; handle resize.
+- **[Substring with Concatenation of All Words](../04-practice/data-structures/02-hashing.md#substring-with-concatenation-of-all-words) `💤 T3`** — Fixed word-length window; multiset comparison.
+- **[Max Points on a Line](../04-practice/data-structures/02-hashing.md#max-points-on-a-line) `💤 T3`** — Slope map with `gcd` normalization; handle vertical lines.
 
 ---
 
@@ -388,7 +388,7 @@ class RandomizedSet:
 ## See also
 
 - [Array](01-array.md) — prefix sum + map for subarray problems
-- [String](../01-data-structures/03-string.md) — anagram key design; rolling hash (Rabin-Karp)
+- [String](03-string.md) — anagram key design; rolling hash (Rabin-Karp)
 - [Linked List](07-linked-list.md) — LRU cache DLL component
 - [Patterns Master](../03-patterns/patterns-master.md) — complement map and frequency map triggers
 

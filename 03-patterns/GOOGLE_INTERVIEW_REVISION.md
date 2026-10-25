@@ -10,7 +10,7 @@ tags: [patterns, google-interview-revision]
 > [!abstract] In this file
 > **Covers:** The revision plan: one-page recall, topic-by-topic revision links, communication tips, revision schedules, post-interview steps.
 > **You'll be able to:** Run a structured final-week and day-before revision.
-> **Prereqs:** Most topics done · **Pair with:** [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) · [Flowcharts](../FLOWCHARTS.md) · **Time:** 1 h
+> **Prereqs:** Most topics done · **Pair with:** [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) · [Flowcharts](maps/flowcharts.md) · **Time:** 1 h
 > **How to use:** reference — read once, then use as a lookup.
 
 **Sections:** [First-Principles Breakdown](#first-principles-breakdown) · [Part A — One-Page Quick Recall (Cheatsheet)](#part-a--one-page-quick-recall-cheatsheet) · [Part B — Topic-by-Topic Revision (with links)](#part-b--topic-by-topic-revision-with-links) · [Part C — Communication (how to sound clear at Google)](#part-c--communication-how-to-sound-clear-at-google) · [Part D — Revision schedules](#part-d--revision-schedules) · [Part E — After the interview](#part-e--after-the-interview) · [Related repo resources](#related-repo-resources) · [Document map (foundations)](#document-map-foundations)
@@ -64,7 +64,7 @@ Sound bites — say them exactly like this:
 ### Edge cases & complexity table
 
 Single-sourced in the cheatsheet — reread them there, not here:
-[edge cases](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#5-universal-edge-cases) · [pattern → time/space table](../00-L3-EXECUTION-META/L3_CHEATSHEET.md#6-big-o-reference) · [pattern triggers](./patterns-master.md#quick-decision-trees).
+[edge cases](../00-start-here/L3_CHEATSHEET.md#5-universal-edge-cases) · [pattern → time/space table](../00-start-here/L3_CHEATSHEET.md#6-big-o-reference) · [pattern triggers](./patterns-master.md#quick-decision-trees).
 
 ### Open with / Close with
 
@@ -225,7 +225,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ### Night before
 
-- Skim **Part A** and the [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) (edge cases, Big-O).
+- Skim **Part A** and the [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) (edge cases, Big-O).
 - Do **not** cram new topics; review **one** problem per weak area only.
 - Prepare 2–3 questions for your interviewers (team, code review, on-call).
 
@@ -240,7 +240,7 @@ If stuck: “I’m considering BFS vs DFS — for shortest path in an unweighted
 
 ## Related repo resources
 
-- [coding/l3-google-roadmap.md](../coding/l3-google-roadmap.md) — 4-week L3 study schedule  
+- [00-start-here/l3-google-roadmap.md](../00-start-here/l3-google-roadmap.md) — 4-week L3 study schedule  
 - [03-patterns/patterns-master.md](patterns-master.md) — condensed patterns with triggers  
 
 **Good luck.** You’ve already done the hard work building this repo — use Part A + one full mock in the last 48 hours to walk in confident.

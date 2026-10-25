@@ -5,15 +5,15 @@ tags: [algorithms, union-find]
 ---
 # Union-Find (Disjoint Set Union) — L3 Gold Standard
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Disjoint Set Union with path compression + union by rank, connectivity counting, cycle detection in undirected graphs, Kruskal's MST, offline union.
 > **You'll be able to:** Write DSU in 10 lines; choose DSU vs BFS/DFS for dynamic connectivity; explain the near-O(1) amortised cost.
-> **Prereqs:** Graphs · **Pair with:** [Union-Find problems](../coding/algorithms/14-union-find.md) · **Time:** 1 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Graphs · **Pair with:** [Union-Find problems](../04-practice/algorithms/14-union-find.md) · **Time:** 1 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. L3 Deep Dives](#3-l3-deep-dives) · [4. Common Interview Problems](#4-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -361,17 +361,17 @@ class RollbackDSU:
 ## 4. Common Interview Problems
 
 ### Medium (High Frequency)
-- **[Redundant Connection](../coding/data-structures/13-graph.md#redundant-connection--t1) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
-- **[Accounts Merge](../coding/algorithms/14-union-find.md#accounts-merge-email-graph--t1) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
-- **[Graph Valid Tree](../coding/algorithms/14-union-find.md#graph-valid-tree--t1) `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
-- **[Satisfiability of Equations](../coding/algorithms/14-union-find.md#satisfiability-of-equality-equations--t1) `⚡ T1`** — Union all `==` pairs first; then check all `!=` pairs.
-- **[Number of Connected Components](../coding/algorithms/14-union-find.md#number-of-connected-components-in-an-undirected-graph) `🎯 T2`** — DSU; initialize `components = n`; decrement on successful union.
+- **[Redundant Connection](../04-practice/data-structures/13-graph.md#redundant-connection--t1) `⚡ T1`** — Process edges; return the first where `find(u) == find(v)` before union.
+- **[Accounts Merge](../04-practice/algorithms/14-union-find.md#accounts-merge-email-graph--t1) `⚡ T1`** — Union emails within each account; group by DSU root; sort emails per group.
+- **[Graph Valid Tree](../04-practice/algorithms/14-union-find.md#graph-valid-tree--t1) `⚡ T1`** — n nodes, n-1 edges, single component ↔ tree.
+- **[Satisfiability of Equations](../04-practice/algorithms/14-union-find.md#satisfiability-of-equality-equations--t1) `⚡ T1`** — Union all `==` pairs first; then check all `!=` pairs.
+- **[Number of Connected Components](../04-practice/algorithms/14-union-find.md#number-of-connected-components-in-an-undirected-graph) `🎯 T2`** — DSU; initialize `components = n`; decrement on successful union.
 
 ### Hard
-- **[Number of Islands II](../coding/algorithms/14-union-find.md#number-of-islands-ii--t1) `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
-- **[Evaluate Division](../coding/algorithms/14-union-find.md#evaluate-division-weighted-dsu) `⚡ T1`** — Weighted DSU; ratios as edge weights; query accumulates product path.
-- **[Smallest String With Swaps](../coding/algorithms/14-union-find.md#smallest-string-with-swaps-lc-1202) `🎯 T2`** — DSU on index pairs; sort characters lexicographically within each component.
-- **[Minimize Malware Spread](../coding/algorithms/14-union-find.md#minimize-malware-spread) `💤 T3`** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
+- **[Number of Islands II](../04-practice/algorithms/14-union-find.md#number-of-islands-ii--t1) `⚡ T1`** — Dynamic: add land cells one-by-one; union 4-neighbors; return component count after each addition.
+- **[Evaluate Division](../04-practice/algorithms/14-union-find.md#evaluate-division-weighted-dsu) `⚡ T1`** — Weighted DSU; ratios as edge weights; query accumulates product path.
+- **[Smallest String With Swaps](../04-practice/algorithms/14-union-find.md#smallest-string-with-swaps-lc-1202) `🎯 T2`** — DSU on index pairs; sort characters lexicographically within each component.
+- **[Minimize Malware Spread](../04-practice/algorithms/14-union-find.md#minimize-malware-spread) `💤 T3`** — DSU for component sizes; remove the node whose unique malware source covers the largest component.
 
 ---
 

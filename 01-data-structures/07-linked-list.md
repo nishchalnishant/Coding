@@ -5,15 +5,15 @@ tags: [data-structures, linked-list]
 ---
 # Linked List — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Pointer manipulation under invariants: dummy head, in-place reversal, fast/slow (middle, cycle, Floyd), merge, copy with random pointer, LRU (map + DLL).
 > **You'll be able to:** Reverse/merge/split lists without losing nodes; prove Floyd's cycle-start step; build LRU cache in O(1).
-> **Prereqs:** None · **Pair with:** [Linked list problems](../coding/data-structures/07-linked-list.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** None · **Pair with:** [Linked list problems](../04-practice/data-structures/07-linked-list.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Concept Overview](#1-concept-overview) · [2. Core Algorithms & Click Moments](#2-core-algorithms--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -367,23 +367,23 @@ class LRUCache:
 ## 3. Common Interview Problems
 
 ### Easy
-- **[Linked List Cycle](../coding/data-structures/07-linked-list.md#linked-list-cycle--t2) `🎯 T2`** — Fast & slow; `O is O` identity check.
-- **[Merge Two Sorted Lists](../coding/data-structures/07-linked-list.md#merge-two-sorted-lists--t2) `🎯 T2`** — Dummy head; two-pointer merge.
-- **[Reverse Linked List](../coding/data-structures/07-linked-list.md#reverse-linked-list--t2) `🎯 T2`** — Three-pointer iterative; recursive is shorter but O(N) stack.
+- **[Linked List Cycle](../04-practice/data-structures/07-linked-list.md#linked-list-cycle--t2) `🎯 T2`** — Fast & slow; `O is O` identity check.
+- **[Merge Two Sorted Lists](../04-practice/data-structures/07-linked-list.md#merge-two-sorted-lists--t2) `🎯 T2`** — Dummy head; two-pointer merge.
+- **[Reverse Linked List](../04-practice/data-structures/07-linked-list.md#reverse-linked-list--t2) `🎯 T2`** — Three-pointer iterative; recursive is shorter but O(N) stack.
 
 ### Medium
-- **[Reorder List](../coding/data-structures/07-linked-list.md#reorder-list--t2) `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
-- **[Remove Nth From End](../coding/data-structures/07-linked-list.md#remove-nth-node-from-end-of-list--t2) `🎯 T2`** — Fast advances N steps first; both advance together until fast.next is null.
-- **[Copy List with Random Pointer](../coding/data-structures/07-linked-list.md#copy-list-with-random-pointer--t2) `🎯 T2`** — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
-- **[Palindrome Linked List](../coding/data-structures/07-linked-list.md#palindrome-linked-list--t2) `🎯 T2`** — Find middle, reverse second half, compare, restore.
-- **[Add Two Numbers](../coding/data-structures/07-linked-list.md#add-two-numbers) `🎯 T2`** — Digit-by-digit sum with carry; handle length mismatch.
-- **[Swap Nodes in Pairs](../coding/data-structures/07-linked-list.md#swap-nodes-in-pairs) `🎯 T2`** — Reverse every two nodes; dummy node simplifies head case.
+- **[Reorder List](../04-practice/data-structures/07-linked-list.md#reorder-list--t2) `🎯 T2`** — Find middle, reverse second half, weave (merge alternating).
+- **[Remove Nth From End](../04-practice/data-structures/07-linked-list.md#remove-nth-node-from-end-of-list--t2) `🎯 T2`** — Fast advances N steps first; both advance together until fast.next is null.
+- **[Copy List with Random Pointer](../04-practice/data-structures/07-linked-list.md#copy-list-with-random-pointer--t2) `🎯 T2`** — Map `old → clone`; two passes. Or: interleave clones O(1) extra space.
+- **[Palindrome Linked List](../04-practice/data-structures/07-linked-list.md#palindrome-linked-list--t2) `🎯 T2`** — Find middle, reverse second half, compare, restore.
+- **[Add Two Numbers](../04-practice/data-structures/07-linked-list.md#add-two-numbers) `🎯 T2`** — Digit-by-digit sum with carry; handle length mismatch.
+- **[Swap Nodes in Pairs](../04-practice/data-structures/07-linked-list.md#swap-nodes-in-pairs) `🎯 T2`** — Reverse every two nodes; dummy node simplifies head case.
 
 ### Hard
-- **[Merge K Sorted Lists](../coding/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — Min-heap of K nodes; or divide-and-conquer pairwise merge.
-- **[LRU Cache](../coding/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — DLL + hash map; dummy head/tail to avoid edge cases.
-- **[Reverse K-Group](../coding/data-structures/07-linked-list.md#reverse-nodes-in-k-group--t2) `🎯 T2`** — Recursion or iterative; check K nodes exist before reversing.
-- **[Sort List](../coding/data-structures/07-linked-list.md#sort-list--t2) `🎯 T2`** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
+- **[Merge K Sorted Lists](../04-practice/data-structures/10-heap.md#merge-k-sorted-lists--t1) `⚡ T1`** — Min-heap of K nodes; or divide-and-conquer pairwise merge.
+- **[LRU Cache](../04-practice/data-structures/07-linked-list.md#lru-cache--t2) `🎯 T2`** — DLL + hash map; dummy head/tail to avoid edge cases.
+- **[Reverse K-Group](../04-practice/data-structures/07-linked-list.md#reverse-nodes-in-k-group--t2) `🎯 T2`** — Recursion or iterative; check K nodes exist before reversing.
+- **[Sort List](../04-practice/data-structures/07-linked-list.md#sort-list--t2) `🎯 T2`** — Merge sort; find middle, split, sort each half, merge. O(N log N) time, O(log N) stack.
 
 ---
 

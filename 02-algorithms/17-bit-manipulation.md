@@ -5,7 +5,7 @@ tags: [algorithms, bit-manipulation]
 ---
 # Bit Manipulation — L3 Gold Standard
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](./algorithm_tree.md)
+← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
 
 ## What this covers
 
@@ -13,7 +13,7 @@ tags: [algorithms, bit-manipulation]
 > **Covers:** Bitwise operators and the 8 essential tricks: XOR cancellation, lowbit, clear lowest bit, popcount, power-of-two test, masks and subset enumeration.
 > **You'll be able to:** Solve single-number / counting-bits / subset-mask problems; read and write bit tricks without guessing.
 > **Prereqs:** None · **Pair with:** [Bit questions](../03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md#bit-manipulation) · **Time:** 1 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Operator Reference](#operator-reference) · [Core Tricks — The Essential 8](#core-tricks--the-essential-8) · [Canonical Interview Problems](#canonical-interview-problems) · [Problem Deep Dives](#problem-deep-dives) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 

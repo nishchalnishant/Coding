@@ -5,8 +5,8 @@
 > [!abstract] In this file
 > **Covers:** The mechanical bridge from brute-force recursion → memoization → tabulation → space-optimised DP, with 15 worked conversions.
 > **You'll be able to:** Convert any recursive solution into top-down and bottom-up DP; pick the iteration order from the recurrence's dependencies.
-> **Prereqs:** Recursion ([masterclass](../03-patterns/RECURSION_AND_DP_MASTERCLASS.md) if it hasn't clicked yet — this file is the drill reference, not the lesson) · **Pair with:** [DP lecture](15-dynamic-programming.md) · [DP problems](../coding/algorithms/15-dynamic-programming.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Recursion ([masterclass](../03-patterns/RECURSION_AND_DP_MASTERCLASS.md) if it hasn't clicked yet — this file is the drill reference, not the lesson) · **Pair with:** [DP lecture](15-dynamic-programming.md) · [DP problems](../04-practice/algorithms/15-dynamic-programming.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [One-Page Map](#one-page-map) · [Quick Revision Triggers](#quick-revision-triggers) · [Overlap in One Picture (Climbing Stairs)](#overlap-in-one-picture-climbing-stairs) · [Iteration Order Cheat Sheet](#iteration-order-cheat-sheet) · [Top-Down vs Bottom-Up — When to Use Which](#top-down-vs-bottom-up--when-to-use-which) · [Templates](#templates) · [Worked Examples — Full Pipeline](#worked-examples--full-pipeline) · [15-Problem Conversion Reference](#15-problem-conversion-reference) · [Common Conversion Bugs](#common-conversion-bugs) · [Interview Script (say this out loud)](#interview-script-say-this-out-loud) · [Final Mental Model](#final-mental-model) · [Flashcards](#flashcards)
 

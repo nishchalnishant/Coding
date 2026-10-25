@@ -445,7 +445,7 @@ The skeleton is always `choose → recurse → un-choose`; the un-choose restore
 
 Worked cold: Insert/Delete/GetRandom O(1). Random needs index-access → array. Delete-by-value needs find → hash `val → idx`. Array's weakness: deleting mid-array is O(n) — but order was never required, so **swap the victim with the last element, pop the end** — O(1). The swap trick is the whole problem; and the canonical bug is update-order (repoint the moved element's hash entry *before* deleting the victim's, or deleting the last element corrupts the map).
 
-**The standard composition table** (derive each row by the 3-step method; walkthroughs in [`coding/data-structures/14-design.md`](../coding/data-structures/14-design.md)):
+**The standard composition table** (derive each row by the 3-step method; walkthroughs in [`04-practice/data-structures/14-design.md`](../04-practice/data-structures/14-design.md)):
 
 | Need | Composition |
 |---|---|
@@ -527,5 +527,5 @@ The compressed version of this entire file — the nine sentences to hold in wor
 - [PATTERN_LADDERS.md](PATTERN_LADDERS.md) — graded problem sequences to pressure-test each chapter
 - [patterns-master.md](patterns-master.md) — trigger-phrase quick reference
 - [MOCK_INTERVIEW_SET.md](MOCK_INTERVIEW_SET.md) — 25-problem cold set + L4 follow-up chains
-- [`coding/l4-sde2-delta.md`](../coding/l4-sde2-delta.md) — the L4 bar, tier promotions, gap problems
-- [`00-L3-EXECUTION-META/L3_CHEATSHEET.md`](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) — 45-minute round plan + decision guide
+- [`00-start-here/l4-sde2-delta.md`](../00-start-here/l4-sde2-delta.md) — the L4 bar, tier promotions, gap problems
+- [`00-start-here/L3_CHEATSHEET.md`](../00-start-here/L3_CHEATSHEET.md) — 45-minute round plan + decision guide

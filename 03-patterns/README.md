@@ -29,7 +29,7 @@ Each guide answers one question. Open the one that matches what you need right n
 | "Interview is in 7 days / 48 h / tomorrow" | [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Plan |
 | "What follow-ups will a senior interviewer ask?" | [`SENIOR_FOLLOWUPS.md`](./SENIOR_FOLLOWUPS.md) | L4+/senior only |
 
-Outside this folder: [L3 cheatsheet](../00-L3-EXECUTION-META/L3_CHEATSHEET.md) (round clock, Big-O, edge cases) · [MINDMAP](../MINDMAP.md) (problem-name → hint recall) · [questions.md](../questions.md) (find a walkthrough) · [FLOWCHARTS](../FLOWCHARTS.md) (visual study paths).
+Outside this folder: [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) (round clock, Big-O, edge cases) · [MINDMAP](maps/mindmap.md) (problem-name → hint recall) · [questions.md](../04-practice/README.md) (find a walkthrough) · [FLOWCHARTS](maps/flowcharts.md) (visual study paths).
 
 ---
 

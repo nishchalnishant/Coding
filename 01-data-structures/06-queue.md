@@ -5,15 +5,15 @@ tags: [data-structures, queue]
 ---
 # Queue — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](./ds_tree.md)
+← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** FIFO, deque, and circular buffer; BFS level order; multi-source BFS; monotonic deque for sliding-window max; Kahn's topological sort.
 > **You'll be able to:** Pick queue vs deque vs heap; write level-order BFS and sliding-window-max with a deque; explain why BFS gives shortest paths in unweighted graphs.
-> **Prereqs:** Arrays, stack · **Pair with:** [Queue problems](../coding/data-structures/06-queue.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Arrays, stack · **Pair with:** [Queue problems](../04-practice/data-structures/06-queue.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [Theory & Mental Models](#theory--mental-models) · [1. Representation Choice](#1-representation-choice) · [2. Core Patterns & Click Moments](#2-core-patterns--click-moments) · [3. Common Interview Problems](#3-common-interview-problems) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Quick Revision Triggers](#quick-revision-triggers) · [Flashcards](#flashcards)
 
@@ -349,18 +349,18 @@ class CircularQueue:
 ## 3. Common Interview Problems
 
 ### Easy / Medium
-- **[Word Ladder](../coding/algorithms/13-graph-algorithms.md#word-ladder-bfs-on-implicit-graph--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
-- **[Sliding Window Maximum](../coding/data-structures/06-queue.md#sliding-window-maximum--t1) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
-- **[01 Matrix](../coding/data-structures/06-queue.md#01-matrix--t1) `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
-- **[Rotten Oranges](../coding/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
-- **[Design Circular Queue](../coding/data-structures/06-queue.md#design-circular-queue) `🎯 T2`** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
-- **[Moving Average from Data Stream](../coding/data-structures/06-queue.md#moving-average-from-data-stream) `🎯 T2`** — Fixed-size deque + running sum; evict front when over capacity.
+- **[Word Ladder](../04-practice/algorithms/13-graph-algorithms.md#word-ladder-bfs-on-implicit-graph--t1) `⚡ T1`** — BFS; neighbors = one-letter edits in word set; remove visited words from set immediately.
+- **[Sliding Window Maximum](../04-practice/data-structures/06-queue.md#sliding-window-maximum--t1) `⚡ T1`** — Monotonic deque of indices; decreasing values; front = max.
+- **[01 Matrix](../04-practice/data-structures/06-queue.md#01-matrix--t1) `⚡ T1`** — Multi-source BFS from all `0` cells; distances expand outward.
+- **[Rotten Oranges](../04-practice/data-structures/13-graph.md#rotting-oranges--t1) `⚡ T1`** — Multi-source BFS from all rotten cells at t=0; count fresh oranges; return level count if fresh = 0, else -1.
+- **[Design Circular Queue](../04-practice/data-structures/06-queue.md#design-circular-queue) `🎯 T2`** — Fixed array + `front`/`size`/`cap`; mod arithmetic.
+- **[Moving Average from Data Stream](../04-practice/data-structures/06-queue.md#moving-average-from-data-stream) `🎯 T2`** — Fixed-size deque + running sum; evict front when over capacity.
 
 ### Hard
-- **[Shortest Path in Binary Matrix](../coding/data-structures/06-queue.md#shortest-path-in-binary-matrix--t1) `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
-- **[Cheapest Flights Within K Stops](../coding/data-structures/06-queue.md#cheapest-flights-within-k-stops) `⚡ T1`** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
-- **[Sliding Window Minimum](../coding/data-structures/06-queue.md#sliding-window-minimum) `🎯 T2`** — Same deque pattern; maintain increasing order (flip comparison).
-- **[Maximum of Minimums of Every Window Size](../coding/data-structures/06-queue.md#maximum-of-minimums-of-every-window-size) `💤 T3`** — Monotonic stack for prev/next smaller element; fill answer array.
+- **[Shortest Path in Binary Matrix](../04-practice/data-structures/06-queue.md#shortest-path-in-binary-matrix--t1) `⚡ T1`** — BFS on 8-neighbor open (0) cells; return step count.
+- **[Cheapest Flights Within K Stops](../04-practice/data-structures/06-queue.md#cheapest-flights-within-k-stops) `⚡ T1`** — BFS with state `(node, stops_used)`; or Bellman-Ford with K+1 relaxations.
+- **[Sliding Window Minimum](../04-practice/data-structures/06-queue.md#sliding-window-minimum) `🎯 T2`** — Same deque pattern; maintain increasing order (flip comparison).
+- **[Maximum of Minimums of Every Window Size](../04-practice/data-structures/06-queue.md#maximum-of-minimums-of-every-window-size) `💤 T3`** — Monotonic stack for prev/next smaller element; fill answer array.
 
 ---
 
@@ -402,7 +402,7 @@ class CircularQueue:
 ## See also
 
 - [Stack](05-stack.md) — stack vs queue; monotonic stack for next greater element
-- [Graph Algorithms](../01-data-structures/13-graphs.md) — BFS shortest path; Dijkstra with priority queue
+- [Graph Algorithms](13-graphs.md) — BFS shortest path; Dijkstra with priority queue
 - [Array](01-array.md) — sliding window (pointer-based); deque for window max variant
 - [Patterns Master](../03-patterns/patterns-master.md) — BFS and queue pattern recognition triggers
 

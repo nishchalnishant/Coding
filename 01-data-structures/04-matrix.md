@@ -5,15 +5,15 @@ tags: [data-structures, matrix, grid, bfs, dfs]
 ---
 # Matrix / Grid
 
-← [DS index](./README.md) · [DS decision tree](./ds_tree.md)
+← [DS index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Grids as implicit graphs: direction arrays, bounds checks, BFS/DFS flood fill, in-place transforms (rotate, spiral, set zeroes), grid DP.
 > **You'll be able to:** Write a bug-free grid BFS/DFS template from memory; recognise when a grid problem is really shortest path, connected components or DP.
-> **Prereqs:** Queue, recursion · **Pair with:** [Matrix problems](../coding/data-structures/04-matrix.md) · [Graphs](13-graphs.md) · **Time:** 1.5 h
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../coding/l3-google-roadmap.md#tier-legend))
+> **Prereqs:** Queue, recursion · **Pair with:** [Matrix problems](../04-practice/data-structures/04-matrix.md) · [Graphs](13-graphs.md) · **Time:** 1.5 h
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Core Idea](#core-idea) · [The Templates](#the-templates) · [Bounds checking](#bounds-checking) · [Decision Guide](#decision-guide) · [Interview Questions — Logic & Trickiness](#interview-questions--logic--trickiness) · [Flashcards](#flashcards)
 
@@ -157,7 +157,7 @@ The sentinel border removes bounds checks entirely, but costs O(m+n) extra memor
 
 ---
 
-Practice → [`coding/data-structures/04-matrix.md`](../coding/data-structures/04-matrix.md) (12 problems with full walkthroughs)
+Practice → [`04-practice/data-structures/04-matrix.md`](../04-practice/data-structures/04-matrix.md) (12 problems with full walkthroughs)
 
 ---
 
