@@ -29,7 +29,7 @@ Google L3 (SWE) loops are **4–5 coding rounds**, one problem each, **35–45 m
 | Full L3 roadmap + 4-week schedule | [`00-start-here/l3-google-roadmap.md`](../00-start-here/l3-google-roadmap.md) |
 | 45-min pacing + constraint → Big-O heuristics | [`00-start-here/L3_CHEATSHEET.md`](../00-start-here/L3_CHEATSHEET.md) |
 | Problem walkthroughs (code + approach) | [`04-practice/data-structures/`](../04-practice/data-structures/) |
-| 30-min pattern revision | [`mindmap.md`](../03-patterns/maps/mindmap.md) · [`flowcharts.md`](../03-patterns/maps/flowcharts.md) |
+| 30-min pattern revision | [`mindmap.md`](../03-patterns/mindmap.md) · [`patterns-master.md`](../03-patterns/patterns-master.md) |
 | Behavioral / Googliness | [`05-behavioral/BEHAVIORAL_GOOGLINESS.md`](../05-behavioral/BEHAVIORAL_GOOGLINESS.md) |
 
 ### L3 study order (data structures)

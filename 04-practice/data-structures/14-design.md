@@ -10,7 +10,7 @@ difficulty: mixed
 > [!abstract] In this file
 > **Covers:** Design-a-data-structure problems: support operations X/Y/Z in O(1) / O(log n) by composing maps, lists, heaps and sets.
 > **You'll be able to:** Compose structures so each covers the other's weakness; state per-operation cost.
-> **Prereqs:** Hashing, linked list, heap · **Pair with:** [Design ladder](../../03-patterns/PATTERN_LADDERS.md#ladder-12--design-a-data-structure-l4-signature) · **Time:** 2–3 h
+> **Prereqs:** Hashing, linked list, heap · **Pair with:** [Design ladder](../../03-patterns/HOW_TO_THINK.md#ladder-12--design-a-data-structure-l4-signature) · **Time:** 2–3 h
 > **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Design Interview Checklist](#design-interview-checklist)
@@ -18,7 +18,7 @@ difficulty: mixed
 ---
 
 > [!note] L4 signature family
-> Derivation ladder for this family: [Pattern Ladders — Ladder 12](../../03-patterns/PATTERN_LADDERS.md#ladder-12--design-a-data-structure-l4-signature).
+> Derivation ladder for this family: [Pattern Ladders — Ladder 12](../../03-patterns/HOW_TO_THINK.md#ladder-12--design-a-data-structure-l4-signature).
 > Already covered elsewhere: **Min Stack** → [stack](05-stack.md), **LRU Cache** → [linked list](07-linked-list.md), **Kth Largest in Stream / Find Median** → [heap](10-heap.md).
 
 ## Design Interview Checklist

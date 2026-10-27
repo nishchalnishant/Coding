@@ -5,18 +5,18 @@ tags: [root, mindmap, l3]
 ---
 # Mindmap — ASCII only (`04-practice/`, L3 scope)
 
-← [L3 Roadmap](../../00-start-here/l3-google-roadmap.md) · [Flowcharts](flowcharts.md) · [DS index](../../01-data-structures/README.md) · [Algorithms index](../../02-algorithms/README.md)
+← [L3 Roadmap](../00-start-here/l3-google-roadmap.md) · [Patterns master](patterns-master.md) · [DS index](../01-data-structures/README.md) · [Algorithms index](../02-algorithms/README.md)
 
 ## What this covers
 
 > [!abstract] In this file
 > **Covers:** Every T1/T2 problem in the coding walkthroughs as an ASCII tree, each with a one-line hint.
 > **You'll be able to:** Rapid-fire recall: see a problem name, recall the approach.
-> **Prereqs:** Solved the problems once · **Pair with:** [Questions index](../../04-practice/README.md) · [Flowcharts](flowcharts.md) · **Time:** 30 min per pass
+> **Prereqs:** Solved the problems once · **Pair with:** [Questions index](../04-practice/README.md) · [Patterns master](patterns-master.md) · **Time:** 30 min per pass
 > **How to use:** reference — read once, then use as a lookup.
-> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../../00-start-here/l3-google-roadmap.md#tier-legend))
+> **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
-**Sections:** [04-practice/data-structures/](#codingdata-structures) · [04-practice/algorithms/](#codingalgorithms)
+**Sections:** [04-practice/data-structures/](#04-practicedata-structures) · [04-practice/algorithms/](#04-practicealgorithms)
 
 ---
 
@@ -590,28 +590,19 @@ _→ = one-line hint from each problem's Approach block_
     ├── XOR Trie
     │   └── Maximum XOR of Two Numbers in an Array `⚡ T1`
     │       → Brute force is O(n²).
-    ├── Miscellaneous
-    │   ├── Number of Distinct Substrings in a String
-    │   │   → KMP handles one pattern in O(n+m).
-    │   └── Multi String Search (AlgoExpert / similar)
-    │       → Naive approach: for each small string, run Python's in operator — O(b × s × len(small)) total.
     ├── Core Trie Operations (Extended)
     │   └── Add and Search Word `⚡ T1`
     │       → Exact-match trie search is O(L).
     ├── Prefix Problems
     │   ├── Search Suggestions System `⚡ T1`
     │   │   → After inserting and sorting, a trie lets us walk to the prefix node once and collect the first 3 words in lexicographic order via a bounded DFS — O(prefix_length + output) per query.
-    │   ├── Prefix and Suffix Search
-    │   │   → Checking all words for every query is O(N × L).
     │   ├── Count Words With Given Prefix
     │   │   → A trie answers prefix-count queries in O(L) after O(N × L) build — count of words in the subtree rooted at the prefix node.
     │   └── Implement Magic Dictionary
     │       → We need "exactly one substitution" match, not exact or prefix match.
     ├── XOR Trie (Extended)
-    │   ├── Maximum XOR With an Element From Array
-    │   │   → If we could insert all nums freely, a standard XOR trie answers each query in O(32).
-    │   └── Count Pairs With XOR in a Range
-    │       → Brute force O(n²).
+    │   └── Maximum XOR With an Element From Array
+    │       → Sort queries offline by limit; insert nums ≤ limit into the XOR trie, then answer each in O(32).
     ├── Bitwise Trie / Other
     │   ├── Design File System
     │   ├── Stream of Characters
@@ -621,8 +612,6 @@ _→ = one-line hint from each problem's Approach block_
     └── Suffix Trie / Advanced
         ├── Implement Trie II (Count Operations) `⚡ T1`
         │   → The basic trie only tracks is_end (bool).
-        ├── Shortest Unique Prefix for Every Word
-        │   → "Unique prefix" means the trie node at the end of the prefix has pass_count == 1 — only one word passes through it.
         └── Maximum XOR of Two Numbers — Prefix Hash Approach `⚡ T1`
             → Demonstrates the equivalence of "XOR trie greedy" and "prefix hash greedy" for this problem.
 ```
@@ -1281,7 +1270,7 @@ _→ = one-line hint from each problem's Approach block_
     │   │   → Naive search rescans characters already matched; O(nm) is unacceptable for large text.
     │   ├── Find All Occurrences of Pattern in Text
     │   │   → Standard substring search is O(nm); we need every occurrence, not just the first.
-    │   └── Add Minimum Characters to Make String a Palindrome
+    │   └── Add Minimum Characters to Make a String Palindrome
     │       → We need the longest prefix of s that is already a palindrome; characters after that prefix must be reflected at the front.
     ├── Rabin-Karp (Rolling Hash)
     │   ├── Implement Rabin-Karp
@@ -1296,12 +1285,10 @@ _→ = one-line hint from each problem's Approach block_
     │   └── Repeated String Match
     │       → B can span at most ceil(len(B)/len(A)) + 1 copies of A.
     ├── Palindrome Algorithms
-    │   ├── Longest Palindromic Substring — Expand Around Center `🎯 T2`
+    │   ├── Longest Palindromic Substring — Expand Around Center `⚡ T1`
     │   │   → A palindrome reads the same forwards and backwards; the structural invariant is symmetry around a center.
-    │   ├── Palindromic Substrings — Count
-    │   │   → Each center expansion contributes one palindrome per step.
-    │   └── Manacher's Algorithm — O(n) All Palindromes
-    │       → Naive expand-around-center is O(n²) because each center expands independently.
+    │   └── Palindromic Substrings — Count
+    │       → Each center expansion contributes one palindrome per step.
     ├── Sliding Window on Strings
     │   ├── Longest Substring with K Distinct Characters
     │   │   → We want the longest window satisfying a constraint on character diversity — a classic sliding window.
@@ -1371,27 +1358,19 @@ _→ = one-line hint from each problem's Approach block_
     │   └── Maximal Square `🎯 T2`
     │       → A square of side k at (i,j) requires squares of side k-1 at three adjacent neighbors — optimal substructure with overlapping sub-rectangles.
     ├── Interval DP
-    │   ├── Matrix Chain Multiplication (Concept)
-    │   │   → Splitting the chain at any point k yields independent subproblems for left and right chains; optimal split depends on results of all sub-chains — overlapping.
-    │   └── Strange Printer
-    │       → Printing s[i..j] can leverage if s[i]==s[k] for some k in (i,j) — we can extend the first turn to cover s[k].
+    │   └── Matrix Chain Multiplication (Concept)
+    │       → Splitting the chain at any point k yields independent subproblems for left and right chains; optimal split depends on results of all sub-chains — overlapping.
     ├── State Machine DP (Stocks)
     │   ├── Best Time to Buy and Sell Stock (All Variants) `🎯 T2`
     │   ├── Stock with Cooldown
     │   │   → Three states model the constraint: holding, just sold (cooldown), resting.
     │   └── Stock with Transaction Fee
     │       → Two states: hold (best profit holding), cash (best profit not holding).
-    ├── Digit DP
-    │   ├── Numbers At Most N Given Digit Set
-    │   └── Count Numbers with Unique Digits
-    │       → At each digit position, choices depend only on how many distinct digits have been used — classic digit DP structure.
     ├── Longest Increasing Subsequence (LIS) Family
     │   ├── Longest Increasing Subsequence `⚡ T1`
     │   │   → Naïve O(n²) DP checks all prior elements; patience sort uses a maintained tails array to binary-search the right position, achieving O(n log n).
-    │   ├── Number of LIS
-    │   │   → Length alone isn't enough; need to count paths.
-    │   └── Longest Bitonic Subsequence
-    │       → Decompose into LIS from the left and LIS from the right (longest decreasing = LIS reversed).
+    │   └── Number of LIS
+    │       → Length alone isn't enough; need to count paths.
     ├── String DP
     │   ├── Distinct Subsequences `🎯 T2`
     │   │   → At each position we either use s[i] to match t[j] or we skip it; both branches must be counted.
@@ -1399,28 +1378,14 @@ _→ = one-line hint from each problem's Approach block_
     │   │   → At each position in s3 we choose whether the next character comes from s1 or s2; overlapping subproblems arise.
     │   └── Regular Expression Matching
     │       → * introduces branching — match zero occurrences (skip pattern pair) or one-or-more — creating overlapping sub-problems.
-    ├── Probability / Expected Value DP
-    │   ├── Knight Probability in Chessboard
-    │   │   → After each move, probability distributes over up to 8 neighbours; cells off-board contribute 0.
-    │   └── New 21 Game
-    │       → dp[x] = probability of reaching exactly x before stopping.
-    ├── Bitmask DP
+    ├── Subset Assignment (backtracking at L3)
     │   └── Partition to K Equal Subset Sums `🎯 T2`
-    │       → Subset assignment is NP-hard in general but n ≤ 16 makes 2^n bitmask DP feasible.
-    ├── Game Theory DP
-    │   ├── Stone Game
-    │   │   → Each player maximises their own score minus the opponent's; the decision at each subarray depends on what the opponent will optimally do.
-    │   ├── Stone Game II
-    │   │   → The value of M changes each turn, so state must encode both position and current M.
-    │   └── Predict the Winner
-    │       → Identical structure to Stone Game.
+    │       → n ≤ 16: backtrack bucket-by-bucket with sort-desc + skip-equal-bucket pruning; bitmask DP is the L4+ alternative.
     ├── DP on Sequences
     │   ├── Jump Game II `🎯 T2`
     │   │   → Greedy DP: at each jump, greedily extend to the farthest reachable index.
-    │   ├── Maximum Product Subarray `🎯 T2`
-    │   │   → A negative number flips max↔min, so both must be tracked at each position.
-    │   └── Arithmetic Slices II — Subsequence
-    │       → Unlike subarrays, subsequences can skip elements; tracking every possible common difference per ending index is necessary.
+    │   └── Maximum Product Subarray `🎯 T2`
+    │       → A negative number flips max↔min, so both must be tracked at each position.
     ├── See Also
     │   └── Longest Common Substring
     │       → Unlike LCS, contiguity matters.

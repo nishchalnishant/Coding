@@ -16,20 +16,16 @@
 
 Each guide answers one question. Open the one that matches what you need right now.
 
-| Your question | File | Mode |
+| File | Answers | Mode |
 |---|---|---|
-| "Which pattern is this?" — triggers, decision trees, pivots | [`patterns-master.md`](./patterns-master.md) | Lookup |
-| "Why does this pattern work / how do I re-derive it?" | [`HOW_TO_THINK.md`](./HOW_TO_THINK.md) | Read once, in order |
-| "I can't design recursion or DP states" | [`RECURSION_AND_DP_MASTERCLASS.md`](./RECURSION_AND_DP_MASTERCLASS.md) | Lesson, in order |
-| "Give me graded practice for one pattern" | [`PATTERN_LADDERS.md`](./PATTERN_LADDERS.md) | Practice (weeks) |
-| "The interviewer changed the problem — now what?" | [`leetcode-variants.md`](./leetcode-variants.md) | Read once |
-| "What's the trap in canonical problem X?" | [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](./TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | Lookup |
-| "Commit or pivot? How do I use a hint?" | [`INTERVIEW_JUDGMENT.md`](./INTERVIEW_JUDGMENT.md) | Read once, reread before mocks |
-| "Am I ready?" — timed problems + rubric | [`MOCK_INTERVIEW_SET.md`](./MOCK_INTERVIEW_SET.md) | Practice |
-| "Interview is in 7 days / 48 h / tomorrow" | [`GOOGLE_INTERVIEW_REVISION.md`](./GOOGLE_INTERVIEW_REVISION.md) | Plan |
-| "What follow-ups will a senior interviewer ask?" | [`SENIOR_FOLLOWUPS.md`](./SENIOR_FOLLOWUPS.md) | L4+/senior only |
+| [`patterns-master.md`](patterns-master.md) | "Which pattern is this?" — N-size/keyword trees, triggers, phrase → technique, when stuck | Lookup |
+| [`HOW_TO_THINK.md`](HOW_TO_THINK.md) | "Why does it work / how do I re-derive it?" + Part IV graded ladders | Read in order, then practice |
+| [`RECURSION_AND_DP_MASTERCLASS.md`](RECURSION_AND_DP_MASTERCLASS.md) | "I can't design recursion or DP states" | Lesson, in order |
+| [`TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md`](TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md) | "What's the trap in problem X?" + Variants playbook (interviewer changed the problem) | Lookup |
+| [`INTERVIEW_JUDGMENT.md`](INTERVIEW_JUDGMENT.md) | Commit/pivot, hints, recovery · C: round cheatsheet + revision schedules · D: mocks + rubric · E: senior follow-up chains | Reread before mocks |
+| [`mindmap.md`](mindmap.md) | Problem name → one-line hint recall | Final-week revision |
 
-Outside this folder: [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) (round clock, Big-O, edge cases) · [MINDMAP](maps/mindmap.md) (problem-name → hint recall) · [questions.md](../04-practice/README.md) (find a walkthrough) · [FLOWCHARTS](maps/flowcharts.md) (visual study paths).
+Outside this folder: [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) (round clock, Big-O, edge cases) · [Questions index](../04-practice/README.md) (find a walkthrough).
 
 ---
 

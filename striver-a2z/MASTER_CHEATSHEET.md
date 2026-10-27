@@ -5,7 +5,7 @@ tags: [striver, cheatsheet, revision]
 ---
 # Master Cheat Sheet
 
-← [Striver course map](README.md) · [Pattern triggers](../03-patterns/maps/pattern-triggers.md)
+← [Striver course map](README.md) · [Pattern triggers](../03-patterns/patterns-master.md)
 
 > [!abstract] What this is
 > Every part's cheat sheet in course order, for last-day revision. Each one is copied from its part README, so edit the part README and regenerate. If any line here feels unfamiliar, go back to that part's theory note.

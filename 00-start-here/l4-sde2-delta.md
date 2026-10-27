@@ -156,7 +156,7 @@ Weeks 1–4 = the L3 schedule ([roadmap](l3-google-roadmap.md)), with two amendm
 | Week | Focus |
 | :--- | :--- |
 | **5** | §3.1 design-DS family + §3.2 intervals + §3.4 parsing. One 45-min mock mid-week. |
-| **6** | §3.3 hard graphs + §3.5–3.7 + **follow-up drills**: for every T1 problem you know, answer "what if it's a stream?", "what if it doesn't fit in memory?", "what if there are updates?" out loud. 3 timed mocks from the [L4 mock rounds](../03-patterns/MOCK_INTERVIEW_SET.md#l4-sde-2-mock-rounds--follow-up-chains). |
+| **6** | §3.3 hard graphs + §3.5–3.7 + **follow-up drills**: for every T1 problem you know, answer "what if it's a stream?", "what if it doesn't fit in memory?", "what if there are updates?" out loud. 3 timed mocks from the [L4 mock rounds](../03-patterns/INTERVIEW_JUDGMENT.md#l4-sde-2-mock-rounds--follow-up-chains). |
 
 **Follow-up drill table** (the L4-defining skill):
 

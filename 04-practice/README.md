@@ -10,7 +10,7 @@ tags: [root, questions]
 > [!abstract] In this file
 > **Covers:** Index of all 128 walkthrough problems grouped by topic, with tier and a link to each walkthrough.
 > **You'll be able to:** Find any problem's walkthrough and work through all T1s first.
-> **Prereqs:** None · **Pair with:** [Mindmap](../03-patterns/maps/mindmap.md) · **Time:** lookup
+> **Prereqs:** None · **Pair with:** [Mindmap](../03-patterns/mindmap.md) · **Time:** lookup
 > **Tiers:** ⚡ T1 must master · 🎯 T2 build fluency · 💤 T3 skip at L3 ([details](../00-start-here/l3-google-roadmap.md#tier-legend))
 
 **Sections:** [Data Structures](#data-structures) · [Algorithms](#algorithms)

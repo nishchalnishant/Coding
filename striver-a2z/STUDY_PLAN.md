@@ -5,7 +5,7 @@ tags: [striver, plan, revision]
 ---
 # Study Plan
 
-← [Striver course map](README.md) · [Problem index](PROBLEM_INDEX.md) · [Pattern triggers](../03-patterns/maps/pattern-triggers.md)
+← [Striver course map](README.md) · [Problem index](PROBLEM_INDEX.md) · [Pattern triggers](../03-patterns/patterns-master.md)
 
 > [!abstract] How to use this
 > The plan runs 16 weeks at about 2 hours a day, covering 506 notes. Each week is **theory first, then problems, then a checkpoint**.
@@ -28,7 +28,7 @@ tags: [striver, plan, revision]
 
 **Per-problem protocol:**
 1. Restate the problem, then write the brute force with its complexity.
-2. Find the repeated work, then pick a pattern from [Pattern triggers](../03-patterns/maps/pattern-triggers.md).
+2. Find the repeated work, then pick a pattern from [Pattern triggers](../03-patterns/patterns-master.md).
 3. Code it, then dry-run the note's edge cases.
 4. Compare with the note's **Optimal** column. If yours differs, re-code theirs.
 
@@ -86,7 +86,7 @@ Mark a problem **mastered** after you pass it at +21. Keep the log in one table:
 | 11 | 1 tree DFS-value problem + 1 heap top-k | State the return value before coding |
 | 13 | 1 Dijkstra variant + 1 DSU problem | Correct graph modelling in 5 minutes |
 | 15 | 3 random DP problems from Part 28 | State, recurrence and base case before coding |
-| 16 | 2 mixed-topic mocks ([mock set](../03-patterns/MOCK_INTERVIEW_SET.md)) | 45 minutes each, with explanation |
+| 16 | 2 mixed-topic mocks ([mock set](../03-patterns/INTERVIEW_JUDGMENT.md#part-d--mock-rounds)) | 45 minutes each, with explanation |
 
 If you fail a checkpoint, spend one extra day on that block's weakest pattern before moving on.
 
@@ -99,11 +99,11 @@ Run these after week 16, or in the last 2 weeks before interviews.
 | Day | What |
 |---|---|
 | 1–5 | One mock a day (two problems, 45 minutes). Log weaknesses by pattern |
-| 6–8 | Drill the three weakest patterns from the log, using [Pattern triggers](../03-patterns/maps/pattern-triggers.md) to find more problems |
+| 6–8 | Drill the three weakest patterns from the log, using [Pattern triggers](../03-patterns/patterns-master.md) to find more problems |
 | 9–11 | Re-solve every problem that failed a revision |
 | 12–13 | [Master cheat sheet](MASTER_CHEATSHEET.md) plus all flashcards |
 | 14 | Light: read [L3 cheatsheet](../00-start-here/L3_CHEATSHEET.md) edge cases and the complexity table. No new problems |
 
 ---
 
-**Interview track →** [Interview revision](../03-patterns/GOOGLE_INTERVIEW_REVISION.md) · [Mock set](../03-patterns/MOCK_INTERVIEW_SET.md) · [Interview judgment](../03-patterns/INTERVIEW_JUDGMENT.md)
+**Interview track →** [Interview revision](../03-patterns/INTERVIEW_JUDGMENT.md#part-c--round-execution--revision) · [Mock set](../03-patterns/INTERVIEW_JUDGMENT.md#part-d--mock-rounds) · [Interview judgment](../03-patterns/INTERVIEW_JUDGMENT.md)

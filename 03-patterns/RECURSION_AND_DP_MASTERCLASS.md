@@ -80,7 +80,7 @@ A recursion's cost is the **number of nodes in its call tree × work per call**.
 
 - One recursive call per invocation (`f(n) → f(n-1)`): a chain, depth n → **O(n)** calls. (Factorial, linked-list walks.)
 - Two calls per invocation (`f(n) → f(n-1), f(n-2)`): a binary tree of depth n → **O(2ⁿ)** calls. (Naive Fibonacci, naive subset-sum.)
-- Two calls but on *halves* (`f(n) → f(n/2), f(n/2)`): depth log n, still n leaves → **O(n log n)** total for merge-sort-shaped work.
+- Two calls on *halves* (`f(n) → f(n/2), f(n/2)`): depth log n, n leaves → **O(n)** calls; with O(n) merge work per level → **O(n log n)** (merge sort).
 
 Rule of thumb to say out loud: **branching factor ^ depth**. This is why Lesson 3's discovery matters so much: an exponential call tree is only a disaster if the nodes are all *different*…
 
@@ -108,7 +108,7 @@ Shapes 1 and 2 are the ones that become DP (Lesson 3 explains exactly why). Shap
 - Edit Distance: *"Look at the last characters: they match (free), or I insert, delete, or replace."*
 - LCS: *"If a[i] == b[j], both advance and score 1; otherwise the answer skips one of the two."*
 
-Say the decision sentence before writing any code. If you can't state it, you don't have a recursion yet — you have a wish. Practice converting problem statements into decision sentences as its own drill; it's the highest-leverage 10 minutes/day in all of DP prep.
+Say the decision sentence before writing any code. If you can't state it, you don't have a recursion yet — you have a wish. Drill converting problem statements into decision sentences on their own.
 
 **✍️ Do this now:** write decision sentences (just the sentence, no code) for: (a) minimum path sum in a grid moving only right/down; (b) number of ways to decode a digit string where '1'–'26' are letters; (c) can `nums` be partitioned into two equal-sum halves? Check yourself: (a) "the last step into cell (i,j) came from above or from the left"; (b) "the first letter is one digit, or two digits if they form 10–26"; (c) "element i is in the left pile or the right pile."
 
@@ -132,16 +132,17 @@ Now the pivot from recursion to DP. Watch it happen concretely.
     f(1) f(0)
 ```
 
-Count the labels: `f(3)` computed **2** times, `f(2)` **3** times, `f(1)` **5** times. For `f(50)`, `f(2)` is computed ~5 billion times — and *every single one returns the same answer*, because the function's output depends only on its argument.
+Count the labels: `f(3)` computed **2** times, `f(2)` **3** times, `f(1)` **5** times. For `f(50)`, `f(2)` is computed ~7.8 billion times (= Fib(49)) — and *every single one returns the same answer*, because the function's output depends only on its argument.
 
-There's the disease and the cure in one sentence: **the call tree has 2ⁿ nodes but only n distinct labels.** We're not doing exponential *work*, we're doing linear work exponentially many times.
+There's the disease and the cure in one sentence: **the call tree has ~1.6ⁿ nodes but only n+1 distinct labels.** We're not doing exponential *work*, we're doing linear work exponentially many times.
 
 ## 3.2 The cure: memoization
 
 If the function is **pure** — return value depends only on the arguments, no side effects, no reading mutating globals — then the second call with the same arguments is guaranteed to return the same thing. So: cache it.
 
 ```python
-def fib(n, memo={}):                    # or @functools.lru_cache(None)
+memo = {}                               # or @functools.lru_cache(None)
+def fib(n):
     if n <= 1: return n
     if n not in memo:
         memo[n] = fib(n-1) + fib(n-2)
@@ -223,7 +224,7 @@ Complexity: n·m states × O(1) = **O(nm)**. Notice how *little* changed from th
 ## 4.3 Top-down mechanics: the gotcha list
 
 - **Cache key = complete argument tuple.** If your recursion secretly depends on something not in the arguments (a global you mutate, a `path` list), the cache returns wrong answers. That's not a memoization bug — it's the signal your **state is incomplete** (Lesson 6).
-- **Never pass slices** (`f(s[1:])`) — O(n) copy per call *and* unhashable-adjacent mess. Pass indices into the one shared string.
+- **Never pass slices** (`f(s[1:])`) — O(n) copy per call, and every cache key becomes a whole string (O(n²) memory). Pass indices into the one shared string.
 - **Python recursion limit** (~1000): for n up to 10⁵ linear-state problems, top-down will crash. Options: `sys.setrecursionlimit(1_000_100)` (say it, slightly ugly), or convert to bottom-up (Lesson 5 — the clean answer, and a great reason to volunteer the conversion).
 - `lru_cache(None)` means unbounded; that's what you want here.
 
@@ -340,7 +341,7 @@ Same skeleton, three combiners — classify before writing:
 - "**min/max cost/length**" → `dp = min/max` over choices (base = 0 or ±inf-poison)
 - "**is it possible**" → `dp = OR` over choices (base = True)
 
-Target Sum, Partition Equal Subset, Coin Change I & II are one recursion with different combiners. Seeing this collapses ~40% of "different" DP problems into things you've already solved.
+Target Sum, Partition Equal Subset, Coin Change I & II are one recursion with different combiners. Seeing this collapses many "different" DP problems into one you've already solved.
 
 ---
 
@@ -380,24 +381,24 @@ Attempt each cold with the 5-step method — decision sentence and contract *on 
 
 | # | Problem | It teaches |
 |---|---|---|
-| 1 | Climbing Stairs | the whole pipeline on the smallest canvas; O(1)-space rolling variables |
-| 2 | House Robber | decision sentence with a constraint baked into the recursion (`i+2`) |
-| 3 | House Robber II (circle) | reduction: circular = max of two linear runs (drop first / drop last) |
-| 4 | Decode Ways | base-case identity discipline; '0' as poison |
-| 5 | Coin Change | min-combiner, ∞-poison, the translation to bottom-up |
-| 6 | Coin Change II | count-combiner; combinations vs permutations loop order |
-| 7 | Unique Paths → Min Path Sum | first 2D grid; same grid, different combiner |
-| 8 | Partition Equal Subset Sum | `(i, remaining)` state; 1D compression + the backward loop |
-| 9 | LCS | two-sequence shape; hand-fill the table once |
-| 10 | Edit Distance | LCS + one more choice per cell; nothing else new — notice that |
-| 11 | Word Break | linear state, but the *choice set* is "every dictionary word" |
-| 12 | Longest Increasing Subsequence | O(n²) DP → the O(n log n) escalation (binary search crossover) |
-| 13 | Stock with Cooldown | live state discovery (§6.2) |
-| 14 | Longest Palindromic Substring / Subsequence | `(l, r)` range states |
-| 15 | Burst Balloons | decide-the-last-action flip; hardest state in the common canon |
-| 16 | Maximum Profit in Job Scheduling | DP + binary search composition — the L4 seam ([HOW_TO_THINK.md](HOW_TO_THINK.md) Part III) |
+| 1 | Climbing Stairs `🎯 T2` | the whole pipeline on the smallest canvas; O(1)-space rolling variables |
+| 2 | House Robber `🎯 T2` | decision sentence with a constraint baked into the recursion (`i+2`) |
+| 3 | House Robber II (circle) `🎯 T2` | reduction: circular = max of two linear runs (drop first / drop last) |
+| 4 | Decode Ways `🎯 T2` | base-case identity discipline; '0' as poison |
+| 5 | Coin Change `🎯 T2` | min-combiner, ∞-poison, the translation to bottom-up |
+| 6 | Coin Change II `🎯 T2` | count-combiner; combinations vs permutations loop order |
+| 7 | Unique Paths → Min Path Sum `⚡ T1` | first 2D grid; same grid, different combiner |
+| 8 | Partition Equal Subset Sum `🎯 T2` | `(i, remaining)` state; 1D compression + the backward loop |
+| 9 | LCS `🎯 T2` | two-sequence shape; hand-fill the table once |
+| 10 | Edit Distance `🎯 T2` | LCS + one more choice per cell; nothing else new — notice that |
+| 11 | Word Break `🎯 T2` | linear state, but the *choice set* is "every dictionary word" |
+| 12 | Longest Increasing Subsequence `⚡ T1` | O(n²) DP → the O(n log n) escalation (binary search crossover) |
+| 13 | Stock with Cooldown `🎯 T2` | live state discovery (§6.2) |
+| 14 | Longest Palindromic Substring `⚡ T1` / Subsequence `🎯 T2` | `(l, r)` range states |
+| 15 | Burst Balloons `🎯 T2` | decide-the-last-action flip; hardest state in the common canon |
+| 16 | Maximum Profit in Job Scheduling `🎯 T2` | DP + binary search composition — the L4 seam ([HOW_TO_THINK.md](HOW_TO_THINK.md#hard-problems-are-two-patterns-with-a-seam)) |
 
-**Per-problem protocol:** 25 min cold → if stuck, re-run: *decision sentence? contract? what leaks?* (that sequence un-sticks ~80% of attempts) → after solving, do the space-optimization follow-up aloud → log which Lesson-8 bug (if any) you hit. Your bug log converging on one or two entries after ~10 problems tells you exactly what to drill.
+**Per-problem protocol:** 25 min cold → if stuck, re-run: *decision sentence? contract? what leaks?* (that sequence un-sticks most attempts) → after solving, do the space-optimization follow-up aloud → log which Lesson-8 bug (if any) you hit. Your bug log converging on one or two entries after ~10 problems tells you exactly what to drill.
 
 ---
 
@@ -413,7 +414,7 @@ Attempt each cold with the 5-step method — decision sentence and contract *on 
 
 ## See Also
 
-- [HOW_TO_THINK.md](HOW_TO_THINK.md) — the Recursion → DP chapter in the full pattern framework
-- [PATTERN_LADDERS.md](PATTERN_LADDERS.md) — the DP ladder for graded pressure-testing
+- [HOW_TO_THINK.md — Recursion → DP](HOW_TO_THINK.md#recursion--dp--same-tree-cached-the-skill-is-state-design) — the chapter in the full pattern framework
+- [HOW_TO_THINK.md — Ladder 10](HOW_TO_THINK.md#ladder-10--recursion--dp) — the DP ladder for graded pressure-testing
 - [`02-algorithms/09-recursion.md`](../02-algorithms/09-recursion.md) · [`02-algorithms/10-recursion-to-dp.md`](../02-algorithms/10-recursion-to-dp.md) · [`02-algorithms/15-dynamic-programming.md`](../02-algorithms/15-dynamic-programming.md) — topic deep-dives
 - [`04-practice/algorithms/15-dynamic-programming.md`](../04-practice/algorithms/15-dynamic-programming.md) — full problem walkthroughs

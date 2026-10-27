@@ -233,4 +233,4 @@ P[r2+1][c2+1] − P[r1][c2+1] − P[r2+1][c1] + P[r1][c1].
 
 ---
 
-**Interview track →** [Array deep-dive](../../01-data-structures/01-array.md) · [Senior follow-ups](../../03-patterns/SENIOR_FOLLOWUPS.md)
+**Interview track →** [Array deep-dive](../../01-data-structures/01-array.md) · [Senior follow-ups](../../03-patterns/INTERVIEW_JUDGMENT.md#part-e--senior-follow-up-chains)

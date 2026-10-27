@@ -62,10 +62,10 @@ tags: [striver, a2z, dsa, course-notes]
 |---|---|
 | [Study plan](STUDY_PLAN.md) | Week-by-week order through all 32 parts, with revision checkpoints |
 | [Problem index](PROBLEM_INDEX.md) | Every note in one table, by part and category |
-| [Pattern triggers](../03-patterns/maps/pattern-triggers.md) | "Constraint or phrase in the prompt → technique → where it's taught" |
+| [Pattern triggers](../03-patterns/patterns-master.md) | "Constraint or phrase in the prompt → technique → where it's taught" |
 | [Master cheat sheet](MASTER_CHEATSHEET.md) | All part cheat sheets on one page for last-day revision |
 | [SDE 2 interview prep](33-sde2-interview-prep/README.md) | System design, low-level design, core CS, interview execution and behavioral prep |
-| [Problem recognition mind map](../03-patterns/maps/problem-recognition.md) | Prompt shape → likely topic → common problem type and solving approach |
+| [Patterns master](../03-patterns/patterns-master.md) | Prompt shape → likely topic → common problem type and solving approach |
 
 ---
 

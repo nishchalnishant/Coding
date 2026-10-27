@@ -18,7 +18,7 @@ tags: [striver, beyond-sheet, theory, meet-in-the-middle, sweep-line, reservoir-
 > - composing structures for "design X with O(1) ops"
 >
 > **You'll be able to:** recognise each trigger, write the core loop, and state its complexity.
-> **Source:** not in the A2Z sheet. It pulls together Parts 13, 21, 22 and 26, plus [senior follow-ups](../../03-patterns/SENIOR_FOLLOWUPS.md). · **Time:** 50 min
+> **Source:** not in the A2Z sheet. It pulls together Parts 13, 21, 22 and 26, plus [senior follow-ups](../../03-patterns/INTERVIEW_JUDGMENT.md#part-e--senior-follow-up-chains). · **Time:** 50 min
 
 **Sections:** [1. Meet in the middle](#1-meet-in-the-middle) · [2. Sweep line](#2-sweep-line) · [3. Coordinate compression](#3-coordinate-compression) · [4. Reservoir sampling](#4-reservoir-sampling) · [5. Randomisation](#5-randomisation) · [6. Streaming patterns](#6-streaming-patterns) · [7. Design recipes](#7-design-recipes)
 
@@ -109,7 +109,7 @@ for i, x in enumerate(stream):             # i from 0
 | Approximate membership | Bloom filter: false positives possible, no false negatives |
 | Data stream as disjoint intervals | Sorted map, merging with the neighbours |
 
-See [SENIOR_FOLLOWUPS](../../03-patterns/SENIOR_FOLLOWUPS.md) for streaming and scale-change follow-up chains.
+See [Senior follow-ups](../../03-patterns/INTERVIEW_JUDGMENT.md#part-e--senior-follow-up-chains) for streaming and scale-change follow-up chains.
 
 ---
 
@@ -201,4 +201,4 @@ Array plus a value→index map. Delete by swapping with the last element and pop
 
 ---
 
-**Interview track →** [Senior follow-ups](../../03-patterns/SENIOR_FOLLOWUPS.md) · [Interview judgment](../../03-patterns/INTERVIEW_JUDGMENT.md)
+**Interview track →** [Senior follow-ups](../../03-patterns/INTERVIEW_JUDGMENT.md#part-e--senior-follow-up-chains) · [Interview judgment](../../03-patterns/INTERVIEW_JUDGMENT.md)

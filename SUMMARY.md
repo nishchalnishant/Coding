@@ -53,7 +53,7 @@
 
 ## Practice Problem Bank (`04-practice/`)
 
-Companion to [Mind Map](03-patterns/maps/mindmap.md) — full problem walkthroughs.
+Companion to [Mind Map](03-patterns/mindmap.md) — full problem walkthroughs.
 
 ### Data Structures
 * [Array](04-practice/data-structures/01-array.md)
@@ -86,24 +86,12 @@ Companion to [Mind Map](03-patterns/maps/mindmap.md) — full problem walkthroug
 
 ## Patterns & Revision
 * [Patterns Index](03-patterns/README.md)
-* [**How to Think — first-principles guide**](03-patterns/HOW_TO_THINK.md)
+* [**Patterns Master — triggers & decision trees**](03-patterns/patterns-master.md)
+* [**How to Think — first principles + ladders**](03-patterns/HOW_TO_THINK.md)
 * [**Recursion & DP Masterclass**](03-patterns/RECURSION_AND_DP_MASTERCLASS.md)
-* [**Interview Judgment — proofs & live decisions**](03-patterns/INTERVIEW_JUDGMENT.md)
-* [**Pattern Ladders**](03-patterns/PATTERN_LADDERS.md)
-* [Patterns Master](03-patterns/patterns-master.md)
-* [**Mock Interview Set (25 Problems)**](03-patterns/MOCK_INTERVIEW_SET.md)
-* [**Senior Follow-Up Chains**](03-patterns/SENIOR_FOLLOWUPS.md)
-* [Topic Questions, Logic, and Tricks](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
-* [Leetcode Variants](03-patterns/leetcode-variants.md)
-* [Google Interview Revision](03-patterns/GOOGLE_INTERVIEW_REVISION.md)
-
-### Maps & Decision Trees
-* [Mind Map (problems + hints)](03-patterns/maps/mindmap.md)
-* [Flowcharts](03-patterns/maps/flowcharts.md)
-* [DS Decision Tree](03-patterns/maps/ds-tree.md)
-* [Algorithm Decision Tree](03-patterns/maps/algorithm-tree.md)
-* [Pattern Triggers](03-patterns/maps/pattern-triggers.md)
-* [Problem Recognition](03-patterns/maps/problem-recognition.md)
+* [Topic Questions, Tricks & Variants](03-patterns/TOPIC_QUESTIONS_LOGIC_AND_TRICKS.md)
+* [**Interview Judgment — execution, mocks, senior chains**](03-patterns/INTERVIEW_JUDGMENT.md)
+* [Mind Map (problems + hints)](03-patterns/mindmap.md)
 
 ---
 

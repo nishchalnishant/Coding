@@ -696,7 +696,7 @@ difficulty: mixed
 
 ---
 
-### Manacher's Algorithm — O(n) All Palindromes
+### Manacher's Algorithm — O(n) All Palindromes `💤 T3`
 
 > [!example] Problem
 > Find the radius of the longest palindromic substring centered at every position in O(n). LeetCode 5 (O(n) solution).

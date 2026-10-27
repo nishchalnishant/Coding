@@ -5,7 +5,7 @@ tags: [data-structures, matrix, grid, bfs, dfs]
 ---
 # Matrix / Grid
 
-← [DS index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
+← [DS index](./README.md) · [Patterns master](../03-patterns/patterns-master.md)
 
 ## What this covers
 

@@ -5,7 +5,7 @@ tags: [algorithms, binary-search]
 ---
 # Binary Search
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
+← [Algorithms index](./README.md) · [Patterns master](../03-patterns/patterns-master.md)
 
 ## What this covers
 

@@ -5,7 +5,7 @@ tags: [data-structures, stack]
 ---
 # Stack — L3 Core
 
-← [Data structures index](./README.md) · [DS decision tree](../03-patterns/maps/ds-tree.md)
+← [Data structures index](./README.md) · [Patterns master](../03-patterns/patterns-master.md)
 
 ## What this covers
 

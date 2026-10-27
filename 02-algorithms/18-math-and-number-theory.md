@@ -5,7 +5,7 @@ tags: [algorithms, math, number-theory]
 ---
 # Math & Number Theory — L3 Reference
 
-← [Algorithms index](./README.md) · [Algorithm decision tree](../03-patterns/maps/algorithm-tree.md)
+← [Algorithms index](./README.md) · [Patterns master](../03-patterns/patterns-master.md)
 
 ## What this covers
 

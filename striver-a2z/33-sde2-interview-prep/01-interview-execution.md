@@ -5,7 +5,7 @@ tags: [interview, coding, communication, testing]
 ---
 # 01. Coding Interview Execution
 
-← [Part 33](README.md) · [Pattern triggers](../../03-patterns/maps/pattern-triggers.md)
+← [Part 33](README.md) · [Pattern triggers](../../03-patterns/patterns-master.md)
 
 A strong interview answer makes the reasoning visible, produces working code, and checks it against meaningful cases. Practice in the language you intend to use, including writing code without relying on autocomplete or a debugger.
 
